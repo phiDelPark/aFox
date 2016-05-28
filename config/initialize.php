@@ -1,0 +1,81 @@
+<?php
+if(!defined('__AFOX__')) exit();
+
+require_once dirname(__FILE__) . '/config.php';
+
+require_once _AF_LANGS_PATH_ . 'default_' . _AF_LANG_ . '.php';
+require_once _AF_CONFIG_PATH_ . 'function.php';
+
+define('__MOBILE__', checkUserAgent() == 'MOBILE');
+define('__REQ_METHOD__', getRequestMethod());
+
+if(__REQ_METHOD__ == 'JSON') {
+	$_POST = json_decode(file_get_contents('php://input'), TRUE);
+}
+
+// 넘어온 값을 하나로 합침
+$_DATA = is_null($_POST) ? $_GET : (is_null($_GET) ? $_POST : array_merge($_POST, $_GET));
+
+unset($_GET);
+unset($_POST);
+
+// CDN 에러면 브라우저 종료전까지 사용안함
+if(!empty($_DATA['cdnerr'])) {
+	set_cookie('_CDN_ERROR_', $_DATA['cdnerr'], 0);
+	unset($_DATA['cdnerr']);
+	setQuery('cdnerr', '');
+}
+
+$tmp = _AF_CONFIG_DATA_.'base_cdn_list.php';
+define('__USE_BASE_CDN__', get_cookie('_CDN_ERROR_') ? FALSE : (file_exists($tmp) ? $tmp : FALSE));
+
+$tmp = _AF_CONFIG_DATA_.'footer_html.php';
+$_CFG['footer_html'] = file_exists($tmp) ? $tmp : FALSE;
+
+$_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
+$_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
+
+// 실행 가능한 에드온 정보 합치기
+$tmp = (__MOBILE__?'ao_use_mobile':'ao_use_pc').'=1';
+$tmp_arr = DB::query('SELECT ao_id,extra FROM '._AF_ADDON_TABLE_.' WHERE '.$tmp);
+if(!DB::error()) {
+	while ($tmp = DB::assoc($tmp_arr)) {
+		$_ADDONS[$tmp['ao_id']] = $tmp['extra']; // unserialize는 필요할때 하기로...
+	}
+}
+
+// 자주 쓰는데 매번 체크하기 귀찮아 초기화
+if(!isset($_DATA['module'])) {
+	$_DATA['module'] = '';
+	// 첫 화면 이면 시작 페이지 설정
+	if(!isset($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
+} else {
+	if(!isset($_DATA['id'])) $_DATA['id'] = '';
+}
+
+if(!isset($_DATA['act'])) $_DATA['act'] = '';
+if(!isset($_DATA['disp'])) $_DATA['disp'] = '';
+
+if(isset($_DATA['admin']) || ($_DATA['module'] == 'admin')) {
+	define('__MODULE__', 'admin');
+} else {
+	// id 가 있으면 page 값 초기화 하고 module 값 추가
+	if(!empty($_DATA['id'])) {
+		// 모듈 id 가넘어오면 설정 저장
+		$tmp = getModule($_DATA['id']);
+		if(empty($tmp['error'])) {
+			$_CFG['module'] = $tmp;
+			$_DATA['module'] = $tmp['md_key'];
+		} else $_DATA['module'] = '';
+	}
+
+	define('__MODULE__', empty($_DATA['module']) ? '' : $_DATA['module']);
+}
+
+if(__MODULE__) require_once _AF_MODULES_PATH_ . __MODULE__ . '/index.php';
+
+unset($tmp);
+unset($tmp_arr);
+
+/* End of file initialize.php */
+/* Location: ./config/initialize.php */

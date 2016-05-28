@@ -1,0 +1,169 @@
+@charset "utf-8";
+
+#logo_title {
+	margin: 5px 0;
+}
+
+#logo_title img {
+	border: 0;
+}
+
+.header-image {
+	height:210px;
+	margin:0 auto 50px;
+	background:url(img/header_images.jpg);
+	background-size: cover;
+	color: #fff
+}
+
+.header-image>h3,
+.header-image>p{
+	position: relative;
+	top: 67px;
+	left:10px;
+	width: 400px;
+	margin: 5px;
+}
+
+.nav.right {
+	float: right;
+	margin-right: -30px;
+}
+
+.carousel.slide {
+	margin-bottom: 48px;
+}
+
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+	width: 70%;
+	margin: auto;
+	max-height: 300px;
+}
+
+ul.message-dropdown {
+	padding: 0;
+	max-height: 250px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+li.message-preview {
+	width: 275px;
+	border-bottom: 1px solid rgba(0,0,0,.15);
+}
+
+li.message-preview>a {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+li.message-footer {
+	margin: 5px 0;
+}
+
+ul.message-dropdown {
+	float: left;
+	position: absolute;
+	margin-top: 0;
+	border: 1px solid rgba(0,0,0,.15);
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	background-color: #fff;
+	-webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+	box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+ul.message-dropdown>li>a {
+	white-space: normal;
+}
+
+.auto-hide{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 99999;
+	background: #333;
+	color: #fff;
+	margin: 0;
+	padding: 2px 20px 8px;
+	text-align: right;
+}
+
+.bs-docs-header {
+	position: relative;
+	color:#000;
+}
+
+.bs-docs-header .right {
+	position: absolute;
+	bottom: 0;
+	right:0;
+}
+
+.bs-docs-header .right .fa{
+	width:20px;
+	text-align: center;
+}
+
+.bs-docs-header .right .fa,
+.bs-docs-header .right .caret {
+	color:#000;
+}
+
+.bs-docs-header .right .caret {
+	margin-right: 5px;
+}
+
+.bs-docs-header .dropdown-header {
+	font-size: inherit;
+}
+
+.bs-docs-footer-links {
+	padding-left: 0;
+	margin-bottom: 20px;
+}
+
+.bs-docs-footer-links li {
+	display: inline-block;
+}
+
+.bs-docs-footer-links li+li {
+	margin-left: 15px;
+}
+
+.bs-docs-footer {
+	padding: 30px 30px;
+	margin-top: 48px;
+	color: #99979c;
+	text-align: right;
+	background-color: #2a2730;
+}
+
+.bs-docs-footer a {
+	color: #fff;
+}
+
+#loginModal .modal-dialog{
+	width: 400px;
+	margin: 70px auto;
+}
+
+.login-icon img {
+	border: 0;
+	color: #000;
+	border-radius: 100%;
+	display: inline-block !important;
+	width: 36px;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	padding: 0;
+	vertical-align: bottom;
+}
+
+form .af_editor_rp_content > textarea,
+form .af_editor_rp_content > textarea + iframe{
+	min-height: 80px !important;
+}
