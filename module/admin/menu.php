@@ -56,7 +56,7 @@ if (!empty($menus['error'])) echo showMessage($menus['message'],$menus['error'])
 						echo '<li class="form-inline sitemap-item">'."\n";
 						echo '<input type="hidden" name="parent_key[]" value="'. $value['mu_parent'] .'" class="_parent_key">'."\n";
 						echo '<input type="hidden" name="item_key[]" value="'. $value['mu_srl'] .'" class="_item_key">'."\n";
-						echo '<input type="hidden" name="desc_key[]" value="'. $value['mu_desc'] .'" class="_desc_key">'."\n";
+						echo '<input type="hidden" name="desc_key[]" value="'. $value['mu_description'] .'" class="_desc_key">'."\n";
 						echo '<input type="hidden" name="collapse_key[]" value="'. $value['mu_collapse'] .'" class="_collapse_key">'."\n";
 						echo '<input type="hidden" name="new_win_key[]" value="'. $value['mu_new_win'] .'" class="_new_win_key">'."\n";
 						echo '<input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHtml($value['mu_title']) .'" class="form-control input-sm">'."\n";
@@ -125,7 +125,7 @@ if (!empty($menus['error'])) echo showMessage($menus['message'],$menus['error'])
 						echo '<li class="form-inline sitemap-item">'."\n";
 						echo '<input type="hidden" name="parent_key[]" value="'. $value['mu_parent'] .'" class="_parent_key">'."\n";
 						echo '<input type="hidden" name="item_key[]" value="'. $value['mu_srl'] .'" class="_item_key">'."\n";
-						echo '<input type="hidden" name="desc_key[]" value="'. $value['mu_desc'] .'" class="_desc_key">'."\n";
+						echo '<input type="hidden" name="desc_key[]" value="'. $value['mu_description'] .'" class="_desc_key">'."\n";
 						echo '<input type="hidden" name="collapse_key[]" value="'. $value['mu_collapse'] .'" class="_collapse_key">'."\n";
 						echo '<input type="hidden" name="new_win_key[]" value="'. $value['mu_new_win'] .'" class="_new_win_key">'."\n";
 						echo '<input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHtml($value['mu_title']) .'" class="form-control input-sm">'."\n";
@@ -176,8 +176,8 @@ if (!empty($menus['error'])) echo showMessage($menus['message'],$menus['error'])
 			</div>
 		</div>
 		<div class="form-group">
-			<label for="sitemap_mu_desc"><?php echo getLang('menu_desc')?></label>
-			<input type="text" class="form-control" id="sitemap_mu_desc" maxlength="255">
+			<label for="sitemap_mu_description"><?php echo getLang('menu_desc')?></label>
+			<input type="text" class="form-control" id="sitemap_mu_description" maxlength="255">
 			<p class="help-block"><?php echo getLang('desc_menu_desc')?></p>
 		</div>
 	  </div>

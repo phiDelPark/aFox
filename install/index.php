@@ -114,7 +114,7 @@ $create_sql = '
 	   mu_type         CHAR(1)      NOT NULL,
 	   mu_title        VARCHAR(255) NOT NULL,
 	   mu_link         VARCHAR(255) NOT NULL DEFAULT \'\',
-	   mu_desc         VARCHAR(255) NOT NULL DEFAULT \'\',
+	   mu_description  VARCHAR(255) NOT NULL DEFAULT \'\',
 	   mu_collapse     CHAR(1)      NOT NULL DEFAULT 0,
 	   mu_new_win      CHAR(1)      NOT NULL DEFAULT 0,
 

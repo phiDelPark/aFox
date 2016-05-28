@@ -248,7 +248,7 @@ jQuery(function($) {
 			kc = $p.find('._collapse_key').val(),
 			kw = $p.find('._new_win_key').val();
 
-		$this.find('#sitemap_mu_desc').val(kd);
+		$this.find('#sitemap_mu_description').val(kd);
 		var smc = $this.find('#sitemap_mu_collapse').val(kc).parent(),
 			smw = $this.find('#sitemap_mu_new_window').val(kw).parent();
 
@@ -256,7 +256,7 @@ jQuery(function($) {
 		if(kw==1) {smw.addClass('on');} else {smw.removeClass('on');}
 
 		$this.find('button.btn-success').off('click').one('click', function(e){
-			$p.find('._desc_key').val($this.find('#sitemap_mu_desc').val());
+			$p.find('._desc_key').val($this.find('#sitemap_mu_description').val());
 			$p.find('._collapse_key').val($this.find('#sitemap_mu_collapse').val());
 			$p.find('._new_win_key').val($this.find('#sitemap_mu_new_window').val());
 			$this.modal('hide');

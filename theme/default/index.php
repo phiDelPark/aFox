@@ -238,7 +238,7 @@
 
 	if(empty($menus['error'])){
 		foreach ($menus['footer'] as $val) {
-			echo '<li><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').' title="'.$val['mu_desc'].'">'. escapeHtml($val['mu_title']) .'</a></li>';
+			echo '<li><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').' title="'.$val['mu_description'].'">'. escapeHtml($val['mu_title']) .'</a></li>';
 		}
 	}
 
