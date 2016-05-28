@@ -47,11 +47,12 @@ function proc($data) {
 				[
 					'md_id'=>$data['md_id'],
 					'md_key'=>'page',
-					'md_title'=>$data['md_title']
+					'md_title'=>$data['md_title'],
+					'(md_regdate)'=>'NOW()'
 				]
 			);
 
-			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$data['md_id']]);
+			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$data['md_id'],'(pg_regdate)'=>'NOW()']);
 
 		} else {
 			if(isset($data['new_md_id'])) {
@@ -125,7 +126,8 @@ function proc($data) {
 					'mf_size'=>$file['size'],
 					'mf_type'=>$file['type'],
 					'mb_srl'=>0,
-					'mf_ipaddress'=>$mf_ipaddress
+					'mf_ipaddress'=>$mf_ipaddress,
+					'(mf_regdate)'=>'NOW()'
 				]);
 				$mf_srl = DB::insertId();
 

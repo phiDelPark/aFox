@@ -304,7 +304,8 @@ if(!defined('__AFOX__')) exit();
 					[
 						'mb_srl'=>$uinfo['mb_srl'],
 						'hs_ipaddress'=>$uinfo['ipaddress'],
-						'hs_action'=>$act.'('.$value.')'
+						'hs_action'=>$act.'('.$value.')',
+						'(hs_regdate)'=>'NOW()'
 					]
 				);
 			}

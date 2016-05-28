@@ -1,6 +1,9 @@
 <?php
 define('__AFOX__',   TRUE);
+?>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"></head><body>
 
+<?php
 $datadir = dirname(__FILE__) . '/../data/';
 
 if(file_exists($datadir.'config/_db_config.php')) {
@@ -73,7 +76,7 @@ DB::init(array(
 DB::transaction();
 
 try {
-
+$_err_keys = 'afox_config';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_config (
 	   lang           CHAR(5)      NOT NULL,
@@ -88,6 +91,7 @@ $create_sql = '
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_addons';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_addons (
 	   ao_id          VARCHAR(255)  NOT NULL,
@@ -101,6 +105,7 @@ $create_sql = '
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_menus';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_menus (
 	   mu_srl          INT(11)      NOT NULL,
@@ -117,6 +122,7 @@ $create_sql = '
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_members';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_members (
 	   mb_srl          INT(11)      NOT NULL AUTO_INCREMENT,
@@ -129,7 +135,7 @@ $create_sql = '
 	   mb_email        VARCHAR(255) NOT NULL DEFAULT \'\',
 	   mb_homepage     VARCHAR(255) NOT NULL DEFAULT \'\',
 	   mb_memo         TEXT         NOT NULL DEFAULT \'\',
-	   mb_regdate      datetime     NOT NULL DEFAULT NOW(),
+	   mb_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   mb_login        datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   extra           TEXT         NOT NULL DEFAULT \'\',
 
@@ -139,6 +145,7 @@ $create_sql = '
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_modules';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_modules (
 	   md_id           CHAR(11)     NOT NULL,
@@ -151,7 +158,7 @@ $create_sql = '
 	   md_file_size    INT(11)      NOT NULL DEFAULT 0,
 	   md_file_ext     VARCHAR(255) NOT NULL DEFAULT \'\',
 	   md_list_count   INT(11)      NOT NULL DEFAULT 20,
-	   md_regdate      datetime     NOT NULL DEFAULT NOW(),
+	   md_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   md_manager      INT(11)      NOT NULL DEFAULT 0,
 	   use_style       CHAR(1)      NOT NULL DEFAULT 0,
 	   use_type        CHAR(1)      NOT NULL DEFAULT 0,
@@ -173,6 +180,7 @@ $create_sql = '
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_documents';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_documents (
 	   wr_srl          INT(11)      NOT NULL AUTO_INCREMENT,
@@ -194,7 +202,7 @@ $create_sql = '
 	   mb_nick         VARCHAR(20)  NOT NULL,
 	   mb_password     VARCHAR(100),
 	   wr_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
-	   wr_regdate      datetime     NOT NULL DEFAULT NOW(),
+	   wr_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   wr_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   wr_updater      VARCHAR(20)  ,
 	   extra           TEXT         NOT NULL DEFAULT \'\',
@@ -207,6 +215,7 @@ $create_sql = '
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_comments';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_comments (
 	   rp_srl          INT(11)      NOT NULL AUTO_INCREMENT,
@@ -223,7 +232,7 @@ $create_sql = '
 	   mb_nick         VARCHAR(20)  NOT NULL,
 	   mb_password     VARCHAR(100),
 	   rp_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
-	   rp_regdate      datetime     NOT NULL DEFAULT NOW(),
+	   rp_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   rp_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   rp_depth        CHAR(5)      NOT NULL DEFAULT \'\',
 
@@ -232,13 +241,14 @@ $create_sql = '
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_pages';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_pages (
 	   md_id           CHAR(11)     NOT NULL,
 	   pg_type         CHAR(1)      NOT NULL DEFAULT 0,
 	   pg_content      LONGTEXT     NOT NULL DEFAULT \'\',
 	   pg_file         INT(11)      NOT NULL DEFAULT 0,
-	   pg_regdate      datetime     NOT NULL DEFAULT NOW(),
+	   pg_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   pg_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   extra           TEXT         NOT NULL DEFAULT \'\',
 
@@ -246,6 +256,7 @@ $create_sql = '
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_files';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_files (
 	   mf_srl          INT(11)      NOT NULL AUTO_INCREMENT,
@@ -259,34 +270,34 @@ $create_sql = '
 	   mf_download     INT(11)      NOT NULL DEFAULT 0,
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
 	   mf_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
-	   mf_regdate      datetime     NOT NULL DEFAULT NOW(),
+	   mf_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (mf_srl),
-	  INDEX KEY_INDEX (md_id, mf_target, mf_type)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX TARGET_INDEX (md_id, mf_target, mf_type)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_histories';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_histories (
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
 	   hs_ipaddress    VARCHAR(128) NOT NULL,
 	   hs_action       VARCHAR(255) NOT NULL,
-	   hs_regdate      datetime     NOT NULL DEFAULT NOW(),
-
-	  INDEX ACTION_MEMBER (hs_action, mb_srl),
-	  INDEX ACTION_IP (hs_action, hs_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	   hs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\') ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_visitors';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_visitors (
 	   vs_ipaddress    VARCHAR(128) NOT NULL,
 	   vs_agent        VARCHAR(255) NOT NULL,
 	   vs_referer      VARCHAR(255) NOT NULL,
-	   vs_regdate      datetime     NOT NULL DEFAULT NOW()) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	   vs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\') ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
+$_err_keys = 'insert_members';
 $sql = 'SELECT mb_id FROM afox_members WHERE mb_id = \'admin\'';
 $mb = DB::get($sql);
 if (!$mb['mb_id']) {
@@ -294,6 +305,7 @@ if (!$mb['mb_id']) {
 	DB::query(sprintf($sql, 's', 'admin', PasswordStorage::create_hash('0000'), '관리자'));
 }
 
+$_err_keys = 'insert_config';
 $sql = 'SELECT theme FROM afox_config WHERE 1';
 $cf = DB::get($sql);
 if (!$cf['theme']) {
@@ -301,13 +313,15 @@ if (!$cf['theme']) {
 	DB::query($sql);
 }
 
+$_err_keys = 'insert_modules';
 $sql = 'SELECT md_id FROM afox_modules WHERE md_id = \'welcome\'';
 $pg = DB::get($sql);
 if (!$pg['md_id']) {
-	$sql = 'INSERT INTO afox_modules (`md_id`, `md_key`, `md_title`) VALUES ("%s", "%s", "%s")';
+	$sql = 'INSERT INTO afox_modules (`md_id`, `md_key`, `md_title`, `md_regdate`) VALUES ("%s", "%s", "%s", NOW())';
 	DB::query(sprintf($sql, 'welcome', 'page', ''));
 }
 
+$_err_keys = 'insert_pages';
 $sql = 'SELECT md_id FROM afox_pages WHERE md_id = \'welcome\'';
 $pg = DB::get($sql);
 if (!$pg['md_id']) {
@@ -315,13 +329,13 @@ if (!$pg['md_id']) {
 	$fp = fopen(dirname(__FILE__) . '/../README.md',"r");
 	while( !feof($fp) ) $doc_data .= fgets($fp);
 	fclose($fp);
-	$sql = 'INSERT INTO afox_pages (`md_id`, `pg_type`, `pg_content`, `pg_update`) VALUES ("%s", "1", "%s", NOW())';
-	DB::query(sprintf($sql, 'welcome', $doc_data));
+	$sql = 'INSERT INTO afox_pages (`md_id`, `pg_type`, `pg_content`, `pg_update`, `pg_regdate`) VALUES ("%s", "1", "%s", NOW(), NOW())';
+	DB::query(sprintf($sql, 'welcome', DB::quotes($doc_data)));
 }
 
 } catch (Exception $ex) {
 	DB::rollback();
-	exit('{"STATUS":' . $ex->getCode() . ',"MESSAGE":"INSERT_ADMIN: ' . $ex->getMessage() .'"}');
+	exit('{"STATUS":' . $ex->getCode() . ',"MESSAGE":"'.$_err_keys.': ' . $ex->getMessage() .'"}');
 }
 
 DB::commit();
@@ -373,6 +387,12 @@ echo "설치 성공<br><br>";
 echo "관리자 아이디 : admin<br>";
 echo "관리자 비밀번호 : 0000<br><br>";
 echo "주의 : 관리자 로그인 후에 관리자 페이지에 접속 후 관리자 비밀번호를 바꿔주세요.<br><br>";
+
+?>
+
+</body></html>
+
+<?php
 
 /* End of file __install.php */
 /* Location: ./__install.php */

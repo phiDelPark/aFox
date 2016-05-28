@@ -100,7 +100,8 @@ function proc($data) {
 					'mb_srl'=>$data['mb_srl'],
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
-					'wr_ipaddress'=>$data['wr_ipaddress']
+					'wr_ipaddress'=>$data['wr_ipaddress'],
+					'(wr_regdate)'=>'NOW()'
 				]
 			)) {
 				$wr_srl = DB::insertId();
@@ -194,7 +195,8 @@ function proc($data) {
 					'mf_size'=>$file['size'],
 					'mf_type'=>$file['type'],
 					'mb_srl'=>$data['mb_srl'],
-					'mf_ipaddress'=>$data['wr_ipaddress']
+					'mf_ipaddress'=>$data['wr_ipaddress'],
+					'(mf_regdate)'=>'NOW()'
 				]);
 				$mf_srl = DB::insertId();
 

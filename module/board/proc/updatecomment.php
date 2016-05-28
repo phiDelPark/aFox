@@ -101,6 +101,7 @@ function proc($data) {
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
 					'rp_ipaddress'=>$data['rp_ipaddress'],
+					'(rp_regdate)'=>'NOW()',
 					'(rp_update)'=>'NOW()'
 				]
 			);
