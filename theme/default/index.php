@@ -41,7 +41,15 @@
 				</ul>
 			</span>
 			<span>
-				<a href="#" class="dropdown-toggle login-icon" data-toggle="dropdown"><img src="<?php echo _AF_THEME_URL_?>/img/user_default.jpg" alt="<?php echo $_MEMBER['mb_nick']?>" /></a>
+			<?php
+				$_icon = $_MEMBER['mb_srl'].'/profile_image.png';
+				if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
+					$_icon = _AF_URL_ . 'data/member/' . $_icon;
+				} else {
+					$_icon = _AF_URL_ .'module/board/tpl/user_default.jpg';
+				}
+			?>
+				<a href="#" class="dropdown-toggle login-icon" data-toggle="dropdown"><img src="<?php echo $_icon ?>" alt="<?php echo $_MEMBER['mb_nick']?>" /></a>
 				<ul class="dropdown-menu dropdown-menu-right">
 					<?php if(isManager($_DATA['id'])) { ?>
 					<li><a href="<?php echo _AF_URL_?>?admin"><i class="fa fa-fw fa-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></a></li>
