@@ -55,7 +55,7 @@ function proc($data) {
 			$rp_root = $_out1['max'] + 1;
 		}
 
-		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'md_id, mb_srl, mb_password');
+		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'md_id');
 		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
 		// 문서가 없으면 에러
 		if(empty($wr_srl)) throw new Exception(getLang('msg_not_founded'), 801);
@@ -119,11 +119,12 @@ function proc($data) {
 		} else {
 			// 권한 체크
 			if(empty($_MEMBER)) {
-				if(empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
+				debugPrint();
+				if(empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
 					throw new Exception(getLang('msg_not_permitted'), 901);
 				}
 			} else if(!isManager($module['md_id'])) {
-				if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
+				if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
 					throw new Exception(getLang('msg_not_permitted'), 901);
 				}
 			}
