@@ -119,7 +119,6 @@ function proc($data) {
 		} else {
 			// 권한 체크
 			if(empty($_MEMBER)) {
-				debugPrint();
 				if(empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
 					throw new Exception(getLang('msg_not_permitted'), 901);
 				}
