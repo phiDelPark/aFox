@@ -5,7 +5,10 @@ if(!defined('__AFOX__')) exit();
 @include_once _AF_LANGS_PATH_ . 'module_' . _AF_LANG_ . '.php';
 
 // 관리자만 접근 가능
-if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') exit('not admin');
+if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
+	goUrl(_AF_URL_, getLang('msg_not_admin'));
+	exit('not admin');
+}
 
 function returnUrlMerge($data, $result) {
 	if(!isset($result)) $result = [];
