@@ -329,7 +329,7 @@ if (!$pg['md_id']) {
 	$fp = fopen(dirname(__FILE__) . '/../README.md',"r");
 	while( !feof($fp) ) $doc_data .= fgets($fp);
 	fclose($fp);
-	$sql = 'INSERT INTO afox_pages (`md_id`, `pg_type`, `pg_content`, `pg_update`, `pg_regdate`) VALUES ("%s", "1", "%s", NOW(), NOW())';
+	$sql = 'INSERT INTO afox_pages (`md_id`, `pg_type`, `pg_content`, `pg_update`, `pg_regdate`) VALUES ("%s", "1", %s, NOW(), NOW())';
 	DB::query(sprintf($sql, 'welcome', DB::quotes($doc_data)));
 }
 

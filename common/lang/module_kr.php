@@ -20,7 +20,7 @@ $_LANG['msg_diff_password'] = '가입된 회원아이디가 아니거나 비밀�
 $_LANG['msg_diff_new_password'] = '새 비밀번호와 비밀번호 확인이 서로 다릅니다.'; //503
 $_LANG['success_member_signup'] = '회원에 가입되셨습니다.'."\n".'다시 로그인해주세요.';
 
-$_LANG['msg_non_admin'] = '관리자가 아닙니다.'."\n".'다시 로그인해 주십시요.'; //551
+$_LANG['msg_not_admin'] = '관리자가 아닙니다.'."\n".'다시 로그인해 주십시요.'; //551
 
 $_LANG['msg_not_write_reply'] = '더 이상 답변하실 수 없습니다.'."\n".'답변은 5단계 각 단계당 93개 까지만 가능합니다.'; //571
 $_LANG['msg_not_delete_reply_with_sub'] = '이 코멘트와 관련된 답변코멘트가 존재하므로 삭제 할 수 없습니다.'; //573

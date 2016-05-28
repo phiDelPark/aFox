@@ -65,7 +65,7 @@ function proc($data) {
 					'grant_reply'=>empty($data['grant_reply'])?'0':$data['grant_reply'],
 					'grant_upload'=>empty($data['grant_upload'])?'0':$data['grant_upload'],
 					'grant_download'=>empty($data['grant_download'])?'0':$data['grant_download'],
-					'(md_update)'=>'NOW()'
+					'(md_regdate)'=>'NOW()'
 				]
 			);
 		} else {
