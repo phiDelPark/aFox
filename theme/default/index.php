@@ -136,7 +136,7 @@
 			} else {
 				$muroot = $is_active;
 				$submenu[$muroot] = ['_ROOT_'=>$val];
-				echo '<li'.($muroot=='_ACTIVE_'?' class="active"':'').'><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').'">'. escapeHtml($val['mu_title']) .'</a></li>';
+				echo '<li'.($muroot=='_ACTIVE_'?' class="active"':'').'><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a></li>';
 			}
 		}
 	}
@@ -201,7 +201,7 @@
 
 <?php } ?>
 
-<?php if(!empty($submenu['_ACTIVE_'])) { ?>
+<?php if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>1) { ?>
 	<div class="row">
 		<aside class="col-md-3">
 			<div class="list-group">
@@ -213,7 +213,7 @@
 	<?php
 		foreach ($submenu['_ACTIVE_'] as $key => $val) {
 			if($key === '_ROOT_') continue;
-			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==1?' target="_blank"':'').'">'. escapeHtml($val['mu_title']) .'</a>';
+			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==1?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a>';
 		}
 	?>
 			</div>
