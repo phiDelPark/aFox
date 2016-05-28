@@ -116,18 +116,26 @@
 
 <?php
 	$submenu = [];
-	// getUrlQuery(pg), getUrlQuery(id)
 	// $sr_only = '<span class="sr-only">(current)</span>';
 	if(empty($menus['error'])){
 		$url = getCurrentUrl();
 		foreach ($menus['header'] as $val) {
+
 			$mu_parent = (int) $val['mu_parent'];
+			$is_active = !empty($val['md_id'])&&$val['md_id']==$_DATA['id']?'_ACTIVE_':$val['mu_srl'];
+			if($is_active!='_ACTIVE_' && !empty($val['mu_link']) && strpos($url, $val['mu_link'])!==false) {$is_active='_ACTIVE_';}
+
 			if($mu_parent > 0) {
+				if($is_active == '_ACTIVE_') {
+					$submenu['_ACTIVE_'] = $submenu[$muroot];
+					unset($submenu[$muroot]);
+					$muroot = '_ACTIVE_';
+					$val['_ACTIVE_'] = 1;
+				}
 				$submenu[$muroot][] = $val;
 			} else {
-				$muroot = !empty($val['md_id'])&&$val['md_id']==$_DATA['id']?'_ACTIVE_':$val['mu_srl'];
-				if($muroot!='_ACTIVE_' && !empty($val['mu_link']) && strpos($url, $val['mu_link'])!==false) {$muroot='_ACTIVE_';}
-				$submenu[$muroot] = [];
+				$muroot = $is_active;
+				$submenu[$muroot] = ['_ROOT_'=>$val];
 				echo '<li'.($muroot=='_ACTIVE_'?' class="active"':'').'><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').'">'. escapeHtml($val['mu_title']) .'</a></li>';
 			}
 		}
@@ -198,13 +206,14 @@
 		<aside class="col-md-3">
 			<div class="list-group">
 			  <span class="list-group-item disabled">
-				Cras justo odio
+				<?php echo $submenu['_ACTIVE_']['_ROOT_']['mu_title'] ?>
 			  </span>
 			</div>
 			<div class="list-group">
 	<?php
-		foreach ($submenu['_ACTIVE_'] as $val) {
-			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item"'.($val['mu_new_win']==1?' target="_blank"':'').'">'. escapeHtml($val['mu_title']) .'</a>';
+		foreach ($submenu['_ACTIVE_'] as $key => $val) {
+			if($key === '_ROOT_') continue;
+			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==1?' target="_blank"':'').'">'. escapeHtml($val['mu_title']) .'</a>';
 		}
 	?>
 			</div>

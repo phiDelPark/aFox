@@ -170,6 +170,7 @@ form .af_editor_rp_content > textarea + iframe{
 
 @media(max-width:768px) {
 	.nav.right {
+		float:none;
 		margin-right: -15px;
 	}
 	.header-image {
