@@ -13,7 +13,7 @@ if(!empty($_{'board'}['mb_srl'])) {
 		<hr class="divider">
 		<div class="clearfix">
 			<span class="pull-left"><?php echo $_{'board'}['mb_nick']?></span>
-			<span class="pull-right"><?php echo date('Y'.getLang('year').' m'.getLang('month').' d'.getLang('day').' A h:i:s', strtotime($_{'board'}['wr_regdate']))?></span>
+			<span class="pull-right"><?php echo date((__MOBILE__?'y':'Y').getLang('year').' m'.getLang('month').' d'.getLang('day').' A h:i', strtotime($_{'board'}['wr_regdate']))?></span>
 		</div>
 	</header>
 	<article>

@@ -82,7 +82,7 @@
 								<a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><strong><?php echo getLang('member_signup')?></strong></a> /
 								<a href="<?php echo _AF_URL_ ?>?module=member&disp=findAccount"><?php echo getLang('member_find_account')?></a>
 							</div>
-							<button type="button" class="btn btn-default" data-dismiss="modal"> <?php echo getLang('close')?></a></button>
+							<?php if(!__MOBILE__) { ?><button type="button" class="btn btn-default" data-dismiss="modal"> <?php echo getLang('close')?></a></button><?php } ?>
 							<button type="submit" class="btn btn-primary"><?php echo getLang('login')?></button>
 						</div>
 					</form>
@@ -143,23 +143,8 @@
 
 		<!-- Wrapper for slides -->
 		<div class="carousel-inner" role="listbox">
+
 			<div class="item active">
-				<img src="http://www.w3schools.com/bootstrap/img_chania.jpg" alt="Chania">
-				<div class="carousel-caption">
-					<h3>Chania</h3>
-					<p>The atmosphere in Chania has a touch of Florence and Venice.</p>
-				</div>
-			</div>
-
-			<div class="item">
-				<img src="http://www.w3schools.com/bootstrap/img_chania2.jpg" alt="Chania">
-				<div class="carousel-caption">
-					<h3>Chania</h3>
-					<p>The atmosphere in Chania has a touch of Florence and Venice.</p>
-				</div>
-			</div>
-
-			<div class="item">
 				<img src="http://www.w3schools.com/bootstrap/img_flower.jpg" alt="Flower">
 				<div class="carousel-caption">
 					<h3>Flowers</h3>

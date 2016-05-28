@@ -167,3 +167,28 @@ form .af_editor_rp_content > textarea,
 form .af_editor_rp_content > textarea + iframe{
 	min-height: 80px !important;
 }
+
+@media(max-width:768px) {
+	.nav.right {
+		margin-right: -15px;
+	}
+	.header-image {
+		height: 110px;
+	}
+	.header-image>h3{
+		display:none;
+	}
+	.header-image>p{
+		top: 33px;
+		left: 5px;
+		width: 230px;
+		margin:0;
+	}
+	.bs-docs-footer {
+		padding: 10px;
+		text-align: left;
+	}
+	#loginModal .modal-dialog{
+		width: 300px;
+	}
+}

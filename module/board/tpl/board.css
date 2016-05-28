@@ -200,3 +200,38 @@
 	top: -5px;
 	height:25px;
 }
+
+
+@media(max-width:768px) {
+	#board_reply>.reply-editer .area-group button{
+		width:100%;
+		height:initial;
+	}
+	#board_reply>.reply-editer .area-button{
+		position: static;
+	}
+	#board_reply>.reply-editer .area-group .form-group{
+		margin-right: initial;
+	}
+	#board_view .profile-text > .left,
+	#board_reply .reply-item > .left {
+		position:static;
+		float: none;
+		width:initial;
+	}
+	#board_view .profile-text > .right,
+	#board_reply .reply-item > .right {
+		margin-left:5px;
+		margin-top: 10px;
+	}
+	#board_view .profile-text > .left .profile,
+	#board_reply .reply-item > .left .profile {
+		float: none;
+	}
+	#board_reply .reply-item > .left>.area-author-info{
+		float:right;
+	}
+	#board_view>article {
+		min-height: 200px;
+	}
+}

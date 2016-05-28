@@ -19,19 +19,31 @@ if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURR
 	<article class="clearfix">
 		<table class="table table-hover list-table">
 		<colgroup>
+		<?php if(__MOBILE__) { ?>
+		<col>
+		<col>
+		<col class="col-xs-1">
+		<?php } else { ?>
 		<col class="col-md-1">
 		<col class="col-md-7">
 		<col class="col-md-2">
 		<col class="col-md-1">
 		<col class="col-md-1">
+		<?php } ?>
 		</colgroup>
 		<thead>
 			<tr>
+				<?php if(__MOBILE__) { ?>
+				<th><?php echo getLang('title')?></th>
+				<th><?php echo getLang('name')?></th>
+				<th><?php echo getLang('date')?></th>
+				<?php } else { ?>
 				<th><?php echo getLang('number')?></th>
 				<th><?php echo getLang('title')?></th>
 				<th><?php echo getLang('name')?></th>
 				<th><?php echo getLang('view')?></th>
 				<th><?php echo getLang('date')?></th>
+				<?php } ?>
 			</tr>
 		</thead>
 		<tbody>
@@ -39,12 +51,21 @@ if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURR
 		<?php
 			$current_page = $_{'board'}['current_page'];
 			$total_page = $_{'board'}['total_page'];
-			foreach ($_{'board'}['data'] as $key => $val) {
-				echo '<tr data-hot-track><th scope="row">'.$val['wr_srl'].'</th>';
-				echo '<td class="wr_title"><a href="'.getUrl('srl',$val['wr_srl']).'" onclick="return false">'.escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
-				echo '<td>'.escapeHtml($val['mb_nick'], true).'</td>';
-				echo '<td>'.$val['wr_hit'].'</td>';
-				echo '<td>'.date('Y/m/d', strtotime($val['wr_update'])).'</td></tr>';
+
+			if(__MOBILE__) {
+				foreach ($_{'board'}['data'] as $key => $val) {
+					echo '<tr data-hot-track><td class="wr_title"><a href="'.getUrl('srl',$val['wr_srl']).'" onclick="return false">'.escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
+					echo '<td>'.escapeHtml($val['mb_nick'], true).'</td>';
+					echo '<td>'.date('m/d', strtotime($val['wr_update'])).'</td></tr>';
+				}
+			} else {
+				foreach ($_{'board'}['data'] as $key => $val) {
+					echo '<tr data-hot-track><th scope="row">'.$val['wr_srl'].'</th>';
+					echo '<td class="wr_title"><a href="'.getUrl('srl',$val['wr_srl']).'" onclick="return false">'.escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
+					echo '<td>'.escapeHtml($val['mb_nick'], true).'</td>';
+					echo '<td>'.$val['wr_hit'].'</td>';
+					echo '<td>'.date('Y/m/d', strtotime($val['wr_update'])).'</td></tr>';
+				}
 			}
 		?>
 
@@ -67,7 +88,7 @@ if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURR
 			<div class="input-group">
 				<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 				<span class="input-group-btn">
-				<button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
+				<?php if(empty($_DATA['search']) || !__MOBILE__) {?><button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button><?php }?>
 				<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 				</span>
 			</div>
