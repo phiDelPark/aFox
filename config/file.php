@@ -17,7 +17,7 @@ if(!isset($_file[$srl])) {
 	$_tmp=array('binary'=>0,'image'=>1,'video'=>2,'audio'=>3);
 	$_file[$srl]=['mb_srl'=>$file['mb_srl'], 'is_download'=>true, 'point_download'=>0, 'type'=>empty($_tmp[$filetype])?'binary':$filetype, 'name'=>$file['mf_name']];
 	$_file[$srl]['path']=_AF_ATTACH_DATA_.$_file[$srl]['type'].'/'.$file['md_id'].'/'.$file['mf_target'].'/'.$file['mf_upload_name'];
-	// binary면 권한 체크 // isGrant() 다시 작성
+	// binary면 권한 체크 // isGrant() 함수 안불러서 작성
 	if($_file[$srl]['type']==='binary') {
 		$out = DB::select(_AF_MODULE_TABLE_, ['md_id'=>$file['md_id']]);
 		$module = DB::assoc($out);
@@ -26,7 +26,7 @@ if(!isset($_file[$srl])) {
 		$grant = $module['grant_download'];
 		if(!empty($grant)) {
 			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
-			if($rank > 115) return false; // s = 115 이상이면 블럭 대상임
+			if($rank > 115) return false; // s = 115 초과면 블럭 대상임
 			$_file[$srl]['is_download'] = ord($grant) <= $rank; // 0 = 48, z = 122
 			if(!$_file[$srl]['is_download']) setHttpError('401 Unauthorized', true);
 		}
@@ -41,7 +41,7 @@ if(!empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])){
 		fclose($fp); setHttpError('304 Not Modified');
 	}
 }
-// TODO 다운로드 조회를 위해 기록 // setHistoryAction() 다시 작성
+// 다운로드 조회를 위해 기록 // setHistoryAction() 함수 안불러서 작성
 if($_file[$srl]['type']==='binary'){
 	$point = $_file[$srl]['point_download'];
 	$mb_srl = empty($_MEMBER)?0:$_MEMBER['mb_srl'];

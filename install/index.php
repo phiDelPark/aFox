@@ -301,6 +301,22 @@ $create_sql = '
 
 DB::query($create_sql);
 
+$_err_keys = 'afox_notes';
+$create_sql = '
+	  CREATE TABLE IF NOT EXISTS afox_notes (
+	   nt_srl          INT(11)      NOT NULL AUTO_INCREMENT,
+	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
+	   nt_sender       INT(11)      NOT NULL DEFAULT 0,
+	   nt_send_date    datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
+	   nt_read_date    datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
+	   nt_note         TEXT         NOT NULL DEFAULT \'\',
+
+	  CONSTRAINT SRL_PK PRIMARY KEY (nt_srl),
+	  INDEX MEMBER_IX (mb_srl),
+	  INDEX SENDER_IX (nt_sender)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+
+DB::query($create_sql);
+
 $_err_keys = 'afox_visitors';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_visitors (
