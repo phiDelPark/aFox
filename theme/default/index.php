@@ -2,10 +2,37 @@
 	if(!defined('__AFOX__')) exit();
 
 	$menus = getSiteMenu();
-	$err = empty($menus['error']) ? get_error() : $menus;
+
+	$mainmenu = [];
+	$submenu = [];
+	if(empty($menus['error'])) {
+		$url = getCurrentUrl();
+		foreach ($menus['header'] as $val) {
+			$is_active = !empty($val['md_id'])&&$val['md_id']==$_DATA['id']?'_ACTIVE_':$val['mu_srl'];
+			if($is_active!='_ACTIVE_' && !empty($val['mu_link']) && strpos($url, $val['mu_link'])!==false) {$is_active='_ACTIVE_';}
+			if((int) $val['mu_parent'] > 0) {
+				if($is_active == '_ACTIVE_') {
+					// 활성화시 키값 교체
+					if(!empty($submenu[$muroot])){
+						$submenu['_ACTIVE_'] = $submenu[$muroot];
+						unset($submenu[$muroot]);
+					}
+					$mainmenu['_ACTIVE_'] = $mainmenu[$muroot];
+					unset($mainmenu[$muroot]);
+					$muroot = '_ACTIVE_';
+					$val['_ACTIVE_'] = 1;
+				}
+				$submenu[$muroot][] = $val;
+			} else {
+				$muroot = $is_active;
+				$mainmenu[$muroot] = $val;
+			}
+		}
+
+	}
 ?>
 
-<?php if(!empty($err['error'])) { ?>
+<?php if($err = get_error()) { ?>
 	<div class="auto-hide" data-timer="5">
 		<h3 class="clearfix"><span class="timer-progress pull-left" data-repeat-char="&bull;"></span> <i class="fa fa-<?php echo $err['error']!=0?'warning':'exclamation-circle'?>" aria-hidden="true"></i> <?php echo $err['message']?></h3>
 	</div>
@@ -115,30 +142,8 @@
 				<ul class="nav navbar-nav right">
 
 <?php
-	$submenu = [];
-	// $sr_only = '<span class="sr-only">(current)</span>';
-	if(empty($menus['error'])){
-		$url = getCurrentUrl();
-		foreach ($menus['header'] as $val) {
-
-			$mu_parent = (int) $val['mu_parent'];
-			$is_active = !empty($val['md_id'])&&$val['md_id']==$_DATA['id']?'_ACTIVE_':$val['mu_srl'];
-			if($is_active!='_ACTIVE_' && !empty($val['mu_link']) && strpos($url, $val['mu_link'])!==false) {$is_active='_ACTIVE_';}
-
-			if($mu_parent > 0) {
-				if($is_active == '_ACTIVE_') {
-					$submenu['_ACTIVE_'] = $submenu[$muroot];
-					unset($submenu[$muroot]);
-					$muroot = '_ACTIVE_';
-					$val['_ACTIVE_'] = 1;
-				}
-				$submenu[$muroot][] = $val;
-			} else {
-				$muroot = $is_active;
-				$submenu[$muroot] = ['_ROOT_'=>$val];
-				echo '<li'.($muroot=='_ACTIVE_'?' class="active"':'').'><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a></li>';
-			}
-		}
+	foreach ($mainmenu as $key => $val) {
+		echo '<li'.($key==='_ACTIVE_'?' class="active"':'').'><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a></li>';
 	}
 ?>
 				</ul>
@@ -206,13 +211,12 @@
 		<aside class="col-md-3">
 			<div class="list-group">
 			  <span class="list-group-item disabled">
-				<?php echo $submenu['_ACTIVE_']['_ROOT_']['mu_title'] ?>
+				<?php echo $mainmenu['_ACTIVE_']['mu_title'] ?>
 			  </span>
 			</div>
 			<div class="list-group">
 	<?php
 		foreach ($submenu['_ACTIVE_'] as $key => $val) {
-			if($key === '_ROOT_') continue;
 			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==1?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a>';
 		}
 	?>
