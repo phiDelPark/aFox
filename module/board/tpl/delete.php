@@ -1,6 +1,7 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 	$is = !empty($_{'board'});
+	$is_manager = isManager($_DATA['id']);
 
 	// $cfm_delete = sprintf(getLang($_LANG['confirm_select_delete']), getLang('document'));
 ?>
@@ -18,7 +19,7 @@
 		<input type="hidden" name="success_return_url" value="<?php echo getUrl('disp','','srl','')?>" />
 		<input type="hidden" name="wr_srl" value="<?php echo $is?$_{'board'}['wr_srl']:''?>" />
 			<div>
-			<?php if (empty($_MEMBER)) { ?>
+			<?php if (empty($_MEMBER) || (!$is_manager&&empty($_{'board'}['mb_srl']))) { ?>
 				<div class="form-group">
 					<label for="id_mb_password"><?php echo getLang('password')?></label>
 					<input type="password" name="mb_password" class="form-control" id="id_mb_password" required>

@@ -95,6 +95,7 @@ $_LANG['move'] = '이동';
 $_LANG['open'] = '열기';
 $_LANG['publish'] = '발행';
 $_LANG['restore'] = '복구';
+$_LANG['ok'] = '확인';
 
 $_LANG['yes'] = '예';
 $_LANG['no'] = '아니오';
@@ -140,8 +141,8 @@ $_LANG['confirm_select_empty'] = '선택된 %s를(을) 비우시겠습니까?';
 $_LANG['confirm_select_copy'] = '선택된 %s를(을) 복사하시겠습니까?';
 $_LANG['confirm_select_move'] = '선택된 %s를(을) 이동하시겠습니까?';
 
-$_LANG['warn_input'] = '%s를(을) 입력하세요.';
-$_LANG['warn_select'] = '%s를(을) 선택하세요.';
+$_LANG['warn_input'] = '%s를(을) 입력하세요.'; // 90
+$_LANG['warn_select'] = '%s를(을) 선택하세요.'; // 80
 $_LANG['warn_permit'] = '%s만 허용됩니다.';
 $_LANG['warn_not_permit'] = '%s는(은) 허용되지 않습니다.';
 

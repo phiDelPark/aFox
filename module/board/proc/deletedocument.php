@@ -18,15 +18,15 @@ function proc($data) {
 		if(empty($doc['wr_srl'])) throw new Exception(getLang('msg_invalid_request'), 303);
 
 		// 권한 체크
-		if(empty($_MEMBER)) {
-			if(empty($data['mb_password'])) {
-				throw new Exception(sprintf(getLang('warn_input'), getLang('password')), 3);
-			}
-			if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
-				throw new Exception(getLang('msg_not_permitted'), 901);
-			}
-		} else if(!isManager($doc['md_id'])) {
-			if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
+		if(!isManager($doc['md_id'])) {
+			if(empty($_MEMBER) || empty($doc['mb_srl'])) {
+				if(empty($data['mb_password'])) {
+					throw new Exception(sprintf(getLang('warn_input'), getLang('password')), 3);
+				}
+				if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
+					throw new Exception(getLang('msg_not_permitted'), 901);
+				}
+			} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
 				throw new Exception(getLang('msg_not_permitted'), 901);
 			}
 		}

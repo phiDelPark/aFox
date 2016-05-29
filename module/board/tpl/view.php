@@ -3,8 +3,9 @@ if(!defined('__AFOX__')) exit();
 $is_manager = isManager($_DATA['id']);
 $is_rp_grant = isGrant($_DATA['id'],'reply');
 if(!empty($_{'board'}['mb_srl'])) {
-	$mb = getMember($_{'board'}['mb_srl']);
+	$doc_mb = getMember($_{'board'}['mb_srl']);
 }
+$is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 ?>
 
 <section id="board_view">
@@ -17,7 +18,12 @@ if(!empty($_{'board'}['mb_srl'])) {
 		</div>
 	</header>
 	<article>
-	<?php echo toHTML($_{'board'}['wr_type'], $_{'board'}['wr_content'])?>
+	<?php
+		$is_permit = ($_{'board'}['wr_secret']!='1' || $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl']);
+		if(!$is_permit) $is_permit = !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$_{'board'}['wr_srl'])]);
+		$wr_content = $is_permit ? $_{'board'}['wr_content'] : getLang('msg_not_permitted');
+		echo toHTML($_{'board'}['wr_type'], $wr_content);
+	?>
 	<?php if(!empty($_{'board'}['wr_tags'])) { ?>
 	<div calss="hashtags">
 		<?php
@@ -28,8 +34,8 @@ if(!empty($_{'board'}['mb_srl'])) {
 		?>
 	</div>
 	<?php } ?>
-	<?php if(!empty($mb['mb_memo'])) {
-			$_icon = $mb['mb_srl'].'/profile_image.png';
+	<?php if(!empty($doc_mb['mb_memo'])) {
+			$_icon = $doc_mb['mb_srl'].'/profile_image.png';
 			if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
 				$_icon = _AF_URL_ . 'data/member/' . $_icon;
 			} else {
@@ -38,13 +44,13 @@ if(!empty($_{'board'}['mb_srl'])) {
 	?>
 		<div class="profile-text clearfix">
 			<div class="left"><img src="<?php echo $_icon ?>" alt="Profile" class="profile"></div>
-			<div class="right"><?php echo toHTML(1, $mb['mb_memo'], 'mb_memo') ?></div>
+			<div class="right"><?php echo toHTML(1, $doc_mb['mb_memo'], 'mb_memo') ?></div>
 		</div>
 	<?php } ?>
 	</article>
 	<footer class="area-text-button clearfix">
 		<div class="pull-right">
-			<?php if(empty($_{'board'}['mb_srl'])||$is_manager) { ?>
+			<?php if(empty($_{'board'}['mb_srl']) || $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl']) { ?>
 			<a href="<?php echo getUrl('disp','writeDocument', 'srl', $_DATA['srl']) ?>" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
 			<a href="<?php echo getUrl('disp','deleteDocument', 'srl', $_DATA['srl']) ?>" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 			<?php } ?>

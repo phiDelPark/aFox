@@ -24,15 +24,15 @@ function proc($data) {
 		$is_manager = isManager($doc['md_id']);
 
 		// 권한 체크
-		if(empty($_MEMBER)) {
-			if(empty($data['mb_password'])) {
-				throw new Exception(sprintf(getLang('warn_input'), getLang('password')), 3);
-			}
-			if (empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
-				throw new Exception(getLang('msg_not_permitted'), 901);
-			}
-		} else if(!$is_manager) {
-			if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
+		if(!$is_manager) {
+			if(empty($_MEMBER) || empty($cmt['mb_srl'])) {
+				if(empty($data['mb_password'])) {
+					throw new Exception(sprintf(getLang('warn_input'), getLang('password')), 3);
+				}
+				if (empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
+					throw new Exception(getLang('msg_not_permitted'), 901);
+				}
+			} else if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
 				throw new Exception(getLang('msg_not_permitted'), 901);
 			}
 		}

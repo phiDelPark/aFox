@@ -32,6 +32,12 @@
 			var editor = $f.find('.af_editor_rp_content').afEditor();
 
 			if(act == 'board.getComment'){
+				var nombsrl = $i.attr('data-act-option') || '';
+				if(nombsrl) {
+					var r = prompt($_LANG['warn_input'].sprintf([$_LANG['password']]), '');
+					if (r == null) return false;
+					data['mb_password'] = r;
+				}
 				exec_ajax(act, data, function(status, data, xhr) {
 					if(status == 'success') {
 						$('<input type="hidden" name="rp_srl" value="">').prependTo($f);

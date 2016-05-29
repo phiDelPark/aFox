@@ -17,14 +17,18 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 			} else {
 				$_icon = _AF_URL_ .'module/board/tpl/user_default.jpg';
 			}
+			$is_permit = ($value['rp_secret']!='1' || $is_manager || $is_login_mb_srl === $value['mb_srl']);
+			$rp_content = $is_permit ? $value['rp_content'] : getLang('msg_not_permitted');
+			$is_edit = !$_deleted && (empty($value['mb_srl'])||$is_manager||$is_login_mb_srl===$value['mb_srl']);
+			$edit_str = 'data-act-param="rp_srl,'.$value['rp_srl'].'"'.((empty($value['mb_srl'])&&!$is_manager)?' data-act-option="nombsrl"':'');
 			echo '<a id="reply_'.$value['rp_srl'].'"'.(!empty($_DATA['rp'])&&$value['rp_srl']==$_DATA['rp'] ? ' class="active"':'').'></a>'
 				.'<div class="reply-item" style="padding-left:'.(($_len>5?5:$_len)*30).'px"><div class="left">'
 				.'<img src="'.$_icon.'" alt="Profile" class="profile"><div class="area-author-info"><h5 class="author">'.$value['mb_nick'].'</h5>'
-				.'<div class="reply-date"><small>'.date('Y/m/d h:m', strtotime($value['rp_update'])).'</small></div></div></div><div class="right"><div class="content clearfix">'.toHTML($value['rp_type'], $value['rp_content']).'</div>'
+				.'<div class="reply-date"><small>'.date('Y/m/d h:m', strtotime($value['rp_update'])).'</small></div></div></div><div class="right"><div class="content clearfix">'.toHTML($value['rp_type'], $rp_content).'</div>'
 				.'<div class="area-text-button clearfix"><div class="pull-right">'
 				.(!$_deleted&&$is_rp_grant&&$_len<5?('<a href="#" role="button" data-exec-act="board.updateComment" data-act-param="rp_parent,'.$value['rp_srl'].'"><i class="fa fa-reply gly-rotate-180" aria-hidden="true"></i> '.getLang('reply').'</a>'):'')
-				.'<a href="#" role="button" '.(!$_deleted&&(empty($value['mb_srl'])||$is_manager)?'data-exec-act="board.getComment" data-act-param="rp_srl,'.$value['rp_srl'].'"':'style="text-decoration:line-through" onclick="alert($_LANG[\'msg_not_permitted\']);return false"').'><i class="fa fa-pencil-square-o" aria-hidden="true"></i> '.getLang('edit').'</a>'
-				.'<a href="#" role="button" '.(!$_deleted&&(empty($value['mb_srl'])||$is_manager)?'data-exec-act="board.deleteComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.((empty($value['mb_srl'])&&!$is_manager)?' data-act-option="nombsrl"':''):'style="text-decoration:line-through" onclick="alert($_LANG[\'msg_not_permitted\']);return false"').'><i class="fa fa-trash-o" aria-hidden="true"></i> '.getLang('delete').'</a>'
+				.'<a href="#" role="button" '.($is_edit?'data-exec-act="board.getComment" '.$edit_str:'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted')).'\');return false"').'><i class="fa fa-pencil-square-o" aria-hidden="true"></i> '.getLang('edit').'</a>'
+				.'<a href="#" role="button" '.($is_edit?'data-exec-act="board.deleteComment" '.$edit_str:'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted')).'\');return false"').'><i class="fa fa-trash-o" aria-hidden="true"></i> '.getLang('delete').'</a>'
 				.'</div></div></div></div>';
 		}
 	?>

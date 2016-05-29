@@ -1,6 +1,7 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 	$is = !empty($_{'board'})&&!empty($_{'board'}['wr_srl']);
+	$is_manager = isManager($_DATA['id']);
 ?>
 
 <section id="board_write">
@@ -19,7 +20,7 @@
 	<input type="hidden" name="wr_srl" value="<?php echo $is?$_{'board'}['wr_srl']:''?>">
 
 		<div>
-		<?php if (empty($_MEMBER)) { ?>
+		<?php if (empty($_MEMBER) || (!$is_manager&&empty($_{'board'}['mb_srl']))) { ?>
 			<div class="form-group">
 				<label for="id_mb_nick"><?php echo getLang('id')?></label>
 				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" required maxlength="20" value="<?php echo $is?$_{'board'}['mb_nick']:''?>">

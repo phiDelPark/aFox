@@ -4,6 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(!isset($data['rp_srl'])) return set_error(getLang('msg_invalid_request'),303);
+	global $_MEMBER;
 
 	$cmt = getComment($data['rp_srl']);
 	if(!empty($cmt['error'])) {
@@ -17,6 +18,21 @@ function proc($data) {
 		return set_error($doc['message'],$doc['error']);
 	} else if(!isGrant($doc['md_id'], 'view')) {
 		return set_error(getLang('msg_not_permitted'),901);
+	}
+
+	// 비밀글이면
+	if($cmt['rp_secret'] == '1' && !isManager($doc['md_id'])) {
+		// 권한 체크
+		if(empty($_MEMBER) || empty($cmt['mb_srl'])) {
+			if(empty($data['mb_password'])) {
+				return set_error(sprintf(getLang('warn_input'), getLang('password')), 3);
+			}
+			if (empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
+				return set_error(getLang('msg_not_permitted'), 901);
+			}
+		} else if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
+			return set_error(getLang('msg_not_permitted'), 901);
+		}
 	}
 
 	// JSON은 비밀번호는 암호화 되있지만 그래도 노출 안되게 제거
