@@ -42,6 +42,7 @@ function proc($data) {
 				'use_level'=>$data['use_level'],
 				'use_captcha'=>$data['use_captcha'],
 				'use_visit'=>$data['use_visit'],
+				'use_signup'=>$data['use_signup']
 			]
 		);
 

@@ -87,6 +87,7 @@ $create_sql = '
 	   use_level      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
+	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
 	   extra          TEXT) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
@@ -325,7 +326,7 @@ $_err_keys = 'insert_config';
 $sql = 'SELECT theme FROM afox_config WHERE 1';
 $cf = DB::get($sql);
 if (!$cf['theme']) {
-	$sql = 'INSERT INTO afox_config (`theme`, `start`, `title`) VALUES ("default", "welcome", "에이폭스")';
+	$sql = 'INSERT INTO afox_config (`theme`, `start`, `title`, `use_signup`) VALUES ("default", "welcome", "에이폭스", "1")';
 	DB::query($sql);
 }
 
