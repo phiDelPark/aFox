@@ -206,7 +206,7 @@
 
 <?php } ?>
 
-<?php if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>1) { ?>
+<?php if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) { ?>
 	<div class="row">
 		<aside class="col-md-3">
 			<div class="list-group">
