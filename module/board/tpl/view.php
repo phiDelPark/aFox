@@ -25,7 +25,7 @@ $is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		echo toHTML($_{'board'}['wr_type'], $wr_content);
 	?>
 	<?php if(!empty($_{'board'}['wr_tags'])) { ?>
-	<div calss="hashtags">
+	<div class="hashtags">
 		<?php
 			$hashtags = explode(',', $_{'board'}['wr_tags']);
 			foreach ($hashtags as $val) {

@@ -43,7 +43,7 @@
 }
 
 #board_view>footer{
-	margin: 10px 5px 5px;
+	margin: 15px 5px 5px;
 }
 
 #board_view>article>.current_content {
@@ -201,6 +201,9 @@
 	height:25px;
 }
 
+#board_view>article>.hashtags {
+	margin-top: 20px;
+}
 
 @media(max-width:768px) {
 	#board_reply>.reply-editer .area-group button{

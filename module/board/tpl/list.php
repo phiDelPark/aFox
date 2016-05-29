@@ -1,6 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURRENT_DOCUMENT_LIST'];
+$is_wr_grant = isGrant($_DATA['id'], 'write');
 ?>
 
 <section id="board_list"<?php echo empty($_DATA['srl']) ? '' :' style="margin-top:50px"'; ?>>
@@ -96,7 +97,7 @@ if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURR
 		</form>
 		<div class="pull-right">
 			<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
-			<a class="btn btn-default" href="<?php echo getUrl('disp','writeDocument','srl','') ?>" role="button"><i class="fa fa-pencil" aria-hidden="true"></i> <?php echo getLang('write') ?></a>
+			<a class="btn btn-default" href="<?php echo $is_wr_grant ? getUrl('disp','writeDocument','srl','') : '#' ?>"<?php echo $is_wr_grant ? '':' onclick="alert(\''.escapeHtml(getLang('msg_not_permitted')).'\');return false"'?> role="button"><i class="fa fa-pencil" aria-hidden="true"></i> <?php echo getLang('write') ?></a>
 		</div>
 	</footer>
 </section>
