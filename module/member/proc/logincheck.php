@@ -11,7 +11,7 @@ function proc($data) {
 	$mb_password    = trim($data['mb_password']);
 	$auto_login     = isset($data['auto_login']) && $data['auto_login'] == 1;
 
-	if (!$mb_id || !$mb_password) {
+	if(!$mb_id || !$mb_password) {
 		return set_error(getLang('msg_empty_id'),501);
 	}
 
@@ -19,7 +19,7 @@ function proc($data) {
 	$mb = DB::get($sql);
 	if($ex = DB::error()) return set_error($ex->getMessage(),$ex->getCode());
 
-	if (empty($mb['mb_srl']) || !verifyEncrypt($mb_password, $mb['mb_password'])) {
+	if(empty($mb['mb_srl']) || !verifyEncrypt($mb_password, $mb['mb_password'])) {
 		return set_error(getLang('msg_diff_password'),502);
 	}
 
@@ -32,7 +32,8 @@ function proc($data) {
 	// FLASH XSS 공격에 대응하기 위하여 회원의 고유키를 생성해 놓는다. 관리자에서 검사함 - 110106
 	set_session('ss_mb_key', md5($mb['mb_regdate'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']));
 
-	if ($auto_login) {
+	// 최고 관리자는 자동 로그인 안함
+	if($mb['mb_rank'] !== 's' && $auto_login) {
 		$key = md5($_SERVER['SERVER_ADDR'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] . $mb_password);
 		set_cookie('ck_mb_id', $mb_id, 86400 * 31);
 		set_cookie('ck_auto', $key, 86400 * 31);
@@ -43,7 +44,7 @@ function proc($data) {
 
 	$setvalues = ['(mb_login)'=>'NOW()'];
 
-	if (substr($mb['mb_login'], 0, 10) != date('Y-m-d')) {
+	if(substr($mb['mb_login'], 0, 10) != date('Y-m-d')) {
 		// 포인트
 		if(!empty($_CFG['point_login'])) {
 			$point = (int) $_CFG['point_login'];
