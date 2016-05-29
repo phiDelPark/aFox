@@ -9,7 +9,9 @@
 
 	$('.current_content img,.current_content video').each(function(){
 		if(!this.hasAttribute('width')) {
-			$(this).attr('width', '100%');
+			var w1 = $(this).closest('.current_content').width(),
+				w2 = $(this).width();
+			if(w1<w2) $(this).attr('width', '100%');
 		}
 	});
 

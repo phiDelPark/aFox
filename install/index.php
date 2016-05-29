@@ -293,7 +293,7 @@ $create_sql = '
 	   hs_action       VARCHAR(255) NOT NULL,
 	   hs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 
-	  INDEX MB_IX (mb_srl),
+	  INDEX MEMBER_IX (mb_srl),
 	  INDEX IP_IX (hs_ipaddress),
 	  INDEX ACTION_IX (hs_action),
 	  INDEX REGDATE_IX (hs_regdate)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
