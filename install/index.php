@@ -100,8 +100,8 @@ $create_sql = '
 	   extra          TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (ao_id),
-	  INDEX PC_ID (ao_use_pc),
-	  INDEX MOBILE_ID (ao_use_mobile)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX PC_IX (ao_use_pc),
+	  INDEX MOBILE_IX (ao_use_mobile)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -118,7 +118,8 @@ $create_sql = '
 	   mu_collapse     CHAR(1)      NOT NULL DEFAULT 0,
 	   mu_new_win      CHAR(1)      NOT NULL DEFAULT 0,
 
-	  INDEX TYPE_SRL (mu_type, mu_srl)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX SRL_IX (mu_srl),
+	  INDEX TYPE_IX (mu_type)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -176,7 +177,7 @@ $create_sql = '
 	   extra           TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (md_id),
-	  INDEX KEY_INDEX (md_key)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX KEY_IX (md_key)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -210,8 +211,10 @@ $create_sql = '
 	  CONSTRAINT SRL_PK PRIMARY KEY (wr_srl),
 	  INDEX REGDATE_IX (md_id, wr_regdate),
 	  INDEX UPDATE_IX (md_id, wr_update),
-	  INDEX CATEGORY_REGDATE (md_id, wr_category, wr_regdate),
-	  INDEX CATEGORY_UPDATE (md_id, wr_category, wr_update)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX CATEGORY_RDIX (md_id, wr_category, wr_regdate),
+	  INDEX CATEGORY_UDIX (md_id, wr_category, wr_update),
+	  INDEX MEMBER_IX (mb_srl),
+	  INDEX IP_IX (wr_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -237,7 +240,10 @@ $create_sql = '
 	   rp_depth        CHAR(5)      NOT NULL DEFAULT \'\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (rp_srl),
-	  INDEX PARENT_SRL (wr_srl, rp_parent)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX SRL_IX (wr_srl),
+	  INDEX PARENT_IX (rp_parent),
+	  INDEX MEMBER_IX (mb_srl),
+	  INDEX IP_IX (rp_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -273,7 +279,9 @@ $create_sql = '
 	   mf_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (mf_srl),
-	  INDEX TARGET_INDEX (md_id, mf_target, mf_type)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX TARGET_IX (md_id, mf_target),
+	  INDEX MEMBER_IX (mb_srl),
+	  INDEX IP_IX (mf_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -283,7 +291,12 @@ $create_sql = '
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
 	   hs_ipaddress    VARCHAR(128) NOT NULL,
 	   hs_action       VARCHAR(255) NOT NULL,
-	   hs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\') ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	   hs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
+
+	  INDEX MB_IX (mb_srl),
+	  INDEX IP_IX (hs_ipaddress),
+	  INDEX ACTION_IX (hs_action),
+	  INDEX REGDATE_IX (hs_regdate)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -293,7 +306,10 @@ $create_sql = '
 	   vs_ipaddress    VARCHAR(128) NOT NULL,
 	   vs_agent        VARCHAR(255) NOT NULL,
 	   vs_referer      VARCHAR(255) NOT NULL,
-	   vs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\') ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	   vs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
+
+	  INDEX AGENT_IX (vs_agent),
+	  INDEX REGDATE_IX (vs_regdate)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
