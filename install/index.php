@@ -92,17 +92,13 @@ $create_sql = '
 
 DB::query($create_sql);
 
-$_err_keys = 'afox_addons';
+$_err_keys = 'afox_themes';
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_addons (
-	   ao_id          VARCHAR(255)  NOT NULL,
-	   ao_use_pc      CHAR(1)      NOT NULL DEFAULT 0,
-	   ao_use_mobile  CHAR(1)      NOT NULL DEFAULT 0,
+	  CREATE TABLE IF NOT EXISTS afox_themes (
+	   th_id          VARCHAR(255) NOT NULL,
 	   extra          TEXT         NOT NULL DEFAULT \'\',
 
-	  UNIQUE KEY ID_UK (ao_id),
-	  INDEX PC_IX (ao_use_pc),
-	  INDEX MOBILE_IX (ao_use_mobile)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  UNIQUE KEY ID_UK (th_id)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -144,6 +140,20 @@ $create_sql = '
 	  CONSTRAINT SRL_PK PRIMARY KEY (mb_srl),
 	  UNIQUE KEY ID_UK (mb_id),
 	  INDEX RANK_IX (mb_rank)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+
+DB::query($create_sql);
+
+$_err_keys = 'afox_addons';
+$create_sql = '
+	  CREATE TABLE IF NOT EXISTS afox_addons (
+	   ao_id          VARCHAR(255) NOT NULL,
+	   ao_use_pc      CHAR(1)      NOT NULL DEFAULT 0,
+	   ao_use_mobile  CHAR(1)      NOT NULL DEFAULT 0,
+	   extra          TEXT         NOT NULL DEFAULT \'\',
+
+	  UNIQUE KEY ID_UK (ao_id),
+	  INDEX PC_IX (ao_use_pc),
+	  INDEX MOBILE_IX (ao_use_mobile)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -338,6 +348,20 @@ if (!$mb['mb_id']) {
 	DB::query(sprintf($sql, 's', 'admin', PasswordStorage::create_hash('0000'), '관리자'));
 }
 
+$_err_keys = 'insert_themes';
+$sql = 'SELECT th_id FROM afox_themes WHERE th_id = \'default\'';
+$cf = DB::get($sql);
+if (!$cf['th_id']) {
+	$tmp = [];
+	$tmp['carousel_item_1'] = '<h1>헤드라인 예제</h1><p>이것은 헤드라인 예제입니다.<br>이 헤드라인은 (테마 설정)에서 사용자가 원하는 대로 작성하시면 됩니다.<br>에이폭스는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.</p><a class="btn btn-primary" href="#">오늘 가입</a>';
+	$tmp['carousel_item_2'] = '<h1>두번째 헤드라인 예제</h1><p>에이폭스는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.<br>afox에 의해 디자인되고 만들어 졌으며 코드 기여자의 도움과 코어 팀에 의해 유지보수 됩니다.</p><a class="btn btn-primary" href="#">자세히 알아보기</a>';
+	$tmp['carousel_item_3'] = '<h1>마지막으로 하나 더</h1><p><p>에이폭스는 각각의 기능과 디자인이 구조적으로 연결되는 모듈형 구조로 개발 및 유지보수를 쉽게 하도록 도와주며 관리자는 손쉽게 설정과 디자인을 변경할 수 있으며 여러분만의 개성을 가진 웹 사이트를 만들 수 있습니다.</p></p><a class="btn btn-primary" href="#">갤러리 검색</a>';
+	$tmp['footer_html'] = '에이폭스는 <a href="http://afox.kr" target="_blank">@afox</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.';
+	$tmp = DB::quotes(serialize($tmp));
+	$sql = 'INSERT INTO afox_themes (`th_id`, `extra`) VALUES ("default", '.$tmp.')';
+	DB::query($sql);
+}
+
 $_err_keys = 'insert_config';
 $sql = 'SELECT theme FROM afox_config WHERE 1';
 $cf = DB::get($sql);
@@ -387,13 +411,6 @@ fwrite($f, '<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.
 fwrite($f, '<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css" rel="stylesheet">'."\n");
 fwrite($f, '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>'."\n");
 fwrite($f, '<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>'."\n");
-fclose($f);
-chmod($file, 0644);
-
-$file = $datadir.'config/footer_html.php';
-$f = @fopen($file, 'w');
-fwrite($f, "<?php if(!defined('__AFOX__')) exit();?>\n");
-fwrite($f, '에이폭스 게시판은 <a href="http://afox.kr" target="_blank">@afox</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.');
 fclose($f);
 chmod($file, 0644);
 
