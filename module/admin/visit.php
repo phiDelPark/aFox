@@ -10,10 +10,10 @@
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
-		<th>#<?php echo getLang('ip')?></th>
+		<th class="col-xs-1">#<?php echo getLang('ip')?></th>
 		<th><?php echo getLang('agent')?></th>
-		<th><?php echo getLang('referer')?></th>
-		<th><?php echo getLang('date')?></th>
+		<th class="col-md-7"><?php echo getLang('referer')?></th>
+		<th class="col-xs-1"><?php echo getLang('date')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -31,7 +31,7 @@
 		foreach ($vs_list['data'] as $key => $value) {
 			echo '<tr><th scope="row">'.$value['vs_ipaddress'].'</th>';
 			echo '<td>'.escapeHtml($value['vs_agent']).'</td>';
-			echo '<td class="col-md-10">'.escapeHtml($value['vs_referer']).'</td>';
+			echo '<td>'.escapeHtml($value['vs_referer']).'</td>';
 			echo '<td>'.date('Y/m/d h:m', strtotime($value['vs_regdate'])).'</td></tr>';
 		}
 	}

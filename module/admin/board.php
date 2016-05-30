@@ -17,10 +17,10 @@
 <thead>
 	<tr>
 		<th>#<?php echo getLang('id')?></th>
-		<th><?php echo getLang('title')?></th>
+		<th class="col-md-8"><?php echo getLang('title')?></th>
 		<th><?php echo getLang('grant')?></th>
 		<th><?php echo getLang('date')?></th>
-		<th><?php echo getLang('setup')?></th>
+		<th class="col-xs-1"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -37,10 +37,10 @@
 
 		foreach ($board_list['data'] as $key => $value) {
 			echo '<tr><th scope="row"><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
-			echo '<td class="col-md-10">'.escapeHtml(cut_str(strip_tags($value['md_title'].(isset($value['md_description'])?' - '.$value['md_description']:'')),50)).'</td>';
+			echo '<td>'.escapeHtml(cut_str(strip_tags($value['md_title'].(isset($value['md_description'])?' - '.$value['md_description']:'')),50)).'</td>';
 			echo '<td>'.$value['grant_list'].'-'.$value['grant_view'].'-'.$value['grant_write'].'-'.$value['grant_reply'].'-'.$value['grant_upload'].'-'.$value['grant_download'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['md_regdate'])).'</td>';
-			echo '<td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" data-exec-ajax="admin.getBoard" data-ajax-param="md_id,'.$value['md_id'].'" data-modal-target="#board_modal">'.getLang('setup').'</button></td></tr>';
+			echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-exec-ajax="admin.getBoard" data-ajax-param="md_id,'.$value['md_id'].'" data-modal-target="#board_modal">'.getLang('setup').'</button></td></tr>';
 		}
 	}
 ?>

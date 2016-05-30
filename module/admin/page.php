@@ -35,10 +35,10 @@
 	<tr>
 		<th>#<?php echo getLang('id')?></th>
 		<th><?php echo getLang('type')?></th>
-		<th><?php echo getLang('title')?></th>
+		<th class="col-md-7"><?php echo getLang('title')?></th>
 		<th><?php echo getLang('grant')?></th>
-		<th><?php echo getLang('date')?></th>
-		<th><?php echo getLang('setup')?></th>
+		<th class="col-xs-1"><?php echo getLang('date')?></th>
+		<th class="col-xs-1"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -54,10 +54,10 @@
 		foreach ($page_list['data'] as $key => $value) {
 			echo '<tr><th scope="row"><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
 			echo '<td>'.$_type[$value['pg_type']].'</td>';
-			echo '<td class="col-md-10">'.escapeHtml(cut_str(strip_tags($value['md_title']),50)).'</td>';
+			echo '<td>'.escapeHtml(cut_str(strip_tags($value['md_title']),50)).'</td>';
 			echo '<td>'.$value['grant_view'].'-'.$value['grant_reply'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['pg_update'])).'</td>';
-			echo '<td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].',with_module_config,1,with_file_list,1" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
+			echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].',with_module_config,1,with_file_list,1" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
 		}
 	}
 ?>

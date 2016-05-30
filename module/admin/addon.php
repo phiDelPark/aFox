@@ -15,10 +15,10 @@
 <table class="table table-hover">
 <thead>
 	<tr>
-		<th>#<?php echo getLang('addon')?></th>
+		<th class="col-md-9">#<?php echo getLang('addon')?></th>
 		<th><?php echo getLang('version')?></th>
 		<th><?php echo getLang('author')?></th>
-		<th><?php echo getLang('setup')?></th>
+		<th class="col-xs-1"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -33,10 +33,10 @@ if(is_dir($addon_dir)) {
 		$_ADDON_INFO = [];
 		@include $addon_dir.$name.'/info.php';
 
-		echo '<tr><th scope="row" class="col-md-8">'.(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title']).'</th>';
+		echo '<tr><th scope="row">'.(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title']).'</th>';
 		echo '<td>'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
 		echo '<td>'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
-		echo '<td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_addon_modal" data-addon-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
+		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_addon_modal" data-addon-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
 	}
 }
 ?>

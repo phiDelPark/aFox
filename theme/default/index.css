@@ -41,10 +41,14 @@ body > .container{
 	background-color: transparent;
 	border: 0;
 	font-size: 80px;
-	width: 80px;
-	margin-top: -10px;
+	width: 45px;
+	margin:0;
 	text-shadow: 0 1px 1px rgba(0,0,0,.4);
 	background-image: none !important;
+	text-align: right;
+}
+.carousel-control.right {
+	text-align: left;
 }
 
 .carousel .item {
@@ -87,7 +91,7 @@ body > .container{
 }
 
 .header-image.board {
-	background:url(img/header_board.jpg);
+	background-image: url(img/header_board.jpg);
 }
 
 .header-image>h3,
@@ -245,7 +249,6 @@ form .af_editor_rp_content > textarea + iframe{
 	.carousel-control {
 		font-size: 50px;
 		width: 25px;
-		margin-top: -15px;
 	}
 	.carousel .item {
 		height: 220px;
@@ -267,7 +270,7 @@ form .af_editor_rp_content > textarea + iframe{
 	.header-image>p{
 		top: 33px;
 		left: 15px;
-		width: 230px;
+		width: 330px;
 		margin:0;
 	}
 	.bs-docs-footer {

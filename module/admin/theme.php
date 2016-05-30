@@ -16,11 +16,11 @@
 <table class="table table-hover">
 <thead>
 	<tr>
-		<th>#<?php echo getLang('theme')?></th>
+		<th class="col-md-7">#<?php echo getLang('theme')?></th>
 		<th><?php echo getLang('version')?></th>
 		<th><?php echo getLang('author')?></th>
-		<th><?php echo getLang('use')?></th>
-		<th><?php echo getLang('setup')?></th>
+		<th class="col-xs-1"><?php echo getLang('use')?></th>
+		<th class="col-xs-1"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -35,11 +35,11 @@ if(is_dir($theme_dir)) {
 		$_THEME_INFO = [];
 		@include $theme_dir.$name.'/info.php';
 
-		echo '<tr><th scope="row" class="col-md-8">'.(empty($_THEME_INFO['title'])?$name:$_THEME_INFO['title']).'</th>';
+		echo '<tr><th scope="row">'.(empty($_THEME_INFO['title'])?$name:$_THEME_INFO['title']).'</th>';
 		echo '<td>'.(empty($_THEME_INFO['version'])?'...':$_THEME_INFO['version']).'</td>';
 		echo '<td>'.(empty($_THEME_INFO['author'])?'...':'<a href="'.(empty($_THEME_INFO['link'])?'mailto:'.$_THEME_INFO['email'].'"':$_THEME_INFO['link'].'" target="_blank"').'>'.$_THEME_INFO['author'].'</a>').'</td>';
-		echo '<td class="col-xs-1"><button type="button" class="btn btn-'.($theme_id == $name?'info':'primary').' btn-xs min-width-100" data-exec-ajax="admin.updateSetupTheme" data-ajax-param="th_id,'.$name.',success_return_url,'.urlencode(getUrl()).'">'.getLang($theme_id == $name? 'using':'use').'</button></td>';
-		echo '<td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_theme_modal" data-theme-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
+		echo '<td><button type="button" class="btn btn-'.($theme_id == $name?'info':'primary').' btn-xs min-width-100" data-exec-ajax="admin.updateSetupTheme" data-ajax-param="th_id,'.$name.',success_return_url,'.urlencode(getUrl()).'">'.getLang($theme_id == $name? 'using':'use').'</button></td>';
+		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_theme_modal" data-theme-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
 	}
 }
 ?>
@@ -51,13 +51,13 @@ if(is_dir($theme_dir)) {
 <thead>
 	<tr>
 		<th>#<?php echo getLang('removed_theme')?></th>
-		<th><?php echo getLang('empty_theme')?></th>
+		<th class="col-xs-1"><?php echo getLang('empty_theme')?></th>
 	</tr>
 </thead>
 <tbody>
 <?php
 	foreach($th_list as $key => $value) {
-		if($value) echo '<tr><td>'.$key.'</td><td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" data-empty-theme="'.$key.'">'.getLang('empty_theme').'</button></td></tr>';
+		if($value) echo '<tr><td>'.$key.'</td><td><button type="button" class="btn btn-primary btn-xs min-width-100" data-empty-theme="'.$key.'">'.getLang('empty_theme').'</button></td></tr>';
 	}
 ?>
 </tbody>

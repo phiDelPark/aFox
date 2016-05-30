@@ -15,11 +15,11 @@
 <thead>
 	<tr>
 		<th>#<?php echo getLang('id')?></th>
-		<th><?php echo getLang('nickname')?></th>
-		<th><?php echo getLang('rank')?></th>
+		<th class="col-md-7"><?php echo getLang('nickname')?></th>
+		<th class="col-xs-1"><?php echo getLang('rank')?></th>
 		<th><?php echo getLang('point')?></th>
-		<th><?php echo getLang('status')?></th>
-		<th><?php echo getLang('login')?></th>
+		<th class="col-xs-1"><?php echo getLang('status')?></th>
+		<th class="col-xs-1"><?php echo getLang('login')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -37,7 +37,7 @@
 		foreach ($member_list['data'] as $key => $value) {
 			$rank = ord($value['mb_rank']) - 48;
 			echo '<tr class="afox-list-item" data-exec-ajax="member.getMember" data-ajax-param="mb_id,'.$value['mb_id'].'" data-modal-target="#member_modal"><th scope="row">'.$value['mb_id'].'</th>';
-			echo '<td class="col-md-10">'.$value['mb_nick'].'</td>';
+			echo '<td>'.$value['mb_nick'].'</td>';
 			echo '<td>'.(isset($rank_arr[$rank])?$rank_arr[$rank]:'LV. '.$rank).'</td>';
 			echo '<td>'.$value['mb_point'].'</td>';
 			echo '<td>'.$value['mb_status'].'</td>';

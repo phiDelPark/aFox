@@ -12,12 +12,12 @@
 <thead>
 	<tr>
 		<th>#</th>
-		<th><?php echo getLang('title')?></th>
-		<th><?php echo getLang('status')?></th>
-		<th><?php echo getLang('secret')?></th>
+		<th class="col-md-7"><?php echo getLang('title')?></th>
+		<th class="col-xs-1"><?php echo getLang('status')?></th>
+		<th class="col-xs-1"><?php echo getLang('secret')?></th>
 		<th><?php echo getLang('author')?></th>
-		<th><?php echo getLang('date')?></th>
-		<th><?php echo getLang('removed_date')?></th>
+		<th class="col-xs-1"><?php echo getLang('date')?></th>
+		<th class="col-xs-1"><?php echo getLang('removed_date')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -34,7 +34,7 @@
 
 		foreach ($doc_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"><th scope="row">'.$value['wr_srl'].'</th>';
-			echo '<td class="col-md-10">'.escapeHtml(cut_str(strip_tags($value['wr_title']),50)).'</td>';
+			echo '<td>'.escapeHtml(cut_str(strip_tags($value['wr_title']),50)).'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td>'.($value['wr_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml(strip_tags($value['mb_nick'])).'</td>';

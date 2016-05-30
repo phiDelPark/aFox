@@ -11,11 +11,11 @@
 <thead>
 	<tr>
 		<th>#<?php echo getLang('board')?></th>
-		<th><?php echo getLang('title')?></th>
-		<th><?php echo getLang('status')?></th>
-		<th><?php echo getLang('secret')?></th>
+		<th class="col-md-7"><?php echo getLang('title')?></th>
+		<th class="col-xs-1"><?php echo getLang('status')?></th>
+		<th class="col-xs-1"><?php echo getLang('secret')?></th>
 		<th><?php echo getLang('author')?></th>
-		<th><?php echo getLang('date')?></th>
+		<th class="col-xs-1"><?php echo getLang('date')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -32,7 +32,7 @@
 
 		foreach ($cmt_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].'" data-modal-target="#comment_modal"><th scope="row">'.$value['rp_srl'].'</th>';
-			echo '<td class="col-md-10">'.escapeHtml(cut_str(strip_tags($value['rp_content']),50)).'</td>';
+			echo '<td>'.escapeHtml(cut_str(strip_tags($value['rp_content']),50)).'</td>';
 			echo '<td>'.($value['rp_status']?$value['rp_status']:'-').'</td>';
 			echo '<td>'.($value['rp_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml(strip_tags($value['mb_nick'])).'</td>';

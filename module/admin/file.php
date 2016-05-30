@@ -11,10 +11,10 @@
 <thead>
 	<tr>
 		<th>#<?php echo getLang('id')?></th>
-		<th><?php echo getLang('name')?></th>
+		<th class="col-md-8"><?php echo getLang('name')?></th>
 		<th><?php echo getLang('download')?></th>
 		<th><?php echo getLang('ip')?></th>
-		<th><?php echo getLang('date')?></th>
+		<th class="col-xs-1"><?php echo getLang('date')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -31,7 +31,7 @@
 
 		foreach ($file_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item"><th scope="row">'.$value['md_id'].'</th>';
-			echo '<td class="col-md-10">'.escapeHtml(cut_str($value['mf_name'],50)).'</td>';
+			echo '<td>'.escapeHtml(cut_str($value['mf_name'],50)).'</td>';
 			echo '<td>'.$value['mf_download'].'</td>';
 			echo '<td>'.$value['mf_ipaddress'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mf_regdate'])).'</td></tr>';
