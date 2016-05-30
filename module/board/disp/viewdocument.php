@@ -7,11 +7,14 @@ function proc($data) {
 
 	if(empty($doc['error'])) {
 	global $_MEMBER;
+	$is_manager = isManager($doc['md_id']);
+
 		// 권한 체크
-		if(!isManager($doc['md_id'])) {
+		if(!$is_manager) {
 			if(!isGrant($doc['md_id'], 'view')) {
 				return set_error(getLang('msg_not_permitted'),901);
 			}
+
 			// 비밀글이면
 			if($doc['wr_secret'] == '1') {
 				// 권한 체크
@@ -25,17 +28,39 @@ function proc($data) {
 					}
 					if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
 						return set_error(getLang('msg_not_permitted'), 901);
-					} else {
-						$GLOBALS['_PERMIT_VIEW_'][md5($doc['md_id'].'_'.$data['srl'])] = true;
 					}
 				} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
 					return set_error(getLang('msg_not_permitted'), 901);
 				}
+
+				$GLOBALS['_PERMIT_VIEW_'][md5($doc['md_id'].'_'.$data['srl'])] = true;
+			}
+		}
+
+		$call = null;
+
+		if(!$is_manager && !empty($data['rp']) && !empty($data['mb_password'])) {
+			if(empty($GLOBALS['_PERMIT_VIEW_'][md5($doc['md_id'].'_'.$data['srl'])])) {
+				$rsrl = $data['rp'];
+				$pass = $data['mb_password'];
+				$mdid= $doc['md_id'];
+				$call = function($r)use($rsrl,$pass,$mdid){
+					$rset = [];
+					while ($row = DB::assoc($r)) {
+						$rset[] = $row;
+						if($rsrl===$row['rp_srl']) {
+							if(verifyEncrypt($pass, $row['mb_password'])){
+								$GLOBALS['_PERMIT_VIEW_'][md5($mdid.'_'.$row['wr_srl'].'_'.$row['rp_srl'])] = true;
+							}
+						}
+					}
+					return $rset;
+				};
 			}
 		}
 
 		$cpage = empty($data['cpage']) ? '' : $data['cpage'];
-		$doc['CURRENT_COMMENT_LIST'] = getCommentList($data['srl'], $cpage);
+		$doc['CURRENT_COMMENT_LIST'] = getCommentList($data['srl'], $cpage, [], 'rp_parent,rp_depth', $call);
 
 		$category = empty($data['category']) ? '' : $data['category'];
 		$search = empty($data['search']) ? '' : $data['search'];

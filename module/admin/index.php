@@ -14,12 +14,8 @@ function returnUrlMerge($data, $result) {
 	if(!isset($result)) $result = [];
 	$result['act'] = $data['act'];
 	$result['disp'] = $data['disp'];
-
-	if(empty($result['error'])) {
-		$result['redirect_url'] = isset($data['success_return_url']) ? urldecode($data['success_return_url']) : '';
-	} else {
-		$result['redirect_url'] = isset($data['error_return_url']) ? urldecode($data['error_return_url']) : '';
-	}
+	$url_key = empty($result['error'])?'success_return_url':'error_return_url';
+	$result['redirect_url'] = isset($data[$url_key])?urldecode($data[$url_key]):'';
 	return $result;
 }
 

@@ -52,9 +52,10 @@ $is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		<div class="pull-right">
 			<?php
 				$is_edit = empty($_{'board'}['mb_srl']) || $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl'];
+				$not_edit_str = '#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted')).'\');return false';
 			?>
-			<a href="<?php echo $is_edit?getUrl('disp','writeDocument', 'srl', $_DATA['srl']):'#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted')).'\');return false' ?>" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
-			<a href="<?php echo $is_edit?getUrl('disp','deleteDocument', 'srl', $_DATA['srl']):'#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted')).'\');return false' ?>" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
+			<a href="<?php echo $is_edit?getUrl('disp','writeDocument', 'srl', $_DATA['srl']):$not_edit_str?>" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
+			<a href="<?php echo $is_edit?getUrl('disp','deleteDocument', 'srl', $_DATA['srl']):$not_edit_str?>" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 		</div>
 	</footer>
 </section>

@@ -32,7 +32,7 @@
 			var editor = $f.find('.af_editor_rp_content').afEditor();
 
 			if(act == 'board.getComment'){
-				var nombsrl = $i.attr('data-act-option') || '';
+				var nombsrl = $i.attr('data-act-password') || '';
 				if(nombsrl) {
 					var r = prompt($_LANG['warn_input'].sprintf([$_LANG['password']]), '');
 					if (r == null) return false;
@@ -72,7 +72,7 @@
 			});
 
 		} else if(act == 'board.deleteComment'){
-			var nombsrl = $i.attr('data-act-option') || '';
+			var nombsrl = $i.attr('data-act-password') || '';
 			if(nombsrl) {
 				var r = prompt($_LANG['warn_input'].sprintf([$_LANG['password']]), '');
 				if (r == null) return false;

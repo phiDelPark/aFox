@@ -3,7 +3,7 @@ if(!defined('__AFOX__')) exit();
 
 require_once dirname(__FILE__) . '/config.php';
 
-require_once _AF_LANGS_PATH_ . 'default_' . _AF_LANG_ . '.php';
+@include_once _AF_LANGS_PATH_ . 'default_' . _AF_LANG_ . '.php';
 require_once _AF_CONFIG_PATH_ . 'function.php';
 
 define('__MOBILE__', checkUserAgent() == 'MOBILE');

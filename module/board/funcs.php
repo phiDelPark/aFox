@@ -37,7 +37,7 @@ if(!defined('__AFOX__')) exit();
 		return $result;
 	}
 
-	function getDocumentList($id, $page, $search = '', $category = '', $wheres = [], $order = 'wr_regdate desc') {
+	function getDocumentList($id, $page, $search = '', $category = '', $wheres = [], $order = 'wr_regdate desc', $callback = null) {
 		$schs = [];
 		if(!empty($search)) {
 			$schkeys = ['tags'=>'wr_tags','nick'=>'mb_nick','regdate'=>'wr_regdate'];
@@ -56,17 +56,17 @@ if(!defined('__AFOX__')) exit();
 		];
 		if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
 		$list_count = getModule($id, 'md_list_count');
-		return getDBList(_AF_DOCUMENT_TABLE_, $_wheres, $order, $page, $list_count);
+		return getDBList(_AF_DOCUMENT_TABLE_, $_wheres, $order, $page, $list_count, $callback);
 	}
 
 	function getComment($srl, $field = '*') {
 		return getDBItem(_AF_COMMENT_TABLE_, ['rp_srl'=>$srl], $field);
 	}
 
-	function getCommentList($srl, $page, $wheres = [], $order = 'rp_parent,rp_depth') {
+	function getCommentList($srl, $page, $wheres = [], $order = 'rp_parent,rp_depth', $callback = null) {
 		$_wheres = ['wr_srl'=>$srl];
 		if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
-		return getDBList(_AF_COMMENT_TABLE_, $_wheres, $order, $page, 50);
+		return getDBList(_AF_COMMENT_TABLE_, $_wheres, $order, $page, 50, $callback);
 	}
 
 	function getHashtags($content) {

@@ -168,7 +168,7 @@ if(!defined('__AFOX__')) exit();
 		return ($ex=DB::error()) ? set_error($ex->getMessage(), $ex->getCode()) : $r;
 	}
 
-	function getDBList($table, $wheres = [], $order = '', $page = 0, $count = 0) {
+	function getDBList($table, $wheres = [], $order = '', $page = 0, $count = 0, $callback = null) {
 		$limit = '';
 
 		if($count>0){
@@ -181,7 +181,7 @@ if(!defined('__AFOX__')) exit();
 		if(empty($wheres)) $wheres = '1';
 
 		try {
-			$r = DB::getList("SELECT SQL_CALC_FOUND_ROWS * FROM $table WHERE {$wheres}{$order}{$limit}");
+			$r = DB::getList("SELECT SQL_CALC_FOUND_ROWS * FROM $table WHERE {$wheres}{$order}{$limit}", [], $callback);
 
 			$total_count = DB::found();
 			$result = [];
