@@ -265,6 +265,7 @@ $create_sql = '
 	   pg_type         CHAR(1)      NOT NULL DEFAULT 0,
 	   pg_content      LONGTEXT     NOT NULL DEFAULT \'\',
 	   pg_file         INT(11)      NOT NULL DEFAULT 0,
+	   pg_reply        INT(11)      NOT NULL DEFAULT 0,
 	   pg_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   pg_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   extra           TEXT         NOT NULL DEFAULT \'\',
@@ -355,7 +356,7 @@ if (!$cf['th_id']) {
 	$tmp = [];
 	$tmp['carousel_item_1'] = '<h1>헤드라인 예제</h1><p>이것은 헤드라인 예제입니다.<br>이 헤드라인은 (테마 설정)에서 사용자가 원하는 대로 작성하시면 됩니다.<br>에이폭스는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.</p><a class="btn btn-primary" href="#">오늘 가입</a>';
 	$tmp['carousel_item_2'] = '<h1>두번째 헤드라인 예제</h1><p>에이폭스는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.<br>afox에 의해 디자인되고 만들어 졌으며 코드 기여자의 도움과 코어 팀에 의해 유지보수 됩니다.</p><a class="btn btn-primary" href="#">자세히 알아보기</a>';
-	$tmp['carousel_item_3'] = '<h1>마지막으로 하나 더</h1><p><p>에이폭스는 각각의 기능과 디자인이 구조적으로 연결되는 모듈형 구조로 개발 및 유지보수를 쉽게 하도록 도와주며 관리자는 손쉽게 설정과 디자인을 변경할 수 있으며 여러분만의 개성을 가진 웹 사이트를 만들 수 있습니다.</p></p><a class="btn btn-primary" href="#">갤러리 검색</a>';
+	$tmp['carousel_item_3'] = '<h1>마지막으로 하나 더</h1><p>에이폭스는 각각의 기능과 디자인이 구조적으로 연결되는 모듈형 구조로 개발 및 유지보수를 쉽게 하도록 도와주며 관리자는 손쉽게 설정과 디자인을 변경할 수 있으며 여러분만의 개성을 가진 웹 사이트를 만들 수 있습니다.</p><a class="btn btn-primary" href="#">갤러리 검색</a>';
 	$tmp['footer_html'] = '에이폭스는 <a href="http://afox.kr" target="_blank">@afox</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.';
 	$tmp = DB::quotes(serialize($tmp));
 	$sql = 'INSERT INTO afox_themes (`th_id`, `extra`) VALUES ("default", '.$tmp.')';
