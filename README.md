@@ -1,5 +1,4 @@
-[![release](https://img.shields.io/badge/release-Download-brightgreen.svg)](https://github.com/phiDelPark/aFox/releases)
-[![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](https://github.com/phiDelPark/aFox/blob/master/LICENSE)
+[![release](https://img.shields.io/badge/release-Download-brightgreen.svg)](https://github.com/phiDelPark/aFox/releases) [![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](https://github.com/phiDelPark/aFox/blob/master/LICENSE)
 
 aFox는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.
 
@@ -12,7 +11,7 @@ aFox는 모듈, 애드온, 에디터, 테마의 구조를 기반으로 결과물
 ### 오픈 소스 소프트웨어! 열린 프로젝트! (코드 공헌 가이드)
 
 aFox는 여러분들의 개발 참여를 기다립니다.
-참여를 원하시는 분들은 버그 신고/제안 혹은 Pull Request 전에 [CONTRIBUTING.md](./CONTRIBUTING.md) 문서를 먼저 읽어주시기 바랍니다.
+참여를 원하시는 분들은 버그 신고/제안 혹은 Pull Request 전에 [CONTRIBUTING.md](https://github.com/phiDelPark/aFox/blob/master/CONTRIBUTING.md) 문서를 먼저 읽어주시기 바랍니다.
 
 ## 서버 필요 조건
 * UTF-8

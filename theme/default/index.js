@@ -1,6 +1,6 @@
 /*!
- * aFox Board v3.3.6 (http://afox.kr)
- * Copyright 2015-2016 afox, Inc.
+ * aFox (http://afox.kr)
+ * Copyright 2016 afox, Inc.
  */
 
 +function ($) {

@@ -18,7 +18,7 @@ function proc($data) {
 
 		$addon_exists = !empty($out['ao_id']);
 
-		$remove_array = ['ao_id', 'ao_use_pc', 'ao_use_mobile', 'module', 'act', 'success_return_url', 'error_return_url'];
+		$remove_array = ['ao_id', 'ao_use_pc', 'ao_use_mobile', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url'];
 		foreach ($remove_array as $value) {
 			if(isset($data[$value])) unset($data[$value]);
 		}

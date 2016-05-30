@@ -12,20 +12,16 @@
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
 	<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
 	<input type="hidden" name="act" value="updateSetup">
+	<input type="hidden" name="theme" value="<?php echo empty($config['theme'])?'':escapeHtml($config['theme'])?>">
 
 	<div class="form-group">
 		<div class="form-inline">
-			<div class="input-group">
-				<label class="input-group-addon" for="id_theme"><?php echo getLang('theme')?></label>
-				<input type="text" name="theme" class="form-control" style="width:130px" id="id_theme" maxlength="255" value="<?php echo empty($config['theme'])?'':escapeHtml($config['theme'])?>" placeholder="<?php echo getLang('theme')?>" required>
-				<span class="input-group-btn"><button class="btn btn-primary" type="button"><?php echo getLang('browse')?></button></span>
-			</div>&nbsp;&nbsp;&nbsp;
 			<div class="input-group">
 				<label class="input-group-addon" for="id_start_page"><?php echo getLang('start_page')?></label>
 				<input type="text" name="start" class="form-control" style="width:130px" id="id_start_page" maxlength="11" value="<?php echo empty($config['start'])?'':escapeHtml($config['start'])?>" placeholder="<?php echo getLang('page')?>" required>
 			</div>
 		</div>
-		<p class="help-block"><?php echo getLang('desc_theme')?></p>
+		<p class="help-block"><?php echo getLang('desc_start_page')?></p>
 	</div>
 	<div class="form-group">
 		<label for="id_title"><?php echo getLang('title')?></label>
@@ -56,11 +52,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="form-group">
-		<label for="id_footer"><?php echo getLang('site_footer')?></label>
-		<textarea class="form-control min-height-100 vresize" name="footer_html" id="id_footer"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'footer_html.php')) include $tmp; ?></textarea>
-		<p class="help-block"><?php echo getLang('desc_site_footer')?></p>
 	</div>
 	<div>&nbsp;</div>
 	<div class="form-group point-group">
@@ -143,6 +134,25 @@
 	</div>
 
 </form>
+
+<div id="admin_theme_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.getThemeForm">
+	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+	<input type="hidden" name="ao_id" value="" />
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('theme')?></h4>
+	  </div>
+	  <div class="modal-body">
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
+		<button type="submit" class="btn btn-success min-width-150"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
+	  </div>
+	</form>
+  </div>
+</div>
 
 <?php
 /* End of file setup.php */

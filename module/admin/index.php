@@ -16,9 +16,9 @@ function returnUrlMerge($data, $result) {
 	$result['disp'] = $data['disp'];
 
 	if(empty($result['error'])) {
-		$result['redirect_url'] = isset($data['success_return_url']) ? $data['success_return_url'] : '';
+		$result['redirect_url'] = isset($data['success_return_url']) ? urldecode($data['success_return_url']) : '';
 	} else {
-		$result['redirect_url'] = isset($data['error_return_url']) ? $data['error_return_url'] : '';
+		$result['redirect_url'] = isset($data['error_return_url']) ? urldecode($data['error_return_url']) : '';
 	}
 	return $result;
 }

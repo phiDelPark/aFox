@@ -41,7 +41,7 @@
 <div class="container">
 
 	<header class="bs-docs-header">
-		<h1 id="logo_title"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'/img/logo.png' : $_CFG['logo']?>" alt="<?php echo $_CFG['title']?>" height="50"></h1>
+		<h1 id="logo_title"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo $_CFG['title']?>" height="50"></h1>
 		<div class="right">
 <?php if (!empty($_MEMBER)) { ?>
 			<span>
@@ -152,50 +152,26 @@
 	</nav>
 
 <?php if ($_DATA['id'] == $_CFG['start']) { ?>
-
 	<section id="myCarousel" class="carousel slide" data-ride="carousel">
-		<!-- Indicators -->
-		<ol class="carousel-indicators">
-			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-			<li data-target="#myCarousel" data-slide-to="1"></li>
-			<li data-target="#myCarousel" data-slide-to="2"></li>
-			<li data-target="#myCarousel" data-slide-to="3"></li>
-		</ol>
-
-		<!-- Wrapper for slides -->
-		<div class="carousel-inner" role="listbox">
-
-			<div class="item active">
-				<img src="http://www.w3schools.com/bootstrap/img_flower.jpg" alt="Flower">
+	  <div class="carousel-inner">
+		<?php for ($i=1; $i < 4; $i++) {  ?>
+			<div class="item<?php echo $i===1 ? ' active':''?>">
+			  <img src="<?php echo _AF_THEME_URL_ ?>img/slide-0<?php echo $i ?>.jpg" alt="">
+			  <div class="container">
 				<div class="carousel-caption">
-					<h3>Flowers</h3>
-					<p>Beatiful flowers in Kolymbari, Crete.</p>
+				  <?php if(!empty($_CFG['theme']['carousel_item_'.$i])) echo $_CFG['theme']['carousel_item_'.$i] ?>
 				</div>
+			  </div>
 			</div>
-
-			<div class="item">
-				<img src="http://www.w3schools.com/bootstrap/img_flower2.jpg" alt="Flower">
-				<div class="carousel-caption">
-					<h3>Flowers</h3>
-					<p>Beatiful flowers in Kolymbari, Crete.</p>
-				</div>
-			</div>
-		</div>
-
-	  <!-- Left and right controls -->
-	  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-		<span class="sr-only">Previous</span>
-	  </a>
-	  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-		<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-		<span class="sr-only">Next</span>
-	  </a>
+		<?php } ?>
+	  </div>
+	  <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+	  <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
 	</section>
 
 <?php } else if(!empty($_CFG['module'])) { ?>
 
-  <div class="header-image">
+  <div class="header-image <?php echo strtolower($_DATA['module']) ?>">
 	<h3><?php echo $_CFG['module']['md_title'] ?></h3>
 	<p><?php echo $_CFG['module']['md_description'] ?></p>
   </div>
@@ -207,7 +183,7 @@
 <?php } ?>
 
 <?php if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) { ?>
-	<div class="row">
+	<div class="bs-docs-body row">
 		<aside class="col-md-3">
 			<div class="list-group">
 			  <span class="list-group-item disabled">
@@ -225,19 +201,18 @@
 		<section class="col-md-9">
 
 <?php } else { ?>
-	<div>
+	<div class="bs-docs-body">
 		<section>
 <?php } ?>
-			<article class="bs-docs-body">
-
+			<article>
 			<?php echo dispModuleContent()?>
-
 			</article>
 		</section>
 	</div>
 
 	<footer class="bs-docs-footer">
 		<ul class="bs-docs-footer-links">
+		<li style="visibility:hidden"></li>
 <?php
 
 	if(empty($menus['error'])){
@@ -248,7 +223,7 @@
 
 ?>
 		</ul>
-		<p><?php if($_CFG['footer_html']) include $_CFG['footer_html']; ?></p>
+		<p><?php if(!empty($_CFG['theme']['footer_html'])) echo $_CFG['theme']['footer_html']; ?></p>
 	</footer>
 
 </div>

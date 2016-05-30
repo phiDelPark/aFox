@@ -1,7 +1,6 @@
 /*!
- * aFox Board (http://afox.kr)
+ * aFox (http://afox.kr)
  * Copyright 2016 afox, Inc.
- * Licensed under the MIT license
  */
 
 +function ($) {

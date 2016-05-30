@@ -69,7 +69,7 @@ function proc($data) {
 			}
 		}
 
-		$_lst = ['base_cdn_list','terms_of_use','footer_html'];
+		$_lst = ['base_cdn_list','terms_of_use'];
 		foreach ($_lst as $val) {
 			$data[$val] = trim($data[$val]);
 			$file = _AF_CONFIG_DATA_.$val.'.php';

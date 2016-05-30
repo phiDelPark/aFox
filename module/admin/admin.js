@@ -1,6 +1,6 @@
 /*!
- * aFox Board v3.3.6 (http://afox.kr)
- * Copyright 2015-2016 afox, Inc.
+ * aFox (http://afox.kr)
+ * Copyright 2016 afox, Inc.
  */
 
 +function ($) {
@@ -86,11 +86,14 @@
 		var $editor = $m.find('.af-editor-group');
 		if($editor.length>0) $editor.afEditor({});
 	})
-	.on('click', '[data-empty-addon]', function(){
-		if (!confirm($_LANG['confirm_select_empty'].sprintf([$_LANG['addon']]))) return false;
+	.on('click', '[data-empty-addon],[data-empty-theme]', function(){
+		var key = this.hasAttribute('data-empty-addon') ? 'addon': 'theme';
+		if (!confirm($_LANG['confirm_select_empty'].sprintf([$_LANG[key]]))) return false;
 		var $i = $(this),
-			id = $i.attr('data-empty-addon');
-		exec_ajax('admin.deleteAddonConfig', {'ao_id': id}, function(status, data, xhr){
+			id = $i.attr('data-empty-'+key),
+			data = {};
+		data[(key=='addon'?'ao':'th') + '_id'] = id;
+		exec_ajax('admin.delete'+key.toUcFirst()+'Config', data, function(status, data, xhr){
 			switch(status) {
 				case 'error':
 				break;
@@ -103,29 +106,31 @@
 	});
 
 	$('#ADM_DEFAULT_MODULE')
-	.on('show.bs.modal', '#admin_addon_modal', function(e) {
+	.on('show.bs.modal', '#admin_addon_modal,#admin_theme_modal', function(e) {
 		var $i = $(this),
 			$f = $i.find('form'),
 			$p = $i.find('.modal-body'),
-			id = $(e.relatedTarget).attr('data-addon-id');
+			key = $i.attr('id') == 'admin_addon_modal' ? 'addon': 'theme';
 
-		$f.attr('data-exec-ajax', 'admin.getAddonForm')
-			.find('input[name=ao_id]').val(id).end()
+		var id = $(e.relatedTarget).attr('data-'+key+'-id');
+
+		$f.attr('data-exec-ajax', 'admin.get'+key.toUcFirst()+'Form')
+			.find('input[name='+(key=='addon'?'ao':'th')+'_id]').val(id).end()
 			.on('error.exec.ajax', function(e, error, xhr){
 				e.preventDefault();
 				$p.html('<div class="alert alert-danger">' + error + '</div>');
 			})
 			.on('success.exec.ajax', function(e, data, xhr){
 				e.preventDefault();
-				if(data['act'] == 'updateAddonConfig' && data['redirect_url']) {
+				if(data['act'] == 'update'+key.toUcFirst()+'Config' && data['redirect_url']) {
 					parent.location.replace(data['redirect_url']);
 				}
-				$f.attr('data-exec-ajax', 'admin.updateAddonConfig');
+				$f.attr('data-exec-ajax', 'admin.update'+key.toUcFirst()+'Config');
 				if(typeof(data['tpl']) != 'undefined') $p.html(data['tpl']);
 			});
 
 		$(document).trigger($.Event('submit', { target: $f[0] }));
-	}).on('hidden.bs.modal', '#admin_addon_modal', function(){
+	}).on('hidden.bs.modal', '#admin_addon_modal,#admin_theme_modal', function(){
 		$(this).find('.modal-body').html('');
 	});
 

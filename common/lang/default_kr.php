@@ -73,8 +73,9 @@ $_LANG['read'] = '읽기';
 
 $_LANG['select'] = '선택';
 $_LANG['none'] = '없음';
-$_LANG['use'] = '사용';
 $_LANG['notuse'] = '미사용';
+$_LANG['use'] = '사용';
+$_LANG['using'] = '사용중';
 
 $_LANG['grant'] = '승인';
 $_LANG['declare'] = '신고';

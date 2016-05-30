@@ -79,11 +79,6 @@ if(is_dir($addon_dir)) {
   </div>
 </div>
 
-<script>
-	$_LANG['addon'] = "<?php echo getLang('addon')?>";
-	$_LANG['confirm_select_empty'] = "<?php echo getLang('confirm_select_empty')?>";
-</script>
-
 <?php
 /* End of file addon.php */
 /* Location: ./module/admin/addon.php */

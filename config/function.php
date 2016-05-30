@@ -226,6 +226,41 @@ if(!defined('__AFOX__')) exit();
 		return empty($get) ? $menus : $menus[$get];
 	}
 
+	function getTheme($id) {
+		// TODO 캐시처리 할까?
+		static $theme = [];
+		if(!isset($theme[$id])) {
+			$out = getDBItem(_AF_THEME_TABLE_, ['th_id'=>$id]);
+			if(!empty($out['error']) || empty($out['extra'])) {
+				$theme[$id] = $out;
+				$theme[$id]['th_id'] = $id;
+			} else {
+				$extra = $out['extra'];
+				$extra = unserialize($extra);
+				unset($out['extra']);
+				$theme[$id] = array_merge($out, $extra);
+			}
+		}
+		return $theme[$id];
+	}
+
+	function getAddon($id) {
+		// TODO 캐시처리 할까?
+		static $addons = [];
+		if(!isset($addons[$id])) {
+			$out = getDBItem(_AF_ADDON_TABLE_, ['ao_id'=>$id]);
+			if(!empty($out['error']) || empty($out['extra'])) {
+				$addons[$id] = $out;
+			} else {
+				$extra = $out['extra'];
+				$extra = unserialize($extra);
+				unset($out['extra']);
+				$addons[$id] = array_merge($out, $extra);
+			}
+		}
+		return $addons[$id];
+	}
+
 	// 모듈 설정 가져오기
 	function getModule($id, $get = '') {
 		static $module_cfg = [];
@@ -250,22 +285,6 @@ if(!defined('__AFOX__')) exit();
 			$members[$id] = $out;
 		}
 		return empty($get) ? $members[$id] : $members[$id][$get];
-	}
-
-	function getAddon($id) {
-		static $addons = [];
-		if(!isset($addons[$id])) {
-			$out = getDBItem(_AF_ADDON_TABLE_, ['ao_id'=>$id]);
-			if(!empty($out['error']) || empty($out['extra'])) {
-				$addons[$id] = $out;
-			} else {
-				$extra = $out['extra'];
-				$extra = unserialize($extra);
-				unset($out['extra']);
-				$addons[$id] = array_merge($out, $extra);
-			}
-		}
-		return $addons[$id];
 	}
 
 	function getFileList($id, $target) {

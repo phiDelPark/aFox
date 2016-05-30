@@ -50,10 +50,11 @@ $is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 	</article>
 	<footer class="area-text-button clearfix">
 		<div class="pull-right">
-			<?php if(empty($_{'board'}['mb_srl']) || $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl']) { ?>
-			<a href="<?php echo getUrl('disp','writeDocument', 'srl', $_DATA['srl']) ?>" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
-			<a href="<?php echo getUrl('disp','deleteDocument', 'srl', $_DATA['srl']) ?>" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
-			<?php } ?>
+			<?php
+				$is_edit = empty($_{'board'}['mb_srl']) || $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl'];
+			?>
+			<a href="<?php echo $is_edit?getUrl('disp','writeDocument', 'srl', $_DATA['srl']):'#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted')).'\');return false' ?>" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
+			<a href="<?php echo $is_edit?getUrl('disp','deleteDocument', 'srl', $_DATA['srl']):'#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted')).'\');return false' ?>" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 		</div>
 	</footer>
 </section>

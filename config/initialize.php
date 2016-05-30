@@ -29,11 +29,11 @@ if(!empty($_DATA['cdnerr'])) {
 $tmp = _AF_CONFIG_DATA_.'base_cdn_list.php';
 define('__USE_BASE_CDN__', get_cookie('_CDN_ERROR_') ? FALSE : (file_exists($tmp) ? $tmp : FALSE));
 
-$tmp = _AF_CONFIG_DATA_.'footer_html.php';
-$_CFG['footer_html'] = file_exists($tmp) ? $tmp : FALSE;
-
 $_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
 $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
+
+// 테마 설정 저장
+$_CFG['theme'] = getTheme(_AF_THEME_);
 
 // 실행 가능한 에드온 정보 합치기
 $tmp = (__MOBILE__?'ao_use_mobile':'ao_use_pc').'=1';

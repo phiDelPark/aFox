@@ -1,4 +1,8 @@
 <?php
+/*!
+ * aFox (http://afox.kr)
+ * Copyright 2016 afox, Inc.
+ */
 
 class DB {
 	private static $link = NULL;

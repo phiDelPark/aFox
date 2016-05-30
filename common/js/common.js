@@ -1,7 +1,6 @@
 /*!
- * aFox Board (http://afox.kr)
+ * aFox (http://afox.kr)
  * Copyright 2016 afox, Inc.
- * Licensed under the MIT license
  */
 
 if (typeof jQuery === 'undefined') {
@@ -220,8 +219,10 @@ var $_LANG = [];
 				data = $i[0].dataExport();
 			} else {
 				var arr = ($i.attr('data-ajax-param') || '').split(',');
-				for (var i = 0, n = arr.length; i < n; i+=2) {
-					data[arr[i]] = arr[i+1];
+				if(arr.length>1) {
+					for (var i = 0, n = arr.length; i < n; i+=2) {
+						data[arr[i]] = arr[i+1];
+					}
 				}
 			}
 			$.extend(data,{module:act[0], act:act[1]});

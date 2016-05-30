@@ -14,7 +14,7 @@ if (get_session('ss_mb_key') !== $admin_key) {
 @include_once _AF_LANGS_PATH_ . 'module_' . _AF_LANG_ . '.php';
 @include_once _AF_LANGS_PATH_ . 'admin_' . _AF_LANG_ . '.php';
 
-$_MENU_ICON = ['dashbd'=>'dashboard', 'menu'=>'menu-hamburger', 'member'=>'user', 'content'=>'list-alt', 'page'=>'list-alt', 'board'=>'list-alt', 'document'=>'list-alt', 'comment'=>'list-alt', 'file'=>'list-alt', 'trash'=>'trash', 'module'=>'th-large', 'addon'=>'import', 'setup'=>'cog'];
+$_MENU_ICON = ['dashbd'=>'dashboard', 'theme'=>'home', 'menu'=>'menu-hamburger', 'member'=>'user', 'content'=>'list-alt', 'page'=>'list-alt', 'board'=>'list-alt', 'document'=>'list-alt', 'comment'=>'list-alt', 'file'=>'list-alt', 'trash'=>'trash', 'module'=>'th-large', 'addon'=>'import', 'setup'=>'cog'];
 
 $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 
@@ -51,6 +51,7 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 				<ul class="nav navbar-nav side-nav">
 
 					<li role="presentation"<?php echo empty($_DATA['admin']) ? ' class="active"': '' ?>><a href="./?admin"><i class="glyphicon glyphicon-dashboard" aria-hidden="true"></i> <?php echo getLang('menu_name_dashbd')?></a></li>
+					<li role="presentation"<?php echo $_DATA['admin'] == 'theme' ? ' class="active"': '' ?>><a href="./?admin=theme"><i class="glyphicon glyphicon-home" aria-hidden="true"></i> <?php echo getLang('menu_name_theme')?></a></li>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'menu' ? ' class="active"': '' ?>><a href="./?admin=menu"><i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></i> <?php echo getLang('menu_name_menu')?></a></li>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'member' ? ' class="active"': '' ?>><a href="./?admin=member"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo getLang('menu_name_member')?></a></li>
 					<li role="presentation"><a href="#" data-toggle="collapse" data-target="#content"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo getLang('menu_name_content')?></a>
@@ -92,7 +93,7 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 				<div class="row">
 					<div class="col-lg-12">
 						<h1 class="page-header">
-							<?php echo getLang('menu_name_'.(in_array($admin, ['page','board','document','comment']) ? 'content' : $admin))?> <small><?php echo getLang('page')?></small>
+							<?php echo getLang('menu_name_'.$admin)?>
 						</h1>
 						<ol class="breadcrumb">
 							<li class="active">
@@ -125,6 +126,9 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 	$_LANG['page'] = "<?php echo getLang('page')?>";
 	$_LANG['board'] = "<?php echo getLang('board')?>";
 	$_LANG['menu'] = "<?php echo getLang('menu')?>";
+	$_LANG['addon'] = "<?php echo getLang('addon')?>";
+	$_LANG['theme'] = "<?php echo getLang('theme')?>";
+	$_LANG['confirm_select_empty'] = "<?php echo getLang('confirm_select_empty')?>";
 	$_LANG['confirm_select_delete'] = "<?php echo getLang('confirm_select_delete')?>";
 </script>
 <?php

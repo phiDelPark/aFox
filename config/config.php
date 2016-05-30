@@ -8,6 +8,7 @@ define('_AF_SERVER_TIME_', time());
 define('_AF_CONFIG_TABLE_', 'afox_config');
 define('_AF_MEMBER_TABLE_', 'afox_members');
 define('_AF_MODULE_TABLE_', 'afox_modules');
+define('_AF_THEME_TABLE_', 'afox_themes');
 define('_AF_MENU_TABLE_', 'afox_menus');
 define('_AF_ADDON_TABLE_', 'afox_addons');
 define('_AF_PAGE_TABLE_', 'afox_pages');
@@ -38,7 +39,7 @@ define('_AF_CACHE_DATA_', _AF_DATA_PATH_.'cache/');
 define('_AF_DIR_PERMIT_', 0755);
 define('_AF_FILE_PERMIT_', 0644);
 
-(@include_once(_AF_CONFIG_DATA_ . '_db_config.php')) OR die("Please install afox board");
+(@include_once(_AF_CONFIG_DATA_ . '_db_config.php')) OR die("Please install afox");
 
 define('_AF_USE_SSL_', $_DBINFO['use_ssl']);
 define('_AF_HTTP_PORT_', empty($_DBINFO['http_port'])?80:(int)$_DBINFO['http_port']);
@@ -62,7 +63,7 @@ $_CFG['module'] = [];
 
 define('_AF_LANG_', empty($_CFG['lang'])?'kr':$_CFG['lang']);
 define('_AF_THEME_', empty($_CFG['theme'])?'default':$_CFG['theme']);
-define('_AF_THEME_URL_', _AF_URL_ . 'theme/' . _AF_THEME_);
+define('_AF_THEME_URL_', _AF_URL_ . 'theme/' . _AF_THEME_ . '/');
 define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
 
 $_LANG = [];
