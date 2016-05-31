@@ -11,7 +11,6 @@ function proc($data) {
 	$category = empty($data['category']) ? '' : $data['category'];
 	$search = empty($data['search']) ? '' : $data['search'];
 	$page = empty($data['page']) ? '' : $data['page'];
-
 	return getDocumentList($data['id'], $page, $search, $category);
 }
 

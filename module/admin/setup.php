@@ -135,25 +135,6 @@
 
 </form>
 
-<div id="admin_theme_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.getThemeForm">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="ao_id" value="" />
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('theme')?></h4>
-	  </div>
-	  <div class="modal-body">
-	  </div>
-	  <div class="modal-footer">
-		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="submit" class="btn btn-success min-width-150"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
-	  </div>
-	</form>
-  </div>
-</div>
-
 <?php
 /* End of file setup.php */
 /* Location: ./module/admin/setup.php */

@@ -7,13 +7,13 @@ function proc($data) {
 		return set_error(getLang('msg_invalid_request'),303);
 	}
 
-	if(!isset($data['mb_srl'])) {
+	if(!isset($data['mb_id'])) {
 		if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['mb_id'])) {
-			return set_error(getLang(getLang('invalid_value'), getLang('id')),701);
+			return set_error(getLang('msg_invalid_request'),303);
 		}
 	}
 
-	$out = getMember(isset($data['mb_srl']) ? $data['mb_srl'] : $data['mb_id']);
+	$out = getMember(isset($data['mb_srl']) ? (int)$data['mb_srl'] : $data['mb_id']);
 	if(!empty($out['error'])) {
 		return set_error($out['message'],$out['error']);
 	}

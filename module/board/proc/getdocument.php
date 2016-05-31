@@ -6,7 +6,7 @@ function proc($data) {
 	if(!isset($data['wr_srl'])) return set_error(getLang('msg_invalid_request'),303);
 
 	global $_MEMBER;
-	$doc = getDocument($data['wr_srl']);
+	$doc = getDocument((int)$data['wr_srl']);
 
 	if(!empty($doc['error'])) {
 		return set_error($doc['message'],$doc['error']);

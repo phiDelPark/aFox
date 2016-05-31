@@ -5,10 +5,6 @@ if(!defined('__AFOX__')) exit();
 function proc($data) {
 	if(!isset($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
 
-	if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['md_id'])) {
-		return set_error(getLang(getLang('invalid_value'), getLang('id')),701);
-	}
-
 	$out = getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['md_id']]);
 	if(!empty($out['error'])) {
 		return set_error($out['message'],$out['error']);

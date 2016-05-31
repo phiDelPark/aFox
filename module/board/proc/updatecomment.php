@@ -13,9 +13,9 @@ function proc($data) {
 	$rp_root = 0;
 	$rp_depth = '';
 	$rp_parent = (int) abs(empty($data['rp_parent']) ? 0 : $data['rp_parent']);
+	$rp_srl = (int) (empty($rp_parent) ? abs(empty($data['rp_srl']) ? 0 : $data['rp_srl']) : $rp_parent);
 
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
-	$rp_srl = (int) (empty($rp_parent) ? abs(empty($data['rp_srl']) ? 0 : $data['rp_srl']) : $rp_parent);
 
 	try {
 

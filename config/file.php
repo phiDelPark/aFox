@@ -9,7 +9,7 @@ function setHttpError($err, $back = false) {
 	exit;
 }
 static $_file = [];
-$srl = $_GET['file'];
+$srl = (int)$_GET['file'];
 if(!isset($_file[$srl])) {
 	$file = DB::assoc(DB::select(_AF_FILE_TABLE_,['mf_srl'=>$srl]));
 	if(!empty($file['error'])) setHttpError('400 Bad Request');

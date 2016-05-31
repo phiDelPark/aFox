@@ -173,8 +173,8 @@ if(!defined('__AFOX__')) exit();
 		$limit = '';
 
 		if($count>0){
-			$page = ($page > 0 ? $page - 1 : 0);
-			$limit = ' LIMIT '.($page * $count).','.$count;
+			$page = (int)($page > 0 ? $page - 1 : 0);
+			$limit = ' LIMIT '.(int)($page * $count).','.(int)$count;
 		}
 
 		$order = empty($order) ? '' : ' ORDER BY '.$order;
@@ -225,24 +225,6 @@ if(!defined('__AFOX__')) exit();
 			}
 		}
 		return empty($get) ? $menus : $menus[$get];
-	}
-
-	function getTheme($id) {
-		// TODO 캐시처리 할까?
-		static $theme = [];
-		if(!isset($theme[$id])) {
-			$out = getDBItem(_AF_THEME_TABLE_, ['th_id'=>$id]);
-			if(!empty($out['error']) || empty($out['extra'])) {
-				$theme[$id] = $out;
-				$theme[$id]['th_id'] = $id;
-			} else {
-				$extra = $out['extra'];
-				$extra = unserialize($extra);
-				unset($out['extra']);
-				$theme[$id] = array_merge($out, $extra);
-			}
-		}
-		return $theme[$id];
 	}
 
 	function getAddon($id) {
