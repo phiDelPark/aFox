@@ -56,7 +56,8 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getCurrentUrl() {
-		return ($_SERVER['REQUEST_METHOD'] == 'GET') ? getUrl() : getRequestUri();
+		return getUrl();
+		//return ($_SERVER['REQUEST_METHOD'] == 'GET') ? getUrl() : getRequestUri();
 	}
 
 	function getRequestUri($ssl_mode = FOLLOW_REQUEST_SSL) {

@@ -36,8 +36,8 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 				.'<div class="reply-date"><small>'.date('Y/m/d h:m', strtotime($value['rp_update'])).'</small></div></div></div><div class="right"><div class="content clearfix">'.toHTML($value['rp_type'], $rp_content).'</div>'
 				.'<div class="area-text-button clearfix"><div class="pull-right">'
 				.(!$_deleted&&$is_rp_grant&&$_len<5?('<a href="#" role="button" data-exec-act="board.updateComment" data-act-param="rp_parent,'.$value['rp_srl'].'"><i class="fa fa-reply gly-rotate-180" aria-hidden="true"></i> '.getLang('reply').'</a>'):'')
-				.'<a href="#" role="button" '.($is_edit?'data-exec-act="board.getComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])?' data-act-password="1"':''):$not_edit_str).'><i class="fa fa-pencil-square-o" aria-hidden="true"></i> '.getLang('edit').'</a>'
-				.'<a href="#" role="button" '.($is_edit?'data-exec-act="board.deleteComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])?' data-act-password="1"':''):$not_edit_str).'><i class="fa fa-trash-o" aria-hidden="true"></i> '.getLang('delete').'</a>'
+				.'<a href="#" role="button" '.($is_edit?'data-exec-act="board.getComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])&&!$is_manager&&$value['rp_secret']=='1'?' data-act-password="1"':''):$not_edit_str).'><i class="fa fa-pencil-square-o" aria-hidden="true"></i> '.getLang('edit').'</a>'
+				.'<a href="#" role="button" '.($is_edit?'data-exec-act="board.deleteComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])&&!$is_manager?' data-act-password="1"':''):$not_edit_str).'><i class="fa fa-trash-o" aria-hidden="true"></i> '.getLang('delete').'</a>'
 				.'</div></div></div></div>';
 		}
 	?>
@@ -58,7 +58,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 	<?php if ($is_rp_grant) { ?>
 	<footer class="reply-editer">
 		<form method="post" autocomplete="off" data-exec-ajax="board.updateComment">
-		<input type="hidden" name="success_return_url" value="<?php echo getUrl('rp','')?>">
+		<input type="hidden" name="success_return_url" value="<?php echo urlencode(getUrl('rp',''))?>">
 		<input type="hidden" name="wr_srl" value="<?php echo $_DATA['srl'] ?>">
 		<a class="close" href="javascrip:;" style="display:none"><span aria-hidden="true">×</span></a>
 		<?php if (empty($_MEMBER)) { ?>

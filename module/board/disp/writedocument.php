@@ -13,23 +13,24 @@ function proc($data) {
 		}
 		// 비밀글이면
 		if($doc['wr_secret'] == '1') {
+			$input_password = '<form class="input-password" method="post" autocomplete="off">'
+							.'%s<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'
+							.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>';
+
 			// 권한 체크
 			if(empty($_MEMBER) || empty($doc['mb_srl'])) {
-				if(empty($data['mb_password'])) {
-					return set_error('<form class="input-password" method="post" autocomplete="off">'
-									.sprintf(getLang('warn_input'), getLang('password'))
-									.'<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'
-									.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>'
-								, 90);
-				}
-				if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
+				if (empty($doc['mb_password'])) {
 					return set_error(getLang('msg_not_permitted'), 901);
-				} else {
-					$GLOBALS['_PERMIT_VIEW_'][md5($doc['md_id'].'_'.$data['srl'])] = true;
+				} else if(empty($data['mb_password'])) {
+					return set_error(sprintf($input_password, getLang(getLang('warn_input'), getLang('password'))), 90);
+				} else if (!verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
+					return set_error(sprintf($input_password, getLang('msg_wrong_password')), 906);
 				}
 			} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
 				return set_error(getLang('msg_not_permitted'), 901);
 			}
+
+			$GLOBALS['_PERMIT_VIEW_'][md5($doc['md_id'].'_'.$data['srl'])] = true;
 		}
 	}
 

@@ -24,14 +24,6 @@ var $_LANG = [];
 +function ($) {
   'use strict';
 
-	Number.prototype.shortFileSize = function(){
-		var size = this, tail = 'byte';
-		if(size>1024) {size=Math.ceil(size/1024);tail='kb';}
-		if(size>1024) {size=Math.ceil(size/1024);tail='mb';}
-		if(size>1024) {size=Math.ceil(size/1024);tail='gb';}
-		return size + tail;
-	}
-
 	String.prototype.trim = function(){
 		return this.replace(/^\s+|\s+$/g,"");
 	};
@@ -76,7 +68,6 @@ var $_LANG = [];
 		var idx = s.indexOf('?'),
 			uri = s.replace(/#$/, ''),
 			qrs = {}, qls = [], v;
-
 		if (idx != -1 && args[0] != '') {
 			uri.substr(idx + 1, s.length)
 				.replace(/([^=]+)=([^&]*)(&|$)/g,
@@ -85,20 +76,24 @@ var $_LANG = [];
 					}
 				);
 		}
-
 		uri = s.substr(0, idx);
-
 		for (var i = (args[0]==''?1:0); i < n; i+=2) {
 			qrs[args[i]] = args[i+1];
 		}
-
 		for (var k in qrs) {
 			if (!qrs.hasOwnProperty(k)) continue;
 			if (!(v = String(qrs[k]).trim())) continue;
 			qls.push(k+'='+decodeURI(v));
 		}
-
 		return uri + (qls.length > 0 ? '?' + qls.join('&') : '');
+	}
+
+	Number.prototype.shortFileSize = function(){
+		var size = this, tail = 'byte';
+		if(size>1024) {size=Math.ceil(size/1024);tail='kb';}
+		if(size>1024) {size=Math.ceil(size/1024);tail='mb';}
+		if(size>1024) {size=Math.ceil(size/1024);tail='gb';}
+		return size + tail;
 	}
 
 	HTMLFormElement.prototype.dataExport = function() {
@@ -185,26 +180,23 @@ var $_LANG = [];
 +function ($) {
   'use strict';
 
-	$.pop_win = window.pop_win = function(url,opt) {
-		var popwin = window.open(url, 'af_popup', opt||'width=700,height=500,top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no');
+	$.pop_win = window.pop_win = function(url,w,h) {
+		var popwin = window.open(url, 'af_popup', 'width='+(w||'700')+',height='+(h||'500')+',top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no');
 		popwin.focus();
 		return popwin;
 	}
 
 	$.exec_ajax = window.exec_ajax = function(self, param, callback) {
-		var $i = $(typeof self === 'string' ? 'BODY' : self);
+		var $i = $(typeof self === 'string' ? 'BODY' : self),
+			act = ((typeof self === 'string' ? self : $i.attr('data-exec-ajax')) || '').split('.');
 
+		if(act.length != 2) return;
 		if($i.data('actioning')) return;
 		$i.data('actioning',true);
 
 		var isform = self.tagName == 'FORM',
-			act = ((typeof self === 'string' ? self : $i.attr('data-exec-ajax')) || '').split('.'),
 			multipart = ($i.attr('enctype') || '') == 'multipart/form-data',
 			data = param || {};
-
-		if(act.length != 2) {
-			$i.data('actioning',false); return;
-		}
 
 		if(!waiting_message) waiting_message = '';
 		var $waiting = $('<div class="af_waiting_message alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> '+waiting_message+'<div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:100%"></div></div></div>');
@@ -220,9 +212,7 @@ var $_LANG = [];
 			} else {
 				var arr = ($i.attr('data-ajax-param') || '').split(',');
 				if(arr.length>1) {
-					for (var i = 0, n = arr.length; i < n; i+=2) {
-						data[arr[i]] = arr[i+1];
-					}
+					for (var i = 0, n = arr.length; i < n; i+=2) data[arr[i]] = arr[i+1];
 				}
 			}
 			$.extend(data,{module:act[0], act:act[1]});
@@ -238,18 +228,18 @@ var $_LANG = [];
 				processData: multipart ? false : true,
 				data: data,
 				beforeSend:function(xhr, settings){
+					var cancel = false;
 					if($.isFunction(callback)) {
-						if(callback('before', settings, xhr) === false) {
-							$waiting.remove();
-							$i.data('actioning',false); return false;
-						}
+						cancel = callback('before', settings, xhr) === false;
 					} else {
 						var e = $.Event('before.exec.ajax');
 						$i.trigger(e, [settings, xhr]);
-						if(e.isDefaultPrevented()) {
-							$waiting.remove();
-							$i.data('actioning',false); return false;
-						}
+						cancel = e.isDefaultPrevented();
+					}
+					if(cancel) {
+						$waiting.remove();
+						$i.data('actioning',false);
+						return false;
 					}
 				},
 				complete:function(xhr, status) {
@@ -262,9 +252,7 @@ var $_LANG = [];
 					$i.data('actioning',false);
 				},
 				success: function(data, status, xhr) {
-					//$(".wfsr").hide().trigger('cancel_confirm');
-					var e, err, msg;
-
+					var e, err, msg, cancel = false;
 					if(typeof data == 'string') {
 						err = -1;
 						msg = xhr.responseText.replace(/<[^>]+>/g, '');
@@ -272,64 +260,43 @@ var $_LANG = [];
 						err = (data['error'] && data['error'] != '0') ? data['error'] : 0;
 						msg = err ? data['message'] : '';
 					}
-
 					if($.isFunction(callback)) {
-						if(err) {
-							if(callback('error', msg, xhr) === false) {
-								$waiting.remove();
-								$i.data('actioning',false); return;
-							}
-						} else {
-							if(callback('success', data, xhr) === false) {
-								$waiting.remove();
-								$i.data('actioning',false); return;
-							}
-						}
+						cancel = callback(err?'error':'success', err?msg:data, xhr) === false;
 					} else {
 						e = $.Event(err ? 'error.exec.ajax' : 'success.exec.ajax');
 						$i.trigger(e, err ? [msg, xhr] : [data, xhr]);
-						if(e.isDefaultPrevented()) {
-							$waiting.remove();
-							$i.data('actioning',false); return;
-						}
+						cancel = e.isDefaultPrevented();
 					}
-
+					if(cancel) {
+						$waiting.remove();
+						$i.data('actioning',false);
+						return;
+					}
 					if(err) alert(msg);
-					else if(data['redirect_url']) {
-						parent.location.replace(data['redirect_url']);
-					}
+					if(data['redirect_url']) parent.location.replace(data['redirect_url']);
 				},
 				error: function(xhr, status, error) {
-					//$(".wfsr").hide();
-					var msg = status;
-
+					var msg = status, cancel = false;
 					if(status == 'parsererror') {
 						msg  = 'The result is not valid JSON :\n--------------------------------\n';
 						if(xhr.responseText !== "") msg += xhr.responseText.replace(/<[^>]+>/g, '');
 					} else msg = error;
-
 					if($.isFunction(callback)) {
-						if(callback('error', msg, xhr) === false) {
-							$waiting.remove();
-							$i.data('actioning',false); return;
-						}
+						cancel = callback('error', msg, xhr) === false;
 					} else {
 						var e = $.Event('error.exec.ajax');
 						$i.trigger(e, [msg, xhr]);
-						if(e.isDefaultPrevented()) {
-							$waiting.remove();
-							$i.data('actioning',false); return;
-						}
+						cancel = e.isDefaultPrevented();
 					}
-
+					if(cancel) {
+						$waiting.remove();
+						$i.data('actioning',false);
+						return;
+					}
 					alert(msg);
-
-					if(data['redirect_url']) {
-						parent.location.replace(data['redirect_url']);
-					}
+					if(data['redirect_url']) parent.location.replace(data['redirect_url']);
 				}
 			});
-
 		} catch(e) {
 			alert(e);
 			$waiting.remove();
@@ -340,14 +307,10 @@ var $_LANG = [];
 	$(document).on('submit', 'form[data-exec-ajax]', function(e){
 		e.preventDefault();
 		exec_ajax(this);
-	});
-
-	$(document).on('click', '[data-exec-ajax][data-ajax-param]', function(e){
+	}).on('click', '[data-exec-ajax][data-ajax-param]', function(e){
 		e.preventDefault();
 		exec_ajax(this);
 	});
-
-
 
 	// <div class="fileupload-group" placeholder="File">
 	// 	<div class="input-group">
@@ -388,8 +351,7 @@ var $_LANG = [];
 			$g.trigger(ev, [$i.prop("files")]);
 			if(ev.isDefaultPrevented()) return;
 			$i.val('');
-			$('<input type="hidden" name="remove_files[]" value="'+$i.attr('name')+'">')
-				.appendTo($c.text(plac));
+			$('<input type="hidden" name="remove_files[]" value="'+$i.attr('name')+'">').appendTo($c.text(plac));
 		}
 	}).on('keydown', '.fileupload-group .file-caption', function(e){
 		if (e.which == 13 || e.which == 32) {
@@ -443,18 +405,15 @@ var $_LANG = [];
 		if($i[0].hasAttribute("readonly") || $i[0].hasAttribute("disabled") ) return;
 		if($i.data('actioning')) return;
 		$i.data('actioning',true);
-
 		var on = $i.hasClass('on'),
 			von = $i.find('.switch-handle-on').attr('data-value') || 1,
 			vof = $i.find('.switch-handle-off').attr('data-value') || 0;
-
 		var e = $.Event('change.af.switch');
 		$i.trigger(e, [on, (on ? von : vof)]);
 		if(e.isDefaultPrevented()) {
 			$i.data('actioning',false);
 			return;
 		}
-
 		$i.find(".switch-control").animate({
 			left: on ? '-=100' : '+=100',
 		}, 500, function() {

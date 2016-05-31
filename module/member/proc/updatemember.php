@@ -24,7 +24,7 @@ function proc($data) {
 
 	if(!empty($data['new_mb_password'])) {
 		if($data['new_mb_password'] !== $data['verify_mb_password']) {
-			return set_error(getLang('msg_diff_new_password'),503);
+			return set_error(getLang('msg_diff_password'),503);
 		}
 		$new_password = encryptString($data['new_mb_password']);
 	} else {

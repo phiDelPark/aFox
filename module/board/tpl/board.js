@@ -5,6 +5,8 @@
 
 +function ($) {
   'use strict';
+  var input_password = '<form action="%s" class="input-password" method="post" autocomplete="off"><div class="form-inline"><div>%s</div><input class="form-control" name="mb_password" type="password" placeholder="%s" style="width:150px" required> <button class="btn btn-primary" type="submit">%s</button> <button class="btn btn-default" type="button">%s</button></div></form>';
+  var confirm_action = '<form action="%s" class="input-group" method="post" autocomplete="off"><div><div>%s</div><button class="btn btn-default" type="button">%s</button> <button class="btn btn-primary" type="submit">%s</button></div></form>';
 
 	$('[data-exec-act]').click(function() {
 		var data = {},
@@ -19,44 +21,64 @@
 			data[args[i]] = args[i+1];
 		}
 
-		if(act == 'board.getComment' || act == 'board.updateComment') {
+		var $arp = $i.closest('#board_reply'),
+			$rp = $i.closest('.reply-item'),
+			nombsrl = $i.attr('data-act-password') || '';
 
-			var $arp = $i.closest('#board_reply');
-			$arp.find('form.right').remove().end().find('.reply-item>.right').show();
-			var $f = $arp.find('[data-exec-ajax="board.updateComment"]').clone().hide(),
-				$rp = $i.closest('.reply-item');
+		$arp.find('form.right').remove().end().find('.reply-item>.right').show();
 
-			$f.find('.form-group').show();
-			$f.find('[disabled="disabled"]').removeAttr('disabled');
+		var $f = $arp.find('[data-exec-ajax="board.updateComment"]').clone().hide(),
+			editor = $f.find('.af_editor_rp_content').afEditor();
 
-			var editor = $f.find('.af_editor_rp_content').afEditor();
+		$f.find('.form-group').show();
+		$f.find('[disabled="disabled"]').removeAttr('disabled');
+
+		var callfunc = function(status, data, xhr) {
+			if(status == 'success') {
+				$('<input type="hidden" name="rp_srl" value="">').prependTo($f);
+				var $rc = $rp.find('>.right');
+				$f[0].dataImport(data);
+				$f.addClass('right')
+				.find('.close').show().click(
+						function() {
+							$rc.show('fast', function(){
+								$f.remove();
+							});
+						}
+					)
+				.end().insertAfter($rc.hide('slow')).show('slow');
+				$f.find('.btn-success').removeClass('btn-success').addClass('btn-info');
+				if(data['rp_type'] == 2) editor.switch(true);
+				return false;
+			}
+		};
+
+		if(act == 'board.deleteComment' || (act == 'board.getComment' && nombsrl)){
+			var $ipu, url = encodeURI(current_url.setQuery('rp',''));
+			if(nombsrl) {
+				if(act == 'board.getComment'){
+					$ipu = $(input_password.sprintf('',$_LANG['warn_input'].sprintf($_LANG['password']),$_LANG['password'],$_LANG['ok'],$_LANG['close']));
+					$ipu.on('success.exec.ajax', function(e, data, xhr){
+						e.preventDefault();
+						callfunc('success', data, xhr);
+					});
+				} else {
+					$ipu = $(input_password.sprintf('',$_LANG['confirm_select_delete'].sprintf($_LANG['comment']),$_LANG['password'],$_LANG['ok'],$_LANG['close']));
+				}
+			} else {
+				$ipu = $(confirm_action.sprintf('',$_LANG['confirm_select_delete'].sprintf($_LANG['comment']),$_LANG['no'],$_LANG['yes']));
+			}
+			$ipu.hide().addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
+			$ipu.find('button.btn-default').click(function(){$ipu.fadeOut('slow',function(){$(this).remove()});});
+			$ipu.attr('data-exec-ajax',act);
+			$ipu.prepend('<input type="hidden" name="rp_srl" value="'+data['rp_srl']+'">');
+			$ipu.prepend('<input type="hidden" name="success_return_url" value="'+url+'">');
+			$ipu.addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
+
+		} else if(act == 'board.getComment' || act == 'board.updateComment') {
 
 			if(act == 'board.getComment'){
-				var nombsrl = $i.attr('data-act-password') || '';
-				if(nombsrl) {
-					var r = prompt($_LANG['warn_input'].sprintf([$_LANG['password']]), '');
-					if (r == null) return false;
-					data['mb_password'] = r;
-				}
-				exec_ajax(act, data, function(status, data, xhr) {
-					if(status == 'success') {
-						$('<input type="hidden" name="rp_srl" value="">').prependTo($f);
-						var $rc = $rp.find('>.right');
-						$f[0].dataImport(data);
-						$f.addClass('right')
-						.find('.close').show().click(
-								function() {
-									$rc.show('fast', function(){
-										$f.remove();
-									});
-								}
-							)
-						.end().insertAfter($rc.hide('slow')).show('slow');
-						$f.find('.btn-success').removeClass('btn-success').addClass('btn-info');
-						if(data['rp_type'] == 2) editor.switch(true);
-						return false;
-					}
-				});
+				exec_ajax(act, data, callfunc);
 			} else {
 				editor.switch(false);
 				$('<input type="hidden" name="rp_parent" value="">').prependTo($f);
@@ -68,26 +90,6 @@
 				e.preventDefault();
 				if(data['redirect_url']) {
 					parent.location.replace(data['redirect_url'].setQuery('rp',data['rp_srl']));
-				}
-			});
-
-		} else if(act == 'board.deleteComment'){
-			var nombsrl = $i.attr('data-act-password') || '';
-			if(nombsrl) {
-				var r = prompt($_LANG['warn_input'].sprintf([$_LANG['password']]), '');
-				if (r == null) return false;
-				data['mb_password'] = r;
-			} else {
-				if (!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['comment']]))) return false;
-			}
-			exec_ajax(act, data, function(status, data, xhr){
-				switch(status) {
-					case 'error':
-						break;
-					case 'success':
-							parent.location.replace(current_url.setQuery('rp',''));
-							return false;
-						break;
 				}
 			});
 		}

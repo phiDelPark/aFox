@@ -19,31 +19,18 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 	<?php } ?>
 	<article class="clearfix">
 		<table class="table table-hover list-table">
-		<colgroup>
-		<?php if(__MOBILE__) { ?>
-		<col>
-		<col>
-		<col class="col-xs-1">
-		<?php } else { ?>
-		<col class="col-md-1">
-		<col class="col-md-7">
-		<col class="col-md-2">
-		<col class="col-md-1">
-		<col class="col-md-1">
-		<?php } ?>
-		</colgroup>
 		<thead>
 			<tr>
 				<?php if(__MOBILE__) { ?>
 				<th><?php echo getLang('title')?></th>
 				<th><?php echo getLang('name')?></th>
-				<th><?php echo getLang('date')?></th>
+				<th class="col-xs-1"><?php echo getLang('date')?></th>
 				<?php } else { ?>
-				<th><?php echo getLang('number')?></th>
+				<th class="col-xs-1 hide-xs"><?php echo getLang('number')?></th>
 				<th><?php echo getLang('title')?></th>
-				<th><?php echo getLang('name')?></th>
-				<th><?php echo getLang('view')?></th>
-				<th><?php echo getLang('date')?></th>
+				<th class="col-xs-3 col-md-2"><?php echo getLang('name')?></th>
+				<th class="col-xs-1 hide-xs"><?php echo getLang('view')?></th>
+				<th class="col-xs-1"><?php echo getLang('date')?></th>
 				<?php } ?>
 			</tr>
 		</thead>
@@ -61,10 +48,10 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 				}
 			} else {
 				foreach ($_{'board'}['data'] as $key => $val) {
-					echo '<tr data-hot-track><th scope="row">'.$val['wr_srl'].'</th>';
+					echo '<tr data-hot-track><th class="hide-xs" scope="row">'.$val['wr_srl'].'</th>';
 					echo '<td class="wr_title"><a href="'.getUrl('srl',$val['wr_srl']).'" onclick="return false">'.escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
 					echo '<td>'.escapeHtml($val['mb_nick'], true).'</td>';
-					echo '<td>'.$val['wr_hit'].'</td>';
+					echo '<td class="hide-xs">'.$val['wr_hit'].'</td>';
 					echo '<td>'.date('Y/m/d', strtotime($val['wr_update'])).'</td></tr>';
 				}
 			}

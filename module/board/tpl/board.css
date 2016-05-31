@@ -74,6 +74,7 @@
 #board_reply .reply-item > .right {
 	margin-left:220px;
 	padding: 0 6px 0 0;
+	position: relative;
 }
 
 #board_reply .reply-item > .right > .content {
@@ -192,6 +193,25 @@
 	margin-left: 10px;
 }
 
+#board_reply .inside_massage_box {
+	background-color: #fff;
+	position: absolute;
+	width: 100%;
+	height:100%;
+	z-index: 3;
+	display: block;
+	text-align: right;
+}
+
+#board_reply .inside_massage_box>div {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+#board_reply .inside_massage_box>div>div{
+	margin: 10px 0;
+}
+
 #board_write>header .close,
 #board_delete>header .close{
 	font-size: 30px;
@@ -236,5 +256,8 @@
 	}
 	#board_view>article>.current_content {
 		min-height: 200px;
+	}
+	#board_list .list-table .hide-xs{
+		display: none;
 	}
 }

@@ -20,7 +20,7 @@ function proc($data) {
 	if($ex = DB::error()) return set_error($ex->getMessage(),$ex->getCode());
 
 	if(empty($mb['mb_srl']) || !verifyEncrypt($mb_password, $mb['mb_password'])) {
-		return set_error(getLang('msg_diff_password'),502);
+		return set_error(getLang('msg_wrong_password2'),906);
 	}
 
 	// 정상적인 접근이면 암호화된 비밀번호로 교체

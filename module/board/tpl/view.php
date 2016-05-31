@@ -65,6 +65,10 @@ $is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 <?php include 'list.php'; ?>
 
 <script>
+$_LANG['ok'] = "<?php echo getLang('ok')?>";
+$_LANG['close'] = "<?php echo getLang('close')?>";
+$_LANG['yes'] = "<?php echo getLang('yes')?>";
+$_LANG['no'] = "<?php echo getLang('no')?>";
 $_LANG['comment'] = "<?php echo getLang('comment')?>";
 $_LANG['password'] = "<?php echo getLang('password')?>";
 $_LANG['warn_input'] = "<?php echo getLang('warn_input')?>";

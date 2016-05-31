@@ -68,12 +68,14 @@ body > .container{
 	width: 83%;
 	margin-bottom: 45px;
 	text-align: left;
+	color: #fff;
 }
-.carousel-caption>h1,
-.carousel-caption>p {
+.carousel-caption h1,
+.carousel-caption h2,
+.carousel-caption h3,
+.carousel-caption p {
 	margin: 0;
 	line-height: 1.25;
-	color: #fff;
 	text-shadow: 0 1px 1px rgba(0,0,0,.4);
 }
 .carousel-caption .btn {
@@ -258,7 +260,9 @@ form .af_editor_rp_content > textarea + iframe{
 		padding: 0 10px;
 		width: auto;
 	}
-	.carousel-caption>h1 {
+	.carousel-caption h1
+	.carousel-caption h2,
+	.carousel-caption h3, {
 		font-size: 25px;
 	}
 	.header-image {

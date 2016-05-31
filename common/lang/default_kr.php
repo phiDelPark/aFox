@@ -175,6 +175,7 @@ $_LANG['msg_invalid_request'] = '잘못된 요청입니다.'; // 303
 $_LANG['msg_not_founded'] = '대상을 찾을 수 없습니다.'; // 801
 $_LANG['msg_target_exists'] = '같은 대상이 존재합니다.'; //802
 $_LANG['msg_not_permitted'] = '권한이 없습니다.'; // 901
+$_LANG['msg_wrong_password'] = '비밀번호가 다릅니다.'; // 906
 $_LANG['msg_disallow_by_point'] = '포인트가 부족합니다. (필요 포인트: %d, 현재 포인트: %d)'; // 907
 
 $_LANG['upload_err_code(0)'] = '파일 업로드가 성공했습니다.'; // 1400
