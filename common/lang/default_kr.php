@@ -38,7 +38,7 @@ $_LANG['page'] = '페이지';
 $_LANG['board'] = '게시판';
 $_LANG['document'] = '문서';
 $_LANG['recycle_bin'] = '휴지통';
-$_LANG['addon'] = '에드온';
+$_LANG['addon'] = '애드온';
 $_LANG['style'] = '스타일';
 $_LANG['default'] = '기본';
 

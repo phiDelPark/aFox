@@ -58,7 +58,7 @@ if(!DB::error()) {
 	$_CFG['theme']['th_id'] = _AF_THEME_;
 }
 
-// 실행 가능한 에드온 정보 합치기
+// 실행 가능한 애드온 정보 합치기
 $tmp = (__MOBILE__?'ao_use_mobile':'ao_use_pc').'=1';
 $tmp_arr = DB::query('SELECT ao_id,extra FROM '._AF_ADDON_TABLE_.' WHERE '.$tmp);
 if(!DB::error()) {
