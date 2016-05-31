@@ -2,8 +2,6 @@
 	if(!defined('__AFOX__')) exit();
 	$is = !empty($_{'board'});
 	$is_manager = isManager($_DATA['id']);
-
-	// $cfm_delete = sprintf(getLang($_LANG['confirm_select_delete']), getLang('document'));
 ?>
 
 <section id="board_delete">
@@ -27,7 +25,7 @@
 			<?php } ?>
 				<div class="form-group">
 					<label for="id_wr_title"><?php echo getLang('title')?></label>
-					<input type="text" class="form-control" id="id_wr_title" value="<?php echo $is?$_{'board'}['wr_title']:''?>" readonly="readonly">
+					<input type="text" class="form-control" id="id_wr_title" value="<?php echo $is?escapeHtml($_{'board'}['wr_title']):''?>" readonly="readonly">
 				</div>
 				<div class="form-group">
 					<label for="id_wr_content"><?php echo getLang('content')?></label>

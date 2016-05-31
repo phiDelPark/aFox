@@ -50,15 +50,15 @@
 		</div>
 		<div class="form-group">
 			<label for="id_mb_nick"><?php echo getLang('nickname')?></label>
-			<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" maxlength="255" value="<?php echo $ismb?$_MEMBER['mb_nick']:''?>" required>
+			<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" maxlength="255" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_nick']):''?>" required>
 		</div>
 		<div class="form-group">
 			<label for="id_mb_email"><?php echo getLang('email')?></label>
-			<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" value="<?php echo $ismb?$_MEMBER['mb_email']:''?>" required>
+			<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_email']):''?>" required>
 		</div>
 		<div class="form-group">
 			<label for="id_mb_homepage"><?php echo getLang('homepage')?></label>
-			<input type="url" name="mb_homepage" class="form-control" id="id_mb_homepage" value="<?php echo $ismb?$_MEMBER['mb_homepage']:''?>" maxlength="255">
+			<input type="url" name="mb_homepage" class="form-control" id="id_mb_homepage" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_homepage']):''?>" maxlength="255">
 		</div>
 		<div class="form-group">
 			<label for="id_mb_memo"><?php echo getLang('memo')?></label>
@@ -66,7 +66,7 @@
 		</div>
 		<div class="form-group">
 			<?php $isfile = $ismb&&!empty($_MEMBER['mb_icon'])?$_MEMBER['mb_icon']:''?>
-			<div class="fileupload-group" placeholder="<?php echo getLang(getLang('warn_permit'),'png [100x100 size]')?>">
+			<div class="fileupload-group" placeholder="<?php echo getLang('warn_permit',['png [100x100 size]'])?>">
 				<div class="input-group">
 					<div class="file-caption form-control"><?php echo $isfile?'<i class="file-item" data-type="image">'.$_MEMBER['mb_icon'].'</i>':''?></div>
 					<div class="btn btn-primary btn-file">

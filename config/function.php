@@ -143,22 +143,24 @@ if(!defined('__AFOX__')) exit();
 		return $n > 0 ? call_user_func_array('setUrlQuery', array_merge([$url], $a)) : $url;
 	}
 
-	function getLang($key) {
+	// 이스케이프시 홑따옴표는 안되니 필요하면 escapeHtml 사용
+	// 홑따옴표 이스케이프시 escapeHtml(getLang('msg',false),false,ENT_QUOTES)
+	function getLang($key, $args1 = true, $args2 = true) {
 		global $_LANG;
-		$n = func_num_args();
-		if($n > 1) {
-			$args = [$key];
-			$a = func_get_args();
-			for ($i = 1; $i < $n; $i++) {
-				$lstr = strtolower($a[$i]);
-				$args[] = isset($_LANG[$lstr]) ? $_LANG[$lstr] : $a[$i];
+		if(empty($key)) return '';
+		$lstr = strtolower($key);
+		$result = isset($_LANG[$lstr]) ? $_LANG[$lstr] : $key;
+		$escape = $args1;
+		if(is_array($args1)) {
+			$escape = $args2;
+			$args = [$result];
+			foreach ($args1 as $v) {
+				$lstr = strtolower($v);
+				$args[] = isset($_LANG[$lstr]) ? $_LANG[$lstr] : $v;
 			}
 			$result = call_user_func_array('sprintf', $args);
-		} else {
-			$lstr = strtolower($key);
-			$result = isset($_LANG[$lstr]) ? $_LANG[$lstr] : $key;
 		}
-		return $result;
+		return $escape ? escapeHtml($result) : $result;
 	}
 
 	/** private **********************/
@@ -333,7 +335,7 @@ if(!defined('__AFOX__')) exit();
 
 		// 비회원인데 - 값이면 에러
 		if(empty($mb_srl) && $point < 0) {
-			return set_error(getLang(getLang('msg_disallow_by_point'), abs($point), 0), 907);
+			return set_error(getLang('msg_disallow_by_point', [abs($point), 0]), 907);
 		}
 
 		if(empty($mb_srl)) return;
@@ -347,7 +349,7 @@ if(!defined('__AFOX__')) exit();
 
 		// 포인트 모자르면 에러
 		if(($mb['mb_point'] + $point) < 0) {
-			return set_error(getLang(getLang('msg_disallow_by_point'), abs($point), $mb['mb_point']), 907);
+			return set_error(getLang('msg_disallow_by_point', [abs($point), $mb['mb_point']]), 907);
 		}
 
 		$_setvals = ['(mb_point)'=>'mb_point'.($point>0?'+':'').$point];
@@ -589,7 +591,7 @@ if(!defined('__AFOX__')) exit();
 		// 다운로드 권한이 없으면 처리
 		if(!empty($_DATA['id']) && !isGrant($_DATA['id'],'download')) {
 			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/i';
-			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('msg_not_permitted'),true,ENT_QUOTES)."');return false\" \\3";
+			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('msg_not_permitted',false),true,ENT_QUOTES)."');return false\" \\3";
 			$text = preg_replace($patterns, $replacement, $text);
 		}
 

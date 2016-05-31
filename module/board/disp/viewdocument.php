@@ -26,7 +26,7 @@ function proc($data) {
 					if (empty($doc['mb_password'])) {
 						return set_error(getLang('msg_not_permitted'), 901);
 					} else if(empty($data['mb_password'])) {
-						return set_error(sprintf($input_password, getLang(getLang('warn_input'), getLang('password'))), 90);
+						return set_error(sprintf($input_password, getLang('warn_input', ['password'])), 90);
 					} else if (!verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
 						return set_error(sprintf($input_password, getLang('msg_wrong_password')), 906);
 					}

@@ -25,7 +25,7 @@ function proc($data) {
 		// 권한 체크
 		if(empty($_MEMBER) || empty($cmt['mb_srl'])) {
 			if(empty($data['mb_password'])) {
-				return set_error(sprintf(getLang('warn_input'), getLang('password')), 3);
+				return set_error(getLang('warn_input', ['password']), 3);
 			}
 			if (empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
 				return set_error(getLang('msg_not_permitted'), 901);

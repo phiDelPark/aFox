@@ -8,10 +8,9 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 	<?php
 		$current_cpage = $cmt['current_page'];
 		$total_cpage = $cmt['total_page'];
-		$not_edit_str = 'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted')).'\');return false"';
+		$not_edit_str = 'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted',false),true,ENT_QUOTES).'\');return false"';
 		$is_owner_permit_view = $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl'] || !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$_{'board'}['wr_srl'])]);
-		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'
-										.sprintf(getLang('warn_input'), getLang('password'))
+		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'.getLang('warn_input', ['password'])
 										.'<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'
 										.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>';
 		foreach ($cmt['data'] as $key => $value) {
@@ -58,7 +57,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 	<?php if ($is_rp_grant) { ?>
 	<footer class="reply-editer">
 		<form method="post" autocomplete="off" data-exec-ajax="board.updateComment">
-		<input type="hidden" name="success_return_url" value="<?php echo urlencode(getUrl('rp',''))?>">
+		<input type="hidden" name="success_return_url" value="<?php echo getUrl('rp','')?>">
 		<input type="hidden" name="wr_srl" value="<?php echo $_DATA['srl'] ?>">
 		<a class="close" href="javascrip:;" style="display:none"><span aria-hidden="true">×</span></a>
 		<?php if (empty($_MEMBER)) { ?>
@@ -79,7 +78,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 						dispEditor(
 							'rp_content', '',
 							[
-								'required'=>sprintf(getLang('warn_input'), getLang('content')),
+								'required'=>getLang('warn_input', ['content']),
 								'readonly'=>(!$is_rp_grant),
 								'toolbar'=>(!$is_rp_grant)?[]:array(getLang('reply'), $istool)
 							]

@@ -137,7 +137,7 @@
 				<textarea class="form-control min-height-100 vresize" name="mb_memo" id="id_mb_memo"></textarea>
 			</div>
 			<div class="form-group">
-				<div class="fileupload-group" placeholder="<?php echo getLang(getLang('warn_permit'),'png [100x100 size]')?>">
+				<div class="fileupload-group" placeholder="<?php echo getLang('warn_permit',['png [100x100 size]'])?>">
 					<div class="input-group">
 						<div class="file-caption form-control"></div>
 						<div class="btn btn-primary btn-file">

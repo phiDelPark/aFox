@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(empty($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
-	if(empty($data['wr_title'])) return set_error(sprintf(getLang('warn_input'), getLang('title')));
+	if(empty($data['wr_title'])) return set_error(getLang('warn_input', ['title']));
 
 	global $_MEMBER;
 
@@ -61,10 +61,10 @@ function proc($data) {
 
 		if(!empty($module['md_category'])) {
 			if(empty($data['wr_category'])) {
-				throw new Exception(getLang(getLang('warn_input'),getLang('category')), 3);
+				throw new Exception(getLang('warn_input',['category']), 3);
 			}
 			if(preg_match('/[\x{21}-\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['wr_category'])) {
-				throw new Exception(getLang(getLang('invalid_value'), getLang('category')), 701);
+				throw new Exception(getLang('invalid_value', ['category']), 701);
 			}
 		} else {
 			$data['wr_category'] = '';
@@ -75,7 +75,7 @@ function proc($data) {
 
 		if(empty($_MEMBER)) {
 			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
-				throw new Exception(sprintf(getLang('warn_input'), getLang('%s, %s', 'id', 'password')), 3);
+				throw new Exception(getLang('warn_input', [getLang('%s, %s', ['id', 'password'])]), 3);
 			}
 			$data['mb_srl'] = 0;
 			$encrypt_password = encryptString($data['mb_password']);
@@ -158,7 +158,7 @@ function proc($data) {
 
 		if($upload_count>0) {
 			// 권한 체크
-			if(!isGrant($md_id, 'upload')) throw new Exception(getLang(getLang('warn_not_permit'), getLang('upload')), 901);
+			if(!isGrant($md_id, 'upload')) throw new Exception(getLang('warn_not_permit', ['upload']), 901);
 			if($file_max < $upload_count) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 1487);
 
 			for ($i=0; $i < $upload_count; $i++) {
@@ -176,7 +176,7 @@ function proc($data) {
 				$filename = $file['name'];
 
 				if($file_ext && !preg_match('/\.('.($file_ext).')$/i', $filename)) {
-					throw new Exception(getLang(getLang('warn_permit'), $file_ext)."\n", 303);
+					throw new Exception(getLang('warn_permit', [$file_ext])."\n", 303);
 				}
 
 				$filename = md5($filename.time()) . '.' . array_pop(explode('.', $filename));

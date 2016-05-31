@@ -11,15 +11,15 @@ function proc($data) {
 	if(empty($data['mb_id'])) return set_error(getLang('msg_invalid_request'),303);
 
 	if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['mb_id'])) {
-		return set_error(getLang(getLang('invalid_value'), getLang('id')),701);
+		return set_error(getLang('invalid_value', ['id']),701);
 	}
 
 	if(!preg_match('/^[\w-]+((?:\.|\+|\~)[\w-]+)*@[\w-]+(\.[\w-]+)+$/', $data['mb_email'])) {
-		return set_error(getLang(getLang('invalid_value'), getLang('email')),701);
+		return set_error(getLang('invalid_value', ['email']),701);
 	}
 
 	if(!empty($data['mb_homepage'])&&!preg_match('/^(https?|ftp):\/\/[0-9a-z-]+(\.[_0-9a-z-]+)+(:\d+)?/', $data['mb_homepage'])) {
-		return set_error(getLang(getLang('invalid_value'), getLang('homepage')),701);
+		return set_error(getLang('invalid_value', ['homepage']),701);
 	}
 
 	if(!empty($data['new_mb_password'])) {
@@ -65,14 +65,14 @@ function proc($data) {
 		}
 
 		if(!preg_match('/\.(png)$/i', $_FILES['mb_icon']['name'])) {
-			return set_error(getLang(getLang('warn_permit'), 'png'),303);
+			return set_error(getLang('warn_permit', ['png']),303);
 		}
 
 		$mb_icon_tmp = $_FILES['mb_icon']['tmp_name'];
 
 		$size = getimagesize($mb_icon_tmp);
 		if($size[0] > 100 || $size[1] > 100 || $size[0] < 50 || $size[1] < 50) {
-			return set_error(getLang(getLang('invalid_value'),getLang('size')),701);
+			return set_error(getLang('invalid_value',['size']),701);
 		}
 
 		$destination = '/profile_image.png';
@@ -121,7 +121,7 @@ function proc($data) {
 		if (empty($member['mb_id'])) {
 
 			if(empty($data['new_mb_id']) || empty($new_password)) {
-				throw new Exception(getLang(getLang('warn_input'),getLang(empty($data['new_mb_id'])?'id':'password')), 303);
+				throw new Exception(getLang('warn_input',[empty($data['new_mb_id'])?'id':'password']), 303);
 			}
 
 			$in_data['mb_id'] = $data['mb_id'];

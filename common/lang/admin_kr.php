@@ -1,5 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
+// 언어엔 ' (홑따옴표) 는 쓰지마세요. 에러가 발생할 가능성이 있습니다. 필요하면 ` (악센트) 이걸 사용하세요.
 
 $_LANG['menu_name_dashbd'] = '대시보드';
 $_LANG['menu_name_theme'] = '사이트 테마';

@@ -20,12 +20,12 @@ function proc($data) {
 		$module = getModule($doc['wr_updater']);
 		if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
 		// 모듈이 없으면 에러
-		if(empty($module['md_id']) || $module['md_id'] != $doc['wr_updater']) throw new Exception(getLang(getLang('invalid_value'),getLang('module')), 303);
+		if(empty($module['md_id']) || $module['md_id'] != $doc['wr_updater']) throw new Exception(getLang('invalid_value',['module']), 303);
 
 		// 권한 체크
 		if(empty($_MEMBER)) {
 			if(empty($data['mb_password'])) {
-				throw new Exception(sprintf(getLang('warn_input'), getLang('password')), 3);
+				throw new Exception(getLang('warn_input', ['password']), 3);
 			}
 			if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
 				throw new Exception(getLang('msg_not_permitted'), 901);

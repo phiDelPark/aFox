@@ -35,7 +35,7 @@
 			echo '<td>'.escapeHtml(cut_str(strip_tags($value['rp_content']),50)).'</td>';
 			echo '<td>'.($value['rp_status']?$value['rp_status']:'-').'</td>';
 			echo '<td>'.($value['rp_secret']?'Y':'N').'</td>';
-			echo '<td>'.escapeHtml(strip_tags($value['mb_nick'])).'</td>';
+			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['rp_regdate'])).'</td></tr>';
 		}
 	}

@@ -33,7 +33,7 @@ if(is_dir($addon_dir)) {
 		$_ADDON_INFO = [];
 		@include $addon_dir.$name.'/info.php';
 
-		echo '<tr><th scope="row">'.(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title']).'</th>';
+		echo '<tr><th scope="row">'.(escapeHtml(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title'])).'</th>';
 		echo '<td>'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
 		echo '<td>'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
 		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_addon_modal" data-addon-id="'.$name.'">'.getLang('setup').'</button></td></tr>';

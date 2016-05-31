@@ -31,7 +31,7 @@ if (!empty($menus['error'])) echo showMessage($menus['message'],$menus['error'])
 				<?php
 
 				if(empty($menus['error'])){
-					$placeholder = getLang('%s %s', 'category', 'title');
+					$placeholder = getLang('%s %s', ['category', 'title']);
 					$is_parent = $depth = 0;
 					$deps = [0];
 					$li = '';
@@ -56,11 +56,11 @@ if (!empty($menus['error'])) echo showMessage($menus['message'],$menus['error'])
 						echo '<li class="form-inline sitemap-item">'."\n";
 						echo '<input type="hidden" name="parent_key[]" value="'. $value['mu_parent'] .'" class="_parent_key">'."\n";
 						echo '<input type="hidden" name="item_key[]" value="'. $value['mu_srl'] .'" class="_item_key">'."\n";
-						echo '<input type="hidden" name="desc_key[]" value="'. $value['mu_description'] .'" class="_desc_key">'."\n";
+						echo '<input type="hidden" name="desc_key[]" value="'. escapeHtml($value['mu_description']) .'" class="_desc_key">'."\n";
 						echo '<input type="hidden" name="collapse_key[]" value="'. $value['mu_collapse'] .'" class="_collapse_key">'."\n";
 						echo '<input type="hidden" name="new_win_key[]" value="'. $value['mu_new_win'] .'" class="_new_win_key">'."\n";
 						echo '<input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHtml($value['mu_title']) .'" class="form-control input-sm">'."\n";
-						echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)','id','link') . '" value="'. (empty($value['md_id'])?escapeHtml($value['mu_link']):$value['md_id']) .'" class="form-control input-sm">'."\n";
+						echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)',['id','link']) . '" value="'. (empty($value['md_id'])?escapeHtml($value['mu_link']):$value['md_id']) .'" class="form-control input-sm">'."\n";
 						echo '<span class="side"><input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_tool.png" onclick="return false" data-toggle="modal" data-target=".bs-admin-modal-lg"> <input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_delete.png" value="delete" onclick="return siteMapItemDelete(this);"></span>'."\n";
 
 					}
@@ -99,7 +99,7 @@ if (!empty($menus['error'])) echo showMessage($menus['message'],$menus['error'])
 				<?php
 
 				if(empty($menus['error'])){
-					$placeholder = getLang('%s %s', 'category', 'title');
+					$placeholder = getLang('%s %s', ['category', 'title']);
 					$is_parent = $depth = 0;
 					$deps = [0];
 					$li = '';
@@ -125,11 +125,11 @@ if (!empty($menus['error'])) echo showMessage($menus['message'],$menus['error'])
 						echo '<li class="form-inline sitemap-item">'."\n";
 						echo '<input type="hidden" name="parent_key[]" value="'. $value['mu_parent'] .'" class="_parent_key">'."\n";
 						echo '<input type="hidden" name="item_key[]" value="'. $value['mu_srl'] .'" class="_item_key">'."\n";
-						echo '<input type="hidden" name="desc_key[]" value="'. $value['mu_description'] .'" class="_desc_key">'."\n";
+						echo '<input type="hidden" name="desc_key[]" value="'. escapeHtml($value['mu_description']) .'" class="_desc_key">'."\n";
 						echo '<input type="hidden" name="collapse_key[]" value="'. $value['mu_collapse'] .'" class="_collapse_key">'."\n";
 						echo '<input type="hidden" name="new_win_key[]" value="'. $value['mu_new_win'] .'" class="_new_win_key">'."\n";
 						echo '<input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHtml($value['mu_title']) .'" class="form-control input-sm">'."\n";
-						echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)','id','link') . '" value="'. (empty($value['md_id'])?escapeHtml($value['mu_link']):$value['md_id']) .'" class="form-control input-sm">'."\n";
+						echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)',['id','link']) . '" value="'. (empty($value['md_id'])?escapeHtml($value['mu_link']):$value['md_id']) .'" class="form-control input-sm">'."\n";
 						echo '<span class="side"><input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_tool.png" onclick="return false" data-toggle="modal" data-target=".bs-admin-modal-lg"> <input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_delete.png" value="delete" onclick="return siteMapItemDelete(this);"></span>'."\n";
 
 					}
@@ -198,8 +198,8 @@ if (!empty($menus['error'])) echo showMessage($menus['message'],$menus['error'])
 		<input type="hidden" name="desc_key[]" value="" class="_desc_key">
 		<input type="hidden" name="collapse_key[]" value="0" class="_collapse_key">
 		<input type="hidden" name="new_win_key[]" value="0" class="_new_win_key">
-		<input type="text" name="item_title[]" placeholder="<?php echo getLang('%s %s', 'category', 'title')?>" value="" class="form-control input-sm">
-		<input type="text" name="item_link[]" placeholder="<?php echo getLang('%s (or %s)','id','link')?>" value="" class="form-control input-sm">
+		<input type="text" name="item_title[]" placeholder="<?php echo getLang('%s %s', ['category', 'title'])?>" value="" class="form-control input-sm">
+		<input type="text" name="item_link[]" placeholder="<?php echo getLang('%s (or %s)',['id','link'])?>" value="" class="form-control input-sm">
 		<span class="side">
 			<input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_tool.png" onclick="return false" data-toggle="modal" data-target=".bs-admin-modal-lg">
 			<input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_delete.png" value="delete" onclick="return siteMapItemDelete(this);">

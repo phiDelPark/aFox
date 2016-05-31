@@ -19,10 +19,16 @@ if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
 <html lang="ko">
 <head>
 <meta charset="utf-8">
+<?php if (__MOBILE__) { ?>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=0,maximum-scale=10,user-scalable=yes">
+<meta name="HandheldFriendly" content="true">
+<meta name="format-detection" content="telephone=no">
+<?php } else { ?>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="imagetoolbar" content="no">
 <meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
-<title><?php echo getLang('%s %s', 'afox', 'admin') ?></title>
+<?php } ?>
+<title><?php echo getLang('%s %s', ['afox', 'admin']) ?></title>
 <!--[if IE]>
 <script type="text/javascript" src="<?php echo _AF_URL_ ?>common/js/html5shiv.min.js"></script>
 <![endif]-->

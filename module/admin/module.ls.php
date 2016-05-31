@@ -30,7 +30,7 @@ $module_dir = _AF_MODULES_PATH_;
 foreach ($skip_arr as $key => $value) {
 	@include $module_dir.$key.'/info.php';
 
-	echo '<tr><th scope="row" class="col-md-8">'.(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title']).'</th>';
+	echo '<tr><th scope="row" class="col-md-8">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
 	echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
 	echo '<td>'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
 	echo '<td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" '.'disabled="disabled">'.getLang('none').'</button></td></tr>';
@@ -45,7 +45,7 @@ if(is_dir($module_dir)) {
 		$_MODULE_INFO = [];
 		@include $module_dir.$name.'/info.php';
 
-		echo '<tr><th scope="row" class="col-md-8">'.(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title']).'</th>';
+		echo '<tr><th scope="row" class="col-md-8">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
 		echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
 		echo '<td>'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
 		echo '<td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" onclick="parent.location.replace(\''.getUrl('mid',$name).'\')">'.getLang('setup').'</button></td></tr>';

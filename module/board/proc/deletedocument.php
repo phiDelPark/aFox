@@ -21,7 +21,7 @@ function proc($data) {
 		if(!isManager($doc['md_id'])) {
 			if(empty($_MEMBER) || empty($doc['mb_srl'])) {
 				if(empty($data['mb_password'])) {
-					throw new Exception(sprintf(getLang('warn_input'), getLang('password')), 3);
+					throw new Exception(getLang('warn_input', ['password']), 3);
 				}
 				if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
 					throw new Exception(getLang('msg_not_permitted'), 901);
@@ -49,7 +49,7 @@ function proc($data) {
 			if($md_id == '_AFOXtRASH_') {
 				$module = getModule($doc['wr_updater']);
 				if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
-				if(empty($module['md_id']) || $module['md_id'] != $doc['wr_updater']) throw new Exception(getLang(getLang('invalid_value'),getLang('module')), 303);
+				if(empty($module['md_id']) || $module['md_id'] != $doc['wr_updater']) throw new Exception(getLang('invalid_value',['module']), 303);
 				$md_id = $module['md_id'];
 			}
 			// 파일 , 댓글 , 문서 삭제

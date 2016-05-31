@@ -27,7 +27,7 @@ function proc($data) {
 		if(!$is_manager) {
 			if(empty($_MEMBER) || empty($cmt['mb_srl'])) {
 				if(empty($data['mb_password'])) {
-					throw new Exception(sprintf(getLang('warn_input'), getLang('password')), 3);
+					throw new Exception(getLang('warn_input', ['password']), 3);
 				}
 				if (empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
 					throw new Exception(getLang('msg_not_permitted'), 901);

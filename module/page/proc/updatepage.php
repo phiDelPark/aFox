@@ -8,7 +8,7 @@ function proc($data) {
 	if(empty($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
 
 	if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['md_id'])) {
-		return set_error(getLang(getLang('invalid_value'), getLang('id')),701);
+		return set_error(getLang('invalid_value', ['id']),701);
 	}
 
 	$upload_count = 0;
@@ -107,7 +107,7 @@ function proc($data) {
 				$filename = $file['name'];
 
 				if($chk_ext && !preg_match('/\.('.($chk_ext).')$/i', $filename)) {
-					throw new Exception(getLang(getLang('warn_permit'), $chk_ext)."\n", 303);
+					throw new Exception(getLang('warn_permit', [$chk_ext])."\n", 303);
 				}
 
 				$filename = md5($filename.time()) . '.' . array_pop(explode('.', $filename));

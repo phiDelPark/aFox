@@ -20,9 +20,9 @@ header('Pragma: no-cache'); // HTTP/1.0
 <meta http-equiv="imagetoolbar" content="no">
 <meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
 <?php } ?>
-<?php if (!empty($_CFG['module']['md_title'])) { echo '<meta name="title" content="'.$_CFG['module']['md_title'].'">'."\n"; } ?>
-<?php if (!empty($_CFG['module']['md_description'])) { echo '<meta name="description" content="'.$_CFG['module']['md_description'].'">'."\n"; } ?>
-<title><?php echo $_CFG['title'].(empty($_CFG['module']['md_title']) ? '' : ' - '.$_CFG['module']['md_title']) ?></title>
+<?php if (!empty($_CFG['module']['md_title'])) { echo '<meta name="title" content="'.escapeHtml($_CFG['module']['md_title']).'">'."\n"; } ?>
+<?php if (!empty($_CFG['module']['md_description'])) { echo '<meta name="description" content="'.escapeHtml($_CFG['module']['md_description']).'">'."\n"; } ?>
+<title><?php echo escapeHtml($_CFG['title'].(empty($_CFG['module']['md_title']) ? '' : ' - '.$_CFG['module']['md_title'])) ?></title>
 <?php if ($_CFG['favicon']) {echo '<link rel="shortcut icon" href="'.$_CFG['favicon'].'">'."\n";} ?>
 <!--[if IE]>
 <script type="text/javascript" src="<?php echo _AF_URL_ ?>common/js/html5shiv.min.js"></script>

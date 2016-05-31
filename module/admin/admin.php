@@ -42,7 +42,7 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 						<li><a href="#"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('inbox')?></a></li>
 						<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('setup')?></a></li>
 						<li class="divider"></li>
-						<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo escapeHtml(getUrl(''))?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('logout')?></a></li>
+						<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('logout')?></a></li>
 					</ul>
 				</li>
 			</ul>

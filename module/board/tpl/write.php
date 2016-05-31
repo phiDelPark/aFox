@@ -23,7 +23,7 @@
 		<?php if (empty($_MEMBER) || (!$is_manager&&empty($_{'board'}['mb_srl']))) { ?>
 			<div class="form-group">
 				<label for="id_mb_nick"><?php echo getLang('id')?></label>
-				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" required maxlength="20" value="<?php echo $is?$_{'board'}['mb_nick']:''?>">
+				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" required maxlength="20" value="<?php echo $is?escapeHtml($_{'board'}['mb_nick']):''?>">
 			</div>
 			<div class="form-group">
 				<label for="id_mb_password"><?php echo getLang('password')?></label>
@@ -45,7 +45,7 @@
 		<?php } ?>
 			<div class="form-group">
 				<label for="id_wr_title"><?php echo getLang('title')?></label>
-				<input type="text" name="wr_title" class="form-control" id="id_wr_title" required maxlength="255" value="<?php echo $is?$_{'board'}['wr_title']:''?>">
+				<input type="text" name="wr_title" class="form-control" id="id_wr_title" required maxlength="255" value="<?php echo $is?escapeHtml($_{'board'}['wr_title']):''?>">
 			</div>
 			<div class="form-group">
 				<?php
@@ -58,7 +58,7 @@
 						'wr_content', $is?$_{'board'}['wr_content']:'',
 						[
 							'file'=>array($_CFG['module']['md_file_max'], $_DATA['id'], $is?$_{'board'}['wr_srl']:0),
-							'required'=>sprintf(getLang('warn_input'),getLang('content')),
+							'required'=>getLang('warn_input',['content']),
 							'html'=>$ishtml,
 							'toolbar'=>array(getLang('content'), $istool)
 						]

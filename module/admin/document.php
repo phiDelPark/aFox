@@ -36,7 +36,7 @@
 			echo '<td>'.escapeHtml(cut_str(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td>'.($value['wr_secret']?'Y':'N').'</td>';
-			echo '<td>'.escapeHtml(strip_tags($value['mb_nick'])).'</td>';
+			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td></tr>';
 		}
 	}

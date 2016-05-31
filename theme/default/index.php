@@ -41,7 +41,7 @@
 <div class="container">
 
 	<header class="bs-docs-header">
-		<h1 id="logo_title"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo $_CFG['title']?>" height="50"></h1>
+		<h1 id="logo_title"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
 		<div class="right">
 <?php if (!empty($_MEMBER)) { ?>
 			<span>
@@ -76,7 +76,7 @@
 					$_icon = _AF_URL_ .'module/board/tpl/user_default.jpg';
 				}
 			?>
-				<a href="#" class="dropdown-toggle login-icon" data-toggle="dropdown"><img src="<?php echo $_icon ?>" alt="<?php echo $_MEMBER['mb_nick']?>" /></a>
+				<a href="#" class="dropdown-toggle login-icon" data-toggle="dropdown"><img src="<?php echo $_icon ?>" alt="<?php echo escapeHtml($_MEMBER['mb_nick'])?>" /></a>
 				<ul class="dropdown-menu dropdown-menu-right">
 					<?php if(isManager($_DATA['id'])) { ?>
 					<li><a href="<?php echo _AF_URL_?>?admin"><i class="fa fa-fw fa-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></a></li>
@@ -87,7 +87,7 @@
 					<li><a href="#"><i class="fa fa-trash" aria-hidden="true"></i> <?php echo getLang('recycle_bin')?></a></li>
 					<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="fa fa-fw fa-gear" aria-hidden="true"></i> <?php echo getLang('setup')?></a></li>
 					<li class="divider"></li>
-					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo escapeHtml(getUrl(''))?>"><i class="fa fa-fw fa-power-off" aria-hidden="true"></i> <?php echo getLang('logout')?></a></li>
+					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="fa fa-fw fa-power-off" aria-hidden="true"></i> <?php echo getLang('logout')?></a></li>
 				</ul>
 			</span>
 <?php } else { ?>
@@ -136,7 +136,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<?php echo getUrl('')?>"><?php echo $_CFG['title']?></a>
+				<a class="navbar-brand" href="<?php echo getUrl('')?>"><?php echo escapeHtml($_CFG['title'])?></a>
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
 				<ul class="nav navbar-nav right">
@@ -217,7 +217,7 @@
 
 	if(empty($menus['error'])){
 		foreach ($menus['footer'] as $val) {
-			echo '<li><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').' title="'.$val['mu_description'].'">'. escapeHtml($val['mu_title']) .'</a></li>';
+			echo '<li><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').' title="'.escapeHtml($val['mu_description']).'">'. escapeHtml($val['mu_title']) .'</a></li>';
 		}
 	}
 

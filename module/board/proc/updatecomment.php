@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(empty($data['wr_srl']) && empty($data['rp_parent']) && empty($data['rp_srl'])) return set_error(getLang('msg_invalid_request'),303);
-	if(empty($data['rp_content'])) return set_error(sprintf(getLang('warn_input'), getLang('content')));
+	if(empty($data['rp_content'])) return set_error(getLang('warn_input', ['content']));
 
 	global $_MEMBER;
 
@@ -72,7 +72,7 @@ function proc($data) {
 
 		if(empty($_MEMBER)) {
 			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
-				throw new Exception(sprintf(getLang('warn_input'), getLang('%s, %s', 'id', 'password')), 3);
+				throw new Exception(getLang('warn_input', [getLang('%s, %s', ['id', 'password'])]), 3);
 			}
 			$data['mb_srl'] = 0;
 			$encrypt_password = encryptString($data['mb_password']);
