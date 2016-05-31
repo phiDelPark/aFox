@@ -88,33 +88,30 @@ function debugPrint($_out = null) { if(!(__DEBUG__ & 1)) return; $print = [date(
 
 // 로그인 중이면 맴버 정보 가져오기
 unset($_MEMBER);
-if($tmp = (isset($_SESSION['ss_mb_id']) ? $_SESSION['ss_mb_id'] : '')) {
-	// 로그인 중이면 정보 가져오기
-	$_MEMBER = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$tmp}'");
-	if(!DB::error() && !empty($_MEMBER['mb_srl'])){
-		$tmp = $_MEMBER['mb_srl'].'/profile_image.png';
-		if(file_exists(_AF_MEMBER_DATA_.$tmp)) $_MEMBER['mb_icon'] = _AF_URL_.'data/member/'.$tmp;
-	} else {
-		unset($_MEMBER);
-	}
-} else if ($tmp = get_cookie('ck_mb_id')) {
-	// 자동로그인
-	$_MEMBER = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$tmp}'");
-	if(!DB::error() && !empty($_MEMBER['mb_srl']) && $_MEMBER['mb_rank'] !== 's'){ // 관리자 제외
-		// 키검사
-		$tmp = get_cookie('ck_auto');
-		if(empty($tmp) || ($tmp !== md5($_SERVER['SERVER_ADDR'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] . $_MEMBER['mb_password']))) {
-			unset($_MEMBER);
+if($tmp = (isset($_SESSION['ss_mb_id']) ? $_SESSION['ss_mb_id'] : get_cookie('ck_mb_id'))) {
+	if(preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $tmp)) {
+		$_MEMBER = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$tmp}'");
+		if(!DB::error() && !empty($_MEMBER['mb_srl'])){
+			$tmp = $_MEMBER['mb_srl'].'/profile_image.png';
+			if(file_exists(_AF_MEMBER_DATA_.$tmp)) $_MEMBER['mb_icon'] = _AF_URL_.'data/member/'.$tmp;
+			// 쿠키이면... 키검사... 최고 관리자는 쿠키사용안함
+			if(!isset($_SESSION['ss_mb_id'])) {
+				$tmp = get_cookie('ck_auto');
+				if(empty($tmp) || $_MEMBER['mb_rank'] == 's' || ($tmp !== md5($_SERVER['SERVER_ADDR'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] . $_MEMBER['mb_password']))) {
+					unset($_MEMBER);
+				} else {
+					set_session('ss_mb_id', $mb['mb_id']);
+				}
+			}
 		} else {
-			set_session('ss_mb_id', $mb['mb_id']);
+			unset($_MEMBER);
 		}
-	} else {
-		unset($_MEMBER);
 	}
-	// 아니면 쿠키 삭제
+	// 아니면 삭제
 	if(empty($_MEMBER)) {
 		set_cookie('ck_mb_id', '', -1);
 		set_cookie('ck_auto', '', -1);
+		unset($_SESSION['ss_mb_id']);
 	}
 }
 
