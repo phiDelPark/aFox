@@ -1,10 +1,10 @@
 [![release](https://img.shields.io/badge/release-Download-brightgreen.svg)](https://github.com/phiDelPark/aFox/releases) [![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](https://github.com/phiDelPark/aFox/blob/master/LICENSE)
 
-aFox는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.
+에이폭스는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.
 
 ### 확장형 구조
 
-aFox는 모듈, 애드온, 에디터, 테마의 구조를 기반으로 결과물을 생성합니다.
+에이폭스는 모듈, 애드온, 위젯, 에디터, 테마의 구조를 기반으로 결과물을 생성합니다.
 
 이렇게 각각의 기능과 디자인이 구조적으로 연결되는 모듈형 구조는 개발 및 유지보수를 쉽게 하도록 도와주며 관리자는 손쉽게 설정과 디자인을 변경할 수 있으며 여러분만의 개성을 가진 웹 사이트를 만들 수 있습니다. aFox와 함께 더 다채롭고 개성있는 웹사이트를 만들어보세요!
 
