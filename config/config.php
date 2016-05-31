@@ -26,11 +26,12 @@ define('_AF_CONFIG_PATH_', _AF_PATH_ . 'config/');
 define('_AF_LIBS_PATH_', _AF_PATH_ . 'lib/');
 define('_AF_MODULES_PATH_', _AF_PATH_ . 'module/');
 define('_AF_ADDONS_PATH_', _AF_PATH_ . 'addon/');
+define('_AF_WIDGETS_PATH_', _AF_PATH_ . 'widget/');
 define('_AF_TPLS_PATH_', _AF_PATH_ . 'tpl/');
 define('_AF_THEMES_PATH_', _AF_PATH_ . 'theme/');
 define('_AF_LANGS_PATH_', _AF_PATH_ . 'common/lang/');
-define('_AF_DATA_PATH_', _AF_PATH_ . 'data/');
 
+define('_AF_DATA_PATH_', _AF_PATH_ . 'data/');
 define('_AF_CONFIG_DATA_', _AF_DATA_PATH_.'config/');
 define('_AF_MEMBER_DATA_', _AF_DATA_PATH_.'member/');
 define('_AF_ATTACH_DATA_', _AF_DATA_PATH_.'attach/');

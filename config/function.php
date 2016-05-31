@@ -372,9 +372,12 @@ if(!defined('__AFOX__')) exit();
 		}
 	}
 
+	function dispEditor($name, $content, $options = []) {
+		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
+	}
+
 	function dispModuleContent() {
 		if(!__MODULE__) return;
-
 		global $_CFG;
 		global $_DATA;
 		global $_MEMBER;
@@ -411,8 +414,32 @@ if(!defined('__AFOX__')) exit();
 		}
 	}
 
-	function dispEditor($name, $content, $options = []) {
-		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
+	function setWidgetContent($text){
+		static $call = null;
+
+		if($call == null) {
+			$call =	function($include_file, $_WIDGET) {
+				ob_start();
+				include $include_file;
+				return ob_get_clean();
+			};
+		}
+
+		return preg_replace_callback('/<img[^>]*class="afox_widget"\s*([^>]*)>/is',  function($m)use($call){
+			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)) {
+				$attrs = [];
+				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
+				if(!empty($attrs['widget'])){
+					$include_file = _AF_WIDGETS_PATH_ . $attrs['widget'].'/index.php';
+					if(file_exists($include_file)) {
+						return $call($include_file, $attrs);
+					} else {
+						return showMessage(getLang('msg_not_founded'), 801);
+					}
+				}
+			}
+			return '';
+		}, $text);
 	}
 
 	function triggerCall($trigger, $position, &$data) {
@@ -422,8 +449,8 @@ if(!defined('__AFOX__')) exit();
 		static $call = null;
 
 		if($call == null) {
-			$call =	function($inclued_file, $_ADDON, $_DATA) {
-				$r = include $inclued_file;
+			$call =	function($include_file, $_ADDON, $_DATA) {
+				$r = include $include_file;
 				return !empty($r['error']) && empty($r['act']) ? $r : $_DATA;
 			};
 		}
@@ -431,14 +458,14 @@ if(!defined('__AFOX__')) exit();
 		$trigger = strtolower($position.'/'.$trigger.'.php');
 
 		foreach ($_ADDONS as $key => $value) {
-			$inclued_file = _AF_ADDONS_PATH_.'/'.$key.'/'.$trigger;
-			if(file_exists($inclued_file)) {
+			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/'.$trigger;
+			if(file_exists($include_file)) {
 
 				if(!is_array($_ADDONS[$key])) {
 					$_ADDONS[$key] = unserialize($_ADDONS[$key]);
 				}
 
-				$result = $call($inclued_file, $_ADDONS[$key], $data);
+				$result = $call($include_file, $_ADDONS[$key], $data);
 				if(!empty($result['error']) && empty($result['act'])) {
 					$result['redirect_url'] = isset($data['error_return_url']) ? $data['error_return_url'] : _AF_URL_;
 					return $result;
@@ -630,7 +657,7 @@ if(!defined('__AFOX__')) exit();
 	function showMessage($message, $type = 0, $title = '') {
 		$type = ($type > 3 || $type < 0) ? 3 : $type;
 		$a_type = ['success', 'info', 'warning', 'danger'];
-		echo '<div class="'. (empty($title)?'alert alert-dismissable alert-':'panel panel-') . '' . $a_type[$type] . '" role="alert">'
+		return '<div class="'. (empty($title)?'alert alert-dismissable alert-':'panel panel-') . '' . $a_type[$type] . '" role="alert">'
 				. (empty($title)?'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>':'<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3></div>')
 				. '<div' . (empty($title)?'':' class="panel-body"') . '>' . $message . '</div></div>';
 	}

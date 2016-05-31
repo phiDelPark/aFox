@@ -6,7 +6,7 @@
 +function ($) {
   'use strict';
   var input_password = '<form action="%s" class="input-password" method="post" autocomplete="off"><div class="form-inline"><div>%s</div><input class="form-control" name="mb_password" type="password" placeholder="%s" style="width:150px" required> <button class="btn btn-primary" type="submit">%s</button> <button class="btn btn-default" type="button">%s</button></div></form>';
-  var confirm_action = '<form action="%s" class="input-group" method="post" autocomplete="off"><div><div>%s</div><button class="btn btn-default" type="button">%s</button> <button class="btn btn-primary" type="submit">%s</button></div></form>';
+  var confirm_action = '<form action="%s" class="input-group" method="post" autocomplete="off"><div><div>%s</div><button class="btn btn-primary" type="submit">%s</button> <button class="btn btn-default" type="button">%s</button></div></form>';
 
 	$('[data-exec-act]').click(function() {
 		var data = {},
@@ -66,7 +66,7 @@
 					$ipu = $(input_password.sprintf('',$_LANG['confirm_select_delete'].sprintf($_LANG['comment']),$_LANG['password'],$_LANG['ok'],$_LANG['close']));
 				}
 			} else {
-				$ipu = $(confirm_action.sprintf('',$_LANG['confirm_select_delete'].sprintf($_LANG['comment']),$_LANG['no'],$_LANG['yes']));
+				$ipu = $(confirm_action.sprintf('',$_LANG['confirm_select_delete'].sprintf($_LANG['comment']),$_LANG['yes'],$_LANG['no']));
 			}
 			$ipu.hide().addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
 			$ipu.find('button.btn-default').click(function(){$ipu.fadeOut('slow',function(){$(this).remove()});});

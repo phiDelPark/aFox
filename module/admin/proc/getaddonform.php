@@ -24,6 +24,8 @@ function proc($data) {
 	$_ADDON_INFO = [];
 	@require_once _AF_ADDONS_PATH_ . $data['ao_id'] . '/info.php';
 
+	ob_start();
+
 	$author = empty($_ADDON_INFO['link'])?escapeHtml($_ADDON_INFO['author']):('<a href="'.escapeHtml($_ADDON_INFO['link']).'" target="_blank">'.escapeHtml($_ADDON_INFO['author']).'</a>');
 
 	echo '<div class="form-group"><h3 style="margin-top:0">'.escapeHtml($_ADDON_INFO['title']).'</h3>'

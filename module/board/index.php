@@ -15,10 +15,10 @@ function returnUrlMerge($data, $result) {
 }
 
 function procBoardDefault($data) {
-	$inclued_file = dirname(__FILE__) . '/proc/'.strtolower($data['act']).'.php';
+	$include_file = dirname(__FILE__) . '/proc/'.strtolower($data['act']).'.php';
 
-	if(file_exists($inclued_file)) {
-		require_once $inclued_file;
+	if(file_exists($include_file)) {
+		require_once $include_file;
 		return returnUrlMerge($data, proc($data));
 	} else {
 		return returnUrlMerge($data, set_error(getLang('msg_invalid_request'),303));
@@ -30,9 +30,9 @@ function dispBoardDefault($data) {
 	$result = [];
 
 	if($data['disp']) {
-		$inclued_file = $dir . strtolower($data['disp']).'.php';
-		if(file_exists($inclued_file)) {
-			require_once $inclued_file;
+		$include_file = $dir . strtolower($data['disp']).'.php';
+		if(file_exists($include_file)) {
+			require_once $include_file;
 			$result = proc($data);
 		} else {
 			return set_error(getLang('msg_invalid_request'),303);

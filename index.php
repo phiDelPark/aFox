@@ -12,8 +12,6 @@ if(!empty($_GET['file'])) {
 
 require_once dirname(__FILE__) . '/config/initialize.php';
 
-ob_start();
-
 if(__MODULE__ && !empty($_DATA['act'])) {
 
 	$triggercall = 'proc'.__MODULE__.$_DATA['act'];

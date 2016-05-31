@@ -16,6 +16,7 @@ $_LANG['author'] = '작성자';
 $_LANG['nickname'] = '별명';
 $_LANG['point'] = '포인트';
 $_LANG['module'] = '모듈';
+$_LANG['widget'] = '위젯';
 
 $_LANG['ip'] = '아이피';
 

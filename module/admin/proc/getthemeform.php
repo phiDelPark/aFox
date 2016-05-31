@@ -28,6 +28,8 @@ function proc($data) {
 	$_THEME_INFO = [];
 	@require_once _AF_THEMES_PATH_ . $data['th_id'] . '/info.php';
 
+	ob_start();
+
 	$author = empty($_THEME_INFO['link'])?escapeHtml($_THEME_INFO['author']):('<a href="'.escapeHtml($_THEME_INFO['link']).'" target="_blank">'.escapeHtml($_THEME_INFO['author']).'</a>');
 
 	echo '<div class="form-group"><h3 style="margin-top:0">'.escapeHtml($_THEME_INFO['title']).'</h3>'
