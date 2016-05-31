@@ -3,7 +3,8 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['theme'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['start'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['theme'])) $data['theme'] = 'default';
 
 	if(!empty($_FILES)) {
 		$_lst = ['logo','favicon'];
@@ -42,7 +43,8 @@ function proc($data) {
 				'use_level'=>$data['use_level'],
 				'use_captcha'=>$data['use_captcha'],
 				'use_visit'=>$data['use_visit'],
-				'use_signup'=>$data['use_signup']
+				'use_signup'=>$data['use_signup'],
+				'protect_file'=>$data['protect_file']
 			]
 		);
 

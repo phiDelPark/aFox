@@ -66,6 +66,7 @@ $_LANG['possible_ip'] = '접근 아이피';
 $_LANG['intercept_ip'] = '차단 아이피';
 $_LANG['menu_desc'] = '메뉴 설명';
 $_LANG['new_open_window'] = '새창열기';
+$_LANG['protect_file'] = '파일보호';
 $_LANG['desc_start_page'] = '사이트에서 사용할 시작 페이지를 선택하세요.';
 $_LANG['desc_point'] = '회원에게 지급될 포인트를 설정할 수 있습니다. (포인트 감소는 - 값을 입력하세요)';
 $_LANG['desc_mb_point'] = '회원 포인트를 설정할 수 있습니다.';
@@ -78,6 +79,7 @@ $_LANG['desc_intercept_ip'] = '입력된 IP의 컴퓨터는 접근할 수 없음
 $_LANG['desc_terms_of_use'] = '이용약관을 적어주시면 회원 가입시 약관을 출력해줍니다. (비워두면 출력안함)';
 $_LANG['desc_category'] = '게시판에서 사용할 분류를 입력하세요. (단어와 단어 사이는 ,로 구분합니다)<br>* 주의 * 특수문자는 사용할 수 없으며 한 분류당 글자수는 20자로 제한됩니다.';
 $_LANG['desc_menu_desc'] = '메뉴에 관련된 설명 혹은 정보등을 입력할 수 있습니다.';
+$_LANG['desc_options'] = '회원가입: 회원가입을 허락할지 설정합니다.<br>방문기록: 방문자 정보를 기록할지 설정합니다.<br>파일보호: 다른 사이트에선 파일을 사용할 수 없게 설정합니다.';
 
 /* End of file admin_kr.php */
 /* Location: ./common/lang/admin_kr.php */

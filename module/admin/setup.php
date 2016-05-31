@@ -76,14 +76,6 @@
 				</div>
 			</div>&nbsp;&nbsp;
 			<div class="switch-group">
-			<input type="hidden" name="use_level" value="<?php echo empty($config['use_level'])?'0':$config['use_level']?>">
-				<div class="switch-control">
-					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-					<span class="switch switch-label"><?php echo getLang('level_icon')?></span>
-					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-				</div>
-			</div>&nbsp;&nbsp;
-			<div class="switch-group">
 				<input type="hidden" name="use_captcha" value="<?php echo empty($config['use_captcha'])?'0':$config['use_captcha']?>">
 				<div class="switch-control">
 					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
@@ -98,10 +90,26 @@
 					<span class="switch switch-label"><?php echo getLang('visit_record')?></span>
 					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
 				</div>
+			</div>&nbsp;&nbsp;
+			<div class="switch-group">
+				<input type="hidden" name="protect_file" value="<?php echo empty($config['protect_file'])?'0':$config['protect_file']?>">
+				<div class="switch-control">
+					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
+					<span class="switch switch-label"><?php echo getLang('protect_file')?></span>
+					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
+				</div>
+			</div>&nbsp;&nbsp;
+			<div class="switch-group">
+			<input type="hidden" name="use_level" value="<?php echo empty($config['use_level'])?'0':$config['use_level']?>">
+				<div class="switch-control">
+					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
+					<span class="switch switch-label"><?php echo getLang('level_icon')?></span>
+					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
+				</div>
 			</div>
 		</div>
+		<p class="help-block"><?php echo getLang('desc_options')?></p>
 	</div>
-	<div>&nbsp;</div>
 	<div class="form-group">
 		<label for="id_base_cdn_list"><?php echo getLang('base_cdn_list')?></label>
 		<textarea class="form-control min-height-100 vresize" name="base_cdn_list" id="id_base_cdn_list" placeholder="<?php echo getLang('how_to_use')?>) &lt;script src=&quot;//cdn.server.com/cdn.js&quot;&gt;&lt;/script&gt;"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'base_cdn_list.php')) include $tmp; ?></textarea>

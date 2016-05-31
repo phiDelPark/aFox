@@ -88,6 +88,7 @@ $create_sql = '
 	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
+	   protect_file   CHAR(1)      NOT NULL DEFAULT 0,
 	   extra          TEXT) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
