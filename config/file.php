@@ -4,8 +4,10 @@ require_once 'config.php';
 function setHttpError($err, $back = false) {
 	header('HTTP/1.1 '.$err);
 	header("Connection: close");
-	set_error('HTTP/1.1 '.$err, 3);
-	if($back) header('Location: ' . $_SERVER['HTTP_REFERER']); // binary 는 뒤로 가기
+	if($back) {
+		set_error('HTTP/1.1 '.$err, 3);
+		header('Location: ' . $_SERVER['HTTP_REFERER']); // binary 는 뒤로 가기
+	}
 	exit;
 }
 if($_CFG['protect_file']=='1' && !preg_match('/https?:\/\/[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
