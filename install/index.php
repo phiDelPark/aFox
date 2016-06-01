@@ -214,7 +214,7 @@ $create_sql = '
 	   mb_rank         CHAR(1)      NOT NULL DEFAULT 0,
 	   mb_nick         VARCHAR(20)  NOT NULL,
 	   mb_password     VARCHAR(100),
-	   wr_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
+	   mb_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
 	   wr_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   wr_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   wr_updater      VARCHAR(20)  ,
@@ -226,7 +226,7 @@ $create_sql = '
 	  INDEX CATEGORY_RDIX (md_id, wr_category, wr_regdate),
 	  INDEX CATEGORY_UDIX (md_id, wr_category, wr_update),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (wr_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX IP_IX (mb_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -247,7 +247,7 @@ $create_sql = '
 	   mb_rank         CHAR(1)      NOT NULL DEFAULT 0,
 	   mb_nick         VARCHAR(20)  NOT NULL,
 	   mb_password     VARCHAR(100),
-	   rp_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
+	   mb_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
 	   rp_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   rp_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   rp_depth        CHAR(5)      NOT NULL DEFAULT \'\',
@@ -256,7 +256,7 @@ $create_sql = '
 	  INDEX SRL_IX (wr_srl),
 	  INDEX PARENT_IX (rp_parent),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (rp_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX IP_IX (mb_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -289,13 +289,13 @@ $create_sql = '
 	   mf_type         VARCHAR(255) NOT NULL,
 	   mf_download     INT(11)      NOT NULL DEFAULT 0,
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
-	   mf_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
+	   mb_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
 	   mf_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (mf_srl),
 	  INDEX TARGET_IX (md_id, mf_target),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (mf_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX IP_IX (mb_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -303,12 +303,12 @@ $_err_keys = 'afox_histories';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_histories (
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
-	   hs_ipaddress    VARCHAR(128) NOT NULL,
+	   mb_ipaddress    VARCHAR(128) NOT NULL,
 	   hs_action       VARCHAR(255) NOT NULL,
 	   hs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (hs_ipaddress),
+	  INDEX IP_IX (mb_ipaddress),
 	  INDEX ACTION_IX (hs_action),
 	  INDEX REGDATE_IX (hs_regdate)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
@@ -334,7 +334,7 @@ DB::query($create_sql);
 $_err_keys = 'afox_visitors';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_visitors (
-	   vs_ipaddress    VARCHAR(128) NOT NULL,
+	   mb_ipaddress    VARCHAR(128) NOT NULL,
 	   vs_agent        VARCHAR(255) NOT NULL,
 	   vs_referer      VARCHAR(255) NOT NULL,
 	   vs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',

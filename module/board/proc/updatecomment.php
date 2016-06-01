@@ -70,7 +70,7 @@ function proc($data) {
 		if(!empty($module['use_type'])) $data['rp_type'] = ((int)$module['use_type'])-1;
 		if(!empty($module['use_secret'])) $data['rp_secret'] = ((int)$module['use_secret'])-1;
 
-		$data['rp_ipaddress'] = $_SERVER['REMOTE_ADDR'];
+		$data['mb_ipaddress'] = $_SERVER['REMOTE_ADDR'];
 
 		if(empty($_MEMBER)) {
 			$data['mb_nick'] = empty($data['mb_nick'])?'':trim($data['mb_nick']);
@@ -108,7 +108,7 @@ function proc($data) {
 					'mb_rank'=>$data['mb_rank'],
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
-					'rp_ipaddress'=>$data['rp_ipaddress'],
+					'mb_ipaddress'=>$data['mb_ipaddress'],
 					'(rp_regdate)'=>'NOW()',
 					'(rp_update)'=>'NOW()'
 				]

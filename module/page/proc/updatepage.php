@@ -93,7 +93,7 @@ function proc($data) {
 		if($upload_count>0) {
 
 			$chk_ext = '';
-			$mf_ipaddress = $_SERVER['REMOTE_ADDR'];
+			$mb_ipaddress = $_SERVER['REMOTE_ADDR'];
 
 			for ($i=0; $i < $upload_count; $i++) {
 				// 빈 파일 넘김
@@ -129,7 +129,7 @@ function proc($data) {
 					'mf_size'=>$file['size'],
 					'mf_type'=>$file['type'],
 					'mb_srl'=>0,
-					'mf_ipaddress'=>$mf_ipaddress,
+					'mb_ipaddress'=>$mb_ipaddress,
 					'(mf_regdate)'=>'NOW()'
 				]);
 				$mf_srl = DB::insertId();

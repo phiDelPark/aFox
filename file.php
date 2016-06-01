@@ -51,7 +51,7 @@ if($_file[$srl]['type']==='binary'){
 	if(empty($mb_srl) && $point < 0) setHttpError('401 Unauthorized', true); // -값은 비회원 불가
 	$act = 'mf_download';
 	$uinfo = ['mb_srl'=>$mb_srl,'ipaddress'=>$_SERVER['REMOTE_ADDR']];
-	$pkey = ($uinfo['mb_srl'] > 0 ? 'mb_srl':'hs_ipaddress');
+	$pkey = ($uinfo['mb_srl'] > 0 ? 'mb_srl':'mb_ipaddress');
 	$pval = ($uinfo['mb_srl'] > 0 ? $uinfo['mb_srl']:$uinfo['ipaddress']);
 	$_tmp = DB::select(_AF_HISTORY_TABLE_,['hs_action'=>$act.'('.$srl.')',$pkey=>$pval]);
 	if(!DB::error()) {
@@ -62,7 +62,7 @@ if($_file[$srl]['type']==='binary'){
 				if(DB::error() || ($mb['mb_point']+$point) < 0) setHttpError('401 Unauthorized', true); // 포인트 모자르면 에러
 				DB::update(_AF_MEMBER_TABLE_,['(mb_point)'=>'mb_point'.($point>0?'+':'').$point],['mb_srl'=>$mb_srl]);
 			}
-			if(true === DB::insert(_AF_HISTORY_TABLE_,['mb_srl'=>$uinfo['mb_srl'],'hs_ipaddress'=>$uinfo['ipaddress'],'hs_action'=>$act.'('.$srl.')','(hs_regdate)'=>'NOW()'])){
+			if(true === DB::insert(_AF_HISTORY_TABLE_,['mb_srl'=>$uinfo['mb_srl'],'mb_ipaddress'=>$uinfo['ipaddress'],'hs_action'=>$act.'('.$srl.')','(hs_regdate)'=>'NOW()'])){
 				DB::update(_AF_FILE_TABLE_, ['(mf_download)'=>'mf_download+1'], ['mf_srl'=>$srl]);
 			}
 		}

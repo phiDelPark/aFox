@@ -35,7 +35,7 @@ function proc($data) {
 	unset($doc['mb_password']);
 
 	if(!empty($data['with_file_list'])) {
-		$fd = 'mf_srl,mf_name,mf_type,mf_download,mf_description,mf_size,mb_srl,mf_ipaddress';
+		$fd = 'mf_srl,mf_name,mf_type,mf_download,mf_description,mf_size,mb_srl,mb_ipaddress';
 		$doc['files'] = DB::getList('SELECT '.$fd.' FROM '._AF_FILE_TABLE_.' WHERE md_id=\''.$doc['md_id'].'\' AND mf_target='.$doc['wr_srl'].' ORDER BY mf_type');
 	}
 

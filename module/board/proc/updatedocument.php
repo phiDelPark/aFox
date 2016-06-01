@@ -73,7 +73,7 @@ function proc($data) {
 
 		$data['wr_content'] = xssClean($data['wr_content']);
 		$data['wr_tags'] = getHashtags($data['wr_content']);
-		$data['wr_ipaddress'] = $_SERVER['REMOTE_ADDR'];
+		$data['mb_ipaddress'] = $_SERVER['REMOTE_ADDR'];
 
 		if(empty($_MEMBER)) {
 			$data['mb_nick'] = empty($data['mb_nick'])?'':trim($data['mb_nick']);
@@ -106,7 +106,7 @@ function proc($data) {
 					'mb_rank'=>$data['mb_rank'],
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
-					'wr_ipaddress'=>$data['wr_ipaddress'],
+					'mb_ipaddress'=>$data['mb_ipaddress'],
 					'(wr_regdate)'=>'NOW()'
 				]
 			)) {
@@ -201,7 +201,7 @@ function proc($data) {
 					'mf_size'=>$file['size'],
 					'mf_type'=>$file['type'],
 					'mb_srl'=>$data['mb_srl'],
-					'mf_ipaddress'=>$data['wr_ipaddress'],
+					'mb_ipaddress'=>$data['mb_ipaddress'],
 					'(mf_regdate)'=>'NOW()'
 				]);
 				$mf_srl = DB::insertId();

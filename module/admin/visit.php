@@ -29,7 +29,7 @@
 		$total_page = $vs_list['total_page'];
 
 		foreach ($vs_list['data'] as $key => $value) {
-			echo '<tr><th scope="row">'.$value['vs_ipaddress'].'</th>';
+			echo '<tr><th scope="row">'.$value['mb_ipaddress'].'</th>';
 			echo '<td style="white-space:normal">'.escapeHtml($value['vs_agent']).'</td>';
 			echo '<td style="white-space:normal">'.escapeHtml($value['vs_referer']).'</td>';
 			echo '<td>'.date('Y/m/d h:m', strtotime($value['vs_regdate'])).'</td></tr>';

@@ -311,7 +311,7 @@ if(!defined('__AFOX__')) exit();
 		$uinfo['mb_srl'] = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
 		$uinfo['ipaddress'] = $_SERVER['REMOTE_ADDR'];
 
-		$pkey = ($uinfo['mb_srl'] > 0 ? 'mb_srl':'hs_ipaddress');
+		$pkey = ($uinfo['mb_srl'] > 0 ? 'mb_srl':'mb_ipaddress');
 		$pval = ($uinfo['mb_srl'] > 0 ? $uinfo['mb_srl']:$uinfo['ipaddress']);
 
 		DB::transaction();
@@ -329,7 +329,7 @@ if(!defined('__AFOX__')) exit();
 				DB::insert(_AF_HISTORY_TABLE_,
 					[
 						'mb_srl'=>$uinfo['mb_srl'],
-						'hs_ipaddress'=>$uinfo['ipaddress'],
+						'mb_ipaddress'=>$uinfo['ipaddress'],
 						'hs_action'=>$act.'('.$value.')',
 						'(hs_regdate)'=>'NOW()'
 					]

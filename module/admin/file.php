@@ -33,7 +33,7 @@
 			echo '<tr class="afox-list-item"><th scope="row">'.$value['md_id'].'</th>';
 			echo '<td>'.escapeHtml(cut_str($value['mf_name'],50)).'</td>';
 			echo '<td>'.$value['mf_download'].'</td>';
-			echo '<td>'.$value['mf_ipaddress'].'</td>';
+			echo '<td>'.$value['mb_ipaddress'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mf_regdate'])).'</td></tr>';
 		}
 	}

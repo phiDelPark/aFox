@@ -15,7 +15,7 @@ function proc($data) {
 	}
 
 	if(!empty($data['with_file_list'])) {
-		$fd = 'mf_srl,mf_name,mf_type,mf_download,mf_description,mf_size,mb_srl,mf_ipaddress';
+		$fd = 'mf_srl,mf_name,mf_type,mf_download,mf_description,mf_size,mb_srl,mb_ipaddress';
 		$out['files'] = DB::getList('SELECT '.$fd.' FROM '._AF_FILE_TABLE_.' WHERE md_id=\''.$data['md_id'].'\' ORDER BY mf_type');
 	}
 

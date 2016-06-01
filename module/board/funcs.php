@@ -21,7 +21,7 @@ if(!defined('__AFOX__')) exit();
 				}
 
 				// 자신은 카운터 안올림
-				$ukey = ($v['mb_srl'] > 0 ? 'mb_srl':'wr_ipaddress').'{<>}';
+				$ukey = ($v['mb_srl'] > 0 ? 'mb_srl':'mb_ipaddress').'{<>}';
 				$uval = ($v['mb_srl'] > 0 ? $v['mb_srl']:$v['ipaddress']);
 				DB::update(_AF_DOCUMENT_TABLE_,
 					[
