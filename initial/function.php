@@ -475,7 +475,7 @@ if(!defined('__AFOX__')) exit();
 			'mb_srl'=>$srl,
 			'nt_sender'=>$sender,
 			'nt_sender_nick'=>$nick,
-			'nt_note'=>xssClean($msg),
+			'nt_content'=>xssClean($msg),
 			'(nt_send_date)'=>'NOW()'
 		]);
 	}

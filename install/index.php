@@ -323,7 +323,7 @@ $create_sql = '
 	   nt_sender_nick  VARCHAR(20)  NOT NULL DEFAULT \'\',
 	   nt_send_date    datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   nt_read_date    datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
-	   nt_note         TEXT         NOT NULL DEFAULT \'\',
+	   nt_content      TEXT         NOT NULL DEFAULT \'\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (nt_srl),
 	  INDEX MEMBER_IX (mb_srl),

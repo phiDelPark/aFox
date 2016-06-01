@@ -17,7 +17,7 @@
 	</header>
 	<article style="padding:20px 5px 30px;min-height:200px">
 	<?php
-		echo $_item['nt_note'];
+		echo $_item['nt_content'];
 	?>
 	</article>
 </section>
