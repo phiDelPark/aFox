@@ -101,7 +101,7 @@ function proc($data) {
 			'mb_nick'=>$data['mb_nick'],
 			'mb_email'=>$data['mb_email'],
 			'mb_homepage'=>$data['mb_homepage'],
-			'mb_memo'=>$data['mb_memo']
+			'mb_memo'=>xssClean($data['mb_memo'])
 		];
 
 		if($new_password) $in_data['mb_password'] = $new_password;

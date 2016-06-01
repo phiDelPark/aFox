@@ -60,7 +60,7 @@
 						}
 					?>
 					<li class="message-preview">
-						<a href="#">
+						<a href="<?php echo getUrl('','module','member','disp','inbox','srl', $val['nt_srl']) ?>">
 							<div class="media">
 								<span class="pull-left">
 									<img class="media-object" src="<?php echo $_icon ?>">
@@ -97,8 +97,8 @@
 					<li class="dropdown-header"><i class="fa fa-fw fa-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></li>
 					<?php } ?>
 					<li class="divider"></li>
-					<li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> <?php echo getLang('inbox')?></a></li>
-					<li><a href="#"><i class="fa fa-trash" aria-hidden="true"></i> <?php echo getLang('recycle_bin')?></a></li>
+					<li><a href="<?php echo getUrl('','module','member','disp','inbox') ?>"><i class="fa fa-envelope" aria-hidden="true"></i> <?php echo getLang('inbox')?></a></li>
+					<li><a href="<?php echo getUrl('','module','member','disp','trash') ?>"><i class="fa fa-trash" aria-hidden="true"></i> <?php echo getLang('recycle_bin')?></a></li>
 					<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="fa fa-fw fa-gear" aria-hidden="true"></i> <?php echo getLang('setup')?></a></li>
 					<li class="divider"></li>
 					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="fa fa-fw fa-power-off" aria-hidden="true"></i> <?php echo getLang('logout')?></a></li>

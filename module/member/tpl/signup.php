@@ -63,6 +63,7 @@
 		<div class="form-group">
 			<label for="id_mb_memo"><?php echo getLang('memo')?></label>
 			<textarea class="form-control min-height-100 vresize" name="mb_memo" id="id_mb_memo"><?php echo $ismb?$_MEMBER['mb_memo']:''?></textarea>
+			<p class="help-block"><?php echo getLang('desc_member_memo')?></p>
 		</div>
 		<div class="form-group">
 			<?php $isfile = $ismb&&!empty($_MEMBER['mb_icon'])?$_MEMBER['mb_icon']:''?>

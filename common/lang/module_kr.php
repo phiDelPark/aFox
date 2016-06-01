@@ -5,6 +5,7 @@ if(!defined('__AFOX__')) exit();
 $_LANG['terms_of_use'] = '이용약관';
 $_LANG['desc_terms_of_use'] = '가입전에 이용약관을 꼭 읽고 가입에 동의해주세요.';
 $_LANG['member_icon'] = '회원 아이콘';
+$_LANG['desc_member_memo'] = '회원 프로필에 표시할 메모를 입력할 수 있습니다. (Markdown 지원)';
 $_LANG['desc_member_icon'] = '회원 아이콘은 가로,세로 100x100 크기의 png 파일로 등록해주세요.';
 $_LANG['not_use_signup'] = '지금은 회원 가입을 하실 수 없습니다.';
 $_LANG['verify_password'] = '비밀번호 확인';

@@ -220,6 +220,10 @@ ul.message-dropdown>li>a {
 	margin-bottom: 190px;
 }
 
+.bs-docs-body>section {
+	margin-bottom: 20px;
+}
+
 #loginModal .modal-dialog{
 	width: 400px;
 	margin: 70px auto;
