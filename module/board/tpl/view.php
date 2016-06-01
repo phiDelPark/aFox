@@ -13,7 +13,7 @@ $is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		<h3 class="clearfix"><?php echo $_{'board'}['wr_title']?></h3>
 		<hr class="divider">
 		<div class="clearfix">
-			<span class="pull-left"><?php echo $_{'board'}['mb_nick']?></span>
+			<span class="pull-left"><?php echo '<span class="mb_nick" data-srl="'.$_{'board'}['mb_srl'].'" data-rank="'.(ord($_{'board'}['mb_rank']) - 48).'">'.$_{'board'}['mb_nick'].'</span>'?></span>
 			<span class="pull-right"><?php echo date((__MOBILE__?'y':'Y').getLang('year').' m'.getLang('month').' d'.getLang('day').' A h:i', strtotime($_{'board'}['wr_regdate']))?></span>
 		</div>
 	</header>

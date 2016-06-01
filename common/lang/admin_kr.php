@@ -58,7 +58,6 @@ $_LANG['new_board'] = '새 게시판 등록';
 $_LANG['max_file_count'] = '최대 수';
 $_LANG['max_file_size'] = '최대 크기';
 $_LANG['file_extension'] = '첨부 가능 확장자';
-$_LANG['level_icon'] = '레벨아이콘';
 $_LANG['visit_record'] = '방문기록';
 $_LANG['base_cdn_list'] = '기본 CDN';
 $_LANG['how_to_use'] = '사용법';

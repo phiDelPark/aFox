@@ -75,9 +75,11 @@ function proc($data) {
 				throw new Exception(getLang('warn_input', [getLang('%s, %s', ['id', 'password'])]), 3);
 			}
 			$data['mb_srl'] = 0;
+			$data['mb_rank'] = 0;
 			$encrypt_password = encryptString($data['mb_password']);
 		} else {
 			$data['mb_srl'] = $_MEMBER['mb_srl'];
+			$data['mb_rank'] = $_MEMBER['mb_rank'];
 			$data['mb_nick'] = $_MEMBER['mb_nick'];
 			$encrypt_password = null;
 		}
@@ -98,6 +100,7 @@ function proc($data) {
 					'rp_type'=>$data['rp_type'],
 					'rp_content'=>$data['rp_content'],
 					'mb_srl'=>$data['mb_srl'],
+					'mb_rank'=>$data['mb_rank'],
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
 					'rp_ipaddress'=>$data['rp_ipaddress'],

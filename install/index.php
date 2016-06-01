@@ -84,10 +84,9 @@ $create_sql = '
 	   theme          VARCHAR(255) NOT NULL,
 	   title          VARCHAR(255) NOT NULL,
 	   point_login    INT(11)      NOT NULL DEFAULT 0,
-	   use_level      CHAR(1)      NOT NULL DEFAULT 0,
-	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
-	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
+	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
+	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
 	   protect_file   CHAR(1)      NOT NULL DEFAULT 0,
 	   extra          TEXT) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
@@ -212,6 +211,7 @@ $create_sql = '
 	   wr_file         INT(11)      NOT NULL DEFAULT 0,
 	   wr_reply        INT(11)      NOT NULL DEFAULT 0,
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
+	   mb_rank         CHAR(1)      NOT NULL DEFAULT 0,
 	   mb_nick         VARCHAR(20)  NOT NULL,
 	   mb_password     VARCHAR(100),
 	   wr_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
@@ -244,6 +244,7 @@ $create_sql = '
 	   rp_hate         INT(11)      NOT NULL DEFAULT 0,
 	   rp_file         INT(11)      NOT NULL DEFAULT 0,
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
+	   mb_rank         CHAR(1)      NOT NULL DEFAULT 0,
 	   mb_nick         VARCHAR(20)  NOT NULL,
 	   mb_password     VARCHAR(100),
 	   rp_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',

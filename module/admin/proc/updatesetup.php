@@ -40,7 +40,6 @@ function proc($data) {
 				'start'=>$data['start'],
 				'title'=>$data['title'],
 				'point_login'=>(int)$data['point_login'],
-				'use_level'=>$data['use_level'],
 				'use_captcha'=>$data['use_captcha'],
 				'use_visit'=>$data['use_visit'],
 				'use_signup'=>$data['use_signup'],

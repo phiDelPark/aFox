@@ -98,14 +98,6 @@
 					<span class="switch switch-label"><?php echo getLang('protect_file')?></span>
 					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
 				</div>
-			</div>&nbsp;&nbsp;
-			<div class="switch-group">
-			<input type="hidden" name="use_level" value="<?php echo empty($config['use_level'])?'0':$config['use_level']?>">
-				<div class="switch-control">
-					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-					<span class="switch switch-label"><?php echo getLang('level_icon')?></span>
-					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-				</div>
 			</div>
 		</div>
 		<p class="help-block"><?php echo getLang('desc_options')?></p>

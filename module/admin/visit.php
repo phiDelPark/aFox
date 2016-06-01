@@ -11,8 +11,8 @@
 <thead>
 	<tr>
 		<th class="col-xs-1">#<?php echo getLang('ip')?></th>
-		<th><?php echo getLang('agent')?></th>
-		<th class="col-md-7"><?php echo getLang('referer')?></th>
+		<th class="col-md-6"><?php echo getLang('agent')?></th>
+		<th><?php echo getLang('referer')?></th>
 		<th class="col-xs-1"><?php echo getLang('date')?></th>
 	</tr>
 </thead>
@@ -30,8 +30,8 @@
 
 		foreach ($vs_list['data'] as $key => $value) {
 			echo '<tr><th scope="row">'.$value['vs_ipaddress'].'</th>';
-			echo '<td>'.escapeHtml($value['vs_agent']).'</td>';
-			echo '<td>'.escapeHtml($value['vs_referer']).'</td>';
+			echo '<td style="white-space:normal">'.escapeHtml($value['vs_agent']).'</td>';
+			echo '<td style="white-space:normal">'.escapeHtml($value['vs_referer']).'</td>';
 			echo '<td>'.date('Y/m/d h:m', strtotime($value['vs_regdate'])).'</td></tr>';
 		}
 	}
