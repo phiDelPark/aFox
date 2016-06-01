@@ -24,7 +24,7 @@ if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 
 if(empty($_POST['db_name'])) {
 
-	echo '<form action="./" method="post" autocomplete="off">';
+	echo '<form action="index.php" method="post" autocomplete="off">';
 	echo '<span style="display:inline-block;width:150px">DB 호스트 : </span><input type="text" name="db_host" value="localhost"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 포트 : </span><input type="text" name="db_port" value="3306"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 이름 : </span><input type="text" name="db_name" value=""><br><br>';
