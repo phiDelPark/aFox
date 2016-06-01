@@ -672,5 +672,8 @@ if(!defined('__AFOX__')) exit();
 		return 'BROWSER';
 	}
 
+	function addJS($src) { global $_ADDELEMENTS; $_ADDELEMENTS['JS'][$src] = 1; }
+	function addCSS($src) { global $_ADDELEMENTS; $_ADDELEMENTS['CSS'][$src] = 1; }
+
 /* End of file function.php */
-/* Location: ./config/function.php */
+/* Location: ./initial/function.php */

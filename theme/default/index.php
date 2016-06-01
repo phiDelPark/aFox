@@ -159,7 +159,7 @@
 			  <img src="<?php echo _AF_THEME_URL_ ?>img/slide-0<?php echo $i ?>.jpg" alt="">
 			  <div class="container">
 				<div class="carousel-caption">
-				  <?php if(!empty($_CFG['theme']['carousel_item_'.$i])) echo $_CFG['theme']['carousel_item_'.$i] ?>
+				  <?php if(!empty($_THEME['carousel_item_'.$i])) echo $_THEME['carousel_item_'.$i] ?>
 				</div>
 			  </div>
 			</div>
@@ -169,11 +169,11 @@
 	  <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
 	</section>
 
-<?php } else if(!empty($_CFG['module'])) { ?>
+<?php } else if(!empty($_CFG['md_id'])) { ?>
 
   <div class="header-image <?php echo strtolower($_DATA['module']) ?>">
-	<h3><?php echo $_CFG['module']['md_title'] ?></h3>
-	<p><?php echo $_CFG['module']['md_description'] ?></p>
+	<h3><?php echo $_CFG['md_title'] ?></h3>
+	<p><?php echo $_CFG['md_description'] ?></p>
   </div>
 
 <?php } else { ?>
@@ -223,7 +223,7 @@
 
 ?>
 		</ul>
-		<p><?php if(!empty($_CFG['theme']['footer_html'])) echo $_CFG['theme']['footer_html']; ?></p>
+		<p><?php if(!empty($_THEME['footer_html'])) echo $_THEME['footer_html']; ?></p>
 	</footer>
 
 </div>

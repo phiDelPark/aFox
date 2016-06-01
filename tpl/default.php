@@ -1,11 +1,8 @@
 <?php
 if(!defined('__AFOX__')) exit();
-header('Content-Type: text/html; charset=utf-8');
-header('Expires: 0'); // rfc2616 - Section 14.21
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-header('Cache-Control: no-store, no-cache, must-revalidate'); // HTTP/1.1
-header('Cache-Control: pre-check=0, post-check=0, max-age=0'); // HTTP/1.1
-header('Pragma: no-cache'); // HTTP/1.0
+// 테마 설정 저장
+$_THEME = getDBItem(_AF_THEME_TABLE_, ['th_id'=>_AF_THEME_], 'extra');
+if(empty($_THEME['error'])) $_THEME = unserialize($_THEME['extra']);
 ?>
 <!doctype html>
 <html lang="ko">
@@ -20,9 +17,9 @@ header('Pragma: no-cache'); // HTTP/1.0
 <meta http-equiv="imagetoolbar" content="no">
 <meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
 <?php } ?>
-<?php if (!empty($_CFG['module']['md_title'])) { echo '<meta name="title" content="'.escapeHtml($_CFG['module']['md_title']).'">'."\n"; } ?>
-<?php if (!empty($_CFG['module']['md_description'])) { echo '<meta name="description" content="'.escapeHtml($_CFG['module']['md_description']).'">'."\n"; } ?>
-<title><?php echo escapeHtml($_CFG['title'].(empty($_CFG['module']['md_title']) ? '' : ' - '.$_CFG['module']['md_title'])) ?></title>
+<?php if (!empty($_CFG['md_title'])) { echo '<meta name="title" content="'.escapeHtml($_CFG['md_title']).'">'."\n"; } ?>
+<?php if (!empty($_CFG['md_description'])) { echo '<meta name="description" content="'.escapeHtml($_CFG['md_description']).'">'."\n"; } ?>
+<title><?php echo escapeHtml($_CFG['title'].(empty($_CFG['md_title']) ? '' : ' - '.$_CFG['md_title'])) ?></title>
 <?php if ($_CFG['favicon']) {echo '<link rel="shortcut icon" href="'.$_CFG['favicon'].'">'."\n";} ?>
 <!--[if IE]>
 <script type="text/javascript" src="<?php echo _AF_URL_ ?>common/js/html5shiv.min.js"></script>
@@ -46,8 +43,8 @@ var waiting_message = "<?php echo getLang('msg_call_server') ?>";
 <?php  include _AF_THEME_PATH_ . 'index.php'; ?>
 <?php
 @include _AF_THEME_PATH_ . '_tail.php';
-foreach ($_SCRIPTS as $key=>$val) {echo '<script src="'.$key.'"></script>';}
-foreach ($_STYLESHEETS as $key=>$val) {echo '<link href="'.$key.'" rel="stylesheet">';}
+foreach ($_ADDELEMENTS['JS'] as $key=>$val) {echo '<script src="'.$key.'"></script>';}
+foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {echo '<link href="'.$key.'" rel="stylesheet">';}
 ?>
 </body>
 </html>

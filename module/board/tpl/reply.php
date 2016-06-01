@@ -72,8 +72,8 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 				<div class="form-group"><span class="sr-only"><?php echo getLang('content')?></span>
 					<?php
 						$istool = [];
-						if(empty($_CFG['module']['use_type'])) $istool['rp_type'] = ['1', ['MKDW'=>'1','HTML'=>'2']];
-						if(empty($_CFG['module']['use_secret'])) $istool['rp_secret'] = [false,'Secret'];
+						if(empty($_CFG['use_type'])) $istool['rp_type'] = ['1', ['MKDW'=>'1','HTML'=>'2']];
+						if(empty($_CFG['use_secret'])) $istool['rp_secret'] = [false,'Secret'];
 
 						dispEditor(
 							'rp_content', '',

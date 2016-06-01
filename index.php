@@ -6,11 +6,11 @@ header('P3P: CP="ALL CURa ADMa DEVa TAIa OUR BUS IND PHY ONL UNI PUR FIN COM NAV
 define('__AFOX__', TRUE);
 
 if(!empty($_GET['file'])) {
-	require_once dirname(__FILE__) . '/config/file.php';
+	require_once dirname(__FILE__) . '/file.php';
 	exit();
 }
 
-require_once dirname(__FILE__) . '/config/initialize.php';
+require_once dirname(__FILE__) . '/initial/common.php';
 
 if(__MODULE__ && !empty($_DATA['act'])) {
 

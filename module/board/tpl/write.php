@@ -30,12 +30,12 @@
 				<input type="password" name="mb_password" class="form-control" id="id_mb_password" required>
 			</div>
 		<?php } ?>
-		<?php if (!empty($_CFG['module']['md_category'])) { ?>
+		<?php if (!empty($_CFG['md_category'])) { ?>
 			<div class="form-group">
 				<select name="wr_category" class="form-control" required>
 				<option value=""><?php echo getLang('category')?></option>
 				<?php
-					$tmp = explode(',', $_CFG['module']['md_category']);
+					$tmp = explode(',', $_CFG['md_category']);
 					foreach ($tmp as $val) {
 						echo '<option value="'.$val.'"'.(($is&&$val==$_{'board'}['wr_category'])?' selected="selected"':'').'>'.$val.'</option>';
 					}
@@ -52,12 +52,12 @@
 					$issecret = ($is&&$_{'board'}['wr_secret']==1)?1:0;
 					$ishtml = ($is&&$_{'board'}['wr_type']==2)?1:0;
 					$istool = [];
-					if(empty($_CFG['module']['use_type'])) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
-					if(empty($_CFG['module']['use_secret'])) $istool['wr_secret'] = [$issecret,'Secret'];
+					if(empty($_CFG['use_type'])) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
+					if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [$issecret,'Secret'];
 					dispEditor(
 						'wr_content', $is?$_{'board'}['wr_content']:'',
 						[
-							'file'=>array($_CFG['module']['md_file_max'], $_DATA['id'], $is?$_{'board'}['wr_srl']:0),
+							'file'=>array($_CFG['md_file_max'], $_DATA['id'], $is?$_{'board'}['wr_srl']:0),
 							'required'=>getLang('warn_input',['content']),
 							'html'=>$ishtml,
 							'toolbar'=>array(getLang('content'), $istool)

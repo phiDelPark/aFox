@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 require_once dirname(__FILE__) . '/config.php';
 
 @include_once _AF_LANGS_PATH_ . 'default_' . _AF_LANG_ . '.php';
-require_once _AF_CONFIG_PATH_ . 'function.php';
+require_once _AF_INIT_PATH_ . 'function.php';
 
 define('__MOBILE__', checkUserAgent() == 'MOBILE');
 define('__REQ_METHOD__', getRequestMethod());
@@ -31,7 +31,7 @@ if($_DATA['module'] == 'admin' || isset($_DATA['admin'])) {
 	if(!empty($_DATA['id'])) {
 		$tmp = getModule($_DATA['id']);
 		if(empty($tmp['error'])) {
-			$_CFG['module'] = $tmp;
+			$_CFG = array_merge($_CFG, $tmp);
 			$_DATA['module'] = $tmp['md_key'];
 		}
 	}
@@ -50,14 +50,6 @@ if(!empty($_DATA['cdnerr'])) {
 $tmp = _AF_CONFIG_DATA_.'base_cdn_list.php';
 define('__USE_BASE_CDN__', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp : FALSE);
 
-// 테마 설정 저장 // TODO 캐시 처리 하자
-$tmp_arr = DB::query('SELECT extra FROM '._AF_THEME_TABLE_.' WHERE th_id=\''._AF_THEME_.'\'');
-if(!DB::error()) {
-	$tmp = DB::assoc($tmp_arr);
-	$_CFG['theme'] = unserialize($tmp['extra']);
-	$_CFG['theme']['th_id'] = _AF_THEME_;
-}
-
 // 실행 가능한 애드온 정보 합치기
 $tmp = (__MOBILE__?'ao_use_mobile':'ao_use_pc').'=1';
 $tmp_arr = DB::query('SELECT ao_id,extra FROM '._AF_ADDON_TABLE_.' WHERE '.$tmp);
@@ -71,6 +63,11 @@ $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/
 
 unset($tmp);
 unset($tmp_arr);
+header('Content-Type: text/html; charset=utf-8');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0"); // HTTP 1.1.
+header("Pragma: no-cache"); // HTTP 1.0.
+header("Expires: 0"); // Proxies.
 
-/* End of file initialize.php */
-/* Location: ./config/initialize.php */
+/* End of file common.php */
+/* Location: ./initial/common.php */

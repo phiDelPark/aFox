@@ -10,7 +10,7 @@
 			$th_list[$row['th_id']] = true;
 		}
 	}
-	$theme_id = empty($_CFG['theme']) ? '' : $_CFG['theme']['th_id'];
+	$theme_id = empty($_CFG['theme']) ? '' : $_CFG['theme'];
 ?>
 
 <table class="table table-hover">

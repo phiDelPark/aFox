@@ -5,11 +5,11 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 ?>
 
 <section id="board_list"<?php echo empty($_DATA['srl']) ? '' :' style="margin-top:50px"'; ?>>
-	<?php if (empty($_DATA['srl']) && !empty($_CFG['module']['md_category'])) { ?>
+	<?php if (empty($_DATA['srl']) && !empty($_CFG['md_category'])) { ?>
 		<header>
 			<ol class="breadcrumb">
 			<?php
-				$tmp = explode(',', $_CFG['module']['md_category']);
+				$tmp = explode(',', $_CFG['md_category']);
 				foreach ($tmp as $val) {
 					echo '<li><a href="'.getUrl('','id',$_DATA['id'],'category', urlencode($val)).'">'.$val.'</a></li>';
 				}

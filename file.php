@@ -1,6 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
-require_once 'config.php';
+require_once dirname(__FILE__) . '/initial/config.php';
 function setHttpError($err, $back = false) {
 	header('HTTP/1.1 '.$err);
 	header("Connection: close");
@@ -77,4 +77,4 @@ fpassthru($fp);
 fclose($fp);
 
 /* End of file file.php */
-/* Location: ./config/file.php */
+/* Location: ./file.php */
