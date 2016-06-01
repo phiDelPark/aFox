@@ -163,7 +163,6 @@ if(!defined('__AFOX__')) exit();
 		return $escape ? escapeHtml($result) : $result;
 	}
 
-	/** private **********************/
 	function getDBItem($table, $wheres = [], $field = '*') {
 		$wheres = count($wheres) > 0 ? implode(' AND ', DB::quotesArray($wheres, TRUE)) : '1';
 		if(empty($wheres)) $wheres = '1';
@@ -202,7 +201,6 @@ if(!defined('__AFOX__')) exit();
 			return set_error($ex->getMessage(), $ex->getCode());
 		}
 	}
-	/*********************************/
 
 	function getSiteMenu($get = '') {
 		static $menus = [];
@@ -281,6 +279,31 @@ if(!defined('__AFOX__')) exit();
 		return $filelist[$id];
 	}
 
+	function getCache($key) {
+		$file = _AF_CACHE_DATA_. md5($key);
+		if(file_exists($file)){
+			include($file);
+			if(!empty($_CACHE_EXPIRE) && $_CACHE_EXPIRE < _AF_SERVER_TIME_) {
+				@unlinkFile($file);
+				return false;
+			}
+			return $_CACHE_DATA;
+		} else return false;
+	}
+
+	// $expire = 0 유지 - 값이면 삭제
+	function setCache($key, $value, $expire = 0) {
+		$file = _AF_CACHE_DATA_. md5($key);
+		if(file_exists($file)) @unlinkFile($file);
+		if($expire < 0) {
+			@unlinkFile($file);
+		} else {
+			$expire = $expire > 0 ? _AF_SERVER_TIME_ + $expire : 0;
+			$str = '<?php if(!defined(\'__AFOX__\')) exit(); $_CACHE_EXPIRE='.$expire.'; $_CACHE_DATA='.var_export($value, true).'; ?>';
+			file_put_contents($file, $str, LOCK_EX);
+		}
+	}
+
 	function setHistoryAction($act, $value, $allowdup = false, $callback = null) {
 		global $_MEMBER;
 
@@ -290,7 +313,6 @@ if(!defined('__AFOX__')) exit();
 
 		$pkey = ($uinfo['mb_srl'] > 0 ? 'mb_srl':'hs_ipaddress');
 		$pval = ($uinfo['mb_srl'] > 0 ? $uinfo['mb_srl']:$uinfo['ipaddress']);
-
 
 		DB::transaction();
 

@@ -44,6 +44,9 @@ function proc($data) {
 			);
 		}
 
+		// 캐시 삭제 시켜 재생성
+		setCache('_AF_THEME_'.$th_id, 0, -1);
+
 	} catch (Exception $ex) {
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
