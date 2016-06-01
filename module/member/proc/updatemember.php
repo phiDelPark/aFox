@@ -8,7 +8,11 @@ function proc($data) {
 	if(isset($data['new_mb_id'])) $data['mb_id'] = $data['new_mb_id'];
 	$data['mb_id'] = trim($data['mb_id']);
 
-	if(empty($data['mb_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['mb_id'])||empty(trim($data['mb_nick']))) return set_error(getLang('msg_invalid_request'),303);
+
+	$data['mb_nick'] = trim(strip_tags($data['mb_nick']));
+	$data['mb_email'] = trim($data['mb_email']);
+	$data['mb_homepage'] = trim($data['mb_homepage']);
 
 	if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['mb_id'])) {
 		return set_error(getLang('invalid_value', ['id']),701);
@@ -33,14 +37,6 @@ function proc($data) {
 
 	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
 
-	$member = getMember($data['mb_id']);
-	if(!empty($member['error'])) return set_error($member['message'],$member['error']);
-	if (empty($member['mb_id']) || ($data['mb_email'] != $member['mb_email'])) {
-		$out = getDBItem(_AF_MEMBER_TABLE_, ['mb_email'=>$data['mb_email']], 'mb_email');
-		if(!empty($out['error'])) return set_error($out['message'],$out['error']);
-		if(!empty($out['mb_email'])) return set_error(getLang('msg_email_exists'),802);
-	}
-
 	// 금지 아이디 체크
 	$file = _AF_CONFIG_DATA_ . 'prohibit_id.php';
 	if(file_exists($file) && !$is_admin) {
@@ -51,6 +47,21 @@ function proc($data) {
 				break;
 			}
 		}
+	}
+
+	$member = getMember($data['mb_id']);
+	if(!empty($member['error'])) return set_error($member['message'],$member['error']);
+	//이메일 체크
+	if(empty($member['mb_id']) || ($data['mb_email'] != $member['mb_email'])) {
+		$out = getDBItem(_AF_MEMBER_TABLE_, ['mb_email'=>$data['mb_email']], 'mb_email');
+		if(!empty($out['error'])) return set_error($out['message'],$out['error']);
+		if(!empty($out['mb_email'])) return set_error(getLang('msg_email_exists'),802);
+	}
+	//닉네임 체크
+	if(empty($member['mb_id']) || ($data['mb_nick'] != $member['mb_nick'])) {
+		$out = getDBItem(_AF_MEMBER_TABLE_, ['mb_nick'=>$data['mb_nick']], 'mb_nick');
+		if(!empty($out['error'])) return set_error($out['message'],$out['error']);
+		if(!empty($out['mb_nick'])) return set_error(getLang('msg_nick_exists'),802);
 	}
 
 	// 아이콘 삭제 값이 넘어오면
@@ -87,7 +98,7 @@ function proc($data) {
 	try {
 
 		$in_data = [
-			'mb_nick'=>strip_tags($data['mb_nick']),
+			'mb_nick'=>$data['mb_nick'],
 			'mb_email'=>$data['mb_email'],
 			'mb_homepage'=>$data['mb_homepage'],
 			'mb_memo'=>$data['mb_memo']

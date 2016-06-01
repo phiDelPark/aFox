@@ -24,6 +24,7 @@ $_LANG['msg_not_admin'] = '관리자가 아닙니다.'."\n".'다시 로그인해
 $_LANG['msg_not_write_reply'] = '더 이상 답변하실 수 없습니다.'."\n".'답변은 5단계 각 단계당 93개 까지만 가능합니다.'; //571
 $_LANG['msg_not_delete_reply_with_sub'] = '이 코멘트와 관련된 답변코멘트가 존재하므로 삭제 할 수 없습니다.'; //573
 $_LANG['msg_email_exists'] = '같은 메일이 이미 등록 되어있습니다.'; // 802
+$_LANG['msg_nick_exists'] = '같은 별명이 이미 등록 되어있습니다.'; // 802
 
 /* End of file module_kr.php */
 /* Location: ./common/lang/module_kr.php */
