@@ -19,8 +19,8 @@ define('_AF_VISITOR_TABLE_', 'afox_visitors');
 define('_AF_FILE_TABLE_', 'afox_files');
 
 $tmp = str_replace('\\', '/', dirname(__FILE__));
-define('_AF_URL_', substr(('http' . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . '://' . $_SERVER['SERVER_NAME'] . (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80' ? ':'.$_SERVER['SERVER_PORT'] : '') . str_replace(str_replace($_SERVER['SCRIPT_NAME'], '', $_SERVER['SCRIPT_FILENAME']), '', $tmp)), 0, -7) . '/');
-define('_AF_PATH_', substr($tmp, 0, -7) . '/');
+define('_AF_URL_', substr(('http' . (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . '://' . $_SERVER['SERVER_NAME'] . (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] != '80' ? ':'.$_SERVER['SERVER_PORT'] : '') . str_replace(str_replace(preg_replace('/\/\/+/', '/',$_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_FILENAME']), '', $tmp)), 0, -8) . '/');
+define('_AF_PATH_', substr($tmp, 0, -8) . '/');
 define('_AF_ADMIN_PATH_', _AF_PATH_ . 'module/admin/');
 define('_AF_INIT_PATH_', _AF_PATH_ . 'initial/');
 define('_AF_LIBS_PATH_', _AF_PATH_ . 'lib/');
