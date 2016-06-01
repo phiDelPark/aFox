@@ -39,10 +39,11 @@ function proc($data) {
 				$_wheres = [
 					'wr_srl'=>$wr_srl,
 					'rp_parent'=>$rp_root,
-					'SUBSTRING(`rp_depth`,'.$_len.',1){<>}'=>'',
 					'rp_depth{LIKE}'=>empty($cmt['rp_depth'])?null:$cmt['rp_depth'].'%'
 				];
-				$_out1 = getDBItem(_AF_COMMENT_TABLE_, $_wheres, 'MAX(SUBSTRING(rp_depth,'.$_len.',1)) as reply');
+
+				$wheres = implode(' AND ', DB::quotesArray($_wheres, TRUE)).' AND SUBSTRING(`rp_depth`,'.$_len.',1)<>\'\'';
+				$_out1 = DB::get('SELECT MAX(SUBSTRING(rp_depth,'.$_len.',1)) as reply FROM '._AF_COMMENT_TABLE_.' WHERE '.$wheres);
 
 				if (!$_out1['reply']) {
 					$rp_depth .= $_begin_char;

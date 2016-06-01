@@ -218,7 +218,7 @@ class DB {
 				if($q_skip = preg_match("/^\((.+?)\)$/", $key, $matches)) {
 					$key = $matches[1];
 				}
-				$r[] = ($useKeys ? "$key $operation ":'') . ($q_skip ? $val : self::quotes($val));
+				$r[] = ($useKeys ? "`$key` $operation ":'') . ($q_skip ? $val : self::quotes($val));
 			}
 		}
 		return $r;
