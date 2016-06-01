@@ -76,6 +76,7 @@
 		<input type="hidden" name="id" value="<?php echo $_DATA['id'] ?>">
 	</form>
 	<div class="pull-right">
-		<a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a>
+		<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
+		<a class="btn btn-default" href="#" data-exec-ajax="member.readAllNotes" data-ajax-param="success_return_url,<?php echo getUrl()?>" role="button"><i class="fa fa-envelope-o" aria-hidden="true"></i> <?php echo getLang('read_all') ?></a>
 	</div>
 </footer>

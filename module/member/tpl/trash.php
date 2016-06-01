@@ -15,6 +15,8 @@
 		}
 	}
 	$_list = getDBList(_AF_DOCUMENT_TABLE_,['md_id'=>'_AFOXtRASH_','mb_srl'=>$mb['mb_srl'],'OR'=>$schs],'wr_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
+
+	if(!empty($_DATA['srl'])) include 'trashview.php';
 ?>
 
 <table class="table table-hover table-nowrap">
@@ -41,7 +43,7 @@
 		$current_page = $_list['current_page'];
 		$total_page = $_list['total_page'];
 		foreach ($_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"><th scope="row">'.$value['wr_srl'].'</th>';
+			echo '<tr style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['wr_srl'].'</th>';
 			echo '<td>'.escapeHtml(cut_str(strip_tags($value['wr_title']),50)).'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td>'.($value['wr_secret']?'Y':'N').'</td>';
