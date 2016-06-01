@@ -23,7 +23,7 @@ function proc($data) {
 		$data['md_category'] = '';
 		foreach ($tmpa as $value) {
 			$value = trim($value);
-			if(!empty($value)) $data['md_category'] .= cut_str($value,20,'') . ',';
+			if(!empty($value)) $data['md_category'] .= cutstr($value,20,'') . ',';
 		}
 		if(!empty($data['md_category'])) $data['md_category'] = substr($data['md_category'], 0, -1);
 	}

@@ -33,7 +33,7 @@
 
 		foreach ($doc_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].',with_module_config,1,with_file_list,1" data-modal-target="#document_modal"><th scope="row">'.$value['md_id'].'</th>';
-			echo '<td>'.escapeHtml(cut_str(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
+			echo '<td>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td>'.($value['wr_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';

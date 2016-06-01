@@ -124,7 +124,7 @@ function proc($data) {
 				DB::update(_AF_DOCUMENT_TABLE_, ['(wr_reply)'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);
 			});
 
-			sendNote(empty($sendsrl)?$doc['mb_srl']:$sendsrl, cut_str(strip_tags($data['rp_content']),200)
+			sendNote(empty($sendsrl)?$doc['mb_srl']:$sendsrl, cutstr(strip_tags($data['rp_content']),200)
 					.sprintf('<br><a href="./?id=%s&srl=%s&rp=%s">%s</a>', $doc['md_id'], $wr_srl, $ret_rp_srl, getLang('view_more'))
 				);
 

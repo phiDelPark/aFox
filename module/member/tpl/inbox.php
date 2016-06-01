@@ -41,7 +41,7 @@
 		$total_page = $_list['total_page'];
 		foreach ($_list['data'] as $key => $value) {
 			echo '<tr style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['nt_sender_nick'].'</th>';
-			echo '<td>'.cut_str(strip_tags($value['nt_content']),90).'</td>';
+			echo '<td>'.cutstr(strip_tags($value['nt_content']),90).'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['nt_read_date'])).'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['nt_send_date'])).'</td></tr>';
 		}

@@ -44,7 +44,7 @@
 		$total_page = $_list['total_page'];
 		foreach ($_list['data'] as $key => $value) {
 			echo '<tr style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['wr_srl'].'</th>';
-			echo '<td>'.escapeHtml(cut_str(strip_tags($value['wr_title']),50)).'</td>';
+			echo '<td>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td>'.($value['wr_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';

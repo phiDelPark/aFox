@@ -54,7 +54,7 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 					<li role="presentation"<?php echo $_DATA['admin'] == 'theme' ? ' class="active"': '' ?>><a href="./?admin=theme"><i class="glyphicon glyphicon-home" aria-hidden="true"></i> <?php echo getLang('menu_name_theme')?></a></li>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'menu' ? ' class="active"': '' ?>><a href="./?admin=menu"><i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></i> <?php echo getLang('menu_name_menu')?></a></li>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'member' ? ' class="active"': '' ?>><a href="./?admin=member"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo getLang('menu_name_member')?></a></li>
-					<li role="presentation"><a href="#" data-toggle="collapse" data-target="#content"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo getLang('menu_name_content')?></a>
+					<li role="presentation"><a href="#" data-toggle="collapse" data-target="#content" onclick="return false"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo getLang('menu_name_content')?></a>
 						<ul id="content" class="collapse<?php echo in_array($_DATA['admin'], ['page','board','document','comment','file','trash'])?' in':''?>">
 							<li<?php echo $_DATA['admin'] == 'page' ? ' class="active"': '' ?>>
 								<a href="./?admin=page"><i class="glyphicon glyphicon-chevron-right" aria-hidden="true"></i> <?php echo getLang('menu_name_page')?></a>

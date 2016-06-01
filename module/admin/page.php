@@ -54,7 +54,7 @@
 		foreach ($page_list['data'] as $key => $value) {
 			echo '<tr><th scope="row"><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
 			echo '<td>'.$_type[$value['pg_type']].'</td>';
-			echo '<td>'.escapeHtml(cut_str(strip_tags($value['md_title']),50)).'</td>';
+			echo '<td>'.escapeHtml(cutstr(strip_tags($value['md_title']),50)).'</td>';
 			echo '<td>'.$value['grant_view'].'-'.$value['grant_reply'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['pg_update'])).'</td>';
 			echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].',with_module_config,1,with_file_list,1" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';

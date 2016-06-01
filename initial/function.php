@@ -672,15 +672,7 @@ if(!defined('__AFOX__')) exit();
 		return htmlspecialchars($str, $quote_style | ENT_HTML401, 'UTF-8', false);
 	}
 
-	function shortFileSize($size) {
-		$tail = 'byte';
-		if($size>1024) {$size=ceil($size/1024);$tail='kb';}
-		if($size>1024) {$size=ceil($size/1024);$tail='mb';}
-		if($size>1024) {$size=ceil($size/1024);$tail='gb';}
-		return $size.$tail;
-	}
-
-	function cut_str($str, $length, $tail = '...') {
+	function cutstr($str, $length, $tail = '...') {
 		if($length < 1) return $str;
 		$count = 0;
 		$max = preg_match("@\[re\]@", $str) ? ($length + 4) : $length;
@@ -690,6 +682,31 @@ if(!defined('__AFOX__')) exit();
 		}
 		return substr($str, 0, $count) . $tail;
 
+	}
+
+	function shortFileSize($size) {
+		$tail = 'byte';
+		if($size>1024) {$size=ceil($size/1024);$tail='kb';}
+		if($size>1024) {$size=ceil($size/1024);$tail='mb';}
+		if($size>1024) {$size=ceil($size/1024);$tail='gb';}
+		return $size.$tail;
+	}
+
+	// http://www.devnetwork.net/viewtopic.php?f=50&t=113253
+	function timePassed($datetime) {
+		$diff = time() - strtotime($datetime);
+		if($diff == 0) return 'just now';
+		$intervals = [
+			1                   => array('year',    31556926),
+			$diff < 31556926    => array('month',   2628000),
+			$diff < 2629744     => array('week',    604800),
+			$diff < 604800      => array('day',     86400),
+			$diff < 86400       => array('hour',    3600),
+			$diff < 3600        => array('minute',  60),
+			$diff < 60          => array('second',  1)
+		];
+		 $value = floor($diff/$intervals[1][1]);
+		 return $value.' '.$intervals[1][0].($value > 1 ? 's' : '').' ago';
 	}
 
 	// http://stackoverflow.com/questions/1336776/xss-filtering-function-in-php

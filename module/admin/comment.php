@@ -32,7 +32,7 @@
 
 		foreach ($cmt_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].'" data-modal-target="#comment_modal"><th scope="row">'.$value['rp_srl'].'</th>';
-			echo '<td>'.escapeHtml(cut_str(strip_tags($value['rp_content']),50)).'</td>';
+			echo '<td>'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
 			echo '<td>'.($value['rp_status']?$value['rp_status']:'-').'</td>';
 			echo '<td>'.($value['rp_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';

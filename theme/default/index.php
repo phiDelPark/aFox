@@ -68,7 +68,7 @@
 								<div class="media-body">
 									<h5 class="media-heading"><strong><?php echo escapeHtml($val['nt_sender_nick']) ?></strong></h5>
 									<p class="small text-muted"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo date('Y/m/d', strtotime($val['nt_send_date'])) ?></p>
-									<p><?php echo cut_str(strip_tags($val['nt_content']),35) ?></p>
+									<p><?php echo cutstr(strip_tags($val['nt_content']),35) ?></p>
 								</div>
 							</div>
 						</a>
