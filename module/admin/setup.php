@@ -12,13 +12,13 @@
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
 	<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
 	<input type="hidden" name="act" value="updateSetup">
-	<input type="hidden" name="theme" value="<?php echo empty($config['theme'])?'':escapeHtml($config['theme'])?>">
+	<input type="hidden" name="theme" value="<?php echo empty($config['theme'])?'default':$config['theme']?>">
 
 	<div class="form-group">
 		<div class="form-inline">
 			<div class="input-group">
 				<label class="input-group-addon" for="id_start_page"><?php echo getLang('start_page')?></label>
-				<input type="text" name="start" class="form-control" style="width:130px" id="id_start_page" maxlength="11" value="<?php echo empty($config['start'])?'':escapeHtml($config['start'])?>" placeholder="<?php echo getLang('page')?>" required>
+				<input type="text" name="start" class="form-control" style="width:130px" id="id_start_page" maxlength="11" value="<?php echo empty($config['start'])?'':$config['start']?>" placeholder="<?php echo getLang('page')?>" required>
 			</div>
 		</div>
 		<p class="help-block"><?php echo getLang('desc_start_page')?></p>
