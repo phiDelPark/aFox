@@ -11,6 +11,8 @@ function proc($data) {
 		return set_error(getLang('invalid_value', ['id']),701);
 	}
 
+	$data['md_title'] = trim($data['md_title']);
+
 	// 분류값 정리
 	if(!empty($data['md_category'])) {
 		if(preg_match('/[\x{21}-\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_category'])) {

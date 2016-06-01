@@ -34,8 +34,8 @@ function proc($data) {
 						'mu_srl'=>$key + 1,
 						'mu_parent'=>$ins_srl[$parent_key[$key]],
 						'mu_type'=>$mu_type,
-						'mu_title'=>$item_title[$key],
-						'mu_link'=>$item_link[$key],
+						'mu_title'=>trim($item_title[$key]),
+						'mu_link'=>trim($item_link[$key]),
 						'mu_description'=>$desc_key[$key],
 						'mu_collapse'=>(int)$collapse_key[$key],
 						'mu_new_win'=>(int)$new_win_key[$key]

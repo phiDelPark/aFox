@@ -4,6 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(empty($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
+	$data['wr_title'] = trim($data['wr_title']);
 	if(empty($data['wr_title'])) return set_error(getLang('warn_input', ['title']));
 
 	global $_MEMBER;
@@ -70,10 +71,12 @@ function proc($data) {
 			$data['wr_category'] = '';
 		}
 
+		$data['wr_content'] = xssClean($data['wr_content']);
 		$data['wr_tags'] = getHashtags($data['wr_content']);
 		$data['wr_ipaddress'] = $_SERVER['REMOTE_ADDR'];
 
 		if(empty($_MEMBER)) {
+			$data['mb_nick'] = empty($data['mb_nick'])?'':trim($data['mb_nick']);
 			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
 				throw new Exception(getLang('warn_input', [getLang('%s, %s', ['id', 'password'])]), 3);
 			}
@@ -221,7 +224,7 @@ function proc($data) {
 				'md_id'=>$md_id,
 				'wr_secret'=>$data['wr_secret'],
 				'wr_type'=>$data['wr_type'],
-				'wr_category'=>$data['wr_category'],
+				'wr_category'=>trim($data['wr_category']),
 				'wr_title'=>$data['wr_title'],
 				'wr_content'=>$data['wr_content'],
 				'wr_tags'=>$data['wr_tags'],

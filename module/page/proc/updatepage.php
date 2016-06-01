@@ -26,6 +26,9 @@ function proc($data) {
 		}
 	}
 
+	$data['md_title'] = trim($data['md_title']);
+	$data['pg_content'] = xssClean($data['pg_content']);
+
 	$unlink_files = [];
 	$file_dests = [];
 	$file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);

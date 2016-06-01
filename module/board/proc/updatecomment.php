@@ -73,6 +73,7 @@ function proc($data) {
 		$data['rp_ipaddress'] = $_SERVER['REMOTE_ADDR'];
 
 		if(empty($_MEMBER)) {
+			$data['mb_nick'] = empty($data['mb_nick'])?'':trim($data['mb_nick']);
 			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
 				throw new Exception(getLang('warn_input', [getLang('%s, %s', ['id', 'password'])]), 3);
 			}
@@ -85,6 +86,8 @@ function proc($data) {
 			$data['mb_nick'] = $_MEMBER['mb_nick'];
 			$encrypt_password = null;
 		}
+
+		$data['rp_content'] = xssClean($data['rp_content']);
 
 		if (!empty($rp_parent) || empty($rp_srl)) {
 

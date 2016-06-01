@@ -38,7 +38,7 @@ function proc($data) {
 			[
 				'theme'=>$data['theme'],
 				'start'=>$data['start'],
-				'title'=>$data['title'],
+				'title'=>trim($data['title']),
 				'point_login'=>(int)$data['point_login'],
 				'use_captcha'=>$data['use_captcha'],
 				'use_visit'=>$data['use_visit'],
