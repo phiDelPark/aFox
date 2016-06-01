@@ -466,6 +466,20 @@ if(!defined('__AFOX__')) exit();
 		}, $text);
 	}
 
+	function sendNote($srl, $msg) {
+		global $_MEMBER;
+		$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
+		$nick = empty($_MEMBER) ? getLang('none') : $_MEMBER['mb_nick'];
+		if(empty($srl) || $srl === $sender) return false;
+		DB::insert(_AF_NOTE_TABLE_, [
+			'mb_srl'=>$srl,
+			'nt_sender'=>$sender,
+			'nt_sender_nick'=>$nick,
+			'nt_note'=>xssClean($msg),
+			'(nt_send_date)'=>'NOW()'
+		]);
+	}
+
 	function triggerCall($trigger, $position, &$data) {
 		if(empty($trigger)) return;
 
@@ -592,6 +606,34 @@ if(!defined('__AFOX__')) exit();
 		}
 	}
 
+	function goUrl($url, $msg='') {
+		$url = str_replace("&amp;", "&", $url);
+		if (headers_sent()) {
+			echo '<script>'.($msg?'alert("'.$msg.'");':'').' location.replace("'.$url.'");</script>'
+				.'<noscript>'.($msg ? $msg . '<br><br><a href="'.$url.'">'.$url.'</a>'
+				: '<meta http-equiv="refresh" content="0;url='.$url.'" />').'</noscript>';
+		} else {
+			if($msg) set_error($msg, 1);
+			header('Location: '.$url);
+		}
+		exit;
+	}
+
+	function verifyEncrypt($password, $hash) {
+		try {
+			$testResult = PasswordStorage::verify_password($password, $hash);
+		} catch (InvalidHashException $ex) {
+			exit($ex->getMessage());
+		} catch (CannotPerformOperationException $ex) {
+			exit($ex->getMessage());
+		}
+		return $testResult;
+	}
+
+	function encryptString($str) {
+		return PasswordStorage::create_hash($str);
+	}
+
 	function toHTML($type, $text, $class='current_content') {
 		global $_DATA;
 		static $parsedown = null;
@@ -650,32 +692,24 @@ if(!defined('__AFOX__')) exit();
 
 	}
 
-	function goUrl($url, $msg='') {
-		$url = str_replace("&amp;", "&", $url);
-		if (headers_sent()) {
-			echo '<script>'.($msg?'alert("'.$msg.'");':'').' location.replace("'.$url.'");</script>'
-				.'<noscript>'.($msg ? $msg . '<br><br><a href="'.$url.'">'.$url.'</a>'
-				: '<meta http-equiv="refresh" content="0;url='.$url.'" />').'</noscript>';
-		} else {
-			if($msg) set_error($msg, 1);
-			header('Location: '.$url);
-		}
-		exit;
-	}
-
-	function verifyEncrypt($password, $hash) {
-		try {
-			$testResult = PasswordStorage::verify_password($password, $hash);
-		} catch (InvalidHashException $ex) {
-			exit($ex->getMessage());
-		} catch (CannotPerformOperationException $ex) {
-			exit($ex->getMessage());
-		}
-		return $testResult;
-	}
-
-	function encryptString($str) {
-		return PasswordStorage::create_hash($str);
+	// http://stackoverflow.com/questions/1336776/xss-filtering-function-in-php
+	function xssClean($str) {
+		// Fix &entity\n;
+		$str = str_replace(array('&amp;','&lt;','&gt;'), array('&amp;amp;','&amp;lt;','&amp;gt;'), $str);
+		$str = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $str);
+		$str = preg_replace('/(&#x*[0-9A-F]+);*/iu', '$1;', $str);
+		$str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
+		// Remove any attribute starting with "on" or xmlns
+		$str = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $str);
+		// Remove javascript: and vbscript: protocols
+		$str = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2nojavascript...', $str);
+		$str = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2novbscript...', $str);
+		$str = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...', $str);
+		// Remove namespaced elements (we do not need them)
+		$str = preg_replace('#</*\w+:\w[^>]*+>#i', '', $str);
+		// Remove really unwanted tags
+		$str = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*+>#i', '', $str);
+		return $str;
 	}
 
 	function showMessage($message, $type = 0, $title = '') {

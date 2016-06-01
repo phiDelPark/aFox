@@ -320,6 +320,7 @@ $create_sql = '
 	   nt_srl          INT(11)      NOT NULL AUTO_INCREMENT,
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
 	   nt_sender       INT(11)      NOT NULL DEFAULT 0,
+	   nt_sender_nick  VARCHAR(20)  NOT NULL DEFAULT \'\',
 	   nt_send_date    datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   nt_read_date    datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   nt_note         TEXT         NOT NULL DEFAULT \'\',

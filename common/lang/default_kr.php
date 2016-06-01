@@ -102,6 +102,7 @@ $_LANG['search_text'] = '검색어';
 $_LANG['member_signup'] = '회원가입';
 $_LANG['member_find_account'] = '회원조회';
 $_LANG['auto_login'] = '자동 로그인';
+$_LANG['view_more'] = '더보기';
 $_LANG['view_details'] = '자세히 보기';
 $_LANG['year'] = '년';
 $_LANG['month'] = '월';

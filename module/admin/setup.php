@@ -76,14 +76,6 @@
 				</div>
 			</div>&nbsp;&nbsp;
 			<div class="switch-group">
-				<input type="hidden" name="use_captcha" value="<?php echo empty($config['use_captcha'])?'0':$config['use_captcha']?>">
-				<div class="switch-control">
-					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-					<span class="switch switch-label"><?php echo getLang('captcha')?></span>
-					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-				</div>
-			</div>&nbsp;&nbsp;
-			<div class="switch-group">
 				<input type="hidden" name="use_visit" value="<?php echo empty($config['use_visit'])?'0':$config['use_visit']?>">
 				<div class="switch-control">
 					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
@@ -96,6 +88,14 @@
 				<div class="switch-control">
 					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
 					<span class="switch switch-label"><?php echo getLang('protect_file')?></span>
+					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
+				</div>
+			</div>&nbsp;&nbsp;
+			<div class="switch-group">
+				<input type="hidden" name="use_captcha" value="<?php echo empty($config['use_captcha'])?'0':$config['use_captcha']?>">
+				<div class="switch-control">
+					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
+					<span class="switch switch-label"><?php echo getLang('captcha')?></span>
 					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
 				</div>
 			</div>

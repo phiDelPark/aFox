@@ -10,11 +10,11 @@ function proc($data) {
 
 	DB::transaction();
 
+	$sendsrl = 0;
 	$rp_root = 0;
 	$rp_depth = '';
 	$rp_parent = (int) abs(empty($data['rp_parent']) ? 0 : $data['rp_parent']);
 	$rp_srl = (int) (empty($rp_parent) ? abs(empty($data['rp_srl']) ? 0 : $data['rp_srl']) : $rp_parent);
-
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
 
 	try {
@@ -25,6 +25,7 @@ function proc($data) {
 			if(empty($cmt['wr_srl'])) throw new Exception(getLang('msg_not_founded'), 801);
 			$wr_srl = (int) abs(empty($cmt['wr_srl']) ? 0 : $cmt['wr_srl']);
 
+			$sendsrl = $cmt['mb_srl'];
 			$rp_root = $cmt['rp_parent'];
 
 			if(!empty($rp_parent)) {
@@ -56,7 +57,7 @@ function proc($data) {
 			$rp_root = $_out1['max'] + 1;
 		}
 
-		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'md_id');
+		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'md_id,mb_srl');
 		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
 		// 문서가 없으면 에러
 		if(empty($wr_srl)) throw new Exception(getLang('msg_not_founded'), 801);
@@ -119,6 +120,10 @@ function proc($data) {
 			setHistoryAction('wr_reply', $wr_srl, false, function($v)use($wr_srl){
 				DB::update(_AF_DOCUMENT_TABLE_, ['(wr_reply)'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);
 			});
+
+			sendNote(empty($sendsrl)?$doc['mb_srl']:$sendsrl, cut_str(strip_tags($data['rp_content']),200)
+					.sprintf('<br><a href="./?id=%s&srl=%s&rp=%s">%s</a>', $doc['md_id'], $wr_srl, $ret_rp_srl, getLang('view_more'))
+				);
 
 		} else {
 			// 권한 체크

@@ -16,6 +16,7 @@ define('_AF_DOCUMENT_TABLE_', 'afox_documents');
 define('_AF_COMMENT_TABLE_', 'afox_comments');
 define('_AF_HISTORY_TABLE_', 'afox_histories');
 define('_AF_VISITOR_TABLE_', 'afox_visitors');
+define('_AF_NOTE_TABLE_', 'afox_notes');
 define('_AF_FILE_TABLE_', 'afox_files');
 
 $tmp = str_replace('\\', '/', dirname(__FILE__));

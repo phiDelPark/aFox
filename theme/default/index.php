@@ -30,6 +30,7 @@
 		}
 
 	}
+
 ?>
 
 <?php if($err = get_error()) { ?>
@@ -43,30 +44,42 @@
 	<header class="bs-docs-header">
 		<h1 id="logo_title"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
 		<div class="right">
-<?php if (!empty($_MEMBER)) { ?>
+<?php if (!empty($_MEMBER)) {
+	$notes = getDBList(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], '', 1, 5);
+?>
+			<?php if(empty($notes['error']) && $notes['total_count'] > 0){ ?>
 			<span>
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope" aria-hidden="true"></i> <b class="caret"></b></a>
 				<ul class="dropdown-menu message-dropdown dropdown-menu-right">
+					<?php foreach ($notes['data'] as $val) {
+						$_icon = $val['nt_sender'].'/profile_image.png';
+						if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
+							$_icon = _AF_URL_ . 'data/member/' . $_icon;
+						} else {
+							$_icon = _AF_URL_ .'module/board/tpl/user_default.jpg';
+						}
+					?>
 					<li class="message-preview">
 						<a href="#">
 							<div class="media">
 								<span class="pull-left">
-									<img class="media-object" src="http://placehold.it/50x50" alt="">
+									<img class="media-object" src="<?php echo $_icon ?>">
 								</span>
 								<div class="media-body">
-									<h5 class="media-heading"><strong>이름</strong>
-									</h5>
-									<p class="small text-muted"><i class="fa fa-clock-o" aria-hidden="true"></i> 날짜</p>
-									<p>간략히</p>
+									<h5 class="media-heading"><strong><?php echo escapeHtml($val['nt_sender_nick']) ?></strong></h5>
+									<p class="small text-muted"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo date('Y/m/d', strtotime($val['nt_send_date'])) ?></p>
+									<p><?php echo cut_str(strip_tags($val['nt_note']),35) ?></p>
 								</div>
 							</div>
 						</a>
 					</li>
+					<?php } ?>
 					<li class="message-footer">
 						<a href="#">모든 새 메세지 읽기</a>
 					</li>
 				</ul>
 			</span>
+			<?php } ?>
 			<span>
 			<?php
 				$_icon = $_MEMBER['mb_srl'].'/profile_image.png';
@@ -84,6 +97,7 @@
 					<li class="dropdown-header"><i class="fa fa-fw fa-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></li>
 					<?php } ?>
 					<li class="divider"></li>
+					<li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i> <?php echo getLang('inbox')?></a></li>
 					<li><a href="#"><i class="fa fa-trash" aria-hidden="true"></i> <?php echo getLang('recycle_bin')?></a></li>
 					<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="fa fa-fw fa-gear" aria-hidden="true"></i> <?php echo getLang('setup')?></a></li>
 					<li class="divider"></li>
