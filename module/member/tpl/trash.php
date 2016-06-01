@@ -5,27 +5,28 @@
 	$schs = [];
 	$search = empty($_DATA['search']) ? '' : $_DATA['search'];
 	if(!empty($search)) {
-		$schkeys = ['date'=>'nt_send_date','read'=>'nt_read_date'];
+		$schkeys = ['tags'=>'wr_tags','nick'=>'mb_nick','date'=>'wr_regdate'];
 		$ss = explode(':', $search);
 		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
 			$search = trim(implode(':', array_slice($ss,1)));
 			if(!empty($search)) $schs = [$schkeys[$ss[0]].'{LIKE}'=>$search.'%'];
 		} else {
-			$schs = ['nt_sender_nick{LIKE}'=>'%'.$search.'%'];
+			$schs = ['wr_title{LIKE}'=>'%'.$search.'%', 'wr_content{LIKE}'=>'%'.$search.'%'];
 		}
 	}
-	$_list = getDBList(_AF_NOTE_TABLE_,['mb_srl'=>$mb['mb_srl'],'OR'=>$schs],'nt_send_date desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
-
-	if(!empty($_DATA['srl'])) include 'inboxview.php';
+	$_list = getDBList(_AF_DOCUMENT_TABLE_,['md_id'=>'_AFOXtRASH_','mb_srl'=>$mb['mb_srl'],'OR'=>$schs],'wr_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
 ?>
 
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
-		<th class="col-xs-1"><?php echo getLang('nickname')?></th>
-		<th><?php echo getLang('content')?></th>
+		<th class="col-xs-1">#</th>
+		<th><?php echo getLang('title')?></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
+		<th class="col-xs-1"><?php echo getLang('secret')?></th>
+		<th class="col-xs-2"><?php echo getLang('author')?></th>
 		<th class="col-xs-1"><?php echo getLang('date')?></th>
+		<th class="col-xs-1"><?php echo getLang('removed_date')?></th
 	</tr>
 </thead>
 <tbody>
@@ -40,10 +41,13 @@
 		$current_page = $_list['current_page'];
 		$total_page = $_list['total_page'];
 		foreach ($_list['data'] as $key => $value) {
-			echo '<tr style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['nt_sender_nick'].'</th>';
-			echo '<td>'.cut_str(strip_tags($value['nt_note']),90).'</td>';
-			echo '<td>'.date('Y/m/d', strtotime($value['nt_read_date'])).'</td>';
-			echo '<td>'.date('Y/m/d', strtotime($value['nt_send_date'])).'</td></tr>';
+			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"><th scope="row">'.$value['wr_srl'].'</th>';
+			echo '<td>'.escapeHtml(cut_str(strip_tags($value['wr_title']),50)).'</td>';
+			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
+			echo '<td>'.($value['wr_secret']?'Y':'N').'</td>';
+			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
+			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td>';
+			echo '<td>'.date('Y/m/d', strtotime($value['wr_update'])).'</td></tr>';
 		}
 	}
 ?>

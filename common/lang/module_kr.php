@@ -2,6 +2,7 @@
 if(!defined('__AFOX__')) exit();
 // 언어엔 ' (홑따옴표) 는 쓰지마세요. 에러가 발생할 가능성이 있습니다. 필요하면 ` (악센트) 이걸 사용하세요.
 
+$_LANG['removed_date'] = '삭제날짜';
 $_LANG['terms_of_use'] = '이용약관';
 $_LANG['desc_terms_of_use'] = '가입전에 이용약관을 꼭 읽고 가입에 동의해주세요.';
 $_LANG['member_icon'] = '회원 아이콘';

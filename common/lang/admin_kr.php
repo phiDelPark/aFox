@@ -46,7 +46,6 @@ $_LANG['empty_module'] = '비우기';
 $_LANG['removed_addon'] = '삭제된 애드온';
 $_LANG['removed_theme'] = '삭제된 테마';
 $_LANG['empty_addon'] = $_LANG['empty_theme'] = '비우기';
-$_LANG['removed_date'] = '삭제날짜';
 $_LANG['recycle_bin'] = '휴지통';
 $_LANG['permanently_delete'] = '영구히 삭제';
 $_LANG['main_menu'] = '메인 메뉴';

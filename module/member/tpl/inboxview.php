@@ -1,6 +1,6 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	$_item = getDBItem(_AF_NOTE_TABLE_, ['nt_srl'=>$_DATA['srl']]);
+	$_item = getDBItem(_AF_NOTE_TABLE_, ['mb_srl'=>$mb['mb_srl'],'nt_srl'=>$_DATA['srl']]);
 	if(empty($_item['nt_srl'])) return;
 	if($_item['nt_read_date'] === '0000-00-00 00:00:00') {
 		DB::update(_AF_NOTE_TABLE_, ['(nt_read_date)'=>'NOW()'], ['nt_srl'=>$_DATA['srl']]);
