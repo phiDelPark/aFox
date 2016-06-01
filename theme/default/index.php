@@ -75,7 +75,7 @@
 					</li>
 					<?php } ?>
 					<li class="message-footer">
-						<a href="#">모든 새 메세지 읽기</a>
+						<a href="#" data-exec-ajax="member.readAllNotes" data-ajax-param="success_return_url,<?php echo getUrl()?>">Mark all messages as read</a>
 					</li>
 				</ul>
 			</span>
