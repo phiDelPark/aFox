@@ -7,7 +7,7 @@
 	'use strict';
 
 	function dropFile(e, $i) {
-		var text, data = JSON.parse(e.originalEvent.dataTransfer.getData('af-editor-file-link') || {}),
+		var text, data = JSON.parse(e.originalEvent.dataTransfer.getData("TEXT") || '{}'),
 			title = data['title'],
 			srl = data['srl'] || data['index'],
 			url = ((data['srl'] || false) ? (request_uri + '?file=' + srl) : 'af-editor-tmpfile=' + srl),
@@ -58,29 +58,33 @@
 			}
 
 			var sel, range, w = $i[0].contentWindow;
-			if (w.getSelection) {
-				sel = w.getSelection();
-				if (sel.getRangeAt && sel.rangeCount) {
-					var el = document.createElement("div");
-					el.innerHTML = text;
-					range = sel.getRangeAt(0);
-					range.deleteContents();
-					var frag = document.createDocumentFragment(),
-						node, lastNode;
-					while ((node = el.firstChild)) {
-						lastNode = frag.appendChild(node);
-					}
-					range.insertNode(frag);
-					if (lastNode) {
-						range = range.cloneRange();
-						range.setStartAfter(lastNode);
-						range.collapse(true);
-						sel.removeAllRanges();
-						sel.addRange(range);
-					}
+			if (w) {
+				var isie = false;
+				if (w.getSelection) {
+					sel = w.getSelection();
+				} else if (w.document.getSelection) {
+					sel = w.document.getSelection();
 				} else {
-					var html = $i.contents().find('body').html();
-					$i.contents().find('body').html(html + text);
+					var selection = w.document.selection && w.document.selection.createRange();
+					if (selection.text) {
+						isie = true;
+						sel = selection;
+					}
+					return false;
+				}
+				if (isie) {
+					sel.pasteHTML(text);
+				} else {
+					if (sel.getRangeAt && sel.rangeCount) {
+						var el = w.document.createElement("div");
+						el.innerHTML = text;
+						range = sel.getRangeAt(0);
+						range.deleteContents();
+						range.insertNode(el);
+					} else {
+						var html = $i.contents().find('body').html();
+						$i.contents().find('body').html(html + text);
+					}
 				}
 			}
 		}
@@ -156,7 +160,7 @@
 			}
 		}).on('dragstart', '.af-editor-uploaded-list>.file-item', function(e) {
 			var $i = $(this);
-			e.originalEvent.dataTransfer.setData('af-editor-file-link', JSON.stringify({
+			e.originalEvent.dataTransfer.setData("TEXT", JSON.stringify({
 				'type': $i.attr('data-type'),
 				'srl': $i.attr('data-srl'),
 				'title': $i.attr('title')
@@ -183,7 +187,7 @@
 					.appendTo($c)
 					.on('dragstart', function(e) {
 						var $i = $(this);
-						e.originalEvent.dataTransfer.setData('af-editor-file-link', JSON.stringify({
+						e.originalEvent.dataTransfer.setData("TEXT", JSON.stringify({
 							'type': $i.attr('data-type'),
 							'index': $i.attr('data-index'),
 							'title': $i.attr('title'),
@@ -208,46 +212,53 @@
 	};
 
 	AfEditor.prototype.switch = function(swc) {
-		var $iframe = this.$element.find('iframe'),
-			height = this.$textarea.css('height') || '',
-			text;
+		var $txtarea = this.$textarea,
+			$iframe = this.$element.find('iframe'),
+			height = $txtarea.css('height') || '',
+			readonly = this.options.readonly;
 
 		if (swc) {
 			if (!$iframe.length) {
 				$iframe = $('<iframe class="form-control vresize">')
-					.insertAfter(this.$textarea.hide())
-					.end();
-				if (this.options.readonly) {
+					.on('load', function() {
+						var $_i = $(this);
+						$_i.contents().find('body')
+							.on('dragover',
+								function(e) {
+									e.preventDefault();
+								}
+							).on('drop', function(e) {
+								e.preventDefault();
+								dropFile(e, $_i);
+							});
+						$_i.contents().find('body').html($txtarea.val());
+						if (!readonly) $_i.contents()[0].designMode = 'on';
+						//$_i[0].contentWindow.document.designMode = 'on';
+					}).insertAfter($txtarea.hide()).end();
+
+				if (readonly) {
 					$iframe.attr('readonly', 'readonly');
 				} else {
 					$iframe.removeAttr('readonly');
 				}
-				$iframe.contents().find('body').on('dragover', function(e) {
-					e.preventDefault();
-				}).on('drop', function(e) {
-					e.preventDefault();
-					dropFile(e, $iframe);
-				});
 			}
 
 			$iframe.css('height', height);
-			$iframe.contents().find('body').html(this.$textarea.val());
-			if (!this.options.readonly) $iframe.contents()[0].designMode = 'on';
-			//$iframe[0].contentWindow.document.designMode = 'on';
 		} else {
+			var text;
 			if ($iframe.length) {
 				height = $iframe.css('height');
 				text = $iframe.contents().find('body').html();
 				$iframe.remove();
 			} else {
-				text = this.$textarea.val();
+				text = $txtarea.val();
 			}
 
-			this.$textarea.css('height', height).val(text).show();
-			if (this.options.readonly) {
-				this.$textarea.attr('readonly', 'readonly');
+			$txtarea.css('height', height).val(text).show();
+			if (readonly) {
+				$txtarea.attr('readonly', 'readonly');
 			} else {
-				this.$textarea.removeAttr('readonly');
+				$txtarea.removeAttr('readonly');
 			}
 		}
 
