@@ -70,11 +70,6 @@ body {
 	white-space: normal;
 }
 
-.top-nav>.pull-left{
-	color: #ccc;
-	background-color: #000;
-}
-
 /* Side Navigation */
 
 .side-nav>li>ul {

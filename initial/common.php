@@ -2,14 +2,13 @@
 if(!defined('__AFOX__')) exit();
 
 require_once dirname(__FILE__) . '/config.php';
+@include_once _AF_LANGS_PATH_ . 'default_' . _AF_LANG_ . '.php';
+require_once _AF_INIT_PATH_ . 'function.php';
 
-if($_CFG['use_visit'] == '1' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_ADDR']) {
+if($_CFG['use_visit'] == '1' &&  checkUserAgent() == 'BOT' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_ADDR']) {
 	set_cookie('ck_visit_ip', $_SERVER['REMOTE_ADDR'], 86400); // 하루동안 저장
 	DB::insert(_AF_VISITOR_TABLE_, ['mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],'vs_agent'=>strip_tags($_SERVER['HTTP_USER_AGENT']),'vs_referer'=>strip_tags($_SERVER['HTTP_REFERER']),'(vs_regdate)'=>'NOW()']);
 }
-
-@include_once _AF_LANGS_PATH_ . 'default_' . _AF_LANG_ . '.php';
-require_once _AF_INIT_PATH_ . 'function.php';
 
 define('__MOBILE__', checkUserAgent() == 'MOBILE');
 define('__REQ_METHOD__', getRequestMethod());
