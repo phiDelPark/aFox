@@ -280,7 +280,7 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getCache($key) {
-		$file = _AF_CACHE_DATA_. md5($key);
+		$file = _AF_CACHE_DATA_. md5($key). '.php';
 		if(file_exists($file)){
 			include($file);
 			if(!empty($_CACHE_EXPIRE) && $_CACHE_EXPIRE < _AF_SERVER_TIME_) {
@@ -293,7 +293,7 @@ if(!defined('__AFOX__')) exit();
 
 	// $expire = 0 유지 - 값이면 삭제
 	function setCache($key, $value, $expire = 0) {
-		$file = _AF_CACHE_DATA_. md5($key);
+		$file = _AF_CACHE_DATA_. md5($key). '.php';
 		if(file_exists($file)) @unlinkFile($file);
 		if($expire < 0) {
 			@unlinkFile($file);
