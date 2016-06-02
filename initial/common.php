@@ -22,10 +22,24 @@ $_DATA = is_null($_POST) ? $_GET : (is_null($_GET) ? $_POST : array_merge($_POST
 unset($_GET);
 unset($_POST);
 
+// 문서번호만 오면 id 가져옴
+if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))) {
+	if(empty($_DATA['srl'])) {
+		$tmp = getDBItem(_AF_COMMENT_TABLE_,['rp_srl'=>(int)$_DATA['rp']], 'wr_srl');
+		if(empty($tmp['error'])) $_DATA['srl'] = $tmp['wr_srl'];
+	}
+	if(!empty($_DATA['srl'])) {
+		$tmp = getDBItem(_AF_DOCUMENT_TABLE_,['wr_srl'=>(int)$_DATA['srl']], 'md_id');
+		if(empty($tmp['error'])) $_DATA['id'] = $tmp['md_id'];
+	}
+	setQuery('','id',empty($_DATA['id'])?'':$_DATA['id'],'srl',empty($_DATA['srl'])?'':$_DATA['srl'],'rp',empty($_DATA['rp'])?'':$_DATA['rp']);
+}
+
 $tmp_arr = ['module','id','act','disp'];
 foreach ($tmp_arr as $tmp) {
 	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $_DATA[$tmp])) $_DATA[$tmp] = '';
 }
+
 
 if($_DATA['module'] == 'admin' || isset($_DATA['admin'])) {
 	define('__MODULE__', 'admin');

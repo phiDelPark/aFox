@@ -156,7 +156,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 						$_list = getDBList(_AF_COMMENT_TABLE_, [], 'rp_regdate desc', 1, 10);
 						if(empty($_list['error'])){
 							foreach ($_list['data'] as $val) {
-								echo '<a href="'.getUrl('','rp',$val['wr_srl']).'" class="list-group-item"><span class="badge">'.timePassed($val['rp_regdate']).'</span>'.cutstr(strip_tags($val['rp_content']),50).'</a>';
+								echo '<a href="'.getUrl('','rp',$val['rp_srl']).'" class="list-group-item"><span class="badge">'.timePassed($val['rp_regdate']).'</span>'.cutstr(strip_tags($val['rp_content']),50).'</a>';
 							}
 						}
 					?>
