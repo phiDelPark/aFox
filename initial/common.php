@@ -63,7 +63,7 @@ $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/
 
 if($_CFG['use_visit'] == '1' && get_cookie('ck_vs_ipaddress') != $_SERVER['REMOTE_ADDR']) {
 	set_cookie('ck_vs_ipaddress', $_SERVER['REMOTE_ADDR'], 86400); // 하루동안 저장
-	DB::insert(_AF_VISITOR_TABLE_, ['vs_agent'=>strip_tags($_SERVER['HTTP_USER_AGENT']),'vs_referer'=>strip_tags($_SERVER['HTTP_REFERER']),'(vs_regdate)'=>'NOW()']);
+	DB::insert(_AF_VISITOR_TABLE_, ['mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],'vs_agent'=>strip_tags($_SERVER['HTTP_USER_AGENT']),'vs_referer'=>strip_tags($_SERVER['HTTP_REFERER']),'(vs_regdate)'=>'NOW()']);
 }
 
 unset($tmp);
