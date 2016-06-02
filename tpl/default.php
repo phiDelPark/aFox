@@ -2,8 +2,8 @@
 if(!defined('__AFOX__')) exit();
 // 테마 설정 저장
 if(($_THEME = getCache('_AF_THEME_'._AF_THEME_)) === false) {
-	$_THEME = getDBItem(_AF_THEME_TABLE_, ['th_id'=>_AF_THEME_], 'extra');
-	if(empty($_THEME['error'])) $_THEME = unserialize($_THEME['extra']);
+	$_THEME = getDBItem(_AF_THEME_TABLE_, ['th_id'=>_AF_THEME_], 'th_extra');
+	if(empty($_THEME['error'])) $_THEME = unserialize($_THEME['th_extra']);
 	setCache('_AF_THEME_'._AF_THEME_,$_THEME);
 }
 ?>

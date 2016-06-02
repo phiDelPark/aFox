@@ -34,7 +34,7 @@ function proc($data) {
 				[
 					'ao_use_pc'=>$ao_use_pc,
 					'ao_use_mobile'=>$ao_use_mobile,
-					'extra'=>$extra
+					'ao_extra'=>$extra
 				], [
 					'ao_id'=>$ao_id
 				]
@@ -45,7 +45,7 @@ function proc($data) {
 					'ao_id'=>$ao_id,
 					'ao_use_pc'=>$ao_use_pc,
 					'ao_use_mobile'=>$ao_use_mobile,
-					'extra'=>$extra
+					'ao_extra'=>$extra
 				]
 			);
 		}

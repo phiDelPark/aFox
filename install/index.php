@@ -88,7 +88,7 @@ $create_sql = '
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
 	   protect_file   CHAR(1)      NOT NULL DEFAULT 0,
-	   extra          TEXT) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	   cf_extra          TEXT) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 
@@ -96,7 +96,7 @@ $_err_keys = 'afox_themes';
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS afox_themes (
 	   th_id          VARCHAR(255) NOT NULL,
-	   extra          TEXT         NOT NULL DEFAULT \'\',
+	   th_extra          TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (th_id)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
@@ -135,7 +135,7 @@ $create_sql = '
 	   mb_memo         TEXT         NOT NULL DEFAULT \'\',
 	   mb_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   mb_login        datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
-	   extra           TEXT         NOT NULL DEFAULT \'\',
+	   mb_extra           TEXT         NOT NULL DEFAULT \'\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (mb_srl),
 	  UNIQUE KEY ID_UK (mb_id),
@@ -149,7 +149,7 @@ $create_sql = '
 	   ao_id          VARCHAR(255) NOT NULL,
 	   ao_use_pc      CHAR(1)      NOT NULL DEFAULT 0,
 	   ao_use_mobile  CHAR(1)      NOT NULL DEFAULT 0,
-	   extra          TEXT         NOT NULL DEFAULT \'\',
+	   ao_extra          TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (ao_id),
 	  INDEX PC_IX (ao_use_pc),
@@ -185,7 +185,7 @@ $create_sql = '
 	   grant_reply     CHAR(1)      NOT NULL DEFAULT 0,
 	   grant_upload    CHAR(1)      NOT NULL DEFAULT 0,
 	   grant_download  CHAR(1)      NOT NULL DEFAULT 0,
-	   extra           TEXT         NOT NULL DEFAULT \'\',
+	   md_extra           TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (md_id),
 	  INDEX KEY_IX (md_key)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
@@ -218,7 +218,7 @@ $create_sql = '
 	   wr_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   wr_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   wr_updater      VARCHAR(20)  ,
-	   extra           TEXT         NOT NULL DEFAULT \'\',
+	   wr_extra           TEXT         NOT NULL DEFAULT \'\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (wr_srl),
 	  INDEX REGDATE_IX (md_id, wr_regdate),
@@ -270,7 +270,7 @@ $create_sql = '
 	   pg_reply        INT(11)      NOT NULL DEFAULT 0,
 	   pg_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   pg_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
-	   extra           TEXT         NOT NULL DEFAULT \'\',
+	   pg_extra           TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (md_id)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
@@ -362,7 +362,7 @@ if (!$cf['th_id']) {
 	$tmp['carousel_item_3'] = '<h1>마지막으로 하나 더</h1><p>에이폭스는 각각의 기능과 디자인이 구조적으로 연결되는 모듈형 구조로 개발 및 유지보수를 쉽게 하도록 도와주며 관리자는 손쉽게 설정과 디자인을 변경할 수 있으며 여러분만의 개성을 가진 웹 사이트를 만들 수 있습니다.</p><a class="btn btn-primary" href="#">갤러리 검색</a>';
 	$tmp['footer_html'] = '에이폭스는 <a href="http://afox.kr" target="_blank">@afox</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.';
 	$tmp = DB::quotes(serialize($tmp));
-	$sql = 'INSERT INTO afox_themes (`th_id`, `extra`) VALUES ("default", '.$tmp.')';
+	$sql = 'INSERT INTO afox_themes (`th_id`, `th_extra`) VALUES ("default", '.$tmp.')';
 	DB::query($sql);
 }
 

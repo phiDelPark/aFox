@@ -16,10 +16,10 @@ function proc($data) {
 		return set_error(getLang('msg_not_founded'),801);
 	}
 
-	$_THEME = DB::query('SELECT extra FROM '._AF_THEME_TABLE_.' WHERE th_id=\''.$data['th_id'].'\'');
+	$_THEME = DB::query('SELECT th_extra FROM '._AF_THEME_TABLE_.' WHERE th_id=\''.$data['th_id'].'\'');
 	if(!$ex = DB::error()) {
 		$_THEME = DB::assoc($_THEME);
-		$_THEME = unserialize($_THEME['extra']);
+		$_THEME = unserialize($_THEME['th_extra']);
 		$_THEME['th_id'] = $data['th_id'];
 	} else {
 		return set_error($ex->getMessage(),$ex->getCode());

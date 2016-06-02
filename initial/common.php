@@ -52,10 +52,10 @@ define('__USE_BASE_CDN__', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp 
 
 // 실행 가능한 애드온 정보 합치기
 $tmp = (__MOBILE__?'ao_use_mobile':'ao_use_pc').'=1';
-$tmp_arr = DB::query('SELECT ao_id,extra FROM '._AF_ADDON_TABLE_.' WHERE '.$tmp);
+$tmp_arr = DB::query('SELECT ao_id,ao_extra FROM '._AF_ADDON_TABLE_.' WHERE '.$tmp);
 if(!DB::error()) {
 	while ($tmp = DB::assoc($tmp_arr)) {
-		$_ADDONS[$tmp['ao_id']] = $tmp['extra']; // unserialize는 필요할때 하기로... // TODO 캐시 처리 필요할까?
+		$_ADDONS[$tmp['ao_id']] = $tmp['ao_extra']; // unserialize는 필요할때 하기로... // TODO 캐시 처리 필요할까?
 	}
 }
 $_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;

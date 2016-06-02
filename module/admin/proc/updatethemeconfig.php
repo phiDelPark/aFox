@@ -28,20 +28,9 @@ function proc($data) {
 		}
 
 		if($theme_exists) {
-			DB::update(_AF_THEME_TABLE_,
-				[
-					'extra'=>$extra
-				], [
-					'th_id'=>$th_id
-				]
-			);
+			DB::update(_AF_THEME_TABLE_,['th_extra'=>$extra], ['th_id'=>$th_id]);
 		} else {
-			DB::insert(_AF_THEME_TABLE_,
-				[
-					'th_id'=>$th_id,
-					'extra'=>$extra
-				]
-			);
+			DB::insert(_AF_THEME_TABLE_,['th_id'=>$th_id,'th_extra'=>$extra]);
 		}
 
 		// 캐시 삭제 시켜 재생성

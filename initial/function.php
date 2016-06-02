@@ -232,12 +232,12 @@ if(!defined('__AFOX__')) exit();
 		static $addons = [];
 		if(!isset($addons[$id])) {
 			$out = getDBItem(_AF_ADDON_TABLE_, ['ao_id'=>$id]);
-			if(!empty($out['error']) || empty($out['extra'])) {
+			if(!empty($out['error']) || empty($out['ao_extra'])) {
 				$addons[$id] = $out;
 			} else {
-				$extra = $out['extra'];
+				$extra = $out['ao_extra'];
 				$extra = unserialize($extra);
-				unset($out['extra']);
+				unset($out['ao_extra']);
 				$addons[$id] = array_merge($out, $extra);
 			}
 		}
