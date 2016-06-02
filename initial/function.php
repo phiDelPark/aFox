@@ -645,7 +645,7 @@ if(!defined('__AFOX__')) exit();
 			}
 			$text =$parsedown->text($text);
 			// 비디오,오디오 처리
-			$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/i';
+			$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
 			$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
 			$text = preg_replace($patterns, $replacement, $text);
 		} else if($type == 0) {
@@ -654,7 +654,7 @@ if(!defined('__AFOX__')) exit();
 
 		// 다운로드 권한이 없으면 처리
 		if(!empty($_DATA['id']) && !isGrant($_DATA['id'],'download')) {
-			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/i';
+			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
 			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('msg_not_permitted',false),true,ENT_QUOTES)."');return false\" \\3";
 			$text = preg_replace($patterns, $replacement, $text);
 		}

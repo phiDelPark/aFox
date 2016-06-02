@@ -208,9 +208,7 @@
 	};
 
 	AfEditor.prototype.switch = function(swc) {
-
-		var readonly = this.options.readonly === 1,
-			$iframe = this.$element.find('iframe'),
+		var $iframe = this.$element.find('iframe'),
 			height = this.$textarea.css('height') || '',
 			text;
 
@@ -219,7 +217,7 @@
 				$iframe = $('<iframe class="form-control vresize">')
 					.insertAfter(this.$textarea.hide())
 					.end();
-				if (readonly) {
+				if (this.options.readonly) {
 					$iframe.attr('readonly', 'readonly');
 				} else {
 					$iframe.removeAttr('readonly');
@@ -234,7 +232,7 @@
 
 			$iframe.css('height', height);
 			$iframe.contents().find('body').html(this.$textarea.val());
-			if (readonly === 0) $iframe.contents()[0].designMode = 'on';
+			if (!this.options.readonly) $iframe.contents()[0].designMode = 'on';
 			//$iframe[0].contentWindow.document.designMode = 'on';
 		} else {
 			if ($iframe.length) {
@@ -246,7 +244,7 @@
 			}
 
 			this.$textarea.css('height', height).val(text).show();
-			if (readonly) {
+			if (this.options.readonly) {
 				this.$textarea.attr('readonly', 'readonly');
 			} else {
 				this.$textarea.removeAttr('readonly');
