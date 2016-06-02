@@ -87,8 +87,7 @@ $create_sql = '
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
-	   protect_file   CHAR(1)      NOT NULL DEFAULT 0,
-	   cf_extra          TEXT) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	   protect_file   CHAR(1)      NOT NULL DEFAULT 0) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
 
 DB::query($create_sql);
 

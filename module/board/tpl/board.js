@@ -3,10 +3,11 @@
  * Copyright 2016 afox, Inc.
  */
 
-+function ($) {
-  'use strict';
-  var input_password = '<form action="%s" class="input-password" method="post" autocomplete="off"><div class="form-inline"><div>%s</div><input class="form-control" name="mb_password" type="password" placeholder="%s" style="width:150px" required> <button class="btn btn-primary" type="submit">%s</button> <button class="btn btn-default" type="button">%s</button></div></form>';
-  var confirm_action = '<form action="%s" class="input-group" method="post" autocomplete="off"><div><div>%s</div><button class="btn btn-primary" type="submit">%s</button> <button class="btn btn-default" type="button">%s</button></div></form>';
+(function($) {
+	'use strict';
+
+	var input_password = '<form action="%s" class="input-password" method="post" autocomplete="off"><div class="form-inline"><div>%s</div><input class="form-control" name="mb_password" type="password" placeholder="%s" style="width:150px" required> <button class="btn btn-primary" type="submit">%s</button> <button class="btn btn-default" type="button">%s</button></div></form>';
+	var confirm_action = '<form action="%s" class="input-group" method="post" autocomplete="off"><div><div>%s</div><button class="btn btn-primary" type="submit">%s</button> <button class="btn btn-default" type="button">%s</button></div></form>';
 
 	$('[data-exec-act]').click(function() {
 		var data = {},
@@ -14,11 +15,11 @@
 			act = $i.attr('data-exec-act'),
 			args = $i.attr('data-act-param');
 
-		if(!args) return false;
+		if (!args) return false;
 		args = args.split(',');
 
-		for (var i = 0, n = args.length; i < n; i+=2) {
-			data[args[i]] = args[i+1];
+		for (var i = 0, n = args.length; i < n; i += 2) {
+			data[args[i]] = args[i + 1];
 		}
 
 		var $arp = $i.closest('#board_reply'),
@@ -34,62 +35,71 @@
 		$f.find('[disabled="disabled"]').removeAttr('disabled');
 
 		var callfunc = function(status, data, xhr) {
-			if(status == 'success') {
+			if (status == 'success') {
 				$('<input type="hidden" name="rp_srl" value="">').prependTo($f);
 				var $rc = $rp.find('>.right');
 				$f[0].dataImport(data);
 				$f.addClass('right')
-				.find('.close').show().click(
+					.find('.close').show().click(
 						function() {
-							$rc.show('fast', function(){
+							$rc.show('fast', function() {
 								$f.remove();
 							});
 						}
 					)
-				.end().insertAfter($rc.hide('slow')).show('slow');
+					.end().insertAfter($rc.hide('slow')).show('slow');
 				$f.find('.btn-success').removeClass('btn-success').addClass('btn-info');
-				if(data['rp_type'] == 2) editor.switch(true);
+				if (data['rp_type'] == 2) editor.switch(true);
 				return false;
 			}
 		};
 
-		if(act == 'board.deleteComment' || (act == 'board.getComment' && nombsrl)){
-			var $ipu, url = encodeURI(current_url.setQuery('rp',''));
-			if(nombsrl) {
-				if(act == 'board.getComment'){
-					$ipu = $(input_password.sprintf('',$_LANG['warn_input'].sprintf($_LANG['password']),$_LANG['password'],$_LANG['ok'],$_LANG['close']));
-					$ipu.on('success.exec.ajax', function(e, data, xhr){
+		if (act == 'board.deleteComment' || (act == 'board.getComment' && nombsrl)) {
+			var $ipu, url = encodeURI(current_url.setQuery('rp', ''));
+			if (nombsrl) {
+				if (act == 'board.getComment') {
+					$ipu = $(input_password.sprintf('', $_LANG['warn_input'].sprintf($_LANG['password']), $_LANG['password'], $_LANG['ok'], $_LANG['close']));
+					$ipu.on('success.exec.ajax', function(e, data, xhr) {
 						e.preventDefault();
 						callfunc('success', data, xhr);
 					});
 				} else {
-					$ipu = $(input_password.sprintf('',$_LANG['confirm_select_delete'].sprintf($_LANG['comment']),$_LANG['password'],$_LANG['ok'],$_LANG['close']));
+					$ipu = $(input_password.sprintf('', $_LANG['confirm_select_delete'].sprintf($_LANG['comment']), $_LANG['password'], $_LANG['ok'], $_LANG['close']));
 				}
 			} else {
-				$ipu = $(confirm_action.sprintf('',$_LANG['confirm_select_delete'].sprintf($_LANG['comment']),$_LANG['yes'],$_LANG['no']));
+				$ipu = $(confirm_action.sprintf('', $_LANG['confirm_select_delete'].sprintf($_LANG['comment']), $_LANG['yes'], $_LANG['no']));
 			}
 			$ipu.hide().addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
-			$ipu.find('button.btn-default').click(function(){$ipu.fadeOut('slow',function(){$(this).remove()});});
-			$ipu.attr('data-exec-ajax',act);
-			$ipu.prepend('<input type="hidden" name="rp_srl" value="'+data['rp_srl']+'">');
-			$ipu.prepend('<input type="hidden" name="success_return_url" value="'+url+'">');
+			$ipu.find('button.btn-default').click(function() {
+				$ipu.fadeOut('slow', function() {
+					$(this).remove();
+				});
+			});
+			$ipu.attr('data-exec-ajax', act);
+			$ipu.prepend('<input type="hidden" name="rp_srl" value="' + data['rp_srl'] + '">');
+			$ipu.prepend('<input type="hidden" name="success_return_url" value="' + url + '">');
 			$ipu.addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
 
-		} else if(act == 'board.getComment' || act == 'board.updateComment') {
+		} else if (act == 'board.getComment' || act == 'board.updateComment') {
 
-			if(act == 'board.getComment'){
+			if (act == 'board.getComment') {
 				exec_ajax(act, data, callfunc);
 			} else {
 				editor.switch(false);
 				$('<input type="hidden" name="rp_parent" value="">').prependTo($f);
-				$f[0].dataImport({'rp_type':1,'rp_secret':0,'rp_content':'','rp_parent':data['rp_parent']});
+				$f[0].dataImport({
+					'rp_type': 1,
+					'rp_secret': 0,
+					'rp_content': '',
+					'rp_parent': data['rp_parent']
+				});
 				$f.addClass('right').insertAfter($rp.find('>.right')).show('slow');
 			}
 
-			$f.on('success.exec.ajax', function(e, data, xhr){
+			$f.on('success.exec.ajax', function(e, data, xhr) {
 				e.preventDefault();
-				if(data['redirect_url']) {
-					parent.location.replace(data['redirect_url'].setQuery('rp',data['rp_srl']));
+				if (data['redirect_url']) {
+					parent.location.replace(data['redirect_url'].setQuery('rp', data['rp_srl']));
 				}
 			});
 		}
@@ -98,19 +108,19 @@
 	});
 
 	$('[data-exec-ajax="board.updateDocument"],[data-exec-ajax="board.updateComment"]')
-		.on('success.exec.ajax', function(e, data, xhr){
+		.on('success.exec.ajax', function(e, data, xhr) {
 			e.preventDefault();
 			var isd = $(this).attr('data-exec-ajax') == 'board.updateDocument';
-			if(data['redirect_url']) {
+			if (data['redirect_url']) {
 				parent.location.replace(data['redirect_url'].setQuery(
-					isd?'srl':'rp', data[isd?'wr_srl':'rp_srl']
+					isd ? 'srl' : 'rp', data[isd ? 'wr_srl' : 'rp_srl']
 				));
 			}
 		});
 
-	$(document).on('change.af.editor.toolbar', '.af-editor-toolbar', function(e, tar, old, val){
+	$(document).on('change.af.editor.toolbar', '.af-editor-toolbar', function(e, tar, old, val) {
 		var $e = $(this).closest('.af-editor-group');
-		if((tar == 'wr_type' || tar == 'rp_type') && $e.length == 1) $e.data('af.editor').switch(val==='2');
+		if ((tar == 'wr_type' || tar == 'rp_type') && $e.length == 1) $e.data('af.editor').switch(val === '2');
 	});
 
 	$('.auto-hide').each(function() {
@@ -121,26 +131,26 @@
 			time = stime,
 			timerId = 0;
 
-			var _repeat_char= function() {
-				var r = srpt.repeat(time);
-				r = r + '<u>' + srpt + '</u>' + srpt.repeat(stime-time);
-				return r;
-			};
+		var _repeat_char = function() {
+			var r = srpt.repeat(time);
+			r = r + '<u>' + srpt + '</u>' + srpt.repeat(stime - time);
+			return r;
+		};
 
-			if($prg) $prg.html(_repeat_char());
-			timerId = setInterval(function(){
-				if(time < 1){
-					clearInterval(timerId);
-					$i.animate({
-						bottom: '-=70'
-					}, 1000, function() {
-						$(this).remove();
-					});
-				} else {
-					time--;
-					if($prg) $prg.html(_repeat_char());
-				}
-			}, 1000);
+		if ($prg) $prg.html(_repeat_char());
+		timerId = setInterval(function() {
+			if (time < 1) {
+				clearInterval(timerId);
+				$i.animate({
+					bottom: '-=70'
+				}, 1000, function() {
+					$(this).remove();
+				});
+			} else {
+				time--;
+				if ($prg) $prg.html(_repeat_char());
+			}
+		}, 1000);
 	});
 
 	$('.list-table tr[data-hot-track]').click(function() {
@@ -149,9 +159,9 @@
 		return false;
 	});
 
-	$(window).on('load', function () {
+	$(window).on('load', function() {
 		var into = $('a.active[id^=reply_]')[0];
-		if(into) into.scrollIntoView(true);
+		if (into) into.scrollIntoView(true);
 	});
 
-}(jQuery);
+})(jQuery);

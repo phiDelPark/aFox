@@ -51,8 +51,8 @@ function dispBoardDefault($data) {
 		}
 	}
 
-	addCSS(_AF_URL_ . 'module/board/tpl/board.css');
-	addJS(_AF_URL_ . 'module/board/tpl/board.js');
+	addCSS(_AF_URL_ . 'module/board/tpl/board.min.css');
+	addJS(_AF_URL_ . 'module/board/tpl/board.min.js');
 	return $result;
 }
 

@@ -33,9 +33,9 @@ var current_url     = "<?php echo getCurrentUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
 var waiting_message = "<?php echo getLang('msg_call_server') ?>";
 </script>
-<link rel="stylesheet" href="<?php echo _AF_URL_ ?>common/css/common.css">
+<link rel="stylesheet" href="<?php echo _AF_URL_ ?>common/css/common.min.css">
 <link rel="stylesheet" href="<?php echo _AF_URL_ ?>module/admin/admin.css">
-<script src="<?php echo _AF_URL_ ?>common/js/common.js"></script>
+<script src="<?php echo _AF_URL_ ?>common/js/common.min.js"></script>
 </head>
 <body>
 <?php include _AF_ADMIN_PATH_ . 'admin.php'; ?>

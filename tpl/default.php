@@ -38,8 +38,8 @@ var current_url     = "<?php echo getCurrentUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
 var waiting_message = "<?php echo getLang('msg_call_server') ?>";
 </script>
-<link rel="stylesheet" href="<?php echo _AF_URL_ ?>common/css/common.css">
-<script src="<?php echo _AF_URL_ ?>common/js/common.js"></script>
+<link rel="stylesheet" href="<?php echo _AF_URL_ ?>common/css/common.min.css">
+<script src="<?php echo _AF_URL_ ?>common/js/common.min.js"></script>
 <?php @include _AF_THEME_PATH_ . '_head.php'; ?>
 </head>
 <body>

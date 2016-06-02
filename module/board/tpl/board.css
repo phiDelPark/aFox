@@ -1,5 +1,4 @@
 @charset "utf-8";
-
 #board_list>header {
 	margin-bottom: 20px;
 }
@@ -21,14 +20,14 @@
 
 #board_view>header,
 #board_write>header,
-#board_delete>header{
+#board_delete>header {
 	margin-bottom: 20px;
 	position: relative;
 }
 
 #board_view>header>h3,
 #board_write>header>h3,
-#board_delete>header>h3{
+#board_delete>header>h3 {
 	margin: 0;
 	padding: 0;
 	margin-bottom: 3px;
@@ -42,7 +41,7 @@
 	margin: 5px 0;
 }
 
-#board_view>footer{
+#board_view>footer {
 	margin: 15px 5px 5px;
 }
 
@@ -62,8 +61,8 @@
 #board_reply .reply-item > .left {
 	position: absolute;
 	float: left;
-    width: 184px;
-    padding: 0 0 0 6px;
+	width: 184px;
+	padding: 0 0 0 6px;
 }
 
 #board_reply .reply-item > .left h5 {
@@ -72,7 +71,7 @@
 
 #board_view .profile-text > .right,
 #board_reply .reply-item > .right {
-	margin-left:220px;
+	margin-left: 220px;
 	padding: 0 6px 0 0;
 	position: relative;
 }
@@ -83,13 +82,13 @@
 }
 
 #board_reply .reply-item > .right .area-group {
-	margin:0;
+	margin: 0;
 	padding: 0;
 }
 
 #board_reply .reply-item > .right .area-button,
 #board_reply>.reply-editer .form-inline+.area-group,
-#board_reply .reply-item > .right .form-inline+.area-group{
+#board_reply .reply-item > .right .form-inline+.area-group {
 	margin-top: 5px;
 }
 
@@ -117,7 +116,7 @@
 	max-height: 200px;
 	overflow: hidden;
 	padding: 5px 10px;
-	margin-left:100px;
+	margin-left: 100px;
 	border: 1px solid #eee;
 	border-radius: 5px;
 }
@@ -127,7 +126,7 @@
 	width: 80px;
 }
 
-.af-editor-area > textarea{
+.af-editor-area > textarea {
 	min-height: 250px;
 }
 
@@ -136,8 +135,8 @@
 	min-height: 250px;
 	padding: 1px;
 	outline: 0;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
-	box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
 #board_reply>.reply-editer {
@@ -145,28 +144,28 @@
 	padding-top: 20px;
 }
 
-#board_reply>.reply-editer .area-group{
+#board_reply>.reply-editer .area-group {
 	position: relative;
 	padding: 0;
 }
 
-#board_reply>.reply-editer .area-group .form-group{
+#board_reply>.reply-editer .area-group .form-group {
 	margin-right: 130px;
 }
 
-#board_reply>.reply-editer .area-button{
+#board_reply>.reply-editer .area-button {
 	position: absolute;
-	bottom:0;
-	right:0;
+	bottom: 0;
+	right: 0;
 	margin: 0;
 }
 
-#board_reply>.reply-editer .area-group button{
+#board_reply>.reply-editer .area-group button {
 	width: 120px;
-	height:80px;
+	height: 80px;
 }
 
-#board_reply .af-editor-area > textarea{
+#board_reply .af-editor-area > textarea {
 	min-height: 80px;
 }
 
@@ -179,12 +178,12 @@
 	margin-left: 10px;
 }
 
-#board_reply .reply-item form .form-group{
+#board_reply .reply-item form .form-group {
 	margin-bottom: 0;
 }
 
 #board_write .area-button,
-#board_delete .area-button{
+#board_delete .area-button {
 	margin: 30px 0 10px;
 }
 
@@ -197,7 +196,7 @@
 	background-color: #fff;
 	position: absolute;
 	width: 100%;
-	height:100%;
+	height: 100%;
 	z-index: 3;
 	display: block;
 	text-align: right;
@@ -208,17 +207,18 @@
 	bottom: 0;
 	right: 0;
 }
-#board_reply .inside_massage_box>div>div{
+
+#board_reply .inside_massage_box>div>div {
 	margin: 10px 0;
 }
 
 #board_write>header .close,
-#board_delete>header .close{
+#board_delete>header .close {
 	font-size: 30px;
 	position: absolute;
 	right: 0;
 	top: -5px;
-	height:25px;
+	height: 25px;
 }
 
 #board_view>article>.hashtags {
@@ -226,38 +226,38 @@
 }
 
 @media(max-width:768px) {
-	#board_reply>.reply-editer .area-group button{
-		width:100%;
-		height:initial;
+	#board_reply>.reply-editer .area-group button {
+		width: 100%;
+		height: initial;
 	}
-	#board_reply>.reply-editer .area-button{
+	#board_reply>.reply-editer .area-button {
 		position: static;
 	}
-	#board_reply>.reply-editer .area-group .form-group{
+	#board_reply>.reply-editer .area-group .form-group {
 		margin-right: initial;
 	}
 	#board_view .profile-text > .left,
 	#board_reply .reply-item > .left {
-		position:static;
+		position: static;
 		float: none;
-		width:initial;
+		width: initial;
 	}
 	#board_view .profile-text > .right,
 	#board_reply .reply-item > .right {
-		margin-left:5px;
+		margin-left: 5px;
 		margin-top: 10px;
 	}
 	#board_view .profile-text > .left .profile,
 	#board_reply .reply-item > .left .profile {
 		float: none;
 	}
-	#board_reply .reply-item > .left>.area-author-info{
-		float:right;
+	#board_reply .reply-item > .left>.area-author-info {
+		float: right;
 	}
 	#board_view>article>.current_content {
 		min-height: 200px;
 	}
-	#board_list .list-table .hide-xs{
+	#board_list .list-table .hide-xs {
 		display: none;
 	}
 }
