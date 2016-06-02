@@ -11,8 +11,8 @@ function proc($data) {
 	if(empty($data['mb_id'])||empty(trim($data['mb_nick']))) return set_error(getLang('msg_invalid_request'),303);
 
 	$data['mb_nick'] = trim(strip_tags($data['mb_nick']));
-	$data['mb_email'] = trim($data['mb_email']);
-	$data['mb_homepage'] = trim($data['mb_homepage']);
+	$data['mb_email'] = trim(strip_tags($data['mb_email']));
+	$data['mb_homepage'] = trim(strip_tags($data['mb_homepage']));
 
 	if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['mb_id'])) {
 		return set_error(getLang('invalid_value', ['id']),701);

@@ -709,24 +709,51 @@ if(!defined('__AFOX__')) exit();
 		 return $value.' '.$intervals[1][0].($value > 1 ? 's' : '').' ago';
 	}
 
-	// http://stackoverflow.com/questions/1336776/xss-filtering-function-in-php
+	// http://stackoverflow.com/questions/1336776/
 	function xssClean($str) {
-		// Fix &entity\n;
-		$str = str_replace(array('&amp;','&lt;','&gt;'), array('&amp;amp;','&amp;lt;','&amp;gt;'), $str);
-		$str = preg_replace('/(&#*\w+)[\x00-\x20]+;/u', '$1;', $str);
-		$str = preg_replace('/(&#x*[0-9A-F]+);*/iu', '$1;', $str);
-		$str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
-		// Remove any attribute starting with "on" or xmlns
-		$str = preg_replace('#(<[^>]+?[\x00-\x20"\'])(?:on|xmlns)[^>]*+>#iu', '$1>', $str);
-		// Remove javascript: and vbscript: protocols
-		$str = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([`\'"]*)[\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2nojavascript...', $str);
-		$str = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iu', '$1=$2novbscript...', $str);
-		$str = preg_replace('#([a-z]*)[\x00-\x20]*=([\'"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#u', '$1=$2nomozbinding...', $str);
 		// Remove namespaced elements (we do not need them)
 		$str = preg_replace('#</*\w+:\w[^>]*+>#i', '', $str);
 		// Remove really unwanted tags
 		$str = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*+>#i', '', $str);
+		// remove src hack
+		$str = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i', 'removeSrcHack', $str);
 		return $str;
+	}
+
+	// XE removeSrcHack https://www.xpressengine.com/
+	function removeSrcHack($match) {
+		$tag = strtolower($match[2]);
+		if($tag == 'xmp') return "<{$match[1]}xmp>";
+		if($match[1]) return $match[0];
+		if($match[4]) $match[4] = ' ' . $match[4];
+		$attrs = array();
+		if(preg_match_all('/([\w:-]+)\s*=(?:\s*(["\']))?(?(2)(.*?)\2|([^ ]+))/s', $match[3], $m)) {
+			foreach($m[1] as $idx => $name) {
+				if(strlen($name) >= 2 && substr_compare($name, 'on', 0, 2) === 0) continue;
+				$val = preg_replace('/&#(?:x([a-fA-F0-9]+)|0*(\d+));/', 'chr("\\1"?0x00\\1:\\2+0)', $m[3][$idx] . $m[4][$idx]);
+				$val = preg_replace('/^\s+|[\t\n\r]+/', '', $val);
+				if(preg_match('/^[a-z]+script:/i', $val)) continue;
+				$attrs[$name] = $val;
+			}
+		}
+		if(isset($attrs['style']) && preg_match('@(?:/\*|\*/|\n|:\s*expression\s*\()@i', $attrs['style'])) unset($attrs['style']);
+		$attr = array();
+		foreach($attrs as $name => $val) {
+			if($tag == 'object' || $tag == 'embed' || $tag == 'a') {
+				$attribute = strtolower(trim($name));
+				if($attribute == 'data' || $attribute == 'src' || $attribute == 'href') {
+					if(stripos($val, 'data:') === 0) continue;
+				}
+			}
+			if($tag == 'img') {
+				$attribute = strtolower(trim($name));
+				if(stripos($val, 'data:') === 0) continue;
+			}
+			$val = str_replace('"', '&quot;', $val);
+			$attr[] = $name . "=\"{$val}\"";
+		}
+		$attr = count($attr) ? ' ' . implode(' ', $attr) : '';
+		return "<{$match[1]}{$tag}{$attr}{$match[4]}>";
 	}
 
 	function showMessage($message, $type = 0, $title = '') {

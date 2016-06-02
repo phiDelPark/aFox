@@ -26,7 +26,7 @@ function proc($data) {
 		}
 	}
 
-	$data['md_title'] = trim($data['md_title']);
+	$data['md_title'] = trim(strip_tags($data['md_title']));
 	$data['pg_content'] = xssClean($data['pg_content']);
 
 	$unlink_files = [];

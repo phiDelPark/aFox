@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(empty($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
-	$data['wr_title'] = trim($data['wr_title']);
+	$data['wr_title'] = trim(strip_tags($data['wr_title']));
 	if(empty($data['wr_title'])) return set_error(getLang('warn_input', ['title']));
 
 	global $_MEMBER;
@@ -76,7 +76,7 @@ function proc($data) {
 		$data['mb_ipaddress'] = $_SERVER['REMOTE_ADDR'];
 
 		if(empty($_MEMBER)) {
-			$data['mb_nick'] = empty($data['mb_nick'])?'':trim($data['mb_nick']);
+			$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
 			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
 				throw new Exception(getLang('warn_input', [getLang('%s, %s', ['id', 'password'])]), 3);
 			}
