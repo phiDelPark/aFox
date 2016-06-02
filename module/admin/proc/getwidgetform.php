@@ -27,7 +27,7 @@ function proc($data) {
 		.'<div class="row"><label class="col-md-2">'.getLang('version').'</label> '.escapeHtml($_WIDGET_INFO['version']).'</div>'
 		.'<div class="row"><label class="col-md-2">'.getLang('date').'</label> '.escapeHtml($_WIDGET_INFO['date']).'</div>'
 		.'<div class="row"><label class="col-md-2">'.getLang('author').'</label> '.$author.' ('.escapeHtml($_WIDGET_INFO['email']).')</div>'
-		.'<p class="help-block">'.escapeHtml($_WIDGET_INFO['description']).'</p></div>';
+		.'<p class="help-block">'.nl2br(escapeHtml($_WIDGET_INFO['description'])).'</p></div>';
 
 	require($_template_file);
 

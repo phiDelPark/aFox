@@ -36,7 +36,7 @@ function proc($data) {
 		.'<div class="row"><label class="col-md-2">'.getLang('version').'</label> '.escapeHtml($_THEME_INFO['version']).'</div>'
 		.'<div class="row"><label class="col-md-2">'.getLang('date').'</label> '.escapeHtml($_THEME_INFO['date']).'</div>'
 		.'<div class="row"><label class="col-md-2">'.getLang('author').'</label> '.$author.' ('.escapeHtml($_THEME_INFO['email']).')</div>'
-		.'<p class="help-block">'.escapeHtml($_THEME_INFO['description']).'</p></div>';
+		.'<p class="help-block">'.nl2br(escapeHtml($_THEME_INFO['description'])).'</p></div>';
 
 	unset($data);
 

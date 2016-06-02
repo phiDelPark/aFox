@@ -32,7 +32,7 @@ function proc($data) {
 		.'<div class="row"><label class="col-md-2">'.getLang('version').'</label> '.escapeHtml($_ADDON_INFO['version']).'</div>'
 		.'<div class="row"><label class="col-md-2">'.getLang('date').'</label> '.escapeHtml($_ADDON_INFO['date']).'</div>'
 		.'<div class="row"><label class="col-md-2">'.getLang('author').'</label> '.$author.' ('.escapeHtml($_ADDON_INFO['email']).')</div>'
-		.'<p class="help-block">'.escapeHtml($_ADDON_INFO['description']).'</p></div>';
+		.'<p class="help-block">'.nl2br(escapeHtml($_ADDON_INFO['description'])).'</p></div>';
 
 	echo '<div><label style="margin:0 20px 10px 0"><input name="ao_use_pc" type="checkbox" value="1"'.($_ADDON['ao_use_pc']=='1'?' checked="checked"':'').'> PC</label>'
 		.'<label><input name="ao_use_mobile" type="checkbox" value="1"'.($_ADDON['ao_use_mobile']=='1'?' checked="checked"':'').'> Mobile</label></div>';

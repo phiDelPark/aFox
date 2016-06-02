@@ -36,11 +36,11 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 			</div>
 			<!-- Top Menu Items -->
 			<ul class="nav navbar-right top-nav">
+				<li><a href="#" data-exec-ajax="admin.clearCache" data-ajax-param="success_return_url,<?php echo getUrl()?>"><?php echo getLang('clear_cache')?></a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $_MEMBER['mb_nick']?> <b class="caret"></b></a>
 					<ul class="dropdown-menu pull-right">
-						<li><a href="#"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('inbox')?></a></li>
-						<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('setup')?></a></li>
+						<li><a href="<?php echo getUrl('','module','member','disp','inbox')?>"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('inbox')?></a></li>
 						<li class="divider"></li>
 						<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('logout')?></a></li>
 					</ul>

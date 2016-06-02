@@ -298,6 +298,8 @@ if(!defined('__AFOX__')) exit();
 		if($expire < 0) {
 			@unlinkFile($file);
 		} else {
+			$dir = dirname($file);
+			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
 			$expire = $expire > 0 ? _AF_SERVER_TIME_ + $expire : 0;
 			$str = '<?php if(!defined(\'__AFOX__\')) exit(); $_CACHE_EXPIRE='.$expire.'; $_CACHE_DATA='.var_export($value, true).'; ?>';
 			file_put_contents($file, $str, LOCK_EX);
@@ -555,6 +557,16 @@ if(!defined('__AFOX__')) exit();
 		}
 	}
 
+	function unlinkDir($dir) {
+		@chmod($dir, 0707);
+		if(!@rmdir($dir)) {
+			@chmod($dir, _AF_DIR_PERMIT_);
+			return false;
+		} else {
+			return true;
+		}
+	}
+
 	// 권한 체크
 	function isGrant($md_id, $chk) {
 		if(empty($md_id) || empty($chk)) return false;
@@ -692,7 +704,7 @@ if(!defined('__AFOX__')) exit();
 		return $size.$tail;
 	}
 
-	// http://www.devnetwork.net/viewtopic.php?f=50&t=113253
+	// http://www.devnetwork.net/viewtopic.php?t=113253
 	function timePassed($datetime) {
 		$diff = time() - strtotime($datetime);
 		if($diff == 0) return 'just now';

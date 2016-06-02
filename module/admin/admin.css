@@ -42,7 +42,7 @@ body {
 	padding-top: 15px;
 	padding-bottom: 15px;
 	line-height: 20px;
-	color: #999;
+	color: #aaa;
 }
 
 .top-nav>li>a:hover,
@@ -68,6 +68,11 @@ body {
 
 .top-nav>.open>.dropdown-menu>li>a {
 	white-space: normal;
+}
+
+.top-nav>.pull-left{
+	color: #ccc;
+	background-color: #000;
 }
 
 /* Side Navigation */
