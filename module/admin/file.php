@@ -20,14 +20,16 @@
 <tbody>
 
 <?php
-	$total_page = 0;
-	$current_page = 1;
+	$end_page = $total_page = 0;
+	$start_page = $current_page = 1;
 
 	if(!empty($file_list['error'])) {
 		echo showMessage($file_list['message'], $file_list['error']);
 	} else {
 		$current_page = $file_list['current_page'];
 		$total_page = $file_list['total_page'];
+		$start_page = $file_list['start_page'];
+		$end_page = $file_list['end_page'];
 
 		foreach ($file_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item"><th scope="row">'.$value['md_id'].'</th>';
@@ -52,15 +54,11 @@
 	</form></li>
   </ul>
   <ul class="pagination pull-right">
-	<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-
-<?php
-	for ($i=1; $i <= $total_page; $i++) {
-		echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>';
-	}
-?>
-
-	<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+	<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
+	<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
+	<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
+	<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
+	<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
   </ul>
 </nav>
 

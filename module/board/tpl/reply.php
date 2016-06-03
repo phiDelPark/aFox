@@ -8,6 +8,9 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 	<?php
 		$current_cpage = $cmt['current_page'];
 		$total_cpage = $cmt['total_page'];
+		$start_cpage = $cmt['start_page'];
+		$end_cpage = $cmt['end_page'];
+
 		$not_edit_str = 'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted',false),true,ENT_QUOTES).'\');return false"';
 		$is_owner_permit_view = $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl'] || !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$_{'board'}['wr_srl'])]);
 		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'.getLang('warn_input', ['password'])
@@ -44,13 +47,11 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 	<?php if($total_cpage > 1) { ?>
 	<nav class="text-center">
 		<ul class="pagination pagination-sm">
-		<li<?php echo $current_cpage <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_cpage <= 1 ? '#' : getUrl('cpage',$current_cpage-1)?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-	<?php
-		for ($i=1; $i <= $total_cpage; $i++) {
-			echo '<li'.($current_cpage == $i ? ' class="active"' : '').'><a href="'.getUrl('cpage',$i).'">'.$i.'</a></li>';
-		}
-	?>
-		<li<?php echo $current_cpage >= $total_cpage ? ' class="disabled"' : ''?>><a href="<?php echo $current_cpage >= $total_cpage ? '#' : getUrl('cpage',$current_cpage+1)?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+		<?php if($start_cpage>10) echo '<li><a href="'.getUrl('cpage',$start_cpage-10).'">&laquo;</a></li>'; ?>
+		<li<?php echo $current_cpage <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_cpage <= 1 ? '#" onclick="return false' : getUrl('cpage',$current_cpage-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
+		<?php for ($i=$start_cpage; $i <= $end_cpage; $i++) echo '<li'.($current_cpage == $i ? ' class="active"' : '').'><a href="'.getUrl('cpage',$i).'">'.$i.'</a></li>'; ?>
+		<li<?php echo $current_cpage >= $total_cpage ? ' class="disabled"' : ''?>><a href="<?php echo $current_cpage >= $total_cpage ? '#" onclick="return false' : getUrl('cpage',$current_cpage+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
+		<?php if(($total_cpage-$end_cpage)>0) echo '<li><a href="'.getUrl('cpage',$end_cpage+1).'">&raquo;</a></li>'; ?>
 		</ul>
 	</nav>
 	<?php } ?>

@@ -189,8 +189,15 @@ if(!defined('__AFOX__')) exit();
 			$result = [];
 
 			if($count>0){
-				$result['current_page'] = ++$page;
-				$result['total_page'] = ceil($total_count / $count);
+				$cur_page = ++$page;
+				$tal_page = ceil($total_count / $count);
+				$result['current_page'] = $cur_page;
+				$result['total_page'] = $tal_page;
+				$cur_page--;
+				$str_page = $cur_page - ($cur_page % 10);
+				$end_page = ($tal_page > ($str_page + 10) ? $str_page + 10 : $tal_page);
+				$result['start_page'] = ++$str_page;
+				$result['end_page'] = $end_page;
 			}
 
 			$result['total_count'] = $total_count;

@@ -39,6 +39,8 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 		<?php
 			$current_page = $_{'board'}['current_page'];
 			$total_page = $_{'board'}['total_page'];
+			$start_page = $_{'board'}['start_page'];
+			$end_page = $_{'board'}['end_page'];
 
 			if(__MOBILE__) {
 				foreach ($_{'board'}['data'] as $key => $val) {
@@ -62,13 +64,11 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 	</article>
 	<nav class="text-center">
 		<ul class="pagination">
-		<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-	<?php
-		for ($i=1; $i <= $total_page; $i++) {
-			echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>';
-		}
-	?>
-		<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+			<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
+			<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
+			<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
+			<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
+			<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
 		</ul>
 	</nav>
 	<footer class="clearfix">

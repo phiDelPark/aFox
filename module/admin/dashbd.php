@@ -134,7 +134,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 			<div class="panel-body">
 				<div class="list-group">
 					<?php
-						$_list = getDBList(_AF_DOCUMENT_TABLE_, [], 'wr_regdate desc', 1, 10);
+						$_list = getDBList(_AF_DOCUMENT_TABLE_, ['md_id{<>}'=>'_AFOXtRASH_'], 'wr_regdate desc', 1, 10);
 						if(empty($_list['error'])){
 							foreach ($_list['data'] as $val) {
 								echo '<a href="'.getUrl('','srl',$val['wr_srl']).'" class="list-group-item"><span class="badge">'.timePassed($val['wr_regdate']).'</span>'.cutstr(strip_tags($val['wr_title']),50).'</a>';

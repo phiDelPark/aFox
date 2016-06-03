@@ -17,7 +17,7 @@ function returnUrlMerge($data, $result) {
 	return $result;
 }
 
-function procPageDefault($data) {
+function procRollcallDefault($data) {
 	$include_file = dirname(__FILE__) . '/proc/'.strtolower($data['act']).'.php';
 
 	if(file_exists($include_file)) {
@@ -28,7 +28,7 @@ function procPageDefault($data) {
 	}
 }
 
-function dispPageDefault($data) {
+function dispRollcallDefault($data) {
 
 	if(!empty($data['id'])) {
 		require_once dirname(__FILE__) . '/disp/viewpage.php';

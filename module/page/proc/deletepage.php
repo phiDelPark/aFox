@@ -27,10 +27,11 @@ function proc($data) {
 			$directory = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/1/';
 			if(is_dir($directory)){
 				$handle = @opendir($directory); // 절대경로
-				while ($file = readdir($handle)) @unlinkFile($directory.$file);
+				while ($file = readdir($handle)) {
+					unlinkFile($directory.$file);
+				}
 				closedir($handle);
-				@chmod($directory, 0707);
-				if(!@rmdir($directory)) @chmod($directory, _AF_DIR_PERMIT_);
+				unlinkDir($directory);
 			}
 		}
 
