@@ -20,13 +20,14 @@ function proc($data) {
 
 		$md_id = $module['md_id'];
 
-		DB::getList('SELECT wr_srl FROM '._AF_DOCUMENT_TABLE_.' WHERE md_id = \'' . $md_id . '\' OR (md_id = \'_AFOXtRASH_\' AND wr_updater = \'' . $md_id . '\')', [], function($r){
+		$sql = 'SELECT wr_srl FROM '._AF_DOCUMENT_TABLE_.' WHERE md_id=:1 OR (md_id=\'_AFOXtRASH_\' AND wr_updater=:2)';
+		DB::getList($sql, [$md_id,$md_id], function($r){
 			while ($row = DB::assoc($r)) {
-				$wr_srl = $row['wr_srl'];
+				$_wr_srl = $row['wr_srl'];
 				// 파일 삭제
 				$variable = ['binary','image','video','audio'];
 				foreach ($variable as $val) {
-					$directory = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/';
+					$directory = _AF_ATTACH_DATA_ . $val . '/' . $_md_id . '/' . $_wr_srl . '/';
 					if(is_dir($directory)){
 						$handle = @opendir($directory); // 절대경로
 						while ($file = readdir($handle)) @unlinkFile($directory.$file);

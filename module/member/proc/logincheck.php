@@ -18,8 +18,8 @@ function proc($data) {
 		return set_error(getLang('msg_empty_id'),501);
 	}
 
-	$sql = "SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$mb_id}'";
-	$mb = DB::get($sql);
+	$sql = 'SELECT * FROM '._AF_MEMBER_TABLE_.' WHERE mb_id= :1';
+	$mb = DB::get($sql, [$mb_id]);
 	if($ex = DB::error()) return set_error($ex->getMessage(),$ex->getCode());
 
 	if(empty($mb['mb_srl']) || !verifyEncrypt($mb_password, $mb['mb_password'])) {

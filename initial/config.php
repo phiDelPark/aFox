@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 
 define('__DEBUG__', 0);
-define('_AF_VERSION_', '0.1.5');
+define('_AF_VERSION_', '0.2.1');
 define('_AF_SERVER_TIME_', time());
 
 define('_AF_CONFIG_TABLE_', 'afox_config');
@@ -50,6 +50,8 @@ define('_AF_HTTPS_PORT_', empty($_DBINFO['https_port'])?443:(int)$_DBINFO['https
 define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
 define('_AF_COOKIE_DOMAIN_', $_DBINFO['cookie_domain']);
 
+// SQL Injection 공격에 대비하기 위해
+// DB 클래스 사용시 보통은 escape 하지만 직접 query를 사용할땐 escape를 직접하거나 params 사용하도록 합니다.
 require_once _AF_PATH_ . 'lib/db/mysql.php';
 DB::init($_DBINFO);
 unset($_DBINFO); // 쓰고나면 정보 제거
@@ -111,6 +113,8 @@ if($tmp = (isset($_SESSION['ss_mb_id']) ? $_SESSION['ss_mb_id'] : get_cookie('ck
 		unset($_SESSION['ss_mb_id']);
 	}
 }
+
+unset($tmp);
 
 /* End of file config.php */
 /* Location: ./initial/config.php */

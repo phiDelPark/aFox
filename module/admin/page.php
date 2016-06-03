@@ -6,7 +6,7 @@
 
 	$search = empty($_DATA['search'])?'':'%'.DB::quotes($_DATA['search']).'%';
 	$where = empty($search) ? '1' : '('.$pg.'.md_id LIKE "%'.$search.'%" OR '.$pg.'.pg_content LIKE "%'.$search.'%")';
-	$page = isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
+	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
 	$count = 20;
 	$start = (($page - 1) * $count);
 	$page_list = [];

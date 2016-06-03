@@ -357,6 +357,7 @@ if(!defined('__AFOX__')) exit();
 		global $_MEMBER;
 		if(empty($mb_srl) && !empty($_MEMBER)) $mb_srl = $_MEMBER['mb_srl'];
 
+		$mb_srl = (int)$mb_srl;
 		// 비회원인데 - 값이면 에러
 		if(empty($mb_srl) && $point < 0) {
 			return set_error(getLang('msg_disallow_by_point', [abs($point), 0]), 907);
@@ -778,9 +779,9 @@ if(!defined('__AFOX__')) exit();
 
 	function checkUserAgent() {
 		$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-		if(preg_match("/googlebot|adsbot|yahooseeker|yahoobot|msnbot|watchmouse|pingdom\.com|feedfetcher-google/i", $agent )) return 'BOT';
-		if(preg_match("/phone|iphone|itouch|ipod|symbian|android|htc_|htc-|palmos|blackberry|opera mini|iemobile|windows ce|nokia|fennec|hiptop|kindle|mot |mot-|webos\/|samsung|sonyericsson|^sie-|nintendo/i", $agent )) return 'MOBILE';
-		if(preg_match("/mobile|pda;|avantgo|eudoraweb|minimo|netfront|brew|teleca|lg;|lge |wap;| wap /i", $agent )) return 'MOBILE';
+		if(preg_match("/googlebot|adsbot|yahooseeker|yahoobot|msnbot|watchmouse|pingdom\.com|feedfetcher-google/", $agent)) return 'BOT';
+		if(preg_match("/phone|iphone|itouch|ipod|symbian|android|htc_|htc-|palmos|blackberry|opera mini|iemobile|windows ce|nokia|fennec|hiptop|kindle|mot |mot-|webos\/|samsung|sonyericsson|^sie-|nintendo/", $agent)) return 'MOBILE';
+		if(preg_match("/mobile|pda;|avantgo|eudoraweb|minimo|netfront|brew|teleca|lg;|lge |wap;| wap /", $agent)) return 'MOBILE';
 		return 'BROWSER';
 	}
 

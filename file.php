@@ -47,7 +47,7 @@ if(!empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])){
 // 다운로드 조회를 위해 기록 // setHistoryAction() 함수 안불러서 작성
 if($_file[$srl]['type']==='binary'){
 	$point = $_file[$srl]['point_download'];
-	$mb_srl = empty($_MEMBER)?0:$_MEMBER['mb_srl'];
+	$mb_srl = empty($_MEMBER)?0:(int)$_MEMBER['mb_srl'];
 	if(empty($mb_srl) && $point < 0) setHttpError('401 Unauthorized', true); // -값은 비회원 불가
 	$act = 'mf_download';
 	$uinfo = ['mb_srl'=>$mb_srl,'ipaddress'=>$_SERVER['REMOTE_ADDR']];

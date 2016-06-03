@@ -36,7 +36,8 @@ function proc($data) {
 
 	if(!empty($data['with_file_list'])) {
 		$fd = 'mf_srl,mf_name,mf_type,mf_download,mf_description,mf_size,mb_srl,mb_ipaddress';
-		$doc['files'] = DB::getList('SELECT '.$fd.' FROM '._AF_FILE_TABLE_.' WHERE md_id=\''.$doc['md_id'].'\' AND mf_target='.$doc['wr_srl'].' ORDER BY mf_type');
+		$sql = 'SELECT '.$fd.' FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 AND mf_target=:2 ORDER BY mf_type';
+		$doc['files'] = DB::getList($sql, [$doc['md_id'],$doc['wr_srl']]);
 	}
 
 	return empty($data['with_module_config']) ?  $doc : array_merge($doc, getModule($doc['md_id']));
