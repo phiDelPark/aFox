@@ -22,6 +22,11 @@ body {
 	margin-bottom: 30px;
 }
 
+.pager li>span{
+	color:#aaa;
+	float: none;
+}
+
 .huge {
 	font-size: 50px;
 	line-height: normal;
@@ -253,5 +258,13 @@ form .af-editor-area > textarea + iframe {
 	.side-nav li a:focus {
 		outline: none;
 		background-color: #000 !important;
+	}
+	.modal-footer .btn+.btn[type="submit"]{
+		min-width: 150px;
+	}
+}
+@media(max-width:992px) {
+	#ADM_DEFAULT_MODULE {
+		overflow-x: auto;
 	}
 }

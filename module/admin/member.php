@@ -12,12 +12,12 @@
 </p>
 
 <table class="table table-hover table-nowrap">
-<thead>
+<thead class="table-nowrap">
 	<tr>
-		<th>#<?php echo getLang('id')?></th>
-		<th class="col-md-7"><?php echo getLang('nickname')?></th>
+		<th class="col-xs-1">#<?php echo getLang('id')?></th>
+		<th><?php echo getLang('nickname')?></th>
 		<th class="col-xs-1"><?php echo getLang('rank')?></th>
-		<th><?php echo getLang('point')?></th>
+		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('point')?></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1"><?php echo getLang('login')?></th>
 	</tr>
@@ -42,7 +42,7 @@
 			echo '<tr class="afox-list-item" data-exec-ajax="member.getMember" data-ajax-param="mb_id,'.$value['mb_id'].'" data-modal-target="#member_modal"><th scope="row">'.$value['mb_id'].'</th>';
 			echo '<td>'.$value['mb_nick'].'</td>';
 			echo '<td>'.(isset($rank_arr[$rank])?$rank_arr[$rank]:'LV. '.$rank).'</td>';
-			echo '<td>'.$value['mb_point'].'</td>';
+			echo '<td class="hidden-xs hidden-sm">'.$value['mb_point'].'</td>';
 			echo '<td>'.$value['mb_status'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mb_login'])).'</td></tr>';
 		}
@@ -53,6 +53,18 @@
 </table>
 
 <nav class="navbar clearfix">
+	<ul class="pager visible-xs-block">
+		<li class="previous<?php echo $current_page <= 1?' disabled':''?>"><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
+		<li><span class="col-xs-5"><?php echo $current_page.' / '.$total_page?></span></li>
+		<li class="next<?php echo $current_page >= $total_page?' disabled':''?>"><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
+	</ul>
+	<ul class="pagination hidden-xs pull-right">
+		<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
+		<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
+		<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
+		<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
+		<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
+	</ul>
 	<ul class="pagination">
 	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['admin'] ?>">
@@ -60,13 +72,6 @@
 		<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
 		<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 	</form></li>
-	</ul>
-	<ul class="pagination pull-right">
-	<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
-	<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
-	<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
-	<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
-	<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
 	</ul>
 </nav>
 
@@ -153,7 +158,7 @@
 	  </div>
 	  <div class="modal-footer">
 		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="submit" class="btn btn-success min-width-150"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
+		<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
 	  </div>
 	</form>
   </div>

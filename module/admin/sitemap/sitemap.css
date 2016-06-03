@@ -35,3 +35,24 @@
 #siteMap .draggable .summary{border-left:1px solid #ccc;padding-left:10px;margin-left:10px;font-size:11px;color:#999}
 #siteMap .form-inline{cursor:move}
 #siteMapRoot1 .input-sm,#siteMapRoot2 .input-sm{max-width:180px;display:inline;margin:5px}
+@media(max-width:992px) {
+	#siteMap .panel-body {
+		padding-top: 0;
+		overflow-x:auto;
+	}
+	#siteMap .panel-body>.pull-left{
+		float: none!important;
+		position: fixed;
+	}
+	#siteMap .panel-body>.pull-left>div{
+		display: inline-block;
+		margin:0 10px 10px 0;
+	}
+	#siteMap form {
+		margin-left: 0;
+		margin-top:90px;
+	}
+	#siteMap .sitemap-item{
+		white-space: nowrap;
+	}
+}

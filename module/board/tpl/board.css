@@ -18,6 +18,11 @@
 	min-width: 150px;
 }
 
+#board_list .pager li>span {
+	color: #aaa;
+	float: none;
+}
+
 #board_view>header,
 #board_write>header,
 #board_delete>header {
@@ -256,8 +261,5 @@
 	}
 	#board_view>article>.current_content {
 		min-height: 200px;
-	}
-	#board_list .list-table .hide-xs {
-		display: none;
 	}
 }

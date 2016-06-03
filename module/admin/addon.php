@@ -13,11 +13,11 @@
 ?>
 
 <table class="table table-hover">
-<thead>
+<thead class="table-nowrap">
 	<tr>
-		<th class="col-md-9">#<?php echo getLang('addon')?></th>
-		<th><?php echo getLang('version')?></th>
-		<th><?php echo getLang('author')?></th>
+		<th>#<?php echo getLang('addon')?></th>
+		<th class="hidden-xs"><?php echo getLang('version')?></th>
+		<th class="hidden-xs hidden-sm"><?php echo getLang('author')?></th>
 		<th class="col-xs-1"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
@@ -34,8 +34,8 @@ if(is_dir($addon_dir)) {
 		@include $addon_dir.$name.'/info.php';
 
 		echo '<tr><th scope="row">'.(escapeHtml(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title'])).'</th>';
-		echo '<td>'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
-		echo '<td>'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
+		echo '<td class="hidden-xs">'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
+		echo '<td class="hidden-xs hidden-sm">'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
 		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_addon_modal" data-addon-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
 	}
 }
@@ -45,7 +45,7 @@ if(is_dir($addon_dir)) {
 </table>
 
 <table class="table table-hover">
-<thead>
+<thead class="table-nowrap">
 	<tr>
 		<th>#<?php echo getLang('removed_addon')?></th>
 		<th><?php echo getLang('empty_addon')?></th>
@@ -73,7 +73,7 @@ if(is_dir($addon_dir)) {
 	  </div>
 	  <div class="modal-footer">
 		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="submit" class="btn btn-success min-width-150"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
+		<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
 	  </div>
 	</form>
   </div>

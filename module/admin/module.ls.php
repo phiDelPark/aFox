@@ -13,12 +13,12 @@
 ?>
 
 <table class="table table-hover">
-<thead>
+<thead class="table-nowrap">
 	<tr>
 		<th>#<?php echo getLang('module')?></th>
-		<th><?php echo getLang('version')?></th>
-		<th><?php echo getLang('author')?></th>
-		<th><?php echo getLang('setup')?></th>
+		<th class="hidden-xs"><?php echo getLang('version')?></th>
+		<th class="hidden-xs hidden-sm"><?php echo getLang('author')?></th>
+		<th class="col-xs-1"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -30,10 +30,10 @@ $module_dir = _AF_MODULES_PATH_;
 foreach ($skip_arr as $key => $value) {
 	@include $module_dir.$key.'/info.php';
 
-	echo '<tr><th scope="row" class="col-md-8">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
-	echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
-	echo '<td>'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
-	echo '<td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" '.'disabled="disabled">'.getLang('none').'</button></td></tr>';
+	echo '<tr><th scope="row">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
+	echo '<td class="hidden-xs">'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
+	echo '<td class="hidden-xs hidden-sm">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
+	echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" '.'disabled="disabled">'.getLang('none').'</button></td></tr>';
 }
 
 if(is_dir($module_dir)) {
@@ -45,10 +45,10 @@ if(is_dir($module_dir)) {
 		$_MODULE_INFO = [];
 		@include $module_dir.$name.'/info.php';
 
-		echo '<tr><th scope="row" class="col-md-8">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
-		echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
-		echo '<td>'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
-		echo '<td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" onclick="parent.location.replace(\''.getUrl('mid',$name).'\')">'.getLang('setup').'</button></td></tr>';
+		echo '<tr><th scope="row">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
+		echo '<td class="hidden-xs">'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
+		echo '<td class="hidden-xs hidden-sm">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
+		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" onclick="parent.location.replace(\''.getUrl('mid',$name).'\')">'.getLang('setup').'</button></td></tr>';
 	}
 }
 ?>
@@ -57,7 +57,7 @@ if(is_dir($module_dir)) {
 </table>
 
 <table class="table table-hover">
-<thead>
+<thead class="table-nowrap">
 	<tr>
 		<th>#<?php echo getLang('removed_module')?></th>
 		<th><?php echo getLang('empty_module')?></th>

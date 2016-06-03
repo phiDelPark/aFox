@@ -46,12 +46,17 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 	</article>
 	<?php if($total_cpage > 1) { ?>
 	<nav class="text-center">
-		<ul class="pagination pagination-sm">
+		<ul class="pagination pagination-sm  hidden-xs">
 		<?php if($start_cpage>10) echo '<li><a href="'.getUrl('cpage',$start_cpage-10).'">&laquo;</a></li>'; ?>
 		<li<?php echo $current_cpage <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_cpage <= 1 ? '#" onclick="return false' : getUrl('cpage',$current_cpage-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
 		<?php for ($i=$start_cpage; $i <= $end_cpage; $i++) echo '<li'.($current_cpage == $i ? ' class="active"' : '').'><a href="'.getUrl('cpage',$i).'">'.$i.'</a></li>'; ?>
 		<li<?php echo $current_cpage >= $total_cpage ? ' class="disabled"' : ''?>><a href="<?php echo $current_cpage >= $total_cpage ? '#" onclick="return false' : getUrl('cpage',$current_cpage+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
 		<?php if(($total_cpage-$end_cpage)>0) echo '<li><a href="'.getUrl('cpage',$end_cpage+1).'">&raquo;</a></li>'; ?>
+		</ul>
+		<ul class="pager visible-xs-block">
+			<li class="previous<?php echo $current_cpage <= 1?' disabled':''?>"><a href="<?php echo  $current_cpage <= 1 ? '#" onclick="return false' : getUrl('cpage',$current_cpage-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
+			<li><span class="col-xs-5"><?php echo $current_cpage.' / '.$total_cpage?></span></li>
+			<li class="next<?php echo $current_cpage >= $total_cpage?' disabled':''?>"><a href="<?php echo $current_cpage >= $total_cpage ? '#" onclick="return false' : getUrl('cpage',$current_cpage+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
 		</ul>
 	</nav>
 	<?php } ?>

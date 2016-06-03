@@ -26,10 +26,10 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 				<th><?php echo getLang('name')?></th>
 				<th class="col-xs-1"><?php echo getLang('date')?></th>
 				<?php } else { ?>
-				<th class="col-xs-1 hide-xs"><?php echo getLang('number')?></th>
+				<th class="col-xs-1 hidden-xs"><?php echo getLang('number')?></th>
 				<th><?php echo getLang('title')?></th>
 				<th class="col-xs-3 col-md-2"><?php echo getLang('name')?></th>
-				<th class="col-xs-1 hide-xs"><?php echo getLang('view')?></th>
+				<th class="col-xs-1 hidden-xs"><?php echo getLang('view')?></th>
 				<th class="col-xs-1"><?php echo getLang('date')?></th>
 				<?php } ?>
 			</tr>
@@ -50,10 +50,10 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 				}
 			} else {
 				foreach ($_{'board'}['data'] as $key => $val) {
-					echo '<tr data-hot-track><th class="hide-xs" scope="row">'.$val['wr_srl'].'</th>';
+					echo '<tr data-hot-track><th class="hidden-xs" scope="row">'.$val['wr_srl'].'</th>';
 					echo '<td class="wr_title"><a href="'.getUrl('srl',$val['wr_srl']).'" onclick="return false">'.escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
 					echo '<td><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';
-					echo '<td class="hide-xs">'.$val['wr_hit'].'</td>';
+					echo '<td class="hidden-xs">'.$val['wr_hit'].'</td>';
 					echo '<td>'.date('Y/m/d', strtotime($val['wr_update'])).'</td></tr>';
 				}
 			}
@@ -63,12 +63,17 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 		</table>
 	</article>
 	<nav class="text-center">
-		<ul class="pagination">
+		<ul class="pagination hidden-xs">
 			<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
 			<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
 			<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
 			<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
 			<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
+		</ul>
+		<ul class="pager visible-xs-block">
+			<li class="previous<?php echo $current_page <= 1?' disabled':''?>"><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
+			<li><span class="col-xs-5"><?php echo $current_page.' / '.$total_page?></span></li>
+			<li class="next<?php echo $current_page >= $total_page?' disabled':''?>"><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
 		</ul>
 	</nav>
 	<footer class="clearfix">

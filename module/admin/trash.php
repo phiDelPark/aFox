@@ -9,14 +9,14 @@
 ?>
 
 <table class="table table-hover table-nowrap">
-<thead>
+<thead class="table-nowrap">
 	<tr>
-		<th>#</th>
-		<th class="col-md-7"><?php echo getLang('title')?></th>
+		<th class="col-xs-1">#</th>
+		<th><?php echo getLang('title')?></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
-		<th class="col-xs-1"><?php echo getLang('secret')?></th>
-		<th><?php echo getLang('author')?></th>
-		<th class="col-xs-1"><?php echo getLang('date')?></th>
+		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('secret')?></th>
+		<th class="col-xs-1"><?php echo getLang('author')?></th>
+		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('date')?></th>
 		<th class="col-xs-1"><?php echo getLang('removed_date')?></th>
 	</tr>
 </thead>
@@ -38,9 +38,9 @@
 			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"><th scope="row">'.$value['wr_srl'].'</th>';
 			echo '<td>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
-			echo '<td>'.($value['wr_secret']?'Y':'N').'</td>';
+			echo '<td class="hidden-xs hidden-sm">'.($value['wr_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
-			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td>';
+			echo '<td class="hidden-xs hidden-sm">'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_update'])).'</td></tr>';
 		}
 	}
@@ -50,21 +50,26 @@
 </table>
 
 <nav class="navbar clearfix">
-  <ul class="pagination">
+	<ul class="pager visible-xs-block">
+		<li class="previous<?php echo $current_page <= 1?' disabled':''?>"><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
+		<li><span class="col-xs-5"><?php echo $current_page.' / '.$total_page?></span></li>
+		<li class="next<?php echo $current_page >= $total_page?' disabled':''?>"><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
+	</ul>
+	<ul class="pagination hidden-xs pull-right">
+		<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
+		<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
+		<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
+		<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
+		<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
+	</ul>
+	<ul class="pagination">
 	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['admin'] ?>">
 		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 		<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
 		<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 	</form></li>
-  </ul>
-  <ul class="pagination pull-right">
-	<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
-	<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
-	<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
-	<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
-	<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
-  </ul>
+	</ul>
 </nav>
 
 <div id="trash_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -115,7 +120,7 @@
 	  <div class="modal-footer clearfix">
 		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteDocument" data-add-param="is_empty,1"><?php echo getLang('permanently_delete')?></button>
 		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="submit" class="btn btn-warning min-width-150"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i> <?php echo getLang('restore')?></button>
+		<button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i> <?php echo getLang('restore')?></button>
 	  </div>
 	</form>
   </div>
