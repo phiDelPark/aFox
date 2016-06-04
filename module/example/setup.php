@@ -5,7 +5,7 @@ if(!defined('__AFOX__')) exit();
 
 	$search = empty($_DATA['search'])?null:'%'.$_DATA['search'].'%';
 	$_list = getDBList(_AF_MODULE_TABLE_,[
-		'md_key'=>'rollcall',
+		'md_key'=>'example',
 		'OR' =>['md_id{LIKE}'=>$search, 'md_title{LIKE}'=>$search]
 	],'md_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
 ?>
@@ -13,18 +13,18 @@ if(!defined('__AFOX__')) exit();
 <div class="row">
 	<div class="col-lg-12">
 		<h1 class="page-header">
-			출석부 <small><?php echo getLang('setup')?></small>
+			예제 <small><?php echo getLang('setup')?></small>
 		</h1>
 		<ol class="breadcrumb">
 			<li class="active">
-				<i class="glyphicon glyphicon-th-large" aria-hidden="true"></i> 출석부 모듈입니다.
+				<i class="glyphicon glyphicon-th-large" aria-hidden="true"></i> 예제 모듈입니다.
 			</li>
 		</ol>
 	</div>
 </div>
 
 <p class="navbar">
-  <button type="button" class="btn btn-primary min-width-200" data-toggle="modal" data-target=".bs-rollcall-modal-lg"><?php echo getLang('new_rollcall')?></button>
+  <button type="button" class="btn btn-primary min-width-200" data-toggle="modal" data-target=".bs-example-modal-lg">예제 입니다.</button>
 </p>
 
 <table class="table table-hover table-nowrap">
@@ -48,7 +48,7 @@ if(!defined('__AFOX__')) exit();
 		$end_page = $_list['end_page'];
 
 		foreach ($_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="rollcall.getRollcall" data-ajax-param="md_id,'.$value['md_id'].'" data-modal-target="#rollcall_modal"><th scope="row">'.$value['md_id'].'</th>';
+			echo '<tr class="afox-list-item" data-exec-ajax="example.getExample" data-ajax-param="md_id,'.$value['md_id'].'" data-modal-target="#example_modal"><th scope="row">'.$value['md_id'].'</th>';
 		}
 	}
 ?>
@@ -74,15 +74,15 @@ if(!defined('__AFOX__')) exit();
 	</ul>
 </nav>
 
-<div id="rollcall_modal" class="modal fade bs-rollcall-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div id="example_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.updateRollcall">
+	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.updateExample">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="rp_srl" value="" />
 
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('rollcall')?></h4>
+		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('example')?></h4>
 	  </div>
 	  <div class="modal-body">
 			<div class="form-group clearfix" style="margin-bottom:0">
@@ -175,8 +175,8 @@ if(!defined('__AFOX__')) exit();
   </div>
 </div>
 
-<script src="<?php echo _AF_URL_ . 'module/rollcall/rollcall.js' ?>"></script>
+<script src="<?php echo _AF_URL_ . 'module/example/example.js' ?>"></script>
 
 <?php
 /* End of file info.php */
-/* Location: ./module/rollcall/info.php */
+/* Location: ./module/example/info.php */

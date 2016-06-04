@@ -8,16 +8,12 @@ function returnUrlMerge($data, $result) {
 	if(!isset($result)) $result = [];
 	$result['act'] = $data['act'];
 	$result['disp'] = $data['disp'];
-
-	if(empty($result['error'])) {
-		$result['redirect_url'] = isset($data['success_return_url']) ? urldecode($data['success_return_url']) : '';
-	} else {
-		$result['redirect_url'] = isset($data['error_return_url']) ? urldecode($data['error_return_url']) : '';
-	}
+	$url_key = empty($result['error'])?'success_return_url':'error_return_url';
+	$result['redirect_url'] = isset($data[$url_key])?urldecode($data[$url_key]):'';
 	return $result;
 }
 
-function procRollcallDefault($data) {
+function procExampleDefault($data) {
 	$include_file = dirname(__FILE__) . '/proc/'.strtolower($data['act']).'.php';
 
 	if(file_exists($include_file)) {
@@ -28,7 +24,7 @@ function procRollcallDefault($data) {
 	}
 }
 
-function dispRollcallDefault($data) {
+function dispExampleDefault($data) {
 
 	if(!empty($data['id'])) {
 		require_once dirname(__FILE__) . '/disp/viewpage.php';
@@ -39,4 +35,4 @@ function dispRollcallDefault($data) {
 }
 
 /* End of file index.php */
-/* Location: ./module/rollcall/index.php */
+/* Location: ./module/example/index.php */
