@@ -185,7 +185,7 @@ function proc($data) {
 					throw new Exception(getLang('warn_permit', [$file_ext])."\n", 303);
 				}
 
-				$filename = md5($filename.time()) . '.' . array_pop(explode('.', $filename));
+				$filename = md5($filename.time().$i) . '.' . array_pop(explode('.', $filename));
 				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/' . $wr_srl . '/' . $filename;
 
 				$ret = moveUpFile($file, $file_dests[$i], $file_max_size);
