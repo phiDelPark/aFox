@@ -108,12 +108,14 @@ function proc($data) {
 				$filetype = strtolower(array_shift(explode('/', $file['type'])));
 				$filetype = empty($file_types[$filetype]) ? 'binary' : $filetype;
 				$filename = $file['name'];
+				$fileext = array_pop(explode('.', $filename));
+				if(count($fileext)===1) $fileext = 'none';
 
 				if($chk_ext && !preg_match('/\.('.($chk_ext).')$/i', $filename)) {
 					throw new Exception(getLang('warn_permit', [$chk_ext])."\n", 303);
 				}
 
-				$filename = md5($filename.time().$i) . '.' . array_pop(explode('.', $filename));
+				$filename = md5($filename.time().$i) . '.' . $fileext;
 				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/1/' . $filename;
 
 				$ret = moveUpFile($file, $file_dests[$i], 0);

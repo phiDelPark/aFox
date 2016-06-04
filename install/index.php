@@ -24,10 +24,11 @@ if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 
 if(empty($_POST['db_name'])) {
 
-	echo '<form action="index.php" method="post" autocomplete="off">';
+	echo '에이폭스 CMS 설치<br><br><form action="index.php" method="post" autocomplete="off">';
 	echo '<span style="display:inline-block;width:150px">DB 호스트 : </span><input type="text" name="db_host" value="localhost"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 포트 : </span><input type="text" name="db_port" value="3306"><br>';
-	echo '<span style="display:inline-block;width:150px">DB 이름 : </span><input type="text" name="db_name" value=""><br><br>';
+	echo '<span style="display:inline-block;width:150px">DB 이름 : </span><input type="text" name="db_name" value=""><br>';
+	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="innodb">InnoDB</option></select><br><br>';
 	echo '<span style="display:inline-block;width:150px">DB 아이디 : </span><input type="text" name="db_user" value=""><br>';
 	echo '<span style="display:inline-block;width:150px">DB 비밀번호 : </span><input type="text" name="db_pass" value=""><br><br>';
 	echo '<button type="submit">설치 시작</button></form>';
@@ -60,10 +61,9 @@ $db_pass = $_POST['db_pass'];
 $charset = 'utf8';
 $time_zone = 'Asia/Seoul';
 
-require_once dirname(__FILE__) . '/../lib/db/mysql.php';
 require_once dirname(__FILE__) . '/../lib/pbkdf2/PasswordStorage.php';
 
-DB::init(array(
+$o = array(
 'host'=>$db_host,
 'port'=>$db_port,
 'name'=>$db_name,
@@ -71,9 +71,27 @@ DB::init(array(
 'pass'=>$db_pass,
 'charset'=>$charset,
 'time_zone'=>$time_zone
-));
+);
 
-DB::transaction();
+mysqli_report(MYSQLI_REPORT_OFF);
+
+$link = new mysqli(isset($o['host'])   ? $o['host']   : 'localhost',
+					 isset($o['user'])   ? $o['user']   : 'root',
+					 isset($o['pass'])   ? $o['pass']   : '',
+					 isset($o['name'])   ? $o['name'] : 'default',
+					 isset($o['port'])   ? $o['port']   : 3306,
+					 isset($o['sock'])   ? $o['sock']   : FALSE );
+if( mysqli_connect_errno() ) {
+	die(mysqli_connect_error() . ' (' . mysqli_connect_errno() . ')');
+}
+mysqli_query($link, "SET NAMES ".(isset($o['charset']) ? $o['charset'] : "utf8"));
+mysqli_query($link, "SET time_zone = '".(isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul")."'");
+
+mysqli_query($link, "SET GLOBAL innodb_file_format=Barracuda");
+mysqli_query($link, "SET GLOBAL innodb_file_per_table=ON");
+
+mysqli_autocommit($link, FALSE);
+mysqli_begin_transaction($link, MYSQLI_TRANS_START_READ_WRITE);
 
 try {
 $_err_keys = 'afox_config';
@@ -87,9 +105,11 @@ $create_sql = '
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
-	   protect_file   CHAR(1)      NOT NULL DEFAULT 0) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	   protect_file   CHAR(1)      NOT NULL DEFAULT 0) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+
 
 $_err_keys = 'afox_themes';
 $create_sql = '
@@ -97,9 +117,10 @@ $create_sql = '
 	   th_id          VARCHAR(255) NOT NULL,
 	   th_extra          TEXT         NOT NULL DEFAULT \'\',
 
-	  UNIQUE KEY ID_UK (th_id)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  UNIQUE KEY ID_UK (th_id)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_menus';
 $create_sql = '
@@ -115,9 +136,10 @@ $create_sql = '
 	   mu_new_win      CHAR(1)      NOT NULL DEFAULT 0,
 
 	  INDEX SRL_IX (mu_srl),
-	  INDEX TYPE_IX (mu_type)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX TYPE_IX (mu_type)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_members';
 $create_sql = '
@@ -138,9 +160,10 @@ $create_sql = '
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (mb_srl),
 	  UNIQUE KEY ID_UK (mb_id),
-	  INDEX RANK_IX (mb_rank)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX RANK_IX (mb_rank)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_addons';
 $create_sql = '
@@ -152,9 +175,10 @@ $create_sql = '
 
 	  UNIQUE KEY ID_UK (ao_id),
 	  INDEX PC_IX (ao_use_pc),
-	  INDEX MOBILE_IX (ao_use_mobile)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX MOBILE_IX (ao_use_mobile)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_modules';
 $create_sql = '
@@ -187,9 +211,10 @@ $create_sql = '
 	   md_extra           TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (md_id),
-	  INDEX KEY_IX (md_key)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX KEY_IX (md_key)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_documents';
 $create_sql = '
@@ -225,9 +250,10 @@ $create_sql = '
 	  INDEX CATEGORY_RDIX (md_id, wr_category, wr_regdate),
 	  INDEX CATEGORY_UDIX (md_id, wr_category, wr_update),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (mb_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX IP_IX (mb_ipaddress)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_comments';
 $create_sql = '
@@ -255,9 +281,10 @@ $create_sql = '
 	  INDEX SRL_IX (wr_srl),
 	  INDEX PARENT_IX (rp_parent),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (mb_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX IP_IX (mb_ipaddress)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_pages';
 $create_sql = '
@@ -271,9 +298,10 @@ $create_sql = '
 	   pg_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   pg_extra           TEXT         NOT NULL DEFAULT \'\',
 
-	  UNIQUE KEY ID_UK (md_id)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  UNIQUE KEY ID_UK (md_id)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_files';
 $create_sql = '
@@ -294,9 +322,10 @@ $create_sql = '
 	  CONSTRAINT SRL_PK PRIMARY KEY (mf_srl),
 	  INDEX TARGET_IX (md_id, mf_target),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (mb_ipaddress)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX IP_IX (mb_ipaddress)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_histories';
 $create_sql = '
@@ -309,9 +338,10 @@ $create_sql = '
 	  INDEX MEMBER_IX (mb_srl),
 	  INDEX IP_IX (mb_ipaddress),
 	  INDEX ACTION_IX (hs_action),
-	  INDEX REGDATE_IX (hs_regdate)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX REGDATE_IX (hs_regdate)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_notes';
 $create_sql = '
@@ -326,9 +356,10 @@ $create_sql = '
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (nt_srl),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX SENDER_IX (nt_sender)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX SENDER_IX (nt_sender)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'afox_visitors';
 $create_sql = '
@@ -339,66 +370,77 @@ $create_sql = '
 	   vs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 
 	  INDEX AGENT_IX (vs_agent),
-	  INDEX REGDATE_IX (vs_regdate)) ENGINE=INNODB DEFAULT CHARSET='.$charset.';';
+	  INDEX REGDATE_IX (vs_regdate)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
 
-DB::query($create_sql);
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'insert_members';
 $sql = 'SELECT mb_id FROM afox_members WHERE mb_id = \'admin\'';
-$mb = DB::get($sql);
-if (!$mb['mb_id']) {
+$r = mysqli_query($link, $sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+$row = mysqli_fetch_assoc($r);
+if (!$row['mb_id']) {
 	$sql = 'INSERT INTO afox_members (`mb_rank`, `mb_id`, `mb_password`, `mb_nick`, `mb_regdate`) VALUES ("%s", "%s", "%s", "%s", NOW())';
-	DB::query(sprintf($sql, 's', 'admin', PasswordStorage::create_hash('0000'), '관리자'));
+	mysqli_query($link, sprintf($sql, 's', 'admin', PasswordStorage::create_hash('0000'), '관리자'));
 }
 
 $_err_keys = 'insert_themes';
 $sql = 'SELECT th_id FROM afox_themes WHERE th_id = \'default\'';
-$cf = DB::get($sql);
-if (!$cf['th_id']) {
+$r = mysqli_query($link, $sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+$row = mysqli_fetch_assoc($r);
+if (!$row['th_id']) {
 	$tmp = [];
 	$tmp['carousel_item_1'] = '<h1>헤드라인 예제</h1><p>이것은 헤드라인 예제입니다.<br>이 헤드라인은 (테마 설정)에서 사용자가 원하는 대로 작성하시면 됩니다.<br>에이폭스는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.</p><a class="btn btn-primary" href="#">오늘 가입</a>';
 	$tmp['carousel_item_2'] = '<h1>두번째 헤드라인 예제</h1><p>에이폭스는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.<br>afox에 의해 디자인되고 만들어 졌으며 코드 기여자의 도움과 코어 팀에 의해 유지보수 됩니다.</p><a class="btn btn-primary" href="#">자세히 알아보기</a>';
 	$tmp['carousel_item_3'] = '<h1>마지막으로 하나 더</h1><p>에이폭스는 각각의 기능과 디자인이 구조적으로 연결되는 모듈형 구조로 개발 및 유지보수를 쉽게 하도록 도와주며 관리자는 손쉽게 설정과 디자인을 변경할 수 있으며 여러분만의 개성을 가진 웹 사이트를 만들 수 있습니다.</p><a class="btn btn-primary" href="#">갤러리 검색</a>';
 	$tmp['footer_html'] = '에이폭스는 <a href="http://afox.kr" target="_blank">@afox</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.';
-	$tmp = DB::quotes(serialize($tmp));
+	$tmp = "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],serialize($tmp))."'";
 	$sql = 'INSERT INTO afox_themes (`th_id`, `th_extra`) VALUES ("default", '.$tmp.')';
-	DB::query($sql);
+	mysqli_query($link, $sql);
 }
 
 $_err_keys = 'insert_config';
 $sql = 'SELECT theme FROM afox_config WHERE 1';
-$cf = DB::get($sql);
-if (!$cf['theme']) {
+$r = mysqli_query($link, $sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+$row = mysqli_fetch_assoc($r);
+if (!$row['theme']) {
 	$sql = 'INSERT INTO afox_config (`theme`, `start`, `title`, `use_signup`) VALUES ("default", "welcome", "에이폭스", "1")';
-	DB::query($sql);
+	mysqli_query($link, $sql);
 }
 
 $_err_keys = 'insert_modules';
 $sql = 'SELECT md_id FROM afox_modules WHERE md_id = \'welcome\'';
-$pg = DB::get($sql);
-if (!$pg['md_id']) {
+$r = mysqli_query($link, $sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+$row = mysqli_fetch_assoc($r);
+if (!$row['md_id']) {
 	$sql = 'INSERT INTO afox_modules (`md_id`, `md_key`, `md_title`, `md_regdate`) VALUES ("%s", "%s", "%s", NOW())';
-	DB::query(sprintf($sql, 'welcome', 'page', ''));
+	mysqli_query($link, sprintf($sql, 'welcome', 'page', ''));
 }
 
 $_err_keys = 'insert_pages';
 $sql = 'SELECT md_id FROM afox_pages WHERE md_id = \'welcome\'';
-$pg = DB::get($sql);
-if (!$pg['md_id']) {
+$r = mysqli_query($link, $sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+$row = mysqli_fetch_assoc($r);
+if (!$row['md_id']) {
 	$doc_data = '';
 	$fp = fopen(dirname(__FILE__) . '/../README.md',"r");
 	while( !feof($fp) ) $doc_data .= fgets($fp);
 	fclose($fp);
 	$sql = 'INSERT INTO afox_pages (`md_id`, `pg_type`, `pg_content`, `pg_update`, `pg_regdate`) VALUES ("%s", "1", %s, NOW(), NOW())';
-	DB::query(sprintf($sql, 'welcome', DB::quotes($doc_data)));
+	mysqli_query($link, sprintf($sql, 'welcome', "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],$doc_data)."'"));
 }
 
 } catch (Exception $ex) {
-	DB::rollback();
+	mysqli_rollback($link);
 	exit('{"STATUS":' . $ex->getCode() . ',"MESSAGE":"'.$_err_keys.': ' . $ex->getMessage() .'"}');
 }
 
-DB::commit();
+mysqli_commit($link);
 
 $file = $datadir.'config/prohibit_id.php';
 $f = @fopen($file, 'w');
@@ -447,5 +489,5 @@ echo "주의 : 관리자 로그인 후에 관리자 페이지에 접속 후 관�
 
 <?php
 
-/* End of file __install.php */
-/* Location: ./__install.php */
+/* End of file index.php */
+/* Location: ./install/index.php */

@@ -43,6 +43,11 @@ define('_AF_FILE_PERMIT_', 0644);
 
 (@include_once(_AF_CONFIG_DATA_ . '_db_config.php')) OR die("Please install afox");
 
+if(file_exists(_AF_PATH_ . 'install/update.php')) {
+	require_once _AF_PATH_ . 'install/update.php';
+	exit();
+}
+
 define('_AF_USE_SSL_', $_DBINFO['use_ssl']);
 define('_AF_HTTP_PORT_', empty($_DBINFO['http_port'])?80:(int)$_DBINFO['http_port']);
 define('_AF_HTTPS_PORT_', empty($_DBINFO['https_port'])?443:(int)$_DBINFO['https_port']);

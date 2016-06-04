@@ -37,7 +37,7 @@ function proc($data) {
 
 	$unlink_files = [];
 	$file_dests = [];
-	$file_ext = $module['md_file_ext'] == '*' ? '' : $module['md_file_ext'];
+	$file_exts = $module['md_file_ext'] == '*' ? '' : $module['md_file_ext'];
 	$file_max = (int) empty($module['md_file_max']) ? 0 : $module['md_file_max'];
 	$file_max_size = (int) $module['md_file_size'];
 	$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
@@ -47,7 +47,7 @@ function proc($data) {
 
 	// 관리자는 제한 없음
 	if($is_admin) {
-		$file_ext = '';
+		$file_exts = '';
 		$file_max = 99999999;
 		$file_max_size = 0;
 	}
@@ -180,12 +180,14 @@ function proc($data) {
 				$filetype = strtolower(array_shift(explode('/', $file['type'])));
 				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 				$filename = $file['name'];
+				$fileext = array_pop(explode('.', $filename));
+				if(count($fileext)===1) $fileext = 'none';
 
-				if($file_ext && !preg_match('/\.('.($file_ext).')$/i', $filename)) {
-					throw new Exception(getLang('warn_permit', [$file_ext])."\n", 303);
+				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
+					throw new Exception(getLang('warn_permit', [$file_exts])."\n", 303);
 				}
 
-				$filename = md5($filename.time().$i) . '.' . array_pop(explode('.', $filename));
+				$filename = md5($filename.time().$i) . '.' . $fileext;
 				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/' . $wr_srl . '/' . $filename;
 
 				$ret = moveUpFile($file, $file_dests[$i], $file_max_size);
