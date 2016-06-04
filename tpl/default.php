@@ -46,8 +46,8 @@ var waiting_message = "<?php echo getLang('msg_call_server') ?>";
 <?php  include _AF_THEME_PATH_ . 'index.php'; ?>
 <?php
 @include _AF_THEME_PATH_ . '_tail.php';
-foreach ($_ADDELEMENTS['JS'] as $key=>$val) {echo '<script src="'.$key.'"></script>';}
 foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {echo '<link href="'.$key.'" rel="stylesheet">';}
+foreach ($_ADDELEMENTS['JS'] as $key=>$val) {echo '<script src="'.$key.'"></script>';}
 ?>
 </body>
 </html>

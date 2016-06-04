@@ -34,7 +34,7 @@
 			echo '<tr><th scope="row">'.$value['mb_ipaddress'].'</th>';
 			echo '<td style="white-space:normal">'.escapeHtml($value['vs_agent']).'</td>';
 			echo '<td style="white-space:normal">'.escapeHtml($value['vs_referer']).'</td>';
-			echo '<td>'.date('y/m/d h:m', strtotime($value['vs_regdate'])).'</td></tr>';
+			echo '<td>'.date('y/m/d h:i', strtotime($value['vs_regdate'])).'</td></tr>';
 		}
 	}
 ?>
