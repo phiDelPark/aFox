@@ -210,10 +210,17 @@ class DB {
 				if(count($tmp) > 0) $r[] = '('.implode(' '.$key.' ', $tmp).')';
 			} else {
 				$operation = '=';
-				if($useKeys && preg_match("/(.+){(=|<>|<=|>=|<|>|LIKE|IS)}$/", $key, $matches)) {
+				if($useKeys && preg_match("/(.+){(=|<>|<=|>=|<|>|IN|LIKE|IS)}$/", $key, $matches)) {
 					$key = $matches[1];
 					$operation = $matches[2];
 					if($operation == 'IS') { $key = '('.$key.')'; } // value = ('null' or 'not null')
+					else if($operation == 'IN') {
+						$key = '('.$key.')';
+						$val = explode(',', $val);
+						if(count($val)===0 || empty($val[0])) continue;
+						foreach ($val as $k=>$v) $val[$k] = self::quotes($v);
+						$val = '('.implode(',', $val).')';
+					}
 				}
 				if($q_skip = preg_match("/^\((.+?)\)$/", $key, $matches)) {
 					$key = $matches[1];
