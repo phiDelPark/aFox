@@ -7,6 +7,7 @@ function proc($data) {
 		return set_error(getLang('msg_invalid_request'),303);
 	}
 
+	// mb_id가 넘어오면 정상적인지 체크
 	if(!isset($data['mb_id'])) {
 		if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['mb_id'])) {
 			return set_error(getLang('msg_invalid_request'),303);
@@ -18,13 +19,14 @@ function proc($data) {
 		return set_error($out['message'],$out['error']);
 	}
 
-	$out['mb_icon'] = '';
-	$_icon = $out['mb_srl'].'/profile_image.png';
-	if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
-		$out['mb_icon'] = _AF_URL_ . 'data/member/' . $_icon;
-	}
-
 	if($out['mb_id']) {
+
+		$out['mb_icon'] = '';
+		$_icon = $out['mb_srl'].'/profile_image.png';
+		if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
+			$out['mb_icon'] = _AF_URL_ . 'data/member/' . $_icon;
+		}
+
 		return $out;
 	} else {
 		return set_error(getLang('msg_not_founded'),801);

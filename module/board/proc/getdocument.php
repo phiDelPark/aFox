@@ -34,13 +34,15 @@ function proc($data) {
 	// 비밀번호는 암호화 되있지만 그래도 노출 안되게 제거
 	unset($doc['mb_password']);
 
+	// JSON 사용시 파일 목록이 필요할때를 위해 만든옵션
 	if(!empty($data['with_file_list'])) {
 		$fd = 'mf_srl,mf_name,mf_type,mf_download,mf_description,mf_size,mb_srl,mb_ipaddress';
 		$sql = 'SELECT '.$fd.' FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 AND mf_target=:2 ORDER BY mf_type';
 		$doc['files'] = DB::getList($sql, [$doc['md_id'],$doc['wr_srl']]);
 	}
 
-	return empty($data['with_module_config']) ?  $doc : array_merge($doc, getModule($doc['md_id']));
+	// JSON 사용시 모듈설정이 필요할때를 위해 만든옵션
+	return empty($data['with_module_config']) ? $doc : array_merge($doc, getModule($doc['md_id']));
 }
 
 /* End of file getdocument.php */

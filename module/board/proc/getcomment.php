@@ -35,10 +35,11 @@ function proc($data) {
 		}
 	}
 
-	// JSON은 비밀번호는 암호화 되있지만 그래도 노출 안되게 제거
+	// 비밀번호는 암호화 되있지만 그래도 노출 안되게 제거
 	unset($cmt['mb_password']);
 
-	return empty($data['with_module_config']) ?  $cmt : array_merge($cmt, getModule($doc['md_id']));
+	// JSON 사용시 모듈설정이 필요할때를 위해 만든옵션
+	return empty($data['with_module_config']) ? $cmt : array_merge($cmt, getModule($doc['md_id']));
 }
 
 /* End of file getcomment.php */

@@ -132,7 +132,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 				<h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i><?php echo getLang('new_document')?></h3>
 			</div>
 			<div class="panel-body">
-				<div class="list-group">
+				<div class="list-group" style="margin:0">
 					<?php
 						$_list = getDBList(_AF_DOCUMENT_TABLE_, ['md_id{<>}'=>'_AFOXtRASH_'], 'wr_regdate desc', 1, 10);
 						if(empty($_list['error'])){
@@ -151,7 +151,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 				<h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i><?php echo getLang('new_comment')?></h3>
 			</div>
 			<div class="panel-body">
-				<div class="list-group">
+				<div class="list-group" style="margin:0">
 					<?php
 						$_list = getDBList(_AF_COMMENT_TABLE_, [], 'rp_regdate desc', 1, 10);
 						if(empty($_list['error'])){

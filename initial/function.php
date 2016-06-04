@@ -150,7 +150,6 @@ if(!defined('__AFOX__')) exit();
 		if(empty($key)) return '';
 		$lstr = strtolower($key);
 		$result = isset($_LANG[$lstr]) ? $_LANG[$lstr] : $key;
-		$escape = $args1;
 		if(is_array($args1)) {
 			$escape = $args2;
 			$args = [$result];
@@ -159,8 +158,10 @@ if(!defined('__AFOX__')) exit();
 				$args[] = isset($_LANG[$lstr]) ? $_LANG[$lstr] : $v;
 			}
 			$result = call_user_func_array('sprintf', $args);
+		} else {
+			$escape = $args1;
 		}
-		return $escape ? escapeHtml($result) : $result;
+		return $escape ? nl2br(escapeHtml($result)) : $result;
 	}
 
 	function getDBItem($table, $wheres = [], $field = '*') {

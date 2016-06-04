@@ -264,7 +264,8 @@ form .af-editor-area > textarea + iframe {
 	}
 }
 @media(max-width:992px) {
-	#ADM_DEFAULT_MODULE {
+	#ADM_DEFAULT_MODULE,
+	#ADM_CUSTOM_MODULE {
 		overflow-x: auto;
 	}
 }
