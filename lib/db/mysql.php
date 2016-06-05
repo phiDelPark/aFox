@@ -38,7 +38,7 @@ class DB {
 			$query = preg_replace_callback(
 						'/:(\d+)/',
 						function ($m) use ($params) {
-						  return self::quotes($params[$m[1] - 1]);
+						  return self::escape($params[$m[1] - 1]);
 						}, $query
 					);
 		}
@@ -83,7 +83,7 @@ class DB {
 	}
 
 	public static function select($table, $wheres) {
-		$wheres = implode(' AND ', self::quotesArray($wheres, TRUE));
+		$wheres = implode(' AND ', self::escapeArray($wheres, TRUE));
 		try {
 			return self::query("SELECT * FROM $table WHERE $wheres");
 		} catch (Exception $ex) {
@@ -92,7 +92,7 @@ class DB {
 	}
 
 	public static function insert($table, $inserts) {
-		$sets = implode( ',', self::quotesArray( $inserts, TRUE ) );
+		$sets = implode( ',', self::escapeArray( $inserts, TRUE ) );
 		try {
 			return self::query("INSERT INTO $table SET $sets");
 		} catch (Exception $ex) {
@@ -101,8 +101,8 @@ class DB {
 	}
 
 	public static function update( $table, $updates, $wheres) {
-		$sets = implode(',', self::quotesArray( $updates, TRUE ));
-		$wheres = implode(' AND ', self::quotesArray( $wheres, TRUE ));
+		$sets = implode(',', self::escapeArray( $updates, TRUE ));
+		$wheres = implode(' AND ', self::escapeArray( $wheres, TRUE ));
 		try {
 			return self::query("UPDATE $table SET $sets WHERE $wheres");
 		} catch (Exception $ex) {
@@ -111,7 +111,7 @@ class DB {
 	}
 
 	public static function delete($table, $wheres) {
-		$wheres = implode(' AND ', self::quotesArray($wheres, TRUE));
+		$wheres = implode(' AND ', self::escapeArray($wheres, TRUE));
 		try {
 			return self::query("DELETE FROM $table WHERE $wheres");
 		} catch (Exception $ex) {
@@ -120,7 +120,7 @@ class DB {
 	}
 
 	public static function count($table, $wheres) {
-		$wheres = implode(' AND ', self::quotesArray($wheres, TRUE));
+		$wheres = implode(' AND ', self::escapeArray($wheres, TRUE));
 		try {
 			$r = self::query("SELECT COUNT(*) as cnt FROM $table WHERE $wheres");
 			if(!is_object($r)) return -1;
@@ -192,7 +192,7 @@ class DB {
 		return mysqli_get_client_version(self::$link);
 	}
 
-	public static function quotes($s) {
+	public static function escape($s) {
 		if($s === TRUE || $s === FALSE) { return (int)$s; }
 		else if(is_int($s) || is_float($s)) { return $s; }
 		else { return "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],$s)."'"; }
@@ -201,12 +201,12 @@ class DB {
 		//return "'".mysqli_real_escape_string(self::$link, $s)."'";
 	}
 
-	public static function quotesArray(&$fields, $useKeys = FALSE) {
+	public static function escapeArray(&$fields, $useKeys = FALSE) {
 		$r = [];
 		foreach($fields as $key => &$val) {
 			if(is_null($val)) continue;
 			if(is_array($val) && ($key == 'AND' || $key == 'OR')) {
-				$tmp = self::quotesArray($val, $useKeys);
+				$tmp = self::escapeArray($val, $useKeys);
 				if(count($tmp) > 0) $r[] = '('.implode(' '.$key.' ', $tmp).')';
 			} else {
 				$operation = '=';
@@ -218,17 +218,26 @@ class DB {
 						$key = '('.$key.')';
 						$val = explode(',', $val);
 						if(count($val)===0 || empty($val[0])) continue;
-						foreach ($val as $k=>$v) $val[$k] = self::quotes($v);
+						foreach ($val as $k=>$v) $val[$k] = self::escape($v);
 						$val = '('.implode(',', $val).')';
 					}
 				}
 				if($q_skip = preg_match("/^\((.+?)\)$/", $key, $matches)) {
 					$key = $matches[1];
 				}
-				$r[] = ($useKeys ? "`$key` $operation ":'') . ($q_skip ? $val : self::quotes($val));
+				$r[] = ($useKeys ? "`$key` $operation ":'') . ($q_skip ? $val : self::escape($val));
 			}
 		}
 		return $r;
+	}
+
+	// deprecated
+	public static function quotes($s) {
+		return self::escape($s);
+	}
+	// deprecated
+	public static function quotesArray(&$fields, $useKeys = FALSE) {
+		return self::escapeArray($fields, $useKeys);
 	}
 }
 

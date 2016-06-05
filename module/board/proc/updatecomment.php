@@ -43,7 +43,7 @@ function proc($data) {
 					'rp_depth{LIKE}'=>empty($cmt['rp_depth'])?null:$cmt['rp_depth'].'%'
 				];
 
-				$wheres = implode(' AND ', DB::quotesArray($_wheres, TRUE)).' AND SUBSTRING(`rp_depth`,'.$_len.',1)<>\'\'';
+				$wheres = implode(' AND ', DB::escapeArray($_wheres, TRUE)).' AND SUBSTRING(`rp_depth`,'.$_len.',1)<>\'\'';
 				$_out1 = DB::get('SELECT MAX(SUBSTRING(rp_depth,'.$_len.',1)) as reply FROM '._AF_COMMENT_TABLE_.' WHERE '.$wheres);
 
 				if (!$_out1['reply']) {

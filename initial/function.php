@@ -165,7 +165,7 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getDBItem($table, $wheres = [], $field = '*') {
-		$wheres = count($wheres) > 0 ? implode(' AND ', DB::quotesArray($wheres, TRUE)) : '1';
+		$wheres = count($wheres) > 0 ? implode(' AND ', DB::escapeArray($wheres, TRUE)) : '1';
 		if(empty($wheres)) $wheres = '1';
 		$r = DB::get("SELECT {$field} FROM $table WHERE {$wheres}");
 		return ($ex=DB::error()) ? set_error($ex->getMessage(), $ex->getCode()) : $r;
@@ -180,7 +180,7 @@ if(!defined('__AFOX__')) exit();
 		}
 
 		$order = empty($order) ? '' : ' ORDER BY '.$order;
-		$wheres = count($wheres) > 0 ? implode(' AND ', DB::quotesArray($wheres, TRUE)) : '1';
+		$wheres = count($wheres) > 0 ? implode(' AND ', DB::escapeArray($wheres, TRUE)) : '1';
 		if(empty($wheres)) $wheres = '1';
 
 		try {

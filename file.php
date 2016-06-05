@@ -10,7 +10,7 @@ function setHttpError($err, $back = false) {
 	}
 	exit;
 }
-if($_CFG['protect_file']=='1' && !preg_match('/https?:\/\/[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
+if($_CFG['protect_file']=='1' && !preg_match('/https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
 static $_file = [];
 $srl = (int)$_GET['file'];
 if(!isset($_file[$srl])) {
