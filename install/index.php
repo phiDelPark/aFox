@@ -28,7 +28,7 @@ if(empty($_POST['db_name'])) {
 	echo '<span style="display:inline-block;width:150px">DB 호스트 : </span><input type="text" name="db_host" value="localhost"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 포트 : </span><input type="text" name="db_port" value="3306"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 이름 : </span><input type="text" name="db_name" value=""><br>';
-	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="innodb">InnoDB</option></select><br><br>';
+	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="myisam">MyISAM</option><option value="innodb">InnoDB</option></select><br><br>';
 	echo '<span style="display:inline-block;width:150px">DB 아이디 : </span><input type="text" name="db_user" value=""><br>';
 	echo '<span style="display:inline-block;width:150px">DB 비밀번호 : </span><input type="text" name="db_pass" value=""><br><br>';
 	echo '<button type="submit">설치 시작</button></form>';
@@ -61,6 +61,8 @@ $db_pass = $_POST['db_pass'];
 $charset = 'utf8';
 $time_zone = 'Asia/Seoul';
 
+$is_innodb = $_POST['db_type'] == 'innodb';
+
 require_once dirname(__FILE__) . '/../lib/pbkdf2/PasswordStorage.php';
 
 $o = array(
@@ -87,8 +89,13 @@ if( mysqli_connect_errno() ) {
 mysqli_query($link, "SET NAMES ".(isset($o['charset']) ? $o['charset'] : "utf8"));
 mysqli_query($link, "SET time_zone = '".(isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul")."'");
 
-mysqli_query($link, "SET GLOBAL innodb_file_format=Barracuda");
-mysqli_query($link, "SET GLOBAL innodb_file_per_table=ON");
+if($is_innodb){
+	@mysqli_query($link, "SET GLOBAL innodb_file_format=Barracuda");
+	@mysqli_query($link, "SET GLOBAL innodb_file_per_table=ON");
+	$_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+} else {
+	$_engine = ' ENGINE=MyISAM DEFAULT CHARSET='.$charset.';';
+}
 
 mysqli_autocommit($link, FALSE);
 mysqli_begin_transaction($link, MYSQLI_TRANS_START_READ_WRITE);
@@ -105,7 +112,7 @@ $create_sql = '
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
-	   protect_file   CHAR(1)      NOT NULL DEFAULT 0) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	   protect_file   CHAR(1)      NOT NULL DEFAULT 0)'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -117,7 +124,7 @@ $create_sql = '
 	   th_id          VARCHAR(255) NOT NULL,
 	   th_extra          TEXT         NOT NULL DEFAULT \'\',
 
-	  UNIQUE KEY ID_UK (th_id)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  UNIQUE KEY ID_UK (th_id))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -136,7 +143,7 @@ $create_sql = '
 	   mu_new_win      CHAR(1)      NOT NULL DEFAULT 0,
 
 	  INDEX SRL_IX (mu_srl),
-	  INDEX TYPE_IX (mu_type)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX TYPE_IX (mu_type))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -160,7 +167,7 @@ $create_sql = '
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (mb_srl),
 	  UNIQUE KEY ID_UK (mb_id),
-	  INDEX RANK_IX (mb_rank)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX RANK_IX (mb_rank))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -175,7 +182,7 @@ $create_sql = '
 
 	  UNIQUE KEY ID_UK (ao_id),
 	  INDEX PC_IX (ao_use_pc),
-	  INDEX MOBILE_IX (ao_use_mobile)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX MOBILE_IX (ao_use_mobile))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -211,7 +218,7 @@ $create_sql = '
 	   md_extra           TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (md_id),
-	  INDEX KEY_IX (md_key)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX KEY_IX (md_key))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -250,7 +257,7 @@ $create_sql = '
 	  INDEX CATEGORY_RDIX (md_id, wr_category, wr_regdate),
 	  INDEX CATEGORY_UDIX (md_id, wr_category, wr_update),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (mb_ipaddress)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX IP_IX (mb_ipaddress))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -281,7 +288,7 @@ $create_sql = '
 	  INDEX SRL_IX (wr_srl),
 	  INDEX PARENT_IX (rp_parent),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (mb_ipaddress)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX IP_IX (mb_ipaddress))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -298,7 +305,7 @@ $create_sql = '
 	   pg_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   pg_extra           TEXT         NOT NULL DEFAULT \'\',
 
-	  UNIQUE KEY ID_UK (md_id)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  UNIQUE KEY ID_UK (md_id))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -322,7 +329,7 @@ $create_sql = '
 	  CONSTRAINT SRL_PK PRIMARY KEY (mf_srl),
 	  INDEX TARGET_IX (md_id, mf_target),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (mb_ipaddress)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX IP_IX (mb_ipaddress))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -338,7 +345,7 @@ $create_sql = '
 	  INDEX MEMBER_IX (mb_srl),
 	  INDEX IP_IX (mb_ipaddress),
 	  INDEX ACTION_IX (hs_action),
-	  INDEX REGDATE_IX (hs_regdate)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX REGDATE_IX (hs_regdate))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -356,7 +363,7 @@ $create_sql = '
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (nt_srl),
 	  INDEX MEMBER_IX (mb_srl),
-	  INDEX SENDER_IX (nt_sender)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX SENDER_IX (nt_sender))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -370,7 +377,7 @@ $create_sql = '
 	   vs_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 
 	  INDEX AGENT_IX (vs_agent),
-	  INDEX REGDATE_IX (vs_regdate)) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET='.$charset.';';
+	  INDEX REGDATE_IX (vs_regdate))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
