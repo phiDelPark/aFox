@@ -20,7 +20,7 @@
 		<div class="form-group">
 			<label for="id_new_mb_id"><?php echo getLang('id')?></label>
 			<div class="form-inline">
-				<input type="text" name="new_mb_id" class="form-control" id="id_new_mb_id" required maxlength="11" pattern="^[a-zA-Z]+[a-zA-Z0-9_]{2,}">
+				<input type="text" name="new_mb_id" class="form-control" id="id_new_mb_id" required maxlength="11" pattern="^[a-zA-Z]+\w{2,}$">
 				<input type="hidden" name="mb_id" value="" />
 			<p class="help-block"><?php echo getLang('desc_id')?></p>
 		</div>

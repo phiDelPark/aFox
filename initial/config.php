@@ -93,7 +93,7 @@ function debugPrint($_out = null) { if(!(__DEBUG__ & 1)) return; $print = [date(
 // 로그인 중이면 맴버 정보 가져오기
 unset($_MEMBER);
 if($tmp = (isset($_SESSION['ss_mb_id']) ? $_SESSION['ss_mb_id'] : get_cookie('ck_mb_id'))) {
-	if(preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $tmp)) {
+	if(preg_match('/^[a-zA-Z]+\w{2,}$/', $tmp)) {
 		$_MEMBER = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$tmp}'");
 		if(!DB::error() && !empty($_MEMBER['mb_srl'])){
 			$tmp = $_MEMBER['mb_srl'].'/profile_image.png';

@@ -7,7 +7,7 @@ function proc($data) {
 	if(isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
 	if(empty($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
 
-	if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['md_id'])) {
+	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) {
 		return set_error(getLang('invalid_value', ['id']),701);
 	}
 

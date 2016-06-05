@@ -218,7 +218,7 @@ if(!defined('__AFOX__')) exit();
 				$out = DB::getList($sql, $i, function($r){
 					$rset = [];
 					while ($row = mysqli_fetch_assoc($r)) {
-						if(preg_match('/^[a-z]?[a-z0-9_]+$/i',$row['mu_link'])) {
+						if(preg_match('/^[a-zA-Z]+\w{2,}$/',$row['mu_link'])) {
 							$row['md_id'] = $row['mu_link'];
 							$row['mu_link'] = getUrl('','id',$row['md_id']);
 						}
@@ -713,68 +713,74 @@ if(!defined('__AFOX__')) exit();
 		return $size.$tail;
 	}
 
-	// http://www.devnetwork.net/viewtopic.php?t=113253
 	function timePassed($datetime) {
-		$diff = time() - strtotime($datetime);
-		if($diff == 0) return 'just now';
-		$intervals = [
-			1                   => array('year',    31556926),
-			$diff < 31556926    => array('month',   2628000),
-			$diff < 2629744     => array('week',    604800),
-			$diff < 604800      => array('day',     86400),
-			$diff < 86400       => array('hour',    3600),
-			$diff < 3600        => array('minute',  60),
-			$diff < 60          => array('second',  1)
-		];
-		 $value = floor($diff/$intervals[1][1]);
-		 return $value.' '.$intervals[1][0].($value > 1 ? 's' : '').' ago';
+		$t = time() - strtotime($datetime);
+		$vars1 = ['minute','hour','day', 'week', 'month','year',  ''];
+		$vars2 = [60,      3600,  86400, 604800, 2592000,31536000,1];
+		foreach ($vars2 as $key => $value) { if($t < $value) break; }
+		if($key < 1) return 'just now'; //second
+		$value = floor($t/$vars2[$key-1]);
+		return $value.' '.$vars1[$key-1].($value > 1 ? 's' : '').' ago';
 	}
 
 	// http://stackoverflow.com/questions/1336776/
-	function xssClean($str) {
+	function xssClean($html, $chkclosed = true) {
 		// Remove namespaced elements (we do not need them)
-		$str = preg_replace('#</*\w+:\w[^>]*+>#i', '', $str);
+		$html = preg_replace('#</*\w+:\w[^>]*+>#i', '', $html);
 		// Remove really unwanted tags
-		$str = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*+>#i', '', $str);
-		// remove src hack
-		$str = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i', 'removeSrcHack', $str);
-		return $str;
+		$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*+>#i', '', $html);
+		// remove src hack // XE removeSrcHack https://www.xpressengine.com/
+		$html = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i',
+			function ($match) {
+				$tag = strtolower($match[2]);
+				if($tag == 'xmp') return "<{$match[1]}xmp>";
+				if($match[1]) return $match[0];
+				if($match[4]) $match[4] = ' ' . $match[4];
+				$attrs = array();
+				if(preg_match_all('/([\w:-]+)\s*=(?:\s*(["\']))?(?(2)(.*?)\2|([^ ]+))/s', $match[3], $m)) {
+					foreach($m[1] as $idx => $name) {
+						if(strlen($name) >= 2 && substr_compare($name, 'on', 0, 2) === 0) continue;
+						$val = preg_replace_callback('/&#(?:x([a-fA-F0-9]+)|0*(\d+));/', function ($c) {return chr(($c[1]?'0x00'.$c[1]:$c[2])+0);}, $m[3][$idx] . $m[4][$idx]);
+						$val = preg_replace('/^\s+|[\t\n\r]+/', '', $val);
+						if(preg_match('/^[a-z]+script:/i', $val)) continue;
+						$attrs[$name] = $val;
+					}
+				}
+				if(isset($attrs['style']) && preg_match('@(?:/\*|\*/|\n|:\s*expression\s*\()@i', $attrs['style'])) unset($attrs['style']);
+				$attr = array();
+				foreach($attrs as $name => $val) {
+					if($tag == 'object' || $tag == 'embed' || $tag == 'a') {
+						$attribute = strtolower(trim($name));
+						if($attribute == 'data' || $attribute == 'src' || $attribute == 'href') {
+							if(stripos($val, 'data:') === 0) continue;
+						}
+					}
+					if($tag == 'img') {
+						$attribute = strtolower(trim($name));
+						if(stripos($val, 'data:') === 0) continue;
+					}
+					$val = str_replace('"', '&quot;', $val);
+					$attr[] = $name . "=\"{$val}\"";
+				}
+				$attr = count($attr) ? ' ' . implode(' ', $attr) : '';
+				return "<{$match[1]}{$tag}{$attr}{$match[4]}>";
+			}
+		, $html);
+		return $chkclosed ? closeTags($html) : $html;
 	}
 
-	// XE removeSrcHack https://www.xpressengine.com/
-	function removeSrcHack($match) {
-		$tag = strtolower($match[2]);
-		if($tag == 'xmp') return "<{$match[1]}xmp>";
-		if($match[1]) return $match[0];
-		if($match[4]) $match[4] = ' ' . $match[4];
-		$attrs = array();
-		if(preg_match_all('/([\w:-]+)\s*=(?:\s*(["\']))?(?(2)(.*?)\2|([^ ]+))/s', $match[3], $m)) {
-			foreach($m[1] as $idx => $name) {
-				if(strlen($name) >= 2 && substr_compare($name, 'on', 0, 2) === 0) continue;
-				$val = preg_replace('/&#(?:x([a-fA-F0-9]+)|0*(\d+));/', 'chr("\\1"?0x00\\1:\\2+0)', $m[3][$idx] . $m[4][$idx]);
-				$val = preg_replace('/^\s+|[\t\n\r]+/', '', $val);
-				if(preg_match('/^[a-z]+script:/i', $val)) continue;
-				$attrs[$name] = $val;
-			}
+	function closeTags($html) {
+		preg_match_all('#</([a-z]+)>#iU', $html, $closeds);
+		preg_match_all('#<(?!meta|link|area|img|br|hr|input\b)([a-z]+)( .*)?(?!/)>#iU', $html, $openeds);
+		if (count($openeds[1]) === count($closeds[1])) return $html;
+		$closeds = $closeds[1];
+		$openeds = array_reverse($openeds[1]);
+		foreach ($openeds as $val) {
+			if (in_array($val, $closeds)) {
+				unset($closeds[array_search($val, $closeds)]);
+			} else $html .= '</'.$val.'>';
 		}
-		if(isset($attrs['style']) && preg_match('@(?:/\*|\*/|\n|:\s*expression\s*\()@i', $attrs['style'])) unset($attrs['style']);
-		$attr = array();
-		foreach($attrs as $name => $val) {
-			if($tag == 'object' || $tag == 'embed' || $tag == 'a') {
-				$attribute = strtolower(trim($name));
-				if($attribute == 'data' || $attribute == 'src' || $attribute == 'href') {
-					if(stripos($val, 'data:') === 0) continue;
-				}
-			}
-			if($tag == 'img') {
-				$attribute = strtolower(trim($name));
-				if(stripos($val, 'data:') === 0) continue;
-			}
-			$val = str_replace('"', '&quot;', $val);
-			$attr[] = $name . "=\"{$val}\"";
-		}
-		$attr = count($attr) ? ' ' . implode(' ', $attr) : '';
-		return "<{$match[1]}{$tag}{$attr}{$match[4]}>";
+		return $html;
 	}
 
 	function showMessage($message, $type = 0, $title = '') {

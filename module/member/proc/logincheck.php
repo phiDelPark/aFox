@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(!isset($data['mb_id']) || !isset($data['mb_password'])) return set_error(getLang('msg_invalid_request'),303);
-	if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['mb_id'])) {
+	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['mb_id'])) {
 		return set_error(getLang('msg_invalid_request'),303);
 	}
 

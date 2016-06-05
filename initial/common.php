@@ -41,7 +41,7 @@ if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))) {
 
 $tmp_arr = ['module','id','act','disp'];
 foreach ($tmp_arr as $tmp) {
-	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $_DATA[$tmp])) $_DATA[$tmp] = '';
+	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp])) $_DATA[$tmp] = '';
 }
 
 if($_DATA['module'] == 'admin' || isset($_DATA['admin'])) {

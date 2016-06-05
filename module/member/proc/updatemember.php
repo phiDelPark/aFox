@@ -14,7 +14,7 @@ function proc($data) {
 	$data['mb_email'] = trim(strip_tags($data['mb_email']));
 	$data['mb_homepage'] = trim(strip_tags($data['mb_homepage']));
 
-	if(!preg_match('/^[a-zA-Z]+[a-zA-Z0-9_]{2,}/', $data['mb_id'])) {
+	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['mb_id'])) {
 		return set_error(getLang('invalid_value', ['id']),701);
 	}
 
@@ -22,7 +22,7 @@ function proc($data) {
 		return set_error(getLang('invalid_value', ['email']),701);
 	}
 
-	if(!empty($data['mb_homepage'])&&!preg_match('/^(https?|ftp):\/\/[0-9a-z-]+(\.[_0-9a-z-]+)+(:\d+)?/', $data['mb_homepage'])) {
+	if(!empty($data['mb_homepage'])&&!preg_match('/^(https?|ftp):\/\/[\w-]+(\.[\w-]+)+(:\d+)?/', $data['mb_homepage'])) {
 		return set_error(getLang('invalid_value', ['homepage']),701);
 	}
 
