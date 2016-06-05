@@ -223,7 +223,7 @@ var $_LANG = [];
 
 		if (!waiting_message) waiting_message = '';
 		var $waiting = $('<div class="af_waiting_message alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> ' + waiting_message + '<div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:100%"></div></div></div>');
-		$waiting.hide().appendTo('body').fadeIn(3000);
+		$waiting.hide().appendTo('body').fadeIn(1500);
 
 		if (isform && multipart) {
 			data = new FormData($i[0]);

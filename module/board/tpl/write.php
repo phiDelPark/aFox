@@ -15,7 +15,7 @@
 
 	<article class="document-editer">
 	<form onsubmit="return false" method="post" autocomplete="off" enctype="multipart/form-data" data-exec-ajax="board.updateDocument">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('disp','')?>">
+	<input type="hidden" name="success_return_url" value="<?php echo getUrl('disp','','rp','')?>">
 	<input type="hidden" name="md_id" value="<?php echo $_DATA['id']?>">
 	<input type="hidden" name="wr_srl" value="<?php echo $is?$_{'board'}['wr_srl']:''?>">
 

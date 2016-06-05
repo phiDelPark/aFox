@@ -35,22 +35,23 @@ function proc($data) {
 
 	DB::transaction();
 
-	$unlink_files = [];
-	$file_dests = [];
-	$file_exts = $module['md_file_ext'] == '*' ? '' : $module['md_file_ext'];
-	$file_max = (int) empty($module['md_file_max']) ? 0 : $module['md_file_max'];
-	$file_max_size = (int) $module['md_file_size'];
-	$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
-
-	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
-	$md_id = $module['md_id'];
-
 	// 관리자는 제한 없음
 	if($is_admin) {
 		$file_exts = '';
 		$file_max = 99999999;
 		$file_max_size = 0;
+	} else {
+		$file_exts = $module['md_file_ext'] == '*' ? '' : $module['md_file_ext'];
+		$file_max = (int) empty($module['md_file_max']) ? 0 : $module['md_file_max'];
+		$file_max_size = (int) $module['md_file_size'];
 	}
+
+	$unlink_files = [];
+	$file_dests = [];
+	$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
+
+	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
+	$md_id = $module['md_id'];
 
 	try {
 		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'md_id, mb_srl, mb_password');

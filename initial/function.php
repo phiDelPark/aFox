@@ -670,7 +670,7 @@ if(!defined('__AFOX__')) exit();
 			$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
 			$text = preg_replace($patterns, $replacement, $text);
 		} else if($type == 0) {
-			$text =strip_tags($text, '<p><a>');
+			$text = nl2br(strip_tags($text, '<p><a>'));
 		}
 
 		// 다운로드 권한이 없으면 처리
