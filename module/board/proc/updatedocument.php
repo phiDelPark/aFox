@@ -181,8 +181,8 @@ function proc($data) {
 				$filetype = strtolower(array_shift(explode('/', $file['type'])));
 				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 				$filename = $file['name'];
-				$fileext = array_pop(explode('.', $filename));
-				if(count($fileext)===1) $fileext = 'none';
+				$fileext = explode('.', $filename);
+				$fileext = count($fileext)===1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
 					throw new Exception(getLang('warn_permit', [$file_exts])."\n", 303);
