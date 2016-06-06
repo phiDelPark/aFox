@@ -2,12 +2,12 @@
 	if(!defined('__AFOX__')) exit();
 
 	$ao_list = [];
-	$out = DB::query('SELECT ao_id FROM '._AF_ADDON_TABLE_.' WHERE 1');
+	$out = DB::query('SELECT * FROM '._AF_ADDON_TABLE_.' WHERE 1');
 	if($ex = DB::error()) {
 		echo showMessage($ex->getMessage(), $ex->getCode());
 	}else {
 		while ($row = DB::assoc($out)) {
-			$ao_list[$row['ao_id']] = true;
+			$ao_list[$row['ao_id']] = (empty($row['ao_use_pc']) ? '-/':'P/').(empty($row['ao_use_mobile']) ? '-':'M');
 		}
 	}
 ?>
@@ -18,6 +18,7 @@
 		<th>#<?php echo getLang('addon')?></th>
 		<th class="hidden-xs"><?php echo getLang('version')?></th>
 		<th class="hidden-xs hidden-sm"><?php echo getLang('author')?></th>
+		<th class="col-xs-1"><?php echo getLang('using')?></th>
 		<th class="col-xs-1"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
@@ -27,8 +28,12 @@
 $addon_dir = _AF_ADDONS_PATH_;
 if(is_dir($addon_dir)) {
 	foreach(glob($addon_dir.'*', GLOB_ONLYDIR) as $dir) {
+		$opt = '-/-';
 		$name = basename($dir);
-		if(isset($ao_list[$name])) $ao_list[$name] = false;
+		if(isset($ao_list[$name])) {
+			$opt = $ao_list[$name];
+			$ao_list[$name] = false;
+		}
 
 		$_ADDON_INFO = [];
 		@include $addon_dir.$name.'/info.php';
@@ -36,6 +41,7 @@ if(is_dir($addon_dir)) {
 		echo '<tr><th scope="row">'.(escapeHtml(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title'])).'</th>';
 		echo '<td class="hidden-xs">'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
 		echo '<td class="hidden-xs hidden-sm">'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
+		echo '<td>'.$opt.'</td>';
 		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_addon_modal" data-addon-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
 	}
 }
