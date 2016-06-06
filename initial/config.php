@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 
 define('__DEBUG__', 0);
-define('_AF_VERSION_', '0.3.0');
+define('_AF_VERSION_', '0.3.7');
 define('_AF_SERVER_TIME_', time());
 
 define('_AF_CONFIG_TABLE_', 'afox_config');

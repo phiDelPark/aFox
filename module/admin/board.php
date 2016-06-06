@@ -92,8 +92,7 @@
 				</div>
 				<div class="pull-right">
 					<div class="form-inline">
-						<input type="text" name="md_manager" class="form-control" style="width:120px" id="id_md_manager" maxlength="11" pattern="^[0-9]+" placeholder="<?php echo getLang('desc_board_manager')?>">
-						<button type="button" class="btn btn-primary"><?php echo getLang('find')?></button>
+						<input type="text" name="md_manager" class="form-control" style="width:120px" id="id_md_manager" maxlength="11" pattern="^[a-zA-Z]+\w{2,}$" placeholder="<?php echo getLang('desc_board_manager')?>">
 					</div>
 				</div>
 			</div>
@@ -150,8 +149,8 @@
 			<div class="form-group">
 				<label><?php echo getLang('file')?></label>
 				<div class="form-inline">
-					<input type="number" class="form-control" name="md_file_max" min="0" max="9000" maxlength="11" placeholder="<?php echo getLang('max_file_count')?>">
-					<input type="number" class="form-control" name="md_file_size" min="0" max="9000" maxlength="11" placeholder="<?php echo getLang('max_file_size')?>">
+					<input type="number" class="form-control" name="md_file_max" min="0" max="9999" maxlength="4" placeholder="<?php echo getLang('max_file_count')?>">
+					<input type="number" class="form-control" name="md_file_size" min="0" max="99999999999" maxlength="11" placeholder="<?php echo getLang('max_file_size')?> (KB)">
 					<input type="text" class="form-control" name="md_file_ext" axlength="255" placeholder="<?php echo getLang('file_extension')?>">
 				</div>
 				<p class="help-block"><?php echo getLang('desc_board_file')?></p>
@@ -161,19 +160,19 @@
 				<div class="form-inline">
 					<div class="input-group">
 						<label class="input-group-addon" for="id_read_point"><?php echo getLang('view')?></label>
-						<input type="number" class="form-control" id="id_read_point" name="point_view" min="-9999" max="9999" maxlength="11" placeholder="<?php echo getLang('point')?>">
+						<input type="number" class="form-control" id="id_read_point" name="point_view" min="-9999" max="9999" maxlength="5" placeholder="<?php echo getLang('point')?>">
 					</div>
 					&nbsp;&nbsp;<div class="input-group">
 						<label class="input-group-addon" for="id_write_point"><?php echo getLang('write')?></label>
-						<input type="number" class="form-control" id="id_write_point" name="point_write" min="-9999" max="9999" maxlength="11" placeholder="<?php echo getLang('point')?>">
+						<input type="number" class="form-control" id="id_write_point" name="point_write" min="-9999" max="9999" maxlength="5" placeholder="<?php echo getLang('point')?>">
 					</div>
 					&nbsp;&nbsp;<div class="input-group">
 						<label class="input-group-addon" for="id_reply_point"><?php echo getLang('reply')?></label>
-						<input type="number" class="form-control" id="id_reply_point" name="point_reply" min="-9999" max="9999" maxlength="11" placeholder="<?php echo getLang('point')?>">
+						<input type="number" class="form-control" id="id_reply_point" name="point_reply" min="-9999" max="9999" maxlength="5" placeholder="<?php echo getLang('point')?>">
 					</div>
 					&nbsp;&nbsp;<div class="input-group">
 						<label class="input-group-addon" for="id_download_point"><?php echo getLang('download')?></label>
-						<input type="number" class="form-control" id="id_download_point" name="point_download" min="-9999" max="9999" maxlength="11" placeholder="<?php echo getLang('point')?>">
+						<input type="number" class="form-control" id="id_download_point" name="point_download" min="-9999" max="9999" maxlength="5" placeholder="<?php echo getLang('point')?>">
 					</div>
 				</div>
 				<p class="help-block"><?php echo getLang('desc_point')?></p>

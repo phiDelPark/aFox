@@ -31,6 +31,14 @@ function proc($data) {
 	// 확장자는 사용하기 쉽게 | 로 구분함
 	$file_extension = str_replace(',', '|', $data['md_file_ext']);
 
+	// 관리자 이이디가 넘어오면 srl로 변경
+	$md_manager = $data['md_manager'];
+	if(!empty($md_manager)) {
+		$mb = getMember($md_manager);
+		if(empty($mb['mb_srl'])) return set_error(getLang('invalid_value', ['admin']),701);
+		$md_manager = (int) $mb['mb_srl'];
+	}
+
 	DB::transaction();
 
 	try {
@@ -50,9 +58,9 @@ function proc($data) {
 					'md_category'=>$data['md_category'],
 					'md_title'=>$data['md_title'],
 					'md_description'=>$data['md_description'],
-					'md_manager'=>(int)$data['md_manager'],
+					'md_manager'=>$md_manager,
 					'md_file_max'=>(int)$data['md_file_max'],
-					'md_file_size'=>(int)$data['md_file_size'],
+					'md_file_size'=>(int)$data['md_file_size']*1024,
 					'md_file_ext'=>$file_extension,
 					'use_style'=>$data['use_style'],
 					'use_type'=>$data['use_type'],
@@ -81,9 +89,9 @@ function proc($data) {
 					'md_category'=>$data['md_category'],
 					'md_title'=>$data['md_title'],
 					'md_description'=>$data['md_description'],
-					'md_manager'=>(int)$data['md_manager'],
+					'md_manager'=>$md_manager,
 					'md_file_max'=>(int)$data['md_file_max'],
-					'md_file_size'=>(int)$data['md_file_size'],
+					'md_file_size'=>(int)$data['md_file_size']*1024,
 					'md_file_ext'=>$file_extension,
 					'use_style'=>$data['use_style'],
 					'use_type'=>$data['use_type'],

@@ -59,7 +59,7 @@
 		<div class="form-inline">
 			<div class="input-group">
 				<label class="input-group-addon" for="id_point_login"><?php echo getLang('login')?></label>
-				<input type="number" class="form-control" id="id_point_login" name="point_login" min="0" max="1000" maxlength="11" placeholder="<?php echo getLang('point')?>" value="<?php echo (!empty($config['point_login'])&&$config['point_login']>0)?$config['point_login']:''?>">
+				<input type="number" class="form-control" id="id_point_login" name="point_login" min="-9999" max="9999" maxlength="5" placeholder="<?php echo getLang('point')?>" value="<?php echo (!empty($config['point_login'])&&$config['point_login']>0)?$config['point_login']:''?>">
 			</div>
 		</div>
 		<p class="help-block"><?php echo getLang('desc_point')?></p>

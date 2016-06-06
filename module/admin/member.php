@@ -111,7 +111,7 @@
 			<div class="form-group">
 				<label for="id_mb_point"><?php echo getLang('point')?></label>
 				<div class="form-inline">
-					<input type="number" id="id_mb_point" class="form-control" name="mb_point" min="0" maxlength="11" placeholder="<?php echo getLang('point')?>">
+					<input type="number" id="id_mb_point" class="form-control" name="mb_point" min="0" max="99999999999" maxlength="11" placeholder="<?php echo getLang('point')?>">
 				</div>
 				<p class="help-block"><?php echo getLang('desc_mb_point')?></p>
 			</div>

@@ -12,6 +12,14 @@ function proc($data) {
 	}
 
 	if($out['md_id']) {
+		// KB 로 바꿈
+		if(!empty($out['md_file_size'])) $out['md_file_size'] = round((int)$out['md_file_size'] / 1024);
+		// 관리자 이이디가 넘어오면 id로 변경
+		$md_manager = $out['md_manager'];
+		if(!empty($md_manager)) {
+			$mb = getMember($md_manager);
+			$out['md_manager'] = empty($mb['mb_id'])?'':$mb['mb_id'];
+		}
 		return $out;
 	} else {
 		return set_error(getLang('msg_not_founded'),801);
