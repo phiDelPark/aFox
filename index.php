@@ -18,7 +18,7 @@ if(__MODULE__ && !empty($_DATA['act'])) {
 
 	if(function_exists($callproc)) {
 		$_result = triggerCall($triggercall, 'before', $_DATA);
-		if(!$_result) {
+		if(empty($_result['error'])) {
 			$_result = call_user_func($callproc, $_DATA);
 			triggerCall($triggercall, 'after', $_result);
 		}

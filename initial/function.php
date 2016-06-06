@@ -498,8 +498,8 @@ if(!defined('__AFOX__')) exit();
 				$_ADDONS[$key] = $_extra;
 
 				$result = $call($include_file, $_ADDONS[$key], $data);
-				if(!empty($result['error']) && empty($result['act'])) {
-					$result['redirect_url'] = isset($data['error_return_url']) ? $data['error_return_url'] : _AF_URL_;
+				if(!empty($result['error'])) {
+					$result['redirect_url'] = isset($data['error_return_url'])?urldecode($data['error_return_url']):'';
 					return $result;
 				}
 

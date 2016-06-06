@@ -45,7 +45,7 @@ foreach ($options as $key => $v) {
 			$fileList = empty($file_id) ? [] : getFileList($file_id, $file_target);
 
 			if(!empty($fileList['data']) && count($fileList['data'])>0) {
-				echo '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded-list fileupload-group file-list form-control" style="margin-top:10px">';
+				echo '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded-list fileupload-group file-list form-control" style="margin-top:10px;height:auto;min-height:34px">';
 				foreach ($fileList['data'] as $val) {
 					echo '<i class="file-item" draggable="true" title="'.escapeHtml($val['mf_name']).' ('.shortFileSize( $val['mf_size']).')" data-type="'.$val['mf_type'].'" data-srl="'.$val['mf_srl'].'"></i>';
 				}

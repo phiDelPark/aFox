@@ -15,11 +15,12 @@ var $_LANG = [];
 
 (function($) {
 	'use strict';
-
-	var version = $.fn.jquery.split(' ')[0].split('.');
-	if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 2)) {
-		throw new Error('aFox\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 3');
-	}
+	/*
+		var version = $.fn.jquery.split(' ')[0].split('.');
+		if ((version[0] < 2 && version[1] < 9) || (version[0] == 1 && version[1] == 9 && version[2] < 1) || (version[0] > 2)) {
+			throw new Error('aFox\'s JavaScript requires jQuery version 1.9.1 or higher, but lower than version 3');
+		}
+	*/
 
 	String.prototype.trim = function() {
 		return this.replace(/^\s+|\s+$/g, "");
