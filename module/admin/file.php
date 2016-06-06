@@ -32,7 +32,7 @@
 		$end_page = $file_list['end_page'];
 
 		foreach ($file_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item"><th scope="row">'.$value['md_id'].'</th>';
+			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row">'.$value['md_id'].'</th>';
 			echo '<td>'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
 			echo '<td class="hidden-xs">'.$value['mf_download'].'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.$value['mb_ipaddress'].'</td>';
@@ -66,6 +66,48 @@
 	</form></li>
 	</ul>
 </nav>
+
+<div id="file_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+	<form class="modal-content" method="post" autocomplete="off">
+	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+	<input type="hidden" name="md_id" value="" />
+	<input type="hidden" name="mf_srl" value="" />
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<h4 class="modal-title" id="myModalLabel"><?php echo getLang('file')?></h4>
+		</div>
+		<div class="modal-body">
+			<div class="form-group clearfix">
+					<div class="pull-left">
+					<label><?php echo getLang('%s %s',['module','id'])?></label>
+					<div class="form-inline">
+						<input type="text" class="form-control" name="md_id" maxlength="11" disabled="disabled">
+					</div>
+				</div>
+				<div class="pull-right">
+					<div class="form-inline">
+						<input type="text" name="mf_regdate" class="form-control" style="width:160px" disabled="disabled" title="<?php echo getLang('regdate')?>">
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="id_mf_name"><?php echo getLang('name')?></label>
+				<input type="text" name="mf_name" class="form-control" id="id_mf_name" maxlength="255">
+			</div>
+			<div class="form-group">
+				<label for="id_mf_description"><?php echo getLang('explain')?></label>
+				<input type="text" name="mf_description" class="form-control" id="id_mf_description" maxlength="255">
+			</div>
+		</div>
+		<div class="modal-footer clearfix">
+			<button type="button" class="btn btn-danger pull-left" data-act-change="admin.deleteFile" data-add-param="is_empty,1"><?php echo getLang('permanently_delete')?></button>
+			<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
+			<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
+		</div>
+	</form>
+  </div>
+</div>
 
 <?php
 /* End of file file.php */
