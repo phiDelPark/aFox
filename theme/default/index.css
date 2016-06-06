@@ -27,7 +27,7 @@ body > .container{
 }
 
 .carousel {
-	margin-bottom: 40px;
+	margin-bottom: 30px;
 }
 
 .carousel .container {
@@ -86,7 +86,7 @@ body > .container{
 
 .header-image {
 	height:210px;
-	margin:0 auto 40px;
+	margin:0 auto 25px;
 	background:url(img/header_page.jpg);
 	background-size: cover;
 	color: #fff
@@ -217,7 +217,7 @@ ul.message-dropdown>li>a {
 
 .bs-docs-body {
 	min-height: 100%;
-	margin-bottom: 190px;
+	margin-bottom: 180px;
 }
 
 .bs-docs-body>section {
@@ -284,6 +284,15 @@ form .af_editor_rp_content > textarea + iframe{
 	.bs-docs-footer {
 		padding: 10px;
 		text-align: left;
+	}
+	.bs-docs-footer-links {
+		margin-bottom: 8px;
+	}
+	.bs-docs-footer-links li{
+		margin: 0;
+	}
+	.bs-docs-footer-links li+li {
+		margin: 5px 15px 0 0;
 	}
 	#loginModal .modal-dialog{
 		width: 300px;

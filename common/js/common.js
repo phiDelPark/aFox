@@ -298,7 +298,7 @@ var $_LANG = [];
 						$i.data('actioning', false);
 						return;
 					}
-					if (err) alert(msg);
+					if (err) alert(msg.replace(/<br[\s|\/]*>/g, "\n"));
 					if (data['redirect_url']) parent.location.replace(data['redirect_url']);
 				},
 				error: function(xhr, status, error) {
@@ -320,7 +320,7 @@ var $_LANG = [];
 						$i.data('actioning', false);
 						return;
 					}
-					alert(msg);
+					alert(msg.replace(/<br[\s|\/]*>/g, "\n"));
 					if (data['redirect_url']) parent.location.replace(data['redirect_url']);
 				}
 			});
