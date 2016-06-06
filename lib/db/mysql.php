@@ -131,6 +131,10 @@ class DB {
 		}
 	}
 
+	public static function num($result) {
+		return mysqli_num_rows($result);
+	}
+
 	public static function row($result) {
 		return mysqli_fetch_row($result);
 	}
@@ -147,10 +151,6 @@ class DB {
 		$r = self::query('SELECT FOUND_ROWS() AS foundRows');
 		$row = mysqli_fetch_assoc($r);
 		return $row['foundRows'];
-	}
-
-	public static function num() {
-		return mysql_num_rows(self::$link);
 	}
 
 	public static function affected() {
