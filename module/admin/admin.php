@@ -32,7 +32,7 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<?php echo _AF_URL_ . '?admin' ?>">aFox BD Admin <small>ver <?php echo _AF_VERSION_?></small></a>
+				<a class="navbar-brand" href="<?php echo _AF_URL_ . '?admin' ?>">aFox Admin <small>ver <?php echo _AF_VERSION_?></small></a>
 			</div>
 			<!-- Top Menu Items -->
 			<ul class="nav navbar-right top-nav">

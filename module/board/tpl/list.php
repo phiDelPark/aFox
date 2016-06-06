@@ -23,8 +23,6 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 			<tr>
 				<?php if(__MOBILE__) { ?>
 				<th><?php echo getLang('title')?></th>
-				<th><?php echo getLang('name')?></th>
-				<th class="col-xs-1"><?php echo getLang('date')?></th>
 				<?php } else { ?>
 				<th class="col-xs-1 hidden-xs"><?php echo getLang('number')?></th>
 				<th><?php echo getLang('title')?></th>
@@ -45,9 +43,9 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 
 			if(__MOBILE__) {
 				foreach ($_{'board'}['data'] as $key => $val) {
-					echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'><td class="wr_title"><a href="'.getUrl('srl',$val['wr_srl']).'" onclick="return false">'.escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
-					echo '<td><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';
-					echo '<td>'.date('m/d', strtotime($val['wr_update'])).'</td></tr>';
+					echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'><td class="wr_title"><a href="'.getUrl('srl',$val['wr_srl']).'" onclick="return false">'.escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
+					echo '<div class="clearfix"><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span>';
+					echo '<span class="pull-right">'.date('m/d', strtotime($val['wr_update'])).'</span></div></td></tr>';
 				}
 			} else {
 				foreach ($_{'board'}['data'] as $key => $val) {

@@ -183,14 +183,14 @@
 					path = (window.URL || window.webkitURL).createObjectURL(val);
 
 				$('<i class="file-item" draggable="true" title="' + (ismt ? title : '') + '" data-type="' + type + '" data-index="' + i + '" data-path="' + path + '">')
-					.html(ismt ? '' : title)
+					.text(ismt ? '' : title)
 					.appendTo($c)
 					.on('dragstart', function(e) {
 						var $i = $(this);
 						e.originalEvent.dataTransfer.setData("TEXT", JSON.stringify({
 							'type': $i.attr('data-type'),
 							'index': $i.attr('data-index'),
-							'title': $i.attr('title'),
+							'title': (ismt ? $i.attr('title') : $i.text()),
 							'path': $i.attr('data-path')
 						}));
 					});

@@ -22,13 +22,17 @@
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
+		<?php if(__MOBILE__) { ?>
+		<th><?php echo getLang('title')?></th>
+		<?php } else { ?>
 		<th class="col-xs-1">#</th>
 		<th><?php echo getLang('title')?></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
-		<th class="col-xs-1"><?php echo getLang('secret')?></th>
+		<th class="col-xs-1 hidden-xs"><?php echo getLang('secret')?></th>
 		<th class="col-xs-2"><?php echo getLang('author')?></th>
-		<th class="col-xs-1"><?php echo getLang('date')?></th>
-		<th class="col-xs-1"><?php echo getLang('removed_date')?></th
+		<th class="col-xs-1 hidden-xs"><?php echo getLang('date')?></th>
+		<th class="col-xs-1"><?php echo getLang('removed_date')?></th>
+		<?php } ?>
 	</tr>
 </thead>
 <tbody>
@@ -44,15 +48,24 @@
 		$total_page = $_list['total_page'];
 		$start_page = $_list['start_page'];
 		$end_page = $_list['end_page'];
+		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
-		foreach ($_list['data'] as $key => $value) {
-			echo '<tr style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['wr_srl'].'</th>';
-			echo '<td>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</td>';
-			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
-			echo '<td>'.($value['wr_secret']?'Y':'N').'</td>';
-			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
-			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td>';
-			echo '<td>'.date('Y/m/d', strtotime($value['wr_update'])).'</td></tr>';
+		if(__MOBILE__) {
+			foreach ($_list['data'] as $key => $value) {
+				echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\'"><td class="wr_title"><a href="#" onclick="return false">'.escapeHtml($value['wr_title'], true).'</a>';
+				echo '<div class="clearfix"><span>'.date('y/m/d', strtotime($value['wr_regdate'])).'</span>';
+				echo '<span class="pull-right">Del:'.date('y/m/d', strtotime($value['wr_update'])).'</span></div></td></tr>';
+			}
+		} else {
+			foreach ($_list['data'] as $key => $value) {
+				echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['wr_srl'].'</th>';
+				echo '<td><a href="#" onclick="return false">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
+				echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
+				echo '<td class="hidden-xs">'.($value['wr_secret']?'Y':'N').'</td>';
+				echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
+				echo '<td class="hidden-xs">'.date('y/m/d', strtotime($value['wr_regdate'])).'</td>';
+				echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td></tr>';
+			}
 		}
 	}
 ?>
@@ -75,10 +88,10 @@
 	</ul>
 </nav>
 <footer class="clearfix">
-	<form class="search-form pull-left col-xs-5 col-sm-4" action="<?php echo getUrl('') ?>" method="get" style="padding:0">
+	<form class="search-form pull-left col-xs-5 col-sm-4" action="<?php echo getUrl('') ?>" method="get" style="padding:0;min-width:150px;max-width:250px">
 		<input type="hidden" name="module" value="member">
 		<input type="hidden" name="disp" value="inbox">
-		<div class="input-group" style="width:250px">
+		<div class="input-group">
 			<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 			<span class="input-group-btn">
 			<?php if(empty($_DATA['search']) || !__MOBILE__) {?><button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button><?php }?>

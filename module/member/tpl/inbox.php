@@ -22,10 +22,14 @@
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
+		<?php if(__MOBILE__) { ?>
+		<th><?php echo getLang('content')?></th>
+		<?php } else { ?>
 		<th class="col-xs-1"><?php echo getLang('nickname')?></th>
 		<th><?php echo getLang('content')?></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1"><?php echo getLang('date')?></th>
+		<?php } ?>
 	</tr>
 </thead>
 <tbody>
@@ -41,11 +45,21 @@
 		$total_page = $_list['total_page'];
 		$start_page = $_list['start_page'];
 		$end_page = $_list['end_page'];
-		foreach ($_list['data'] as $key => $value) {
-			echo '<tr style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['nt_sender_nick'].'</th>';
-			echo '<td>'.cutstr(strip_tags($value['nt_content']),90).'</td>';
-			echo '<td>'.date('Y/m/d', strtotime($value['nt_read_date'])).'</td>';
-			echo '<td>'.date('Y/m/d', strtotime($value['nt_send_date'])).'</td></tr>';
+		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
+
+		if(__MOBILE__) {
+			foreach ($_list['data'] as $key => $value) {
+				echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\'"><td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),255).'</a>';
+				echo '<div class="clearfix"><span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';
+				echo '<span class="pull-right">Send:'.date('y/m/d', strtotime($value['nt_send_date'])).'</span></div></td></tr>';
+			}
+		} else {
+			foreach ($_list['data'] as $key => $value) {
+				echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['nt_sender_nick'].'</th>';
+				echo '<td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),90).'</a></td>';
+				echo '<td>'.date('y/m/d', strtotime($value['nt_read_date'])).'</td>';
+				echo '<td>'.date('y/m/d', strtotime($value['nt_send_date'])).'</td></tr>';
+			}
 		}
 	}
 ?>
@@ -68,10 +82,10 @@
 	</ul>
 </nav>
 <footer class="clearfix">
-	<form class="search-form pull-left col-xs-5 col-sm-4" action="<?php echo getUrl('') ?>" method="get" style="padding:0">
+	<form class="search-form pull-left col-xs-5 col-sm-4" action="<?php echo getUrl('') ?>" method="get" style="padding:0;min-width:150px;max-width:250px">
 		<input type="hidden" name="module" value="member">
 		<input type="hidden" name="disp" value="inbox">
-		<div class="input-group" style="width:250px">
+		<div class="input-group">
 			<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 			<span class="input-group-btn">
 			<?php if(empty($_DATA['search']) || !__MOBILE__) {?><button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button><?php }?>
