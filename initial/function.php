@@ -235,23 +235,6 @@ if(!defined('__AFOX__')) exit();
 		return empty($get) ? $menus : $menus[$get];
 	}
 
-	function getAddon($id) {
-		// TODO 캐시처리 할까?
-		static $addons = [];
-		if(!isset($addons[$id])) {
-			$out = getDBItem(_AF_ADDON_TABLE_, ['ao_id'=>$id]);
-			if(!empty($out['error']) || empty($out['ao_extra'])) {
-				$addons[$id] = $out;
-			} else {
-				$extra = $out['ao_extra'];
-				$extra = unserialize($extra);
-				unset($out['ao_extra']);
-				$addons[$id] = array_merge($out, $extra);
-			}
-		}
-		return $addons[$id];
-	}
-
 	// 모듈 설정 가져오기
 	function getModule($id, $get = '') {
 		static $module_cfg = [];
@@ -492,15 +475,13 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function triggerCall($trigger, $position, &$data) {
-		if(empty($trigger)) return;
-
 		global $_ADDONS;
 		static $call = null;
 
 		if($call == null) {
 			$call =	function($include_file, $_ADDON, $_DATA) {
 				$r = include $include_file;
-				return !empty($r['error']) && empty($r['act']) ? $r : $_DATA;
+				return empty($r['error']) ? $_DATA : $r;
 			};
 		}
 
@@ -510,9 +491,11 @@ if(!defined('__AFOX__')) exit();
 			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/'.$trigger;
 			if(file_exists($include_file)) {
 
-				if(!is_array($_ADDONS[$key])) {
-					$_ADDONS[$key] = unserialize($_ADDONS[$key]);
+				if(($_extra = getCache('_AF_ADDON_'.$key)) === false) {
+					$_extra = unserialize($_ADDONS[$key]);
+					setCache('_AF_ADDON_'.$key, $_extra);
 				}
+				$_ADDONS[$key] = $_extra;
 
 				$result = $call($include_file, $_ADDONS[$key], $data);
 				if(!empty($result['error']) && empty($result['act'])) {

@@ -16,9 +16,16 @@ function proc($data) {
 		return set_error(getLang('msg_not_founded'),801);
 	}
 
-	$_ADDON = getAddon($data['ao_id']);
+	$_ADDON = getDBItem(_AF_ADDON_TABLE_, ['ao_id'=>$data['ao_id']]);
 	if(!empty($_ADDON['error'])) {
 		return set_error( $_ADDON['message'],$_ADDON['error']);
+	}
+	if(empty($_ADDON['use_pc'])) $_ADDON['use_pc'] = 0;
+	if(empty($_ADDON['use_mobile'])) $_ADDON['use_mobile'] = 0;
+	if(!empty($_ADDON['ao_extra'])) {
+		$extra = unserialize($_ADDON['ao_extra']);
+		unset($_ADDON['ao_extra']);
+		$_ADDON = array_merge($_ADDON, $extra);
 	}
 
 	$_ADDON_INFO = [];
