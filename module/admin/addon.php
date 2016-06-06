@@ -7,7 +7,7 @@
 		echo showMessage($ex->getMessage(), $ex->getCode());
 	}else {
 		while ($row = DB::assoc($out)) {
-			$ao_list[$row['ao_id']] = (empty($row['ao_use_pc']) ? '-/':'P/').(empty($row['ao_use_mobile']) ? '-':'M');
+			$ao_list[$row['ao_id']] = (empty($row['use_pc']) ? '-/':'P/').(empty($row['use_mobile']) ? '-':'M');
 		}
 	}
 ?>

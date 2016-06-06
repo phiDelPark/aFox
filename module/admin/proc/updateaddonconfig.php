@@ -10,15 +10,15 @@ function proc($data) {
 	try {
 
 		$ao_id = $data['ao_id'];
-		$ao_use_pc = empty($data['ao_use_pc'])?'0':$data['ao_use_pc'];
-		$ao_use_mobile = empty($data['ao_use_mobile'])?'0':$data['ao_use_mobile'];
+		$use_pc = empty($data['use_pc'])?'0':$data['use_pc'];
+		$use_mobile = empty($data['use_mobile'])?'0':$data['use_mobile'];
 
 		$out = getDBItem(_AF_ADDON_TABLE_, ['ao_id'=>$ao_id], 'ao_id');
 		if(!empty($out['error'])) throw new Exception($out['message'], $out['error']);
 
 		$addon_exists = !empty($out['ao_id']);
 
-		$remove_array = ['ao_id', 'ao_use_pc', 'ao_use_mobile', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url'];
+		$remove_array = ['ao_id', 'use_pc', 'use_mobile', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url'];
 		foreach ($remove_array as $value) {
 			if(isset($data[$value])) unset($data[$value]);
 		}
@@ -32,8 +32,8 @@ function proc($data) {
 		if($addon_exists) {
 			DB::update(_AF_ADDON_TABLE_,
 				[
-					'ao_use_pc'=>$ao_use_pc,
-					'ao_use_mobile'=>$ao_use_mobile,
+					'use_pc'=>$use_pc,
+					'use_mobile'=>$use_mobile,
 					'ao_extra'=>$extra
 				], [
 					'ao_id'=>$ao_id
@@ -43,8 +43,8 @@ function proc($data) {
 			DB::insert(_AF_ADDON_TABLE_,
 				[
 					'ao_id'=>$ao_id,
-					'ao_use_pc'=>$ao_use_pc,
-					'ao_use_mobile'=>$ao_use_mobile,
+					'use_pc'=>$use_pc,
+					'use_mobile'=>$use_mobile,
 					'ao_extra'=>$extra
 				]
 			);

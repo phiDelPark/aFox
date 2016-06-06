@@ -72,7 +72,7 @@ $tmp = _AF_CONFIG_DATA_.'base_cdn_list.php';
 define('__USE_BASE_CDN__', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp : FALSE);
 
 // 실행 가능한 애드온 정보 합치기
-$tmp = (__MOBILE__?'ao_use_mobile':'ao_use_pc').'=1';
+$tmp = (__MOBILE__?'use_mobile':'use_pc').'=1';
 $tmp_arr = DB::query('SELECT ao_id,ao_extra FROM '._AF_ADDON_TABLE_.' WHERE '.$tmp);
 if(!DB::error()) {
 	while ($tmp = DB::assoc($tmp_arr)) {

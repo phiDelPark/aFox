@@ -642,13 +642,12 @@ if(!defined('__AFOX__')) exit();
 
 	function verifyEncrypt($password, $hash) {
 		try {
-			$testResult = PasswordStorage::verify_password($password, $hash);
+			return PasswordStorage::verify_password($password, $hash);
 		} catch (InvalidHashException $ex) {
 			exit($ex->getMessage());
 		} catch (CannotPerformOperationException $ex) {
 			exit($ex->getMessage());
 		}
-		return $testResult;
 	}
 
 	function encryptString($str) {

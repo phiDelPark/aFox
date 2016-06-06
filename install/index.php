@@ -1,5 +1,20 @@
 <?php
 define('__AFOX__',   TRUE);
+
+define('_AF_CONFIG_TABLE_', 'afox_config');
+define('_AF_MEMBER_TABLE_', 'afox_members');
+define('_AF_MODULE_TABLE_', 'afox_modules');
+define('_AF_THEME_TABLE_', 'afox_themes');
+define('_AF_MENU_TABLE_', 'afox_menus');
+define('_AF_ADDON_TABLE_', 'afox_addons');
+define('_AF_PAGE_TABLE_', 'afox_pages');
+define('_AF_DOCUMENT_TABLE_', 'afox_documents');
+define('_AF_COMMENT_TABLE_', 'afox_comments');
+define('_AF_HISTORY_TABLE_', 'afox_histories');
+define('_AF_VISITOR_TABLE_', 'afox_visitors');
+define('_AF_NOTE_TABLE_', 'afox_notes');
+define('_AF_FILE_TABLE_', 'afox_files');
+
 ?>
 <!doctype html><html lang="ko"><head><meta charset="utf-8"></head><body>
 
@@ -63,8 +78,6 @@ $time_zone = 'Asia/Seoul';
 
 $is_innodb = $_POST['db_type'] == 'innodb';
 
-require_once dirname(__FILE__) . '/../lib/pbkdf2/PasswordStorage.php';
-
 $o = array(
 'host'=>$db_host,
 'port'=>$db_port,
@@ -74,6 +87,8 @@ $o = array(
 'charset'=>$charset,
 'time_zone'=>$time_zone
 );
+
+require_once dirname(__FILE__) . '/../lib/pbkdf2/PasswordStorage.php';
 
 mysqli_report(MYSQLI_REPORT_OFF);
 
@@ -100,10 +115,12 @@ if($is_innodb){
 mysqli_autocommit($link, FALSE);
 mysqli_begin_transaction($link, MYSQLI_TRANS_START_READ_WRITE);
 
+// 관리에 편하게 메인 설정들은 접두어 안 붙임
+
 try {
-$_err_keys = 'afox_config';
+$_err_keys = _AF_CONFIG_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_config (
+	  CREATE TABLE IF NOT EXISTS '._AF_CONFIG_TABLE_.' (
 	   lang           CHAR(5)      NOT NULL,
 	   start          CHAR(11)     NOT NULL,
 	   theme          VARCHAR(255) NOT NULL,
@@ -118,20 +135,20 @@ mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 
-$_err_keys = 'afox_themes';
+$_err_keys = _AF_THEME_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_themes (
+	  CREATE TABLE IF NOT EXISTS '._AF_THEME_TABLE_.' (
 	   th_id          VARCHAR(255) NOT NULL,
-	   th_extra          TEXT         NOT NULL DEFAULT \'\',
+	   th_extra       TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (th_id))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_menus';
+$_err_keys = _AF_MENU_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_menus (
+	  CREATE TABLE IF NOT EXISTS '._AF_MENU_TABLE_.' (
 	   mu_srl          INT(11)      NOT NULL,
 	   mu_parent       INT(11)      NOT NULL DEFAULT 0,
 	   mu_status       CHAR(1)      NOT NULL DEFAULT 0,
@@ -148,9 +165,9 @@ $create_sql = '
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_members';
+$_err_keys = _AF_MEMBER_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_members (
+	  CREATE TABLE IF NOT EXISTS '._AF_MEMBER_TABLE_.' (
 	   mb_srl          INT(11)      NOT NULL AUTO_INCREMENT,
 	   mb_id           CHAR(11)     NOT NULL,
 	   mb_rank         CHAR(1)      NOT NULL DEFAULT 0,
@@ -163,7 +180,7 @@ $create_sql = '
 	   mb_memo         TEXT         NOT NULL DEFAULT \'\',
 	   mb_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   mb_login        datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
-	   mb_extra           TEXT         NOT NULL DEFAULT \'\',
+	   mb_extra        TEXT         NOT NULL DEFAULT \'\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (mb_srl),
 	  UNIQUE KEY ID_UK (mb_id),
@@ -172,24 +189,24 @@ $create_sql = '
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_addons';
+$_err_keys = _AF_ADDON_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_addons (
+	  CREATE TABLE IF NOT EXISTS '._AF_ADDON_TABLE_.' (
 	   ao_id          VARCHAR(255) NOT NULL,
-	   ao_use_pc      CHAR(1)      NOT NULL DEFAULT 0,
-	   ao_use_mobile  CHAR(1)      NOT NULL DEFAULT 0,
-	   ao_extra          TEXT         NOT NULL DEFAULT \'\',
+	   use_pc         CHAR(1)      NOT NULL DEFAULT 0,
+	   use_mobile     CHAR(1)      NOT NULL DEFAULT 0,
+	   ao_extra       TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (ao_id),
-	  INDEX PC_IX (ao_use_pc),
-	  INDEX MOBILE_IX (ao_use_mobile))'.$_engine;
+	  INDEX PC_IX (use_pc),
+	  INDEX MOBILE_IX (use_mobile))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_modules';
+$_err_keys = _AF_MODULE_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_modules (
+	  CREATE TABLE IF NOT EXISTS '._AF_MODULE_TABLE_.' (
 	   md_id           CHAR(11)     NOT NULL,
 	   md_key          VARCHAR(100) NOT NULL,
 	   md_status       CHAR(1)      NOT NULL DEFAULT 0,
@@ -215,7 +232,7 @@ $create_sql = '
 	   grant_reply     CHAR(1)      NOT NULL DEFAULT 0,
 	   grant_upload    CHAR(1)      NOT NULL DEFAULT 0,
 	   grant_download  CHAR(1)      NOT NULL DEFAULT 0,
-	   md_extra           TEXT         NOT NULL DEFAULT \'\',
+	   md_extra        TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (md_id),
 	  INDEX KEY_IX (md_key))'.$_engine;
@@ -223,9 +240,9 @@ $create_sql = '
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_documents';
+$_err_keys = _AF_DOCUMENT_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_documents (
+	  CREATE TABLE IF NOT EXISTS '._AF_DOCUMENT_TABLE_.' (
 	   wr_srl          INT(11)      NOT NULL AUTO_INCREMENT,
 	   md_id           CHAR(11)     NOT NULL,
 	   wr_parent       INT(11)      NOT NULL DEFAULT 0,
@@ -249,7 +266,7 @@ $create_sql = '
 	   wr_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   wr_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   wr_updater      VARCHAR(20)  ,
-	   wr_extra           TEXT         NOT NULL DEFAULT \'\',
+	   wr_extra        TEXT         NOT NULL DEFAULT \'\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (wr_srl),
 	  INDEX REGDATE_IX (md_id, wr_regdate),
@@ -262,9 +279,9 @@ $create_sql = '
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_comments';
+$_err_keys = _AF_COMMENT_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_comments (
+	  CREATE TABLE IF NOT EXISTS '._AF_COMMENT_TABLE_.' (
 	   rp_srl          INT(11)      NOT NULL AUTO_INCREMENT,
 	   wr_srl          INT(11)      NOT NULL,
 	   rp_parent       INT(11)      NOT NULL DEFAULT 0,
@@ -293,9 +310,9 @@ $create_sql = '
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_pages';
+$_err_keys = _AF_PAGE_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_pages (
+	  CREATE TABLE IF NOT EXISTS '._AF_PAGE_TABLE_.' (
 	   md_id           CHAR(11)     NOT NULL,
 	   pg_type         CHAR(1)      NOT NULL DEFAULT 0,
 	   pg_content      LONGTEXT     NOT NULL DEFAULT \'\',
@@ -303,25 +320,25 @@ $create_sql = '
 	   pg_reply        INT(11)      NOT NULL DEFAULT 0,
 	   pg_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   pg_update       datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
-	   pg_extra           TEXT         NOT NULL DEFAULT \'\',
+	   pg_extra        TEXT         NOT NULL DEFAULT \'\',
 
 	  UNIQUE KEY ID_UK (md_id))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_files';
+$_err_keys = _AF_FILE_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_files (
+	  CREATE TABLE IF NOT EXISTS '._AF_FILE_TABLE_.' (
 	   mf_srl          INT(11)      NOT NULL AUTO_INCREMENT,
 	   md_id           CHAR(11)     NOT NULL,
 	   mf_target       INT(11)      NOT NULL,
 	   mf_name         VARCHAR(255) NOT NULL,
 	   mf_upload_name  VARCHAR(255) NOT NULL,
-	   mf_description  VARCHAR(255) NOT NULL DEFAULT \'\',
-	   mf_size         INT(11)      NOT NULL,
 	   mf_type         VARCHAR(255) NOT NULL,
+	   mf_size         INT(11)      NOT NULL,
 	   mf_download     INT(11)      NOT NULL DEFAULT 0,
+	   mf_description  VARCHAR(255) NOT NULL DEFAULT \'\',
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
 	   mb_ipaddress    VARCHAR(128) NOT NULL DEFAULT \'\',
 	   mf_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
@@ -334,9 +351,9 @@ $create_sql = '
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_histories';
+$_err_keys = _AF_HISTORY_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_histories (
+	  CREATE TABLE IF NOT EXISTS '._AF_HISTORY_TABLE_.' (
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
 	   mb_ipaddress    VARCHAR(128) NOT NULL,
 	   hs_action       VARCHAR(255) NOT NULL,
@@ -350,9 +367,9 @@ $create_sql = '
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_notes';
+$_err_keys = _AF_NOTE_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_notes (
+	  CREATE TABLE IF NOT EXISTS '._AF_NOTE_TABLE_.' (
 	   nt_srl          INT(11)      NOT NULL AUTO_INCREMENT,
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
 	   nt_sender       INT(11)      NOT NULL DEFAULT 0,
@@ -368,9 +385,9 @@ $create_sql = '
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
-$_err_keys = 'afox_visitors';
+$_err_keys = _AF_VISITOR_TABLE_;
 $create_sql = '
-	  CREATE TABLE IF NOT EXISTS afox_visitors (
+	  CREATE TABLE IF NOT EXISTS '._AF_VISITOR_TABLE_.' (
 	   mb_ipaddress    VARCHAR(128) NOT NULL,
 	   vs_agent        VARCHAR(255) NOT NULL,
 	   vs_referer      VARCHAR(255) NOT NULL,
@@ -383,17 +400,17 @@ mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
 $_err_keys = 'insert_members';
-$sql = 'SELECT mb_id FROM afox_members WHERE mb_id = \'admin\'';
+$sql = 'SELECT mb_id FROM '._AF_MEMBER_TABLE_.' WHERE mb_id = \'admin\'';
 $r = mysqli_query($link, $sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 $row = mysqli_fetch_assoc($r);
 if (!$row['mb_id']) {
-	$sql = 'INSERT INTO afox_members (`mb_rank`, `mb_id`, `mb_password`, `mb_nick`, `mb_regdate`) VALUES ("%s", "%s", "%s", "%s", NOW())';
+	$sql = 'INSERT INTO '._AF_MEMBER_TABLE_.' (`mb_rank`, `mb_id`, `mb_password`, `mb_nick`, `mb_regdate`) VALUES ("%s", "%s", "%s", "%s", NOW())';
 	mysqli_query($link, sprintf($sql, 's', 'admin', PasswordStorage::create_hash('0000'), '관리자'));
 }
 
 $_err_keys = 'insert_themes';
-$sql = 'SELECT th_id FROM afox_themes WHERE th_id = \'default\'';
+$sql = 'SELECT th_id FROM '._AF_THEME_TABLE_.' WHERE th_id = \'default\'';
 $r = mysqli_query($link, $sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 $row = mysqli_fetch_assoc($r);
@@ -404,32 +421,32 @@ if (!$row['th_id']) {
 	$tmp['carousel_item_3'] = '<h1>마지막으로 하나 더</h1><p>에이폭스는 각각의 기능과 디자인이 구조적으로 연결되는 모듈형 구조로 개발 및 유지보수를 쉽게 하도록 도와주며 관리자는 손쉽게 설정과 디자인을 변경할 수 있으며 여러분만의 개성을 가진 웹 사이트를 만들 수 있습니다.</p><a class="btn btn-primary" href="#">갤러리 검색</a>';
 	$tmp['footer_html'] = '에이폭스는 <a href="http://afox.kr" target="_blank">@afox</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.';
 	$tmp = "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],serialize($tmp))."'";
-	$sql = 'INSERT INTO afox_themes (`th_id`, `th_extra`) VALUES ("default", '.$tmp.')';
+	$sql = 'INSERT INTO '._AF_THEME_TABLE_.' (`th_id`, `th_extra`) VALUES ("default", '.$tmp.')';
 	mysqli_query($link, $sql);
 }
 
 $_err_keys = 'insert_config';
-$sql = 'SELECT theme FROM afox_config WHERE 1';
+$sql = 'SELECT theme FROM '._AF_CONFIG_TABLE_.' WHERE 1';
 $r = mysqli_query($link, $sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 $row = mysqli_fetch_assoc($r);
 if (!$row['theme']) {
-	$sql = 'INSERT INTO afox_config (`theme`, `start`, `title`, `use_signup`) VALUES ("default", "welcome", "에이폭스", "1")';
+	$sql = 'INSERT INTO '._AF_CONFIG_TABLE_.' (`theme`, `start`, `title`, `use_signup`) VALUES ("default", "welcome", "에이폭스", "1")';
 	mysqli_query($link, $sql);
 }
 
 $_err_keys = 'insert_modules';
-$sql = 'SELECT md_id FROM afox_modules WHERE md_id = \'welcome\'';
+$sql = 'SELECT md_id FROM '._AF_MODULE_TABLE_.' WHERE md_id = \'welcome\'';
 $r = mysqli_query($link, $sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 $row = mysqli_fetch_assoc($r);
 if (!$row['md_id']) {
-	$sql = 'INSERT INTO afox_modules (`md_id`, `md_key`, `md_title`, `md_regdate`) VALUES ("%s", "%s", "%s", NOW())';
+	$sql = 'INSERT INTO '._AF_MODULE_TABLE_.' (`md_id`, `md_key`, `md_title`, `md_regdate`) VALUES ("%s", "%s", "%s", NOW())';
 	mysqli_query($link, sprintf($sql, 'welcome', 'page', ''));
 }
 
 $_err_keys = 'insert_pages';
-$sql = 'SELECT md_id FROM afox_pages WHERE md_id = \'welcome\'';
+$sql = 'SELECT md_id FROM '._AF_PAGE_TABLE_.' WHERE md_id = \'welcome\'';
 $r = mysqli_query($link, $sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 $row = mysqli_fetch_assoc($r);
@@ -438,7 +455,7 @@ if (!$row['md_id']) {
 	$fp = fopen(dirname(__FILE__) . '/../README.md',"r");
 	while( !feof($fp) ) $doc_data .= fgets($fp);
 	fclose($fp);
-	$sql = 'INSERT INTO afox_pages (`md_id`, `pg_type`, `pg_content`, `pg_update`, `pg_regdate`) VALUES ("%s", "1", %s, NOW(), NOW())';
+	$sql = 'INSERT INTO '._AF_PAGE_TABLE_.' (`md_id`, `pg_type`, `pg_content`, `pg_update`, `pg_regdate`) VALUES ("%s", "1", %s, NOW(), NOW())';
 	mysqli_query($link, sprintf($sql, 'welcome', "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],$doc_data)."'"));
 }
 
@@ -479,16 +496,61 @@ fwrite($f, "'charset'=>'{$charset}',\n");
 fwrite($f, "'time_zone'=>'{$time_zone}',\n");
 fwrite($f, "'http_port'=>'',\n");
 fwrite($f, "'https_port'=>'',\n");
-fwrite($f, "'use_ssl'=>'none', //'none','always','optional'\n");
+fwrite($f, "'use_ssl'=>'none',   //'none','always','optional'\n");
 fwrite($f, "'cookie_domain'=>'' //도메인쿠키공유(.도메인.com)\n");
 fwrite($f, ");");
 fclose($f);
 chmod($file, 0644);
 
-echo "설치 성공<br><br>";
-echo "관리자 아이디 : admin<br>";
-echo "관리자 비밀번호 : 0000<br><br>";
-echo "주의 : 관리자 로그인 후에 관리자 페이지에 접속 후 관리자 비밀번호를 바꿔주세요.<br><br>";
+$success_msg = "<br>설치 성공<br><br>관리자 아이디 : admin<br>관리자 비밀번호 : 0000<br><br>주의 : 관리자 로그인 후에 관리자 페이지에 접속 후 관리자 비밀번호를 바꿔주세요.<br><br>";
+
+// 새로 설치가 아닐때를 대비 업데이트 체크
+function __AFOX__delete_updatefiles($dir) {
+	chmod($dir . 'update/1.php', 0777);
+	@unlink($dir . 'update/1.php');
+	chmod($dir . 'update', 0777);
+	@rmdir($dir . 'update');
+	chmod($dir . 'update.php', 0777);
+	if(!@unlink($dir . 'update.php')){
+		echo "업데이트 파일 삭제에 실패했습니다.<br>'./install/update*' 파일, 폴더를 직접 지워주세요.<br><br>";
+	}
+}
+function __AFOX__flush_msg($msg) {
+	echo $msg;
+	echo str_repeat(' ', 4096) . "\n";
+	ob_flush();
+	flush();
+	sleep(1);
+}
+$upbuild = 1;
+$dir = dirname(__FILE__) . '/';
+if(file_exists($dir . 'update.php')) {
+
+	__AFOX__flush_msg("<br>설치를 마치고 업데이트를 체크하는중...<br>");
+
+	mysqli_begin_transaction($link, MYSQLI_TRANS_START_READ_WRITE);
+	try{
+		for ($i=1; $i <= $upbuild; $i++) {
+			include $dir . 'update/'.$i.'.php';
+		}
+		mysqli_commit($link);
+		$file = $datadir.'config/_update.php';
+		@chmod($file, 0777);
+		@unlink($file);
+		$f = @fopen($file, 'w');
+		fwrite($f, "<?php\nif(!defined('__AFOX__')) exit();\n");
+		fwrite($f, "\$_UPBUILD={$upbuild};");
+		fclose($f);
+		chmod($file, 0644);
+		echo $success_msg;
+		__AFOX__delete_updatefiles($dir);
+	} catch (Exception $ex) {
+		mysqli_rollback($link);
+		echo $success_msg;
+	} // finally {}
+} else {
+	echo $success_msg;
+}
 
 ?>
 
