@@ -187,6 +187,16 @@ class DB {
 		}
 	}
 
+	public static function engine($table) {
+		if(self::$link === NULL) {self::connect();}
+		$r = mysqli_query(self::$link, "SHOW TABLE STATUS WHERE Name = '{$table}'");
+		if(mysqli_errno(self::$link)) {
+			throw new Exception(mysqli_error(self::$link), mysqli_errno(self::$link));
+		}
+		$row = mysqli_fetch_assoc($r);
+		return empty($row['Engine'])?'':strtolower($row['Engine']);
+	}
+
 	public static function version() {
 		if(self::$link === NULL) {self::connect();}
 		return mysqli_get_client_version(self::$link);

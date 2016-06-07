@@ -43,8 +43,7 @@ if(empty($_POST['db_name'])) {
 	echo '<span style="display:inline-block;width:150px">DB 호스트 : </span><input type="text" name="db_host" value="localhost"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 포트 : </span><input type="text" name="db_port" value="3306"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 이름 : </span><input type="text" name="db_name" value=""><br>';
-	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="myisam">MyISAM</option><option value="innodb">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br>';
-	echo '<span style="display:inline-block;width:150px">...</span>InnoDB는 서버의 지원 여부를 확인하세요.<br><br>';
+	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="myisam">MyISAM</option><option value="innodb" selected>InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
 	echo '<span style="display:inline-block;width:150px">DB 아이디 : </span><input type="text" name="db_user" value=""><br>';
 	echo '<span style="display:inline-block;width:150px">DB 비밀번호 : </span><input type="text" name="db_pass" value=""><br><br>';
 	echo '<button type="submit">설치 시작</button></form>';
@@ -536,6 +535,7 @@ if(file_exists($dir . 'update.php')) {
 			include $dir . 'update/'.$i.'.php';
 		}
 		mysqli_commit($link);
+		echo $success_msg;
 		__AFOX__delete_updatefiles($dir);
 	} catch (Exception $ex) {
 		mysqli_rollback($link);

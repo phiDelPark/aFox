@@ -37,10 +37,14 @@ function proc($data) {
 
 	try {
 
-		$module = getModule($data['md_id']);
+		$md_id = $data['md_id'];
+		$module = getModule($md_id);
+
+		$new_insert = empty($module['md_id']);
+		$new_files = [];
 
 		// 권한 체크, 파일 첨부 때문에 먼저 함
-		if (empty($module['md_id'])) {
+		if ($new_insert) {
 			if(!isset($data['new_md_id'])) {
 				throw new Exception(getLang('msg_invalid_request'), 303);
 			}
@@ -48,22 +52,20 @@ function proc($data) {
 			// id 를 얻기 위해 먼저 추가
 			DB::insert(_AF_MODULE_TABLE_,
 				[
-					'md_id'=>$data['md_id'],
+					'md_id'=>$md_id,
 					'md_key'=>'page',
 					'md_title'=>$data['md_title'],
 					'(md_regdate)'=>'NOW()'
 				]
 			);
 
-			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$data['md_id'],'(pg_regdate)'=>'NOW()']);
+			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$md_id,'(pg_regdate)'=>'NOW()']);
 
 		} else {
 			if(isset($data['new_md_id'])) {
 				throw new Exception(getLang('msg_target_exists'), 802);
 			}
 		}
-
-		$md_id = $data['md_id'];
 
 		if(!empty($data['remove_files'])) {
 
@@ -134,8 +136,8 @@ function proc($data) {
 					'mb_ipaddress'=>$mb_ipaddress,
 					'(mf_regdate)'=>'NOW()'
 				]);
-				$mf_srl = DB::insertId();
 
+				$new_files[] = $mf_srl = DB::insertId();
 				$file_count++;
 
 				if($data['pg_type'] == 2) {
@@ -162,7 +164,7 @@ function proc($data) {
 				'grant_write'=>0,
 				'grant_reply'=>empty($data['grant_reply'])?'0':$data['grant_reply']
 			], [
-				'md_id'=>$data['md_id']
+				'md_id'=>$md_id
 			]
 		);
 
@@ -173,7 +175,7 @@ function proc($data) {
 				'pg_file'=>$file_count,
 				'(pg_update)'=>'NOW()'
 			], [
-				'md_id'=>$data['md_id']
+				'md_id'=>$md_id
 			]
 		);
 
@@ -182,8 +184,23 @@ function proc($data) {
 
 	} catch (Exception $ex) {
 		DB::rollback();
+
+		// myisam면 rollback 수동으로 해야됨
+		if(DB::engine(_AF_PAGE_TABLE_) === 'myisam') {
+			if($new_insert && !empty($wr_srl)) {
+				@DB::delete(_AF_PAGE_TABLE_, ['md_id'=>$md_id]);
+				@DB::delete(_AF_MODULE_TABLE_, ['md_id'=>$md_id]);
+				@DB::delete(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>1]);
+			} else if(count($new_files)>0) {
+				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $new_files)]);
+			}
+			// myisam면 삭제된 파일은 그냥 지움
+			foreach ($unlink_files as $val) @unlinkFile($val);
+		}
+
 		// 실패시 업로드 된 파일 삭제
 		foreach ($file_dests as $val) @unlinkFile($val);
+
 		return set_error($ex->getMessage(),$ex->getCode());
 	}
 

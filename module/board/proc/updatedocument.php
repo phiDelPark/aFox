@@ -91,8 +91,11 @@ function proc($data) {
 			$encrypt_password = null;
 		}
 
+		$new_insert = empty($wr_srl);
+		$new_files = [];
+
 		// 권한 체크, 파일 첨부 때문에 먼저 함
-		if (empty($wr_srl)) {
+		if ($new_insert) {
 			if(!isGrant($md_id, 'write')) {
 				throw new Exception(getLang('msg_not_permitted'), 901);
 			}
@@ -207,8 +210,8 @@ function proc($data) {
 					'mb_ipaddress'=>$data['mb_ipaddress'],
 					'(mf_regdate)'=>'NOW()'
 				]);
-				$mf_srl = DB::insertId();
 
+				$new_files[] = $mf_srl = DB::insertId();
 				$file_count++;
 
 				if($data['wr_type'] == 2) {
@@ -243,8 +246,22 @@ function proc($data) {
 
 	} catch (Exception $ex) {
 		DB::rollback();
+
+		// myisam면 rollback 수동으로 해야됨
+		if(DB::engine(_AF_DOCUMENT_TABLE_) === 'myisam') {
+			if($new_insert && !empty($wr_srl)) {
+				@DB::delete(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl]);
+				@DB::delete(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>$wr_srl]);
+			} else if(count($new_files)>0) {
+				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $new_files)]);
+			}
+			// myisam면 삭제된 파일은 그냥 지움
+			foreach ($unlink_files as $val) @unlinkFile($val);
+		}
+
 		// 실패시 업로드 된 파일 삭제
 		foreach ($file_dests as $val) @unlinkFile($val);
+
 		return set_error($ex->getMessage(),$ex->getCode());
 	}
 
