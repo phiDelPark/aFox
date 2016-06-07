@@ -20,10 +20,10 @@ function proc($data) {
 
 		$md_id = $module['md_id'];
 
-		$sql = 'SELECT wr_srl FROM '._AF_DOCUMENT_TABLE_.' WHERE md_id=:1 OR (md_id=\'_AFOXtRASH_\' AND wr_updater=:2)';
+		$sql = 'SELECT md_id,wr_srl,wr_updater FROM '._AF_DOCUMENT_TABLE_.' WHERE md_id=:1 OR (md_id=\'_AFOXtRASH_\' AND wr_updater=:2)';
 		DB::getList($sql, [$md_id,$md_id], function($r){
 			while ($row = DB::assoc($r)) {
-				$_md_id = $row['md_id'];
+				$_md_id = ($row['md_id'] === '_AFOXtRASH_') ? $row['wr_updater'] : $row['md_id'];
 				$_wr_srl = $row['wr_srl'];
 				// 파일 삭제
 				$variable = ['binary','image','video','audio'];
