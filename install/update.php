@@ -58,10 +58,10 @@ if(empty($_POST['id']) || empty($_POST['pass'])) {
 
 require_once _AF_PATH_ . 'lib/pbkdf2/PasswordStorage.php';
 
-$r = mysqli_query($link, 'SELECT mb_password FROM '._AF_MEMBER_TABLE_.' WHERE mb_id = \''.$_POST['id'].'\'');
+$r = mysqli_query($link, 'SELECT mb_rank,mb_password FROM '._AF_MEMBER_TABLE_.' WHERE mb_id = \''.$_POST['id'].'\'');
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 $row = mysqli_fetch_assoc($r);
-if (empty($row['mb_password']) || !PasswordStorage::verify_password($_POST['pass'], $row['mb_password'])) {
+if (empty($row['mb_password']) || !PasswordStorage::verify_password($_POST['pass'], $row['mb_password']) || $row['mb_rank'] !== 's') {
 	echo '관리자가 아닙니다. <a href="'._AF_URL_.'">뒤로가기...</a>';
 	exit();
 }
