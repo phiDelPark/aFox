@@ -55,8 +55,16 @@ define('_AF_HTTPS_PORT_', empty($_DBINFO['https_port'])?443:(int)$_DBINFO['https
 define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
 define('_AF_COOKIE_DOMAIN_', $_DBINFO['cookie_domain']);
 
-// SQL Injection 공격에 대비하기 위해
-// DB 클래스 사용시 보통은 escape 하지만 직접 query를 사용할땐 escape를 직접하거나 params 사용하도록 합니다.
+date_default_timezone_set(_AF_TIME_ZONE_);
+session_set_cookie_params(0, '/', _AF_COOKIE_DOMAIN_);
+
+if(session_status() == PHP_SESSION_NONE) {
+	session_start();
+}
+
+/** DB및 기본설정과 일부 설정에 필요한 함수는 먼저 읽기 **/
+
+// SQL Injection 대비를 뤼해 DB 사용시 보통은 escape 되지만 직접 query를 사용할땐 escape를 직접하거나 params 사용.
 require_once _AF_PATH_ . 'lib/db/mysql.php';
 DB::init($_DBINFO);
 unset($_DBINFO); // 쓰고나면 정보 제거
@@ -74,13 +82,6 @@ $_LANG = [];
 $_ADDONS = [];
 $_ADDELEMENTS = ['JS'=>[],'CSS'=>[]];
 
-date_default_timezone_set(_AF_TIME_ZONE_);
-session_set_cookie_params(0, '/', _AF_COOKIE_DOMAIN_);
-
-if(session_status() == PHP_SESSION_NONE) {
-	session_start();
-}
-
 // set_cookie 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료된 쿠키로 만듬 (제거)
 function set_cookie($_name, $value, $expire) { $expire = $expire > 0 ? _AF_SERVER_TIME_ + $expire : (empty($expire) ? 0 : _AF_SERVER_TIME_); setcookie(md5($_name), base64_encode($value), $expire, '/', _AF_COOKIE_DOMAIN_); }
 function get_cookie($_name) { $cookie = md5($_name); if (array_key_exists($cookie, $_COOKIE)) return base64_decode($_COOKIE[$cookie]); else return ""; }
@@ -95,7 +96,9 @@ unset($_MEMBER);
 if($tmp = (isset($_SESSION['ss_mb_id']) ? $_SESSION['ss_mb_id'] : get_cookie('ck_mb_id'))) {
 	if(preg_match('/^[a-zA-Z]+\w{2,}$/', $tmp)) {
 		$_MEMBER = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$tmp}'");
-		if(!DB::error() && !empty($_MEMBER['mb_srl'])){
+		if(DB::error() || empty($_MEMBER['mb_srl'])){
+			unset($_MEMBER);
+		} else {
 			$tmp = $_MEMBER['mb_srl'].'/profile_image.png';
 			if(file_exists(_AF_MEMBER_DATA_.$tmp)) $_MEMBER['mb_icon'] = _AF_URL_.'data/member/'.$tmp;
 			// 쿠키이면... 키검사... 최고 관리자는 쿠키사용안함
@@ -107,8 +110,6 @@ if($tmp = (isset($_SESSION['ss_mb_id']) ? $_SESSION['ss_mb_id'] : get_cookie('ck
 					set_session('ss_mb_id', $mb['mb_id']);
 				}
 			}
-		} else {
-			unset($_MEMBER);
 		}
 	}
 	// 아니면 삭제

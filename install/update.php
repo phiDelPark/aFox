@@ -50,6 +50,7 @@ if( mysqli_connect_errno() ) {
 }
 mysqli_query($link, "SET NAMES ".(isset($o['charset']) ? $o['charset'] : "utf8"));
 mysqli_query($link, "SET time_zone = '".(isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul")."'");
+mysqli_autocommit($link, FALSE);
 
 if(empty($_POST['id']) || empty($_POST['pass'])) {
 	echo '관리자 id, password 를 입력하세요. <a href="'._AF_URL_.'">뒤로가기...</a>';
