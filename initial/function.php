@@ -650,6 +650,7 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function xssClean($html, $chkclosed = true) {
+		$html = preg_replace('#<!--.*?-->#i', '', $html);
 		$html = preg_replace('#</*\w+:\w[^>]*+>#i', '', $html);
 		$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*+>#i', '', $html);
 
