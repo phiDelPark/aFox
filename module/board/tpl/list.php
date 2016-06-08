@@ -51,7 +51,7 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 				foreach ($_{'board'}['data'] as $key => $val) {
 					echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'><th class="hidden-xs" scope="row">'.$val['wr_srl'].'</th>';
 					echo '<td class="wr_title"><a href="'.getUrl('srl',$val['wr_srl']).'" onclick="return false">'.escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
-					echo '<td><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';
+					echo '<td nowrap><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';
 					echo '<td class="hidden-xs">'.$val['wr_hit'].'</td>';
 					echo '<td>'.date('Y/m/d', strtotime($val['wr_update'])).'</td></tr>';
 				}

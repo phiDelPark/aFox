@@ -151,7 +151,7 @@
 				<div class="form-inline">
 					<input type="number" class="form-control" name="md_file_max" min="0" max="9999" maxlength="4" placeholder="<?php echo getLang('max_file_count')?>">
 					<input type="number" class="form-control" name="md_file_size" min="0" max="99999999999" maxlength="11" placeholder="<?php echo getLang('max_file_size')?> (KB)">
-					<input type="text" class="form-control" name="md_file_ext" axlength="255" placeholder="<?php echo getLang('file_extension')?>">
+					<input type="text" class="form-control" name="md_file_ext" maxlength="255" placeholder="<?php echo getLang('file_extension')?>">
 				</div>
 				<p class="help-block"><?php echo getLang('desc_board_file')?></p>
 			</div>

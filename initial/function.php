@@ -60,6 +60,7 @@ if(!defined('__AFOX__')) exit();
 		//return ($_SERVER['REQUEST_METHOD'] == 'GET') ? getUrl() : getRequestUri();
 	}
 
+	// XE getRequestUri 참고 https://www.xpressengine.com/
 	function getRequestUri($ssl_mode = FOLLOW_REQUEST_SSL) {
 		static $url = [];
 
@@ -143,6 +144,7 @@ if(!defined('__AFOX__')) exit();
 		return $n > 0 ? call_user_func_array('setUrlQuery', array_merge([$url], $a)) : $url;
 	}
 
+	// 사용법: getLang(key), getLang(key,isescape), getLang(key,[sprintf],isescape)
 	// 이스케이프시 홑따옴표는 안되니 필요하면 escapeHtml 사용
 	// 홑따옴표 이스케이프시 escapeHtml(getLang('msg',false),false,ENT_QUOTES)
 	function getLang($key, $args1 = true, $args2 = true) {
@@ -637,34 +639,6 @@ if(!defined('__AFOX__')) exit();
 		return PasswordStorage::create_hash($str);
 	}
 
-	function toHTML($type, $text, $class='current_content') {
-		global $_DATA;
-		static $parsedown = null;
-
-		if($type == 1) {
-			if($parsedown == null) {
-				$parsedown = new Parsedown();
-				$parsedown->setBreaksEnabled(true)->setMarkupEscaped(false);
-			}
-			$text =$parsedown->text($text);
-			// 비디오,오디오 처리
-			$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
-			$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
-			$text = preg_replace($patterns, $replacement, $text);
-		} else if($type == 0) {
-			$text = nl2br(strip_tags($text, '<p><a>'));
-		}
-
-		// 다운로드 권한이 없으면 처리
-		if(!empty($_DATA['id']) && !isGrant($_DATA['id'],'download')) {
-			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
-			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('msg_not_permitted',false),true,ENT_QUOTES)."');return false\" \\3";
-			$text = preg_replace($patterns, $replacement, $text);
-		}
-
-		return '<div class="'.$class.'">'.$text.'</div>';
-	}
-
 	function escapeMKDW($str, $is_strip_tags = false) {
 		if($is_strip_tags) $str = strip_tags($str);
 		return preg_replace('/([\\\`\*\_\{\}\[\]\(\)\>\#\+\-\.\!])/m', '\\\\$1', $str);
@@ -675,42 +649,10 @@ if(!defined('__AFOX__')) exit();
 		return htmlspecialchars($str, $quote_style | ENT_HTML401, 'UTF-8', false);
 	}
 
-	function cutstr($str, $length, $tail = '...') {
-		if($length < 1) return $str;
-		$count = 0;
-		$max = preg_match("@\[re\]@", $str) ? ($length + 4) : $length;
-		for ($i=$max; $i > 0; $i--) {
-			if (strlen($str) <= $count) return $str;
-			if (ord($str[$count]) > 127) $count+=3; else $count++;
-		}
-		return substr($str, 0, $count) . $tail;
-
-	}
-
-	function shortFileSize($size) {
-		$tail = 'byte';
-		if($size>1024) {$size=ceil($size/1024);$tail='kb';}
-		if($size>1024) {$size=ceil($size/1024);$tail='mb';}
-		if($size>1024) {$size=ceil($size/1024);$tail='gb';}
-		return $size.$tail;
-	}
-
-	function timePassed($datetime) {
-		$t = time() - strtotime($datetime);
-		$vars1 = ['minute','hour','day', 'week', 'month','year',  ''];
-		$vars2 = [60,      3600,  86400, 604800, 2592000,31536000,1];
-		foreach ($vars2 as $key => $value) { if($t < $value) break; }
-		if($key < 1) return 'just now'; //second
-		$value = floor($t/$vars2[$key-1]);
-		return $value.' '.$vars1[$key-1].($value > 1 ? 's' : '').' ago';
-	}
-
-	// http://stackoverflow.com/questions/1336776/
 	function xssClean($html, $chkclosed = true) {
-		// Remove namespaced elements (we do not need them)
 		$html = preg_replace('#</*\w+:\w[^>]*+>#i', '', $html);
-		// Remove really unwanted tags
 		$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*+>#i', '', $html);
+
 		// remove src hack // XE removeSrcHack https://www.xpressengine.com/
 		$html = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i',
 			function ($match) {
@@ -748,21 +690,77 @@ if(!defined('__AFOX__')) exit();
 				return "<{$match[1]}{$tag}{$attr}{$match[4]}>";
 			}
 		, $html);
-		return $chkclosed ? closeTags($html) : $html;
+
+		if($chkclosed) { // close tags
+			preg_match_all('#</([a-z]+)>#iU', $html, $closeds);
+			preg_match_all('#<(?!meta|link|area|img|br|hr|input\b)([a-z]+)( .*)?(?!/)>#iU', $html, $openeds);
+			if (count($openeds[1]) !== count($closeds[1])) {
+				$closeds = $closeds[1];
+				$openeds = array_reverse($openeds[1]);
+				foreach ($openeds as $val) {
+					if (in_array($val, $closeds)) { unset($closeds[array_search($val, $closeds)]); }
+					else { $html .= '</'.$val.'>'; }
+				}
+			}
+		}
+
+		return $html;
 	}
 
-	function closeTags($html) {
-		preg_match_all('#</([a-z]+)>#iU', $html, $closeds);
-		preg_match_all('#<(?!meta|link|area|img|br|hr|input\b)([a-z]+)( .*)?(?!/)>#iU', $html, $openeds);
-		if (count($openeds[1]) === count($closeds[1])) return $html;
-		$closeds = $closeds[1];
-		$openeds = array_reverse($openeds[1]);
-		foreach ($openeds as $val) {
-			if (in_array($val, $closeds)) {
-				unset($closeds[array_search($val, $closeds)]);
-			} else $html .= '</'.$val.'>';
+	function toHTML($type, $text, $class='current_content') {
+		global $_DATA;
+		static $parsedown = null;
+
+		if($type == 1) {
+			if($parsedown == null) {
+				$parsedown = new Parsedown();
+				$parsedown->setBreaksEnabled(true)->setMarkupEscaped(false);
+			}
+			$text =$parsedown->text($text);
+			// 비디오,오디오 처리
+			$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
+			$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
+			$text = preg_replace($patterns, $replacement, $text);
+		} else if($type == 0) {
+			$text = nl2br(strip_tags($text, '<p><a>'));
 		}
-		return $html;
+
+		// 다운로드 권한이 없으면 처리
+		if(!empty($_DATA['id']) && !isGrant($_DATA['id'],'download')) {
+			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
+			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('msg_not_permitted',false),true,ENT_QUOTES)."');return false\" \\3";
+			$text = preg_replace($patterns, $replacement, $text);
+		}
+
+		return '<div class="'.$class.'">'.$text.'</div>';
+	}
+
+	function cutstr($str, $length, $tail = '...') {
+		$count = 0;
+		if($length < 1) return $str;
+		for ($i=$length; $i > 0; $i--) {
+			if (strlen($str) <= $count) return $str;
+			$count+=($d=ord($str[$count]))<0x80?1:($d<0xE0?2:($d<0xF0?3:4));
+		}
+		return substr($str, 0, $count) . $tail;
+	}
+
+	function timePassed($datetime) {
+		$t = time() - strtotime($datetime);
+		$vars1 = ['minute','hour','day', 'week', 'month','year',  ''];
+		$vars2 = [60,      3600,  86400, 604800, 2592000,31536000,1];
+		foreach ($vars2 as $key => $value) { if($t < $value) break; }
+		if($key < 1) return 'just now'; //second
+		$value = floor($t/$vars2[$key-1]);
+		return $value.' '.$vars1[$key-1].($value > 1 ? 's' : '').' ago';
+	}
+
+	function shortFileSize($size) {
+		$tail = 'Byte';
+		if($size>1024) {$size=ceil($size/1024);$tail='KB';}
+		if($size>1024) {$size=ceil($size/1024);$tail='MB';}
+		if($size>1024) {$size=ceil($size/1024);$tail='GB';}
+		return $size.$tail;
 	}
 
 	function showMessage($message, $type = 0, $title = '') {

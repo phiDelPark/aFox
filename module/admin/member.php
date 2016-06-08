@@ -128,7 +128,7 @@
 			</div>
 			<div class="form-group">
 				<label for="id_mb_nick"><?php echo getLang('nickname')?></label>
-				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" maxlength="255" required>
+				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" maxlength="20" required>
 			</div>
 			<div class="form-group">
 				<label for="id_mb_email"><?php echo getLang('email')?></label>

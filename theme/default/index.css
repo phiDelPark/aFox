@@ -86,7 +86,7 @@ body > .container{
 
 .header-image {
 	height:210px;
-	margin:0 auto 25px;
+	margin:0 auto 30px;
 	background:url(img/header_page.jpg);
 	background-size: cover;
 	color: #fff
@@ -217,11 +217,7 @@ ul.message-dropdown>li>a {
 
 .bs-docs-body {
 	min-height: 100%;
-	margin-bottom: 180px;
-}
-
-.bs-docs-body>section {
-	margin-bottom: 20px;
+	margin-bottom: 185px;
 }
 
 #loginModal .modal-dialog{
