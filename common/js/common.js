@@ -308,6 +308,8 @@ var $_LANG = [];
 					if (status == 'parsererror') {
 						msg = 'The result is not valid JSON :\n--------------------------------\n';
 						if (xhr.responseText !== "") msg += xhr.responseText.replace(/<[^>]+>/g, '');
+						console.log(msg);
+						msg = 'parsererror';
 					} else msg = error;
 					if ($.isFunction(callback)) {
 						cancel = callback('error', msg, xhr) === false;
@@ -458,6 +460,21 @@ var $_LANG = [];
 		}
 	});
 
+	// 글자 수를 byte로 체크하기 위해
+	$(document).on('keyup', 'input[maxbyte],textarea[maxbyte]', function(e) {
+		var $i = $(this),
+			max = $i.attr('maxbyte') || 0;
+		if (isNaN(max)) return;
+		var b = 0,
+			r = '',
+			val = $i.val();
+		for (var i = 0, c; !isNaN(c = val.charCodeAt(i)); i++) {
+			b += c < 128 ? 1 : (c < 2048 ? 2 : (c < 3936256 ? 3 : 4));
+			if (b > max) break;
+			r += String.fromCharCode(c);
+		}
+		$i.val(r);
+	});
 
 	// ... load
 	$(window).on('load', function() {
