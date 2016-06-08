@@ -57,7 +57,7 @@ function proc($data) {
 			DB::delete(_AF_COMMENT_TABLE_,['wr_srl'=>$wr_srl]);
 			DB::delete(_AF_DOCUMENT_TABLE_,['wr_srl'=>$wr_srl]);
 			// 파일 삭제
-			$variable = ['binary','image','video','audio'];
+			$variable = ['binary','image','video','audio','thumbnail'];
 			foreach ($variable as $val) {
 				$directory = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/';
 				if(is_dir($directory)){

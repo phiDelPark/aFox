@@ -22,7 +22,7 @@ function proc($data) {
 		$md_id = $page['md_id'];
 
 		// 파일 삭제
-		$variable = ['binary','image','video','audio'];
+		$variable = ['binary','image','video','audio','thumbnail'];
 		foreach ($variable as $val) {
 			$directory = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/1/';
 			if(is_dir($directory)){

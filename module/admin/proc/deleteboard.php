@@ -26,7 +26,7 @@ function proc($data) {
 				$_md_id = ($row['md_id'] === '_AFOXtRASH_') ? $row['wr_updater'] : $row['md_id'];
 				$_wr_srl = $row['wr_srl'];
 				// 파일 삭제
-				$variable = ['binary','image','video','audio'];
+				$variable = ['binary','image','video','audio','thumbnail'];
 				foreach ($variable as $val) {
 					$directory = _AF_ATTACH_DATA_ . $val . '/' . $_md_id . '/' . $_wr_srl . '/';
 					if(is_dir($directory)){
