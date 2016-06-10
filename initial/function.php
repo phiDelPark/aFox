@@ -392,6 +392,20 @@ if(!defined('__AFOX__')) exit();
 		}
 	}
 
+	function sendNote($srl, $msg) {
+		global $_MEMBER;
+		$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
+		$nick = empty($_MEMBER) ? getLang('none') : $_MEMBER['mb_nick'];
+		if(empty($srl) || $srl === $sender) return false;
+		DB::insert(_AF_NOTE_TABLE_, [
+			'mb_srl'=>$srl,
+			'nt_sender'=>$sender,
+			'nt_sender_nick'=>$nick,
+			'nt_content'=>xssClean($msg),
+			'(nt_send_date)'=>'NOW()'
+		]);
+	}
+
 	function dispEditor($name, $content, $options = []) {
 		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
 	}
@@ -423,18 +437,18 @@ if(!defined('__AFOX__')) exit();
 				);
 			}
 		} else {
-			$_{strtolower(__MODULE__)} = $_result;
+			$_{__MODULE__} = $_result;
 			unset($_result);
 			unset($triggercall);
 			// 테마에 스킨(tpl)이 있으면 사용
-			$tpl_path = _AF_THEME_PATH_ . __MODULE__ . '/';
+			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
 			$tpl_file = (empty($_{__MODULE__}['tpl'])?'default':$_{__MODULE__}['tpl']).'.php';
 			if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
 			include $tpl_path . $tpl_file;
 		}
 	}
 
-	function setWidgetContent($text){
+	function printWidget($text){
 		static $call = null;
 
 		if($call == null) {
@@ -450,6 +464,9 @@ if(!defined('__AFOX__')) exit();
 				$attrs = [];
 				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
 				if(!empty($attrs['widget'])){
+					// 테마에 스킨(tpl)이 있으면 사용하려 했으나 위젯은 스타일 설정하기가 쉽고 큰 비중이없어 안함
+					// $include_file = _AF_THEME_PATH_ . 'widget/'.$attrs['widget'].'.php';
+					// if(!file_exists($include_file))
 					$include_file = _AF_WIDGETS_PATH_ . $attrs['widget'].'/index.php';
 					if(file_exists($include_file)) {
 						return $call($include_file, $attrs);
@@ -462,20 +479,7 @@ if(!defined('__AFOX__')) exit();
 		}, $text);
 	}
 
-	function sendNote($srl, $msg) {
-		global $_MEMBER;
-		$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
-		$nick = empty($_MEMBER) ? getLang('none') : $_MEMBER['mb_nick'];
-		if(empty($srl) || $srl === $sender) return false;
-		DB::insert(_AF_NOTE_TABLE_, [
-			'mb_srl'=>$srl,
-			'nt_sender'=>$sender,
-			'nt_sender_nick'=>$nick,
-			'nt_content'=>xssClean($msg),
-			'(nt_send_date)'=>'NOW()'
-		]);
-	}
-
+	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
 	function triggerCall($trigger, $position, &$data) {
 		global $_ADDONS;
 		static $call = null;
