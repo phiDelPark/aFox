@@ -32,6 +32,7 @@ function proc($data) {
 					if(is_dir($directory)){
 						$handle = @opendir($directory); // 절대경로
 						while ($file = readdir($handle)) {
+							if ($file == '.' || $file == '..') continue;
 							unlinkFile($directory.$file);
 						}
 						closedir($handle);
