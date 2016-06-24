@@ -19,19 +19,21 @@
 	if(!empty($_DATA['srl'])) include 'trashview.php';
 ?>
 
+<form id="af_member_remove_trash_items" method="post">
+<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
 		<?php if(__MOBILE__) { ?>
-		<th><?php echo getLang('title')?></th>
+		<th><input type="checkbox"> <?php echo getLang('title')?></th>
 		<?php } else { ?>
 		<th class="col-xs-1">#</th>
 		<th><?php echo getLang('title')?></th>
-		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1 hidden-xs"><?php echo getLang('secret')?></th>
 		<th class="col-xs-2"><?php echo getLang('author')?></th>
 		<th class="col-xs-1 hidden-xs"><?php echo getLang('date')?></th>
 		<th class="col-xs-1"><?php echo getLang('removed_date')?></th>
+		<th style="width:30px"><input type="checkbox" onclick="_allCheckTrashItems(this)"></th>
 		<?php } ?>
 	</tr>
 </thead>
@@ -50,29 +52,28 @@
 		$end_page = $_list['end_page'];
 		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
-		if(__MOBILE__) {
-			foreach ($_list['data'] as $key => $value) {
-				echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\'"><td class="wr_title"><a href="#" onclick="return false">'.escapeHtml($value['wr_title'], true).'</a>';
-				echo '<div class="clearfix"><span>'.date('y/m/d', strtotime($value['wr_regdate'])).'</span>';
-				echo '<span class="pull-right">Del:'.date('y/m/d', strtotime($value['wr_update'])).'</span></div></td></tr>';
-			}
-		} else {
-			foreach ($_list['data'] as $key => $value) {
-				echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['wr_srl'].'</th>';
+		foreach ($_list['data'] as $key => $value) {
+			echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _trashItemClick(event,\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\')">';
+			if(__MOBILE__) {
+				echo '<td class="wr_title"><a href="#" onclick="return false">'.escapeHtml($value['wr_title'], true).'</a>';
+				echo '<div class="clearfix"><input type="checkbox"> <span>'.date('y/m/d', strtotime($value['wr_regdate'])).'</span>';
+				echo '<span class="pull-right">Del:'.date('y/m/d', strtotime($value['wr_update'])).'</span></div></td>';
+			} else {
+				echo '<th scope="row">'.$value['wr_srl'].'</th>';
 				echo '<td><a href="#" onclick="return false">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
-				echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 				echo '<td class="hidden-xs">'.($value['wr_secret']?'Y':'N').'</td>';
-				echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
+				echo '<td nowrap>'.escapeHtml($value['mb_nick'],true).'</td>';
 				echo '<td class="hidden-xs">'.date('y/m/d', strtotime($value['wr_regdate'])).'</td>';
-				echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td></tr>';
+				echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td><td><input type="checkbox" name="wr_srl[]" value="'.$value['wr_srl'].'"></td>';
 			}
+			echo '</tr>';
 		}
 	}
 ?>
 
 </tbody>
 </table>
-
+</form>
 <nav class="text-center">
 	<ul class="pagination hidden-xs">
 		<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
@@ -83,10 +84,11 @@
 	</ul>
 	<ul class="pager visible-xs-block">
 		<li class="previous<?php echo $current_page <= 1?' disabled':''?>"><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
-		<li><span class="col-xs-5"><?php echo $current_page.' / '.$total_page?></span></li>
+		<li><span class="col-xs-5" style="float:none"><?php echo $current_page.' / '.$total_page?></span></li>
 		<li class="next<?php echo $current_page >= $total_page?' disabled':''?>"><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
 	</ul>
 </nav>
+
 <footer class="clearfix">
 	<form class="search-form pull-left col-xs-5 col-sm-4" action="<?php echo getUrl('') ?>" method="get" style="padding:0;min-width:150px;max-width:250px">
 		<input type="hidden" name="module" value="member">
@@ -101,6 +103,27 @@
 		<input type="hidden" name="id" value="<?php echo $_DATA['id'] ?>">
 	</form>
 	<div class="pull-right">
-		<a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a>
+		<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
+		<a class="btn btn-default" href="#" onclick="_allRemoveTrashItems()" role="button"><i class="fa fa-envelope-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 	</div>
 </footer>
+
+<script>
+	function _trashItemClick(e, href) {
+		if(e.target.tagName === 'INPUT') return true;
+		location.href = href;
+		return false;
+	}
+	function _allCheckTrashItems(th) {
+		var ck = $(th).is(':checked');
+		$(th).closest('table').find('[type=checkbox]').prop('checked', ck);
+	}
+	function _allRemoveTrashItems() {
+		var data = $('#af_member_remove_trash_items')[0].dataExport();
+		if (!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['item']]))) return false;
+		exec_ajax('member.deleteTrash', data);
+		return false;
+	}
+	$_LANG['item'] = "<?php echo getLang('Item')?>";
+	$_LANG['confirm_select_delete'] = "<?php echo getLang('confirm_select_delete')?>";
+</script>
