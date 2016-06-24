@@ -74,7 +74,6 @@
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" onsubmit="return false" method="post" autocomplete="off">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="success_return_values" value="*" />
 	<input type="hidden" name="md_id" value="" />
 	<input type="hidden" name="wr_srl" value="" />
 
