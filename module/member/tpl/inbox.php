@@ -19,16 +19,19 @@
 	if(!empty($_DATA['srl'])) include 'inboxview.php';
 ?>
 
+<form id="af_member_remove_inbox_items" method="post">
+<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
 		<?php if(__MOBILE__) { ?>
-		<th><?php echo getLang('content')?></th>
+		<th><input type="checkbox"> <?php echo getLang('content')?></th>
 		<?php } else { ?>
 		<th class="col-xs-1"><?php echo getLang('nickname')?></th>
 		<th><?php echo getLang('content')?></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1"><?php echo getLang('date')?></th>
+		<th style="width:30px"><input type="checkbox" onclick="_allCheckInboxItems(this)"></th>
 		<?php } ?>
 	</tr>
 </thead>
@@ -47,26 +50,26 @@
 		$end_page = $_list['end_page'];
 		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
-		if(__MOBILE__) {
-			foreach ($_list['data'] as $key => $value) {
-				echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\'"><td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),255).'</a>';
-				echo '<div class="clearfix"><span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';
-				echo '<span class="pull-right">Send:'.date('y/m/d', strtotime($value['nt_send_date'])).'</span></div></td></tr>';
-			}
-		} else {
-			foreach ($_list['data'] as $key => $value) {
-				echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="location.href=\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\'"><th scope="row">'.$value['nt_sender_nick'].'</th>';
+		foreach ($_list['data'] as $key => $value) {
+			echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _inboxItemClick(event,\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\')">';
+			if(__MOBILE__) {
+				echo '<td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),255).'</a>';
+				echo '<div class="clearfix"><input type="checkbox"> <span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';
+				echo '<span class="pull-right">Send:'.date('y/m/d', strtotime($value['nt_send_date'])).'</span></div></td>';
+			} else {
+				echo '<th scope="row" nowrap>'.$value['nt_sender_nick'].'</th>';
 				echo '<td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),90).'</a></td>';
 				echo '<td>'.date('y/m/d', strtotime($value['nt_read_date'])).'</td>';
-				echo '<td>'.date('y/m/d', strtotime($value['nt_send_date'])).'</td></tr>';
+				echo '<td>'.date('y/m/d', strtotime($value['nt_send_date'])).'</td><td><input type="checkbox" name="nt_srl[]" value="'.$value['nt_srl'].'"></td>';
 			}
+			echo '</tr>';
 		}
 	}
 ?>
 
 </tbody>
 </table>
-
+</form>
 <nav class="text-center">
 	<ul class="pagination hidden-xs">
 		<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
@@ -77,7 +80,7 @@
 	</ul>
 	<ul class="pager visible-xs-block">
 		<li class="previous<?php echo $current_page <= 1?' disabled':''?>"><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
-		<li><span class="col-xs-5"><?php echo $current_page.' / '.$total_page?></span></li>
+		<li><span class="col-xs-5" style="float:none"><?php echo $current_page.' / '.$total_page?></span></li>
 		<li class="next<?php echo $current_page >= $total_page?' disabled':''?>"><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
 	</ul>
 </nav>
@@ -96,6 +99,26 @@
 	</form>
 	<div class="pull-right">
 		<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
-		<a class="btn btn-default" href="#" data-exec-ajax="member.readAllNotes" data-ajax-param="success_return_url,<?php echo getUrl()?>" role="button"><i class="fa fa-envelope-o" aria-hidden="true"></i> <?php echo getLang('read_all') ?></a>
+		<a class="btn btn-default" href="#" onclick="_allRemoveInboxItems()" role="button"><i class="fa fa-envelope-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 	</div>
 </footer>
+
+<script>
+	function _inboxItemClick(e, href) {
+		if(e.target.tagName === 'INPUT') return true;
+		location.href = href;
+		return false;
+	}
+	function _allCheckInboxItems(th) {
+		var ck = $(th).is(':checked');
+		$(th).closest('table').find('[type=checkbox]').prop('checked', ck);
+	}
+	function _allRemoveInboxItems() {
+		var data = $('#af_member_remove_inbox_items')[0].dataExport();
+		if (!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['message']]))) return false;
+		exec_ajax('member.deleteNote', data);
+		return false;
+	}
+	$_LANG['message'] = "<?php echo getLang('message')?>";
+	$_LANG['confirm_select_delete'] = "<?php echo getLang('confirm_select_delete')?>";
+</script>

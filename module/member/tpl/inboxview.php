@@ -20,5 +20,9 @@
 		echo $_item['nt_content'];
 	?>
 	</article>
+	<footer class="area-text-button clearfix" style="text-align:right;margin-bottom:50px">
+		<button type="button" class="btn btn-danger" data-exec-ajax="board.del" data-ajax-param="wr_srl,<?php echo $_item['wr_srl']?>,is_empty,1,success_return_url,<?php echo getUrl('srl','')?>"><?php echo getLang('delete')?></button>
+		<button type="button" class="btn btn-success min-width-100" data-exec-ajax="board.jj" data-ajax-param="wr_srl,<?php echo $_item['wr_srl']?>,success_return_url,<?php echo getUrl('srl','')?>"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i> <?php echo getLang('reply')?></button>
+	</footer>
 </section>
 
