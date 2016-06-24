@@ -119,10 +119,22 @@ var $_LANG = [];
 	};
 
 	HTMLFormElement.prototype.dataExport = function() {
-		var data = {},
+		var name, value, data = {},
 			arrs = $(this).serializeArray();
 		for (var v in arrs) {
-			data[arrs[v]['name']] = arrs[v]['value'];
+			name = arrs[v]['name'];
+			value = arrs[v]['value'];
+			if (name.substring(name.length - 2) === '[]') {
+				var $item = $('[name="' + name + '"]');
+				if ($item.eq(0).is(':checkbox') || $item.eq(0).is(':radio')) {
+					$item = $('[name="' + name + '"]:checked');
+					value = $item.map(function() {
+						return this.value;
+					}).get();
+					name = name.slice(0, -2);
+				}
+			}
+			data[name] = value;
 		}
 		return data;
 	};
