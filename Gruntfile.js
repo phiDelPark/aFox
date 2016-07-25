@@ -1,0 +1,132 @@
+module.exports = function(grunt) {
+
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    dirs: {
+      src: 'test/skins/default',
+      dest: 'test/skins/default',
+    },
+    concat: {
+      options: {
+        //separator: ';'
+      },
+      basic_and_extras: {
+        files: {
+          'module/editor/editor.min.js' : ['module/editor/editor.js'],
+          'module/board/tpl/board.min.css' : ['module/board/tpl/board.css'],
+          'module/board/tpl/board.min.js' : ['module/board/tpl/board.js'],
+          'common/js/common.min.js' : ['common/js/common.js'],
+          'common/css/common.min.css' : ['common/css/common.css']
+        }
+      }
+
+      // dist: {
+      //   src: [
+      //     '<%= dirs.src %>/js/board.*.js',
+      //     '<%= dirs.src %>/js/modal.*.js'
+      //   ],
+      //   dest: '<%= dirs.dest %>/js/common.min.js'
+      // }
+    },
+    uglify: {
+      minify: {
+        files: [{
+          expand: true,
+          cwd: 'module/editor/',
+          src: ['editor.min.js'],
+          dest: 'module/editor/',
+          ext: '.min.js'
+        }, {
+          expand: true,
+          cwd: 'module/board/tpl/',
+          src: ['board.min.js'],
+          dest: 'module/board/tpl/',
+          ext: '.min.js'
+        }, {
+          expand: true,
+          cwd: 'common/js/',
+          src: ['common.min.js'],
+          dest: 'common/js/',
+          ext: '.min.js'
+        }]
+      }
+
+      // dist: {
+      //     src: '<%= concat.dist.dest %>',
+      //     dest: static_path + 'js/common.min.js'
+      //   }
+    },
+    cssmin: {
+      minify: {
+        files: [{
+          expand: true,
+          cwd: 'module/board/tpl/',
+          src: ['board.min.css'],
+          dest: 'module/board/tpl/',
+          ext: '.min.css'
+        }, {
+          expand: true,
+          cwd: 'common/css/',
+          src: ['common.min.css'],
+          dest: 'common/css/',
+          ext: '.min.css'
+        }]
+      }
+    },
+    jshint: {
+      files: [
+          'module/editor/editor.js',
+          'module/board/tpl/board.js',
+          'common/js/common.js'
+      ],
+      options: {
+        sub:true,
+        evil: true,
+        loopfunc: true,
+        // options here to override JSHint defaults
+        globals: {
+          jQuery: true,
+          document: true
+        }
+      }
+    },
+    jsbeautifier: {
+      files: [
+          'module/editor/editor.js',
+          'module/board/tpl/board.css',
+          'module/board/tpl/board.js',
+          'common/css/common.css',
+          'common/js/common.js'
+      ],
+      options: {
+        html: {
+            indentScripts: "keep",
+            indentWithTabs: true,
+            unformatted: ["block","a"]
+        },
+        css: {
+            indentWithTabs: true
+        },
+        js: {
+            indentWithTabs: true,
+            evalCode: false
+        }
+      }
+    }
+    // ,
+    // watch: {
+    //   files: ['<%= jshint.files %>'],
+    //   tasks: ['jshint', 'qunit']
+    // }
+  });
+
+  //grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks("grunt-jsbeautifier");
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+
+  grunt.registerTask('default', ['jsbeautifier', 'jshint', 'concat', 'uglify', 'cssmin']);
+
+};
