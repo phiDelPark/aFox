@@ -20,7 +20,6 @@ $_LANG['msg_has_been_delete'] = '이 문서는 삭제되었습니다.';
 $_LANG['msg_prohibit_id'] = '이 아이디나 별명은 사용하실 수 없습니다.';
 $_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
 $_LANG['msg_not_welcome_page'] = 'welcome 페이지는 삭제할 수 없습니다.';
-$_LANG['success_member_signup'] = '회원에 가입되셨습니다.'."\n".'다시 로그인해주세요.';
 $_LANG['msg_empty_id'] = '회원아이디나 비밀번호가 공백이면 안됩니다.'; //501
 $_LANG['msg_diff_password'] = '새 비밀번호와 비밀번호 확인이 서로 다릅니다.'; //503
 $_LANG['msg_wrong_password2'] = '가입된 회원아이디가 아니거나 비밀번호가 틀립니다.'."\n".'비밀번호는 대소문자를 구분합니다.'; //906
@@ -29,6 +28,7 @@ $_LANG['msg_not_write_reply'] = '더 이상 답변하실 수 없습니다.'."\n"
 $_LANG['msg_not_delete_reply_with_sub'] = '이 코멘트와 관련된 답변코멘트가 존재하므로 삭제 할 수 없습니다.'; //573
 $_LANG['msg_email_exists'] = '같은 메일이 이미 등록 되어있습니다.'; // 802
 $_LANG['msg_nick_exists'] = '같은 별명이 이미 등록 되어있습니다.'; // 802
+$_LANG['success_member_signup'] = '회원에 가입되셨습니다.'."\n".'다시 로그인해주세요.';
 
 /* End of file module_kr.php */
 /* Location: ./common/lang/module_kr.php */

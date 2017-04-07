@@ -20,11 +20,11 @@ if($type === 'gallery') {
 	<a class="pull-right" href="<?php echo getUrl('','id',$_WIDGET['module'])?>"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>
 	</div>
 	<?php if($type === 'gallery') { ?>
-		<div class="panel-body" style="overflow:hidden">
+		<div class="panel-body" style="overflow:hidden;padding:8px">
 		<?php
 			$w = (100 / $count);
 			foreach ($_list as $val) {
-				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target']).'"><img src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="max-height:150px;margin:0;padding:3px"></a>';
+				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target']).'"><img src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="max-height:150px;margin:0;padding:8px"></a>';
 			}
 		?>
 		</div>
