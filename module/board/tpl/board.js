@@ -50,6 +50,7 @@
 					.end().insertAfter($rc.hide('slow')).show('slow');
 				$f.find('.btn-success').removeClass('btn-success').addClass('btn-info');
 				if (data['rp_type'] == 2) editor.switch(true);
+				$rp[0].scrollIntoView(true);
 				return false;
 			}
 		};

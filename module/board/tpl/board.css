@@ -220,6 +220,7 @@
 
 #board_reply .inside_massage_box>div>div {
 	margin: 10px 0;
+	font-weight: bold;
 }
 
 #board_write>header .close,
