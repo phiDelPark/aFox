@@ -43,7 +43,7 @@ if(empty($_POST['db_name'])) {
 	echo '<span style="display:inline-block;width:150px">DB 호스트 : </span><input type="text" name="db_host" value="localhost"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 포트 : </span><input type="text" name="db_port" value="3306"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 이름 : </span><input type="text" name="db_name" value=""><br>';
-	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="myisam">MyISAM</option><option value="innodb" selected>InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
+	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="myisam">MyISAM</option><option value="innodb" selected>InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
 	echo '<span style="display:inline-block;width:150px">DB 아이디 : </span><input type="text" name="db_user" value=""><br>';
 	echo '<span style="display:inline-block;width:150px">DB 비밀번호 : </span><input type="text" name="db_pass" value=""><br><br>';
 	echo '<button type="submit">설치 시작</button></form>';
@@ -76,8 +76,8 @@ $db_pass = $_POST['db_pass'];
 $charset = 'utf8';
 $time_zone = 'Asia/Seoul';
 
-$is_innodb = $_POST['db_type'] == 'innodb16' || $_POST['db_type'] == 'innodb';
-$innodb_kb16 = $_POST['db_type'] == 'innodb16';
+$is_innodb = $_POST['db_type'] == 'innodb16' || $_POST['db_type'] == 'innodb8' || $_POST['db_type'] == 'innodb';
+$innodb_option = !$is_innodb || $_POST['db_type'] == 'innodb' ? '' : ($_POST['db_type'] == 'innodb16' ? '16' : '8');
 
 $o = array(
 'host'=>$db_host,
@@ -110,7 +110,11 @@ if($is_innodb){
 	// 단, 루트 사용자는 동적 설정이 가능하다.
 	@mysqli_query($link, "SET GLOBAL innodb_file_format=Barracuda");
 	@mysqli_query($link, "SET GLOBAL innodb_file_per_table=ON");
-	$_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE='.($innodb_kb16?'16':'8').' DEFAULT CHARSET='.$charset.';';
+    if($innodb_option==='') {
+       $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPACT DEFAULT CHARSET='.$charset.';';
+    } else {
+       $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE='.($innodb_option?'16':'8').' DEFAULT CHARSET='.$charset.';';
+    }
 } else {
 	$_engine = ' ENGINE=MyISAM DEFAULT CHARSET='.$charset.';';
 }
