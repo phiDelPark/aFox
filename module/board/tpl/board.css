@@ -67,43 +67,43 @@
 	padding: 20px 0 5px;
 }
 
-#board_view .profile-text > .left,
-#board_reply .reply-item > .left {
+#board_view .profile-text>.left,
+#board_reply .reply-item>.left {
 	position: absolute;
 	float: left;
 	width: 184px;
 	padding: 0 0 0 6px;
 }
 
-#board_reply .reply-item > .left h5 {
+#board_reply .reply-item>.left h5 {
 	margin-bottom: 0;
 }
 
-#board_view .profile-text > .right,
-#board_reply .reply-item > .right {
+#board_view .profile-text>.right,
+#board_reply .reply-item>.right {
 	margin-left: 220px;
 	padding: 0 6px 0 0;
 	position: relative;
 }
 
-#board_reply .reply-item > .right > .content {
+#board_reply .reply-item>.right>.content {
 	min-height: 80px;
 	padding-right: 5px;
 }
 
-#board_reply .reply-item > .right .area-group {
+#board_reply .reply-item>.right .area-group {
 	margin: 0;
 	padding: 0;
 }
 
-#board_reply .reply-item > .right .area-button,
+#board_reply .reply-item>.right .area-button,
 #board_reply>.reply-editer .form-inline+.area-group,
-#board_reply .reply-item > .right .form-inline+.area-group {
+#board_reply .reply-item>.right .form-inline+.area-group {
 	margin-top: 5px;
 }
 
-#board_view .profile-text > .left .profile,
-#board_reply .reply-item > .left .profile {
+#board_view .profile-text>.left .profile,
+#board_reply .reply-item>.left .profile {
 	float: left;
 	margin: 0 6px 5px 0;
 	border: 1px solid #ddd;
@@ -116,12 +116,12 @@
 	margin: 30px 0 20px;
 }
 
-#board_view .profile-text > .left {
+#board_view .profile-text>.left {
 	width: 90px;
 	padding-left: 0;
 }
 
-#board_view .profile-text > .right {
+#board_view .profile-text>.right {
 	min-height: 80px;
 	max-height: 200px;
 	overflow: hidden;
@@ -131,16 +131,16 @@
 	border-radius: 5px;
 }
 
-#board_view .profile-text > .left .profile {
+#board_view .profile-text>.left .profile {
 	height: 80px;
 	width: 80px;
 }
 
-.af-editor-area > textarea {
+.af-editor-area>textarea {
 	min-height: 250px;
 }
 
-.af-editor-area > textarea + iframe {
+.af-editor-area>textarea+iframe {
 	border-color: #5cb85c;
 	min-height: 250px;
 	padding: 1px;
@@ -175,11 +175,11 @@
 	height: 80px;
 }
 
-#board_reply .af-editor-area > textarea {
+#board_reply .af-editor-area>textarea {
 	min-height: 80px;
 }
 
-#board_reply .af-editor-area > textarea + iframe {
+#board_reply .af-editor-area>textarea+iframe {
 	min-height: 80px;
 	margin-bottom: 10px;
 }
@@ -246,22 +246,22 @@
 	#board_reply>.reply-editer .area-group .form-group {
 		margin-right: initial;
 	}
-	#board_view .profile-text > .left,
-	#board_reply .reply-item > .left {
+	#board_view .profile-text>.left,
+	#board_reply .reply-item>.left {
 		position: static;
 		float: none;
 		width: initial;
 	}
-	#board_view .profile-text > .right,
-	#board_reply .reply-item > .right {
+	#board_view .profile-text>.right,
+	#board_reply .reply-item>.right {
 		margin-left: 5px;
 		margin-top: 10px;
 	}
-	#board_view .profile-text > .left .profile,
-	#board_reply .reply-item > .left .profile {
+	#board_view .profile-text>.left .profile,
+	#board_reply .reply-item>.left .profile {
 		float: none;
 	}
-	#board_reply .reply-item > .left>.area-author-info {
+	#board_reply .reply-item>.left>.area-author-info {
 		float: right;
 	}
 	#board_view>article>.current_content {
