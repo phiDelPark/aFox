@@ -230,6 +230,15 @@
 	margin: 10px 0 0;
 }
 
+.text-ellipsis {
+	overflow: hidden;
+	-ms-text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	display: block;
+	white-space: nowrap;
+}
+
 .min-width-50 {
 	min-width: 50px;
 }

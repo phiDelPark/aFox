@@ -32,7 +32,7 @@ if($type === 'gallery') {
 		<div  class="list-group">
 		<?php
 			foreach ($_list['data'] as $val) {
-				echo '<a class="list-group-item" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl']).'">'.$val['wr_title'].'</a>';
+				echo '<a class="list-group-item text-ellipsis" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl']).'">'.$val['wr_title'].'</a>';
 			}
 		?>
 		</div >
