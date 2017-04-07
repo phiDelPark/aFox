@@ -25,12 +25,28 @@ function procPageDefault($data) {
 }
 
 function dispPageDefault($data) {
+	$dir = dirname(__FILE__) . '/disp/';
+	$result = [];
 
-	if(!empty($data['id'])) {
-		require_once dirname(__FILE__) . '/disp/viewpage.php';
-		return proc($data);
+	if($data['disp']) {
+		$include_file = $dir . strtolower($data['disp']) . '.php';
+		if(strtolower($data['disp'])=='setuppage' && file_exists($include_file)) {
+			require_once $include_file;
+			$result = proc($data);
+			$result['tpl'] = 'setup';
+			addCSS(_AF_URL_ . 'module/page/tpl/page.min.css');
+			addJS(_AF_URL_ . 'module/page/tpl/page.min.js');
+			return $result;
+		} else {
+			return set_error(getLang('msg_invalid_request'),303);
+		}
 	} else {
-		set_error(getLang('msg_invalid_request'),303);
+		if(!empty($data['id'])) {
+			require_once dirname(__FILE__) . '/disp/viewpage.php';
+			return proc($data);
+		} else {
+			return set_error(getLang('msg_invalid_request'),303);
+		}
 	}
 }
 

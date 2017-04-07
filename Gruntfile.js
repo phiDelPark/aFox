@@ -15,6 +15,8 @@ module.exports = function(grunt) {
           'module/editor/editor.min.js' : ['module/editor/editor.js'],
           'module/board/tpl/board.min.css' : ['module/board/tpl/board.css'],
           'module/board/tpl/board.min.js' : ['module/board/tpl/board.js'],
+          'module/page/tpl/page.min.css' : ['module/page/tpl/page.css'],
+          'module/page/tpl/page.min.js' : ['module/page/tpl/page.js'],
           'common/js/common.min.js' : ['common/js/common.js'],
           'common/css/common.min.css' : ['common/css/common.css']
         }
@@ -44,6 +46,12 @@ module.exports = function(grunt) {
           ext: '.min.js'
         }, {
           expand: true,
+          cwd: 'module/page/tpl/',
+          src: ['page.min.js'],
+          dest: 'module/page/tpl/',
+          ext: '.min.js'
+        }, {
+          expand: true,
           cwd: 'common/js/',
           src: ['common.min.js'],
           dest: 'common/js/',
@@ -66,6 +74,12 @@ module.exports = function(grunt) {
           ext: '.min.css'
         }, {
           expand: true,
+          cwd: 'module/page/tpl/',
+          src: ['page.min.css'],
+          dest: 'module/page/tpl/',
+          ext: '.min.css'
+        }, {
+          expand: true,
           cwd: 'common/css/',
           src: ['common.min.css'],
           dest: 'common/css/',
@@ -77,6 +91,7 @@ module.exports = function(grunt) {
       files: [
           'module/editor/editor.js',
           'module/board/tpl/board.js',
+          'module/page/tpl/page.js',
           'common/js/common.js'
       ],
       options: {
@@ -95,6 +110,8 @@ module.exports = function(grunt) {
           'module/editor/editor.js',
           'module/board/tpl/board.css',
           'module/board/tpl/board.js',
+          'module/page/tpl/page.css',
+          'module/page/tpl/page.js',
           'common/css/common.css',
           'common/js/common.js'
       ],
