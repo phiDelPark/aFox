@@ -57,6 +57,9 @@
 
 		if (act == 'board.deleteComment' || (act == 'board.getComment' && nombsrl)) {
 			var $ipu, url = encodeURI(current_url.setQuery('rp', ''));
+			if ($rp.find('>>.inside_massage_box').length > 0) {
+				return;
+			}
 			if (nombsrl) {
 				if (act == 'board.getComment') {
 					$ipu = $(input_password.sprintf('', $_LANG['warn_input'].sprintf($_LANG['password']), $_LANG['password'], $_LANG['ok'], $_LANG['close']));
@@ -75,7 +78,7 @@
 				$ipu.fadeOut('slow', function() {
 					$(this).remove();
 				});
-			});
+			}).focus();
 			$ipu.attr('data-exec-ajax', act);
 			$ipu.prepend('<input type="hidden" name="rp_srl" value="' + data['rp_srl'] + '">');
 			$ipu.prepend('<input type="hidden" name="success_return_url" value="' + url + '">');
