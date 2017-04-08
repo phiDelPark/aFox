@@ -57,8 +57,8 @@
 
 		if (act == 'board.deleteComment' || (act == 'board.getComment' && nombsrl)) {
 			var $ipu, url = encodeURI(current_url.setQuery('rp', ''));
-			if ($rp.find('>>.inside_massage_box').length > 0) {
-				return;
+			if($rp.find('>>.inside_massage_box').length>0) {
+				return false;
 			}
 			if (nombsrl) {
 				if (act == 'board.getComment') {

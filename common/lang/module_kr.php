@@ -7,7 +7,7 @@ $_LANG['member_icon'] = '회원 아이콘';
 $_LANG['not_use_signup'] = '지금은 회원 가입을 하실 수 없습니다.';
 $_LANG['permanently_delete'] = '영구히 삭제';
 $_LANG['read_all'] = '모두 읽기';
-$_LANG['removed_date'] = '삭제날짜';
+$_LANG['removed_date'] = '삭제 날짜';
 $_LANG['terms_of_use'] = '이용약관';
 $_LANG['verify_password'] = '비밀번호 확인';
 

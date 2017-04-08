@@ -14,15 +14,18 @@ function proc($data) {
 		return set_error(getLang('msg_not_permitted'),901);
 	}
 
-	// JSON 사용시 파일 목록이 필요할때를 위해 만든옵션
-	if(!empty($data['with_file_list'])) {
+	// 관리자 모드에서 사용하기 위해 필요한 정보 같이 보내기... (관리자만)
+	if(!empty($data['with_module_config']) && isManager($doc['md_id'])) {
+		// 파일 목록
 		$fd = 'mf_srl,mf_name,mf_type,mf_download,mf_description,mf_size,mb_srl,mb_ipaddress';
 		$sql = 'SELECT '.$fd.' FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 ORDER BY mf_type';
 		$out['files'] = DB::getList($sql, [$data['md_id']]);
+		// 모듈 정보
+		$out = array_merge($out, getModule($out['md_id']));
 	}
 
 	// JSON 사용시 모듈설정이 필요할때를 위해 만든옵션
-	return empty($data['with_module_config']) ? $out : array_merge($out, getModule($out['md_id']));
+	return  $out;
 }
 
 /* End of file getpage.php */

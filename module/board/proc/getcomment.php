@@ -38,8 +38,14 @@ function proc($data) {
 	// 비밀번호는 암호화 되있지만 그래도 노출 안되게 제거
 	unset($cmt['mb_password']);
 
+	// 관리자 모드에서 사용하기 위해 필요한 정보 같이 보내기... (관리자만)
+	if(!empty($data['with_module_config']) && isManager($doc['md_id'])) {
+		$cmt['wr_title'] = $doc['wr_title'];
+		$cmt = array_merge($cmt, getModule($doc['md_id']));
+	}
+
 	// JSON 사용시 모듈설정이 필요할때를 위해 만든옵션
-	return empty($data['with_module_config']) ? $cmt : array_merge($cmt, getModule($doc['md_id']));
+	return $cmt;
 }
 
 /* End of file getcomment.php */

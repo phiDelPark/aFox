@@ -83,6 +83,7 @@ $_LANG['rank'] = '계급';
 $_LANG['read'] = '읽기';
 $_LANG['recycle_bin'] = '휴지통';
 $_LANG['refresh'] = '새로고침';
+$_LANG['regdate'] = '등록 날짜';
 $_LANG['register'] = '등록';
 $_LANG['reload'] = '다시 읽기';
 $_LANG['reply'] = $_LANG['comment'];
