@@ -123,12 +123,15 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 
 
 <script>
-	$_LANG['document'] = "<?php echo getLang('document')?>";
-	$_LANG['page'] = "<?php echo getLang('page')?>";
-	$_LANG['board'] = "<?php echo getLang('board')?>";
 	$_LANG['menu'] = "<?php echo getLang('menu')?>";
 	$_LANG['addon'] = "<?php echo getLang('addon')?>";
 	$_LANG['theme'] = "<?php echo getLang('theme')?>";
+	$_LANG['board'] = "<?php echo getLang('board')?>";
+	$_LANG['page'] = "<?php echo getLang('page')?>";
+	$_LANG['document'] = "<?php echo getLang('document')?>";
+	$_LANG['comment'] = "<?php echo getLang('comment')?>";
+	$_LANG['file'] = "<?php echo getLang('file')?>";
+	$_LANG['confirm_select_move'] = "<?php echo getLang('confirm_select_move')?>";
 	$_LANG['confirm_select_empty'] = "<?php echo getLang('confirm_select_empty')?>";
 	$_LANG['confirm_select_delete'] = "<?php echo getLang('confirm_select_delete')?>";
 </script>

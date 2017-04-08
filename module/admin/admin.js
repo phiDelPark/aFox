@@ -50,17 +50,21 @@
 				arr = $i.attr('data-add-param')||'',
 				data = $f[0].dataExport();
 
-			if(act == 'admin.deleteBoard'||act == 'page.deletePage'||act == 'board.deleteDocument') {
-				var tmp = $_LANG[act == 'admin.deleteBoard' ? 'board' : (act == 'page.deletePage'?'page':'document')];
-				if (!confirm($_LANG['confirm_select_delete'].sprintf([tmp]))) return false;
-			}
-
 			if(arr) {
 				arr = arr.split(',');
 				for (var i = 0, n = arr.length; i < n; i+=2) {
 					data[arr[i]] = arr[i+1];
 				}
 			}
+
+			if(act == 'admin.deleteBoard'||act == 'page.deletePage'||act == 'board.deleteDocument') {
+				var tmp = act == 'admin.deleteBoard' ? 'board' : (act == 'page.deletePage'?'page':'document');
+				if (!confirm($_LANG['confirm_select_'+(tmp=='document'&&(!data['is_empty']||data['is_empty']!=='1')?'move':'delete')].sprintf([$_LANG[tmp]]))) return false;
+			} else if(act == 'board.deleteComment'||act == 'admin.deleteFile') {
+				var tmp = act == 'board.deleteComment' ? 'comment' : 'file';
+				if (!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG[tmp]]))) return false;
+			}
+
 			exec_ajax(act, data);
 			return false;
 		});

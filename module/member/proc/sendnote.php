@@ -26,5 +26,5 @@ function proc($data) {
 	return ['error'=>0, 'message'=>getLang('success_sended')];
 }
 
-/* End of file deletenote.php */
-/* Location: ./module/member/proc/deletenote.php */
+/* End of file sendnote.php */
+/* Location: ./module/member/proc/sendnote.php */
