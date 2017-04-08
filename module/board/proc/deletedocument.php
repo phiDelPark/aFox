@@ -31,12 +31,18 @@ function proc($data) {
 			}
 		}
 
+		$md_id = $doc['md_id'];
+
 		if(empty($data['is_empty'])) {
+			// 이미 휴지통이면 에러
+			if($md_id == '_AFOXtRASH_') {
+				throw new Exception(getLang('msg_invalid_request'), 303);
+			}
 			// 휴지통으로 보냄
 			DB::update(_AF_DOCUMENT_TABLE_,
 				[
 					'md_id'=>'_AFOXtRASH_',
-					'wr_updater'=>$doc['md_id'],
+					'wr_updater'=>$md_id,
 					'(wr_update)'=>'NOW()'
 				], [
 					'wr_srl'=>$wr_srl
@@ -44,7 +50,6 @@ function proc($data) {
 			);
 		} else {
 			// 완전 삭제
-			$md_id = $doc['md_id'];
 			// 휴지통이면 원래 모듈 id 가져오기
 			if($md_id == '_AFOXtRASH_') {
 				$module = getModule($doc['wr_updater']);
@@ -56,21 +61,23 @@ function proc($data) {
 			DB::delete(_AF_FILE_TABLE_,['md_id'=>$md_id,'mf_target'=>$wr_srl]);
 			DB::delete(_AF_COMMENT_TABLE_,['wr_srl'=>$wr_srl]);
 			DB::delete(_AF_DOCUMENT_TABLE_,['wr_srl'=>$wr_srl]);
-			// 파일 삭제
-			$variable = ['binary','image','video','audio','thumbnail'];
-			foreach ($variable as $val) {
-				$directory = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/';
-				if(is_dir($directory)){
-					$handle = @opendir($directory); // 절대경로
-					while ($file = readdir($handle)) {
-						if ($file == '.' || $file == '..') continue;
-						unlinkFile($directory.$file);
-					}
-					closedir($handle);
-					unlinkDir($directory);
+		}
+
+		// 파일 삭제 // 휴지통 이동이면 썸네일만 제거
+		$variable = empty($data['is_empty']) ? ['thumbnail'] : ['binary','image','video','audio','thumbnail'];
+		foreach ($variable as $val) {
+			$directory = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/';
+			if(is_dir($directory)){
+				$handle = @opendir($directory); // 절대경로
+				while ($file = readdir($handle)) {
+					if ($file == '.' || $file == '..') continue;
+					unlinkFile($directory.$file);
 				}
+				closedir($handle);
+				unlinkDir($directory);
 			}
 		}
+
 	} catch (Exception $ex) {
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());

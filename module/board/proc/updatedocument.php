@@ -47,6 +47,7 @@ function proc($data) {
 	}
 
 	$unlink_files = [];
+	$unlink_thumbs = [];
 	$file_dests = [];
 	$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
@@ -154,6 +155,9 @@ function proc($data) {
 					$filetype = strtolower(array_shift(explode('/', $file['mf_type'])));
 					$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 					$unlink_files[] = _AF_ATTACH_DATA_.$filetype.'/'.$md_id.'/'.$wr_srl.'/'.$file['mf_upload_name'];
+					if($filetype=='image') {
+						$unlink_thumbs[$file['mf_srl']] = $md_id.'/'.$wr_srl;
+					}
 				}
 			}
 		}
@@ -243,6 +247,20 @@ function proc($data) {
 
 		// 모두 완료 되면 지워진 파일 완전 삭제
 		foreach ($unlink_files as $val) @unlinkFile($val);
+
+		// 썸네일 제거
+		foreach ($unlink_thumbs as $key => $val) {
+			$directory = _AF_ATTACH_DATA_ . 'thumbnail/' . $val . '/';
+			if(is_dir($directory)){
+				$handle = @opendir($directory); // 절대경로
+				while ($file = readdir($handle)) {
+					if (strpos($file, $key.'_') === false) continue;
+					@unlinkFile($directory.$file);
+				}
+				closedir($handle);
+				//@unlinkDir($directory);
+			}
+		}
 
 	} catch (Exception $ex) {
 		DB::rollback();
