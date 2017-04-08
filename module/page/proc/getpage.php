@@ -15,11 +15,11 @@ function proc($data) {
 	}
 
 	// 관리자 모드에서 사용하기 위해 필요한 정보 같이 보내기... (관리자만)
-	if(!empty($data['with_module_config']) && isManager($doc['md_id'])) {
+	if(!empty($data['with_module_config']) && isManager($out['md_id'])) {
 		// 파일 목록
 		$fd = 'mf_srl,mf_name,mf_type,mf_download,mf_description,mf_size,mb_srl,mb_ipaddress';
 		$sql = 'SELECT '.$fd.' FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 ORDER BY mf_type';
-		$out['files'] = DB::getList($sql, [$data['md_id']]);
+		$out['files'] = DB::getList($sql, [$out['md_id']]);
 		// 모듈 정보
 		$out = array_merge($out, getModule($out['md_id']));
 	}
