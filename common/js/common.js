@@ -216,8 +216,8 @@ var $_LANG = [];
 		}
 	};
 
-	$.pop_win = window.pop_win = function(url, w, h) {
-		var popwin = window.open(url, 'af_popup', 'width=' + (w || '700') + ',height=' + (h || '500') + ',top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no');
+	$.pop_win = window.pop_win = function(url, w, h, id) {
+		var popwin = window.open(url, (id || 'af_popup'), 'width=' + (w || '700') + ',height=' + (h || '500') + ',top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no');
 		popwin.focus();
 		return popwin;
 	};

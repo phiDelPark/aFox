@@ -12,4 +12,4 @@ function proc($data) {
 }
 
 /* End of file signup.php */
-/* Location: ./module/member/signup.php */
+/* Location: ./module/member/disp/signup.php */

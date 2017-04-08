@@ -38,6 +38,7 @@
 <tbody>
 
 <?php
+	$unread_str = getLang('unread');
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
@@ -57,9 +58,9 @@
 				echo '<div class="clearfix"><input type="checkbox"> <span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';
 				echo '<span class="pull-right">Send:'.date('y/m/d', strtotime($value['nt_send_date'])).'</span></div></td>';
 			} else {
-				echo '<th scope="row" nowrap>'.$value['nt_sender_nick'].'</th>';
+				echo '<th scope="row"'.($value['nt_sender']?'':' style="font-weight:normal"').' nowrap>'.$value['nt_sender_nick'].'</th>';
 				echo '<td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),90).'</a></td>';
-				echo '<td>'.date('y/m/d', strtotime($value['nt_read_date'])).'</td>';
+				echo '<td>'.($value['nt_read_date'] === '0000-00-00 00:00:00'?$unread_str:date('y/m/d', strtotime($value['nt_read_date']))).'</td>';
 				echo '<td>'.date('y/m/d', strtotime($value['nt_send_date'])).'</td><td><input type="checkbox" name="nt_srl[]" value="'.$value['nt_srl'].'"></td>';
 			}
 			echo '</tr>';

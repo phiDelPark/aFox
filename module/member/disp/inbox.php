@@ -8,4 +8,4 @@ function proc($data) {
 }
 
 /* End of file inbox.php */
-/* Location: ./module/member/inbox.php */
+/* Location: ./module/member/disp/inbox.php */

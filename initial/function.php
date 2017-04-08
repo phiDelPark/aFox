@@ -392,10 +392,10 @@ if(!defined('__AFOX__')) exit();
 		}
 	}
 
-	function sendNote($srl, $msg) {
+	function sendNote($srl, $msg, $nick = '') {
 		global $_MEMBER;
 		$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
-		$nick = empty($_MEMBER) ? getLang('none') : $_MEMBER['mb_nick'];
+		$nick = empty($_MEMBER) ? ($nick ? $nick : getLang('none')) : $_MEMBER['mb_nick'];
 		if(empty($srl) || $srl === $sender) return false;
 		DB::insert(_AF_NOTE_TABLE_, [
 			'mb_srl'=>$srl,

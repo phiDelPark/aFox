@@ -26,6 +26,8 @@ $_DATA = is_null($_POST) ? $_GET : (is_null($_GET) ? $_POST : array_merge($_POST
 unset($_GET);
 unset($_POST);
 
+define('__POPUP__', !empty($_DATA['popup']) && $_DATA['popup'] === '1');
+
 // 문서번호만 오면 id 가져옴
 if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))) {
 	if(empty($_DATA['srl'])) {
@@ -69,7 +71,7 @@ if(!empty($_DATA['cdnerr'])) {
 }
 
 $tmp = _AF_CONFIG_DATA_.'base_cdn_list.php';
-define('__USE_BASE_CDN__', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp : FALSE);
+define('_AF_USE_BASE_CDN_', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp : FALSE);
 
 // 실행 가능한 애드온 정보 합치기
 $tmp = (__MOBILE__?'use_mobile':'use_pc').'=1';

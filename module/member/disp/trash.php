@@ -8,4 +8,4 @@ function proc($data) {
 }
 
 /* End of file trash.php */
-/* Location: ./module/member/trash.php */
+/* Location: ./module/member/disp/trash.php */

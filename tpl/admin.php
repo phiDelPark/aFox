@@ -22,10 +22,10 @@ if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
 <!--[if IE]>
 <script type="text/javascript" src="<?php echo _AF_URL_ ?>common/js/html5shiv.min.js"></script>
 <![endif]-->
-<?php if (__USE_BASE_CDN__) { include __USE_BASE_CDN__; } else { ?>
+<?php if (_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 <link href="<?php echo _AF_URL_ ?>common/css/bootstrap.min.css" rel="stylesheet">
 <link href="<?php echo _AF_URL_ ?>common/css/font-awesome.min.css" rel="stylesheet">
-<script src="<?php echo _AF_URL_ ?>common/js/jquery-1.12.3.min.js" id="def-jQuery-JS"></script>
+<script src="<?php echo _AF_URL_ ?>common/js/jquery.min.js" id="def-jQuery-JS"></script>
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.min.js" id="def-Bootstrap-JS"></script>
 <?php } ?>
 <script>
