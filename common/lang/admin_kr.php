@@ -43,6 +43,7 @@ $_LANG['clear_cache'] = '캐시 재생성';
 $_LANG['empty_addon'] = $_LANG['empty_module'] = $_LANG['empty_theme'] = '비우기';
 $_LANG['file_extension'] = '첨부 가능 확장자';
 $_LANG['foot_menu'] = '하단 메뉴';
+$_LANG['goto'] = '찾아가기';
 $_LANG['how_to_use'] = '사용법';
 $_LANG['intercept_ip'] = '차단 아이피';
 $_LANG['main_menu'] = '메인 메뉴';

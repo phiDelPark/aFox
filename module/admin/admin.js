@@ -65,6 +65,16 @@
 			return false;
 		});
 
+		$f.find('button.document_goto').on('click', function() {
+			var $i = $(this),
+				$f = $i.closest('form'),
+				mf = $f.find('input[name=mf_target]').val()||'',
+				wr = $f.find('input[name=wr_srl]').val()||mf,
+				rp = $f.find('input[name=rp_srl]').val()||'';
+			if(!wr) return false;
+			window.open(request_uri+'?srl='+wr+(rp?'#reply_'+rp:''), '_blank');
+		});
+
 		var $editor = $f.find('.af-editor-group');
 		if($editor.length>0) {
 			$editor.afEditor({});

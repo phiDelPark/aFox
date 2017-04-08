@@ -73,6 +73,7 @@
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="md_id" value="" />
 	<input type="hidden" name="mf_srl" value="" />
+	<input type="hidden" name="mf_target" value="" />
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			<h4 class="modal-title" id="myModalLabel"><?php echo getLang('file')?></h4>
@@ -93,7 +94,12 @@
 			</div>
 			<div class="form-group">
 				<label for="id_mf_name"><?php echo getLang('name')?></label>
-				<input type="text" name="mf_name" class="form-control" id="id_mf_name" maxlength="255">
+				<div class="input-group">
+					<input type="text" name="mf_name" class="form-control" id="id_mf_name" maxlength="255">
+					<span class="input-group-btn">
+						<button class="btn btn-info document_goto" type="button" title="<?php echo getLang('goto')?>..."><i class="glyphicon glyphicon-share-alt" aria-hidden="true"></i></button>
+					</span>
+				</div>
 			</div>
 			<div class="form-group">
 				<label for="id_mf_description"><?php echo getLang('explain')?></label>

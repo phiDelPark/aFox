@@ -10,7 +10,7 @@
 <table class="table table-hover table-nowrap">
 <thead class="table-nowrap">
 	<tr>
-		<th class="col-xs-1">#<?php echo getLang('board')?></th>
+		<th class="col-xs-1">#<?php echo getLang('document')?></th>
 		<th><?php echo getLang('title')?></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('secret')?></th>
@@ -74,12 +74,22 @@
 	<form class="modal-content" method="post" autocomplete="off">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="rp_srl" value="" />
+	<input type="hidden" name="wr_srl" value="" />
 
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('comment')?></h4>
 	  </div>
 	  <div class="modal-body">
+		<div class="form-group">
+			<label for="id_wr_title"><?php echo getLang('document')?></label>
+			<div class="input-group">
+				<input type="text" class="form-control" id="id_wr_title" maxlength="255" disabled>
+				<span class="input-group-btn">
+					<button class="btn btn-info document_goto" type="button" title="<?php echo getLang('goto')?>..."><i class="glyphicon glyphicon-share-alt" aria-hidden="true"></i></button>
+				</span>
+			</div>
+		</div>
 		<div class="form-group">
 			<?php dispEditor(
 					'rp_content',

@@ -89,7 +89,12 @@
 		</div>
 		<div class="form-group">
 			<label for="id_wr_title"><?php echo getLang('title')?></label>
-			<input type="text" name="wr_title" class="form-control" id="id_wr_title" maxlength="255">
+			<div class="input-group">
+				<input type="text" name="wr_title" class="form-control" id="id_wr_title" maxlength="255">
+				<span class="input-group-btn">
+					<button class="btn btn-info document_goto" type="button" title="<?php echo getLang('goto')?>..."><i class="glyphicon glyphicon-share-alt" aria-hidden="true"></i></button>
+				</span>
+			</div>
 		</div>
 		<div class="form-group">
 			<?php dispEditor(
