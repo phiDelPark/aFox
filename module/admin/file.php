@@ -80,13 +80,14 @@
 		</div>
 		<div class="modal-body">
 			<div class="form-group clearfix">
-					<div class="pull-left">
+				<div class="pull-left">
 					<label><?php echo getLang('%s %s',['module','id'])?></label>
 					<div class="form-inline">
 						<input type="text" class="form-control" name="md_id" maxlength="11" disabled="disabled">
 					</div>
 				</div>
 				<div class="pull-right">
+					<label><?php echo getLang('regdate')?></label>
 					<div class="form-inline">
 						<input type="text" name="mf_regdate" class="form-control" style="width:160px" disabled="disabled" title="<?php echo getLang('regdate')?>">
 					</div>

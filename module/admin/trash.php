@@ -35,7 +35,7 @@
 		$end_page = $doc_list['end_page'];
 
 		foreach ($doc_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"><th scope="row">'.$value['wr_srl'].'</th>';
+			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"><th scope="row">'.$value['wr_updater'].'</th>';
 			echo '<td>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['wr_secret']?'Y':'N').'</td>';
@@ -84,6 +84,34 @@
 		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('recycle_bin')?></h4>
 	  </div>
 	  <div class="modal-body">
+		<div class="form-group clearfix">
+			<div class="pull-left">
+				<label><?php echo getLang('nickname')?></label>
+				<div class="form-inline">
+					<input type="text" class="form-control" name="mb_nick" maxlength="20" disabled="disabled">
+				</div>
+			</div>
+			<div class="pull-right">
+				<label><?php echo getLang('regdate')?></label>
+				<div class="form-inline">
+					<input type="text" name="wr_regdate" class="form-control" style="width:160px" disabled="disabled">
+				</div>
+			</div>
+		</div>
+		<div class="form-group clearfix">
+			<div class="pull-left">
+				<label><?php echo getLang('%s %s',['module','id'])?></label>
+				<div class="form-inline">
+					<input type="text" class="form-control" name="wr_updater" maxlength="11" disabled="disabled">
+				</div>
+			</div>
+			<div class="pull-right">
+				<label><?php echo getLang('removed_date')?></label>
+				<div class="form-inline">
+					<input type="text" name="wr_update" class="form-control" style="width:160px" disabled="disabled">
+				</div>
+			</div>
+		</div>
 		<div class="form-group" style="display:none">
 			<label for="id_wr_category"><?php echo getLang('category')?></label>
 			<input type="text" name="wr_category" class="form-control" id="id_wr_category" maxlength="255" readonly="readonly">

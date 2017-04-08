@@ -1,16 +1,40 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	$search = empty($_DATA['search'])?null:'%'.$_DATA['search'].'%';
-	$cmt_list = getDBList(_AF_COMMENT_TABLE_,[
-		'OR' =>empty($search)?[]:['rp_content{LIKE}'=>$search]
-	],'rp_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
+	$cd = _AF_COMMENT_TABLE_;
+	$dd = _AF_DOCUMENT_TABLE_;
+
+	$search = empty($_DATA['search'])?'':$cd.'.rp_content LIKE '.DB::escape('%'.$_DATA['search'].'%');
+	$category = empty($_DATA['category'])?'':$dd.'.md_id LIKE '.DB::escape('%'.$_DATA['category'].'%');
+	$where = empty($search)&&empty($category) ? '1' : '('.$category.(empty($search)||empty($category) ? '' : ' AND ').$search.')';
+	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
+	$count = 20;
+	$start = (($page - 1) * $count);
+	$cmt_list = [];
+
+	$out = DB::getList("SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.wr_srl WHERE $where ORDER BY $cd.rp_regdate DESC LIMIT $start,$count");
+	if($ex = DB::error()) {
+		echo showMessage($ex->getMessage(),$ex->getCode());
+	} else {
+		$total_count = DB::found();
+		$cur_page = $page;
+		$tal_page = ceil($total_count / $count);
+		$cmt_list['current_page'] = $cur_page;
+		$cmt_list['total_page'] = $tal_page;
+		$cur_page--;
+		$str_page = $cur_page - ($cur_page % 10);
+		$end_page = ($tal_page > ($str_page + 10) ? $str_page + 10 : $tal_page);
+		$cmt_list['start_page'] = ++$str_page;
+		$cmt_list['end_page'] = $end_page;
+		$cmt_list['total_count'] = $total_count;
+		$cmt_list['data'] = $out;
+	}
 ?>
 
 <table class="table table-hover table-nowrap">
 <thead class="table-nowrap">
 	<tr>
-		<th class="col-xs-1">#<?php echo getLang('document')?></th>
+		<th class="col-xs-1">#<?php echo getLang('board')?></th>
 		<th><?php echo getLang('title')?></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('secret')?></th>
@@ -33,7 +57,7 @@
 		$end_page = $cmt_list['end_page'];
 
 		foreach ($cmt_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].'" data-modal-target="#comment_modal"><th scope="row">'.$value['rp_srl'].'</th>';
+			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].',with_module_config,1" data-modal-target="#comment_modal"><th scope="row">'.$value['md_id'].'</th>';
 			echo '<td>'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
 			echo '<td>'.($value['rp_status']?$value['rp_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['rp_secret']?'Y':'N').'</td>';
@@ -81,10 +105,24 @@
 		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('comment')?></h4>
 	  </div>
 	  <div class="modal-body">
+		<div class="form-group clearfix">
+			<div class="pull-left">
+				<label><?php echo getLang('nickname')?></label>
+				<div class="form-inline">
+					<input type="text" class="form-control" name="mb_nick" maxlength="20" disabled="disabled">
+				</div>
+			</div>
+			<div class="pull-right">
+				<label><?php echo getLang('regdate')?></label>
+				<div class="form-inline">
+					<input type="text" name="rp_regdate" class="form-control" style="width:160px" disabled="disabled">
+				</div>
+			</div>
+		</div>
 		<div class="form-group">
 			<label for="id_wr_title"><?php echo getLang('document')?></label>
 			<div class="input-group">
-				<input type="text" class="form-control" id="id_wr_title" maxlength="255" disabled>
+				<input type="text" class="form-control" name="wr_title" id="id_wr_title" maxlength="255" disabled>
 				<span class="input-group-btn">
 					<button class="btn btn-info document_goto" type="button" title="<?php echo getLang('goto')?>..."><i class="glyphicon glyphicon-share-alt" aria-hidden="true"></i></button>
 				</span>

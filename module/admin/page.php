@@ -4,14 +4,14 @@
 	$md = _AF_MODULE_TABLE_;
 	$pg = _AF_PAGE_TABLE_;
 
-	$search = empty($_DATA['search'])?'':'%'.DB::escape($_DATA['search']).'%';
-	$where = empty($search) ? '1' : '('.$pg.'.md_id LIKE "%'.$search.'%" OR '.$pg.'.pg_content LIKE "%'.$search.'%")';
+	$search = empty($_DATA['search'])?'':DB::escape('%'.$_DATA['search'].'%');
+	$where = empty($search) ? '1' : '('.$md.'.md_title LIKE '.$search.' OR '.$pg.'.pg_content LIKE '.$search.')';
 	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
 	$count = 20;
 	$start = (($page - 1) * $count);
 	$page_list = [];
 
-	$out = DB::getList("SELECT SQL_CALC_FOUND_ROWS * FROM $pg INNER JOIN $md ON  $pg.md_id = $md.md_id WHERE $where ORDER BY $pg.pg_regdate DESC LIMIT $start,$count");
+	$out = DB::getList("SELECT SQL_CALC_FOUND_ROWS * FROM $pg INNER JOIN $md ON $md.md_id = $pg.md_id WHERE $where ORDER BY $pg.pg_regdate DESC LIMIT $start,$count");
 	if($ex = DB::error()) {
 		echo showMessage($ex->getMessage(),$ex->getCode());
 	} else {
@@ -66,7 +66,7 @@
 			echo '<td>'.escapeHtml(cutstr(strip_tags($value['md_title']),50)).'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.$value['grant_view'].'-'.$value['grant_reply'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['pg_update'])).'</td>';
-			echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].',with_module_config,1,with_file_list,1" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
+			echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].',with_module_config,1" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
 		}
 	}
 ?>

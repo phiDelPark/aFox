@@ -2,8 +2,9 @@
 	if(!defined('__AFOX__')) exit();
 
 	$search = empty($_DATA['search'])?null:'%'.$_DATA['search'].'%';
+	$category = empty($_DATA['category'])?null:$_DATA['category'];
 	$doc_list = getDBList(_AF_DOCUMENT_TABLE_,[
-		'md_id{<>}'=>'_AFOXtRASH_',
+		'md_id'.(empty($category)?'{<>}':'')=>empty($category)?'_AFOXtRASH_':$category,
 		'OR' =>empty($search)?[]:['wr_title{LIKE}'=>$search, 'wr_content{LIKE}'=>$search]
 	],'wr_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
 ?>
@@ -34,7 +35,7 @@
 		$end_page = $doc_list['end_page'];
 
 		foreach ($doc_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].',with_module_config,1,with_file_list,1" data-modal-target="#document_modal"><th scope="row">'.$value['md_id'].'</th>';
+			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].',with_module_config,1" data-modal-target="#document_modal"><th scope="row">'.$value['md_id'].'</th>';
 			echo '<td>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['wr_secret']?'Y':'N').'</td>';
@@ -82,6 +83,20 @@
 		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('document')?></h4>
 	  </div>
 	  <div class="modal-body">
+		<div class="form-group clearfix">
+			<div class="pull-left">
+				<label><?php echo getLang('nickname')?></label>
+				<div class="form-inline">
+					<input type="text" class="form-control" name="mb_nick" maxlength="20" disabled="disabled">
+				</div>
+			</div>
+			<div class="pull-right">
+				<label><?php echo getLang('regdate')?></label>
+				<div class="form-inline">
+					<input type="text" name="wr_regdate" class="form-control" style="width:160px" disabled="disabled">
+				</div>
+			</div>
+		</div>
 		<div class="form-group" style="display:none">
 			<select name="wr_category" class="form-control">
 			<option value=""><?php echo getLang('category')?></option>
