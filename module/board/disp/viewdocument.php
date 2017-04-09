@@ -12,7 +12,7 @@ function proc($data) {
 		// 권한 체크
 		if(!$is_manager) {
 			if(!isGrant($doc['md_id'], 'view')) {
-				return set_error(getLang('error_permit'),4501);
+				return set_error(getLang('error_permit'),88088);
 			}
 
 			// 비밀글이면

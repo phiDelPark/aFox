@@ -187,6 +187,7 @@ $create_sql = '
 	   mb_memo         TEXT         NOT NULL DEFAULT \'\',
 	   mb_regdate      datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
 	   mb_login        datetime     NOT NULL DEFAULT \'0000-00-00 00:00:00\',
+	   mb_block_id     TEXT         NOT NULL DEFAULT \'\',
 	   mb_extra        TEXT         NOT NULL DEFAULT \'\',
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (mb_srl),
