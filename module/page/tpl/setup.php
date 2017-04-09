@@ -34,6 +34,7 @@
 						$_{'page'}['pg_content'],
 						[
 							'file'=>[99999, $_DATA['id'], 1],
+							'statebar'=>true,
 							'toolbar'=>array(
 								getLang('content'),
 								[

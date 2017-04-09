@@ -30,14 +30,12 @@
 					break;
 			}
 
-			var cursorPos = $i.prop('selectionStart');
-			var v = $i.val();
-			var textBefore = v.substring(0, cursorPos);
-			var textAfter = v.substring(cursorPos, v.length);
-			$i.val(textBefore + text + textAfter);
+			pasteTxtWithSel(text, '', $i);
+			$i.focus();
 		} else {
 
 			title = title.escapeHtml();
+
 			if (data['path'] || false) {
 				url = data['path'] + '" data-af-editor-tmpfile="' + srl;
 			} else url = url.escapeHtml();
@@ -57,48 +55,158 @@
 					break;
 			}
 
-			var sel, range, w = $i[0].contentWindow;
+			pasteTxtWithSel(text, '', $i);
+			$i.contents().find('body').focus();
+		}
+	}
+
+	function pasteTxtWithSel(sTxt, eTxt, $i) {
+		var range;
+
+		if ($i[0].tagName == 'TEXTAREA') {
+
+			var startPos = $i.prop('selectionStart'),
+				endPos = $i.prop('selectionEnd'),
+				v = $i.val(),
+				txtBefore = v.substring(0, startPos),
+				txtAfter = v.substring(startPos + (endPos - startPos), v.length),
+				selTxt = v.substring(startPos, endPos);
+			$i.val(txtBefore + sTxt + selTxt + eTxt + txtAfter);
+
+			endPos = endPos + sTxt.length + eTxt.length;
+			if ($i[0].setSelectionRange) {
+				$i[0].setSelectionRange(startPos, endPos);
+			} else if ($i[0].createTextRange) {
+				range = $i[0].createTextRange();
+				range.collapse(true);
+				range.moveEnd('character', endPos);
+				range.moveStart('character', startPos);
+				range.select();
+			}
+
+		} else {
+
+			var sel, isie = false,
+				w = $i[0].contentWindow;
 			if (w) {
-				var isie = false;
 				if (w.getSelection) {
 					sel = w.getSelection();
 				} else if (w.document.getSelection) {
 					sel = w.document.getSelection();
 				} else {
-					var selection = w.document.selection && w.document.selection.createRange();
-					if (selection.text) {
+					sel = w.document.selection && w.document.selection.createRange();
+					if (sel.text) {
 						isie = true;
-						sel = selection;
+					} else {
+						return false;
 					}
-					return false;
 				}
 				if (isie) {
-					sel.pasteHTML(text);
-				} else {
-					if (sel.getRangeAt && sel.rangeCount) {
-						var el = w.document.createElement("div");
-						el.innerHTML = text;
-						range = sel.getRangeAt(0);
-						range.deleteContents();
-						range.insertNode(el);
-					} else {
-						var html = $i.contents().find('body').html();
-						$i.contents().find('body').html(html + text);
-					}
+					sel.pasteHTML(sTxt + sel.text + eTxt);
+				} else if (sel.getRangeAt && sel.rangeCount) {
+					range = sel.getRangeAt(0);
+					var el = w.document.createElement("div");
+					el.appendChild(range.cloneContents());
+					el = $(sTxt + el.innerHTML + eTxt)[0];
+					range.deleteContents();
+					range.insertNode(el);
 				}
+				/**
+				 else {
+					var $body = $i.contents().find('body'),
+						html = $body.html();
+					$body.html(html + sTxt + eTxt);
+				}
+				**/
 			}
+
 		}
 	}
 
+	function textareaExecCmd(cmd, val, $i) {
+		var sTxt = '',
+			eTxt = '';
+
+		switch (cmd) {
+			case 'bold':
+				sTxt = '**';
+				eTxt = '**';
+				break;
+			case 'italic':
+				sTxt = '`';
+				eTxt = '`';
+				break;
+			case 'underline':
+				sTxt = '~~';
+				eTxt = '~~';
+				break;
+			case 'header':
+				sTxt = "\n" + '### ';
+				break;
+			case 'insertorderedlist':
+				sTxt = "\n" + '1. ';
+				eTxt = "\n" + '2. ';
+				break;
+			case 'indent':
+				sTxt = "\n" + '> ';
+				break;
+			case 'codeblock':
+				sTxt = "\n" + '```' + "\n";
+				eTxt = "\n" + '```' + "\n";
+				break;
+		}
+
+		if (sTxt || eTxt) {
+			pasteTxtWithSel(sTxt, eTxt, $i);
+		}
+
+		$i.focus();
+	}
+
+	function iFrameExecCmd(cmd, val, $i) {
+		var doc,
+			sTxt = '',
+			eTxt = '';
+
+		switch (cmd) {
+			case 'bold':
+			case 'italic':
+			case 'underline':
+			case 'insertorderedlist':
+				doc = $i[0].contentWindow.document;
+				doc.execCommand(cmd, false, val);
+				break;
+			case 'header':
+				sTxt = '<h3>';
+				eTxt = '</h3>';
+				pasteTxtWithSel(sTxt, eTxt, $i);
+				break;
+			case 'indent':
+				sTxt = '<blockquote>';
+				eTxt = '</blockquote>';
+				pasteTxtWithSel(sTxt, eTxt, $i);
+				break;
+			case 'codeblock':
+				sTxt = '<pre><code>';
+				eTxt = '</code></pre>';
+				pasteTxtWithSel(sTxt, eTxt, $i);
+				break;
+		}
+
+		$i.contents().find('body').focus();
+	}
+
 	function setImageTooltip($i) {
+		var title = $i.attr('title');
+		$i.removeAttr('title');
+		$i.attr('data-title', title);
+
 		if ($i.attr('data-type').substring(0, 5) !== 'image') {
 			$i.tooltip({
 				container: 'body'
 			});
 		} else {
-			var title = $i.attr('title'),
-				url = $i.attr('data-srl') || false ? request_uri + '?file=' + $i.attr('data-srl') : $i.attr('data-path');
-			$i.removeAttr('title');
+			var url = $i.attr('data-srl') || false ? request_uri + '?file=' + $i.attr('data-srl') : $i.attr('data-path');
 			title = title.substring(title.length - 12, title.length);
 			$i.tooltip({
 				html: 1,
@@ -166,6 +274,21 @@
 
 			$g.find('input[name="' + target + '"]').val(val);
 			$g.parent().trigger('changed.af.editor.toolbar', [target, old, val]);
+		}).on('keydown', '.af-editor-toolbar>.pull-right>span[tabindex=0]', function(e) {
+			if (e.which == 13 || e.which == 32) {
+				e.preventDefault();
+				$(this).click();
+			}
+		}).on('click', '.af-statebar-area>.btn-group>button[tabindex=-1]', function(e, i) {
+			var $i = $(this),
+				$txtarea = $this.$textarea,
+				$iframe = $this.$element.find('iframe');
+			$i.blur();
+			if ($txtarea.is(':visible') && $txtarea.length > 0) {
+				textareaExecCmd($i.attr('data-type'), null, $txtarea);
+			} else if ($iframe.length > 0) {
+				iFrameExecCmd($i.attr('data-type'), null, $iframe);
+			}
 		}).on('click', '.af-editor-uploaded-list>.file-item', function() {
 			var $i = $(this),
 				srl = $i.attr('data-srl'),
@@ -184,7 +307,7 @@
 			e.originalEvent.dataTransfer.setData("TEXT", JSON.stringify({
 				'type': $i.attr('data-type'),
 				'srl': $i.attr('data-srl'),
-				'title': $i.attr('title')
+				'title': $i.attr('data-title') || $i.attr('title')
 			}));
 		}).on('dragover', '.af-editor-area>textarea', function(e) {
 			e.preventDefault();
@@ -208,16 +331,23 @@
 					.appendTo($c)
 					.on('dragstart', function(e) {
 						var $i = $(this);
+						if ($i.data && $i.data('bs.tooltip')) $i.tooltip('hide'); // 드래그 시작시 툴팁 감추기
 						e.originalEvent.dataTransfer.setData("TEXT", JSON.stringify({
 							'type': $i.attr('data-type'),
 							'index': $i.attr('data-index'),
-							'title': (ismt ? $i.attr('title') : $i.text()),
+							'title': (ismt ? ($i.attr('data-title') || $i.attr('title')) : $i.text()),
 							'path': $i.attr('data-path')
 						}));
 					});
 
 				setImageTooltip($item);
 			});
+		}).on('delete.af.fileupload', '.fileupload-group', function(e, files) {
+			e.preventDefault();
+			var $c = $(this).find('.file-caption'),
+				$g = $c.closest('.fileupload-group');
+			$c.find('.file-item').tooltip('destroy').end().text($g.attr('placeholder') || '');
+			$g.find('input:file').val('');
 		});
 
 		this.$element.find('.form-control-feedback').popover({
@@ -270,6 +400,7 @@
 								e.preventDefault();
 								dropFile(e, $_i);
 							});
+						$_i.contents().find("head").html('<link rel="stylesheet" href="' + request_uri + 'module/editor/editor.min.css">');
 						$_i.contents().find('body').html($txtarea.val());
 						if (!readonly) $_i.contents()[0].designMode = 'on';
 						//$_i[0].contentWindow.document.designMode = 'on';

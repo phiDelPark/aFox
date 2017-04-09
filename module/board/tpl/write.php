@@ -60,7 +60,8 @@
 							'file'=>array($_CFG['md_file_max'], $_DATA['id'], $is?$_{'board'}['wr_srl']:0),
 							'required'=>getLang('request_input',['content']),
 							'html'=>$ishtml,
-							'toolbar'=>array(getLang('content'), $istool)
+							'toolbar'=>array(getLang('content'), $istool),
+							'statebar'=>true
 						]
 					);
 				?>

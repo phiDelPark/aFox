@@ -117,6 +117,7 @@
 					'',
 					[
 						'file'=>[99999,'',0],
+						'statebar'=>true,
 						'toolbar'=>array(getLang('content'), ['wr_type'=>['1', ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']],'wr_secret'=>[false,'Secret']])
 					]
 				);

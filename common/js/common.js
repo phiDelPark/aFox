@@ -386,7 +386,6 @@ var $_LANG = [];
 			$ci = $c.find('.file-item'),
 			$g = $c.closest('.fileupload-group'),
 			$i = $g.find('input:file'),
-			ismt = $i[0].hasAttribute('multiple'),
 			plac = $g.attr('placeholder') || '';
 		if ($ci.length > 0) {
 			var ev = $.Event('delete.af.fileupload');

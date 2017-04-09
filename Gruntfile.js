@@ -12,11 +12,14 @@ module.exports = function(grunt) {
       },
       basic_and_extras: {
         files: {
+          'module/editor/editor.min.css' : ['module/editor/editor.css'],
           'module/editor/editor.min.js' : ['module/editor/editor.js'],
           'module/board/tpl/board.min.css' : ['module/board/tpl/board.css'],
           'module/board/tpl/board.min.js' : ['module/board/tpl/board.js'],
           'module/page/tpl/page.min.css' : ['module/page/tpl/page.css'],
           'module/page/tpl/page.min.js' : ['module/page/tpl/page.js'],
+          'theme/default/index.min.js' : ['theme/default/index.js'],
+          'theme/default/index.min.css' : ['theme/default/index.css'],
           'common/js/common.min.js' : ['common/js/common.js'],
           'common/css/common.min.css' : ['common/css/common.css']
         }
@@ -52,6 +55,12 @@ module.exports = function(grunt) {
           ext: '.min.js'
         }, {
           expand: true,
+          cwd: 'theme/default/',
+          src: ['index.min.js'],
+          dest: 'theme/default/',
+          ext: '.min.js'
+        }, {
+          expand: true,
           cwd: 'common/js/',
           src: ['common.min.js'],
           dest: 'common/js/',
@@ -68,6 +77,12 @@ module.exports = function(grunt) {
       minify: {
         files: [{
           expand: true,
+          cwd: 'module/editor/tpl/',
+          src: ['editor.min.css'],
+          dest: 'module/editor/tpl/',
+          ext: '.min.css'
+        }, {
+          expand: true,
           cwd: 'module/board/tpl/',
           src: ['board.min.css'],
           dest: 'module/board/tpl/',
@@ -77,6 +92,12 @@ module.exports = function(grunt) {
           cwd: 'module/page/tpl/',
           src: ['page.min.css'],
           dest: 'module/page/tpl/',
+          ext: '.min.css'
+        }, {
+          expand: true,
+          cwd: 'theme/default/',
+          src: ['index.min.css'],
+          dest: 'theme/default/',
           ext: '.min.css'
         }, {
           expand: true,
@@ -92,6 +113,7 @@ module.exports = function(grunt) {
           'module/editor/editor.js',
           'module/board/tpl/board.js',
           'module/page/tpl/page.js',
+          'theme/default/index.js',
           'common/js/common.js'
       ],
       options: {
@@ -107,11 +129,14 @@ module.exports = function(grunt) {
     },
     jsbeautifier: {
       files: [
+          'module/editor/editor.css',
           'module/editor/editor.js',
           'module/board/tpl/board.css',
           'module/board/tpl/board.js',
           'module/page/tpl/page.css',
           'module/page/tpl/page.js',
+          'theme/default/index.css',
+          'theme/default/index.js',
           'common/css/common.css',
           'common/js/common.js'
       ],

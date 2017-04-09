@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 $file_options = (!empty($options['file']) && count($options['file'])==3) ? $options['file'] : false;
 
 $ops = '';
-$skip_keys = ['file'=>1,'toolbar'=>1];
+$skip_keys = ['file'=>1,'toolbar'=>1,'statebar'=>1];
 foreach ($options as $key => $v) {
 	if(!empty($skip_keys[$key])) continue;
 	$ops .= $key . ':' . (($v === TRUE || $v === FALSE) ? (int)$v : (is_int($v) || is_float($v) ? $v : '"' . $v . '"')) . ',';
@@ -37,6 +37,22 @@ foreach ($options as $key => $v) {
 	<div class="af-editor-area">
 		<textarea name="<?php echo $name ?>" class="form-control vresize"><?php echo $content ?></textarea>
 	</div>
+<?php if(!empty($options['statebar'])) { ?>
+	<div class="af-statebar-area clearfix" style="margin-top:3px;height:24px;padding:0 0 0 155px">
+		<div class="btn-group btn-group-xs pull-left" role="group" aria-label="..." style="margin-left:-155px">
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="bold"><i class="fa fa-bold" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="italic"><i class="fa fa-italic" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="underline"><i class="fa fa-underline" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="header"><i class="fa fa-header" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="insertorderedlist"><i class="fa fa-list" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="indent"><i class="fa fa-indent" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="codeblock"><i class="fa fa-list-alt" aria-hidden="true"></i></button>
+		</div>
+		<div class="form-control" style="cursor:help;overflow:hidden;white-space:nowrap;color:#aaa;font-size:12px;font-family:Arial;width:100%;height:22px;padding:2px 5px;text-align:right;margin:0 -155px 0 0">
+			<strong>aFox</strong>
+		</div>
+	</div>
+<?php } ?>
 	<?php
 		if($file_options && $file_options[0] > 0) {
 			$file_max = $file_options[0];
