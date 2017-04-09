@@ -20,7 +20,7 @@
 			</div>
 			<div class="pull-left">
 				<a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><strong><?php echo getLang('member_signup')?></strong></a> /
-				<a href="<?php echo _AF_URL_ ?>?module=member&disp=findAccount"><?php echo getLang('member_find_account')?></a>
+				<a href="<?php echo _AF_URL_ ?>?module=member&disp=findAccount"><?php echo getLang('member_find')?></a>
 			</div>
 			<button type="submit" class="btn btn-primary"><?php echo getLang('login')?></button>
 		</div>

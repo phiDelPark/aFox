@@ -5,7 +5,7 @@
 
 <?php if($err = get_error()) { ?>
 	<div class="auto-hide" data-timer="5">
-		<h3 class="clearfix"><span class="timer-progress pull-left" data-repeat-char="&bull;"></span> <i class="fa fa-<?php echo $err['error']!=0?'warning':'exclamation-circle'?>" aria-hidden="true"></i> <?php echo $err['message']?></h3>
+		<h3 class="clearfix"><span class="timer-progress pull-left" data-repeat-char="&bull;"></span> <i class="fa fa-warning" aria-hidden="true"></i> <?php echo $err['message']?></h3>
 	</div>
 <?php } ?>
 

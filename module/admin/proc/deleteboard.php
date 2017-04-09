@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	global $_MEMBER;
 	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
@@ -13,10 +13,10 @@ function proc($data) {
 	try {
 		$module = getDBItem(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$data['md_id']]);
 		if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
-		if(empty($module['md_id'])) throw new Exception(getLang('msg_invalid_request'), 303);
+		if(empty($module['md_id'])) throw new Exception(getLang('error_request'),4303);
 
 		// 권한 체크 // 관리자만
-		if(!$is_admin) throw new Exception(getLang('msg_not_permitted'), 901);
+		if(!$is_admin) throw new Exception(getLang('error_permit'), 4501);
 
 		$md_id = $module['md_id'];
 

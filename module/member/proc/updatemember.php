@@ -8,7 +8,7 @@ function proc($data) {
 	if(isset($data['new_mb_id'])) $data['mb_id'] = $data['new_mb_id'];
 	$data['mb_id'] = trim($data['mb_id']);
 
-	if(empty($data['mb_id'])||empty(trim($data['mb_nick']))) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['mb_id'])||empty(trim($data['mb_nick']))) return set_error(getLang('error_request'),4303);
 
 	$data['mb_nick'] = trim(strip_tags($data['mb_nick']));
 	$data['mb_email'] = trim(strip_tags($data['mb_email']));
@@ -72,11 +72,11 @@ function proc($data) {
 	if(!empty($_FILES['mb_icon']['tmp_name'])) {
 		// 파일이 여러개 넘어오면 에러
 		if(is_array($_FILES['mb_icon']['tmp_name'])) {
-			return set_error(getLang('msg_invalid_request'),303);
+			return set_error(getLang('error_request'),4303);
 		}
 
 		if(!preg_match('/\.(png)$/i', $_FILES['mb_icon']['name'])) {
-			return set_error(getLang('warn_permit', ['png']),303);
+			return set_error(getLang('warning_permit', ['png']),2501);
 		}
 
 		$mb_icon_tmp = $_FILES['mb_icon']['tmp_name'];
@@ -132,7 +132,7 @@ function proc($data) {
 		if (empty($member['mb_id'])) {
 
 			if(empty($data['new_mb_id']) || empty($new_password)) {
-				throw new Exception(getLang('warn_input',[empty($data['new_mb_id'])?'id':'password']), 303);
+				throw new Exception(getLang('request_input',[empty($data['new_mb_id'])?'id':'password']), 3);
 			}
 
 			$in_data['mb_id'] = $data['mb_id'];
@@ -143,7 +143,7 @@ function proc($data) {
 		} else {
 
 			if(isset($data['new_mb_id'])) {
-				throw new Exception(getLang('msg_target_exists'), 802);
+				throw new Exception(getLang('error_exists'), 4251);
 			}
 
 			if($remove_mb_icon) {
@@ -165,7 +165,7 @@ function proc($data) {
 			$destination = _AF_MEMBER_DATA_.$mb_srl.$destination;
 			$dir = dirname($destination);
 			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) {
-				throw new Exception(getLang('upload_err_code(7)'), 1407);
+				throw new Exception(getLang('upload_err_code(7)'), 10407);
 			}
 			@chmod($destination, 0707);
 			if (@move_uploaded_file($mb_icon_tmp, $destination)) {

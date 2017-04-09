@@ -2,8 +2,6 @@
 
 if(!defined('__AFOX__')) exit();
 
-@include_once _AF_LANGS_PATH_ . 'module_' . _AF_LANG_ . '.php';
-
 // 관리자만 접근 가능
 if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
 	goUrl(_AF_URL_, getLang('msg_not_admin'));
@@ -26,7 +24,7 @@ function procAdminDefault($data) {
 		require_once $include_file;
 		return returnUrlMerge($data, proc($data));
 	} else {
-		return returnUrlMerge($data, set_error(getLang('msg_invalid_request'),303));
+		return returnUrlMerge($data, set_error(getLang('error_request'),4303));
 	}
 }
 

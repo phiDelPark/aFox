@@ -58,7 +58,7 @@
 						'wr_content', $is?$_{'board'}['wr_content']:'',
 						[
 							'file'=>array($_CFG['md_file_max'], $_DATA['id'], $is?$_{'board'}['wr_srl']:0),
-							'required'=>getLang('warn_input',['content']),
+							'required'=>getLang('request_input',['content']),
 							'html'=>$ishtml,
 							'toolbar'=>array(getLang('content'), $istool)
 						]

@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['th_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['th_id'])) return set_error(getLang('error_request'),4303);
 
 	DB::transaction();
 

@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['rp_srl'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['rp_srl'])) return set_error(getLang('error_request'),4303);
 
 	global $_MEMBER;
 
@@ -14,11 +14,11 @@ function proc($data) {
 	try {
 		$cmt = getDBItem(_AF_COMMENT_TABLE_, ['rp_srl'=>$rp_srl], 'wr_srl, rp_status, rp_parent, rp_depth, mb_srl, mb_password');
 		if(!empty($cmt['error'])) throw new Exception($cmt['message'], $cmt['error']);
-		if(empty($cmt['wr_srl'])) throw new Exception(getLang('msg_not_founded'), 801);
+		if(empty($cmt['wr_srl'])) throw new Exception(getLang('error_founded'), 4201);
 
 		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$cmt['wr_srl']], 'md_id, wr_srl');
 		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
-		if(empty($doc['wr_srl']) || ($doc['wr_srl'] != $cmt['wr_srl'])) throw new Exception(getLang('msg_invalid_request'), 303);
+		if(empty($doc['wr_srl']) || ($doc['wr_srl'] != $cmt['wr_srl'])) throw new Exception(getLang('error_request'),4303);
 
 		$wr_srl = $doc['wr_srl'];
 		$is_manager = isManager($doc['md_id']);
@@ -27,13 +27,13 @@ function proc($data) {
 		if(!$is_manager) {
 			if(empty($_MEMBER) || empty($cmt['mb_srl'])) {
 				if(empty($data['mb_password'])) {
-					throw new Exception(getLang('warn_input', ['password']), 3);
+					throw new Exception(getLang('request_input', ['password']), 3);
 				}
 				if (empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
-					throw new Exception(getLang('msg_not_permitted'), 901);
+					throw new Exception(getLang('error_permit'),4501);
 				}
 			} else if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
-				throw new Exception(getLang('msg_not_permitted'), 901);
+				throw new Exception(getLang('error_permit'),4501);
 			}
 		}
 
@@ -43,13 +43,13 @@ function proc($data) {
 			'rp_parent'=>$cmt['rp_parent'],
 			'rp_depth{LIKE}'=>empty($cmt['rp_depth'])?null:$cmt['rp_depth'].'%'
 		]);
-		if ($_cnt > 0 && (!$is_manager||$cmt['rp_status'] == 4)) throw new Exception(getLang('msg_not_delete_reply_with_sub'), 573);
+		if ($_cnt > 0 && (!$is_manager||$cmt['rp_status'] == 4)) throw new Exception(getLang('msg_reply_exists'), 4501);
 
 		if($_cnt > 0 && $is_manager) {
 			DB::update(_AF_COMMENT_TABLE_,
 				[
 					'rp_status'=>4,
-					'rp_content'=>getLang('msg_has_been_delete'),
+					'rp_content'=>getLang('error_permit'),
 					'mb_srl'=>'0',
 					'mb_nick'=>getLang('system'),
 					'mb_password'=>md5(time())

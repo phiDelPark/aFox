@@ -242,7 +242,7 @@ if(!defined('__AFOX__')) exit();
 		static $module_cfg = [];
 		if(!isset($module_cfg[$id])) {
 			$out = getDBItem(_AF_MODULE_TABLE_, ['md_id'=>$id]);
-			if(empty($out['error'])) $out = is_null($out) ? set_error(getLang('msg_not_founded'),801) : $out;
+			if(empty($out['error'])) $out = is_null($out) ? set_error(getLang('error_founded'),4201) : $out;
 			$module_cfg[$id] = $out;
 		}
 		return empty($get) ? $module_cfg[$id] : $module_cfg[$id][$get];
@@ -353,7 +353,7 @@ if(!defined('__AFOX__')) exit();
 		$mb_srl = (int)$mb_srl;
 		// 비회원인데 - 값이면 에러
 		if(empty($mb_srl) && $point < 0) {
-			return set_error(getLang('msg_disallow_by_point', [abs($point), 0]), 907);
+			return set_error(getLang('warning_shortage', ['point']), 2601);
 		}
 
 		if(empty($mb_srl)) return;
@@ -363,11 +363,11 @@ if(!defined('__AFOX__')) exit();
 
 		$mb_rank = ord($mb['mb_rank']);
 		// 115 초과시 에러... 115는 관리자. 109는 메니져
-		if($mb_rank > 115) set_error(getLang('msg_invalid_request'),303);
+		if($mb_rank > 115) set_error(getLang('error_request'),4303);
 
 		// 포인트 모자르면 에러
 		if(($mb['mb_point'] + $point) < 0) {
-			return set_error(getLang('msg_disallow_by_point', [abs($point), $mb['mb_point']]), 907);
+			return set_error(getLang('warning_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 2601);
 		}
 
 		$_setvals = ['(mb_point)'=>'mb_point'.($point>0?'+':'').$point];
@@ -425,11 +425,11 @@ if(!defined('__AFOX__')) exit();
 				triggerCall($triggercall, 'after', $_result);
 			}
 		} else {
-			$_result = set_error(getLang('msg_invalid_request'),303);
+			$_result = set_error(getLang('error_request'),4303);
 		}
 
 		if(!empty($_result['error'])) {
-			if($_result['error'] == 901 && empty($_MEMBER)) {
+			if($_result['error'] == 88088 && empty($_MEMBER)) {
 				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
 			} else {
 				echo showMessage($_result['message'], $_result['error'],
@@ -471,7 +471,7 @@ if(!defined('__AFOX__')) exit();
 					if(file_exists($include_file)) {
 						return $call($include_file, $attrs);
 					} else {
-						return showMessage(getLang('msg_not_founded'), 801);
+						return showMessage(getLang('error_founded'), 4201);
 					}
 				}
 			}
@@ -517,31 +517,31 @@ if(!defined('__AFOX__')) exit();
 	function moveUpFile($file, $dest, $max_size = 0) {
 		if($file['error'] === UPLOAD_ERR_OK) {
 			// HTTP post로 전송된 것인지 체크합니다.
-			if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('UPLOAD_ERR_CODE(-1)'),1489);
+			if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('UPLOAD_ERR_CODE(-1)'),10489);
 
 			if($file['size'] <= 0) {
-				return set_error(getLang('UPLOAD_ERR_CODE(4)'),1404);
+				return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
 			} if ($max_size > 0 && $max_size < $file['size']) {
-				return set_error(getLang('UPLOAD_ERR_CODE(2)'),1402);
+				return set_error(getLang('UPLOAD_ERR_CODE(2)'),10402);
 			}
 			// 이동 경로가 없으면 이동 안함, 오류 체크는함
 			if(empty($dest)) return true;
 			// 폴더 없으면 만듬
 			$dir = dirname($dest);
 			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) {
-				return set_error(getLang('UPLOAD_ERR_CODE(7)'),1407);
+				return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
 			}
 			// 파일이 있으면 지움
 			if(file_exists($dest)) {
-				if(!unlinkFile($dest)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),1407);
+				if(!unlinkFile($dest)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
 			}
 			if (move_uploaded_file($file['tmp_name'], $dest)) {
 				@chmod($dest, _AF_FILE_PERMIT_);
 			} else {
-				return set_error(getLang('UPLOAD_ERR_CODE(4)'),1404);
+				return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
 			}
 		} else {
-			return set_error(getLang('UPLOAD_ERR_CODE('.$file['error'].')'),1400+$file['error']);
+			return set_error(getLang('UPLOAD_ERR_CODE('.$file['error'].')'),10400+$file['error']);
 		}
 	}
 
@@ -733,7 +733,7 @@ if(!defined('__AFOX__')) exit();
 		// 다운로드 권한이 없으면 처리
 		if(!empty($_DATA['id']) && !isGrant($_DATA['id'],'download')) {
 			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
-			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('msg_not_permitted',false),true,ENT_QUOTES)."');return false\" \\3";
+			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permit',false),true,ENT_QUOTES)."');return false\" \\3";
 			$text = preg_replace($patterns, $replacement, $text);
 		}
 

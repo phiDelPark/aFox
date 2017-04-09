@@ -31,7 +31,7 @@ if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
 <script>
 var current_url     = "<?php echo getCurrentUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
-var waiting_message = "<?php echo getLang('msg_call_server') ?>";
+var waiting_message = "<?php echo getLang('call_server') ?>";
 </script>
 <link rel="stylesheet" href="<?php echo _AF_URL_ . 'common/css/common' . (__DEBUG__?'':'.min') . '.css' ?>">
 <link rel="stylesheet" href="<?php echo _AF_URL_ ?>module/admin/admin.css">

@@ -3,10 +3,10 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['th_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['th_id'])) return set_error(getLang('error_request'),4303);
 
 	if(!is_dir(_AF_THEMES_PATH_.$data['th_id'])) {
-		return set_error(getLang('msg_not_founded'),801);
+		return set_error(getLang('error_founded'),4201);
 	}
 
 	DB::transaction();

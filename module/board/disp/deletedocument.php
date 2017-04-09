@@ -9,7 +9,7 @@ function proc($data) {
 	if(!empty($doc) && !isManager($doc['md_id'])) {
 	global $_MEMBER;
 		if(!isGrant($doc['md_id'], 'view')) {
-			return set_error(getLang('msg_not_permitted'),901);
+			return set_error(getLang('error_permit'),4501);
 		}
 		// 비밀글이면
 		if($doc['wr_secret'] == '1') {
@@ -20,14 +20,14 @@ function proc($data) {
 			// 권한 체크
 			if(empty($_MEMBER) || empty($doc['mb_srl'])) {
 				if (empty($doc['mb_password'])) {
-					return set_error(getLang('msg_not_permitted'), 901);
+					return set_error(getLang('error_permit'),4501);
 				} else if(empty($data['mb_password'])) {
-					return set_error(sprintf($input_password, getLang('warn_input', ['password'])), 90);
+					return set_error(sprintf($input_password, getLang('request_input', ['password'])));
 				} else if (!verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
-					return set_error(sprintf($input_password, getLang('msg_wrong_password')), 906);
+					return set_error(sprintf($input_password, getLang('error_password')), 4801);
 				}
 			} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
-				return set_error(getLang('msg_not_permitted'), 901);
+				return set_error(getLang('error_permit'),4501);
 			}
 
 			$GLOBALS['_PERMIT_VIEW_'][md5($doc['md_id'].'_'.$data['srl'])] = true;

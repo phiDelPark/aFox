@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(!isset($data['wr_srl'])) return set_error(getLang('msg_invalid_request'),303);
+	if(!isset($data['wr_srl'])) return set_error(getLang('error_request'),4303);
 
 	global $_MEMBER;
 	$doc = getDocument((int)$data['wr_srl']);
@@ -11,9 +11,9 @@ function proc($data) {
 	if(!empty($doc['error'])) {
 		return set_error($doc['message'],$doc['error']);
 	} else if(empty($doc['wr_srl'])) {
-		return set_error(getLang('msg_not_founded'),801);
+		return set_error(getLang('error_founded'),4201);
 	} else if(!isGrant($doc['md_id'], 'view')) {
-		return set_error(getLang('msg_not_permitted'),901);
+		return set_error(getLang('error_permit'),4501);
 	}
 
 	// 비밀글이면
@@ -21,13 +21,13 @@ function proc($data) {
 		// 권한 체크
 		if(empty($_MEMBER) || empty($doc['mb_srl'])) {
 			if(empty($data['mb_password'])) {
-				return set_error(getLang('warn_input', ['password']), 3);
+				return set_error(getLang('request_input', ['password']));
 			}
 			if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
-				return set_error(getLang('msg_not_permitted'), 901);
+				return set_error(getLang('error_permit'),4501);
 			}
 		} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
-			return set_error(getLang('msg_not_permitted'), 901);
+			return set_error(getLang('error_permit'),4501);
 		}
 	}
 

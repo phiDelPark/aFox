@@ -8,12 +8,12 @@ function load_template($_template_file) {
 
 function proc($data) {
 
-	if(!isset($data['ao_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(!isset($data['ao_id'])) return set_error(getLang('error_request'),4303);
 
 	$_template_file = _AF_ADDONS_PATH_ . $data['ao_id'] . '/setup.php';
 
 	if(!file_exists($_template_file)) {
-		return set_error(getLang('msg_not_founded'),801);
+		return set_error(getLang('error_founded'),4201);
 	}
 
 	$_ADDON = getDBItem(_AF_ADDON_TABLE_, ['ao_id'=>$data['ao_id']]);

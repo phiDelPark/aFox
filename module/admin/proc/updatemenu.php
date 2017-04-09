@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 
-	if(!isset($data['mu_type'])) return set_error(getLang('msg_invalid_request'),303);
+	if(!isset($data['mu_type'])) return set_error(getLang('error_request'),4303);
 
 	$mu_type = $data['mu_type'];
 

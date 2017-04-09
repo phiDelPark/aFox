@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	global $_MEMBER;
-	if(empty($data['wr_srl']) || empty($_MEMBER['mb_srl'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['wr_srl']) || empty($_MEMBER['mb_srl'])) return set_error(getLang('error_request'),4303);
 	$wr_srls = is_array($data['wr_srl']) ? $data['wr_srl'] : [$data['wr_srl']];
 	$mb_srl = $_MEMBER['mb_srl'];
 
@@ -16,7 +16,7 @@ function proc($data) {
 
 			$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['md_id'=>'_AFOXtRASH_','wr_srl'=>$wr_srl,'mb_srl'=>$mb_srl]);
 			if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
-			if(empty($doc['wr_srl'])) throw new Exception(getLang('msg_invalid_request'), 303);
+			if(empty($doc['wr_srl'])) throw new Exception(getLang('error_request'),4303);
 
 			$module = getModule($doc['wr_updater']);
 			if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);

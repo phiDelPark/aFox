@@ -11,14 +11,14 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 		$start_cpage = $cmt['start_page'];
 		$end_cpage = $cmt['end_page'];
 
-		$not_edit_str = 'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted',false),true,ENT_QUOTES).'\');return false"';
+		$not_edit_str = 'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('error_permit',false),true,ENT_QUOTES).'\');return false"';
 		$is_owner_permit_view = $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl'] || !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$_{'board'}['wr_srl'])]);
-		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'.getLang('warn_input', ['password'])
+		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'.getLang('request_input', ['password'])
 										.'<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'
 										.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>';
 		foreach ($cmt['data'] as $key => $value) {
-			$_len = strlen($value['rp_depth']);
 			$_deleted = $value['rp_status']=='4';
+			$_len = strlen($value['rp_depth']);
 			$_icon = $value['mb_srl'].'/profile_image.png';
 			if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
 				$_icon = _AF_URL_ . 'data/member/' . $_icon;
@@ -28,9 +28,9 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 
 			$is_permit = $is_owner_permit_view || $value['rp_secret']!='1' || $is_login_mb_srl === $value['mb_srl'];
 			if(!$is_permit) $is_permit = !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$value['wr_srl'].'_'.$value['rp_srl'])]);
-			$rp_content = $is_permit ? $value['rp_content'] : (!empty($value['mb_srl'])?getLang('msg_not_permitted'):sprintf($input_password,getUrl('rp',$value['rp_srl'])));
+			$rp_content = $is_permit ? $value['rp_content'] : (!empty($value['mb_srl'])?getLang('error_permit'):sprintf($input_password,getUrl('rp',$value['rp_srl'])));
 
-			$is_edit = empty($value['mb_srl']) || $is_manager || $is_login_mb_srl === $value['mb_srl'];
+			$is_edit = empty($value['mb_srl'])&&!$_deleted || $is_manager || $is_login_mb_srl === $value['mb_srl'];
 
 			echo '<a id="reply_'.$value['rp_srl'].'"'.(!empty($_DATA['rp'])&&$value['rp_srl']==$_DATA['rp'] ? ' class="active"':'').'></a>'
 				.'<div class="reply-item" style="padding-left:'.(($_len>5?5:$_len)*30).'px"><div class="left">'
@@ -84,7 +84,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 						dispEditor(
 							'rp_content', '',
 							[
-								'required'=>getLang('warn_input', ['content']),
+								'required'=>getLang('request_input', ['content']),
 								'readonly'=>(!$is_rp_grant),
 								'toolbar'=>(!$is_rp_grant)?[]:array(getLang('reply'), $istool)
 							]

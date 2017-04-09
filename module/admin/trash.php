@@ -146,7 +146,7 @@
 			</div>
 	  </div>
 	  <div class="modal-footer clearfix">
-		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteDocument" data-add-param="is_empty,1"><?php echo getLang('permanently_delete')?></button>
+		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteDocument" data-add-param="is_empty,1"><?php echo getLang('permanent_delete')?></button>
 		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
 		<button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i> <?php echo getLang('restore')?></button>
 	  </div>

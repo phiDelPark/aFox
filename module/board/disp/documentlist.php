@@ -5,7 +5,7 @@ if(!defined('__AFOX__')) exit();
 function proc($data) {
 	// 권한 체크
 	if(!isGrant($data['id'], 'list') && !isManager($data['id'])) {
-		return set_error(getLang('msg_not_permitted'),901);
+		return set_error(getLang('error_permit'),4501);
 	}
 
 	$category = empty($data['category']) ? '' : $data['category'];

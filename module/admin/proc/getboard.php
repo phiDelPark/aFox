@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 
-	if(!isset($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(!isset($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	$out = getDBItem(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$data['md_id']]);
 	if(!empty($out['error'])) {
@@ -22,7 +22,7 @@ function proc($data) {
 		}
 		return $out;
 	} else {
-		return set_error(getLang('msg_not_founded'),801);
+		return set_error(getLang('error_founded'),4201);
 	}
 }
 

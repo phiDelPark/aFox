@@ -3,9 +3,9 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(!isset($data['mb_id']) || !isset($data['mb_password'])) return set_error(getLang('msg_invalid_request'),303);
+	if(!isset($data['mb_id']) || !isset($data['mb_password'])) return set_error(getLang('error_request'),4303);
 	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['mb_id'])) {
-		return set_error(getLang('msg_invalid_request'),303);
+		return set_error(getLang('error_request'),4303);
 	}
 
 	global $_CFG;
@@ -15,7 +15,7 @@ function proc($data) {
 	$auto_login     = isset($data['auto_login']) && $data['auto_login'] == 1;
 
 	if(!$mb_id || !$mb_password) {
-		return set_error(getLang('msg_empty_id'),501);
+		return set_error(getLang('request_input',[$mb_id?'password':'id']));
 	}
 
 	$sql = 'SELECT * FROM '._AF_MEMBER_TABLE_.' WHERE mb_id= :1';
@@ -23,7 +23,7 @@ function proc($data) {
 	if($ex = DB::error()) return set_error($ex->getMessage(),$ex->getCode());
 
 	if(empty($mb['mb_srl']) || !verifyEncrypt($mb_password, $mb['mb_password'])) {
-		return set_error(getLang('msg_wrong_password2'),906);
+		return set_error(getLang('msg_wrong_password'),4601);
 	}
 
 	// 정상적인 접근이면 암호화된 비밀번호로 교체

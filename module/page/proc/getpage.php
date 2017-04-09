@@ -3,15 +3,15 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(!isset($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(!isset($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	$out = getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['md_id']]);
 	if(!empty($out['error'])) {
 		return set_error($out['message'],$out['error']);
 	} else if(empty($out['md_id'])) {
-		return set_error(getLang('msg_not_founded'),801);
+		return set_error(getLang('error_founded'),4201);
 	} else if(!isGrant($out['md_id'], 'view')) {
-		return set_error(getLang('msg_not_permitted'),901);
+		return set_error(getLang('error_permit'),4501);
 	}
 
 	// 관리자 모드에서 사용하기 위해 필요한 정보 같이 보내기... (관리자만)

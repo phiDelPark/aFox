@@ -23,7 +23,7 @@ if(__MODULE__ && !empty($_DATA['act'])) {
 			triggerCall($triggercall, 'after', $_result);
 		}
 	} else {
-		$_result = set_error(getLang('msg_invalid_request'),303);
+		$_result = set_error(getLang('error_request'),4303);
 	}
 
 	if(__REQ_METHOD__ == 'JSON' || __REQ_METHOD__ == 'XML') {

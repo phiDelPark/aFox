@@ -3,7 +3,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	global $_MEMBER;
-	if(empty($_MEMBER)) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($_MEMBER)) return set_error(getLang('error_request'),4303);
 	return $result = ['tpl'=>'trash'];
 }
 

@@ -5,7 +5,7 @@ if(!defined('__AFOX__')) exit();
 function proc($data) {
 
 	if(isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
-	if(empty($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) {
 		return set_error(getLang('invalid_value', ['id']),701);
@@ -48,7 +48,7 @@ function proc($data) {
 		if (empty($module['md_id'])) {
 
 			if(!isset($data['new_md_id'])) {
-				throw new Exception(getLang('msg_invalid_request'), 303);
+				throw new Exception(getLang('error_request'),4303);
 			}
 
 			DB::insert(_AF_MODULE_TABLE_,
@@ -80,7 +80,7 @@ function proc($data) {
 			);
 		} else {
 			if(isset($data['new_md_id'])) {
-				throw new Exception(getLang('msg_target_exists'), 802);
+				throw new Exception(getLang('error_exists'), 4251);
 			}
 
 			DB::update(_AF_MODULE_TABLE_,

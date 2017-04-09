@@ -5,7 +5,7 @@ if(!defined('__AFOX__')) exit();
 function proc($data) {
 
 	if(isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
-	if(empty($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) {
 		return set_error(getLang('invalid_value', ['id']),701);
@@ -46,7 +46,7 @@ function proc($data) {
 		// 권한 체크, 파일 첨부 때문에 먼저 함
 		if ($new_insert) {
 			if(!isset($data['new_md_id'])) {
-				throw new Exception(getLang('msg_invalid_request'), 303);
+				throw new Exception(getLang('error_request'),4303);
 			}
 
 			// id 를 얻기 위해 먼저 추가
@@ -63,7 +63,7 @@ function proc($data) {
 
 		} else {
 			if(isset($data['new_md_id'])) {
-				throw new Exception(getLang('msg_target_exists'), 802);
+				throw new Exception(getLang('error_exists'), 4251);
 			}
 		}
 
@@ -114,7 +114,7 @@ function proc($data) {
 				$fileext = count($fileext)===1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if($chk_ext && !preg_match('/\.('.($chk_ext).')$/i', $filename)) {
-					throw new Exception(getLang('warn_permit', [$chk_ext])."\n", 303);
+					throw new Exception(getLang('warning_permit', [$chk_ext])."\n", 2501);
 				}
 
 				$filename = md5($filename.time().$i) . '.' . $fileext;

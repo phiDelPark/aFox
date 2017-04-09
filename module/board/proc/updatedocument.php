@@ -3,15 +3,15 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['md_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 	$data['wr_title'] = trim(strip_tags($data['wr_title']));
-	if(empty($data['wr_title'])) return set_error(getLang('warn_input', ['title']));
+	if(empty($data['wr_title'])) return set_error(getLang('request_input', ['title']));
 
 	global $_MEMBER;
 
 	$module = getModule($data['md_id']);
 	if(!empty($module['error'])) return set_error($module['message'],$module['error']);
-	if(empty($module['md_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($module['md_id'])) return set_error(getLang('error_request'),4303);
 
 	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
 
@@ -59,12 +59,12 @@ function proc($data) {
 
 		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
 		if(!empty($wr_srl) && (empty($doc['md_id']) || $doc['md_id'] != $md_id)) {
-			throw new Exception(getLang('msg_invalid_request'), 303);
+			throw new Exception(getLang('error_request'),4303);
 		}
 
 		if(!empty($module['md_category'])) {
 			if(empty($data['wr_category'])) {
-				throw new Exception(getLang('warn_input',['category']), 3);
+				throw new Exception(getLang('request_input',['category']), 3);
 			}
 			if(preg_match('/[\x{21}-\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['wr_category'])) {
 				throw new Exception(getLang('invalid_value', ['category']), 701);
@@ -80,7 +80,7 @@ function proc($data) {
 		if(empty($_MEMBER)) {
 			$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
 			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
-				throw new Exception(getLang('warn_input', [getLang('%s, %s', ['id', 'password'])]), 3);
+				throw new Exception(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 3);
 			}
 			$data['mb_srl'] = 0;
 			$data['mb_rank'] = 0;
@@ -98,7 +98,7 @@ function proc($data) {
 		// 권한 체크, 파일 첨부 때문에 먼저 함
 		if ($new_insert) {
 			if(!isGrant($md_id, 'write')) {
-				throw new Exception(getLang('msg_not_permitted'), 901);
+				throw new Exception(getLang('error_permit'),4501);
 			}
 
 			// 문서 번호를 얻기 위해 먼저 추가
@@ -118,7 +118,7 @@ function proc($data) {
 				$wr_srl = DB::insertId();
 			}
 			if (empty($wr_srl)) {
-				throw new Exception(getLang('msg_error_occured'), 101);
+				throw new Exception(getLang('error_occured'), 4001);
 			}
 
 			// 포인트 사용중이면
@@ -128,11 +128,11 @@ function proc($data) {
 		} else {
 			if(empty($_MEMBER)) {
 				if(empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
-					throw new Exception(getLang('msg_not_permitted'), 901);
+					throw new Exception(getLang('error_permit'),4501);
 				}
 			} else if(!isManager($md_id)) {
 				if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
-					throw new Exception(getLang('msg_not_permitted'), 901);
+					throw new Exception(getLang('error_permit'),4501);
 				}
 			}
 		}
@@ -167,13 +167,13 @@ function proc($data) {
 
 		// 이전 수 + 업로드 수 체크
 		if($upload_count > 0 && (($upload_count+$file_count) > $file_max)) {
-			throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 1487);
+			throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
 		}
 
 		if($upload_count>0) {
 			// 권한 체크
-			if(!isGrant($md_id, 'upload')) throw new Exception(getLang('warn_not_permit', ['upload']), 901);
-			if($file_max < $upload_count) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 1487);
+			if(!isGrant($md_id, 'upload')) throw new Exception(getLang('warning_not_permit', ['upload']), 2502);
+			if($file_max < $upload_count) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
 
 			for ($i=0; $i < $upload_count; $i++) {
 				// 빈 파일 넘김
@@ -192,7 +192,7 @@ function proc($data) {
 				$fileext = count($fileext)===1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
-					throw new Exception(getLang('warn_permit', [$file_exts])."\n", 303);
+					throw new Exception(getLang('warning_permit', [$file_exts])."\n", 2501);
 				}
 
 				$filename = md5($filename.time().$i) . '.' . $fileext;

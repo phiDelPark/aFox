@@ -32,7 +32,7 @@
 		<th class="col-xs-1 hidden-xs"><?php echo getLang('secret')?></th>
 		<th class="col-xs-2"><?php echo getLang('author')?></th>
 		<th class="col-xs-1 hidden-xs"><?php echo getLang('date')?></th>
-		<th class="col-xs-1"><?php echo getLang('removed_date')?></th>
+		<th class="col-xs-1"><?php echo getLang('delete')?></th>
 		<th style="width:30px"><input type="checkbox" onclick="_allCheckTrashItems(this)"></th>
 		<?php } ?>
 	</tr>

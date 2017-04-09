@@ -8,12 +8,12 @@ function load_template($_template_file) {
 
 function proc($data) {
 
-	if(!isset($data['th_id'])) return set_error(getLang('msg_invalid_request'),303);
+	if(!isset($data['th_id'])) return set_error(getLang('error_request'),4303);
 
 	$_template_file = _AF_THEMES_PATH_ . $data['th_id'] . '/setup.php';
 
 	if(!file_exists($_template_file)) {
-		return set_error(getLang('msg_not_founded'),801);
+		return set_error(getLang('error_founded'),4201);
 	}
 
 	$_THEME = DB::query('SELECT th_extra FROM '._AF_THEME_TABLE_.' WHERE th_id=:1',[$data['th_id']]);

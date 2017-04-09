@@ -4,13 +4,13 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(!isset($data['mb_id']) && !isset($data['mb_srl'])) {
-		return set_error(getLang('msg_invalid_request'),303);
+		return set_error(getLang('error_request'),4303);
 	}
 
 	// mb_id가 넘어오면 정상적인지 체크
 	if(!isset($data['mb_id'])) {
 		if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['mb_id'])) {
-			return set_error(getLang('msg_invalid_request'),303);
+			return set_error(getLang('error_request'),4303);
 		}
 	}
 
@@ -29,7 +29,7 @@ function proc($data) {
 
 		return $out;
 	} else {
-		return set_error(getLang('msg_not_founded'),801);
+		return set_error(getLang('error_founded'),4201);
 	}
 }
 

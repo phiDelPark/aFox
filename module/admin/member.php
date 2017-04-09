@@ -141,9 +141,10 @@
 			<div class="form-group">
 				<label for="id_mb_memo"><?php echo getLang('memo')?></label>
 				<textarea class="form-control min-height-100 vresize" name="mb_memo" id="id_mb_memo"></textarea>
+				<p class="help-block"><?php echo getLang('desc_member_memo')?></p>
 			</div>
 			<div class="form-group">
-				<div class="fileupload-group" placeholder="<?php echo getLang('warn_permit',['png [100x100 size]'])?>">
+				<div class="fileupload-group" placeholder="<?php echo getLang('warning_permit',['png [100x100 size]'])?>">
 					<div class="input-group">
 						<div class="file-caption form-control"></div>
 						<div class="btn btn-primary btn-file">

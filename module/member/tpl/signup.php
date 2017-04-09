@@ -67,7 +67,7 @@
 		</div>
 		<div class="form-group">
 			<?php $isfile = $ismb&&!empty($_MEMBER['mb_icon'])?$_MEMBER['mb_icon']:''?>
-			<div class="fileupload-group" placeholder="<?php echo getLang('warn_permit',['png [100x100 size]'])?>">
+			<div class="fileupload-group" placeholder="<?php echo getLang('warning_permit',['png [100x100 size]'])?>">
 				<div class="input-group">
 					<div class="file-caption form-control"><?php echo $isfile?'<i class="file-item" data-type="image">'.$_MEMBER['mb_icon'].'</i>':''?></div>
 					<div class="btn btn-primary btn-file">
@@ -81,6 +81,6 @@
 
 	</div>
 	<div class="modal-footer" style="padding:30px 0 0">
-		<button type="submit" class="btn btn-success min-width-150"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang($ismb?'save':'agree_member_signup')?></button>
+		<button type="submit" class="btn btn-success min-width-150"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang($ismb?'save':'agree_signup')?></button>
 	</div>
 </form>

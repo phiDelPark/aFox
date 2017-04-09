@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['start'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['start'])) return set_error(getLang('error_request'),4303);
 	if(empty($data['theme'])) $data['theme'] = 'default';
 
 	if(!empty($_FILES)) {
@@ -14,7 +14,7 @@ function proc($data) {
 			if (empty($_FILES[$val]['name'])) continue;
 
 			if(!preg_match('/\.('.$_lsext[$key].')$/i', $_FILES[$val]['name'])) {
-				return set_error(getLang('warn_permit',[$_lsext[$key]]),303);
+				return set_error(getLang('warning_permit',[$_lsext[$key]]),2501);
 			}
 
 			$destination = _AF_CONFIG_DATA_.$val.'.'.$_lsext[$key];

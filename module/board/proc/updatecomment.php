@@ -3,8 +3,8 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['wr_srl']) && empty($data['rp_parent']) && empty($data['rp_srl'])) return set_error(getLang('msg_invalid_request'),303);
-	if(empty($data['rp_content'])) return set_error(getLang('warn_input', ['content']));
+	if(empty($data['wr_srl']) && empty($data['rp_parent']) && empty($data['rp_srl'])) return set_error(getLang('error_request'),4303);
+	if(empty($data['rp_content'])) return set_error(getLang('request_input', ['content']));
 
 	global $_MEMBER;
 
@@ -22,7 +22,7 @@ function proc($data) {
 		if(!empty($rp_srl)) {
 			$cmt = getDBItem(_AF_COMMENT_TABLE_, ['rp_srl'=>$rp_srl], 'wr_srl, rp_parent, rp_depth, mb_srl, mb_password');
 			if(!empty($cmt['error'])) throw new Exception($cmt['message'], $cmt['error']);
-			if(empty($cmt['wr_srl'])) throw new Exception(getLang('msg_not_founded'), 801);
+			if(empty($cmt['wr_srl'])) throw new Exception(getLang('error_founded'), 4201);
 			$wr_srl = (int) abs(empty($cmt['wr_srl']) ? 0 : $cmt['wr_srl']);
 
 			$sendsrl = $cmt['mb_srl'];
@@ -60,12 +60,12 @@ function proc($data) {
 		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'md_id,mb_srl');
 		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
 		// 문서가 없으면 에러
-		if(empty($wr_srl)) throw new Exception(getLang('msg_not_founded'), 801);
+		if(empty($wr_srl)) throw new Exception(getLang('error_founded'), 4201);
 
 		$module = getModule($doc['md_id']);
 		if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
 		// 모듈이 없으면 에러
-		if($doc['md_id'] != $module['md_id']) throw new Exception(getLang('msg_invalid_request'), 303);
+		if($doc['md_id'] != $module['md_id']) throw new Exception(getLang('error_request'),4303);
 
 		if(!empty($module['use_type'])) $data['rp_type'] = ((int)$module['use_type'])-1;
 		if(!empty($module['use_secret'])) $data['rp_secret'] = ((int)$module['use_secret'])-1;
@@ -75,7 +75,7 @@ function proc($data) {
 		if(empty($_MEMBER)) {
 			$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
 			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
-				throw new Exception(getLang('warn_input', [getLang('%s, %s', ['id', 'password'])]), 3);
+				throw new Exception(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 3);
 			}
 			$data['mb_srl'] = 0;
 			$data['mb_rank'] = 0;
@@ -93,7 +93,7 @@ function proc($data) {
 
 			// 권한 체크
 			if(!isGrant($module['md_id'], 'reply')) {
-				throw new Exception(getLang('msg_not_permitted'), 901);
+				throw new Exception(getLang('error_permit'),4501);
 			}
 
 			DB::insert(_AF_COMMENT_TABLE_,
@@ -124,9 +124,9 @@ function proc($data) {
 				DB::update(_AF_DOCUMENT_TABLE_, ['(wr_reply)'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);
 			});
 
-			sendNote(empty($sendsrl)?$doc['mb_srl']:$sendsrl,
+			sendNote(empty($sendsrl) ? $doc['mb_srl'] : $sendsrl,
 					cutstr(strip_tags($data['rp_content']),200)
-						.sprintf('<br><a href="./?id=%s&srl=%s&rp=%s">%s...</a>', $doc['md_id'], $wr_srl, $ret_rp_srl, getLang('view_more')),
+						.sprintf('<br><a href="./?id=%s&srl=%s&rp=%s">%s...</a>', $doc['md_id'], $wr_srl, $ret_rp_srl, getLang('detail')),
 					$data['mb_nick']
 				);
 
@@ -134,11 +134,11 @@ function proc($data) {
 			// 권한 체크
 			if(empty($_MEMBER)) {
 				if(empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
-					throw new Exception(getLang('msg_not_permitted'), 901);
+					throw new Exception(getLang('error_permit'),4501);
 				}
 			} else if(!isManager($module['md_id'])) {
 				if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
-					throw new Exception(getLang('msg_not_permitted'), 901);
+					throw new Exception(getLang('error_permit'),4501);
 				}
 			}
 

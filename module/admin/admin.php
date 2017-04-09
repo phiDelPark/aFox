@@ -2,17 +2,19 @@
 
 if(!defined('__AFOX__')) exit();
 
-if(empty($_MEMBER)) goUrl(_AF_URL_, getLang('msg_not_permitted'));
+if(empty($_MEMBER)) goUrl(_AF_URL_, getLang('error_permit'));
 // 관리자의 아이피, 브라우저와 다르다면 세션을 끊고 관리자에게 메일을 보낸다.
 $admin_key = md5($_MEMBER['mb_regdate'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 if (get_session('ss_mb_key') !== $admin_key) {
 	session_destroy();
 	// TODO 관리자에게 쪽지 보낸다.
-	goUrl(_AF_URL_, getLang('msg_not_permitted'));
+	goUrl(_AF_URL_, getLang('error_permit'));
 }
 
-@include_once _AF_LANGS_PATH_ . 'module_' . _AF_LANG_ . '.php';
 @include_once _AF_LANGS_PATH_ . 'admin_' . _AF_LANG_ . '.php';
+if(in_array($_DATA['admin'],['member','board'])) {
+	@include_once _AF_MODULES_PATH_ . $_DATA['admin'] . '/lang/' . _AF_LANG_ . '.php';
+}
 
 $_MENU_ICON = ['dashbd'=>'dashboard', 'theme'=>'home', 'menu'=>'menu-hamburger', 'member'=>'user', 'content'=>'list-alt', 'page'=>'list-alt', 'board'=>'list-alt', 'document'=>'list-alt', 'comment'=>'list-alt', 'file'=>'list-alt', 'trash'=>'trash', 'module'=>'th-large', 'addon'=>'random', 'widget'=>'import', 'setup'=>'cog'];
 

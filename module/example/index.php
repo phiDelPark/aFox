@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-@include_once _AF_LANGS_PATH_ . 'module_' . _AF_LANG_ . '.php';
+@include_once dirname(__FILE__) . '/lang/' . _AF_LANG_ . '.php';
 
 function returnUrlMerge($data, $result) {
 	if(!isset($result)) $result = [];
@@ -20,7 +20,7 @@ function procExampleDefault($data) {
 		require_once $include_file;
 		return returnUrlMerge($data, proc($data));
 	} else {
-		return returnUrlMerge($data, set_error(getLang('msg_invalid_request'),303));
+		return returnUrlMerge($data, set_error(getLang('error_request'),4303));
 	}
 }
 
@@ -30,7 +30,7 @@ function dispExampleDefault($data) {
 		require_once dirname(__FILE__) . '/disp/viewpage.php';
 		return proc($data);
 	} else {
-		set_error(getLang('msg_invalid_request'),303);
+		set_error(getLang('error_request'),4303);
 	}
 }
 

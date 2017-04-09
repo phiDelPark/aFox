@@ -35,7 +35,7 @@
 
 <?php if($err = get_error()) { ?>
 	<div class="auto-hide" data-timer="5">
-		<h3 class="clearfix"><span class="timer-progress pull-left" data-repeat-char="&bull;"></span> <i class="fa fa-<?php echo $err['error']!=0?'warning':'exclamation-circle'?>" aria-hidden="true"></i> <?php echo $err['message']?></h3>
+		<h3 class="clearfix"><span class="timer-progress pull-left" data-repeat-char="&bull;"></span> <i class="fa fa-warning" aria-hidden="true"></i> <?php echo $err['message']?></h3>
 	</div>
 <?php } ?>
 
@@ -129,7 +129,7 @@
 						<div class="modal-footer">
 							<div class="pull-left">
 								<a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><strong><?php echo getLang('member_signup')?></strong></a> /
-								<a href="<?php echo _AF_URL_ ?>?module=member&disp=findAccount"><?php echo getLang('member_find_account')?></a>
+								<a href="<?php echo _AF_URL_ ?>?module=member&disp=findAccount"><?php echo getLang('member_find')?></a>
 							</div>
 							<?php if(!__MOBILE__) { ?><button type="button" class="btn btn-default" data-dismiss="modal"> <?php echo getLang('close')?></a></button><?php } ?>
 							<button type="submit" class="btn btn-primary"><?php echo getLang('login')?></button>

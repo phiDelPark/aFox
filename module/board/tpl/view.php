@@ -21,7 +21,7 @@ $is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 	<?php
 		$is_permit = ($_{'board'}['wr_secret']!='1' || $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl']);
 		if(!$is_permit) $is_permit = !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$_{'board'}['wr_srl'])]);
-		$wr_content = $is_permit ? $_{'board'}['wr_content'] : getLang('msg_not_permitted');
+		$wr_content = $is_permit ? $_{'board'}['wr_content'] : getLang('error_permit');
 		echo toHTML($_{'board'}['wr_type'], $wr_content);
 	?>
 	<?php if(!empty($_{'board'}['wr_tags'])) { ?>
@@ -52,7 +52,7 @@ $is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		<div class="pull-right">
 			<?php
 				$is_edit = empty($_{'board'}['mb_srl']) || $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl'];
-				$not_edit_str = '#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('msg_not_permitted',false),true,ENT_QUOTES).'\');return false';
+				$not_edit_str = '#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('error_permit',false),true,ENT_QUOTES).'\');return false';
 			?>
 			<a href="<?php echo $is_edit?getUrl('disp','writeDocument', 'srl', $_DATA['srl']):$not_edit_str?>" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
 			<a href="<?php echo $is_edit?getUrl('disp','deleteDocument', 'srl', $_DATA['srl']):$not_edit_str?>" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
@@ -71,6 +71,6 @@ $_LANG['yes'] = "<?php echo getLang('yes')?>";
 $_LANG['no'] = "<?php echo getLang('no')?>";
 $_LANG['comment'] = "<?php echo getLang('comment')?>";
 $_LANG['password'] = "<?php echo getLang('password')?>";
-$_LANG['warn_input'] = "<?php echo getLang('warn_input')?>";
+$_LANG['request_input'] = "<?php echo getLang('request_input')?>";
 $_LANG['confirm_select_delete'] = "<?php echo getLang('confirm_select_delete')?>";
 </script>

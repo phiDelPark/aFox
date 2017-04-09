@@ -160,7 +160,7 @@
 
 	  </div>
 	  <div class="modal-footer clearfix">
-		<button type="button" class="btn btn-danger pull-left" data-act-change="page.deletePage"><?php echo getLang('permanently_delete')?></button>
+		<button type="button" class="btn btn-danger pull-left" data-act-change="page.deletePage"><?php echo getLang('permanent_delete')?></button>
 		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
 		<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
 	  </div>

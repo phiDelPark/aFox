@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-@include_once _AF_LANGS_PATH_ . 'module_' . _AF_LANG_ . '.php';
+@include_once dirname(__FILE__) . '/lang/' . _AF_LANG_ . '.php';
 @include_once dirname(__FILE__) . '/funcs.php';
 
 function returnUrlMerge($data, $result) {
@@ -21,7 +21,7 @@ function procBoardDefault($data) {
 		require_once $include_file;
 		return returnUrlMerge($data, proc($data));
 	} else {
-		return returnUrlMerge($data, set_error(getLang('msg_invalid_request'),303));
+		return returnUrlMerge($data, set_error(getLang('error_request'),4303));
 	}
 }
 
@@ -35,7 +35,7 @@ function dispBoardDefault($data) {
 			require_once $include_file;
 			$result = proc($data);
 		} else {
-			return set_error(getLang('msg_invalid_request'),303);
+			return set_error(getLang('error_request'),4303);
 		}
 	} else {
 		if(!empty($data['srl'])) {
@@ -47,7 +47,7 @@ function dispBoardDefault($data) {
 			$result = proc($data);
 			$result['tpl'] = 'list';
 		} else {
-			return set_error(getLang('msg_invalid_request'),303);
+			return set_error(getLang('error_request'),4303);
 		}
 	}
 

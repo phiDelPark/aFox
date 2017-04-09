@@ -62,7 +62,7 @@
 			}
 			if (nombsrl) {
 				if (act == 'board.getComment') {
-					$ipu = $(input_password.sprintf('', $_LANG['warn_input'].sprintf($_LANG['password']), $_LANG['password'], $_LANG['ok'], $_LANG['close']));
+					$ipu = $(input_password.sprintf('', $_LANG['request_input'].sprintf($_LANG['password']), $_LANG['password'], $_LANG['ok'], $_LANG['close']));
 					$ipu.on('success.exec.ajax', function(e, data, xhr) {
 						e.preventDefault();
 						callfunc('success', data, xhr);

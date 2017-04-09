@@ -6,6 +6,9 @@ if(($_THEME = getCache('_AF_THEME_'._AF_THEME_)) === false) {
 	if(empty($_THEME['error'])) $_THEME = unserialize($_THEME['th_extra']);
 	setCache('_AF_THEME_'._AF_THEME_,$_THEME);
 }
+
+@include_once _AF_THEME_PATH_ . 'lang/' . _AF_LANG_ . '.php';
+
 ?>
 <!doctype html>
 <html lang="ko">
@@ -36,7 +39,7 @@ if(($_THEME = getCache('_AF_THEME_'._AF_THEME_)) === false) {
 <script>
 var current_url     = "<?php echo getCurrentUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
-var waiting_message = "<?php echo getLang('msg_call_server') ?>";
+var waiting_message = "<?php echo getLang('call_server') ?>";
 </script>
 <link rel="stylesheet" href="<?php echo _AF_URL_ . 'common/css/common' . (__DEBUG__?'':'.min') . '.css' ?>">
 <script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__?'':'.min') . '.js' ?>"></script>

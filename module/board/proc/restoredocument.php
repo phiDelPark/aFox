@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['wr_srl'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['wr_srl'])) return set_error(getLang('error_request'),4303);
 
 	global $_MEMBER;
 
@@ -15,7 +15,7 @@ function proc($data) {
 		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'wr_srl, wr_updater, md_id, mb_srl, mb_password');
 
 		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
-		if(empty($doc['wr_srl'])) throw new Exception(getLang('msg_invalid_request'), 303);
+		if(empty($doc['wr_srl'])) throw new Exception(getLang('error_request'),4303);
 
 		$module = getModule($doc['wr_updater']);
 		if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
@@ -25,14 +25,14 @@ function proc($data) {
 		// 권한 체크
 		if(empty($_MEMBER)) {
 			if(empty($data['mb_password'])) {
-				throw new Exception(getLang('warn_input', ['password']), 3);
+				throw new Exception(getLang('request_input', ['password']), 3);
 			}
 			if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
-				throw new Exception(getLang('msg_not_permitted'), 901);
+				throw new Exception(getLang('error_permit'),4501);
 			}
 		} else if(!isManager($doc['md_id'])) {
 			if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
-				throw new Exception(getLang('msg_not_permitted'), 901);
+				throw new Exception(getLang('error_permit'),4501);
 			}
 		}
 

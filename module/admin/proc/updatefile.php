@@ -4,16 +4,16 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 
-	if(empty($data['mf_srl'])) return set_error(getLang('msg_invalid_request'),303);
+	if(empty($data['mf_srl'])) return set_error(getLang('error_request'),4303);
 
 	global $_MEMBER;
 	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
 	// 권한 체크 // 관리자만
-	if(!$is_admin) return set_error(getLang('msg_not_permitted'), 901);
+	if(!$is_admin) return set_error(getLang('error_permit'), 4501);
 
 	$out = getDBItem(_AF_FILE_TABLE_, ['mf_srl'=>$data['mf_srl']]);
 	if(!empty($out['error'])) return set_error($out['message'],$out['error']);
-	if(empty($out['mf_srl'])) return set_error(getLang('msg_not_founded'),801);
+	if(empty($out['mf_srl'])) return set_error(getLang('error_founded'),4201);
 
 	$name = explode('.', $data['mf_name']);
 	$ext = count($name)===1 ? 'none' : $name[count($name)-1];

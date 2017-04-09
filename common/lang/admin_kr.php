@@ -58,17 +58,26 @@ $_LANG['new_member'] = '새 회원 등록';
 $_LANG['new_open_window'] = '새창열기';
 $_LANG['new_page'] = '새 페이지 등록';
 $_LANG['new_visit'] = '새로운 방문자';
+$_LANG['permanent_delete'] = '완전 삭제';
 $_LANG['possible_ip'] = '접근 아이피';
 $_LANG['prohibit_id'] = '금지 아이디';
 $_LANG['protect_file'] = '파일보호';
 $_LANG['recycle_bin'] = '휴지통';
 $_LANG['referer'] = '리퍼러';
-$_LANG['removed_module'] = '삭제된 모듈';
 $_LANG['removed_addon'] = '삭제된 애드온';
+$_LANG['removed_date'] = '삭제 날짜';
+$_LANG['removed_module'] = '삭제된 모듈';
 $_LANG['removed_theme'] = '삭제된 테마';
 $_LANG['start_page'] = '시작 페이지';
+$_LANG['terms_of_use'] = '이용약관';
+$_LANG['view_details'] = '자세히 보기';
 $_LANG['visit_record'] = '방문기록';
 
+$_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
+$_LANG['msg_not_admin'] = '관리자가 아닙니다.'."\n".'다시 로그인해 주십시요.';
+$_LANG['msg_not_welcome_page'] = 'welcome 페이지는 삭제할 수 없습니다.';
+
+$_LANG['desc_id'] = '아이디는 유일해야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다. (첫 글자는 영문이여야 합니다)';
 $_LANG['desc_base_cdn_list'] = '사용할 jQuery, bootstrap 등의 CDN 서버를 적어주세요. (비워두면 기본값)';
 $_LANG['desc_board_file'] = '첨부 파일의 최대 수와 최대 크기(KB)를 정할 수 있습니다. (첨부 확장자는 ,로 구분합니다)';
 $_LANG['desc_board_manager'] = '게시판 관리자';
