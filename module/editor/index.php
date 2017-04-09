@@ -73,15 +73,6 @@ foreach ($options as $key => $v) {
 			AF_EDITOR_<?php echo strtoupper($name) ?> = $(".af_editor_<?php echo $name ?>").afEditor(options);
 		}
 	);
-	$('.af-editor-group .form-control-feedback').popover({
-		html:1,
-		trigger:'focus',
-		placement:'top',
-		title:$_LANG['help_editor_attach_title'] || '첨부파일 사용법',
-		content:$_LANG['help_editor_attach_content'] || '본문에 파일을 보여주려면 아이콘을 잡고 끌어 본문 위로 옮기면 됩니다.<br><br>클릭시엔 삭제 모드가 토글됩니다.'
-	}).on('show.bs.popover',function(){
-		$(this).data("bs.popover").tip().css({'max-width':'500px','font-size':'12px'});
-	});
 </script>
 <?php
 /* End of file index.php */

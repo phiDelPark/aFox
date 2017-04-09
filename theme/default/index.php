@@ -49,7 +49,7 @@
 ?>
 			<?php if(empty($notes['error']) && $notes['total_count'] > 0){ ?>
 			<span>
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope" aria-hidden="true"></i> <b class="caret"></b></a>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope" aria-hidden="true"></i> <strong class="caret"></strong></a>
 				<ul class="dropdown-menu message-dropdown dropdown-menu-right">
 					<?php foreach ($notes['data'] as $val) {
 						$_icon = $val['nt_sender'].'/profile_image.png';

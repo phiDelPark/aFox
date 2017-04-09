@@ -90,6 +90,26 @@
 		}
 	}
 
+	function setImageTooltip($i) {
+		if ($i.attr('data-type').substring(0, 5) !== 'image') {
+			$i.tooltip({
+				container: 'body'
+			});
+		} else {
+			var title = $i.attr('title'),
+				url = $i.attr('data-srl') || false ? request_uri + '?file=' + $i.attr('data-srl') : $i.attr('data-path');
+			$i.removeAttr('title');
+			title = title.substring(title.length - 12, title.length);
+			$i.tooltip({
+				html: 1,
+				container: 'body',
+				title: function() {
+					return '<img src="' + url + '" style="width:80px;height:80px"><div style="width:80px;overflow:hidden;white-space:nowrap;">' + title + '</div>';
+				}
+			});
+		}
+	}
+
 	// AFEDITOR CLASS DEFINITION
 	// ==========================
 
@@ -160,6 +180,7 @@
 			}
 		}).on('dragstart', '.af-editor-uploaded-list>.file-item', function(e) {
 			var $i = $(this);
+			if ($i.data && $i.data('bs.tooltip')) $i.tooltip('hide'); // 드래그 시작시 툴팁 감추기
 			e.originalEvent.dataTransfer.setData("TEXT", JSON.stringify({
 				'type': $i.attr('data-type'),
 				'srl': $i.attr('data-srl'),
@@ -182,8 +203,8 @@
 					title = val.name.escapeHtml() + ' (' + size + ')',
 					path = (window.URL || window.webkitURL).createObjectURL(val);
 
-				$('<i class="file-item" draggable="true" title="' + (ismt ? title : '') + '" data-type="' + type + '" data-index="' + i + '" data-path="' + path + '">')
-					.text(ismt ? '' : title)
+				var $item = $('<i class="file-item" draggable="true" title="' + (ismt ? title : '') + '" data-type="' + type + '" data-index="' + i + '" data-path="' + path + '">');
+				$item.text(ismt ? '' : title)
 					.appendTo($c)
 					.on('dragstart', function(e) {
 						var $i = $(this);
@@ -194,9 +215,27 @@
 							'path': $i.attr('data-path')
 						}));
 					});
+
+				setImageTooltip($item);
 			});
 		});
 
+		this.$element.find('.form-control-feedback').popover({
+			html: 1,
+			trigger: 'focus',
+			placement: 'top',
+			title: $_LANG['help_editor_attach_title'] || '<strong>첨부파일 사용법</strong>',
+			content: $_LANG['help_editor_attach_content'] || '본문에 파일을 보여주려면 아이콘을 잡고 끌어 본문 위로 옮기면 됩니다.<br><br>클릭시엔 삭제 모드가 토글됩니다.'
+		}).on('show.bs.popover', function() {
+			$(this).data("bs.popover").tip().css({
+				'max-width': '500px',
+				'font-size': '12px'
+			});
+		});
+
+		this.$element.find('.fileupload-group .file-item').each(function() {
+			setImageTooltip($(this));
+		});
 
 		var $iframe = this.$element.find('iframe');
 		if ($iframe.length) $iframe.remove();
