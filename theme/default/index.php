@@ -110,7 +110,7 @@
 			<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
 				<div class="modal-dialog">
 					<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="member.loginCheck">
-					<input type="hidden" name="success_return_url" value="<?php echo getUrl('')?>" />
+					<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 							<h4 class="modal-title" id="loginModalLabel"><?php echo getLang('login')?></h4>

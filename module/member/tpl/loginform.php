@@ -3,7 +3,7 @@
 ?>
 
 <form class="login-content" method="post" autocomplete="off" style="text-align:right" data-exec-ajax="member.loginCheck">
-<input type="hidden" name="success_return_url" value="<?php echo getUrl('')?>" />
+<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 	<div class="panel panel-default" style="margin:auto;width:350px">
 		<div class="panel-heading">
 			<h4 class="panel-title"><?php echo getLang('login')?></h4>
