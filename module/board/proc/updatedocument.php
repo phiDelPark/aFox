@@ -262,6 +262,13 @@ function proc($data) {
 			}
 		}
 
+		// 비회원이면 비밀번호 다시 안묻기위해 임시권한주기
+		if(empty($_MEMBER)) {
+			$PERMIT_KEY = md5($md_id.'_'.$wr_srl);
+			$GLOBALS['_PERMIT_VIEW_'][$PERMIT_KEY] = true;
+			set_cookie('_AF_PERMIT_VIEW_'.$PERMIT_KEY, true, 0);
+		}
+
 	} catch (Exception $ex) {
 		DB::rollback();
 

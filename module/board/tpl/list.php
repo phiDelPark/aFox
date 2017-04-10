@@ -43,22 +43,22 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 			$_tmp = '<i class="fa fa-lock" aria-hidden="true"></i> ';
 
 			$is_manager = isManager($_DATA['id']);
-			$is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
+			$login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 
 			if(__MOBILE__) {
 				foreach ($_{'board'}['data'] as $key => $val) {
 					$wr_secret =  $val['wr_secret'] == '1';
-					$wr_permit = !$wr_secret || $is_manager || $is_login_mb_srl === $value['mb_srl'];
-					echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'><td class="wr_title"><a href="'.(!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('srl',$val['wr_srl'])).'" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
+					$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
+					echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'><td class="wr_title"><a href="'.(!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('','srl',$val['wr_srl'])).'" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
 					echo '<div class="clearfix"><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span>';
 					echo '<span class="pull-right">'.date('m/d', strtotime($val['wr_update'])).'</span></div></td></tr>';
 				}
 			} else {
 				foreach ($_{'board'}['data'] as $key => $val) {
 					$wr_secret =  $val['wr_secret'] == '1';
-					$wr_permit = !$wr_secret || $is_manager || $is_login_mb_srl === $value['mb_srl'];
+					$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
 					echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'><th class="hidden-xs" scope="row">'.$val['wr_srl'].'</th>';
-					echo '<td class="wr_title"><a href="'.(!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('srl',$val['wr_srl'])).'" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
+					echo '<td class="wr_title"><a href="'.(!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('','srl',$val['wr_srl'])).'" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
 					echo '<td nowrap><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';
 					echo '<td class="hidden-xs">'.$val['wr_hit'].'</td>';
 					echo '<td>'.date('Y/m/d', strtotime($val['wr_update'])).'</td></tr>';
@@ -120,7 +120,7 @@ $is_wr_grant = isGrant($_DATA['id'], 'write');
 			<input type="hidden" name="id" value="<?php echo $_DATA['id'] ?>">
 		</form>
 		<div class="pull-right">
-			<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
+			<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('','id',$_DATA['id'],'page',$_DATA['page']) ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
 			<a class="btn btn-default" href="<?php echo $is_wr_grant ? getUrl('disp','writeDocument','srl','') : '#' ?>"<?php echo $is_wr_grant ? '':' onclick="alert(\''.escapeHtml(getLang('error_permit',false),true,ENT_QUOTES).'\');return false"'?> role="button"><i class="fa fa-pencil" aria-hidden="true"></i> <?php echo getLang('write') ?></a>
 		</div>
 	</footer>

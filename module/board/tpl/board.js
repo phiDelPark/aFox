@@ -82,7 +82,12 @@
 			$ipu.attr('data-exec-ajax', act);
 			$ipu.prepend('<input type="hidden" name="rp_srl" value="' + data['rp_srl'] + '">');
 			$ipu.prepend('<input type="hidden" name="success_return_url" value="' + url + '">');
-			$ipu.addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
+			$ipu.addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow', function() {
+				var $mb_password = $(this).find('[name="mb_password"]');
+				if ($mb_password.length > 0) {
+					$mb_password.focus();
+				}
+			});
 
 		} else if (act == 'board.getComment' || act == 'board.updateComment') {
 
@@ -201,8 +206,10 @@
 						}
 					}, response_tags);
 					return false;
-				}).attr('action', url).end().modal('show');
+				}).attr('action', url);
 		}
+	}).on('shown.bs.modal', function(e) {
+		$(this).find('[name="mb_password"]').focus();
 	});
 
 	$(window).on('load', function() {

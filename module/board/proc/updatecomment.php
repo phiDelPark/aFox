@@ -16,17 +16,20 @@ function proc($data) {
 	$rp_parent = (int) abs(empty($data['rp_parent']) ? 0 : $data['rp_parent']);
 	$rp_srl = (int) (empty($rp_parent) ? abs(empty($data['rp_srl']) ? 0 : $data['rp_srl']) : $rp_parent);
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
+	$parent_secret = false;
 
 	try {
 
 		if(!empty($rp_srl)) {
-			$cmt = getDBItem(_AF_COMMENT_TABLE_, ['rp_srl'=>$rp_srl], 'wr_srl, rp_parent, rp_depth, mb_srl, mb_password');
+			$cmt = getDBItem(_AF_COMMENT_TABLE_, ['rp_srl'=>$rp_srl], 'wr_srl, rp_parent, rp_secret, rp_depth, mb_srl, mb_password');
 			if(!empty($cmt['error'])) throw new Exception($cmt['message'], $cmt['error']);
 			if(empty($cmt['wr_srl'])) throw new Exception(getLang('error_founded'), 4201);
 			$wr_srl = (int) abs(empty($cmt['wr_srl']) ? 0 : $cmt['wr_srl']);
 
 			$sendsrl = $cmt['mb_srl'];
 			$rp_root = $cmt['rp_parent'];
+			// true이면 하위 답변도 비밀글
+			$parent_secret = $cmt['rp_secret'] == '1';
 
 			if(!empty($rp_parent)) {
 				$_len = strlen($cmt['rp_depth']) + 1;
@@ -69,6 +72,7 @@ function proc($data) {
 
 		if(!empty($module['use_type'])) $data['rp_type'] = ((int)$module['use_type'])-1;
 		if(!empty($module['use_secret'])) $data['rp_secret'] = ((int)$module['use_secret'])-1;
+		if($parent_secret) $data['rp_secret'] = 1;
 
 		$data['mb_ipaddress'] = $_SERVER['REMOTE_ADDR'];
 

@@ -51,7 +51,7 @@
 }
 
 #board_view>footer {
-	margin: 15px 5px 5px;
+	margin: 20px 5px 5px;
 }
 
 #board_view>article>.current_content {
@@ -141,12 +141,12 @@
 }
 
 .af-editor-area>textarea {
-	min-height: 250px;
+	min-height: 300px;
 }
 
 .af-editor-area>textarea+iframe {
 	border-color: #5cb85c;
-	min-height: 250px;
+	min-height: 300px;
 	padding: 1px;
 	outline: 0;
 	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);

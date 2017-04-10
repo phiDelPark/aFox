@@ -2,26 +2,29 @@
 if(!defined('__AFOX__')) exit();
 $is_manager = isManager($_DATA['id']);
 $is_rp_grant = isGrant($_DATA['id'],'reply');
-if(!empty($_{'board'}['mb_srl'])) {
-	$doc_mb = getMember($_{'board'}['mb_srl']);
+
+$wr_mb_srl = $_{'board'}['mb_srl'];
+if(!empty($wr_mb_srl)) {
+	$doc_mb = getMember($wr_mb_srl);
 }
-$is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
+
+$login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
+$wr_secret = $_{'board'}['wr_secret'] == '1';
+$wr_permit = $is_manager || $login_srl === $wr_mb_srl || !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$_{'board'}['wr_srl'])]);
 ?>
 
 <section id="board_view">
 	<header>
-		<h3 class="clearfix"><?php echo $_{'board'}['wr_title']?></h3>
+		<h3 class="clearfix"><?php echo ($wr_secret?'<i class="fa fa-lock" aria-hidden="true"></i> ':'').$_{'board'}['wr_title']?></h3>
 		<hr class="divider">
 		<div class="clearfix">
-			<span class="pull-left"><?php echo '<span class="mb_nick" data-srl="'.$_{'board'}['mb_srl'].'" data-rank="'.(ord($_{'board'}['mb_rank']) - 48).'">'.$_{'board'}['mb_nick'].'</span>'?></span>
+			<span class="pull-left"><?php echo '<span class="mb_nick" data-srl="'.$wr_mb_srl.'" data-rank="'.(ord($_{'board'}['mb_rank']) - 48).'">'.$_{'board'}['mb_nick'].'</span>'?></span>
 			<span class="pull-right"><?php echo date((__MOBILE__?'y':'Y').getLang('year').' m'.getLang('month').' d'.getLang('day').' A h:i', strtotime($_{'board'}['wr_regdate']))?></span>
 		</div>
 	</header>
 	<article>
 	<?php
-		$wr_secret =  $_{'board'}['wr_secret'] == '1';
-		$wr_permit = (!$wr_secret || $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl']);
-		$wr_content = ($wr_permit || !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$_{'board'}['wr_srl'])])) ? $_{'board'}['wr_content'] : getLang('error_permit');
+		$wr_content = ($wr_permit || !$wr_secret) ? $_{'board'}['wr_content'] : getLang('error_permit');
 		echo toHTML($_{'board'}['wr_type'], $wr_content);
 	?>
 	<?php if(!empty($_{'board'}['wr_tags'])) { ?>
@@ -49,13 +52,16 @@ $is_login_mb_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 	<?php } ?>
 	</article>
 	<footer class="area-text-button clearfix">
+		<div class="pull-left">
+			<a class="btn btn-default btn-sm" href="<?php echo getUrl('','id',$_DATA['id'],'page',$_DATA['page']) ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a>
+		</div>
 		<div class="pull-right">
 			<?php
-				$is_edit = empty($_{'board'}['mb_srl']) || $is_manager || $is_login_mb_srl === $_{'board'}['mb_srl'];
+				$is_edit = empty($wr_mb_srl) || $is_manager || $login_srl === $wr_mb_srl;
 				$not_edit_str = '#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('error_permit',false),true,ENT_QUOTES).'\');return false';
 			?>
-			<a href="<?php echo $is_edit?(!$wr_permit&&$wr_secret?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
-			<a href="<?php echo $is_edit?(!$wr_permit&&$wr_secret?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo $is_edit?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo $is_edit?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 		</div>
 	</footer>
 </section>

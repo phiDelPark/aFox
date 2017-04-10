@@ -25,7 +25,7 @@
 				<label for="id_mb_nick"><?php echo getLang('id')?></label>
 				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" required maxlength="20" value="<?php echo $is?escapeHtml($_{'board'}['mb_nick']):''?>"<?php echo empty($_{'board'}['wr_srl'])?'':' disabled'?>>
 			</div>
-			<?php if (empty($_{'board'}['mb_srl'])) { ?>
+			<?php if (!$is_manager && empty($_{'board'}['mb_srl'])) { ?>
 				<div class="form-group">
 					<label for="id_mb_password"><?php echo getLang('password')?></label>
 					<input type="password" name="mb_password" class="form-control" id="id_mb_password" required>
