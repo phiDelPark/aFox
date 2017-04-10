@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 // 관리자만 접근 가능
 if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
-	goUrl(_AF_URL_, getLang('msg_not_admin'));
+	goUrl(_AF_URL_, getLang('error_admin'));
 	exit('not admin');
 }
 

@@ -1,4 +1,8 @@
 @charset "utf-8";
+#passwordBoxModal .modal-dialog {
+	margin-top: -250px;
+}
+
 #board_list>header {
 	margin-bottom: 20px;
 }

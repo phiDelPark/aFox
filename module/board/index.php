@@ -51,8 +51,8 @@ function dispBoardDefault($data) {
 		}
 	}
 
-	addCSS(_AF_URL_ . 'module/board/tpl/board.min.css');
-	addJS(_AF_URL_ . 'module/board/tpl/board.min.js');
+	addCSS(_AF_URL_ . 'module/board/tpl/board'. (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css'));
+	addJS(_AF_URL_ . 'module/board/tpl/board'. (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
 	return $result;
 }
 

@@ -3,7 +3,7 @@
 
 	$config = getDBItem(_AF_CONFIG_TABLE_, []);
 	if(!empty($config['error'])) {
-		echo showMessage($config['message'],$config['error']);
+		echo showMessage($config['message'],$config['error'], false);
 	}
 
 ?>

@@ -35,6 +35,14 @@ function proc($data) {
 		}
 	}
 
+	$responses = $data['response_tags'];
+	if(!empty($responses) && count($responses) > 0) {
+		// 요청값이 mb_password이면 권한만 체크
+		if(count($responses) === 1 && $responses[0] === 'mb_password') {
+			return ['rp_srl', $data['rp_srl']];
+		}
+	}
+
 	// 비밀번호는 암호화 되있지만 그래도 노출 안되게 제거
 	unset($cmt['mb_password']);
 

@@ -6,6 +6,7 @@ $_LANG['addon'] = '애드온';
 $_LANG['admin'] = '관리자';
 $_LANG['afox'] = '에이폭스';
 $_LANG['agree'] = '동의';
+$_LANG['alert'] = '알림';
 $_LANG['all'] = '모두';
 $_LANG['apply'] = '적용';
 $_LANG['author'] = '작성자';
@@ -159,6 +160,7 @@ $_LANG['error_request'] = '잘못된 요청입니다.'; // 4303
 $_LANG['error_value'] = '값이 올바르지 않습니다.'; // 4601
 $_LANG['error_permit'] = '권한이 없습니다.'; // 4501
 $_LANG['error_password'] = '비밀번호가 다릅니다.'; // 4801
+$_LANG['error_admin'] = '관리자가 아닙니다.'; // 4901
 
 // fail_... 실패시 오류번호 5001~5999
 $_LANG['fail_connect'] = '연결에 실패했습니다.';

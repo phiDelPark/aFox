@@ -74,7 +74,6 @@ $_LANG['view_details'] = '자세히 보기';
 $_LANG['visit_record'] = '방문기록';
 
 $_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
-$_LANG['msg_not_admin'] = '관리자가 아닙니다.'."\n".'다시 로그인해 주십시요.';
 $_LANG['msg_not_welcome_page'] = 'welcome 페이지는 삭제할 수 없습니다.';
 
 $_LANG['desc_id'] = '아이디는 유일해야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다. (첫 글자는 영문이여야 합니다)';

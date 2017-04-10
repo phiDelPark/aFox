@@ -13,7 +13,7 @@
 
 	$out = DB::getList("SELECT SQL_CALC_FOUND_ROWS * FROM $pg INNER JOIN $md ON $md.md_id = $pg.md_id WHERE $where ORDER BY $pg.pg_regdate DESC LIMIT $start,$count");
 	if($ex = DB::error()) {
-		echo showMessage($ex->getMessage(),$ex->getCode());
+		echo showMessage($ex->getMessage(),$ex->getCode(), false);
 	} else {
 		$total_count = DB::found();
 		$cur_page = $page;

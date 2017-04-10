@@ -158,9 +158,51 @@
 	});
 
 	$('.list-table tr[data-hot-track]').click(function() {
-		var href = $('.wr_title a', this).attr('href');
-		location.href = href;
+		var $i = $('.wr_title a', this),
+			href = $i.attr('href');
+		if (href == '#' && $i.attr('data-target') == '#passwordBoxModal') {
+			$($i.attr('data-target')).modal('show', $i);
+		} else {
+			location.href = href;
+		}
 		return false;
+	});
+
+	$('#passwordBoxModal', '#board_list').on('show.bs.modal', function(e) {
+		if (typeof e.relatedTarget == 'undefined') {
+			e.preventDefault();
+			return false;
+		}
+
+		var $modal = $(this),
+			$form = $modal.find('form'),
+			$relatedTarget = $(e.relatedTarget),
+			srl = $relatedTarget.attr('data-srl') || '',
+			param = ($relatedTarget.attr('data-param') || '').split(','),
+			url = current_url;
+
+		if (srl && param.length > 1) {
+			url = url.setQuery(param);
+			$form
+				.on('submit', function() {
+					// 체크가 성공하면 이동
+					if ($form.data('check success') || false) {
+						return true;
+					}
+					var data = {},
+						response_tags = ['mb_password'];
+					data['wr_srl'] = srl;
+					data['mb_password'] = $modal.find('input[name="mb_password"]').val();
+					exec_ajax('board.getDocument', data, function(status, data, xhr) {
+						$form.data('check success', status === 'success');
+						if (status === 'success') {
+							$form.submit();
+							return false;
+						}
+					}, response_tags);
+					return false;
+				}).attr('action', url).end().modal('show');
+		}
 	});
 
 	$(window).on('load', function() {

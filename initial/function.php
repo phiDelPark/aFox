@@ -432,9 +432,7 @@ if(!defined('__AFOX__')) exit();
 			if($_result['error'] == 88088 && empty($_MEMBER)) {
 				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
 			} else {
-				echo showMessage($_result['message'], $_result['error'],
-					'<i class="fa fa-exclamation-triangle" aria-hidden="true"></i> '.getLang('warning')
-				);
+				echo showMessage($_result['message'], $_result['error']);
 			}
 		} else {
 			$_{__MODULE__} = $_result;
@@ -471,7 +469,7 @@ if(!defined('__AFOX__')) exit();
 					if(file_exists($include_file)) {
 						return $call($include_file, $attrs);
 					} else {
-						return showMessage(getLang('error_founded'), 4201);
+						return showMessage(getLang('error_founded'), 4201, false);
 					}
 				}
 			}
@@ -769,8 +767,14 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function showMessage($message, $type = 0, $title = '') {
-		$type = ($type > 3 || $type < 0) ? 3 : $type;
+		$type = ($type > 4000 && $type < 6000) ? 3 : ($type > 3 && $type < 0 ? 2 : $type);
 		$a_type = ['success', 'info', 'warning', 'danger'];
+		// 타이틀 값에 false 가 들어오면 타이틀바 제거
+		if($title !== false) {
+			$a_title = ['success', 'alert', 'warning', 'error'];
+			$a_icon = ['snowflake-o', 'info-circle', 'exclamation-triangle', 'ban'];
+			$title = '<i class="fa fa-'.$a_icon[$type].'" aria-hidden="true"></i> '.getLang($a_title[$type]);
+		}
 		return '<div class="'. (empty($title)?'alert alert-dismissable alert-':'panel panel-') . '' . $a_type[$type] . '" role="alert">'
 				. (empty($title)?'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>':'<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3></div>')
 				. '<div' . (empty($title)?'':' class="panel-body"') . '>' . $message . '</div></div>';

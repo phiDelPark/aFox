@@ -24,10 +24,18 @@ function proc($data) {
 				return set_error(getLang('request_input', ['password']));
 			}
 			if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
-				return set_error(getLang('error_permit'),4501);
+				return set_error(getLang('error_password'),4801);
 			}
 		} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
 			return set_error(getLang('error_permit'),4501);
+		}
+	}
+
+	$responses = $data['response_tags'];
+	if(!empty($responses) && count($responses) > 0) {
+		// 요청값이 mb_password이면 권한만 체크
+		if(count($responses) === 1 && $responses[0] === 'mb_password') {
+			return ['wr_srl', $data['wr_srl']];
 		}
 	}
 

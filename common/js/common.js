@@ -75,6 +75,10 @@ var $_LANG = [];
 			args = arguments,
 			n = args.length;
 		if (n === 0) return s;
+		if (args.length === 1 && typeof args[0] === 'object') {
+			args = args[0];
+			n = args.length;
+		}
 		var idx = s.indexOf('?'),
 			uri = s.replace(/#$/, ''),
 			qrs = {},
@@ -222,7 +226,7 @@ var $_LANG = [];
 		return popwin;
 	};
 
-	$.exec_ajax = window.exec_ajax = function(self, param, callback) {
+	$.exec_ajax = window.exec_ajax = function(self, param, callback, responses) {
 		var $i = $(typeof self === 'string' ? 'BODY' : self),
 			act = ((typeof self === 'string' ? self : $i.attr('data-exec-ajax')) || '').split('.');
 
@@ -238,10 +242,16 @@ var $_LANG = [];
 		var $waiting = $('<div class="af_waiting_message alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> ' + waiting_message + '<div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:100%"></div></div></div>');
 		$waiting.hide().appendTo('body').fadeIn(1500);
 
+
+		if (typeof(responses) == "undefined" || responses.length < 1) {
+			responses = [];
+		}
+
 		if (isform && multipart) {
 			data = new FormData($i[0]);
 			data.append('module', act[0]);
 			data.append('act', act[1]);
+			data.append('response_tags', responses);
 		} else {
 			if (isform) {
 				data = $i[0].dataExport();
@@ -253,7 +263,8 @@ var $_LANG = [];
 			}
 			$.extend(data, {
 				module: act[0],
-				act: act[1]
+				act: act[1],
+				response_tags: responses
 			});
 			data = JSON.stringify(data);
 		}

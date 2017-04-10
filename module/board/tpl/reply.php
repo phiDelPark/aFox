@@ -25,12 +25,12 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 			} else {
 				$_icon = _AF_URL_ .'module/board/tpl/user_default.jpg';
 			}
+			$rp_secret = $value['rp_secret']=='1';
+			$rp_permit = $is_owner_permit_view || !$rp_secret || $is_login_mb_srl === $value['mb_srl'];
+			if(!$rp_permit) $rp_permit = !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$value['wr_srl'].'_'.$value['rp_srl'])]);
+			$rp_content = $rp_permit ? $value['rp_content'] : (!empty($value['mb_srl'])?($rp_secret?'<i class="fa fa-lock" aria-hidden="true"></i> ':'').getLang($rp_secret?'msg_is_secret':'error_permit'):sprintf($input_password,getUrl('rp',$value['rp_srl'])));
 
-			$is_permit = $is_owner_permit_view || $value['rp_secret']!='1' || $is_login_mb_srl === $value['mb_srl'];
-			if(!$is_permit) $is_permit = !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$value['wr_srl'].'_'.$value['rp_srl'])]);
-			$rp_content = $is_permit ? $value['rp_content'] : (!empty($value['mb_srl'])?getLang('error_permit'):sprintf($input_password,getUrl('rp',$value['rp_srl'])));
-
-			$is_edit = empty($value['mb_srl'])&&!$_deleted || $is_manager || $is_login_mb_srl === $value['mb_srl'];
+			$is_edit = (!$_deleted&&empty($value['mb_srl'])) || $is_manager || $is_login_mb_srl === $value['mb_srl'];
 
 			echo '<a id="reply_'.$value['rp_srl'].'"'.(!empty($_DATA['rp'])&&$value['rp_srl']==$_DATA['rp'] ? ' class="active"':'').'></a>'
 				.'<div class="reply-item" style="padding-left:'.(($_len>5?5:$_len)*30).'px"><div class="left">'
@@ -38,7 +38,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 				.'<div class="reply-date"><small>'.date('Y/m/d h:i', strtotime($value['rp_update'])).'</small></div></div></div><div class="right"><div class="content clearfix">'.toHTML($value['rp_type'], $rp_content).'</div>'
 				.'<div class="area-text-button clearfix"><div class="pull-right">'
 				.(!$_deleted&&$is_rp_grant&&$_len<5?('<a href="#" role="button" data-exec-act="board.updateComment" data-act-param="rp_parent,'.$value['rp_srl'].'"><i class="fa fa-reply gly-rotate-180" aria-hidden="true"></i> '.getLang('reply').'</a>'):'')
-				.'<a href="#" role="button" '.($is_edit?'data-exec-act="board.getComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])&&!$is_manager&&$value['rp_secret']=='1'?' data-act-password="1"':''):$not_edit_str).'><i class="fa fa-pencil-square-o" aria-hidden="true"></i> '.getLang('edit').'</a>'
+				.'<a href="#" role="button" '.(!$_deleted&&$is_edit?'data-exec-act="board.getComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])&&!$is_manager&&$rp_secret?' data-act-password="1"':''):$not_edit_str).'><i class="fa fa-pencil-square-o" aria-hidden="true"></i> '.getLang('edit').'</a>'
 				.'<a href="#" role="button" '.($is_edit?'data-exec-act="board.deleteComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])&&!$is_manager?' data-act-password="1"':''):$not_edit_str).'><i class="fa fa-trash-o" aria-hidden="true"></i> '.getLang('delete').'</a>'
 				.'</div></div></div></div>';
 		}

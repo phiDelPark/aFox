@@ -49,7 +49,7 @@ function proc($data) {
 			DB::update(_AF_COMMENT_TABLE_,
 				[
 					'rp_status'=>4,
-					'rp_content'=>getLang('error_permit'),
+					'rp_content'=>getLang('msg_is_deleted'),
 					'mb_srl'=>'0',
 					'mb_nick'=>getLang('system'),
 					'mb_password'=>md5(time())

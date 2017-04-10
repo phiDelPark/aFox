@@ -44,7 +44,7 @@
 	$start_page = $current_page = 1;
 
 	if(!empty($_list['error'])) {
-		echo showMessage($_list['message'], $_list['error']);
+		echo showMessage($_list['message'], $_list['error'], false);
 	} else {
 		$current_page = $_list['current_page'];
 		$total_page = $_list['total_page'];

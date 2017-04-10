@@ -20,15 +20,17 @@
 	<input type="hidden" name="wr_srl" value="<?php echo $is?$_{'board'}['wr_srl']:''?>">
 
 		<div>
-		<?php if (empty($_MEMBER) || (!$is_manager&&empty($_{'board'}['mb_srl']))) { ?>
+		<?php if (empty($_MEMBER) || (!empty($_{'board'}['wr_srl']) && $_MEMBER['mb_srl'] !== $_{'board'}['mb_srl'])) { ?>
 			<div class="form-group">
 				<label for="id_mb_nick"><?php echo getLang('id')?></label>
-				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" required maxlength="20" value="<?php echo $is?escapeHtml($_{'board'}['mb_nick']):''?>">
+				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" required maxlength="20" value="<?php echo $is?escapeHtml($_{'board'}['mb_nick']):''?>"<?php echo empty($_{'board'}['wr_srl'])?'':' disabled'?>>
 			</div>
-			<div class="form-group">
-				<label for="id_mb_password"><?php echo getLang('password')?></label>
-				<input type="password" name="mb_password" class="form-control" id="id_mb_password" required>
-			</div>
+			<?php if (empty($_{'board'}['mb_srl'])) { ?>
+				<div class="form-group">
+					<label for="id_mb_password"><?php echo getLang('password')?></label>
+					<input type="password" name="mb_password" class="form-control" id="id_mb_password" required>
+				</div>
+			<?php } ?>
 		<?php } ?>
 		<?php if (!empty($_CFG['md_category'])) { ?>
 			<div class="form-group">

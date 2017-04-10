@@ -3,6 +3,25 @@
  * Copyright 2016 afox, Inc.
  */
 
+.modal.vertical-center {
+	text-align: center;
+	padding: 0!important;
+}
+
+.modal.vertical-center:before {
+	content: '';
+	display: inline-block;
+	height: 100%;
+	vertical-align: middle;
+	margin-right: -4px;
+}
+
+.modal.vertical-center .modal-dialog {
+	display: inline-block;
+	text-align: left;
+	vertical-align: middle;
+}
+
 .switch-group,
 .radio-control>.radio {
 	display: inline-block;
