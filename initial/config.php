@@ -1,8 +1,8 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-define('__DEBUG__', 1);
-define('_AF_VERSION_', '0.5.5');
+define('__DEBUG__', 0);
+define('_AF_VERSION_', '0.6.0');
 define('_AF_SERVER_TIME_', time());
 
 define('_AF_CONFIG_TABLE_', 'afox_config');

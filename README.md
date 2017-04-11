@@ -14,7 +14,7 @@ aFox는 여러분들의 개발 참여를 기다립니다.
 참여를 원하시는 분들은 버그 신고/제안 혹은 Pull Request 전에 [CONTRIBUTING.md](https://github.com/phiDelPark/aFox/blob/master/CONTRIBUTING.md) 문서를 먼저 읽어주시기 바랍니다.
 
 ## 설치
-http:\/\/ 도메인/install
+http:\/\/도메인/install
 
 ## 서버 필요 조건
 * UTF-8
