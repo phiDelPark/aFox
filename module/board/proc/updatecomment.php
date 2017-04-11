@@ -93,7 +93,10 @@ function proc($data) {
 
 		$data['rp_content'] = xssClean($data['rp_content']);
 
-		if (!empty($rp_parent) || empty($rp_srl)) {
+		$ret_rp_srl = 0;
+		$new_insert = !empty($rp_parent) || empty($rp_srl);
+
+		if ($new_insert) {
 
 			// 권한 체크
 			if(!isGrant($module['md_id'], 'reply')) {
@@ -162,6 +165,14 @@ function proc($data) {
 
 	} catch (Exception $ex) {
 		DB::rollback();
+
+		// myisam면 rollback 수동으로 해야됨
+		if(DB::engine(_AF_COMMENT_TABLE_) === 'myisam') {
+			if($new_insert && !empty($ret_rp_srl)) {
+				@DB::delete(_AF_COMMENT_TABLE_, ['rp_srl'=>$ret_rp_srl]);
+			}
+		}
+
 		return set_error($ex->getMessage(),$ex->getCode());
 	}
 
