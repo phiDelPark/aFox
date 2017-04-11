@@ -5,7 +5,7 @@
 <section id="setup_page">
 	<header>
 		<h3 class="clearfix">
-			<span class="pull-left"><i class="fa fa-pencil<?php echo getLang('-square-o')?>" aria-hidden="true"></i> <?php echo getLang('edit')?></span>
+			<span class="pull-left"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit')?></span>
 			<a class="close" href="<?php echo getUrl('disp','')?>"><span aria-hidden="true">×</span></a>
 		</h3>
 		<hr class="divider">
@@ -50,7 +50,7 @@
 			</div>
 
 			<div class="area-button">
-				<button type="submit" class="btn btn-success btn-block"><i class="fa fa-check" aria-hidden="true"></i> <?php echo getLang('save')?></button>
+				<button type="submit" class="btn btn-success btn-block"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
 			</div>
 		</div>
 	</form>

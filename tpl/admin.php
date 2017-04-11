@@ -24,7 +24,6 @@ if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
 <![endif]-->
 <?php if (_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 <link href="<?php echo _AF_URL_ ?>common/css/bootstrap.min.css" rel="stylesheet">
-<link href="<?php echo _AF_URL_ ?>common/css/fontawesome.min.css" rel="stylesheet">
 <script src="<?php echo _AF_URL_ ?>common/js/jquery.min.js" id="def-jQuery-JS"></script>
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.min.js" id="def-Bootstrap-JS"></script>
 <?php } ?>
@@ -34,7 +33,7 @@ var request_uri     = "<?php echo getRequestUri() ?>";
 var waiting_message = "<?php echo getLang('call_server') ?>";
 </script>
 <link rel="stylesheet" href="<?php echo _AF_URL_ . 'common/css/common' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css') ?>">
-<link rel="stylesheet" href="<?php echo _AF_URL_ ?>module/admin/admin.css">
+<link rel="stylesheet" href="<?php echo _AF_URL_ . 'module/admin/admin' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.css') ?>">
 <script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
 </head>
 <body>

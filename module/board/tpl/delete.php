@@ -7,7 +7,7 @@
 <section id="board_delete">
 	<header>
 		<h3 class="clearfix">
-			<span class="pull-left"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete')?></span>
+			<span class="pull-left"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('delete')?></span>
 			<a class="close" href="<?php echo getUrl('disp','')?>"><span aria-hidden="true">×</span></a>
 		</h3>
 		<hr class="divider">
@@ -32,7 +32,7 @@
 					<textarea class="form-control min-height-200 vresize" id="id_wr_content" readonly="readonly"><?php echo $is?$_{'board'}['wr_content']:''?></textarea>
 				</div>
 				<div class="area-button">
-					<button type="submit" class="btn btn-warning btn-block"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete')?></button>
+					<button type="submit" class="btn btn-warning btn-block"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('delete')?></button>
 				</div>
 			</div>
 		</form>

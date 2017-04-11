@@ -14,7 +14,7 @@
 
 
 <table class="table table-hover table-nowrap">
-<thead class="table-nowrap">
+<thead>
 	<tr>
 		<th class="col-xs-1">#<?php echo getLang('id')?></th>
 		<th><?php echo getLang('title')?></th>

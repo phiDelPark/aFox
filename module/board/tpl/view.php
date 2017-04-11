@@ -15,7 +15,7 @@ $wr_permit = $is_manager || $login_srl === $wr_mb_srl || !empty($GLOBALS['_PERMI
 
 <section id="board_view">
 	<header>
-		<h3 class="clearfix"><?php echo ($wr_secret?'<i class="fa fa-lock" aria-hidden="true"></i> ':'').$_{'board'}['wr_title']?></h3>
+		<h3 class="clearfix"><?php echo ($wr_secret?'<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ':'').$_{'board'}['wr_title']?></h3>
 		<hr class="divider">
 		<div class="clearfix">
 			<span class="pull-left"><?php echo '<span class="mb_nick" data-srl="'.$wr_mb_srl.'" data-rank="'.(ord($_{'board'}['mb_rank']) - 48).'">'.$_{'board'}['mb_nick'].'</span>'?></span>
@@ -32,7 +32,7 @@ $wr_permit = $is_manager || $login_srl === $wr_mb_srl || !empty($GLOBALS['_PERMI
 		<?php
 			$hashtags = explode(',', $_{'board'}['wr_tags']);
 			foreach ($hashtags as $val) {
-				echo '<a href="'.getUrl('','id',$_DATA['id'],'search','tags:'.$val).'"><i class="fa fa-hashtag" aria-hidden="true"></i> '.$val.'</a>'."\n";
+				echo '<a href="'.getUrl('','id',$_DATA['id'],'search','tags:'.$val).'"><strong>#</strong>'.$val.'</a>'."\n";
 			}
 		?>
 	</div>
@@ -53,15 +53,15 @@ $wr_permit = $is_manager || $login_srl === $wr_mb_srl || !empty($GLOBALS['_PERMI
 	</article>
 	<footer class="area-text-button clearfix">
 		<div class="pull-left">
-			<a class="btn btn-default btn-sm" href="<?php echo getUrl('','id',$_DATA['id'],'page',$_DATA['page']) ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo getUrl('','id',$_DATA['id'],'page',$_DATA['page']) ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a>
 		</div>
 		<div class="pull-right">
 			<?php
 				$is_edit = empty($wr_mb_srl) || $is_manager || $login_srl === $wr_mb_srl;
 				$not_edit_str = '#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('error_permit',false),true,ENT_QUOTES).'\');return false';
 			?>
-			<a class="btn btn-default btn-sm" href="<?php echo $is_edit?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
-			<a class="btn btn-default btn-sm" href="<?php echo $is_edit?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="fa fa-trash-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo $is_edit?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo $is_edit?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 		</div>
 	</footer>
 </section>

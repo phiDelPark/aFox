@@ -196,14 +196,14 @@ body {
 	padding: 20px;
 }
 
-.table-nowrap tr,
+.table-nowrap th,
 .table-nowrap td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.table-nowrap .col-md-10 {
+.table-nowrap td.title {
 	white-space: normal;
 }
 

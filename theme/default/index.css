@@ -163,7 +163,6 @@ ul.message-dropdown>li>a {
 
 .bs-docs-header {
 	position: relative;
-	color: #000;
 }
 
 .bs-docs-header .right {
@@ -172,14 +171,9 @@ ul.message-dropdown>li>a {
 	right: 0;
 }
 
-.bs-docs-header .right .fa {
-	width: 20px;
-	text-align: center;
-}
-
-.bs-docs-header .right .fa,
+.bs-docs-header .right .glyphicon,
 .bs-docs-header .right .caret {
-	color: #000;
+	color: #000 !important;
 }
 
 .bs-docs-header .right .caret {

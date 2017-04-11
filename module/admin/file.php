@@ -8,7 +8,7 @@
 ?>
 
 <table class="table table-hover table-nowrap">
-<thead class="table-nowrap">
+<thead>
 	<tr>
 		<th class="col-xs-1">#<?php echo getLang('id')?></th>
 		<th><?php echo getLang('name')?></th>
@@ -33,7 +33,7 @@
 
 		foreach ($file_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row">'.$value['md_id'].'</th>';
-			echo '<td>'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
+			echo '<td class="title">'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
 			echo '<td class="hidden-xs">'.$value['mf_download'].'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.$value['mb_ipaddress'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mf_regdate'])).'</td></tr>';

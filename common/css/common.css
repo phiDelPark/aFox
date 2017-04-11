@@ -318,33 +318,24 @@
 	resize: horizontal;
 }
 
-.fa.fa-1,
-.fa.fa-2,
-.fa.fa-3,
-.fa.fa-4,
-.fa.fa-5,
-.fa.fa-6 {
-	margin-right: .07142857em;
+.fs-1x {
+	font-size: 1em;
 }
 
-.fa.fa-2 {
+.fs-2x {
 	font-size: 2em;
 }
 
-.fa.fa-3 {
+.fs-3x {
+	font-size: 3em;
+}
+
+.fs-4x {
 	font-size: 4em;
 }
 
-.fa.fa-4 {
-	font-size: 7em;
-}
-
-.fa.fa-5 {
-	font-size: 12em;
-}
-
-.fa.fa-6 {
-	font-size: 20em;
+.fs-5x {
+	font-size: 5em;
 }
 
 

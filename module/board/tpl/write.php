@@ -7,7 +7,7 @@
 <section id="board_write">
 	<header>
 		<h3 class="clearfix">
-			<span class="pull-left"><i class="fa fa-pencil<?php echo getLang($is?'-square-o':'')?>" aria-hidden="true"></i> <?php echo getLang($is?'edit':'write')?></span>
+			<span class="pull-left"><i class="glyphicon glyphicon-<?php echo $is?'edit':'pencil'?>" aria-hidden="true"></i> <?php echo getLang($is?'edit':'write')?></span>
 			<a class="close" href="<?php echo getUrl('disp','')?>"><span aria-hidden="true">×</span></a>
 		</h3>
 		<hr class="divider">
@@ -70,7 +70,7 @@
 			</div>
 
 			<div class="area-button">
-				<button type="submit" class="btn btn-success btn-block"><i class="fa fa-check" aria-hidden="true"></i> <?php echo getLang('save')?></button>
+				<button type="submit" class="btn btn-success btn-block"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
 			</div>
 		</div>
 	</form>

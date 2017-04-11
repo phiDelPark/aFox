@@ -32,7 +32,7 @@
 ?>
 
 <table class="table table-hover table-nowrap">
-<thead class="table-nowrap">
+<thead>
 	<tr>
 		<th class="col-xs-1">#<?php echo getLang('board')?></th>
 		<th><?php echo getLang('title')?></th>
@@ -58,7 +58,7 @@
 
 		foreach ($cmt_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].',with_module_config,1" data-modal-target="#comment_modal"><th scope="row">'.$value['md_id'].'</th>';
-			echo '<td>'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
+			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
 			echo '<td>'.($value['rp_status']?$value['rp_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['rp_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';

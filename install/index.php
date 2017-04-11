@@ -485,7 +485,6 @@ $file = $datadir.'config/base_cdn_list.php';
 $f = @fopen($file, 'w');
 fwrite($f, "<?php if(!defined('__AFOX__')) exit();?>\n");
 fwrite($f, '<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">'."\n");
-fwrite($f, '<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">'."\n");
 fwrite($f, '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>'."\n");
 fwrite($f, '<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>'."\n");
 fclose($f);

@@ -14,7 +14,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-3">
-						<i class="fa fa-comment fa-5x"></i>
+						<i class="glyphicon glyphicon-pencil fs-5x"></i>
 					</div>
 					<div class="col-xs-9 text-right">
 						<div class="huge"><?php echo $doc_cnt?></div>
@@ -25,7 +25,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 			<a href="<?php echo getUrl('','admin','document')?>">
 				<div class="panel-footer">
 					<span class="pull-left"><?php echo getLang('view_details')?></span>
-					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					<span class="pull-right"><i class="glyphicon glyphicon-circle-arrow-right"></i></span>
 					<div class="clearfix"></div>
 				</div>
 			</a>
@@ -36,7 +36,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-3">
-						<i class="fa fa-comments fa-5x"></i>
+						<i class="glyphicon glyphicon-comment fs-5x"></i>
 					</div>
 					<div class="col-xs-9 text-right">
 						<div class="huge"><?php echo $cmt_cnt?></div>
@@ -47,7 +47,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 			<a href="<?php echo getUrl('','admin','comment')?>">
 				<div class="panel-footer">
 					<span class="pull-left"><?php echo getLang('view_details')?></span>
-					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					<span class="pull-right"><i class="glyphicon glyphicon-circle-arrow-right"></i></span>
 					<div class="clearfix"></div>
 				</div>
 			</a>
@@ -58,7 +58,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-3">
-						<i class="fa fa-plane fa-5x"></i>
+						<i class="glyphicon glyphicon-plane fs-5x"></i>
 					</div>
 					<div class="col-xs-9 text-right">
 						<div class="huge"><?php echo $vis_cnt?></div>
@@ -69,7 +69,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 			<a href="<?php echo getUrl('','admin','visit')?>">
 				<div class="panel-footer">
 					<span class="pull-left"><?php echo getLang('view_details')?></span>
-					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					<span class="pull-right"><i class="glyphicon glyphicon-circle-arrow-right"></i></span>
 					<div class="clearfix"></div>
 				</div>
 			</a>
@@ -80,7 +80,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 			<div class="panel-heading">
 				<div class="row">
 					<div class="col-xs-3">
-						<i class="fa fa-question-circle fa-5x"></i>
+						<i class="glyphicon glyphicon-question-sign fs-5x"></i>
 					</div>
 					<div class="col-xs-9 text-right">
 						<div class="huge">25</div>
@@ -91,7 +91,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 			<a href="#">
 				<div class="panel-footer">
 					<span class="pull-left"><?php echo getLang('view_details')?></span>
-					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+					<span class="pull-right"><i class="glyphicon glyphicon-circle-arrow-right"></i></span>
 					<div class="clearfix"></div>
 				</div>
 			</a>
@@ -103,7 +103,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i>Chart 1</h3>
+				<h3 class="panel-title"><i class="glyphicon glyphicon-stats"></i> Chart 1</h3>
 			</div>
 			<div class="panel-body">
 				<div id="morris-area-chart">준비중...</div>
@@ -116,12 +116,12 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 	<div class="col-lg-4">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title"><i class="fa fa-long-arrow-right fa-fw"></i>Chart 2</h3>
+				<h3 class="panel-title"><i class="glyphicon glyphicon-stats"></i> Chart 2</h3>
 			</div>
 			<div class="panel-body">
 				<div id="morris-donut-chart">준비중...</div>
 				<div class="text-right">
-					<a href="#"><?php echo getLang('view_details')?> <i class="fa fa-arrow-circle-right"></i></a>
+					<a href="#"><?php echo getLang('view_details')?> <i class="glyphicon glyphicon-circle-arrow-right"></i></a>
 				</div>
 			</div>
 		</div>
@@ -129,7 +129,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 	<div class="col-lg-4">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i><?php echo getLang('new_document')?></h3>
+				<h3 class="panel-title"><i class="glyphicon glyphicon-time"></i> <?php echo getLang('new_document')?></h3>
 			</div>
 			<div class="panel-body">
 				<div class="list-group" style="margin:0">
@@ -148,7 +148,7 @@ $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']
 	<div class="col-lg-4">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h3 class="panel-title"><i class="fa fa-clock-o fa-fw"></i><?php echo getLang('new_comment')?></h3>
+				<h3 class="panel-title"><i class="glyphicon glyphicon-time"></i> <?php echo getLang('new_comment')?></h3>
 			</div>
 			<div class="panel-body">
 				<div class="list-group" style="margin:0">

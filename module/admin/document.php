@@ -10,7 +10,7 @@
 ?>
 
 <table class="table table-hover table-nowrap">
-<thead class="table-nowrap">
+<thead>
 	<tr>
 		<th class="col-xs-1">#<?php echo getLang('board')?></th>
 		<th><?php echo getLang('title')?></th>
@@ -36,7 +36,7 @@
 
 		foreach ($doc_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].',with_module_config,1" data-modal-target="#document_modal"><th scope="row">'.$value['md_id'].'</th>';
-			echo '<td>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
+			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['wr_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';

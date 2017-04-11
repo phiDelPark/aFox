@@ -92,15 +92,15 @@
 		<div class="input-group">
 			<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 			<span class="input-group-btn">
-			<?php if(empty($_DATA['search']) || !__MOBILE__) {?><button class="btn btn-default" type="submit"><i class="fa fa-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button><?php }?>
+			<?php if(empty($_DATA['search']) || !__MOBILE__) {?><button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button><?php }?>
 			<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 			</span>
 		</div>
 		<input type="hidden" name="id" value="<?php echo $_DATA['id'] ?>">
 	</form>
 	<div class="pull-right">
-		<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="fa fa-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
-		<a class="btn btn-default" href="#" onclick="_allRemoveInboxItems()" role="button"><i class="fa fa-envelope-o" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
+		<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
+		<a class="btn btn-default" href="#" onclick="_allRemoveInboxItems()" role="button"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 	</div>
 </footer>
 

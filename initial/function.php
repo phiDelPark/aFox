@@ -772,8 +772,8 @@ if(!defined('__AFOX__')) exit();
 		// 타이틀 값에 false 가 들어오면 타이틀바 제거
 		if($title !== false) {
 			$a_title = ['success', 'alert', 'warning', 'error'];
-			$a_icon = ['snowflake-o', 'info-circle', 'exclamation-triangle', 'ban'];
-			$title = '<i class="fa fa-'.$a_icon[$type].'" aria-hidden="true"></i> '.getLang($a_title[$type]);
+			$a_icon = ['ok-sign', 'exclamation-sign', 'warning-sign', 'ban-circle'];
+			$title = '<i class="glyphicon glyphicon-'.$a_icon[$type].'" aria-hidden="true"></i> '.getLang($a_title[$type]);
 		}
 		return '<div class="'. (empty($title)?'alert alert-dismissable alert-':'panel panel-') . '' . $a_type[$type] . '" role="alert">'
 				. (empty($title)?'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>':'<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3></div>')

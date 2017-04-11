@@ -35,7 +35,7 @@
 
 <?php if($err = get_error()) { ?>
 	<div class="auto-hide" data-timer="5">
-		<h3 class="clearfix"><span class="timer-progress pull-left" data-repeat-char="&bull;"></span> <i class="fa fa-warning" aria-hidden="true"></i> <?php echo $err['message']?></h3>
+		<h3 class="clearfix"><span class="timer-progress pull-left" data-repeat-char="&bull;"></span> <i class="glyphicon glyphicon-warning-sign" aria-hidden="true"></i> <?php echo $err['message']?></h3>
 	</div>
 <?php } ?>
 
@@ -49,7 +49,7 @@
 ?>
 			<?php if(empty($notes['error']) && $notes['total_count'] > 0){ ?>
 			<span>
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-envelope" aria-hidden="true"></i> <strong class="caret"></strong></a>
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <strong class="caret"></strong></a>
 				<ul class="dropdown-menu message-dropdown dropdown-menu-right">
 					<?php foreach ($notes['data'] as $val) {
 						$_icon = $val['nt_sender'].'/profile_image.png';
@@ -67,7 +67,7 @@
 								</span>
 								<div class="media-body">
 									<h5 class="media-heading"><strong><?php echo escapeHtml($val['nt_sender_nick']) ?></strong></h5>
-									<p class="small text-muted"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo date('Y/m/d', strtotime($val['nt_send_date'])) ?></p>
+									<p class="small text-muted"><i class="glyphicon glyphicon-time" aria-hidden="true"></i> <?php echo date('Y/m/d', strtotime($val['nt_send_date'])) ?></p>
 									<p><?php echo cutstr(strip_tags($val['nt_content']),35) ?></p>
 								</div>
 							</div>
@@ -92,20 +92,20 @@
 				<a href="#" class="dropdown-toggle login-icon" data-toggle="dropdown"><img src="<?php echo $_icon ?>" alt="<?php echo escapeHtml($_MEMBER['mb_nick'])?>" /></a>
 				<ul class="dropdown-menu dropdown-menu-right">
 					<?php if(isManager($_DATA['id'])) { ?>
-					<li><a href="<?php echo _AF_URL_?>?admin"><i class="fa fa-fw fa-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></a></li>
+					<li><a href="<?php echo _AF_URL_?>?admin"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } else { ?>
-					<li class="dropdown-header"><i class="fa fa-fw fa-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></li>
+					<li class="dropdown-header"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></li>
 					<?php } ?>
 					<li class="divider"></li>
-					<li><a href="<?php echo getUrl('','module','member','disp','inbox') ?>"><i class="fa fa-envelope" aria-hidden="true"></i> <?php echo getLang('inbox')?></a></li>
-					<li><a href="<?php echo getUrl('','module','member','disp','trash') ?>"><i class="fa fa-trash" aria-hidden="true"></i> <?php echo getLang('recycle_bin')?></a></li>
-					<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="fa fa-fw fa-gear" aria-hidden="true"></i> <?php echo getLang('setup')?></a></li>
+					<li><a href="<?php echo getUrl('','module','member','disp','inbox') ?>"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('inbox')?></a></li>
+					<li><a href="<?php echo getUrl('','module','member','disp','trash') ?>"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('recycle_bin')?></a></li>
+					<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('setup')?></a></li>
 					<li class="divider"></li>
-					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="fa fa-fw fa-power-off" aria-hidden="true"></i> <?php echo getLang('logout')?></a></li>
+					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('logout')?></a></li>
 				</ul>
 			</span>
 <?php } else { ?>
-			<a href="#" data-toggle="modal" data-target="#loginModal"><i class="fa fa-user fa-2" aria-hidden="true"></i></a>
+			<a href="#" data-toggle="modal" data-target="#loginModal"><i class="glyphicon glyphicon-user fs-2x" aria-hidden="true"></i></a>
 			<!-- Modal -->
 			<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
 				<div class="modal-dialog">

@@ -38,7 +38,7 @@
 </p>
 
 <table class="table table-hover table-nowrap">
-<thead class="table-nowrap">
+<thead>
 	<tr>
 		<th class="col-xs-1">#<?php echo getLang('id')?></th>
 		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('type')?></th>
