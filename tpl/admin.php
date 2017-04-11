@@ -38,6 +38,6 @@ var waiting_message = "<?php echo getLang('call_server') ?>";
 </head>
 <body>
 <?php include _AF_ADMIN_PATH_ . 'admin.php'; ?>
-<script src="<?php echo _AF_URL_ ?>module/admin/admin.js"></script>
+<script src="<?php echo _AF_URL_ . 'module/admin/admin' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.js') ?>"></script>
 </body>
 </html>

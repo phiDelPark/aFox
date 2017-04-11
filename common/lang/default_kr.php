@@ -77,6 +77,7 @@ $_LANG['open'] = '열기';
 $_LANG['page'] = '페이지';
 $_LANG['password'] = '비밀번호';
 $_LANG['point'] = '포인트';
+$_LANG['preview'] = '미리보기';
 $_LANG['previous'] = '이전';
 $_LANG['publish'] = '발행';
 $_LANG['rank'] = '계급';

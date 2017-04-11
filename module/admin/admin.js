@@ -43,6 +43,18 @@
 
 		$f[0].dataImport(data);
 
+		if(act=='admin.getFile') {
+			var type = (data['mf_type'].split('/')[0] || 'binary');
+
+			if(type == 'image') {
+				$f.find('.imagebox > img').attr('src', request_uri + '?file=' + data['mf_srl']);
+				$f.find('.imagebox').show();
+			} else {
+				$f.find('.imagebox').hide();
+				$f.find('.imagebox > img').attr('src', '');
+			}
+		}
+
 		$f.find('[data-act-change]').on('click', function() {
 			var $i = $(this),
 				$f = $i.closest('form'),

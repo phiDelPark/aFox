@@ -93,6 +93,25 @@
 					</div>
 				</div>
 			</div>
+			<div class="form-group clearfix">
+				<div class="pull-left">
+					<label><?php echo getLang('type')?></label>
+					<div class="form-inline">
+						<input type="text" class="form-control" name="mf_type" maxlength="11" disabled="disabled">
+					</div>
+				</div>
+				<div class="pull-right">
+					<label><?php echo getLang('size')?>(Byte)</label>
+					<div class="form-inline">
+						<input type="text" name="mf_size" class="form-control" style="width:160px" disabled="disabled" title="<?php echo getLang('regdate')?>">
+					</div>
+				</div>
+			</div>
+			<div class="form-group imagebox" style="display:none">
+				<label><?php echo getLang('preview')?></label>
+				<br>
+				<img style="width:auto;height:100px">
+			</div>
 			<div class="form-group">
 				<label for="id_mf_name"><?php echo getLang('name')?></label>
 				<div class="input-group">
