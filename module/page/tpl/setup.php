@@ -30,10 +30,10 @@
 			<div class="form-group">
 				<?php
 					dispEditor(
-						'pg_content',
-						$_{'page'}['pg_content'],
+						'pg_content', $_{'page'}['pg_content'],
 						[
-							'file'=>[99999, $_DATA['id'], 1],
+							'file'=>[9000, $_DATA['id'], 1],
+							'html'=>$_{'page'}['pg_type']==='2',
 							'statebar'=>true,
 							'toolbar'=>array(
 								getLang('content'),

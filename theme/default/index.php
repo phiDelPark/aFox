@@ -150,7 +150,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<?php echo getUrl('')?>"><?php echo escapeHtml($_CFG['title'])?></a>
+				<a class="navbar-brand" href="<?php echo getUrl('')?>"><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a>
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
 				<ul class="nav navbar-nav right">
