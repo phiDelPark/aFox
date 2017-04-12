@@ -157,7 +157,7 @@
 
 <?php
 	foreach ($mainmenu as $key => $val) {
-		echo '<li'.($key==='_ACTIVE_'?' class="active"':'').'><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a></li>';
+		echo '<li'.($key==='_ACTIVE_'?' class="active"':'').'><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a></li>';
 	}
 ?>
 				</ul>
@@ -207,7 +207,7 @@
 			<div class="list-group">
 	<?php
 		foreach ($submenu['_ACTIVE_'] as $key => $val) {
-			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==1?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a>';
+			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a>';
 		}
 	?>
 			</div>
@@ -231,7 +231,7 @@
 
 	if(empty($menus['error'])){
 		foreach ($menus['footer'] as $val) {
-			echo '<li><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==1?' target="_blank"':'').' title="'.escapeHtml($val['mu_description']).'">'. escapeHtml($val['mu_title']) .'</a></li>';
+			echo '<li><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').' title="'.escapeHtml($val['mu_description']).'">'. escapeHtml($val['mu_title']) .'</a></li>';
 		}
 	}
 

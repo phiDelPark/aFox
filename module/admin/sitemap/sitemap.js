@@ -260,6 +260,7 @@ jQuery(function($) {
 			$p.find('._collapse_key').val($this.find('#sitemap_mu_collapse').val());
 			$p.find('._new_win_key').val($this.find('#sitemap_mu_new_window').val());
 			$this.modal('hide');
+			$target.attr('src', request_uri + 'module/admin/sitemap/icon_refresh.png').addClass('gly-normal-right-spin');
 		});
 	});
 });
