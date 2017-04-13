@@ -41,11 +41,11 @@ if(!defined('__AFOX__')) exit();
 			}
 
 			$box_items[!$toggle] = '<img src="'.(empty($_image['mf_srl'])?$_tmp_image:_AF_URL_.'?file='.$_image['mf_srl'].'&thumb='.(__MOBILE__?'100x100':'300x300').'&fit').'">';
-			$box_items[$toggle] = '<h3 class="text-ellipsis"><a href="'.(!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('','srl',$val['wr_srl'])).'">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</h3>';
+			$box_items[$toggle] = '<h3 class="text-ellipsis"><a href="'.(!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('srl',$val['wr_srl'],'disp','')).'">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</h3>';
 			$box_items[$toggle] .= '<div class="author clearfix"><span class="mb_nick pull-left" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.$val['mb_nick'].'</span><span class="pull-right">'.date('Y/m/d', strtotime($val['wr_update'])).'</span></div>'.$wr_extra_vars.'<div class="wr_content">'.cutstr(!$wr_permit&&$wr_secret?getLang('msg_is_secret'):escapeHtml(toHTML(0,$val['wr_content']),true,ENT_QUOTES), __MOBILE__?100:300).'</div>';
 			?>
 
-			<div class="list_item_area<?php echo __MOBILE__?' mobile':'' ?> clearfix">
+			<div class="list_item_area<?php echo (__MOBILE__?' mobile':'').($val['wr_srl']==$srl?' active':'') ?> clearfix">
 				<div class="left_box">
 					<?php echo $box_items[true] ?>
 				</div>

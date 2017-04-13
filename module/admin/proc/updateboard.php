@@ -13,6 +13,7 @@ function proc($data) {
 
 	$md_extra = [];
 	$data['md_title'] = trim($data['md_title']);
+	$data['md_list_count'] = empty($data['md_list_count']) ? 1 : abs($data['md_list_count']);
 
 	// 분류값 정리
 	if(!empty($data['md_category'])) {
@@ -85,6 +86,7 @@ function proc($data) {
 					'md_file_max'=>(int)$data['md_file_max'],
 					'md_file_size'=>(int)$data['md_file_size']*1024,
 					'md_file_ext'=>$file_extension,
+					'md_list_count'=>$data['md_list_count'],
 					'use_style'=>$data['use_style'],
 					'use_type'=>$data['use_type'],
 					'use_secret'=>$data['use_secret'],
@@ -117,6 +119,7 @@ function proc($data) {
 					'md_file_max'=>(int)$data['md_file_max'],
 					'md_file_size'=>(int)$data['md_file_size']*1024,
 					'md_file_ext'=>$file_extension,
+					'md_list_count'=>$data['md_list_count'],
 					'use_style'=>$data['use_style'],
 					'use_type'=>$data['use_type'],
 					'use_secret'=>$data['use_secret'],

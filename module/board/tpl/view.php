@@ -71,7 +71,7 @@ $wr_permit = $is_manager || $login_srl === $wr_mb_srl || !empty($GLOBALS['_PERMI
 	</article>
 	<footer class="area-text-button clearfix">
 		<div class="pull-left">
-			<a class="btn btn-default btn-sm" href="<?php echo getUrl('','id',$_DATA['id'],'page',$_DATA['page']) ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo getUrl('disp','','srl','') ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a>
 		</div>
 		<div class="pull-right">
 			<?php

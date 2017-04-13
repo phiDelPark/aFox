@@ -187,10 +187,6 @@ body {
 	margin-right: 10px;
 }
 
-.point-group .input-group-addon {
-	background-color: transparent;
-}
-
 #admin_addon_modal .modal-body,
 #admin_module_modal .modal-body {
 	padding: 20px;

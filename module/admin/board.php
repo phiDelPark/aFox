@@ -159,8 +159,8 @@
 				</div>
 				<p class="help-block"><?php echo getLang('desc_board_file')?></p>
 			</div>
-			<div class="form-group point-group">
-				<label class="sr-only"><?php echo getLang('point')?></label>
+			<div class="form-group">
+				<label><?php echo getLang('point')?></label>
 				<div class="form-inline">
 					<div class="input-group">
 						<label class="input-group-addon" for="id_read_point"><?php echo getLang('view')?></label>
@@ -181,6 +181,17 @@
 				</div>
 				<p class="help-block"><?php echo getLang('desc_point')?></p>
 			</div>
+			<div class="form-group">
+				<label><?php echo getLang('list_count')?></label>
+				<div class="form-inline">
+					<div class="input-group">
+						<label class="input-group-addon" for="id_list_count"><?php echo getLang('list_count')?></label>
+						<input type="number" class="form-control" id="id_list_count" name="md_list_count" min="0" max="9999" maxlength="5" placeholder="<?php echo getLang('Count')?>">
+					</div>
+				</div>
+				<p class="help-block"><?php echo getLang('desc_list_count')?></p>
+			</div>
+			<hr>
 			<div class="form-group">
 				<label><?php echo getLang('list')?></label>
 				<div class="radio-group">
