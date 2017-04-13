@@ -24,16 +24,7 @@ function proc($data) {
 		// 파일 삭제
 		$variable = ['binary','image','video','audio','thumbnail'];
 		foreach ($variable as $val) {
-			$directory = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/1/';
-			if(is_dir($directory)){
-				$handle = @opendir($directory); // 절대경로
-				while ($file = readdir($handle)) {
-					if ($file == '.' || $file == '..') continue;
-					unlinkFile($directory.$file);
-				}
-				closedir($handle);
-				unlinkDir($directory);
-			}
+			unlinkAll(_AF_ATTACH_DATA_ . $val . '/' . $md_id . '/1/');
 		}
 
 		// 파일 , 페이지, 모듈 삭제

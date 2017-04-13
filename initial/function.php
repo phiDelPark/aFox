@@ -563,6 +563,27 @@ if(!defined('__AFOX__')) exit();
 		}
 	}
 
+	function unlinkAll($dir, $subdir = true) {
+		// 폴더가 없어도 성공으로 간주
+		$ret = true;
+		if(is_dir($dir)){
+			$handle = @opendir($dir); // 절대경로
+			while ($file = readdir($handle)) {
+				if($file != '.' && $file != '..') {
+					// 하위 폴더이면...
+					if($subdir && is_dir($dir.$file.'/')) {
+						unlinkAll($dir.$file.'/', $subdir);
+					} else {
+						unlinkFile($dir.$file);
+					}
+				}
+			}
+			@closedir($handle);
+			$ret = unlinkDir($dir);
+		}
+		return $ret;
+	}
+
 	// 권한 체크
 	function isGrant($md_id, $chk) {
 		if(empty($md_id) || empty($chk)) return false;

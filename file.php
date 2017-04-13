@@ -41,9 +41,9 @@ if(!isset($_file[$key])) {
 		$tw = (int)$size[0];
 		$th = (int)$size[1];
 		if(!empty($tw)&&!empty($th)) {
-			// 50, 100, 200 3가지 크기외 불필요
-			$tw = $tw<100?50:($tw<200?100:200);
-			$th = $th<100?50:($th<200?100:200);
+			// 50, 100, 200, 300
+			$tw = $tw<100?50:($tw<200?100:($tw<300?200:300));
+			$th = $th<100?50:($th<200?100:($tw<300?200:300));
 			$thumb_file=_AF_ATTACH_DATA_.'thumbnail/'.$file['md_id'].'/'.$file['mf_target'].'/'.$file['mf_srl'].'_'.$tw.'x'.$th.'.png';
 			if(file_exists($thumb_file)) {
 				$_file[$key]['path']=$thumb_file;

@@ -47,7 +47,6 @@ function proc($data) {
 	}
 
 	$unlink_files = [];
-	$unlink_thumbs = [];
 	$file_dests = [];
 	$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
@@ -155,9 +154,6 @@ function proc($data) {
 					$filetype = strtolower(array_shift(explode('/', $file['mf_type'])));
 					$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 					$unlink_files[] = _AF_ATTACH_DATA_.$filetype.'/'.$md_id.'/'.$wr_srl.'/'.$file['mf_upload_name'];
-					if($filetype=='image') {
-						$unlink_thumbs[$file['mf_srl']] = $md_id.'/'.$wr_srl;
-					}
 				}
 			}
 		}
@@ -248,26 +244,15 @@ function proc($data) {
 		// 모두 완료 되면 지워진 파일 완전 삭제
 		foreach ($unlink_files as $val) @unlinkFile($val);
 
-		// 썸네일 제거
-		foreach ($unlink_thumbs as $key => $val) {
-			$directory = _AF_ATTACH_DATA_ . 'thumbnail/' . $val . '/';
-			if(is_dir($directory)){
-				$handle = @opendir($directory); // 절대경로
-				while ($file = readdir($handle)) {
-					if (strpos($file, $key.'_') === false) continue;
-					@unlinkFile($directory.$file);
-				}
-				closedir($handle);
-				//@unlinkDir($directory);
-			}
-		}
-
 		// 비회원이면 비밀번호 다시 안묻기위해 임시권한주기
 		if(empty($_MEMBER)) {
 			$PERMIT_KEY = md5($md_id.'_'.$wr_srl);
 			$GLOBALS['_PERMIT_VIEW_'][$PERMIT_KEY] = true;
 			set_cookie('_AF_PERMIT_VIEW_'.$PERMIT_KEY, true, 0);
 		}
+
+		// 썸네일 제거
+		unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$md_id.'/'.$wr_srl.'/');
 
 	} catch (Exception $ex) {
 		DB::rollback();
