@@ -2,6 +2,8 @@
 
 if(!defined('__AFOX__')) exit();
 
+@include_once _AF_LANGS_PATH_ . 'admin_' . _AF_LANG_ . '.php';
+
 // 관리자만 접근 가능
 if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
 	goUrl(_AF_URL_, getLang('error_admin'));

@@ -55,6 +55,8 @@ if($_DATA['module'] == 'admin' || isset($_DATA['admin'])) {
 		$tmp = getModule($_DATA['id']);
 		if(empty($tmp['error'])) {
 			$_CFG = array_merge($_CFG, $tmp);
+			// 모듈 정보에 확장 변수가 있으면 unserialize
+			if(!empty($_CFG['md_extra']) && !is_array($_CFG['md_extra'])) $_CFG['md_extra'] = unserialize($_CFG['md_extra']);
 			$_DATA['module'] = $tmp['md_key'];
 		}
 	}

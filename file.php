@@ -44,7 +44,7 @@ if(!isset($_file[$key])) {
 			// 50, 100, 200, 300
 			$tw = $tw<100?50:($tw<200?100:($tw<300?200:300));
 			$th = $th<100?50:($th<200?100:($tw<300?200:300));
-			$thumb_file=_AF_ATTACH_DATA_.'thumbnail/'.$file['md_id'].'/'.$file['mf_target'].'/'.$file['mf_srl'].'_'.$tw.'x'.$th.'.png';
+			$thumb_file=_AF_ATTACH_DATA_.'thumbnail/'.$file['md_id'].'/'.$file['mf_target'].'/'.$file['mf_srl'].'_'.$tw.'x'.$th.($thumbfit?'_fit':'').'.png';
 			if(file_exists($thumb_file)) {
 				$_file[$key]['path']=$thumb_file;
 			} else if(file_exists($_file[$key]['path'])) {
@@ -85,6 +85,8 @@ if(!isset($_file[$key])) {
 						$_file[$key]['path']=$thumb_file;
 					}
 				}
+			} else {
+				$_file[$key]['path']=_AF_PATH_.'common/img/no_image.png';
 			}
 		}
 	}
@@ -95,7 +97,8 @@ $fstat=fstat($fp);
 if(!empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])){
 	$modifiedSince=strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
 	if($modifiedSince&&($modifiedSince>=$fstat['mtime'])){
-		fclose($fp); setHttpError('304 Not Modified');
+		fclose($fp);
+		setHttpError('304 Not Modified');
 	}
 }
 // 다운로드 조회를 위해 기록 // setHistoryAction() 함수 안불러서 작성

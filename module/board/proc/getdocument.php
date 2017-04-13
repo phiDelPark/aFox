@@ -42,6 +42,11 @@ function proc($data) {
 	// 비밀번호는 암호화 되있지만 그래도 노출 안되게 제거
 	unset($doc['mb_password']);
 
+	// 확장 변수가 있으면 unserialize
+	if(!empty($doc['wr_extra']) && !is_array($doc['wr_extra'])) {
+		$doc['wr_extra'] = unserialize($doc['wr_extra']);
+	}
+
 	// 관리자 모드에서 사용하기 위해 필요한 정보 같이 보내기... (관리자만)
 	if(!empty($data['with_module_config']) && isManager($doc['md_id'])) {
 		// 파일 목록

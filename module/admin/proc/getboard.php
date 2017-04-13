@@ -20,6 +20,10 @@ function proc($data) {
 			$mb = getMember($md_manager);
 			$out['md_manager'] = empty($mb['mb_id'])?'':$mb['mb_id'];
 		}
+		// 확장 변수가 있으면 unserialize
+		if(!empty($out['md_extra']) && !is_array($out['md_extra'])) {
+			$out['md_extra'] = unserialize($out['md_extra']);
+		}
 		return $out;
 	} else {
 		return set_error(getLang('error_founded'),4201);

@@ -23,6 +23,24 @@ $wr_permit = $is_manager || $login_srl === $wr_mb_srl || !empty($GLOBALS['_PERMI
 		</div>
 	</header>
 	<article>
+
+	<?php
+		if (!empty($_{'board'}['wr_extra']['vars'])) {
+			echo '<div class="wr_extra_vars">';
+
+			$md_extra_keys = empty($_CFG['md_extra']['keys']) ? [] : $_CFG['md_extra']['keys'];
+			foreach($_{'board'}['wr_extra']['vars'] as $i=>$extra_var) {
+	?>
+			<div class="clearfix">
+				<strong><?php echo $md_extra_keys[$i]?></strong>
+				<span><?php echo $extra_var?></span>
+			</div>
+	<?php
+			}
+			echo '</div>';
+		}
+	?>
+
 	<?php
 		$wr_content = ($wr_permit || !$wr_secret) ? $_{'board'}['wr_content'] : getLang('error_permit');
 		echo toHTML($_{'board'}['wr_type'], $wr_content);

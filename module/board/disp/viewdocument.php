@@ -45,6 +45,11 @@ function proc($data) {
 		}
 	}
 
+	// 확장 변수가 있으면 unserialize
+	if(!empty($doc['wr_extra']) && !is_array($doc['wr_extra'])) {
+		$doc['wr_extra'] = unserialize($doc['wr_extra']);
+	}
+
 	// 댓글 목록에 권한설정
 	$mdid = $doc['md_id'];
 	$rsrl = $data['rp'];

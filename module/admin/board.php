@@ -111,15 +111,19 @@
 				<p class="help-block"><?php echo getLang('desc_category')?></p>
 			</div>
 			<div class="form-group">
+				<label for="id_md_extra_keys"><?php echo getLang('extra_keys')?></label>
+				<input type="text" name="md_extra_keys" class="form-control" id="id_md_extra_keys" maxlength="255" pattern="^[^\x21-\x29\x2b\x2d-\x2f\x3a-\x40\x5b-\x60]+">
+				<p class="help-block"><?php echo getLang('desc_extra_keys')?></p>
+			</div>
+			<div class="form-group">
 				<label><?php echo getLang('style')?></label>
 				<div class="radio-group">
 					<input type="hidden" name="use_style" value="0">
 					<div class="radio-control radio-xs">
 						<span class="radio active" data-value="0"><?php echo getLang('Default')?></span>
-						<span class="radio" data-value="1"><?php echo getLang('Gallery')?></span>
-						<span class="radio" data-value="2"><?php echo getLang('Review')?></span>
-						<span class="radio" data-value="3"><?php echo getLang('Video')?></span>
-						<span class="radio" data-value="4"><?php echo getLang('Audio')?></span>
+						<span class="radio" data-value="1"><?php echo getLang('Review')?></span>
+						<span class="radio" data-value="2"><?php echo getLang('Gallery')?></span>
+						<span class="radio" data-value="3"><?php echo getLang('Media')?></span>
 					</div>
 				 </div>
 			</div>

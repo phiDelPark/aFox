@@ -50,8 +50,9 @@ function proc($data) {
 	$file_dests = [];
 	$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
-	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
 	$md_id = $module['md_id'];
+	$wr_extra = [];
+	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
 
 	try {
 		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'md_id, mb_srl, mb_password');
@@ -70,6 +71,22 @@ function proc($data) {
 			}
 		} else {
 			$data['wr_category'] = '';
+		}
+
+		if(!empty($module['md_extra']) && !is_array($module['md_extra'])) {
+			$module['md_extra'] = unserialize($module['md_extra']);
+			// 확장 변수 키값이 있으면 해당 값을 입력
+			if (!empty($module['md_extra']['keys'])) {
+				$wr_extra_vars = [];
+				foreach($module['md_extra']['keys'] as $i=>$extra_key){
+					$extra_val = trim($data['wr_extra_var_'.$i]);
+					if(empty($extra_val) && substr($extra_key,-1,1) === '*') {
+						throw new Exception(getLang('request_input',[substr($extra_key,0,-1)]), 3);
+					}
+					$wr_extra_vars[] = cutstr($extra_val,255,'');
+				}
+				if(!empty($wr_extra_vars)) $wr_extra['vars'] = $wr_extra_vars;
+			}
 		}
 
 		$data['wr_content'] = xssClean($data['wr_content']);
@@ -235,6 +252,7 @@ function proc($data) {
 				'wr_content'=>$data['wr_content'],
 				'wr_tags'=>$data['wr_tags'],
 				'wr_file'=>$file_count,
+				'wr_extra'=>empty($wr_extra)?'':serialize($wr_extra),
 				'(wr_update)'=>'NOW()'
 			], [
 				'wr_srl'=>$wr_srl

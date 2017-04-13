@@ -56,6 +56,20 @@ if(!defined('__AFOX__')) exit();
 		];
 		if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
 		$list_count = getModule($id, 'md_list_count');
+
+		if (empty($callback)) {
+			$callback = function($r) {
+				$rset = [];
+				while ($row = mysqli_fetch_assoc($r)) {
+					// 확장 변수가 있으면 unserialize
+					if(!empty($row['wr_extra']) && !is_array($row['wr_extra'])) {
+						$row['wr_extra'] = unserialize($row['wr_extra']);
+					}
+					$rset[] = $row;
+				}
+				return $rset;
+			};
+		}
 		return getDBList(_AF_DOCUMENT_TABLE_, $_wheres, $order, $page, $list_count, $callback);
 	}
 

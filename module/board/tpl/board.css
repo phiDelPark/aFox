@@ -240,6 +240,77 @@
 	margin-top: 20px;
 }
 
+#board_view>article>.wr_extra_vars {
+	margin-bottom: 20px
+}
+
+#board_view>article>.wr_extra_vars>div {
+	margin: 0 3px 3px;
+	border-bottom: 1px solid #ddd;
+}
+
+#board_view>article>.wr_extra_vars>div>strong {
+	width: 120px;
+	display: inline-block;
+	padding: 3px;
+	border-right: 1px solid #ddd;
+	margin-right: 3px;
+}
+
+#board_list.review_style .left_box,
+#board_list.review_style .right_box {
+	width: 50%;
+	height: 300px;
+	padding: 0 15px;
+	overflow: hidden;
+}
+
+#board_list.review_style .left_box {
+	float: left;
+	padding-left: 0;
+}
+
+#board_list.review_style .right_box {
+	float: right;
+	padding-right: 0;
+}
+
+#board_list.review_style .list_item_area {
+	vertical-align: top;
+	border-bottom: 1px solid #ddd;
+	padding: 30px 0;
+}
+
+#board_list.review_style .list_item_area:first-child {
+	margin-top: -30px;
+}
+
+#board_list.review_style .list_item_area h3 {
+	margin: 0;
+	margin-bottom: 15px;
+}
+
+#board_list.review_style .list_item_area img {
+	width: 100%;
+	height: 100%;
+	border: 1px solid #eee;
+}
+
+#board_list.review_style .author {
+	margin-bottom: 10px;
+}
+
+#board_list.review_style .mobile .left_box,
+#board_list.review_style .mobile .right_box {
+	height: 200px;
+}
+
+#board_list.review_style .wr_extra_area {
+	overflow: hidden;
+	white-space: nowrap;
+	margin-bottom: 2px;
+}
+
 @media(max-width:768px) {
 	#board_reply>.reply-editer .area-group button {
 		width: 100%;

@@ -11,6 +11,7 @@ function proc($data) {
 		return set_error(getLang('invalid_value', ['id']),701);
 	}
 
+	$md_extra = [];
 	$data['md_title'] = trim($data['md_title']);
 
 	// 분류값 정리
@@ -27,6 +28,28 @@ function proc($data) {
 		}
 		if(!empty($data['md_category'])) $data['md_category'] = substr($data['md_category'], 0, -1);
 	}
+
+	// 확장 변수 키값
+	if(!empty($data['md_extra_keys'])) {
+		if(preg_match('/[\x{21}-\x{29}\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_extra_keys'])) {
+			return set_error(getLang('invalid_value', ['extra_keys']),701);
+		}
+
+		$tmpa = explode(',', $data['md_extra_keys']);
+		$md_extra_keys = [];
+		foreach ($tmpa as $value) {
+			$value = trim($value);
+			if(!empty($value)) $md_extra_keys[]= cutstr($value,20,'');
+		}
+		if(!empty($md_extra_keys)) {
+			//확장 변수 갯수 제한 99개
+			if(count($md_extra_keys) > 99) {
+				return set_error(getLang('msg_count_overflow', ['extra_keys','99']));
+			}
+			$md_extra['keys'] = $md_extra_keys;
+		}
+	}
+
 
 	// 확장자는 사용하기 쉽게 | 로 구분함
 	$file_extension = str_replace(',', '|', $data['md_file_ext']);
@@ -75,6 +98,7 @@ function proc($data) {
 					'grant_reply'=>empty($data['grant_reply'])?'0':$data['grant_reply'],
 					'grant_upload'=>empty($data['grant_upload'])?'0':$data['grant_upload'],
 					'grant_download'=>empty($data['grant_download'])?'0':$data['grant_download'],
+					'md_extra'=>empty($md_extra)?'':serialize($md_extra),
 					'(md_regdate)'=>'NOW()'
 				]
 			);
@@ -105,7 +129,8 @@ function proc($data) {
 					'grant_write'=>empty($data['grant_write'])?'0':$data['grant_write'],
 					'grant_reply'=>empty($data['grant_reply'])?'0':$data['grant_reply'],
 					'grant_upload'=>empty($data['grant_upload'])?'0':$data['grant_upload'],
-					'grant_download'=>empty($data['grant_download'])?'0':$data['grant_download']
+					'grant_download'=>empty($data['grant_download'])?'0':$data['grant_download'],
+					'md_extra'=>empty($md_extra)?'':serialize($md_extra)
 				], [
 					'md_id'=>$data['md_id']
 				]

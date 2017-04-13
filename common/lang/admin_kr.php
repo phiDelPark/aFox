@@ -41,6 +41,7 @@ $_LANG['base_cdn_list'] = '기본 CDN';
 $_LANG['captcha'] = '보안문자';
 $_LANG['clear_cache'] = '캐시 재생성';
 $_LANG['empty_addon'] = $_LANG['empty_module'] = $_LANG['empty_theme'] = '비우기';
+$_LANG['extra_keys'] = '확장변수';
 $_LANG['file_extension'] = '첨부 가능 확장자';
 $_LANG['foot_menu'] = '하단 메뉴';
 $_LANG['goto'] = '찾아가기';
@@ -74,6 +75,7 @@ $_LANG['view_details'] = '자세히 보기';
 $_LANG['visit_record'] = '방문기록';
 
 $_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
+$_LANG['msg_count_overflow'] = '%s의 최대 수 (%s)를 벗어났습니다.';
 $_LANG['msg_not_welcome_page'] = 'welcome 페이지는 삭제할 수 없습니다.';
 
 $_LANG['desc_id'] = '아이디는 유일해야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다. (첫 글자는 영문이여야 합니다)';
@@ -90,6 +92,8 @@ $_LANG['desc_prohibit_id'] = '입력된 단어가 포함된 아이디나 이름�
 $_LANG['desc_possible_ip'] = '입력된 IP의 컴퓨터만 접근할 수 있습니다. 123.123.+ 도 입력 가능. (엔터로 구분)';
 $_LANG['desc_start_page'] = '사이트에서 사용할 시작 페이지를 선택하세요.';
 $_LANG['desc_terms_of_use'] = '이용약관을 적어주시면 회원 가입시 약관을 출력해줍니다. (비워두면 출력안함)';
+
+$_LANG['desc_extra_keys'] = '확장변수를 사용하시려면 확장변수 이름을 입력하세요.'."\n".'(이름과 이름 사이는 ,로 구분하며 이름 뒤에 *를 입력하면 필수 항목이됩니다.)'."\n".'* 주의 * 특수문자는 사용할 수 없으며 확장변수의 이름 글자수는 한개당 20자로 제한됩니다.';
 
 /* End of file admin_kr.php */
 /* Location: ./common/lang/admin_kr.php */

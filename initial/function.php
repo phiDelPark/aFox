@@ -163,7 +163,7 @@ if(!defined('__AFOX__')) exit();
 		} else {
 			$escape = $args1;
 		}
-		return $escape ? escapeHtml($result) : $result;
+		return $escape ? nl2br(escapeHtml($result)) : $result;
 	}
 
 	function getDBItem($table, $wheres = [], $field = '*') {
