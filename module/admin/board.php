@@ -123,7 +123,7 @@
 						<span class="radio active" data-value="0"><?php echo getLang('Default')?></span>
 						<span class="radio" data-value="1"><?php echo getLang('Review')?></span>
 						<span class="radio" data-value="2"><?php echo getLang('Gallery')?></span>
-						<span class="radio" data-value="3"><?php echo getLang('Media')?></span>
+						<span class="radio" data-value="3">준비중...</span>
 					</div>
 				 </div>
 			</div>

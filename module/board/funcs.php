@@ -80,7 +80,7 @@ if(!defined('__AFOX__')) exit();
 	function getCommentList($srl, $page, $wheres = [], $order = 'rp_parent,rp_depth', $callback = null) {
 		$_wheres = ['wr_srl'=>$srl];
 		if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
-		return getDBList(_AF_COMMENT_TABLE_, $_wheres, $order, $page, 50, $callback);
+		return getDBList(_AF_COMMENT_TABLE_, $_wheres, $order, $page, 0, $callback);
 	}
 
 	function getHashtags($content) {

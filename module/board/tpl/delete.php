@@ -14,7 +14,7 @@
 	</header>
 	<article>
 		<form method="post" autocomplete="off" data-exec-ajax="board.deleteDocument">
-		<input type="hidden" name="success_return_url" value="<?php echo getUrl('disp','','srl','')?>" />
+		<input type="hidden" name="success_return_url" value="<?php echo getUrl('disp','','srl','','cpage','','rp','')?>" />
 		<input type="hidden" name="wr_srl" value="<?php echo $is?$_{'board'}['wr_srl']:''?>" />
 			<div>
 			<?php if (empty($_MEMBER) || (!$is_manager&&empty($_{'board'}['mb_srl']))) { ?>
