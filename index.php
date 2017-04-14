@@ -5,7 +5,7 @@ header('P3P: CP="ALL CURa ADMa DEVa TAIa OUR BUS IND PHY ONL UNI PUR FIN COM NAV
 ob_start();
 
 if(!empty($_GET['file'])) {
-	require_once dirname(__FILE__) . '/file.php';
+	require_once dirname(__FILE__) . '/lib/file/file.php';
 	exit();
 }
 

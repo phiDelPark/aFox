@@ -82,10 +82,11 @@ class DB {
 		}
 	}
 
-	public static function select($table, $wheres) {
+	public static function select($table, $wheres, $fields = []) {
 		$wheres = implode(' AND ', self::escapeArray($wheres, TRUE));
+		$fields = count($fields) > 0 ? implode(',', $fields) : '*';
 		try {
-			return self::query("SELECT * FROM $table WHERE $wheres");
+			return self::query("SELECT $fields FROM $table WHERE $wheres");
 		} catch (Exception $ex) {
 			throw new Exception($ex->getMessage(), $ex->getCode());
 		}
