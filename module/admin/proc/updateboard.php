@@ -86,10 +86,13 @@ function proc($data) {
 					'md_file_max'=>(int)$data['md_file_max'],
 					'md_file_size'=>(int)$data['md_file_size']*1024,
 					'md_file_ext'=>$file_extension,
-					'md_list_count'=>$data['md_list_count'],
+					'md_list_count'=>(int)$data['md_list_count'],
 					'use_style'=>$data['use_style'],
 					'use_type'=>$data['use_type'],
 					'use_secret'=>$data['use_secret'],
+					'thumb_width'=>abs($data['thumb_width']),
+					'thumb_height'=>abs($data['thumb_height']),
+					'thumb_option'=>$data['thumb_option'],
 					'point_view'=>empty($data['point_view'])?'0':$data['point_view'],
 					'point_write'=>empty($data['point_write'])?'0':$data['point_write'],
 					'point_reply'=>empty($data['point_reply'])?'0':$data['point_reply'],
@@ -119,10 +122,13 @@ function proc($data) {
 					'md_file_max'=>(int)$data['md_file_max'],
 					'md_file_size'=>(int)$data['md_file_size']*1024,
 					'md_file_ext'=>$file_extension,
-					'md_list_count'=>$data['md_list_count'],
+					'md_list_count'=>(int)$data['md_list_count'],
 					'use_style'=>$data['use_style'],
 					'use_type'=>$data['use_type'],
 					'use_secret'=>$data['use_secret'],
+					'thumb_width'=>abs($data['thumb_width']),
+					'thumb_height'=>abs($data['thumb_height']),
+					'thumb_option'=>$data['thumb_option'],
 					'point_view'=>empty($data['point_view'])?'0':$data['point_view'],
 					'point_write'=>empty($data['point_write'])?'0':$data['point_write'],
 					'point_reply'=>empty($data['point_reply'])?'0':$data['point_reply'],
@@ -139,6 +145,9 @@ function proc($data) {
 				]
 			);
 		}
+
+		// 썸네일 제거
+		unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$data['md_id'].'/');
 
 	} catch (Exception $ex) {
 		DB::rollback();

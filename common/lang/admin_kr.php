@@ -40,6 +40,7 @@ $_LANG['agent'] = '에이전트';
 $_LANG['base_cdn_list'] = '기본 CDN';
 $_LANG['captcha'] = '보안문자';
 $_LANG['clear_cache'] = '캐시 재생성';
+$_LANG['document_count'] = '문서 수';
 $_LANG['empty_addon'] = $_LANG['empty_module'] = $_LANG['empty_theme'] = '비우기';
 $_LANG['extra_keys'] = '확장변수';
 $_LANG['file_extension'] = '첨부 가능 확장자';
@@ -72,6 +73,7 @@ $_LANG['removed_module'] = '삭제된 모듈';
 $_LANG['removed_theme'] = '삭제된 테마';
 $_LANG['start_page'] = '시작 페이지';
 $_LANG['terms_of_use'] = '이용약관';
+$_LANG['thumb_fit'] = '크기맞춤';
 $_LANG['view_details'] = '자세히 보기';
 $_LANG['visit_record'] = '방문기록';
 
@@ -85,7 +87,7 @@ $_LANG['desc_board_file'] = '첨부 파일의 최대 수와 최대 크기(KB)를
 $_LANG['desc_board_manager'] = '게시판 관리자';
 $_LANG['desc_category'] = '게시판에서 사용할 분류를 입력하세요. (단어와 단어 사이는 ,로 구분합니다)'."\n".'* 주의 * 특수문자는 사용할 수 없으며 한 분류당 글자수는 20자로 제한됩니다.';
 $_LANG['desc_intercept_ip'] = '입력된 IP의 컴퓨터는 접근할 수 없음. 123.123.+ 도 입력 가능. (엔터로 구분)';
-$_LANG['desc_list_count'] = '게시판의 목록 수를 설정할 수 있습니다.';
+$_LANG['desc_list_count'] = '게시판 한페이지에 출력할 목록 수를 설정할 수 있습니다.';
 $_LANG['desc_mb_point'] = '회원 포인트를 설정할 수 있습니다.';
 $_LANG['desc_menu_desc'] = '메뉴에 관련된 설명 혹은 정보등을 입력할 수 있습니다.';
 $_LANG['desc_options'] = '회원가입: 회원가입을 허락할지 설정합니다.'."\n".'방문기록: 방문자 정보를 기록할지 설정합니다.'."\n".'파일보호: 다른 사이트에선 파일을 사용할 수 없게 설정합니다.';
