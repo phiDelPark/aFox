@@ -9,7 +9,7 @@ $style = isset($_WIDGET['style']) ? $_WIDGET['style'] : 'width:100%';
 
 $md_title = getModule($_WIDGET['module'], 'md_title');
 if($type === 'gallery') {
-	$_list = DB::getList('SELECT * FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 GROUP BY mf_target ORDER BY mf_regdate desc LIMIT 1,'.$count, [$_WIDGET['module']]);
+	$_list = DB::getList('SELECT * FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 GROUP BY mf_target ORDER BY mf_regdate desc LIMIT 0,'.$count, [$_WIDGET['module']]);
 } else {
 	$_list = getDBList(_AF_DOCUMENT_TABLE_,['md_id'=>$_WIDGET['module']],'wr_regdate desc',1,$count);
 }

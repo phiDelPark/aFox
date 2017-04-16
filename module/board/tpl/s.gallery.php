@@ -25,7 +25,7 @@ if(!defined('__AFOX__')) exit();
 			$_image = DB::get('SELECT mf_srl FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 AND mf_target=:2 AND mf_type LIKE "image%"', [$_DATA['id'],$val['wr_srl']]);
 
 			echo $toggle?'':'<div class="item_area clearfix">';
-		?>
+	?>
 
 			<div class="col-xs-<?php echo ($toggle2?'4':'8').(__MOBILE__?' mobile':'') ?>">
 				<a href="<?php echo (!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp',''))?>">
@@ -34,12 +34,13 @@ if(!defined('__AFOX__')) exit();
 				<div class="title-container"><h3 class="text-ellipsis"><?php echo ($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true)?></h3></div>
 			</div>
 
-		<?php
-
+	<?php
 			$toggle = !$toggle;
 			$toggle2 = !$toggle?$toggle2:!$toggle2;
 
 			echo $toggle?'':'</div>';
 		}
+
+		$toggle?'</div>':'';
 	?>
 </article>

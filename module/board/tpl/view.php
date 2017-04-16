@@ -10,7 +10,8 @@ if(!empty($wr_mb_srl)) {
 
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 $wr_secret = $_{'board'}['wr_secret'] == '1';
-$wr_permit = $is_manager || $login_srl === $wr_mb_srl || !empty($GLOBALS['_PERMIT_VIEW_'][md5($_{'board'}['md_id'].'_'.$_{'board'}['wr_srl'])]);
+$wr_grant_view = $_{'board'}['grant_view'];
+$wr_grant_write = $_{'board'}['grant_write'];
 ?>
 
 <section id="board_view">
@@ -42,7 +43,7 @@ $wr_permit = $is_manager || $login_srl === $wr_mb_srl || !empty($GLOBALS['_PERMI
 	?>
 
 	<?php
-		$wr_content = ($wr_permit || !$wr_secret) ? $_{'board'}['wr_content'] : getLang('error_permit');
+		$wr_content = ($wr_grant_view || !$wr_secret) ? $_{'board'}['wr_content'] : getLang('error_permit');
 		echo toHTML($_{'board'}['wr_type'], $wr_content);
 	?>
 	<?php if(!empty($_{'board'}['wr_tags'])) { ?>
@@ -75,11 +76,10 @@ $wr_permit = $is_manager || $login_srl === $wr_mb_srl || !empty($GLOBALS['_PERMI
 		</div>
 		<div class="pull-right">
 			<?php
-				$is_edit = empty($wr_mb_srl) || $is_manager || $login_srl === $wr_mb_srl;
 				$not_edit_str = '#" style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('error_permit',false),true,ENT_QUOTES).'\');return false';
 			?>
-			<a class="btn btn-default btn-sm" href="<?php echo $is_edit?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
-			<a class="btn btn-default btn-sm" href="<?php echo $is_edit?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#passwordBoxModal" data-toggle="modal" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 		</div>
 	</footer>
 </section>

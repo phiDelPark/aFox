@@ -9,22 +9,26 @@ function proc($data) {
 
 	global $_MEMBER;
 	$is_manager = isManager($doc['md_id']);
-	$is_secret = $doc['wr_secret'] == '1';
-	$PERMIT_KEY = md5($doc['md_id'].'_'.$doc['wr_srl']);
+	$login_srl = empty($_MEMBER)?0:$_MEMBER['mb_srl'];
 
-	// 권한 체크
+	// 관리자면 권한부여
+	$doc['grant_view'] = $is_manager;
+	// 관리자가 아니면 권한 체크
 	if(!$is_manager) {
 
+		$PERMIT_KEY = md5($doc['md_id'].'_'.$doc['wr_srl'] . '_' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+
 		if(!isGrant($doc['md_id'], 'view')) {
-			set_cookie('_AF_PERMIT_VIEW_'.$PERMIT_KEY, false, -1);
+			set_session('_AF_SECRET_DOCUMENT_'.$PERMIT_KEY, false);
 			return set_error(getLang('error_permit'),88088);
 		}
 
-		if(empty($_MEMBER) || $_MEMBER['mb_srl'] != $doc['mb_srl']) {
+		if(empty($login_srl) || $login_srl != $doc['mb_srl']) {
 
-			$GLOBALS['_PERMIT_VIEW_'][$PERMIT_KEY] = get_cookie('_AF_PERMIT_VIEW_'.$PERMIT_KEY);
+			// 비밀글이 아니면 권한부여
+			$doc['grant_view'] = $doc['wr_secret'] != '1' || get_session('_AF_SECRET_DOCUMENT_'.$PERMIT_KEY);
 			// 비밀글이면
-			if($is_secret && !$GLOBALS['_PERMIT_VIEW_'][$PERMIT_KEY]) {
+			if(!$doc['grant_view']) {
 				$input_password = '<form class="input-password" method="post" autocomplete="off">'
 							.'%s<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'
 							.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>';
@@ -37,13 +41,18 @@ function proc($data) {
 					return set_error(sprintf($input_password, getLang('error_password')), 4801);
 				}
 
-				$GLOBALS['_PERMIT_VIEW_'][$PERMIT_KEY] = true;
+				$doc['grant_view'] = true;
 				if(empty($doc['mb_srl'])) {
-					set_cookie('_AF_PERMIT_VIEW_'.$PERMIT_KEY, true, 0);
+					set_session('_AF_SECRET_DOCUMENT_'.$PERMIT_KEY, true);
 				}
 			}
+		} else {
+			// 자기글은 권한부여
+			$doc['grant_view'] = true;
 		}
 	}
+
+	$doc['grant_write'] = $is_manager || empty($doc['mb_srl']) || $login_srl == $doc['mb_srl'];
 
 	// 확장 변수가 있으면 unserialize
 	if(!empty($doc['wr_extra']) && !is_array($doc['wr_extra'])) {
@@ -53,10 +62,10 @@ function proc($data) {
 	// 댓글 목록에 권한설정
 	$mdid = $doc['md_id'];
 	$rsrl = $data['rp'];
-	$loginsrl = empty($_MEMBER)?0:$_MEMBER['mb_srl'];
 	$pass = empty($rsrl) ? '' : $data['mb_password'];
-	$permit = $is_manager || !empty($GLOBALS['_PERMIT_VIEW_'][$PERMIT_KEY]);
-	$call = function($r)use($mdid,$rsrl,$pass,$permit,$loginsrl){
+	// 문서 주인일경우 첫번째 댓글에만 권한 부여
+	$wr_permit = $login_srl && $login_srl == $doc['mb_srl'];
+	$call = function($r)use($mdid,$rsrl,$pass,$wr_permit,$login_srl,$is_manager){
 		$rset = [];
 		$_prlen = 0;
 		$rp_permit = 0;
@@ -66,20 +75,30 @@ function proc($data) {
 			// 권한해제 (더이상 하위 댓글이 없으면...)
 			if($rp_permit > $_len) $rp_permit = 0;
 			// 로그인 유저 권한체크
-			if(!empty($loginsrl) && $loginsrl == $row['mb_srl']) {
+			if(!empty($login_srl) && $login_srl == $row['mb_srl']) {
 				$rp_permit = $_len + 1;
-			// 비밀번호가 넘어오면 권한체크
-			} else if(!empty($pass) && $rsrl === $row['rp_srl']) {
-				if(verifyEncrypt($pass, $row['mb_password'])) $rp_permit = $_len + 1;
+			} else {
+				$RP_PERMIT_KEY = md5($mdid.'_'.$row['rp_srl'] . '_' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+				// 비밀글이 아니면 권한부여
+				if($row['rp_secret'] != '1' || get_session('_AF_SECRET_COMMENT_'.$RP_PERMIT_KEY)) {
+					$rp_permit = $_len + 1;
+				} else if(!empty($pass) && $rsrl == $row['rp_srl']) {
+					// 비밀번호가 넘어오면 권한체크
+					if(verifyEncrypt($pass, $row['mb_password'])) {
+						$rp_permit = $_len + 1;
+						set_session('_AF_SECRET_COMMENT_'.$RP_PERMIT_KEY, true);
+					}
+				}
 			}
 
 			// 비밀글 해제 (더이상 하위 댓글이 없으면...)
 			if($_prlen > $_len) $_prlen = 0;
 			// 하위 댓글에 비밀글 설정
-			if($_prlen === 0 && $row['rp_secret'] == '1') $_prlen = $_len + 1;
+			if($_prlen == 0 && $row['rp_secret'] == '1') $_prlen = $_len + 1;
 
 			$row['rp_secret'] = $_prlen > 0;
-			$row['_PERMIT_VIEW_'] = $permit || $rp_permit || $_prlen === 0;
+			$row['grant_view'] = $is_manager || $rp_permit || $_prlen == 0 || ($wr_permit && $_len == 0);
+			$row['grant_write'] = $row['rp_status']!='4' && ($is_manager || empty($row['mb_srl']) || $login_srl == $row['mb_srl']);
 			$rset[] = $row;
 		}
 		return $rset;

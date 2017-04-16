@@ -13,7 +13,7 @@ function proc($data) {
 
 	$md_extra = [];
 	$data['md_title'] = trim($data['md_title']);
-	$data['md_list_count'] = empty($data['md_list_count']) ? 1 : abs($data['md_list_count']);
+	$data['md_list_count'] = empty($data['md_list_count']) ? 20 : abs($data['md_list_count']);
 
 	// 분류값 정리
 	if(!empty($data['md_category'])) {

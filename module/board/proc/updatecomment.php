@@ -163,6 +163,12 @@ function proc($data) {
 			$ret_rp_srl = $rp_srl;
 		}
 
+		// 비회원이면 비밀번호 다시 안묻기위해 임시권한주기
+		if(empty($_MEMBER)) {
+			$PERMIT_KEY = md5($module['md_id'].'_'.$ret_rp_srl . '_' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+			set_session('_AF_SECRET_COMMENT_'.$PERMIT_KEY, true);
+		}
+
 	} catch (Exception $ex) {
 		DB::rollback();
 

@@ -24,7 +24,7 @@
 
 		var $arp = $i.closest('#board_reply'),
 			$rp = $i.closest('.reply-item'),
-			nombsrl = $i.attr('data-act-password') || '';
+			passform = $i.attr('data-act-password') || '';
 
 		$arp.find('form.right').remove().end().find('.reply-item>.right').show();
 
@@ -34,7 +34,7 @@
 		$f.find('.form-group').show();
 		$f.find('[disabled="disabled"]').removeAttr('disabled');
 
-		var callfunc = function(status, data, xhr) {
+		var getCommentCallfunc = function(status, data, xhr) {
 			if (status == 'success') {
 				$('<input type="hidden" name="rp_srl" value="">').prependTo($f);
 				var $rc = $rp.find('>.right');
@@ -55,17 +55,17 @@
 			}
 		};
 
-		if (act == 'board.deleteComment' || (act == 'board.getComment' && nombsrl)) {
+		if (act == 'board.deleteComment' || (act == 'board.getComment' && passform)) {
 			var $ipu, url = encodeURI(current_url.setQuery('rp', ''));
 			if ($rp.find('>>.inside_massage_box').length > 0) {
 				return false;
 			}
-			if (nombsrl) {
+			if (passform) {
 				if (act == 'board.getComment') {
 					$ipu = $(input_password.sprintf('', $_LANG['request_input'].sprintf($_LANG['password']), $_LANG['password'], $_LANG['ok'], $_LANG['close']));
 					$ipu.on('success.exec.ajax', function(e, data, xhr) {
 						e.preventDefault();
-						callfunc('success', data, xhr);
+						getCommentCallfunc('success', data, xhr);
 					});
 				} else {
 					$ipu = $(input_password.sprintf('', $_LANG['confirm_select_delete'].sprintf($_LANG['comment']), $_LANG['password'], $_LANG['ok'], $_LANG['close']));
@@ -92,7 +92,7 @@
 		} else if (act == 'board.getComment' || act == 'board.updateComment') {
 
 			if (act == 'board.getComment') {
-				exec_ajax(act, data, callfunc);
+				exec_ajax(act, data, getCommentCallfunc);
 			} else {
 				editor.switch(false);
 				$('<input type="hidden" name="rp_parent" value="">').prependTo($f);
@@ -104,14 +104,14 @@
 				});
 				$f.addClass('right').insertAfter($rp.find('>.right')).show('slow');
 			}
-
-			$f.on('success.exec.ajax', function(e, data, xhr) {
-				e.preventDefault();
-				if (data['redirect_url']) {
-					parent.location.replace(data['redirect_url'].setQuery('rp', data['rp_srl']));
-				}
-			});
 		}
+
+		$f.on('success.exec.ajax', function(e, data, xhr) {
+			e.preventDefault();
+			if (data['redirect_url']) {
+				parent.location.replace(data['redirect_url'].setQuery('rp', data['rp_srl']));
+			}
+		});
 
 		return false;
 	});

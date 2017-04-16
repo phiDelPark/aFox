@@ -23,7 +23,7 @@
 		<?php if (empty($_MEMBER) || (!empty($_{'board'}['wr_srl']) && $_MEMBER['mb_srl'] !== $_{'board'}['mb_srl'])) { ?>
 			<div class="form-group">
 				<label for="id_mb_nick"><?php echo getLang('id')?></label>
-				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" required maxlength="20" value="<?php echo $is?escapeHtml($_{'board'}['mb_nick']):''?>"<?php echo empty($_{'board'}['wr_srl'])?'':' disabled'?>>
+				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" required maxlength="20" value="<?php echo $is?escapeHtml($_{'board'}['mb_nick']):''?>"<?php echo empty($_{'board'}['wr_srl'])?'':' readonly'?>>
 			</div>
 			<?php if (!$is_manager && empty($_{'board'}['mb_srl'])) { ?>
 				<div class="form-group">
@@ -62,8 +62,8 @@
 		<?php }} ?>
 			<div class="form-group">
 				<?php
-					$issecret = ($is&&$_{'board'}['wr_secret']==1)?1:0;
-					$ishtml = ($is&&$_{'board'}['wr_type']==2)?1:0;
+					$issecret = ($is&&$_{'board'}['wr_secret']===1)?1:0;
+					$ishtml = ($is&&$_{'board'}['wr_type']==2)||(!$is&&$_CFG['use_type']==3)?1:0;
 					$istool = [];
 					if(empty($_CFG['use_type'])) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
 					if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [$issecret,'Secret'];

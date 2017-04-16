@@ -23,21 +23,17 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 			$_icon = $value['mb_srl'].'/profile_image.png';
 			$_icon = _AF_URL_ . (file_exists(_AF_MEMBER_DATA_.$_icon) ? 'data/member/' . $_icon : 'module/board/tpl/user_default.jpg');
 
-			$_deleted = $value['rp_status']=='4';
 			$rp_secret = $value['rp_secret'] == '1';
-			$rp_permit = $wr_permit || $login_srl === $value['mb_srl'];
-
-			$is_edit = (!$_deleted&&empty($value['mb_srl'])) || $is_manager || $login_srl === $value['mb_srl'];
-			$rp_content = ($rp_permit||$value['_PERMIT_VIEW_']) ? $value['rp_content'] : (!empty($value['mb_srl'])?getLang($rp_secret?'msg_is_secret':'error_permit'):sprintf($input_password,getUrl('rp',$value['rp_srl'])));
+			$rp_content = $value['grant_view'] ? $value['rp_content'] : (!empty($value['mb_srl'])?getLang($rp_secret?'msg_is_secret':'error_permit'):sprintf($input_password,getUrl('rp',$value['rp_srl'])));
 
 			echo '<a id="reply_'.$value['rp_srl'].'"'.(!empty($_DATA['rp'])&&$value['rp_srl']==$_DATA['rp'] ? ' class="active"':'').'></a>'
 				.'<div class="reply-item" style="padding-left:'.(($_len>5?5:$_len)*30).'px"><div class="left">'
 				.'<img src="'.$_icon.'" alt="Profile" class="profile"><div class="area-author-info"><h5 class="mb_nick" data-srl="'.$value['mb_srl'].'" data-rank="'.(ord($value['mb_rank']) - 48).'">'.$value['mb_nick'].'</h5>'
 				.'<div class="reply-date"><small>'.date('Y/m/d h:i', strtotime($value['rp_update'])).($rp_secret?' <i class="glyphicon glyphicon-lock" aria-hidden="true"></i>':'').'</small></div></div></div><div class="right"><div class="content clearfix">'.toHTML($value['rp_type'], $rp_content).'</div>'
 				.'<div class="area-text-button clearfix"><div class="pull-right">'
-				.(!$_deleted&&$is_rp_grant&&$_len<5?('<a href="#" role="button" data-exec-act="board.updateComment" data-act-param="rp_parent,'.$value['rp_srl'].'"><i class="glyphicon glyphicon-comment" aria-hidden="true"></i> '.getLang('reply').'</a>'):'')
-				.'<a href="#" role="button" '.(!$_deleted&&$is_edit?'data-exec-act="board.getComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])&&!$is_manager&&$rp_secret?' data-act-password="1"':''):$not_edit_str).'><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> '.getLang('edit').'</a>'
-				.'<a href="#" role="button" '.($is_edit?'data-exec-act="board.deleteComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])&&!$is_manager?' data-act-password="1"':''):$not_edit_str).'><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> '.getLang('delete').'</a>'
+				.($is_rp_grant&&$_len<5&&$value['rp_status']!='4'?('<a href="#" role="button" data-exec-act="board.updateComment" data-act-param="rp_parent,'.$value['rp_srl'].'"><i class="glyphicon glyphicon-comment" aria-hidden="true"></i> '.getLang('reply').'</a>'):'')
+				.'<a href="#" role="button" '.($value['grant_write']?'data-exec-act="board.getComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])&&!$is_manager&&$rp_secret?' data-act-password="1"':''):$not_edit_str).'><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> '.getLang('edit').'</a>'
+				.'<a href="#" role="button" '.($is_manager||$value['grant_write']?'data-exec-act="board.deleteComment" data-act-param="rp_srl,'.$value['rp_srl'].'"'.(empty($value['mb_srl'])&&!$is_manager?' data-act-password="1"':''):$not_edit_str).'><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> '.getLang('delete').'</a>'
 				.'</div></div></div></div>';
 		}
 	?>

@@ -202,7 +202,7 @@ function proc($data) {
 				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 				$filename = $file['name'];
 				$fileext = explode('.', $filename);
-				$fileext = count($fileext)===1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
+				$fileext = count($fileext) == 1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
 					throw new Exception(getLang('warning_permit', [$file_exts])."\n", 2501);
@@ -264,9 +264,8 @@ function proc($data) {
 
 		// 비회원이면 비밀번호 다시 안묻기위해 임시권한주기
 		if(empty($_MEMBER)) {
-			$PERMIT_KEY = md5($md_id.'_'.$wr_srl);
-			$GLOBALS['_PERMIT_VIEW_'][$PERMIT_KEY] = true;
-			set_cookie('_AF_PERMIT_VIEW_'.$PERMIT_KEY, true, 0);
+			$PERMIT_KEY = md5($md_id.'_'.$wr_srl . '_' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+			set_session('_AF_SECRET_DOCUMENT_'.$PERMIT_KEY, true);
 		}
 
 		// 썸네일 제거
