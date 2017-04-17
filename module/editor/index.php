@@ -38,14 +38,18 @@ foreach ($options as $key => $v) {
 		<textarea name="<?php echo $name ?>" class="form-control vresize"><?php echo $content ?></textarea>
 	</div>
 <?php if(!empty($options['statebar'])) { ?>
-	<div class="af-statebar-area clearfix" style="margin-top:3px;height:24px;padding:0 0 0 150px">
-		<div class="btn-group btn-group-xs pull-left" role="group" aria-label="..." style="margin-left:-150px">
+	<div class="af-statebar-area clearfix" style="margin-top:3px;height:24px;padding:0 0 0 200px">
+		<div class="btn-group btn-group-xs pull-left" role="group" aria-label="..." style="margin-left:-200px">
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="bold"><i class="glyphicon glyphicon-bold" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="italic"><i class="glyphicon glyphicon-italic" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="header"><i class="glyphicon glyphicon-header" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="insertorderedlist"><i class="glyphicon glyphicon-list" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="indent"><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="codeblock"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>
+		</div>
+		<div class="btn-group btn-group-xs pull-left" role="group" aria-label="..." style="margin-left:-54px">
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="link" data-toggle="popover"><i class="glyphicon glyphicon-link" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="video" data-toggle="popover"><i class="glyphicon glyphicon-facetime-video" aria-hidden="true"></i></button>
 		</div>
 		<div class="form-control" style="cursor:help;overflow:hidden;white-space:nowrap;color:#aaa;font-size:12px;font-family:Arial;width:100%;height:22px;padding:2px 5px;text-align:right;margin:0 -150px 0 0">
 			<strong>aFox</strong>
@@ -82,7 +86,7 @@ foreach ($options as $key => $v) {
 <script>
 	var AF_EDITOR_<?php echo strtoupper($name) ?>;
 	$.getScript(
-		"<?php echo _AF_URL_ ?>module/editor/editor.min.js",
+		"<?php echo _AF_URL_ ?>module/editor/editor.js",
 		function() {
 			var options = {<?php echo substr($ops, 0, -1) ?>}
 			AF_EDITOR_<?php echo strtoupper($name) ?> = $(".af_editor_<?php echo $name ?>").afEditor(options);

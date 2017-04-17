@@ -154,6 +154,14 @@
 				sTxt = "\n" + '```' + "\n";
 				eTxt = "\n" + '```' + "\n";
 				break;
+			case 'link':
+				sTxt = '<' + val + '>';
+				eTxt = '';
+				break;
+			case 'video':
+				sTxt = '[youtube](' + val + ')';
+				eTxt = '';
+				break;
 		}
 
 		if (sTxt || eTxt) {
@@ -189,6 +197,19 @@
 			case 'codeblock':
 				sTxt = '<pre><code>';
 				eTxt = '</code></pre>';
+				pasteTxtWithSel(sTxt, eTxt, $i);
+				break;
+			case 'link':
+				sTxt = '<a href="' + val + '" target="_blank">' + val + '</a>';
+				eTxt = '';
+				pasteTxtWithSel(sTxt, eTxt, $i);
+				break;
+			case 'video':
+				// 보안을 위해 iframe 사용 금지 (미디어 관리자 에드온을 사용하자)
+				//var pattern = /(https?:\/\/[a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([a-zA-Z0-9]+)/i;
+				//sTxt = '<iframe src="' + val.replace(pattern, "https://www.youtube.com/embed/$4") + '" frameborder="0" allowfullscreen></iframe>';
+				sTxt = '<div>[youtube](' + val.escapeHtml() + ')</div>';
+				eTxt = '';
 				pasteTxtWithSel(sTxt, eTxt, $i);
 				break;
 		}
@@ -282,12 +303,14 @@
 		}).on('click', '.af-statebar-area>.btn-group>button[tabindex=-1]', function(e, i) {
 			var $i = $(this),
 				$txtarea = $this.$textarea,
-				$iframe = $this.$element.find('iframe');
+				$iframe = $this.$element.find('iframe'),
+				type = $i.attr('data-type');
 			$i.blur();
+			if (type == 'link' || type == 'video') return false;
 			if ($txtarea.is(':visible') && $txtarea.length > 0) {
-				textareaExecCmd($i.attr('data-type'), null, $txtarea);
+				textareaExecCmd(type, null, $txtarea);
 			} else if ($iframe.length > 0) {
-				iFrameExecCmd($i.attr('data-type'), null, $iframe);
+				iFrameExecCmd(type, null, $iframe);
 			}
 		}).on('click', '.af-editor-uploaded-list>.file-item', function() {
 			var $i = $(this),
@@ -360,6 +383,32 @@
 			$(this).data("bs.popover").tip().css({
 				'max-width': '500px',
 				'font-size': '12px'
+			});
+		});
+
+		this.$element.find('.af-statebar-area [data-toggle="popover"]').popover({
+			html: 1,
+			trigger: 'manual',
+			placement: 'top',
+			content: '<div class="input-group"><input type="text" class="form-control" style="width:150px"><a href="#" class="btn btn-default input-group-addon">OK</a></div>'
+		}).click(function() {
+			$(this).popover('toggle');
+		}).on('inserted.bs.popover', function() {
+			var $i = $(this),
+				$popover = $i.data("bs.popover").tip().find('.popover-content'),
+				type = $i.attr('data-type') || '';
+			$popover.find('input').attr('placeholder', type == 'video' ? 'YouTube' : 'Link');
+			$popover.find('a').click(function() {
+				var url = $(this).prev().val() || '',
+					$txtarea = $this.$textarea,
+					$iframe = $this.$element.find('iframe');
+				if ($txtarea.is(':visible') && $txtarea.length > 0) {
+					textareaExecCmd(type, url, $txtarea);
+				} else if ($iframe.length > 0) {
+					iFrameExecCmd(type, url, $iframe);
+				}
+				$i.popover('hide');
+				return false;
 			});
 		});
 

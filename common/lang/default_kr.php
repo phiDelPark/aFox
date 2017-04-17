@@ -19,6 +19,7 @@ $_LANG['collapse'] = '접기';
 $_LANG['comment'] = '댓글';
 $_LANG['content'] = '내용';
 $_LANG['copy'] = '복사';
+$_LANG['count'] = '계수';
 $_LANG['danger'] = '위험';
 $_LANG['date'] = '날짜';
 $_LANG['day'] = '일';

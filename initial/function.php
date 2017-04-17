@@ -803,7 +803,7 @@ if(!defined('__AFOX__')) exit();
 
 	function checkUserAgent() {
 		$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-		if(preg_match("/bot|crawl|slurp|spider|watchmouse|pingdom\.com|feedfetcher-google/", $agent)) return 'BOT';
+		if(preg_match("/bot|daum|crawl|slurp|spider|watchmouse|pingdom\.com|feedfetcher-google|request/", $agent)) return 'BOT';
 		if(preg_match("/phone|iphone|itouch|ipod|symbian|android|htc_|htc-|palmos|blackberry|opera mini|iemobile|windows ce|nokia|fennec|hiptop|kindle|mot |mot-|webos\/|samsung|sonyericsson|^sie-|nintendo/", $agent)) return 'MOBILE';
 		if(preg_match("/mobile|pda;|avantgo|eudoraweb|minimo|netfront|brew|teleca|lg;|lge |wap;| wap /", $agent)) return 'MOBILE';
 		return 'BROWSER';

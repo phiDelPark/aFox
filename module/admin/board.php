@@ -155,10 +155,22 @@
 				<div class="form-inline">
 					<div class="input-group">
 						<label class="input-group-addon" for="id_list_count"><?php echo getLang('document_count')?></label>
-						<input type="number" class="form-control" id="id_list_count" name="md_list_count" min="0" max="9999" maxlength="5">
+						<input type="number" class="form-control" id="id_list_count" name="md_list_count" min="1" max="9999" maxlength="5" placeholder="<?php echo getLang('Count')?>">
 					</div>
 				</div>
 				<p class="help-block"><?php echo getLang('desc_list_count')?></p>
+			</div>
+			<div class="form-group">
+				<label><?php echo getLang('file')?></label>
+				<div class="form-inline">
+					<div class="input-group">
+						<label class="input-group-addon" for="id_md_file_max"><?php echo getLang('max_file_count')?></label>
+						<input type="number" class="form-control" id="id_md_file_max" name="md_file_max" min="0" max="9999" maxlength="4" placeholder="<?php echo getLang('Count')?>">
+					</div>
+					&nbsp;&nbsp;<input type="number" class="form-control" name="md_file_size" min="0" max="99999999999" maxlength="11" placeholder="<?php echo getLang('max_file_size')?> (KB)">
+					&nbsp;&nbsp;<input type="text" class="form-control" name="md_file_ext" maxlength="255" placeholder="<?php echo getLang('file_extension')?>">
+				</div>
+				<p class="help-block"><?php echo getLang('desc_board_file')?></p>
 			</div>
 			<div class="form-group">
 				<label><?php echo getLang('thumbnail')?></label>
@@ -181,7 +193,7 @@
 						</div>
 					</div>
 				</div>
-				<p class="help-block"><?php echo getLang('desc_list_count')?></p>
+				<p class="help-block"><?php echo getLang('desc_lthumbnail')?></p>
 			</div>
 			<div class="form-group">
 				<label><?php echo getLang('point')?></label>
@@ -204,18 +216,6 @@
 					</div>
 				</div>
 				<p class="help-block"><?php echo getLang('desc_point')?></p>
-			</div>
-			<div class="form-group">
-				<label><?php echo getLang('file')?></label>
-				<div class="form-inline">
-					<div class="input-group">
-						<label class="input-group-addon" for="id_md_file_max"><?php echo getLang('max_file_count')?></label>
-						<input type="number" class="form-control" id="id_md_file_max" name="md_file_max" min="0" max="9999" maxlength="4">
-					</div>
-					&nbsp;&nbsp;<input type="number" class="form-control" name="md_file_size" min="0" max="99999999999" maxlength="11" placeholder="<?php echo getLang('max_file_size')?> (KB)">
-					&nbsp;&nbsp;<input type="text" class="form-control" name="md_file_ext" maxlength="255" placeholder="<?php echo getLang('file_extension')?>">
-				</div>
-				<p class="help-block"><?php echo getLang('desc_board_file')?></p>
 			</div>
 			<hr>
 			<div class="form-group">

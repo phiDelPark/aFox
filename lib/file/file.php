@@ -10,7 +10,7 @@ function setHttpError($err, $back = false) {
 	}
 	exit;
 }
-if($_CFG['protect_file']=='1' && !preg_match('/https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
+if($_CFG['protect_file']=='1'&&!empty($_SERVER['HTTP_REFERER'])&& !preg_match('/^https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
 static $_file = [];
 $srl = (int)$_GET['file'];
 $thumb = isset($_GET['thumb']);
@@ -23,7 +23,7 @@ if(!isset($_file[$key])) {
 	$_file[$key]=['mb_srl'=>$file['mb_srl'], 'is_download'=>true, 'point_download'=>0, 'type'=>empty($_tmp[$filetype])?'binary':$filetype, 'name'=>$file['mf_name']];
 	$_file[$key]['path']=_AF_ATTACH_DATA_.$_file[$key]['type'].'/'.$file['md_id'].'/'.$file['mf_target'].'/'.$file['mf_upload_name'];
 	// binary면 권한 체크 // isGrant() 함수 안불러서 작성
-	if($_file[$key]['type']==='binary') {
+	if($_file[$key]['type']=='binary') {
 		$out = DB::select(_AF_MODULE_TABLE_, ['md_id'=>$file['md_id']], ['md_id','point_download','grant_download']);
 		$module = DB::assoc($out);
 		if(empty($module['md_id'])) setHttpError('400 Bad Request', true);
@@ -35,7 +35,7 @@ if(!isset($_file[$key])) {
 			$_file[$key]['is_download'] = ord($grant) <= $rank; // 0 = 48, z = 122
 			if(!$_file[$key]['is_download']) setHttpError('401 Unauthorized', true);
 		}
-	} else if($thumb&&$_file[$key]['type']==='image') {
+	} else if($thumb&&$_file[$key]['type']=='image') {
 		if(!file_exists($_file[$key]['path'])) {
 			$_file[$key]['path']=_AF_PATH_.'common/img/no_image.png';
 		} else {
@@ -80,7 +80,7 @@ if(!empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])){
 	}
 }
 // 다운로드 조회를 위해 기록 // setHistoryAction() 함수 안불러서 작성
-if($_file[$key]['type']==='binary'){
+if($_file[$key]['type']=='binary'){
 	$point = $_file[$key]['point_download'];
 	$mb_srl = empty($_MEMBER)?0:(int)$_MEMBER['mb_srl'];
 	if(empty($mb_srl) && $point < 0) setHttpError('401 Unauthorized', true); // -값은 비회원 불가
