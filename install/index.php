@@ -43,7 +43,7 @@ if(empty($_POST['db_name'])) {
 	echo '<span style="display:inline-block;width:150px">DB 호스트 : </span><input type="text" name="db_host" value="localhost"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 포트 : </span><input type="text" name="db_port" value="3306"><br>';
 	echo '<span style="display:inline-block;width:150px">DB 이름 : </span><input type="text" name="db_name" value=""><br>';
-	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="myisam">MyISAM</option><option value="innodb" selected>InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
+	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="myisam" selected>MyISAM</option><option value="innodb">InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
 	echo '<span style="display:inline-block;width:150px">DB 아이디 : </span><input type="text" name="db_user" value=""><br>';
 	echo '<span style="display:inline-block;width:150px">DB 비밀번호 : </span><input type="text" name="db_pass" value=""><br><br>';
 	echo '<button type="submit">설치 시작</button></form>';
@@ -88,8 +88,6 @@ $o = array(
 'charset'=>$charset,
 'time_zone'=>$time_zone
 );
-
-require_once dirname(__FILE__) . '/../lib/pbkdf2/PasswordStorage.php';
 
 mysqli_report(MYSQLI_REPORT_OFF);
 
@@ -417,7 +415,7 @@ if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($l
 $row = mysqli_fetch_assoc($r);
 if (!$row['mb_id']) {
 	$sql = 'INSERT INTO '._AF_MEMBER_TABLE_.' (`mb_rank`, `mb_id`, `mb_password`, `mb_nick`, `mb_regdate`) VALUES ("%s", "%s", "%s", "%s", NOW())';
-	mysqli_query($link, sprintf($sql, 's', 'admin', PasswordStorage::create_hash('0000'), '관리자'));
+	mysqli_query($link, sprintf($sql, 's', 'admin', password_hash('0000', PASSWORD_BCRYPT), '관리자'));
 }
 
 $_err_keys = 'insert_themes';

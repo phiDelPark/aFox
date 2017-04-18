@@ -5,7 +5,6 @@ if(!defined('__AFOX__')) exit();
 	define('ENFORCE_SSL', 1);
 	define('RELEASE_SSL', 2);
 
-	require_once _AF_LIBS_PATH_ . 'pbkdf2/PasswordStorage.php';
 	require_once _AF_LIBS_PATH_ . 'parsedown/Parsedown.php';
 
 	function getUrlQuery() {
@@ -650,7 +649,7 @@ if(!defined('__AFOX__')) exit();
 
 	function verifyEncrypt($password, $hash) {
 		try {
-			return PasswordStorage::verify_password($password, $hash);
+			return password_verify($password, $hash);
 		} catch (InvalidHashException $ex) {
 			exit($ex->getMessage());
 		} catch (CannotPerformOperationException $ex) {
@@ -659,7 +658,7 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function encryptString($str) {
-		return PasswordStorage::create_hash($str);
+		return password_hash($str, PASSWORD_BCRYPT);
 	}
 
 	function escapeMKDW($str, $is_strip_tags = false) {
