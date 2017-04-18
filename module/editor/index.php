@@ -86,7 +86,7 @@ foreach ($options as $key => $v) {
 <script>
 	var AF_EDITOR_<?php echo strtoupper($name) ?>;
 	$.getScript(
-		"<?php echo _AF_URL_ ?>module/editor/editor.js",
+		"<?php echo _AF_URL_ ?>module/editor/editor.min.js",
 		function() {
 			var options = {<?php echo substr($ops, 0, -1) ?>}
 			AF_EDITOR_<?php echo strtoupper($name) ?> = $(".af_editor_<?php echo $name ?>").afEditor(options);

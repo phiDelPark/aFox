@@ -202,11 +202,14 @@ function proc($data) {
 				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 				$filename = $file['name'];
 				$fileext = explode('.', $filename);
-				$fileext = count($fileext) == 1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
+				$fileext = count($fileext) === 1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
 					throw new Exception(getLang('warning_permit', [$file_exts])."\n", 2501);
 				}
+
+				// 실행 가능한 파일 못하게 처리
+				$fileext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x', ('.'.$fileext));
 
 				$filename = md5($filename.time().$i) . '.' . $fileext;
 				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/' . $wr_srl . '/' . $filename;

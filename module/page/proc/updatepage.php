@@ -117,6 +117,9 @@ function proc($data) {
 					throw new Exception(getLang('warning_permit', [$chk_ext])."\n", 2501);
 				}
 
+				// 실행 가능한 파일 못하게 처리
+				$fileext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x', ('.'.$fileext));
+
 				$filename = md5($filename.time().$i) . '.' . $fileext;
 				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/1/' . $filename;
 

@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 
-	if(empty($data['mf_srl'])) return set_error(getLang('error_request'),4303);
+	if(empty($data['mf_srl']) || empty($data['mf_name'])) return set_error(getLang('error_request'),4303);
 
 	global $_MEMBER;
 	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
@@ -17,7 +17,7 @@ function proc($data) {
 
 	$name = explode('.', $data['mf_name']);
 	$ext = count($name)===1 ? 'none' : $name[count($name)-1];
-	$name = $name[0];
+	$name = count($name)===1 ? $name[0] : substr($data['mf_name'], 0, strlen('.'.$ext) * -1);
 	$ext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x', ('.'.$ext));
 
 	DB::transaction();
