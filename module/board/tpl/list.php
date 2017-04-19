@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURRENT_DOCUMENT_LIST'];
 $is_wr_grant = isGrant($_DATA['id'], 'write');
-$use_style = ['list','review','gallery','media'];
+$use_style = ['list','review','album','gallery'];
 ?>
 
 <section id="board_list" class="<?php echo $use_style[abs($_CFG['use_style'])]?>_style"<?php echo empty($_DATA['srl']) ? '' :' style="margin-top:50px"'; ?>>

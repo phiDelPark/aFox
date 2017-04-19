@@ -793,7 +793,7 @@ if(!defined('__AFOX__')) exit();
 		if($title !== false) {
 			$a_title = ['success', 'alert', 'warning', 'error'];
 			$a_icon = ['ok-sign', 'exclamation-sign', 'warning-sign', 'ban-circle'];
-			$title = '<i class="glyphicon glyphicon-'.$a_icon[$type].'" aria-hidden="true"></i> '.getLang($a_title[$type]);
+			$title = '<i class="glyphicon glyphicon-'.$a_icon[$type].'" aria-hidden="true"></i> '.(empty($title)?getLang($a_title[$type]):$title);
 		}
 		return '<div class="'. (empty($title)?'alert alert-dismissable alert-':'panel panel-') . '' . $a_type[$type] . '" role="alert">'
 				. (empty($title)?'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>':'<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3></div>')
