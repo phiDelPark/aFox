@@ -39,13 +39,18 @@ if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 
 if(empty($_POST['db_name'])) {
 
-	echo '에이폭스 CMS 설치<br><br><form action="index.php" method="post" autocomplete="off">';
-	echo '<span style="display:inline-block;width:150px">DB 호스트 : </span><input type="text" name="db_host" value="localhost"><br>';
-	echo '<span style="display:inline-block;width:150px">DB 포트 : </span><input type="text" name="db_port" value="3306"><br>';
-	echo '<span style="display:inline-block;width:150px">DB 이름 : </span><input type="text" name="db_name" value=""><br>';
-	echo '<span style="display:inline-block;width:150px">DB 종류 : </span><select name="db_type"><option value="myisam" selected>MyISAM</option><option value="innodb">InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
-	echo '<span style="display:inline-block;width:150px">DB 아이디 : </span><input type="text" name="db_user" value=""><br>';
-	echo '<span style="display:inline-block;width:150px">DB 비밀번호 : </span><input type="text" name="db_pass" value=""><br><br>';
+	echo '<h3>에이폭스 CMS 설치</h3><form action="index.php" method="post" autocomplete="off">';
+	echo '<strong style="display:inline-block;width:150px">DB 호스트*</strong> : <input type="text" name="db_host" value="localhost"><br>';
+	echo '<strong style="display:inline-block;width:150px">DB 포트*</strong> : <input type="text" name="db_port" value="3306"><br>';
+	echo '<strong style="display:inline-block;width:150px">DB 이름*</strong> : <input type="text" name="db_name" value=""><br>';
+	echo '<strong style="display:inline-block;width:150px">DB 종류*</strong> : <select name="db_type"><option value="myisam" selected>MyISAM</option><option value="innodb">InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
+	echo '<strong style="display:inline-block;width:150px">DB 아이디*</strong> : <input type="text" name="db_user" value=""><br>';
+	echo '<strong style="display:inline-block;width:150px">DB 비밀번호*</strong> : <input type="text" name="db_pass" value=""><br><br><br>';
+	echo '<h3>에이폭스 도메인 설정</h3>';
+	echo '<span style="display:inline-block;width:150px">내 도메인</span> : <input type="text" name="domain" value="'.$_SERVER['HTTP_HOST'].'"><br>';
+	echo '<span style="display:inline-block;padding-left:163px">현재 이 사이트의 도메인을 입력하세요.</span><br>';
+	echo '<span style="display:inline-block;width:150px">쿠키 도메인</span> : <input type="text" name="cookie_domain" value=""><br>';
+	echo '<span style="display:inline-block;padding-left:163px">쿠키 도메인 www.afox.kr 와 afox.kr 은 서로 다른 도메인으로 인식합니다.<br>쿠키를 공유하려면 .afox.kr 과 같이 입력하세요.</span><br><br>';
 	echo '<button type="submit">설치 시작</button></form>';
 
 	exit();
@@ -64,7 +69,7 @@ for ($i=0; $i<count($dir_arr); $i++) {
 }
 
 if(empty($_POST['db_host'])||empty($_POST['db_port'])||empty($_POST['db_name'])||empty($_POST['db_user'])||empty($_POST['db_pass'])) {
-	exit("값을 모두 채워 주세요.");
+	exit("* 필수 값을 모두 채워 주세요.");
 }
 
 $db_host = $_POST['db_host'];
@@ -76,6 +81,11 @@ $db_pass = $_POST['db_pass'];
 $charset = 'utf8';
 $time_zone = 'Asia/Seoul';
 
+$domain = empty(trim($_POST['domain'])) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['domain']));
+$cookie_domain = empty(trim($_POST['cookie_domain'])) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['cookie_domain']));
+
+echo $cookie_domain;
+exit("* 필수 값을 모두 채워 주세요.");
 $is_innodb = $_POST['db_type'] == 'innodb16' || $_POST['db_type'] == 'innodb8' || $_POST['db_type'] == 'innodb';
 $innodb_option = !$is_innodb || $_POST['db_type'] == 'innodb' ? '' : ($_POST['db_type'] == 'innodb16' ? '16' : '8');
 
@@ -502,10 +512,8 @@ fwrite($f, "'user'=>'{$db_user}',\n");
 fwrite($f, "'pass'=>'{$db_pass}',\n");
 fwrite($f, "'charset'=>'{$charset}',\n");
 fwrite($f, "'time_zone'=>'{$time_zone}',\n");
-fwrite($f, "'http_port'=>'',\n");
-fwrite($f, "'https_port'=>'',\n");
-fwrite($f, "'use_ssl'=>'none',   //'none','always','optional'\n");
-fwrite($f, "'cookie_domain'=>'' //도메인쿠키공유(.도메인.com)\n");
+fwrite($f, "'domain'=>'{$domain}',\n");
+fwrite($f, "'cookie_domain'=>'{$cookie_domain}'\n");
 fwrite($f, ");");
 fclose($f);
 chmod($file, 0644);
