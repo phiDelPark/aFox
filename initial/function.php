@@ -59,7 +59,7 @@ if(!defined('__AFOX__')) exit();
 
 		if(!isset($_SERVER['SERVER_PROTOCOL'])) return; // Check HTTP Request
 
-		if(_AF_USE_SSL_ == 'always') $ssl_mode = ENFORCE_SSL;
+		if(_AF_USE_SSL_ === ENFORCE_SSL) $ssl_mode = ENFORCE_SSL; // always
 
 		$domain = _AF_DOMAIN_ ? _AF_DOMAIN_ : $_SERVER['HTTP_HOST'];
 		$domain_key = md5($domain);
@@ -110,9 +110,9 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getUrl() {
-		if(_AF_USE_SSL_ == 'always' || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) { // If using SSL always
+		if(_AF_USE_SSL_ === ENFORCE_SSL || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) { // If using SSL always
 			$uri = getRequestUri(ENFORCE_SSL);
-		} elseif(_AF_USE_SSL_ == 'optional') { // optional SSL use
+		} elseif(_AF_USE_SSL_ === RELEASE_SSL) { // optional SSL use
 			$uri = getRequestUri(__MODULE__ == 'admin' || __MODULE__ == 'member' ? ENFORCE_SSL : RELEASE_SSL);
 		} else { // no SSL
 			$uri = _AF_DOMAIN_ ? getRequestUri(FOLLOW_REQUEST_SSL) : getScriptPath();
@@ -768,7 +768,7 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function showMessage($message, $type = 0, $title = '') {
-		$type = ($type > 4000 && $type < 6000) ? 3 : ($type > 3 && $type < 0 ? 2 : $type);
+		$type = ($type > 4000) ? 3 : ($type > 3 ? 2 : $type);
 		$a_type = ['success', 'info', 'warning', 'danger'];
 		// 타이틀 값에 false 가 들어오면 타이틀바 제거
 		if($title !== false) {

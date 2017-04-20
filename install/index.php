@@ -140,11 +140,11 @@ $create_sql = '
 	   start          CHAR(11)     NOT NULL,
 	   theme          VARCHAR(255) NOT NULL,
 	   title          VARCHAR(255) NOT NULL,
-	   point_login    INT(11)      NOT NULL DEFAULT 0,
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
-	   protect_file   CHAR(1)      NOT NULL DEFAULT 0)'.$_engine;
+	   protect_file   CHAR(1)      NOT NULL DEFAULT 0,
+	   point_login    INT(11)      NOT NULL DEFAULT 0)'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));

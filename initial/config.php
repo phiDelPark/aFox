@@ -1,9 +1,12 @@
 <?php
 if(!defined('__AFOX__')) exit();
-
-define('__DEBUG__', 0);
 define('_AF_VERSION_', '0.6.0');
 define('_AF_SERVER_TIME_', time());
+
+define('__DEBUG__', 0);
+define('_AF_USE_SSL_', 0); // 1 = always, 2 = optional
+define('_AF_HTTP_PORT_', 80);
+define('_AF_HTTPS_PORT_', 443);
 
 define('_AF_CONFIG_TABLE_', 'afox_config');
 define('_AF_MEMBER_TABLE_', 'afox_members');
@@ -36,14 +39,14 @@ define('_AF_MEMBER_DATA_', _AF_PATH_ . 'data/member/');
 define('_AF_ATTACH_DATA_', _AF_PATH_ . 'data/attach/');
 define('_AF_CACHE_DATA_', _AF_PATH_ . 'data/cache/');
 
+define('_AF_DIR_PERMIT_', 0755);
+define('_AF_FILE_PERMIT_', 0644);
+
 (@include_once(_AF_CONFIG_DATA_ . '_db_config.php')) OR die("Please install afox.");
 
 define('_AF_DOMAIN_', $_DBINFO['domain']);
 define('_AF_COOKIE_DOMAIN_', $_DBINFO['cookie_domain']);
 define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
-
-define('_AF_DIR_PERMIT_', 0755);
-define('_AF_FILE_PERMIT_', 0644);
 
 date_default_timezone_set(_AF_TIME_ZONE_);
 session_set_cookie_params(0, '/', _AF_COOKIE_DOMAIN_);
@@ -76,10 +79,6 @@ if(DB::error()) exit("Please reinstall afox.");
 define('_AF_LANG_', empty($_CFG['lang'])?'kr':$_CFG['lang']);
 define('_AF_THEME_', empty($_CFG['theme'])?'default':$_CFG['theme']);
 define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
-
-define('_AF_USE_SSL_', $_CFG['use_ssl']);
-define('_AF_HTTP_PORT_', empty($_CFG['http_port'])?80:(int)$_CFG['http_port']);
-define('_AF_HTTPS_PORT_', empty($_CFG['https_port'])?443:(int)$_CFG['https_port']);
 
 /* End of file config.php */
 /* Location: ./initial/config.php */
