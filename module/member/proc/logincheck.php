@@ -31,18 +31,18 @@ function proc($data) {
 
 	// TODO 차단 탈퇴 인증 체크,
 
-	set_session('ss_mb_id', $mb['mb_id']);
+	set_session('AF_LOGIN_ID', $mb['mb_id']);
 	// FLASH XSS 공격에 대응하기 위하여 회원의 고유키를 생성해 놓는다. 관리자에서 검사함 - 110106
-	set_session('ss_mb_key', md5($mb['mb_regdate'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']));
+	set_session('AF_LOGIN_KEY', md5($mb['mb_regdate'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']));
 
 	// 최고 관리자는 자동 로그인 안함
 	if($mb['mb_rank'] !== 's' && $auto_login) {
 		$key = md5($_SERVER['SERVER_ADDR'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] . $mb_password);
-		set_cookie('ck_mb_id', $mb_id, 86400 * 31);
-		set_cookie('ck_auto', $key, 86400 * 31);
+		set_cookie('AF_LOGIN_ID', $mb_id, 86400 * 31);
+		set_cookie('AF_AUTO_LOGIN', $key, 86400 * 31);
 	} else {
-		set_cookie('ck_mb_id', '', -1);
-		set_cookie('ck_auto', '', -1);
+		set_cookie('AF_LOGIN_ID', '', -1);
+		set_cookie('AF_AUTO_LOGIN', '', -1);
 	}
 
 	$setvalues = ['(mb_login)'=>'NOW()'];

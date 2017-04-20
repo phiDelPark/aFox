@@ -36,7 +36,7 @@ if(($_THEME = getCache('_AF_THEME_'._AF_THEME_)) === false) {
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.min.js" id="def-Bootstrap-JS"></script>
 <?php } ?>
 <script>
-var current_url     = "<?php echo getCurrentUrl() ?>";
+var current_url     = "<?php echo getUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
 var waiting_message = "<?php echo getLang('call_server') ?>";
 </script>

@@ -8,8 +8,8 @@ function proc($data) {
 	session_destroy();
 	session_start();
 
-	set_cookie('ck_mb_id', '', -1);
-	set_cookie('ck_auto', '', -1);
+	set_cookie('AF_LOGIN_ID', '', -1);
+	set_cookie('AF_AUTO_LOGIN', '', -1);
 
 	return ['error'=>'0', 'message'=>getLang('success_logout')];
 }

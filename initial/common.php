@@ -17,6 +17,37 @@ if($_CFG['use_visit'] == '1' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_AD
 define('__MOBILE__', checkUserAgent() == 'MOBILE');
 define('__REQ_METHOD__', getRequestMethod());
 
+define('_AF_URL_', getRequestUri());
+define('_AF_THEME_URL_', _AF_URL_ . 'theme/' . _AF_THEME_ . '/');
+
+// 로그인 중이면 맴버 정보 가져오기
+if($tmp = (isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cookie('AF_LOGIN_ID'))) {
+	if(preg_match('/^[a-zA-Z]+\w{2,}$/', $tmp)) {
+		$_MEMBER = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$tmp}'");
+		if(DB::error() || empty($_MEMBER['mb_srl'])){
+			unset($_MEMBER);
+		} else {
+			$tmp = $_MEMBER['mb_srl'].'/profile_image.png';
+			if(file_exists(_AF_MEMBER_DATA_.$tmp)) $_MEMBER['mb_icon'] = _AF_URL_.'data/member/'.$tmp;
+			// 쿠키이면... 키검사... 최고 관리자는 쿠키사용안함
+			if(!isset($_SESSION['AF_LOGIN_ID'])) {
+				$tmp = get_cookie('AF_AUTO_LOGIN');
+				if($_MEMBER['mb_rank'] == 's' || empty($tmp) || ($tmp !== md5($_SERVER['SERVER_ADDR'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] . $_MEMBER['mb_password']))) {
+					unset($_MEMBER);
+				} else {
+					set_session('AF_LOGIN_ID', $_MEMBER['mb_id']);
+				}
+			}
+		}
+	}
+	// 아니면 삭제
+	if(empty($_MEMBER)) {
+		set_cookie('AF_LOGIN_ID', '', -1);
+		set_cookie('AF_AUTO_LOGIN', '', -1);
+		unset($_SESSION['AF_LOGIN_ID']);
+	}
+}
+
 if(__REQ_METHOD__ == 'JSON') {
 	$_POST = json_decode(file_get_contents('php://input'), TRUE);
 }

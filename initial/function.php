@@ -1,11 +1,10 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-	define('FOLLOW_REQUEST_SSL', 0);
+	require_once _AF_LIBS_PATH_ . 'parsedown/Parsedown.php';
 	define('ENFORCE_SSL', 1);
 	define('RELEASE_SSL', 2);
-
-	require_once _AF_LIBS_PATH_ . 'parsedown/Parsedown.php';
+	define('FOLLOW_REQUEST_SSL', 0);
 
 	function getUrlQuery() {
 		$qs = [];
@@ -43,20 +42,15 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getQuery($val) {
-		return getUrlQuery(getCurrentUrl(), $val);
+		return getUrlQuery(getUrl(), $val);
 	}
 
 	function setQuery() {
-		$a = array_merge([getCurrentUrl()], func_get_args());
+		$a = array_merge([getUrl()], func_get_args());
 		$u = call_user_func_array('setUrlQuery', $a);
 		$p = strpos($u, '?');
 		$q = ($p !== false) ? substr($u, $p+1) : '';
 		return $_SERVER["QUERY_STRING"] = $q;
-	}
-
-	function getCurrentUrl() {
-		return getUrl();
-		//return ($_SERVER['REQUEST_METHOD'] == 'GET') ? getUrl() : getRequestUri();
 	}
 
 	// XE getRequestUri 참고 https://www.xpressengine.com/
@@ -65,9 +59,10 @@ if(!defined('__AFOX__')) exit();
 
 		if(!isset($_SERVER['SERVER_PROTOCOL'])) return; // Check HTTP Request
 
-		if(_AF_USE_SSL_ == 'always')  $ssl_mode = ENFORCE_SSL;
-		$domain = (defined('_AF_DOMAIN_') && _AF_DOMAIN_) ? _AF_DOMAIN_ : null;
-		$domain_key = $domain ? md5($domain) : 'default';
+		if(_AF_USE_SSL_ == 'always') $ssl_mode = ENFORCE_SSL;
+
+		$domain = _AF_DOMAIN_ ? _AF_DOMAIN_ : $_SERVER['HTTP_HOST'];
+		$domain_key = md5($domain);
 
 		if(isset($url[$ssl_mode][$domain_key])) return $url[$ssl_mode][$domain_key];
 
@@ -79,12 +74,8 @@ if(!defined('__AFOX__')) exit();
 			case RELEASE_SSL: $use_ssl = 0; break;
 		}
 
-		if($domain) {
-			$target_url = trim($domain);
-			if(substr_compare($target_url, '/', -1) !== 0) $target_url.= '/';
-		} else {
-			$target_url = 'http://' . $_SERVER['HTTP_HOST'] . getScriptPath();
-		}
+		$target_url = 'http://' . $domain . getScriptPath();
+		if(substr_compare($target_url, '/', -1) !== 0) $target_url.= '/';
 
 		$url_info = parse_url($target_url);
 		if($current_use_ssl != $use_ssl) unset($url_info['port']);
@@ -98,7 +89,7 @@ if(!defined('__AFOX__')) exit();
 			unset($url_info['port']);
 		}
 
-		$url[$ssl_mode][$domain_key] = sprintf('%s://%s%s%s', $use_ssl ? 'https' : $url_info['scheme'], $url_info['host'], $url_info['port'] && $url_info['port'] != 80 ? ':' . $url_info['port'] : '', $url_info['path']);
+		$url[$ssl_mode][$domain_key] = sprintf('%s://%s%s%s', $use_ssl ? 'https' : $url_info['scheme'], $url_info['host'], $url_info['port'] ? ':' . $url_info['port'] : '', $url_info['path']);
 
 		return $url[$ssl_mode][$domain_key];
 	}
@@ -114,31 +105,21 @@ if(!defined('__AFOX__')) exit();
 
 	function getScriptPath() {
 		static $url = null;
-		if($url == null) $url = str_ireplace('/tools/', '/', preg_replace('/index.php$/i', '', str_replace('\\', '/', $_SERVER['SCRIPT_NAME'])));
+		if($url == null) $url = preg_replace('/index.php$/i', '', str_replace('\\', '/', $_SERVER['SCRIPT_NAME']));
 		return $url;
 	}
 
 	function getUrl() {
-		if(_AF_USE_SSL_ == 'always') { // If using SSL always
+		if(_AF_USE_SSL_ == 'always' || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')) { // If using SSL always
 			$uri = getRequestUri(ENFORCE_SSL);
 		} elseif(_AF_USE_SSL_ == 'optional') { // optional SSL use
-			$ssl_mode = __MODULE__ == 'admin' ? ENFORCE_SSL : RELEASE_SSL;
-			$uri = getRequestUri($ssl_mode);
+			$uri = getRequestUri(__MODULE__ == 'admin' || __MODULE__ == 'member' ? ENFORCE_SSL : RELEASE_SSL);
 		} else { // no SSL
-			if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') { // currently on SSL but target is not based on SSL
-				$uri = getRequestUri(ENFORCE_SSL);
-			} else if(defined('_AF_DOMAIN_') && _AF_DOMAIN_) { // if $domain is set
-				$uri = getRequestUri(FOLLOW_REQUEST_SSL);
-			} else {
-				$uri = getScriptPath();
-			}
+			$uri = _AF_DOMAIN_ ? getRequestUri(FOLLOW_REQUEST_SSL) : getScriptPath();
 		}
-
 		$n = func_num_args();
 		$a = func_get_args();
-
 		if($n == 1 && $a[0] == '') return $uri;
-
 		$url = $uri . ($_SERVER["QUERY_STRING"] ? '?' . $_SERVER["QUERY_STRING"] : '');
 		return $n > 0 ? call_user_func_array('setUrlQuery', array_merge([$url], $a)) : $url;
 	}
@@ -808,8 +789,54 @@ if(!defined('__AFOX__')) exit();
 		return 'BROWSER';
 	}
 
-	function addJS($src) { global $_ADDELEMENTS; $_ADDELEMENTS['JS'][$src] = 1; }
-	function addCSS($src) { global $_ADDELEMENTS; $_ADDELEMENTS['CSS'][$src] = 1; }
+	function addJS($src) {
+		global $_ADDELEMENTS;
+		$_ADDELEMENTS['JS'][$src] = 1;
+	}
+
+	function addCSS($src) {
+		global $_ADDELEMENTS;
+		$_ADDELEMENTS['CSS'][$src] = 1;
+	}
+
+	// set_cookie 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료된 쿠키로 만듬 (제거)
+	function set_cookie($_name, $value, $expire) {
+		$expire = $expire > 0 ? _AF_SERVER_TIME_ + $expire : (empty($expire) ? 0 : _AF_SERVER_TIME_);
+		setcookie(md5($_name), base64_encode($value), $expire, '/', _AF_COOKIE_DOMAIN_);
+	}
+
+	function get_cookie($_name) {
+		$cookie = md5($_name);
+		return array_key_exists($cookie, $_COOKIE) ? base64_decode($_COOKIE[$cookie]) : '';
+	}
+
+	function set_session($_name, $value) {
+		$_SESSION[$_name] = $value;
+	}
+
+	function get_session($_name) {
+		return isset($_SESSION[$_name]) ? $_SESSION[$_name] : '';
+	}
+
+	function set_error($message, $error = 3) {
+		return $_SESSION['AF_VALIDATOR_ERROR'] = ['error'=>$error, 'message'=>$message];
+	}
+
+	function get_error() {
+		return isset($_SESSION['AF_VALIDATOR_ERROR']) ? $_SESSION['AF_VALIDATOR_ERROR'] : '';
+	}
+
+	function debugPrint($_out = null) {
+		if(!(__DEBUG__ & 1)) return;
+		$print = [date('== Y-m-d H:i:s ==')];
+		$type = gettype($_out);
+		if(in_array($type, ['array', 'object', 'resource'])) {
+			$print[] = print_r($_out, true);
+		} else {
+			$print[] = $type . '(' . var_export($_out, true) . ')'.PHP_EOL;
+		}
+		file_put_contents(_AF_PATH_ . '_debug.php', implode(PHP_EOL, $print).PHP_EOL, FILE_APPEND|LOCK_EX);
+	}
 
 /* End of file function.php */
 /* Location: ./initial/function.php */

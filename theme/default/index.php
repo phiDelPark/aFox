@@ -6,7 +6,7 @@
 	$mainmenu = [];
 	$submenu = [];
 	if(empty($menus['error'])) {
-		$url = getCurrentUrl();
+		$url = getUrl();
 		foreach ($menus['header'] as $val) {
 			$is_active = !empty($val['md_id'])&&$val['md_id']==$_DATA['id']?'_ACTIVE_':$val['mu_srl'];
 			if($is_active!='_ACTIVE_' && !empty($val['mu_link']) && strpos($url, $val['mu_link'])!==false) {$is_active='_ACTIVE_';}

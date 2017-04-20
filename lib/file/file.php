@@ -5,10 +5,18 @@ function setHttpError($err, $back = false) {
 	header('HTTP/1.1 '.$err);
 	header("Connection: close");
 	if($back) {
-		set_error('HTTP/1.1 '.$err, 3);
+		$_SESSION['AF_VALIDATOR_ERROR'] = ['error'=>3,'message'=>'HTTP/1.1 '.$err];
 		header('Location: ' . $_SERVER['HTTP_REFERER']); // binary 는 뒤로 가기
 	}
 	exit;
+}
+function getLogin($f='mb_srl') {
+	$mbid = isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cookie('AF_LOGIN_ID');
+	if(!empty($mbid) && preg_match('/^[a-zA-Z]+\w{2,}$/', $mbid)) {
+		$mb = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$mbid}'");
+		if(!DB::error() && !empty($mb['mb_srl'])) return $mb[$f];
+	}
+	return '0';
 }
 if($_CFG['protect_file']=='1'&&!empty($_SERVER['HTTP_REFERER'])&& !preg_match('/^https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
 static $_file = [];
@@ -30,10 +38,9 @@ if(!isset($_file[$key])) {
 		$_file[$key]['point_download'] = (int)$module['point_download'];
 		$grant = $module['grant_download'];
 		if(!empty($grant)) {
-			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
-			if($rank > 115) return false; // s = 115 초과면 블럭 대상임
-			$_file[$key]['is_download'] = ord($grant) <= $rank; // 0 = 48, z = 122
-			if(!$_file[$key]['is_download']) setHttpError('401 Unauthorized', true);
+			$rank = ord(getLogin('mb_rank'));
+			$_file[$key]['is_download'] = ord($grant) <= $rank; // 0 = 48, z = 122 // s = 115 초과면 블럭 대상임
+			if($rank > 115 || !$_file[$key]['is_download']) setHttpError('401 Unauthorized', true);
 		}
 	} else if($thumb&&$_file[$key]['type']=='image') {
 		if(!file_exists($_file[$key]['path'])) {
@@ -82,7 +89,7 @@ if(!empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])){
 // 다운로드 조회를 위해 기록 // setHistoryAction() 함수 안불러서 작성
 if($_file[$key]['type']=='binary'){
 	$point = $_file[$key]['point_download'];
-	$mb_srl = empty($_MEMBER)?0:(int)$_MEMBER['mb_srl'];
+	$mb_srl = (int)getLogin('mb_srl');
 	if(empty($mb_srl) && $point < 0) setHttpError('401 Unauthorized', true); // -값은 비회원 불가
 	$act = 'mf_download';
 	$uinfo = ['mb_srl'=>$mb_srl,'ipaddress'=>$_SERVER['REMOTE_ADDR']];

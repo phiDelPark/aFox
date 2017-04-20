@@ -24,11 +24,12 @@ aFox는 여러분들의 개발 참여를 기다립니다.
 ## 사용 라이브러리
 * jQuery
 * Bootstrap
-* Font Awesome
-* Secure Password Storage
 * Parsedown
 
-## 지원
+## 지원 라이브러리
+* Font Awesome
+
+## 홈페이지
 * Official site (Korean) : http://www.afox.kr/
 
 ## 라이선스
