@@ -14,7 +14,7 @@
 	<div class="bs-popup-body">
 		<section>
 			<article>
-			<?php echo dispModuleContent()?>
+			<?php displayModule()?>
 			</article>
 		</section>
 	</div>

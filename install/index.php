@@ -39,6 +39,10 @@ if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 
 if(empty($_POST['db_name'])) {
 
+	if(version_compare(PHP_VERSION, '5.5.0', '<')) {
+		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 5.5.0 이상 버전을 사용해주세요. </h3>';
+	}
+
 	echo '<h3>에이폭스 CMS 설치</h3><form action="index.php" method="post" autocomplete="off">';
 	echo '<strong style="display:inline-block;width:150px">DB 호스트*</strong> : <input type="text" name="db_host" value="localhost"><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 포트*</strong> : <input type="text" name="db_port" value="3306"><br>';
@@ -118,11 +122,11 @@ if($is_innodb){
 	// 단, 루트 사용자는 동적 설정이 가능하다.
 	@mysqli_query($link, "SET GLOBAL innodb_file_format=Barracuda");
 	@mysqli_query($link, "SET GLOBAL innodb_file_per_table=ON");
-    if($innodb_option==='') {
-       $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPACT DEFAULT CHARSET='.$charset.';';
-    } else {
-       $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE='.($innodb_option?'16':'8').' DEFAULT CHARSET='.$charset.';';
-    }
+	if($innodb_option==='') {
+	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPACT DEFAULT CHARSET='.$charset.';';
+	} else {
+	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE='.($innodb_option?'16':'8').' DEFAULT CHARSET='.$charset.';';
+	}
 } else {
 	$_engine = ' ENGINE=MyISAM DEFAULT CHARSET='.$charset.';';
 }

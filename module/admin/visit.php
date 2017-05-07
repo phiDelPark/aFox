@@ -23,7 +23,7 @@
 	$start_page = $current_page = 1;
 
 	if(!empty($vs_list['error'])) {
-		echo showMessage($vs_list['message'], $vs_list['error'], false);
+		echo messageBox($vs_list['message'], $vs_list['error'], false);
 	} else {
 		$current_page = $vs_list['current_page'];
 		$total_page = $vs_list['total_page'];

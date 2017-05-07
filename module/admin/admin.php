@@ -110,7 +110,7 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 				<!-- /.row -->
 
 				<?php
-					if(is_array($err = get_error())) echo showMessage($err['message'], $err['error'], false);
+					if(is_array($err = get_error())) echo messageBox($err['message'], $err['error'], false);
 					require_once _AF_ADMIN_PATH_ . $admin . '.php';
 				?>
 

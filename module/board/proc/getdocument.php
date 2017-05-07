@@ -23,7 +23,7 @@ function proc($data) {
 			if(empty($data['mb_password'])) {
 				return set_error(getLang('request_input', ['password']));
 			}
-			if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
+			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
 				return set_error(getLang('error_password'),4801);
 			}
 		} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {

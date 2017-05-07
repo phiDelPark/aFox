@@ -83,7 +83,7 @@ function proc($data) {
 			}
 			$data['mb_srl'] = 0;
 			$data['mb_rank'] = 0;
-			$encrypt_password = encryptString($data['mb_password']);
+			$encrypt_password = createHash($data['mb_password']);
 		} else {
 			$data['mb_srl'] = $_MEMBER['mb_srl'];
 			$data['mb_rank'] = $_MEMBER['mb_rank'];
@@ -140,7 +140,7 @@ function proc($data) {
 		} else {
 			// 권한 체크
 			if(empty($_MEMBER)) {
-				if(empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
+				if(empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
 					throw new Exception(getLang('error_permit'),4501);
 				}
 			} else if(!isManager($module['md_id'])) {

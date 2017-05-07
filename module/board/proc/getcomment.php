@@ -27,7 +27,7 @@ function proc($data) {
 			if(empty($data['mb_password'])) {
 				return set_error(getLang('request_input', ['password']));
 			}
-			if (empty($cmt['mb_password']) || !verifyEncrypt($data['mb_password'], $cmt['mb_password'])) {
+			if (empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
 				return set_error(getLang('error_permit'),4501);
 			}
 		} else if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {

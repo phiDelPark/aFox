@@ -30,7 +30,7 @@ function proc($data) {
 					return set_error(getLang('error_permit'),4501);
 				} else if(empty($data['mb_password'])) {
 					return set_error(sprintf($input_password, getLang('request_input', ['password'])), 1);
-				} else if (!verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
+				} else if (!checkPassword($data['mb_password'], $doc['mb_password'])) {
 					return set_error(sprintf($input_password, getLang('error_password')), 4801);
 				}
 

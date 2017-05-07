@@ -27,7 +27,7 @@ function proc($data) {
 			if(empty($data['mb_password'])) {
 				throw new Exception(getLang('request_input', ['password']), 3);
 			}
-			if (empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
+			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
 				throw new Exception(getLang('error_permit'),4501);
 			}
 		} else if(!isManager($doc['md_id'])) {

@@ -30,7 +30,7 @@ function proc($data) {
 		if($data['new_mb_password'] !== $data['verify_mb_password']) {
 			return set_error(getLang('msg_diff_password'),503);
 		}
-		$new_password = encryptString($data['new_mb_password']);
+		$new_password = createHash($data['new_mb_password']);
 	} else {
 		$new_password = false;
 	}

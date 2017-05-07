@@ -67,7 +67,7 @@
 					$istool = [];
 					if(empty($_CFG['use_type'])) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
 					if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [$issecret,'Secret'];
-					dispEditor(
+					displayEditor(
 						'wr_content', $is?$_{'board'}['wr_content']:'',
 						[
 							'file'=>array($_CFG['md_file_max'], $_DATA['id'], $is?$_{'board'}['wr_srl']:0),

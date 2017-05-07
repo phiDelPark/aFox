@@ -30,7 +30,7 @@
 	$rank_arr = ['61'=>getLang('manager'),'67'=>getLang('admin')];
 
 	if(!empty($member_list['error'])) {
-		echo showMessage($member_list['message'], $member_list['error'], false);
+		echo messageBox($member_list['message'], $member_list['error'], false);
 	} else {
 		$current_page = $member_list['current_page'];
 		$total_page = $member_list['total_page'];

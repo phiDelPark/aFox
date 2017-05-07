@@ -75,7 +75,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 						if(empty($_CFG['use_type'])) $istool['rp_type'] = ['1', ['MKDW'=>'1','HTML'=>'2']];
 						if(empty($_CFG['use_secret'])) $istool['rp_secret'] = [false,'Secret'];
 
-						dispEditor(
+						displayEditor(
 							'rp_content', '',
 							[
 								'required'=>getLang('request_input', ['content']),

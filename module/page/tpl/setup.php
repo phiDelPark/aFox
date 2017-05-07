@@ -29,7 +29,7 @@
 			</div>
 			<div class="form-group">
 				<?php
-					dispEditor(
+					displayEditor(
 						'pg_content', $_{'page'}['pg_content'],
 						[
 							'file'=>[9000, $_DATA['id'], 1],

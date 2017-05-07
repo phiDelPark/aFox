@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 
 $menus = getSiteMenu();
-if (!empty($menus['error'])) echo showMessage($menus['message'],$menus['error'], false);
+if (!empty($menus['error'])) echo messageBox($menus['message'],$menus['error'], false);
 ?>
 
 <link rel="stylesheet" href="<?php echo _AF_URL_ ?>module/admin/sitemap/sitemap.css">

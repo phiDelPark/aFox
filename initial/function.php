@@ -252,33 +252,6 @@ if(!defined('__AFOX__')) exit();
 		return $filelist[$id];
 	}
 
-	function getCache($key) {
-		$file = _AF_CACHE_DATA_. md5($key). '.php';
-		if(file_exists($file)){
-			include($file);
-			if(!empty($_CACHE_EXPIRE) && $_CACHE_EXPIRE < _AF_SERVER_TIME_) {
-				@unlinkFile($file);
-				return false;
-			}
-			return $_CACHE_DATA;
-		} else return false;
-	}
-
-	// $expire = 0 유지 - 값이면 삭제
-	function setCache($key, $value, $expire = 0) {
-		$file = _AF_CACHE_DATA_. md5($key). '.php';
-		if(file_exists($file)) @unlinkFile($file);
-		if($expire < 0) {
-			@unlinkFile($file);
-		} else {
-			$dir = dirname($file);
-			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
-			$expire = $expire > 0 ? _AF_SERVER_TIME_ + $expire : 0;
-			$str = '<?php if(!defined(\'__AFOX__\')) exit(); $_CACHE_EXPIRE='.$expire.'; $_CACHE_DATA='.var_export($value, true).'; ?>';
-			file_put_contents($file, $str, LOCK_EX);
-		}
-	}
-
 	function setHistoryAction($act, $value, $allowdup = false, $callback = null) {
 		global $_MEMBER;
 
@@ -384,77 +357,6 @@ if(!defined('__AFOX__')) exit();
 			'nt_content'=>xssClean($msg),
 			'(nt_send_date)'=>'NOW()'
 		]);
-	}
-
-	function dispEditor($name, $content, $options = []) {
-		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
-	}
-
-	function dispModuleContent() {
-		if(!__MODULE__) return;
-		global $_CFG;
-		global $_DATA;
-		global $_MEMBER;
-
-		$triggercall = 'disp'.__MODULE__.($_DATA['disp']?$_DATA['disp']:'Default');
-
-		if(function_exists('disp'.ucwords(__MODULE__).'Default')) {
-			$_result = triggerCall($triggercall, 'before', $_DATA);
-			if(!$_result) {
-				$_result = call_user_func('disp'.ucwords(__MODULE__).'Default', $_DATA);
-				triggerCall($triggercall, 'after', $_result);
-			}
-		} else {
-			$_result = set_error(getLang('error_request'),4303);
-		}
-
-		if(!empty($_result['error'])) {
-			if($_result['error'] == 88088 && empty($_MEMBER)) {
-				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
-			} else {
-				echo showMessage($_result['message'], $_result['error']);
-			}
-		} else {
-			$_{__MODULE__} = $_result;
-			unset($_result);
-			unset($triggercall);
-			// 테마에 스킨(tpl)이 있으면 사용
-			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
-			$tpl_file = (empty($_{__MODULE__}['tpl'])?'default':$_{__MODULE__}['tpl']).'.php';
-			if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
-			include $tpl_path . $tpl_file;
-		}
-	}
-
-	function printWidget($text){
-		static $call = null;
-
-		if($call == null) {
-			$call =	function($include_file, $_WIDGET) {
-				ob_start();
-				include $include_file;
-				return ob_get_clean();
-			};
-		}
-
-		return preg_replace_callback('/<img[^>]*class="afox_widget"\s*([^>]*)>/is',  function($m)use($call){
-			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)) {
-				$attrs = [];
-				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
-				if(!empty($attrs['widget'])){
-					// 테마에 스킨(tpl)이 있으면 사용하려 했으나 위젯은 스타일 설정하기가 쉽고 큰 비중이없어 안함
-					// $include_file = _AF_THEME_PATH_ . 'widget/'.$attrs['widget'].'.php';
-					// if(!file_exists($include_file))
-					$include_file = _AF_WIDGETS_PATH_ . $attrs['widget'].'/index.php';
-					if(file_exists($include_file)) {
-						return $call($include_file, $attrs);
-					} else {
-						return showMessage(getLang('error_founded'), 4201, false);
-					}
-				}
-			}
-			return '';
-		}, $text);
 	}
 
 	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
@@ -628,7 +530,11 @@ if(!defined('__AFOX__')) exit();
 		exit;
 	}
 
-	function verifyEncrypt($password, $hash) {
+	function createHash($password) {
+		return password_hash(trim($password), PASSWORD_BCRYPT);
+	}
+
+	function checkPassword($password, $hash) {
 		try {
 			return password_verify($password, $hash);
 		} catch (InvalidHashException $ex) {
@@ -636,10 +542,6 @@ if(!defined('__AFOX__')) exit();
 		} catch (CannotPerformOperationException $ex) {
 			exit($ex->getMessage());
 		}
-	}
-
-	function encryptString($str) {
-		return password_hash($str, PASSWORD_BCRYPT);
 	}
 
 	function escapeMKDW($str, $is_strip_tags = false) {
@@ -711,7 +613,7 @@ if(!defined('__AFOX__')) exit();
 		return $html;
 	}
 
-	function toHTML($type, $text, $class='current_content') {
+	function toHTML($type, $text, $widget=true, $class='current_content') {
 		global $_DATA;
 		static $parsedown = null;
 
@@ -737,6 +639,79 @@ if(!defined('__AFOX__')) exit();
 		}
 
 		return '<div class="'.$class.'">'.$text.'</div>';
+	}
+
+	function displayEditor($name, $content, $options = []) {
+		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
+	}
+
+	function displayModule() {
+		if(!__MODULE__) return;
+		global $_CFG;
+		global $_DATA;
+		global $_MEMBER;
+
+		$triggercall = 'disp'.__MODULE__.($_DATA['disp']?$_DATA['disp']:'Default');
+
+		if(function_exists('disp'.ucwords(__MODULE__).'Default')) {
+			$_result = triggerCall($triggercall, 'before', $_DATA);
+			if(!$_result) {
+				$_result = call_user_func('disp'.ucwords(__MODULE__).'Default', $_DATA);
+				triggerCall($triggercall, 'after', $_result);
+			}
+		} else {
+			$_result = set_error(getLang('error_request'),4303);
+		}
+
+		if(!empty($_result['error'])) {
+			if($_result['error'] == 88088 && empty($_MEMBER)) {
+				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
+			} else {
+				echo messageBox($_result['message'], $_result['error']);
+			}
+		} else {
+			$_{__MODULE__} = $_result;
+			unset($_result);
+			unset($triggercall);
+			// 테마에 스킨(tpl)이 있으면 사용
+			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
+			$tpl_file = (empty($_{__MODULE__}['tpl'])?'default':$_{__MODULE__}['tpl']).'.php';
+			if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
+			include $tpl_path . $tpl_file;
+		}
+	}
+
+	function printWidget($text){
+		static $call = null;
+
+		if($call == null) {
+			$call =	function($include_file, $_WIDGET) {
+				ob_start();
+				include $include_file;
+				return ob_get_clean();
+			};
+		}
+
+		echo preg_replace_callback('/<img[^>]*class="afox_widget"\s*([^>]*)>/is',  function($m)use($call){
+			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)) {
+				$attrs = [];
+				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
+				if(!empty($attrs['widget'])){
+					// 테마에 스킨(tpl)이 있으면 사용하려 했으나 위젯은 스타일 설정하기가 쉽고 큰 비중이없어 안함
+					// $include_file = _AF_THEME_PATH_ . 'widget/'.$attrs['widget'].'.php';
+					// if(!file_exists($include_file))
+					$include_file = _AF_WIDGETS_PATH_ . $attrs['widget'].'/index.php';
+					if(file_exists($include_file)) {
+						return $call($include_file, $attrs);
+					} else {
+						return messageBox(getLang('error_founded'), 4201, $attrs['widget']);
+					}
+				}
+			}
+			return '';
+		}, $text);
+
+		return;
 	}
 
 	function cutstr($str, $length, $tail = '...') {
@@ -767,7 +742,7 @@ if(!defined('__AFOX__')) exit();
 		return $size.$tail;
 	}
 
-	function showMessage($message, $type = 0, $title = '') {
+	function messageBox($message, $type = 0, $title = '') {
 		$type = ($type > 4000) ? 3 : ($type > 3 ? 2 : $type);
 		$a_type = ['success', 'info', 'warning', 'danger'];
 		// 타이틀 값에 false 가 들어오면 타이틀바 제거
@@ -797,6 +772,33 @@ if(!defined('__AFOX__')) exit();
 	function addCSS($src) {
 		global $_ADDELEMENTS;
 		$_ADDELEMENTS['CSS'][$src] = 1;
+	}
+
+	function getCache($key) {
+		$file = _AF_CACHE_DATA_. md5($key). '.php';
+		if(file_exists($file)){
+			include($file);
+			if(!empty($_CACHE_EXPIRE) && $_CACHE_EXPIRE < _AF_SERVER_TIME_) {
+				@unlinkFile($file);
+				return false;
+			}
+			return $_CACHE_DATA;
+		} else return false;
+	}
+
+	// $expire = 0 유지 - 값이면 삭제
+	function setCache($key, $value, $expire = 0) {
+		$file = _AF_CACHE_DATA_. md5($key). '.php';
+		if(file_exists($file)) @unlinkFile($file);
+		if($expire < 0) {
+			@unlinkFile($file);
+		} else {
+			$dir = dirname($file);
+			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
+			$expire = $expire > 0 ? _AF_SERVER_TIME_ + $expire : 0;
+			$str = '<?php if(!defined(\'__AFOX__\')) exit(); $_CACHE_EXPIRE='.$expire.'; $_CACHE_DATA='.var_export($value, true).'; ?>';
+			file_put_contents($file, $str, LOCK_EX);
+		}
 	}
 
 	// set_cookie 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료된 쿠키로 만듬 (제거)

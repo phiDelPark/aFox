@@ -1,12 +1,16 @@
 <?php
 if(!defined('__AFOX__')) exit();
-define('_AF_VERSION_', '0.6.0');
-define('_AF_SERVER_TIME_', time());
 
 define('__DEBUG__', 0);
+
+/*** SSL 설정 ***/
 define('_AF_USE_SSL_', 0); // 1 = always, 2 = optional
 define('_AF_HTTP_PORT_', 80);
 define('_AF_HTTPS_PORT_', 443);
+/**************/
+
+define('_AF_VERSION_', '0.7.0');
+define('_AF_SERVER_TIME_', time());
 
 define('_AF_CONFIG_TABLE_', 'afox_config');
 define('_AF_MEMBER_TABLE_', 'afox_members');

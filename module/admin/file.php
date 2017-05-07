@@ -24,7 +24,7 @@
 	$start_page = $current_page = 1;
 
 	if(!empty($file_list['error'])) {
-		echo showMessage($file_list['message'], $file_list['error'], false);
+		echo messageBox($file_list['message'], $file_list['error'], false);
 	} else {
 		$current_page = $file_list['current_page'];
 		$total_page = $file_list['total_page'];

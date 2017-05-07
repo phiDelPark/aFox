@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 $is_manager = isManager($_DATA['id']);
 
-echo printWidget(toHTML($_{'page'}['pg_type'], $_{'page'}['pg_content']));
+printWidget(toHTML($_{'page'}['pg_type'], $_{'page'}['pg_content']));
 ?>
 
 <?php if($is_manager) { ?>

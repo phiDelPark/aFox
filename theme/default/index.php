@@ -82,12 +82,7 @@
 			<?php } ?>
 			<span>
 			<?php
-				$_icon = $_MEMBER['mb_srl'].'/profile_image.png';
-				if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
-					$_icon = _AF_URL_ . 'data/member/' . $_icon;
-				} else {
-					$_icon = _AF_URL_ .'module/board/tpl/user_default.jpg';
-				}
+				$_icon = _AF_URL_ . (empty($_MEMBER['mb_icon']) ? 'module/board/tpl/user_default.jpg' : 'data/member/' . $_MEMBER['mb_srl'].'/profile_image.png');
 			?>
 				<a href="#" class="dropdown-toggle login-icon" data-toggle="dropdown"><img src="<?php echo $_icon ?>" alt="<?php echo escapeHtml($_MEMBER['mb_nick'])?>" /></a>
 				<ul class="dropdown-menu dropdown-menu-right">
@@ -219,7 +214,7 @@
 		<section>
 <?php } ?>
 			<article>
-			<?php echo dispModuleContent()?>
+			<?php displayModule()?>
 			</article>
 		</section>
 	</div>

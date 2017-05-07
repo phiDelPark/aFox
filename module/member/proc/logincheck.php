@@ -22,7 +22,7 @@ function proc($data) {
 	$mb = DB::get($sql, [$mb_id]);
 	if($ex = DB::error()) return set_error($ex->getMessage(),$ex->getCode());
 
-	if(empty($mb['mb_srl']) || !verifyEncrypt($mb_password, $mb['mb_password'])) {
+	if(empty($mb['mb_srl']) || !checkPassword($mb_password, $mb['mb_password'])) {
 		return set_error(getLang('msg_wrong_password'),4601);
 	}
 

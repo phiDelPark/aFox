@@ -100,7 +100,7 @@ function proc($data) {
 			}
 			$data['mb_srl'] = 0;
 			$data['mb_rank'] = 0;
-			$encrypt_password = encryptString($data['mb_password']);
+			$encrypt_password = createHash($data['mb_password']);
 		} else {
 			$data['mb_srl'] = $_MEMBER['mb_srl'];
 			$data['mb_rank'] = $_MEMBER['mb_rank'];
@@ -143,7 +143,7 @@ function proc($data) {
 
 		} else {
 			if(empty($_MEMBER)) {
-				if(empty($doc['mb_password']) || !verifyEncrypt($data['mb_password'], $doc['mb_password'])) {
+				if(empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
 					throw new Exception(getLang('error_permit'),4501);
 				}
 			} else if(!isManager($md_id)) {
