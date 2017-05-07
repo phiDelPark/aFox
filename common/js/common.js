@@ -415,6 +415,17 @@ var $_LANG = [];
 			e.preventDefault();
 			$(this).find('input:file').click();
 		}
+	}).on('fileupload:repair', '.fileupload-group', function(e) {
+		var $g = $(this),
+			$i = $g.find('input:hidden'),
+			$c = $g.find('.file-caption'),
+			plac = $g.attr('placeholder') || '';
+		if (!$c.find('.file-item').length && plac) $c.text(plac);
+		if ($c[0] && !$c[0].hasAttribute('tabindex')) $c.attr('tabindex', '0');
+		if ($i[0] && !$i[0].hasAttribute('tabindex')) {
+			$i.parent().attr('tabindex', '0');
+			$i.attr('tabindex', '-1');
+		}
 	});
 
 
@@ -441,6 +452,15 @@ var $_LANG = [];
 			e.preventDefault();
 			$(this).click();
 		}
+	}).on('radio:repair', '.radio-group', function(e) {
+		var $g = $(this),
+			$i = $g.find('input:hidden'),
+			v = $i.val();
+		$g.find('.radio').each(function() {
+			$(this).removeClass('active');
+			if (!this.hasAttribute('tabindex')) $(this).attr('tabindex', '0');
+		});
+		$g.find('.radio[data-value="' + v + '"]').addClass('active');
 	});
 
 
@@ -480,6 +500,12 @@ var $_LANG = [];
 			e.preventDefault();
 			$(this).click();
 		}
+	}).on('switch:repair', '.switch-group', function(e) {
+		var $g = $(this),
+			$i = $g.find('input:hidden'),
+			von = $g.find('.switch-handle-on').attr('data-value') || 1;
+		$g.removeClass('on').addClass(($i.val() || 0) == von ? 'on' : '');
+		if (!$g[0].hasAttribute('tabindex')) $g.attr('tabindex', '0');
 	});
 
 	// 글자 수를 byte로 체크하기 위해
@@ -500,35 +526,10 @@ var $_LANG = [];
 
 	// ... load
 	$(window).on('load', function() {
-		$('.fileupload-group input:file').each(function() {
-			var $i = $(this),
-				$g = $i.closest('.fileupload-group'),
-				$c = $g.find('.file-caption'),
-				plac = $g.attr('placeholder') || '';
-			if (!$c.find('.file-item').length && plac) $c.text(plac);
-			if (!$c[0].hasAttribute('tabindex')) $c.attr('tabindex', '0');
-			if (!$i[0].hasAttribute('tabindex')) {
-				$i.parent().attr('tabindex', '0');
-				$i.attr('tabindex', '-1');
-			}
-		});
-		$('.radio-group input:hidden').each(function() {
-			var $i = $(this),
-				$g = $i.closest('.radio-group'),
-				v = $i.val();
-			$g.find('.radio').each(function() {
-				$(this).removeClass('active');
-				if (!this.hasAttribute('tabindex')) $(this).attr('tabindex', '0');
-			});
-			$g.find('.radio[data-value="' + v + '"]').addClass('active');
-		});
-		$('.switch-group input:hidden').each(function() {
-			var $i = $(this),
-				$g = $i.closest('.switch-group'),
-				von = $g.find('.switch-handle-on').attr('data-value') || 1;
-			$g.removeClass('on').addClass(($i.val() || 0) == von ? 'on' : '');
-			if (!$g[0].hasAttribute('tabindex')) $g.attr('tabindex', '0');
-		});
+		// aFox의 사용자 엘리먼트 값에 맞게 수정
+		$('.radio-group').trigger('radio:repair');
+		$('.switch-group').trigger('switch:repair');
+		$('.fileupload-group').trigger('fileupload:repair');
 	});
 
 })(jQuery);
