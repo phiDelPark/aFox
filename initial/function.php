@@ -613,7 +613,7 @@ if(!defined('__AFOX__')) exit();
 		return $html;
 	}
 
-	function toHTML($type, $text, $widget=true, $class='current_content') {
+	function toHTML($type, $text, $class='current_content') {
 		global $_DATA;
 		static $parsedown = null;
 

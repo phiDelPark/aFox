@@ -30,7 +30,7 @@
 					break;
 			}
 
-			pasteTxtWithSel(text, '', $i);
+			pasteTxtWithSel(text, '', '', $i);
 			$i.focus();
 		} else {
 
@@ -55,12 +55,12 @@
 					break;
 			}
 
-			pasteTxtWithSel(text, '', $i);
+			pasteTxtWithSel(text, '', '', $i);
 			$i.contents().find('body').focus();
 		}
 	}
 
-	function pasteTxtWithSel(sTxt, eTxt, $i) {
+	function pasteTxtWithSel(sTxt, eTxt, defTxt, $i) {
 		var range;
 
 		if ($i[0].tagName == 'TEXTAREA') {
@@ -71,7 +71,7 @@
 				txtBefore = v.substring(0, startPos),
 				txtAfter = v.substring(startPos + (endPos - startPos), v.length),
 				selTxt = v.substring(startPos, endPos);
-			$i.val(txtBefore + sTxt + selTxt + eTxt + txtAfter);
+			$i.val(txtBefore + sTxt + (selTxt ? selTxt : defTxt) + eTxt + txtAfter);
 
 			endPos = endPos + sTxt.length + eTxt.length;
 			if ($i[0].setSelectionRange) {
@@ -102,12 +102,12 @@
 					}
 				}
 				if (isie) {
-					sel.pasteHTML(sTxt + sel.text + eTxt);
+					sel.pasteHTML(sTxt + (sel.text ? sel.text : defTxt) + eTxt);
 				} else if (sel.getRangeAt && sel.rangeCount) {
 					range = sel.getRangeAt(0);
 					var el = w.document.createElement("div");
 					el.appendChild(range.cloneContents());
-					el = $(sTxt + el.innerHTML + eTxt)[0];
+					el = $(sTxt + (el.innerText ? el.innerText : defTxt) + eTxt)[0];
 					range.deleteContents();
 					range.insertNode(el);
 				}
@@ -125,7 +125,8 @@
 
 	function textareaExecCmd(cmd, val, $i) {
 		var sTxt = '',
-			eTxt = '';
+			eTxt = '',
+			defTxt = '';
 
 		switch (cmd) {
 			case 'bold':
@@ -149,6 +150,7 @@
 				break;
 			case 'indent':
 				sTxt = "\n" + '> ';
+				eTxt = '';
 				break;
 			case 'codeblock':
 				sTxt = "\n" + '```' + "\n";
@@ -159,13 +161,14 @@
 				eTxt = '';
 				break;
 			case 'video':
-				sTxt = '[youtube](' + val + ')';
+				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(\?t=|\&t=)?([^\?\&]*)/i;
+				sTxt = '<img class="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/0.jpg\" data-vid=\"$4\" data-pos=\"$6") + '">' + "\n";
 				eTxt = '';
 				break;
 		}
 
 		if (sTxt || eTxt) {
-			pasteTxtWithSel(sTxt, eTxt, $i);
+			pasteTxtWithSel(sTxt, eTxt, defTxt, $i);
 		}
 
 		$i.focus();
@@ -187,30 +190,28 @@
 			case 'header':
 				sTxt = '<h3>';
 				eTxt = '</h3>';
-				pasteTxtWithSel(sTxt, eTxt, $i);
+				pasteTxtWithSel(sTxt, eTxt, '&nbsp;', $i);
 				break;
 			case 'indent':
 				sTxt = '<blockquote>';
 				eTxt = '</blockquote>';
-				pasteTxtWithSel(sTxt, eTxt, $i);
+				pasteTxtWithSel(sTxt, eTxt, '&nbsp;', $i);
 				break;
 			case 'codeblock':
 				sTxt = '<pre><code>';
 				eTxt = '</code></pre>';
-				pasteTxtWithSel(sTxt, eTxt, $i);
+				pasteTxtWithSel(sTxt, eTxt, '&nbsp;', $i);
 				break;
 			case 'link':
-				sTxt = '<a href="' + val + '" target="_blank">' + val + '</a>';
-				eTxt = '';
-				pasteTxtWithSel(sTxt, eTxt, $i);
+				sTxt = '<a href="' + val + '" target="_blank">';
+				eTxt = '</a>';
+				pasteTxtWithSel(sTxt, eTxt, val, $i);
 				break;
 			case 'video':
-				// 보안을 위해 iframe 사용 금지 (미디어 관리자 에드온을 사용하자)
-				//var pattern = /(https?:\/\/[a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([a-zA-Z0-9]+)/i;
-				//sTxt = '<iframe src="' + val.replace(pattern, "https://www.youtube.com/embed/$4") + '" frameborder="0" allowfullscreen></iframe>';
-				sTxt = '<div>[youtube](' + val.escapeHtml() + ')</div>';
+				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(\?t=|\&t=)?([^\?\&]*)/i;
+				sTxt = '<img class="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/0.jpg\" data-vid=\"$4\" data-pos=\"$6") + '">';
 				eTxt = '';
-				pasteTxtWithSel(sTxt, eTxt, $i);
+				pasteTxtWithSel(sTxt, eTxt, '', $i);
 				break;
 		}
 

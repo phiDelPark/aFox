@@ -154,7 +154,11 @@
 					parent.location.replace(data['redirect_url']);
 				}
 				$f.attr('data-exec-ajax', 'admin.update'+key.toUcFirst()+'Config');
-				if(typeof(data['tpl']) != 'undefined') $p.html(data['tpl']);
+				if(typeof(data['tpl']) != 'undefined') {
+					$p.html(data['tpl']);
+					$p.find('.radio-group').trigger('radio:repair');
+					$p.find('.switch-group').trigger('switch:repair');
+				}
 			});
 
 		$(document).trigger($.Event('submit', { target: $f[0] }));
