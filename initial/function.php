@@ -497,13 +497,12 @@ if(!defined('__AFOX__')) exit();
 
 	// 권한 체크
 	function isManager($md_id) {
-		if(empty($md_id)) return false;
-
 		global $_MEMBER;
 		static $is_manager = [];
 
-		// 최고 관리자 제외
-		if(!empty($_MEMBER['mb_srl']) && $_MEMBER['mb_rank'] == 's') return true;
+		if(empty($md_id) || empty($_MEMBER['mb_srl'])) return false;
+		// 최고 관리자와 매니저면 true
+		if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
 
 		if(!isset($is_manager[$md_id])) {
 			$module = getModule($md_id);
@@ -511,11 +510,7 @@ if(!defined('__AFOX__')) exit();
 			$is_manager[$md_id] = $module['md_manager'];
 		}
 
-		if(empty($is_manager[$md_id])) {
-			return false;
-		} else {
-			return !empty($_MEMBER['mb_srl']) && ($is_manager[$md_id] == $_MEMBER['mb_srl']);
-		}
+		return !empty($is_manager[$md_id]) && $is_manager[$md_id] == $_MEMBER['mb_srl'];
 	}
 
 	function goUrl($url, $msg='') {

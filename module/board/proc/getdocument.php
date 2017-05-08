@@ -31,11 +31,18 @@ function proc($data) {
 		}
 	}
 
-	$responses = $data['response_tags'];
-	if(!empty($responses) && count($responses) > 0) {
+	$response_tags = $data['response_tags'];
+	if(!empty($response_tags) && count($response_tags) > 0) {
+		// 요청값이 있으면 요청값만 보냄
+		$response_vals = ['md_id'=>$doc['md_id'],'wr_srl'=>$doc['wr_srl']];
 		// 요청값이 mb_password이면 권한만 체크
-		if(count($responses) === 1 && $responses[0] === 'mb_password') {
-			return ['wr_srl', $data['wr_srl']];
+		if(count($response_tags) === 1 && $response_tags[0] === 'mb_password') {
+			return $response_vals;
+		} else {
+			foreach ($response_tags as $value) {
+				$response_vals[$value] = $doc[$value];
+			}
+			$doc = $response_vals;
 		}
 	}
 
