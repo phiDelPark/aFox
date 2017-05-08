@@ -1,7 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
 ?>
-<hr>
 
 <div class="form-group">
 	<div class="switch-group">

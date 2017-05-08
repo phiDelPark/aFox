@@ -111,9 +111,10 @@ $tmp = (__MOBILE__?'use_mobile':'use_pc').'=1';
 $tmp_arr = DB::query('SELECT ao_id,ao_extra FROM '._AF_ADDON_TABLE_.' WHERE '.$tmp);
 if(!DB::error()) {
 	while ($tmp = DB::assoc($tmp_arr)) {
-		$_ADDONS[$tmp['ao_id']] = $tmp['ao_extra']; // unserialize는 필요할때 하기로... // TODO 캐시 처리 필요할까?
+		$_ADDONS[$tmp['ao_id']] = $tmp['ao_extra']; // unserialize는 필요할때 하기로...
 	}
 }
+
 $_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
 $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
 

@@ -20,7 +20,7 @@ function returnUrlMerge($data, $result) {
 }
 
 function procAdminDefault($data) {
-	$include_file = dirname(__FILE__) . '/proc/'.strtolower($data['act']).'.php';
+	$include_file = _AF_MODULES_PATH_ . 'admin/proc/'.strtolower($data['act']).'.php';
 
 	if(file_exists($include_file)) {
 		require_once $include_file;

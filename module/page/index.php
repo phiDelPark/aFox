@@ -14,7 +14,7 @@ function returnUrlMerge($data, $result) {
 }
 
 function procPageDefault($data) {
-	$include_file = dirname(__FILE__) . '/proc/'.strtolower($data['act']).'.php';
+	$include_file = _AF_MODULES_PATH_ . 'page/proc/'.strtolower($data['act']).'.php';
 
 	if(file_exists($include_file)) {
 		require_once $include_file;
@@ -25,7 +25,7 @@ function procPageDefault($data) {
 }
 
 function dispPageDefault($data) {
-	$dir = dirname(__FILE__) . '/disp/';
+	$dir = _AF_MODULES_PATH_ . 'page/disp/';
 	$result = [];
 
 	if($data['disp']) {

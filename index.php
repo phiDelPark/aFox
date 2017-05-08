@@ -14,14 +14,13 @@ require_once dirname(__FILE__) . '/initial/common.php';
 
 if(__MODULE__ && !empty($_DATA['act'])) {
 
-	$triggercall = 'proc'.__MODULE__.$_DATA['act'];
 	$callproc = 'proc'.ucwords(__MODULE__).'Default';
 
 	if(function_exists($callproc)) {
-		$_result = triggerCall($triggercall, 'before', $_DATA);
+		$_result = triggerCall('before', 'proc', $_DATA['act'], $_DATA);
 		if(empty($_result['error'])) {
 			$_result = call_user_func($callproc, $_DATA);
-			triggerCall($triggercall, 'after', $_result);
+			triggerCall('after', 'proc', $_DATA['act'], $_result);
 		}
 	} else {
 		$_result = set_error(getLang('error_request'),4303);

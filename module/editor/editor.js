@@ -162,7 +162,7 @@
 				break;
 			case 'video':
 				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(\?t=|\&t=)?([^\?\&]*)/i;
-				sTxt = '<img class="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/0.jpg\" data-vid=\"$4\" data-pos=\"$6") + '">' + "\n";
+				sTxt = '<img class="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" data-vid=\"$4\" data-pos=\"$6") + '">' + "\n";
 				eTxt = '';
 				break;
 		}
@@ -209,7 +209,7 @@
 				break;
 			case 'video':
 				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(\?t=|\&t=)?([^\?\&]*)/i;
-				sTxt = '<img class="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/0.jpg\" data-vid=\"$4\" data-pos=\"$6") + '">';
+				sTxt = '<img class="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" data-vid=\"$4\" data-pos=\"$6") + '">';
 				eTxt = '';
 				pasteTxtWithSel(sTxt, eTxt, '', $i);
 				break;

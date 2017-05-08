@@ -33,7 +33,7 @@ $_LANG['menu_desc_page'] = '페이지를 관리하고 설정합니다.';
 $_LANG['menu_desc_theme'] = '사이트 테마를 보고 설정합니다.';
 $_LANG['menu_desc_trash'] = '삭제된 문서를 보고 관리합니다.';
 $_LANG['menu_desc_visit'] = '이 사이트의 방문 기록입니다.';
-$_LANG['menu_desc_widget'] = '위젯 코드를 지원하는 모듈에서 사용 가능합니다. (예: 페이지)';
+$_LANG['menu_desc_widget'] = '위젯 코드를 지원하는 모듈에서 사용 가능합니다.';
 $_LANG['menu_desc_setup'] = '사이트 관리에 필요한 설정을 합니다.';
 
 $_LANG['agent'] = '에이전트';

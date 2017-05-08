@@ -15,7 +15,7 @@ function returnUrlMerge($data, $result) {
 }
 
 function procBoardDefault($data) {
-	$include_file = dirname(__FILE__) . '/proc/'.strtolower($data['act']).'.php';
+	$include_file = _AF_MODULES_PATH_ . 'board/proc/'.strtolower($data['act']).'.php';
 
 	if(file_exists($include_file)) {
 		require_once $include_file;
@@ -26,7 +26,7 @@ function procBoardDefault($data) {
 }
 
 function dispBoardDefault($data) {
-	$dir = dirname(__FILE__) . '/disp/';
+	$dir = _AF_MODULES_PATH_ . 'board/disp/';
 	$result = [];
 
 	if($data['disp']) {

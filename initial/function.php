@@ -360,21 +360,22 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
-	function triggerCall($trigger, $position, &$data) {
+	function triggerCall($position, $type, $trigger, &$data) {
 		global $_ADDONS;
 		static $call = null;
 
+		// 관리자 모듈은 넘어감
+		if(__MODULE__ == 'admin') return $data;
+
 		if($call == null) {
-			$call =	function($include_file, $_ADDON, $_DATA) {
+			$call =	function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
 				$r = include $include_file;
 				return empty($r['error']) ? $_DATA : $r;
 			};
 		}
 
-		$trigger = strtolower($position.'/'.$trigger.'.php');
-
 		foreach ($_ADDONS as $key => $value) {
-			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/'.$trigger;
+			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
 			if(file_exists($include_file)) {
 
 				if(($_extra = getCache('_AF_ADDON_'.$key)) === false) {
@@ -383,7 +384,7 @@ if(!defined('__AFOX__')) exit();
 				}
 				$_ADDONS[$key] = $_extra;
 
-				$result = $call($include_file, $_ADDONS[$key], $data);
+				$result = $call($include_file, strtolower($position.'_'.$type), strtolower($trigger), $_ADDONS[$key], $data);
 				if(!empty($result['error'])) {
 					$result['redirect_url'] = isset($data['error_return_url'])?urldecode($data['error_return_url']):'';
 					return $result;
@@ -651,13 +652,14 @@ if(!defined('__AFOX__')) exit();
 		global $_DATA;
 		global $_MEMBER;
 
-		$triggercall = 'disp'.__MODULE__.($_DATA['disp']?$_DATA['disp']:'Default');
+		$trigger = $_DATA['disp'] ? $_DATA['disp'] : 'Default';
+		$callproc = 'disp'.ucwords(__MODULE__).'Default';
 
-		if(function_exists('disp'.ucwords(__MODULE__).'Default')) {
-			$_result = triggerCall($triggercall, 'before', $_DATA);
+		if(function_exists($callproc)) {
+			$_result = triggerCall('before', 'disp', $trigger, $_DATA);
 			if(!$_result) {
-				$_result = call_user_func('disp'.ucwords(__MODULE__).'Default', $_DATA);
-				triggerCall($triggercall, 'after', $_result);
+				$_result = call_user_func($callproc, $_DATA);
+				triggerCall('after', 'disp', $trigger, $_result);
 			}
 		} else {
 			$_result = set_error(getLang('error_request'),4303);
@@ -672,7 +674,7 @@ if(!defined('__AFOX__')) exit();
 		} else {
 			$_{__MODULE__} = $_result;
 			unset($_result);
-			unset($triggercall);
+			unset($trigger);
 			// 테마에 스킨(tpl)이 있으면 사용
 			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
 			$tpl_file = (empty($_{__MODULE__}['tpl'])?'default':$_{__MODULE__}['tpl']).'.php';
