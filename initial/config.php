@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-define('_AF_VERSION_', '0.6.8');
+define('_AF_VERSION_', '0.7.0');
 define('__DEBUG__', 0);
 
 /*** SSL 설정 ***/
