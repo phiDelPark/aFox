@@ -1,6 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
+define('_AF_VERSION_', '0.6.8');
 define('__DEBUG__', 0);
 
 /*** SSL 설정 ***/
@@ -9,7 +10,6 @@ define('_AF_HTTP_PORT_', 80);
 define('_AF_HTTPS_PORT_', 443);
 /**************/
 
-define('_AF_VERSION_', '0.7.0');
 define('_AF_SERVER_TIME_', time());
 
 define('_AF_CONFIG_TABLE_', 'afox_config');
@@ -26,7 +26,9 @@ define('_AF_VISITOR_TABLE_', 'afox_visitors');
 define('_AF_NOTE_TABLE_', 'afox_notes');
 define('_AF_FILE_TABLE_', 'afox_files');
 
-define('_AF_PATH_', substr(str_replace('\\', '/', dirname(__FILE__)), 0, -8) . '/');
+if(!defined('_AF_PATH_')){
+	define('_AF_PATH_', substr(str_replace('\\', '/', dirname(__FILE__)), 0, -8) . '/');
+}
 
 define('_AF_ADMIN_PATH_', _AF_PATH_ . 'module/admin/');
 define('_AF_INIT_PATH_', _AF_PATH_ . 'initial/');

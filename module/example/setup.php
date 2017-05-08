@@ -76,7 +76,7 @@ if(!defined('__AFOX__')) exit();
 
 <div id="example_modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.updateExample">
+	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="example.updateExample">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="rp_srl" value="" />
 
@@ -95,8 +95,7 @@ if(!defined('__AFOX__')) exit();
 				</div>
 				<div class="pull-right">
 					<div class="form-inline">
-						<input type="text" name="md_manager" class="form-control" style="width:120px" id="id_md_manager" maxlength="11" pattern="^[0-9]+" placeholder="<?php echo getLang('admin')?>">
-						<button type="button" class="btn btn-primary"><?php echo getLang('find')?></button>
+						<input type="text" name="md_manager" class="form-control" style="width:120px" id="id_md_manager" maxlength="11" pattern="^[a-zA-Z]+\w{2,}$" placeholder="<?php echo getLang('manager')?>">
 					</div>
 				</div>
 			</div>
@@ -117,8 +116,12 @@ if(!defined('__AFOX__')) exit();
 			<div class="form-group">
 				<label><?php echo getLang('file')?></label>
 				<div class="form-inline">
-					<input type="number" class="form-control" name="md_file_max" min="0" max="9000" maxlength="11" placeholder="<?php echo getLang('max_file_count')?>">
-					<input type="number" class="form-control" name="md_file_size" min="0" max="9000" maxlength="11" placeholder="<?php echo getLang('max_file_size')?>">
+					<div class="input-group">
+						<label class="input-group-addon" for="id_md_file_max"><?php echo getLang('max_file_count')?></label>
+						<input type="number" class="form-control" id="id_md_file_max" name="md_file_max" min="0" max="9999" maxlength="4" placeholder="<?php echo getLang('Count')?>">
+					</div>
+					&nbsp;&nbsp;<input type="number" class="form-control" name="md_file_size" min="0" max="99999999999" maxlength="11" placeholder="<?php echo getLang('max_file_size')?> (KB)">
+					&nbsp;&nbsp;<input type="text" class="form-control" name="md_file_ext" maxlength="255" placeholder="<?php echo getLang('file_extension')?>">
 				</div>
 				<p class="help-block"><?php echo getLang('desc_board_file')?></p>
 			</div>

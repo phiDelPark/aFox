@@ -47,8 +47,7 @@ function proc($data) {
 			]
 		);
 
-
-		$_lst = ['prohibit_id','possible_ip','intercept_ip'];
+		$_lst = ['prohibit_id','access_ip'];
 		foreach ($_lst as $val) {
 			$data[$val] = trim($data[$val]);
 			$file = _AF_CONFIG_DATA_.$val.'.php';
@@ -59,9 +58,18 @@ function proc($data) {
 				$prohibit_id = explode(($val=='prohibit_id'?',':"\n"), $data[$val]);
 				$f = @fopen($file, 'w');
 				fwrite($f, "<?php if(!defined('__AFOX__')) exit();\n");
+				if($val=='access_ip') {
+					fwrite($f, '$_ACCESS_IP_MODE="'.($data['access_ip_mode']=='possible'?'possible':'intercept').'";');
+				}
 				fwrite($f, '$_'.strtoupper($val).'S=array(');
 				foreach ($prohibit_id as $v) {
-					fwrite($f, $_comma.'\''.escapeHtml($v, true).'\'');
+					$v = trim(escapeHtml($v, true));
+					if(empty($v)) continue;
+					if($val=='access_ip'){
+						$v = str_replace(".", "\.", $v);
+						$v = str_replace("+", "[0-9\.]+", $v);
+					}
+					fwrite($f, $_comma.'"'.$v.'"');
 					$_comma = ',';
 				}
 				fwrite($f, ");");

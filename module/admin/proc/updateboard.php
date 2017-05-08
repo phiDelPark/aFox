@@ -43,8 +43,10 @@ function proc($data) {
 			if(!empty($ex_caption)) {
 				$is_required = substr($ex_caption,-1,1) === '*';
 				if($is_required) $ex_caption = trim(substr($ex_caption,0,-1));
-				$ex_caption = cutstr($ex_caption,20,'');
-				$md_extra_keys[md5($ex_caption)] = $ex_caption . ($is_required?'*':'');
+				if(!empty($ex_caption)){
+					$ex_caption = cutstr($ex_caption,20,'');
+					$md_extra_keys[md5($ex_caption)] = $ex_caption . ($is_required?'*':'');
+				}
 			}
 		}
 		if(!empty($md_extra_keys)) {

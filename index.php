@@ -5,12 +5,28 @@ header('P3P: CP="ALL CURa ADMa DEVa TAIa OUR BUS IND PHY ONL UNI PUR FIN COM NAV
 @set_time_limit(0);
 ob_start();
 
+define('_AF_PATH_', str_replace('\\', '/', dirname(__FILE__)) . '/');
+
+// IP 허용/차단
+if(file_exists(_AF_PATH_ . 'data/config/access_ip.php')) {
+	$is_check_ip = false;
+	include _AF_PATH_ . 'data/config/access_ip.php';
+	foreach ($_ACCESS_IPS as $tmp) {
+		$is_check_ip = preg_match("/^{$tmp}$/", $_SERVER['REMOTE_ADDR']);
+		if ($is_check_ip) break;
+	}
+	if((!$is_check_ip && $_ACCESS_IP_MODE == 'possible') || ($is_check_ip && $_ACCESS_IP_MODE == 'intercept')) {
+		die ("Your IP is not allowed to access this page!");
+	}
+}
+
+// 파일번호가 넘어오면 파일읽기
 if(!empty($_GET['file'])) {
-	require_once dirname(__FILE__) . '/lib/file/file.php';
+	require_once _AF_PATH_ . 'lib/file/file.php';
 	exit();
 }
 
-require_once dirname(__FILE__) . '/initial/common.php';
+require_once _AF_PATH_ . 'initial/common.php';
 
 if(__MODULE__ && !empty($_DATA['act'])) {
 

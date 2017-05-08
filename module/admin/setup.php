@@ -109,14 +109,15 @@
 	</div>
 	<div>&nbsp;</div>
 	<div class="form-group">
-		<label for="id_possible_ip"><?php echo getLang('possible_ip')?></label>
-		<textarea class="form-control min-height-100 vresize" name="possible_ip" id="id_possible_ip"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'possible_ip.php')) {include $tmp; echo implode(',',$_POSSIBLE_IPS);} ?></textarea>
-		<p class="help-block"><?php echo getLang('desc_possible_ip')?></p>
-	</div>
-	<div class="form-group">
-		<label for="id_intercept_ip"><?php echo getLang('intercept_ip')?></label>
-		<textarea class="form-control min-height-100 vresize" name="intercept_ip" id="id_intercept_ip"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'intercept_ip.php')) {include $tmp; echo implode(',',$_INTERCEPT_IPS);} ?></textarea>
-		<p class="help-block"><?php echo getLang('desc_intercept_ip')?></p>
+		<?php
+			$_ACCESS_IP_MODE = '';
+			if (file_exists($tmp = _AF_CONFIG_DATA_.'access_ip.php')) {
+				include $tmp;
+			}
+		?>
+		<label for="id_access_ip"><?php echo getLang('ip')?></label>: &nbsp;&nbsp;<label><input type="radio" name="access_ip_mode" value="possible" <?php echo $_ACCESS_IP_MODE=='possible'?' checked':''?>> <?php echo getLang('possible')?></label>&nbsp;&nbsp;<label><input type="radio" name="access_ip_mode" value="intercept"<?php echo $_ACCESS_IP_MODE!='possible'?' checked':''?>> <?php echo getLang('intercept')?></label>
+		<textarea class="form-control min-height-100 vresize" name="access_ip" id="id_access_ip"><?php echo empty($_ACCESS_IPS) ? '' : str_replace("\.", ".", str_replace("[0-9\.]+", "+", implode("\n",$_ACCESS_IPS))); ?></textarea>
+		<p class="help-block"><?php echo getLang('desc_access_ip')?></p>
 	</div>
 	<div class="form-group">
 		<label for="id_prohibit_id"><?php echo getLang('prohibit_id')?></label>

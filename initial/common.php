@@ -81,7 +81,7 @@ if($_DATA['module'] == 'admin' || isset($_DATA['admin'])) {
 	define('__MODULE__', 'admin');
 } else {
 	// module, id 가 없으면 시작 페이지
-	if(empty($_DATA['module'])&&empty($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
+	if(empty($_DATA['module']) && empty($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
 	if(!empty($_DATA['id'])) {
 		$tmp = getModule($_DATA['id']);
 		if(empty($tmp['error'])) {

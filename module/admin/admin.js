@@ -9,12 +9,13 @@
 	$('#ADM_DEFAULT_MODULE')
 	.on('success.exec.ajax', '[data-exec-ajax][data-modal-target]', function(e, data, xhr){
 		e.preventDefault();
+
 		var $i = $(this),
 			$m = $($i.attr('data-modal-target')).clone(),
+			$f = $m.find('form'),
 			act = $i.attr('data-exec-ajax'),
 			arr = $i.attr('data-ajax-param').split(','),
-			type = arr[0],
-			$f = $m.find('form');
+			type = arr[0];
 
 		$f.find('[id]').each(function(){$(this).attr('id',$(this).attr('id')+'_0');}).end()
 			.find('label[for]').each(function(){$(this).attr('for',$(this).attr('for')+'_0');}).end()

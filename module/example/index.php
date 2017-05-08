@@ -14,7 +14,7 @@ function returnUrlMerge($data, $result) {
 }
 
 function procExampleDefault($data) {
-	$include_file = dirname(__FILE__) . '/proc/'.strtolower($data['act']).'.php';
+	$include_file = _AF_MODULES_PATH_ . 'example/proc/'.strtolower($data['act']).'.php';
 
 	if(file_exists($include_file)) {
 		require_once $include_file;
@@ -27,7 +27,7 @@ function procExampleDefault($data) {
 function dispExampleDefault($data) {
 
 	if(!empty($data['id'])) {
-		require_once dirname(__FILE__) . '/disp/viewpage.php';
+		require_once _AF_MODULES_PATH_ . 'example/disp/viewpage.php';
 		return proc($data);
 	} else {
 		set_error(getLang('error_request'),4303);

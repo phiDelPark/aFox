@@ -92,7 +92,7 @@
 				</div>
 				<div class="pull-right">
 					<div class="form-inline">
-						<input type="text" name="md_manager" class="form-control" style="width:120px" id="id_md_manager" maxlength="11" pattern="^[a-zA-Z]+\w{2,}$" placeholder="<?php echo getLang('desc_board_manager')?>">
+						<input type="text" name="md_manager" class="form-control" style="width:120px" id="id_md_manager" maxlength="11" pattern="^[a-zA-Z]+\w{2,}$" placeholder="<?php echo getLang('board_manager')?>">
 					</div>
 				</div>
 			</div>
@@ -184,8 +184,8 @@
 						<input type="number" class="form-control" id="id_thumb_height" name="thumb_height" min="0" max="9999" maxlength="5" placeholder="<?php echo getLang('Size')?>">
 					</div>
 					&nbsp;&nbsp;
-					<div class="switch-group">
-						<input type="hidden" name="thumb_option" value="0">
+					<div class="switch-group on">
+						<input type="hidden" name="thumb_option" value="1">
 						<div class="switch-control">
 							<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
 							<span class="switch switch-label"><?php echo getLang('thumb_fit')?></span>
@@ -193,7 +193,7 @@
 						</div>
 					</div>
 				</div>
-				<p class="help-block"><?php echo getLang('desc_lthumbnail')?></p>
+				<p class="help-block"><?php echo getLang('desc_thumbnail')?></p>
 			</div>
 			<div class="form-group">
 				<label><?php echo getLang('point')?></label>
