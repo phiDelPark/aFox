@@ -22,8 +22,8 @@ if(!defined('__AFOX__')) exit();
 
 		// 확장변수가 있으면 필수만 골라냄
 		if (!empty($_CFG['md_extra']['keys'])) {
-			foreach($_CFG['md_extra']['keys'] as $i=>$extra_key){
-				if(substr($extra_key,-1,1) === '*') $_required_extras[] = $i;
+			foreach($_CFG['md_extra']['keys'] as $ex_key=>$ex_caption){
+				if(substr($ex_caption,-1,1) === '*') $_required_extras[] = $ex_key;
 			}
 		}
 
@@ -35,8 +35,8 @@ if(!defined('__AFOX__')) exit();
 			$wr_extra_vars = '';
 
 			if (count($_required_extras) > 0) {
-				foreach($_required_extras as $i){
-					$wr_extra_vars .= '<div class="wr_extra_area"><strong>'.substr($_CFG['md_extra']['keys'][$i],0,-1).':</strong> <span>'.$val['wr_extra']['vars'][$i].'</span></div>';
+				foreach($_required_extras as $ex_key){
+					$wr_extra_vars .= '<div class="wr_extra_area"><strong>'.substr($_CFG['md_extra']['keys'][$ex_key],0,-1).':</strong> <span>'.$val['wr_extra']['vars'][$ex_key].'</span></div>';
 				}
 			}
 

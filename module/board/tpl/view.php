@@ -26,15 +26,14 @@ $wr_grant_write = $_{'board'}['grant_write'];
 	<article>
 
 	<?php
-		if (!empty($_{'board'}['wr_extra']['vars'])) {
+		$md_extra_keys = empty($_CFG['md_extra']['keys']) ? [] : $_CFG['md_extra']['keys'];
+		if (!empty($md_extra_keys)) {
 			echo '<div class="wr_extra_vars">';
-
-			$md_extra_keys = empty($_CFG['md_extra']['keys']) ? [] : $_CFG['md_extra']['keys'];
-			foreach($_{'board'}['wr_extra']['vars'] as $i=>$extra_var) {
+			foreach($md_extra_keys as $ex_key=>$extra_var) {
 	?>
 			<div class="clearfix">
-				<strong><?php echo $md_extra_keys[$i]?></strong>
-				<span><?php echo $extra_var?></span>
+				<strong><?php echo $extra_var?></strong>
+				<span><?php echo $_{'board'}['wr_extra']['vars'][$ex_key]?></span>
 			</div>
 	<?php
 			}

@@ -44,7 +44,10 @@
 		$f[0].dataImport(data);
 
 		if(act=='admin.getBoard' && typeof(data['md_extra']['keys']) != 'undefined') {
-			$f.find('[name=md_extra_keys]').val(data['md_extra']['keys'].join());
+			var ext_arr = $.map(data['md_extra']['keys'], function(v) {
+				return v;
+			});
+			$f.find('[name=md_extra_keys]').val(ext_arr.join());
 		} else if(act=='admin.getFile') {
 			var type = (data['mf_type'].split('/')[0] || 'binary');
 

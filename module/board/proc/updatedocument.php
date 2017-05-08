@@ -78,12 +78,12 @@ function proc($data) {
 			// 확장 변수 키값이 있으면 해당 값을 입력
 			if (!empty($module['md_extra']['keys'])) {
 				$wr_extra_vars = [];
-				foreach($module['md_extra']['keys'] as $i=>$extra_key){
-					$extra_val = trim($data['wr_extra_var_'.$i]);
-					if(empty($extra_val) && substr($extra_key,-1,1) === '*') {
-						throw new Exception(getLang('request_input',[substr($extra_key,0,-1)]), 3);
+				foreach($module['md_extra']['keys'] as $ex_key=>$ex_caption){
+					$extra_val = trim($data['wr_extra_var_'.$ex_key]);
+					if(empty($extra_val) && substr($ex_caption,-1,1) === '*') {
+						throw new Exception(getLang('request_input',[substr($ex_caption,0,-1)]), 3);
 					}
-					$wr_extra_vars[] = cutstr($extra_val,255,'');
+					$wr_extra_vars[$ex_key] = cutstr($extra_val,255,'');
 				}
 				if(!empty($wr_extra_vars)) $wr_extra['vars'] = $wr_extra_vars;
 			}

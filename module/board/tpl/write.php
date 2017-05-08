@@ -51,13 +51,13 @@
 			</div>
 		<?php
 			if (!empty($_CFG['md_extra']['keys'])) {
-				foreach($_CFG['md_extra']['keys'] as $i=>$extra_key) {
-				$is_required = substr($extra_key,-1,1) === '*';
-				$wr_extra_var = $_{'board'}['wr_extra']['vars'][$i];
+				foreach($_CFG['md_extra']['keys'] as $ex_key=>$ex_caption) {
+				$is_required = substr($ex_caption,-1,1) === '*';
+				$wr_extra_var = $_{'board'}['wr_extra']['vars'][$ex_key];
 		?>
 				<div class="form-group">
-					<label for="id_wr_extra_var_<?php echo $i?>"><?php echo $extra_key?></label>
-					<input type="text" name="wr_extra_var_<?php echo $i?>" class="form-control" id="id_wr_extra_var_<?php echo $i?>"<?php echo $is_required?' required':''?> maxlength="255" value="<?php echo $is?(empty($wr_extra_var)?'':escapeHtml($wr_extra_var)):''?>">
+					<label for="id_wr_extra_var_<?php echo $ex_key?>"><?php echo $ex_caption?></label>
+					<input type="text" name="wr_extra_var_<?php echo $ex_key?>" class="form-control" id="id_wr_extra_var_<?php echo $ex_key?>"<?php echo $is_required?' required':''?> maxlength="255" value="<?php echo $is?(empty($wr_extra_var)?'':escapeHtml($wr_extra_var)):''?>">
 				</div>
 		<?php }} ?>
 			<div class="form-group">

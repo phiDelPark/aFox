@@ -24,7 +24,7 @@
 <tbody>
 
 <?php
-$skip_arr = ['admin'=>1,'member'=>1,'editor'=>1,'page'=>1,'board'=>1];
+$skip_arr = ['admin'=>1,'member'=>1,'page'=>1,'board'=>1,'editor'=>1];
 $module_dir = _AF_MODULES_PATH_;
 
 foreach ($skip_arr as $key => $value) {
