@@ -63,8 +63,14 @@ function proc($data) {
 	$mdid = $doc['md_id'];
 	$rsrl = $data['rp'];
 	$pass = empty($rsrl) ? '' : $data['mb_password'];
+
 	// 문서 주인일경우 첫번째 댓글에만 권한 부여
-	$wr_permit = $login_srl && $login_srl == $doc['mb_srl'];
+	if(empty($login_srl) && empty($doc['mb_srl']) && $doc['wr_secret'] != '1' && !empty($data['mb_password'])) {
+		$wr_permit = checkPassword($data['mb_password'], $doc['mb_password']);
+	} else {
+		$wr_permit = ($login_srl && $login_srl == $doc['mb_srl']) || ($doc['wr_secret'] == '1' && $doc['grant_view']);
+	}
+
 	$call = function($r)use($mdid,$rsrl,$pass,$wr_permit,$login_srl,$is_manager){
 		$rset = [];
 		$_prlen = 0;
@@ -99,10 +105,14 @@ function proc($data) {
 			$row['rp_secret'] = $_prlen > 0;
 			$row['grant_view'] = $is_manager || $rp_permit || $_prlen == 0 || ($wr_permit && $_len == 0);
 			$row['grant_write'] = $row['rp_status']!='4' && ($is_manager || empty($row['mb_srl']) || $login_srl == $row['mb_srl']);
+			//unset($row['mb_password']);
+
 			$rset[] = $row;
 		}
 		return $rset;
 	};
+
+	//unset($doc['mb_password']);
 
 	$cpage = empty($data['cpage']) ? '' : $data['cpage'];
 	$doc['CURRENT_COMMENT_LIST'] = getCommentList($data['srl'], $cpage, [], 'rp_parent,rp_depth', $call);

@@ -28,8 +28,9 @@ function proc($data) {
 
 			$sendsrl = $cmt['mb_srl'];
 			$rp_root = $cmt['rp_parent'];
+
 			// true이면 하위 답변도 비밀글
-			$parent_secret = $cmt['rp_secret'] == '1';
+			$parent_secret = !empty($rp_parent) && $cmt['rp_secret'] == '1';
 
 			if(!empty($rp_parent)) {
 				$_len = strlen($cmt['rp_depth']) + 1;

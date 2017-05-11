@@ -35,23 +35,19 @@ function proc($data) {
 		}
 	}
 
+	// 요청값이 있으면 요청값만 보냄
 	$response_tags = $data['response_tags'];
 	if(!empty($response_tags) && count($response_tags) > 0) {
-		// 요청값이 있으면 요청값만 보냄
 		$response_vals = ['md_id'=>$doc['md_id'],'wr_srl'=>$doc['wr_srl'],'rp_srl'=>$cmt['rp_srl']];
-		// 요청값이 mb_password이면 권한만 체크
-		if(count($response_tags) === 1 && $response_tags[0] === 'mb_password') {
-			return $response_vals;
-		} else {
-			foreach ($response_tags as $value) {
-				$response_vals[$value] = $cmt[$value];
-			}
-			$cmt = $response_vals;
+		foreach ($response_tags as $value) {
+			$response_vals[$value] = $cmt[$value];
 		}
+		$cmt = $response_vals;
 	}
 
 	// 비밀번호는 암호화 되있지만 그래도 노출 안되게 제거
 	unset($cmt['mb_password']);
+	//if($hide_ipaddress) unset($cmt['mb_ipaddress']);
 
 	// 관리자 모드에서 사용하기 위해 필요한 정보 같이 보내기... (관리자만)
 	if(!empty($data['with_module_config']) && isManager($doc['md_id'])) {

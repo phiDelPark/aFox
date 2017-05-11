@@ -198,7 +198,7 @@
 						response_tags = ['mb_password'];
 					data['wr_srl'] = srl;
 					data['mb_password'] = $modal.find('input[name="mb_password"]').val();
-					exec_ajax('board.getDocument', data, function(status, data, xhr) {
+					exec_ajax('board.checkpassword', data, function(status, data, xhr) {
 						$form.data('check success', status === 'success');
 						if (status === 'success') {
 							$form.submit();

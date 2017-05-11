@@ -16,7 +16,7 @@ function proc($data) {
 
 		$theme_exists = !empty($out['th_id']);
 
-		$remove_array = ['th_id', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url'];
+		$remove_array = ['th_id', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url','response_tags'];
 		foreach ($remove_array as $value) {
 			if(isset($data[$value])) unset($data[$value]);
 		}
