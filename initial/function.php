@@ -360,7 +360,7 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
-	function triggerCall($position, $type, $trigger, &$data) {
+	function triggerCall($position, $trigger, $md_id, &$data) {
 		global $_ADDONS;
 		static $call = null;
 
@@ -384,7 +384,13 @@ if(!defined('__AFOX__')) exit();
 				}
 				$_ADDONS[$key] = $_extra;
 
-				$result = $call($include_file, strtolower($position.'_'.$type), strtolower($trigger), $_ADDONS[$key], $data);
+				if(!empty($_ADDONS[$key]['access_md_ids'])) {
+					$acc_md = $_ADDONS[$key]['access_mode'];
+					$is_acc = !empty($md_id) && in_array($md_id, $_ADDONS[$key]['access_md_ids']);
+					if(($acc_md == 'include' && !$is_acc)||($acc_md == 'exclude' && $is_acc)) continue;
+				}
+
+				$result = $call($include_file, strtolower($position), strtolower($trigger), $_ADDONS[$key], $data);
 				if(!empty($result['error'])) {
 					$result['redirect_url'] = isset($data['error_return_url'])?urldecode($data['error_return_url']):'';
 					return $result;
@@ -647,14 +653,15 @@ if(!defined('__AFOX__')) exit();
 		global $_DATA;
 		global $_MEMBER;
 
+		$md_id = $_DATA['id'];
 		$trigger = $_DATA['disp'] ? $_DATA['disp'] : 'Default';
 		$callproc = 'disp'.ucwords(__MODULE__).'Default';
 
 		if(function_exists($callproc)) {
-			$_result = triggerCall('before', 'disp', $trigger, $_DATA);
+			$_result = triggerCall('before_disp', $trigger, $md_id, $_DATA);
 			if(!$_result) {
 				$_result = call_user_func($callproc, $_DATA);
-				triggerCall('after', 'disp', $trigger, $_result);
+				triggerCall('after_disp', $trigger, $md_id, $_result);
 			}
 		} else {
 			$_result = set_error(getLang('error_request'),4303);

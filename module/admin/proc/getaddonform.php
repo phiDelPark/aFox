@@ -2,10 +2,6 @@
 
 if(!defined('__AFOX__')) exit();
 
-function load_template($_template_file) {
-	require($_template_file);
-}
-
 function proc($data) {
 
 	if(!isset($data['ao_id'])) return set_error(getLang('error_request'),4303);
@@ -42,11 +38,29 @@ function proc($data) {
 		.'<p class="help-block">'.nl2br(escapeHtml($_ADDON_INFO['description'])).'</p></div>';
 
 	echo '<div><label style="margin-right:20px"><input name="use_pc" type="checkbox" value="1"'.($_ADDON['use_pc']=='1'?' checked="checked"':'').'> PC</label>'
-		.'<label><input name="use_mobile" type="checkbox" value="1"'.($_ADDON['use_mobile']=='1'?' checked="checked"':'').'> Mobile</label></div><hr style="margin:10px 0 20px">';
+		.'<label><input name="use_mobile" type="checkbox" value="1"'.($_ADDON['use_mobile']=='1'?' checked="checked"':'').'> Mobile</label></div><hr style="margin:10px 0 25px">';
 
 	unset($data);
 
 	require($_template_file);
+
+	$out = DB::query('SELECT md_id FROM '._AF_MODULE_TABLE_.' WHERE 1 ORDER BY md_key');
+	if(!DB::error()) {
+		echo '<hr style="margin:25px 0 20px"><a href="#" style="display:block;padding:5px" onclick="jQuery(this).next().removeClass(\'hide\').end().remove();return false">'.getLang('advanced_setup').'</a><div class="hide"><div><label>'.getLang('md_id').':</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="include"'.($_ADDON['access_mode']!='exclude'?' checked="checked"':'').'> '.getLang('include').'</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="exclude"'.($_ADDON['access_mode']=='exclude'?' checked="checked"':'').'> '.getLang('exclude').'</label></div><p class="help-block">'.getLang('desc_access_md_id').'</p><div>';
+
+		$access_md_ids = [];
+		if(!empty($_ADDON['access_md_ids'])) {
+			foreach ($_ADDON['access_md_ids'] as $v) {
+				$access_md_ids[$v] = true;
+			}
+		}
+
+		while ($row = DB::assoc($out)) {
+			echo '<label><input name="access_md_ids[]" type="checkbox" value="'.$row['md_id'].'"'.($access_md_ids[$row['md_id']]===true?' checked="checked"':'').'> '.$row['md_id'].'</label>&nbsp;&nbsp;';
+		}
+
+		echo '</div></div>';
+	}
 
 	return ['tpl'=>ob_get_clean()];
 }

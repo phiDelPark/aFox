@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	$key = empty('rp_srl') ? 'wr_srl' : 'rp_srl';
+	$key = empty($data['rp_srl']) ? 'wr_srl' : 'rp_srl';
 	if(empty($data[$key])) return set_error(getLang('error_request'),4303);
 
 	global $_MEMBER;

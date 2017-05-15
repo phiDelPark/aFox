@@ -37,7 +37,9 @@ $_LANG['menu_desc_widget'] = '위젯 코드를 지원하는 모듈에서 사용 
 $_LANG['menu_desc_setup'] = '사이트 관리에 필요한 설정을 합니다.';
 
 $_LANG['agent'] = '에이전트';
+$_LANG['md_id'] = '모듈 아이디';
 $_LANG['base_cdn_list'] = '기본 CDN';
+$_LANG['board_manager'] = '게시판 관리자';
 $_LANG['captcha'] = '보안문자';
 $_LANG['clear_cache'] = '캐시 재생성';
 $_LANG['document_count'] = '문서 수';
@@ -76,7 +78,10 @@ $_LANG['terms_of_use'] = '이용약관';
 $_LANG['thumb_fit'] = '크기맞춤';
 $_LANG['view_details'] = '자세히 보기';
 $_LANG['visit_record'] = '방문기록';
-$_LANG['board_manager'] = '게시판 관리자';
+
+$_LANG['include'] = '포함';
+$_LANG['exclude'] = '제외';
+$_LANG['advanced_setup'] = '고급 설정 표시';
 
 $_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
 $_LANG['msg_count_overflow'] = '%s의 최대 수 (%s)를 벗어났습니다.';
@@ -97,6 +102,7 @@ $_LANG['desc_access_ip'] = '입력된 IP의 접근을 허용 또는 차단할 �
 $_LANG['desc_start_page'] = '사이트에서 사용할 시작 페이지를 선택하세요.';
 $_LANG['desc_terms_of_use'] = '이용약관을 적어주시면 회원 가입시 약관을 출력해줍니다. (비워두면 출력안함)';
 $_LANG['desc_thumbnail'] = '갤러리, 리뷰 게시판에 목록 이미지를 썸네일로 사용하시려면 크기를 입력하세요.';
+$_LANG['desc_access_md_id'] = '선택된 모듈 아이디만 포함 혹은 제외 가능합니다. (선택된 항목이 없으면 모두 포함)';
 
 /* End of file admin_kr.php */
 /* Location: ./common/lang/admin_kr.php */

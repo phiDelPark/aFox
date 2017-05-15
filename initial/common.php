@@ -72,6 +72,7 @@ if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))) {
 	setQuery('','id',empty($_DATA['id'])?'':$_DATA['id'],'srl',empty($_DATA['srl'])?'':$_DATA['srl'],'rp',empty($_DATA['rp'])?'':$_DATA['rp']);
 }
 
+// 유효성 검사
 $tmp_arr = ['module','id','act','disp'];
 foreach ($tmp_arr as $tmp) {
 	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp])) $_DATA[$tmp] = '';

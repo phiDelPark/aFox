@@ -21,6 +21,7 @@
 			.find('label[for]').each(function(){$(this).attr('for',$(this).attr('for')+'_0');}).end()
 			.find('[name=new_mb_password]').val('').removeAttr('required').end()
 			.find('[name=verify_mb_password]').val('').removeAttr('required').end()
+			.find('.modal-footer > button.hide').removeClass('hide').end()
 			.attr('data-exec-ajax', act.replace(/^([a-z]+).get/,'$1.update'));
 
 		if(type == 'mb_id') {
