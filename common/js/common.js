@@ -70,6 +70,15 @@ var $_LANG = [];
 		});
 	};
 
+	String.prototype.getQuery = function(k) {
+		var s = decodeURIComponent(this).replace(/&amp;/g, '&'),
+			p = {};
+		s.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(v0, v1, v2) {
+			p[v1] = v2;
+		});
+		return k ? p[k] : p;
+	};
+
 	String.prototype.setQuery = function() {
 		var s = this,
 			args = arguments,
