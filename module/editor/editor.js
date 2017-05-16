@@ -161,8 +161,9 @@
 				eTxt = '';
 				break;
 			case 'video':
-				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(\?t=|\&t=)?([^\?\&]*)/i;
-				sTxt = '<img class="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" data-vid=\"$4\" data-pos=\"$6") + '">' + "\n";
+				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(.*)/i,
+					t = val.getQuery('t') || val.getQuery('start');
+				sTxt = '<img class="afox_widget" widget="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" width=\"560\" height=\"315\" vid=\"$4") + '"' + (t ? ' time="' + t + '"' : '') + '>' + "\n";
 				eTxt = '';
 				break;
 		}
@@ -208,10 +209,7 @@
 				pasteTxtWithSel(sTxt, eTxt, val, $i);
 				break;
 			case 'video':
-				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(\?t=|\&t=)?([^\?\&]*)/i;
-				sTxt = '<img class="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" data-vid=\"$4\" data-pos=\"$6") + '">';
-				eTxt = '';
-				pasteTxtWithSel(sTxt, eTxt, '', $i);
+				textareaExecCmd('video', val, $i);
 				break;
 		}
 

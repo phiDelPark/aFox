@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 ?>
 
-<h1>위젯 코드 예제</h1>
+<h2>위젯 코드 예제</h2>
 <pre>
 &lt;img class="afox_widget" widget="content" module="아이디"&gt;
 
