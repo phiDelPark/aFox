@@ -11,7 +11,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 		$start_cpage = $cmt['start_page'];
 		$end_cpage = $cmt['end_page'];
 
-		$not_edit_str = 'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('error_permit',false),true,ENT_QUOTES).'\');return false"';
+		$not_edit_str = 'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES).'\');return false"';
 
 		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'.getLang('request_input', ['password'])
 										.'<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'
@@ -24,7 +24,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 			$_icon = _AF_URL_ . (file_exists(_AF_MEMBER_DATA_.$_icon) ? 'data/member/' . $_icon : 'module/board/tpl/user_default.jpg');
 
 			$rp_secret = $value['rp_secret'] == '1';
-			$rp_content = $value['grant_view'] ? $value['rp_content'] : (!empty($value['mb_srl'])?getLang($rp_secret?'msg_is_secret':'error_permit'):sprintf($input_password,getUrl('rp',$value['rp_srl'])));
+			$rp_content = $value['grant_view'] ? $value['rp_content'] : (!empty($value['mb_srl'])?getLang($rp_secret?'msg_is_secret':'error_permitted'):sprintf($input_password,getUrl('rp',$value['rp_srl'])));
 
 			echo '<a id="reply_'.$value['rp_srl'].'"'.(!empty($_DATA['rp'])&&$value['rp_srl']==$_DATA['rp'] ? ' class="active"':'').'></a>'
 				.'<div class="reply-item" style="padding-left:'.(($_len>5?5:$_len)*30).'px"><div class="left">'

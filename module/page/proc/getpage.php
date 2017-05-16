@@ -11,7 +11,7 @@ function proc($data) {
 	} else if(empty($out['md_id'])) {
 		return set_error(getLang('error_founded'),4201);
 	} else if(!isGrant($out['md_id'], 'view')) {
-		return set_error(getLang('error_permit'),4501);
+		return set_error(getLang('error_permitted'),4501);
 	}
 
 	// 관리자 모드에서 사용하기 위해 필요한 정보 같이 보내기... (관리자만)

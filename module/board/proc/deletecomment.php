@@ -30,10 +30,10 @@ function proc($data) {
 					throw new Exception(getLang('request_input', ['password']), 3);
 				}
 				if (empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
-					throw new Exception(getLang('error_permit'),4501);
+					throw new Exception(getLang('error_permitted'),4501);
 				}
 			} else if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
-				throw new Exception(getLang('error_permit'),4501);
+				throw new Exception(getLang('error_permitted'),4501);
 			}
 		}
 

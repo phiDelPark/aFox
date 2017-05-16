@@ -28,7 +28,7 @@ function proc($data) {
 				return set_error(getLang('error_password'),4801);
 			}
 		} else if($_MEMBER['mb_srl'] != $ret['mb_srl']) {
-			return set_error(getLang('error_permit'),4501);
+			return set_error(getLang('error_permitted'),4501);
 		}
 	}
 

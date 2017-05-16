@@ -150,9 +150,9 @@ $_LANG['success_saved'] = '저장했습니다.';
 $_LANG['success_sended'] = '발송했습니다.';
 
 // warning_... 경고 오류번호 2001~2999
-$_LANG['warning_permit'] = '%s만 허용됩니다.'; // 2501
-$_LANG['warning_not_permit'] = '%s는(은) 허용되지 않습니다.'; // 2502
-$_LANG['warning_shortage'] = '%s이(가) 부족합니다.'; // 2601
+$_LANG['warning_allowable'] = '%s만 허용됩니다.'; // 2501
+$_LANG['warning_not_allowable'] = '%s는(은) 허용되지 않습니다.'; // 2502
+$_LANG['warning_shortage'] = '%s이(가) 부족합니다.'; // 2701
 
 // invalid_... 올바르지 않은 값 오류번호 3001~3999
 $_LANG['invalid_value'] = '%s의 값이 올바르지 않습니다.';
@@ -162,8 +162,8 @@ $_LANG['error_occured'] = '오류가 발생했습니다.'; // 4001
 $_LANG['error_founded'] = '대상을 찾을 수 없습니다.'; // 4201
 $_LANG['error_exists'] = '같은 대상이 존재합니다.'; //4251
 $_LANG['error_request'] = '잘못된 요청입니다.'; // 4303
+$_LANG['error_permitted'] = '권한이 없습니다.'; // 4501
 $_LANG['error_value'] = '값이 올바르지 않습니다.'; // 4601
-$_LANG['error_permit'] = '권한이 없습니다.'; // 4501
 $_LANG['error_password'] = '비밀번호가 다릅니다.'; // 4801
 $_LANG['error_admin'] = '관리자가 아닙니다.'; // 4901
 

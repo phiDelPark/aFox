@@ -30,7 +30,7 @@
 	<div class="form-group">
 		<label><?php echo getLang('logo')?></label>
 		<?php $isfile = file_exists($tmp = _AF_CONFIG_DATA_.'logo.png')?>
-		<div class="fileupload-group" placeholder="<?php echo getLang('warning_permit',['png'])?>">
+		<div class="fileupload-group" placeholder="<?php echo getLang('warning_allowable',['png'])?>">
 			<div class="input-group">
 				<div class="file-caption form-control"><?php echo $isfile?'<i class="file-item" data-type="image">'.$tmp.'</i>':''?></div>
 				<div class="btn btn-primary btn-file">
@@ -43,7 +43,7 @@
 	<div class="form-group">
 		<label><?php echo getLang('favicon')?></label>
 		<?php $isfile = file_exists($tmp = _AF_CONFIG_DATA_.'favicon.ico')?>
-		<div class="fileupload-group" placeholder="<?php echo getLang('warning_permit',['16x16 or 32x32 size, ico'])?>">
+		<div class="fileupload-group" placeholder="<?php echo getLang('warning_allowable',['16x16 or 32x32 size, ico'])?>">
 			<div class="input-group">
 				<div class="file-caption form-control"><?php echo $isfile?'<i class="file-item" data-type="image">'.$tmp.'</i>':''?></div>
 				<div class="btn btn-primary btn-file">

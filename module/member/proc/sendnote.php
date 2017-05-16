@@ -10,7 +10,7 @@ function proc($data) {
 	$srl = $data['mb_srl'];
 	$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
 
-	if($srl === $sender) return set_error(getLang('error_permit'),4501);
+	if($srl === $sender) return set_error(getLang('error_permitted'),4501);
 
 	$nick = empty($_MEMBER) ? getLang('none') : $_MEMBER['mb_nick'];
 	$msg = xssClean($data['nt_content']);

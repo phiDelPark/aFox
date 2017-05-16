@@ -17,7 +17,7 @@ function proc($data) {
 		if(empty($page['md_id'])) throw new Exception(getLang('error_request'),4303);
 
 		// 권한 체크 // 관리자만
-		if(!$is_admin) throw new Exception(getLang('error_permit'),4501);
+		if(!$is_admin) throw new Exception(getLang('error_permitted'),4501);
 
 		$md_id = $page['md_id'];
 

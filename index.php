@@ -31,11 +31,10 @@ if(__MODULE__ && !empty($_DATA['act'])) {
 	$callproc = 'proc'.ucwords(__MODULE__).'Default';
 
 	if(function_exists($callproc)) {
-		$md_id = $_DATA['id'];
-		$_result = triggerCall('before_proc', $_DATA['act'], $md_id, $_DATA);
+		$_result = triggerCall('before_proc', $_DATA['act'], $_DATA);
 		if(empty($_result['error'])) {
 			$_result = call_user_func($callproc, $_DATA);
-			triggerCall('after_proc', $_DATA['act'], $md_id, $_result);
+			triggerCall('after_proc', $_DATA['act'], $_result);
 		}
 	} else {
 		$_result = set_error(getLang('error_request'),4303);

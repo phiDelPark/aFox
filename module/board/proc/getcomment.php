@@ -17,7 +17,7 @@ function proc($data) {
 	if(!empty($doc['error'])) {
 		return set_error($doc['message'],$doc['error']);
 	} else if(!isGrant($doc['md_id'], 'view')) {
-		return set_error(getLang('error_permit'),4501);
+		return set_error(getLang('error_permitted'),4501);
 	}
 
 	// 비밀글이면
@@ -28,10 +28,10 @@ function proc($data) {
 				return set_error(getLang('request_input', ['password']));
 			}
 			if (empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
-				return set_error(getLang('error_permit'),4501);
+				return set_error(getLang('error_permitted'),4501);
 			}
 		} else if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
-			return set_error(getLang('error_permit'),4501);
+			return set_error(getLang('error_permitted'),4501);
 		}
 	}
 

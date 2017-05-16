@@ -114,7 +114,7 @@ function proc($data) {
 		// 권한 체크, 파일 첨부 때문에 먼저 함
 		if ($new_insert) {
 			if(!isGrant($md_id, 'write')) {
-				throw new Exception(getLang('error_permit'),4501);
+				throw new Exception(getLang('error_permitted'),4501);
 			}
 
 			// 문서 번호를 얻기 위해 먼저 추가
@@ -144,11 +144,11 @@ function proc($data) {
 		} else {
 			if(empty($_MEMBER)) {
 				if(empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
-					throw new Exception(getLang('error_permit'),4501);
+					throw new Exception(getLang('error_permitted'),4501);
 				}
 			} else if(!isManager($md_id)) {
 				if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
-					throw new Exception(getLang('error_permit'),4501);
+					throw new Exception(getLang('error_permitted'),4501);
 				}
 			}
 		}
@@ -185,7 +185,7 @@ function proc($data) {
 
 		if($upload_count>0) {
 			// 권한 체크
-			if(!isGrant($md_id, 'upload')) throw new Exception(getLang('warning_not_permit', ['upload']), 2502);
+			if(!isGrant($md_id, 'upload')) throw new Exception(getLang('warning_not_allowable', ['upload']), 2502);
 			if($file_max < $upload_count) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
 
 			for ($i=0; $i < $upload_count; $i++) {
@@ -205,7 +205,7 @@ function proc($data) {
 				$fileext = count($fileext) === 1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
-					throw new Exception(getLang('warning_permit', [$file_exts])."\n", 2501);
+					throw new Exception(getLang('warning_allowable', [$file_exts])."\n", 2501);
 				}
 
 				// 실행 가능한 파일 못하게 처리

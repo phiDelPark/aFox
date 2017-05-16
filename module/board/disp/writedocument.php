@@ -13,7 +13,7 @@ function proc($data) {
 	if(!empty($doc) && !$is_manager) {
 
 		if(!isGrant($doc['md_id'], 'view')) {
-			return set_error(getLang('error_permit'),88088);
+			return set_error(getLang('error_permitted'),88088);
 		}
 
 		if(empty($_MEMBER) || $_MEMBER['mb_srl'] != $doc['mb_srl']) {
@@ -25,7 +25,7 @@ function proc($data) {
 							.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>';
 
 				if(!empty($doc['mb_srl']) || empty($doc['mb_password'])) {
-					return set_error(getLang('error_permit'),4501);
+					return set_error(getLang('error_permitted'),4501);
 				} else if(empty($data['mb_password'])) {
 					return set_error(sprintf($input_password, getLang('request_input', ['password'])), 1);
 				} else if (!checkPassword($data['mb_password'], $doc['mb_password'])) {

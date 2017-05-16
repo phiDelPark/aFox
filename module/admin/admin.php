@@ -2,13 +2,13 @@
 
 if(!defined('__AFOX__')) exit();
 
-if(empty($_MEMBER)) goUrl(_AF_URL_, getLang('error_permit'));
+if(empty($_MEMBER)) goUrl(_AF_URL_, getLang('error_permitted'));
 // 관리자의 아이피, 브라우저와 다르다면 세션을 끊고 관리자에게 메일을 보낸다.
 $admin_key = md5($_MEMBER['mb_regdate'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 if (get_session('AF_LOGIN_KEY') !== $admin_key) {
 	session_destroy();
 	// TODO 관리자에게 쪽지 보낸다.
-	goUrl(_AF_URL_, getLang('error_permit'));
+	goUrl(_AF_URL_, getLang('error_permitted'));
 }
 
 @include_once _AF_LANGS_PATH_ . 'admin_' . _AF_LANG_ . '.php';

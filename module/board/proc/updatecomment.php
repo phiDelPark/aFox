@@ -101,7 +101,7 @@ function proc($data) {
 
 			// 권한 체크
 			if(!isGrant($module['md_id'], 'reply')) {
-				throw new Exception(getLang('error_permit'),4501);
+				throw new Exception(getLang('error_permitted'),4501);
 			}
 
 			DB::insert(_AF_COMMENT_TABLE_,
@@ -142,11 +142,11 @@ function proc($data) {
 			// 권한 체크
 			if(empty($_MEMBER)) {
 				if(empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
-					throw new Exception(getLang('error_permit'),4501);
+					throw new Exception(getLang('error_permitted'),4501);
 				}
 			} else if(!isManager($module['md_id'])) {
 				if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
-					throw new Exception(getLang('error_permit'),4501);
+					throw new Exception(getLang('error_permitted'),4501);
 				}
 			}
 

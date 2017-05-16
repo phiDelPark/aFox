@@ -9,7 +9,7 @@ function proc($data) {
 	global $_MEMBER;
 	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
 	// 권한 체크 // 관리자만
-	if(!$is_admin) return set_error(getLang('error_permit'), 4501);
+	if(!$is_admin) return set_error(getLang('error_permitted'), 4501);
 
 	$out = getDBItem(_AF_FILE_TABLE_, ['mf_srl'=>$data['mf_srl']]);
 	if(!empty($out['error'])) return set_error($out['message'],$out['error']);

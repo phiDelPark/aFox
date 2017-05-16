@@ -306,7 +306,7 @@ if(!defined('__AFOX__')) exit();
 		$mb_srl = (int)$mb_srl;
 		// 비회원인데 - 값이면 에러
 		if(empty($mb_srl) && $point < 0) {
-			return set_error(getLang('warning_shortage', ['point']), 2601);
+			return set_error(getLang('warning_shortage', ['point']), 2701);
 		}
 
 		if(empty($mb_srl)) return;
@@ -320,7 +320,7 @@ if(!defined('__AFOX__')) exit();
 
 		// 포인트 모자르면 에러
 		if(($mb['mb_point'] + $point) < 0) {
-			return set_error(getLang('warning_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 2601);
+			return set_error(getLang('warning_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 2701);
 		}
 
 		$_setvals = ['(mb_point)'=>'mb_point'.($point>0?'+':'').$point];
@@ -360,12 +360,20 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
-	function triggerCall($position, $trigger, $md_id, &$data) {
-		global $_ADDONS;
+	function triggerCall($position, $trigger, &$data) {
+		static $addons = null;
 		static $call = null;
-
 		// 관리자 모듈은 넘어감
 		if(__MODULE__ == 'admin') return $data;
+
+		if($addons == null) {
+			DB::getList('SELECT ao_id,ao_extra FROM '._AF_ADDON_TABLE_.' WHERE '.(__MOBILE__?'use_mobile':'use_pc').'=1',
+				[],
+				function($r)use(&$addons) {
+					while ($tmp = DB::assoc($r)) $addons[$tmp['ao_id']] = $tmp['ao_extra']; // unserialize는 필요할때 하기로...
+				}
+			);
+		}
 
 		if($call == null) {
 			$call =	function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
@@ -374,23 +382,23 @@ if(!defined('__AFOX__')) exit();
 			};
 		}
 
-		foreach ($_ADDONS as $key => $value) {
+		foreach ($addons as $key => $value) {
 			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
 			if(file_exists($include_file)) {
 
 				if(($_extra = getCache('_AF_ADDON_'.$key)) === false) {
-					$_extra = unserialize($_ADDONS[$key]);
+					$_extra = unserialize($addons[$key]);
 					setCache('_AF_ADDON_'.$key, $_extra);
 				}
-				$_ADDONS[$key] = $_extra;
+				$addons[$key] = $_extra;
 
-				if(!empty($_ADDONS[$key]['access_md_ids'])) {
-					$acc_md = $_ADDONS[$key]['access_mode'];
-					$is_acc = !empty($md_id) && in_array($md_id, $_ADDONS[$key]['access_md_ids']);
+				if(!empty($addons[$key]['access_md_ids'])) {
+					$acc_md = $addons[$key]['access_mode'];
+					$is_acc = !empty(__MID__) && in_array(__MID__, $addons[$key]['access_md_ids']);
 					if(($acc_md == 'include' && !$is_acc)||($acc_md == 'exclude' && $is_acc)) continue;
 				}
 
-				$result = $call($include_file, strtolower($position), strtolower($trigger), $_ADDONS[$key], $data);
+				$result = $call($include_file, strtolower($position), strtolower($trigger), $addons[$key], $data);
 				if(!empty($result['error'])) {
 					$result['redirect_url'] = isset($data['error_return_url'])?urldecode($data['error_return_url']):'';
 					return $result;
@@ -633,18 +641,25 @@ if(!defined('__AFOX__')) exit();
 			$text = nl2br(strip_tags($text, '<p><a>'));
 		}
 
+		$text = preg_replace_callback('/<img[^>]*class="afox_widget"\s*([^>]*)>/is',  function($m){
+			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)) {
+				$attrs = [];
+				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
+				if(!empty($attrs['widget'])) {
+					return displayWidget($attrs['widget'], $attrs);
+				}
+			}
+			return '';
+		}, $text);
+
 		// 다운로드 권한이 없으면 처리
 		if(!empty($_DATA['id']) && !isGrant($_DATA['id'],'download')) {
 			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
-			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permit',false),true,ENT_QUOTES)."');return false\" \\3";
+			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES)."');return false\" \\3";
 			$text = preg_replace($patterns, $replacement, $text);
 		}
 
 		return '<div class="'.$class.'">'.$text.'</div>';
-	}
-
-	function displayEditor($name, $content, $options = []) {
-		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
 	}
 
 	function displayModule() {
@@ -653,15 +668,14 @@ if(!defined('__AFOX__')) exit();
 		global $_DATA;
 		global $_MEMBER;
 
-		$md_id = $_DATA['id'];
 		$trigger = $_DATA['disp'] ? $_DATA['disp'] : 'Default';
 		$callproc = 'disp'.ucwords(__MODULE__).'Default';
 
 		if(function_exists($callproc)) {
-			$_result = triggerCall('before_disp', $trigger, $md_id, $_DATA);
+			$_result = triggerCall('before_disp', $trigger, $_DATA);
 			if(!$_result) {
 				$_result = call_user_func($callproc, $_DATA);
-				triggerCall('after_disp', $trigger, $md_id, $_result);
+				triggerCall('after_disp', $trigger, $_result);
 			}
 		} else {
 			$_result = set_error(getLang('error_request'),4303);
@@ -685,37 +699,19 @@ if(!defined('__AFOX__')) exit();
 		}
 	}
 
-	function printWidget($text){
-		static $call = null;
-
-		if($call == null) {
-			$call =	function($include_file, $_WIDGET) {
-				ob_start();
-				include $include_file;
-				return ob_get_clean();
-			};
+	function displayWidget($widget, $_WIDGET = []){
+		global $_MEMBER;
+		if(file_exists(_AF_WIDGETS_PATH_ . $widget . '/index.php')) {
+			ob_start();
+			include _AF_WIDGETS_PATH_ . $widget . '/index.php';
+			return ob_get_clean();
+		} else {
+			return messageBox(getLang('error_founded'), 4201, $widget);
 		}
+	}
 
-		echo preg_replace_callback('/<img[^>]*class="afox_widget"\s*([^>]*)>/is',  function($m)use($call){
-			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)) {
-				$attrs = [];
-				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
-				if(!empty($attrs['widget'])){
-					// 테마에 스킨(tpl)이 있으면 사용하려 했으나 위젯은 스타일 설정하기가 쉽고 큰 비중이없어 안함
-					// $include_file = _AF_THEME_PATH_ . 'widget/'.$attrs['widget'].'.php';
-					// if(!file_exists($include_file))
-					$include_file = _AF_WIDGETS_PATH_ . $attrs['widget'].'/index.php';
-					if(file_exists($include_file)) {
-						return $call($include_file, $attrs);
-					} else {
-						return messageBox(getLang('error_founded'), 4201, $attrs['widget']);
-					}
-				}
-			}
-			return '';
-		}, $text);
-
-		return;
+	function displayEditor($name, $content, $options = []) {
+		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
 	}
 
 	function cutstr($str, $length, $tail = '...') {

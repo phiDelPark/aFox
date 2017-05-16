@@ -20,7 +20,7 @@ function proc($data) {
 
 		if(!isGrant($doc['md_id'], 'view')) {
 			set_session('_AF_SECRET_DOCUMENT_'.$PERMIT_KEY, false);
-			return set_error(getLang('error_permit'),88088);
+			return set_error(getLang('error_permitted'),88088);
 		}
 
 		if(empty($login_srl) || $login_srl != $doc['mb_srl']) {
@@ -34,7 +34,7 @@ function proc($data) {
 							.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>';
 
 				if(!empty($doc['mb_srl']) || empty($doc['mb_password'])) {
-					return set_error(getLang('error_permit'),4501);
+					return set_error(getLang('error_permitted'),4501);
 				} else if(empty($data['mb_password'])) {
 					return set_error(sprintf($input_password, getLang('request_input', ['password'])), 1);
 				} else if (!checkPassword($data['mb_password'], $doc['mb_password'])) {

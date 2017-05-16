@@ -1,7 +1,6 @@
 <?php
-
 if(!defined('__AFOX__')) exit();
-if(empty($_WIDGET['module'])) return;
+if(empty($_WIDGET['module']) || __MODULE__ != 'page') return;
 
 $type = isset($_WIDGET['type']) ? $_WIDGET['type'] : 'default';
 $count = isset($_WIDGET['count']) ? (int)$_WIDGET['count'] : 5;

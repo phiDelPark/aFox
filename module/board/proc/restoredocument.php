@@ -28,11 +28,11 @@ function proc($data) {
 				throw new Exception(getLang('request_input', ['password']), 3);
 			}
 			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
-				throw new Exception(getLang('error_permit'),4501);
+				throw new Exception(getLang('error_permitted'),4501);
 			}
 		} else if(!isManager($doc['md_id'])) {
 			if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
-				throw new Exception(getLang('error_permit'),4501);
+				throw new Exception(getLang('error_permitted'),4501);
 			}
 		}
 

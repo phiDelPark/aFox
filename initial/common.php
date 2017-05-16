@@ -45,6 +45,8 @@ if($tmp = (isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cook
 		set_cookie('AF_LOGIN_ID', '', -1);
 		set_cookie('AF_AUTO_LOGIN', '', -1);
 		unset($_SESSION['AF_LOGIN_ID']);
+	} else {
+		unset($_MEMBER['mb_password']);
 	}
 }
 
@@ -73,8 +75,7 @@ if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))) {
 }
 
 // 유효성 검사
-$tmp_arr = ['module','id','act','disp'];
-foreach ($tmp_arr as $tmp) {
+foreach (['module','id','act','disp'] as $tmp) {
 	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp])) $_DATA[$tmp] = '';
 }
 
@@ -95,6 +96,8 @@ if($_DATA['module'] == 'admin' || isset($_DATA['admin'])) {
 	define('__MODULE__', $_DATA['module']);
 }
 
+define('__MID__', $_DATA['id']);
+
 if(__MODULE__) require_once _AF_MODULES_PATH_ . __MODULE__ . '/index.php';
 
 // CDN 에러면 브라우저 종료전까지 사용안함
@@ -107,20 +110,10 @@ if(!empty($_DATA['cdnerr'])) {
 $tmp = _AF_CONFIG_DATA_.'base_cdn_list.php';
 define('_AF_USE_BASE_CDN_', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp : FALSE);
 
-// 실행 가능한 애드온 정보 합치기
-$tmp = (__MOBILE__?'use_mobile':'use_pc').'=1';
-$tmp_arr = DB::query('SELECT ao_id,ao_extra FROM '._AF_ADDON_TABLE_.' WHERE '.$tmp);
-if(!DB::error()) {
-	while ($tmp = DB::assoc($tmp_arr)) {
-		$_ADDONS[$tmp['ao_id']] = $tmp['ao_extra']; // unserialize는 필요할때 하기로...
-	}
-}
-
 $_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
 $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
 
 unset($tmp);
-unset($tmp_arr);
 header('Content-Type: text/html; charset=utf-8');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0"); // HTTP 1.1.

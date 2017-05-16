@@ -33,7 +33,7 @@ $_LANG['menu_desc_page'] = '페이지를 관리하고 설정합니다.';
 $_LANG['menu_desc_theme'] = '사이트 테마를 보고 설정합니다.';
 $_LANG['menu_desc_trash'] = '삭제된 문서를 보고 관리합니다.';
 $_LANG['menu_desc_visit'] = '이 사이트의 방문 기록입니다.';
-$_LANG['menu_desc_widget'] = '위젯 코드를 지원하는 모듈에서 사용 가능합니다.';
+$_LANG['menu_desc_widget'] = '사용 가능한 위젯과 사용 코드를 봅니다.';
 $_LANG['menu_desc_setup'] = '사이트 관리에 필요한 설정을 합니다.';
 
 $_LANG['agent'] = '에이전트';
@@ -82,6 +82,7 @@ $_LANG['visit_record'] = '방문기록';
 $_LANG['include'] = '포함';
 $_LANG['exclude'] = '제외';
 $_LANG['advanced_setup'] = '고급 설정 표시';
+$_LANG['use_member'] = '사용 유저';
 
 $_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
 $_LANG['msg_count_overflow'] = '%s의 최대 수 (%s)를 벗어났습니다.';

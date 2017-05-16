@@ -13,7 +13,7 @@ function proc($data) {
 	} else if(empty($doc['wr_srl'])) {
 		return set_error(getLang('error_founded'),4201);
 	} else if(!isGrant($doc['md_id'], 'view')) {
-		return set_error(getLang('error_permit'),4501);
+		return set_error(getLang('error_permitted'),4501);
 	}
 
 	// 비밀글이면
@@ -27,7 +27,7 @@ function proc($data) {
 				return set_error(getLang('error_password'),4801);
 			}
 		} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
-			return set_error(getLang('error_permit'),4501);
+			return set_error(getLang('error_permitted'),4501);
 		}
 	}
 
