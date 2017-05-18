@@ -70,65 +70,50 @@ var $_LANG = [];
 		});
 	};
 
-	String.prototype.getQuery = function(k) {
-		var s = decodeURIComponent(this).replace(/&amp;/g, '&'),
+	String.prototype.getQuery = function(s) {
+		var u = decodeURIComponent(this).replace(/&amp;/g, '&'),
 			p = {};
-		s.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(v0, v1, v2) {
-			p[v1] = v2;
+		u.replace(/[?&]+([^=&]+)=([^&]*)/g, function(a, k, v) {
+			p[k] = v;
 		});
-		return k ? p[k] : p;
+		return s ? (p[s] || '') : p;
 	};
 
 	String.prototype.setQuery = function() {
-		var s = this,
-			args = arguments,
-			n = args.length;
-		if (n === 0) return s;
-		if (args.length === 1 && typeof args[0] === 'object') {
-			args = args[0];
-			n = args.length;
+		var u = decodeURIComponent(this).replace(/&amp;/g, '&'),
+			a = arguments,
+			n = a.length;
+		if (n === 0) return u;
+		if (typeof a[0] === 'object') {
+			a = a[0];
+			n = a.length;
 		}
-		var idx = s.indexOf('?'),
-			uri = s.replace(/#$/, ''),
-			qrs = {},
-			qls = [],
+		var p = (a[0] !== '') ? u.getQuery() : {},
+			r = [],
 			v;
-		if (idx != -1 && args[0] !== '') {
-			uri.substr(idx + 1, s.length)
-				.replace(/([^=]+)=([^&]*)(&|$)/g,
-					function(all, key, val) {
-						qrs[key] = val;
-					}
-				);
+		for (var i = (a[0] === '' ? 1 : 0); i < n; i += 2) {
+			p[a[i]] = a[i + 1];
 		}
-		uri = s.substr(0, idx);
-		for (var i = (args[0] === '' ? 1 : 0); i < n; i += 2) {
-			qrs[args[i]] = args[i + 1];
+		for (var k in p) {
+			if (!p.hasOwnProperty(k)) continue;
+			if (!(v = String(p[k]).trim())) continue;
+			r.push(k + '=' + v);
 		}
-		for (var k in qrs) {
-			if (!qrs.hasOwnProperty(k)) continue;
-			if (!(v = String(qrs[k]).trim())) continue;
-			qls.push(k + '=' + decodeURI(v));
-		}
-		return uri + (qls.length > 0 ? '?' + qls.join('&') : '');
+		var x = u.indexOf('?');
+		u = (x == -1 ? u : u.substr(0, x));
+		if (u.substr(-1, 1) != '/') u = u + '/';
+		return u + (r.length > 0 ? '?' + r.join('&') : '');
 	};
 
 	Number.prototype.shortFileSize = function() {
-		var size = this,
-			tail = 'byte';
-		if (size > 1024) {
-			size = Math.ceil(size / 1024);
-			tail = 'kb';
+		var s = this,
+			t = ['Byte', 'KB', 'MB', 'GB'],
+			i = 0;
+		for (var n = 4; i < n; i++) {
+			if (s <= 1024) break;
+			s = s / 1024;
 		}
-		if (size > 1024) {
-			size = Math.ceil(size / 1024);
-			tail = 'mb';
-		}
-		if (size > 1024) {
-			size = Math.ceil(size / 1024);
-			tail = 'gb';
-		}
-		return size + tail;
+		return s.toFixed(1) + t[i];
 	};
 
 	HTMLFormElement.prototype.dataExport = function() {

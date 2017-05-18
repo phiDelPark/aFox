@@ -7,14 +7,16 @@ if(!defined('__AFOX__')) exit();
 	define('FOLLOW_REQUEST_SSL', 0);
 
 	function getUrlQuery() {
-		$qs = [];
 		$n = func_num_args();
 		$a = func_get_args();
-		$q = parse_url($a[0])['query'];
-		preg_replace_callback('/(^|&)([^=&]+)=([^&]*)/',
-			function($mc)use(&$qs) {$qs[$mc[2]]=$mc[3];return '';},
-		$q);
-		return $n == 2 ? $qs[$a[1]] : $qs;
+		$p = [];
+		preg_replace_callback('/[?&]+([^=&]+)=([^&]*)/',
+			function($m)use(&$p) {
+				$p[$m[1]] = $m[2];
+				return '';
+			},
+		$a[0]);
+		return empty($a[1]) ? $p : $p[$a[1]];
 	}
 
 	function setUrlQuery() {
@@ -735,11 +737,12 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function shortFileSize($size) {
-		$tail = 'Byte';
-		if($size>1024) {$size=ceil($size/1024);$tail='KB';}
-		if($size>1024) {$size=ceil($size/1024);$tail='MB';}
-		if($size>1024) {$size=ceil($size/1024);$tail='GB';}
-		return $size.$tail;
+		$tails = ['Byte','KB','MB','GB'];
+		for ($i = 0; $i < 4; $i++) {
+			if($size <= 1024) break;
+			$size = $size / 1024;
+		}
+		return round($size, 1) . $tails[$i];
 	}
 
 	function messageBox($message, $type = 0, $title = '') {
