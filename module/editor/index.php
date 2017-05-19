@@ -13,9 +13,9 @@ foreach ($options as $key => $v) {
 
 <div class="af-editor-group af_editor_<?php echo $name ?>">
 <?php if(!empty($options['toolbar'])) { ?>
-	<div class="af-editor-toolbar unselectable clearfix"<?php echo $options['readonly']?' readonly':''?>>
+	<div class="af-editor-toolbar clearfix"<?php echo $options['readonly']?' readonly':''?>>
 		<strong class="pull-left" style="margin:0 0 5px"><?php echo $options['toolbar'][0]?></strong>
-		<div class="pull-right" style="cursor:pointer;color:#aaa;font-size:12px;font-family:Arial;padding:4px 0 0">
+		<div class="pull-right unselectable" style="cursor:pointer;color:#aaa;font-size:12px;font-family:Arial;padding:4px 0 0">
 		<?php
 			$tool_item = '<span tabindex="0" style="margin:0 0 0 5px;padding:3px 2px 0" data-type="%s" data-target="%s" data-value="%s"><i class="glyphicon glyphicon-%s" aria-hidden="true"></i> %s</span>';
 			foreach ($options['toolbar'][1] as $key=>$val) {

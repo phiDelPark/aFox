@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-define('_AF_VERSION_', '0.7.0');
+define('_AF_VERSION_', '0.7.5');
 define('__DEBUG__', 0);
 
 /*** SSL 설정 ***/
@@ -60,7 +60,6 @@ if(session_status() == PHP_SESSION_NONE) {
 }
 
 $_LANG = [];
-$_ADDONS = [];
 $_ADDELEMENTS = ['JS'=>[],'CSS'=>[]];
 unset($_MEMBER);
 
