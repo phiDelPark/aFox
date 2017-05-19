@@ -266,6 +266,8 @@
 		this.$element.on('click', '.af-editor-toolbar>.pull-right', function(e) {
 			var $g = $(this),
 				$i = $(e.target);
+			if ($g.parent()[0].hasAttribute('readonly')) return;
+
 			if ($i.hasClass('glyphicon')) $i = $i.parent();
 
 			var type = $i.attr('data-type') || '',
@@ -311,7 +313,7 @@
 			} else if ($iframe.length > 0) {
 				iFrameExecCmd(type, null, $iframe);
 			}
-		}).on('click', '.af-editor-uploaded-list>.file-item', function() {
+		}).on('click', '.af-editor-uploaded>.file-item', function() {
 			var $i = $(this),
 				srl = $i.attr('data-srl'),
 				$rm = $('[name="remove_files[]"][value="' + srl + '"]');
@@ -323,7 +325,7 @@
 				$('<input type="hidden" name="remove_files[]" value="' + srl + '">').insertAfter($i);
 				$i.css('color', 'hotpink').attr('title', '(Remove) ' + $i.attr('title'));
 			}
-		}).on('dragstart', '.af-editor-uploaded-list>.file-item', function(e) {
+		}).on('dragstart', '.af-editor-uploaded>.file-item', function(e) {
 			var $i = $(this);
 			if ($i.data && $i.data('bs.tooltip')) $i.tooltip('hide'); // 드래그 시작시 툴팁 감추기
 			e.originalEvent.dataTransfer.setData("TEXT", JSON.stringify({
@@ -331,12 +333,12 @@
 				'srl': $i.attr('data-srl'),
 				'title': $i.attr('data-title') || $i.attr('title')
 			}));
-		}).on('dragover', '.af-editor-area>textarea', function(e) {
+		}).on('dragover', '.af-editor-content>textarea', function(e) {
 			e.preventDefault();
-		}).on('drop', '.af-editor-area>textarea', function(e) {
+		}).on('drop', '.af-editor-content>textarea', function(e) {
 			e.preventDefault();
 			dropFile(e, $(this));
-		}).on('insert.af.fileupload', '.fileupload-group', function(e, files) {
+		}).on('insert.af.uploader', '.uploader-group', function(e, files) {
 			e.preventDefault();
 			var $c = $(this).find('.file-caption'),
 				ismt = $(this).find('input:file')[0].hasAttribute('multiple');
@@ -364,10 +366,10 @@
 
 				setImageTooltip($item);
 			});
-		}).on('delete.af.fileupload', '.fileupload-group', function(e, files) {
+		}).on('delete.af.uploader', '.uploader-group', function(e, files) {
 			e.preventDefault();
 			var $c = $(this).find('.file-caption'),
-				$g = $c.closest('.fileupload-group');
+				$g = $c.closest('.uploader-group');
 			$c.find('.file-item').tooltip('destroy').end().text($g.attr('placeholder') || '');
 			$g.find('input:file').val('');
 		});
@@ -411,7 +413,7 @@
 			});
 		});
 
-		this.$element.find('.fileupload-group .file-item').each(function() {
+		this.$element.find('.uploader-group .file-item').each(function() {
 			setImageTooltip($(this));
 		});
 

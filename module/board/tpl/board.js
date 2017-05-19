@@ -38,6 +38,11 @@
 			if (status == 'success') {
 				$('<input type="hidden" name="rp_srl" value="">').prependTo($f);
 				var $rc = $rp.find('>.right');
+				if (data['mb_srl'] === '0') {
+					var $mbinfo = $f.find('.area-mbinfo');
+					$mbinfo.find('[name="mb_nick"],[name="mb_password"]').attr('required', 'required').end().removeClass('hide');
+					$f.find('.af-editor-toolbar,.af-editor-content>textarea,.af-editor-content>iframe').removeAttr('readonly');
+				}
 				$f[0].dataImport(data);
 				$f.addClass('right')
 					.find('.close').show().click(

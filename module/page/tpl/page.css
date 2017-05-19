@@ -24,11 +24,11 @@
 	height: 25px;
 }
 
-.af-editor-area>textarea {
+.af-editor-content>textarea {
 	min-height: 250px;
 }
 
-.af-editor-area>textarea+iframe {
+.af-editor-content>textarea+iframe {
 	border-color: #5cb85c;
 	min-height: 250px;
 	padding: 1px;

@@ -126,7 +126,7 @@
 	border-color: #2e6da4;
 }
 
-.fileupload-group .btn-file {
+.uploader-group .btn-file {
 	position: relative;
 	white-space: nowrap;
 	display: table-cell;
@@ -137,11 +137,11 @@
 	width: 1%;
 }
 
-.fileupload-group .btn-file>.glyphicon:before {
+.uploader-group .btn-file>.glyphicon:before {
 	margin-right: 10px;
 }
 
-.fileupload-group .btn-file>input[type=file] {
+.uploader-group .btn-file>input[type=file] {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -154,7 +154,7 @@
 	display: block;
 }
 
-.fileupload-group .file-caption {
+.uploader-group .file-caption {
 	display: inline-block;
 	overflow: hidden;
 	word-break: break-all;
@@ -162,11 +162,11 @@
 	height: 34px;
 }
 
-.fileupload-group+.fileupload-group {
+.uploader-group+.uploader-group {
 	margin-top: 10px;
 }
 
-.fileupload-group .file-item {
+.uploader-group .file-item {
 	position: relative;
 	top: 0;
 	left: -5px;
@@ -186,7 +186,7 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.fileupload-group .file-item:before {
+.uploader-group .file-item:before {
 	font-family: 'Glyphicons Halflings';
 	font-size: 16px;
 	content: "\e022";
@@ -194,41 +194,39 @@
 	vertical-align: middle;
 }
 
-.fileupload-group .file-item[data-type^=image]:before {
+.uploader-group .file-item[data-type^=image]:before {
 	content: "\e060";
 }
 
-.fileupload-group .file-item[data-type^=video]:before {
+.uploader-group .file-item[data-type^=video]:before {
 	content: "\e009";
 }
 
-.fileupload-group .file-item[data-type^=audio]:before {
+.uploader-group .file-item[data-type^=audio]:before {
 	content: "\e002";
 }
 
-.fileupload-group.file-list .file-item:before {
+.uploader-group.file-list .file-item:before {
 	padding-right: 0;
 }
 
-.fileupload-group.file-list .file-item:hover {
+.uploader-group.file-list .file-item:hover {
 	border: 1px solid #ccc;
 }
 
-.fileupload-group.file-list .file-item {
+.uploader-group.file-list .file-item {
 	margin: 0;
 	padding: 3px;
 	width: 24px;
 	height: 22px;
 }
 
-.fileupload-group.file-list .file-item+.file-item {
+.uploader-group.file-list .file-item+.file-item {
 	margin-left: 3px;
 }
 
-
-/* IE 10 fix */
-
 .btn-file::-ms-browse {
+	/* IE 10 fix */
 	width: 100%;
 	height: 100%;
 }
@@ -336,6 +334,15 @@
 
 .fs-5x {
 	font-size: 5em;
+}
+
+.unselectable {
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+	user-select: none;
+	user-drag: none;
 }
 
 

@@ -54,20 +54,18 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 		</ul>
 	</nav>
 	<?php } ?>
-	<?php if ($is_rp_grant) { ?>
+
 	<footer class="reply-editer">
 		<form method="post" autocomplete="off" data-exec-ajax="board.updateComment">
 		<input type="hidden" name="success_return_url" value="<?php echo getUrl('rp','')?>">
 		<input type="hidden" name="wr_srl" value="<?php echo $_DATA['srl'] ?>">
 		<a class="close" href="javascrip:;" style="display:none"><span aria-hidden="true">×</span></a>
-		<?php if (empty($_MEMBER)) { ?>
-			<div class="form-inline">
+			<div class="form-inline area-mbinfo<?php echo $is_rp_grant&&empty($_MEMBER)?'':' hide'?>">
 				<span class="sr-only"><?php echo getLang('id')?></span>
-				<input type="text" name="mb_nick" class="form-control" required maxlength="20" placeholder="<?php echo getLang('id')?>">
+				<input type="text" name="mb_nick" class="form-control"<?php echo empty($_MEMBER)?' required':''?> maxlength="20" placeholder="<?php echo getLang('id')?>">
 				<span class="sr-only"><?php echo getLang('password')?></span>
-				<input type="password" name="mb_password" class="form-control" required placeholder="<?php echo getLang('password')?>">
+				<input type="password" name="mb_password" class="form-control"<?php echo empty($_MEMBER)?' required':''?> placeholder="<?php echo getLang('password')?>">
 			</div>
-		<?php } ?>
 			<dir class="area-group">
 				<div class="form-group"><span class="sr-only"><?php echo getLang('content')?></span>
 					<?php
@@ -80,7 +78,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 							[
 								'required'=>getLang('request_input', ['content']),
 								'readonly'=>(!$is_rp_grant),
-								'toolbar'=>(!$is_rp_grant)?[]:array(getLang('reply'), $istool)
+								'toolbar'=>count($istool)>0?array(getLang('reply'), $istool):[]
 							]
 						);
 					?>
@@ -91,7 +89,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 			</dir>
 		</form>
 	</footer>
-	<?php } ?>
+
 </section>
 
 <?php

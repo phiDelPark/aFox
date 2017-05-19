@@ -83,9 +83,10 @@ $wr_grant_write = $_{'board'}['grant_write'];
 	</footer>
 </section>
 
-<?php if($is_rp_grant || $_{'board'}['wr_reply'] > 0) include 'reply.php'; ?>
-
-<?php include 'list.php'; ?>
+<?php
+	include 'reply.php';
+	include 'list.php';
+?>
 
 <script>
 $_LANG['ok'] = "<?php echo getLang('ok')?>";

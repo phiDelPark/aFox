@@ -145,7 +145,7 @@ var $_LANG = [];
 			if ($item.is("input")) {
 				if ($item.is(':file')) {
 					$target = $item.parent().parent().parent();
-					if ($target.hasClass('fileupload-group')) {
+					if ($target.hasClass('uploader-group')) {
 						$target.find('input:file').val('');
 						if (data[key]) {
 							if ($.isArray(data[key])) {
@@ -204,12 +204,12 @@ var $_LANG = [];
 			//업로드된 파일
 			var $uploads = $editor.find('[name="upload_files[]"]');
 			if ($uploads.length > 0 && $.isArray(data['files']) && data['files'].length > 0) {
-				html = '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded-list fileupload-group file-list form-control" style="margin-top:10px">';
+				html = '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded uploader-group file-list form-control" style="margin-top:10px">';
 				$.map(data['files'], function(v, i) {
 					html += '<i class="file-item" draggable="true" title="' + v.mf_name.escapeHtml() + ' (' + Number(v.mf_size).shortFileSize() + ')" data-type="' + v.mf_type + '" data-srl="' + v.mf_srl + '"></i>';
 				});
 				html += '</div><span class="glyphicon glyphicon-question-sign form-control-feedback" style="pointer-events:auto;cursor:pointer" tabindex="0"></span></div>';
-				$uploads.closest('.af-editor-upload-button').prepend(html);
+				$uploads.closest('.af-editor-uploader').prepend(html);
 			}
 		}
 	};
@@ -359,7 +359,7 @@ var $_LANG = [];
 		exec_ajax(this);
 	});
 
-	// <div class="fileupload-group" placeholder="File">
+	// <div class="uploader-group" placeholder="File">
 	// 	<div class="input-group">
 	// 		<div class="file-caption form-control"></div>
 	// 		<div class="btn btn-primary btn-file">
@@ -368,13 +368,13 @@ var $_LANG = [];
 	// 		</div>
 	// 	</div>
 	// </div>
-	$(document).on('change', '.fileupload-group input:file', function(e) {
+	$(document).on('change', '.uploader-group input:file', function(e) {
 		var $i = $(this),
-			$g = $i.closest('.fileupload-group'),
+			$g = $i.closest('.uploader-group'),
 			$c = $g.find('.file-caption'),
 			ismt = $i[0].hasAttribute('multiple');
 		if (ismt) $g.addClass('file-list');
-		var ev = $.Event('insert.af.fileupload');
+		var ev = $.Event('insert.af.uploader');
 		$g.trigger(ev, [$i.prop("files")]);
 		if (ev.isDefaultPrevented()) return;
 		$c.html('');
@@ -386,30 +386,30 @@ var $_LANG = [];
 				.html(ismt ? '' : title)
 				.appendTo($c);
 		});
-	}).on('click', '.fileupload-group .file-caption', function(e) {
+	}).on('click', '.uploader-group .file-caption', function(e) {
 		var $c = $(this),
 			$ci = $c.find('.file-item'),
-			$g = $c.closest('.fileupload-group'),
+			$g = $c.closest('.uploader-group'),
 			$i = $g.find('input:file'),
 			plac = $g.attr('placeholder') || '';
 		if ($ci.length > 0) {
-			var ev = $.Event('delete.af.fileupload');
+			var ev = $.Event('delete.af.uploader');
 			$g.trigger(ev, [$i.prop("files")]);
 			if (ev.isDefaultPrevented()) return;
 			$i.val('');
 			$('<input type="hidden" name="remove_files[]" value="' + $i.attr('name') + '">').appendTo($c.text(plac));
 		}
-	}).on('keydown', '.fileupload-group .file-caption', function(e) {
+	}).on('keydown', '.uploader-group .file-caption', function(e) {
 		if (e.which == 13 || e.which == 32) {
 			e.preventDefault();
 			$(this).click();
 		}
-	}).on('keydown', '.fileupload-group .btn-file', function(e) {
+	}).on('keydown', '.uploader-group .btn-file', function(e) {
 		if (e.which == 13 || e.which == 32) {
 			e.preventDefault();
 			$(this).find('input:file').click();
 		}
-	}).on('fileupload:repair', '.fileupload-group', function(e) {
+	}).on('uploader:repair', '.uploader-group', function(e) {
 		var $g = $(this),
 			$i = $g.find('input:hidden'),
 			$c = $g.find('.file-caption'),
@@ -523,7 +523,7 @@ var $_LANG = [];
 		// aFox의 사용자 엘리먼트 값에 맞게 수정
 		$('.radio-group').trigger('radio:repair');
 		$('.switch-group').trigger('switch:repair');
-		$('.fileupload-group').trigger('fileupload:repair');
+		$('.uploader-group').trigger('uploader:repair');
 	});
 
 })(jQuery);

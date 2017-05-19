@@ -13,7 +13,7 @@ foreach ($options as $key => $v) {
 
 <div class="af-editor-group af_editor_<?php echo $name ?>">
 <?php if(!empty($options['toolbar'])) { ?>
-	<div class="af-editor-toolbar clearfix">
+	<div class="af-editor-toolbar unselectable clearfix"<?php echo $options['readonly']?' readonly':''?>>
 		<strong class="pull-left" style="margin:0 0 5px"><?php echo $options['toolbar'][0]?></strong>
 		<div class="pull-right" style="cursor:pointer;color:#aaa;font-size:12px;font-family:Arial;padding:4px 0 0">
 		<?php
@@ -34,8 +34,8 @@ foreach ($options as $key => $v) {
 		</div>
 	</div>
 <?php } ?>
-	<div class="af-editor-area">
-		<textarea name="<?php echo $name ?>" class="form-control vresize"><?php echo $content ?></textarea>
+	<div class="af-editor-content">
+		<textarea name="<?php echo $name ?>" class="form-control vresize"<?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo $content ?></textarea>
 	</div>
 <?php if(!empty($options['statebar'])) { ?>
 	<div class="af-statebar-area clearfix" style="margin-top:3px;height:24px;padding:0 0 0 200px">
@@ -64,14 +64,14 @@ foreach ($options as $key => $v) {
 			$fileList = empty($file_id) ? [] : getFileList($file_id, $file_target);
 
 			if(!empty($fileList['data']) && count($fileList['data'])>0) {
-				echo '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded-list fileupload-group file-list form-control" style="margin-top:10px;height:auto;min-height:34px">';
+				echo '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded uploader-group file-list form-control" style="margin-top:10px;height:auto;min-height:34px">';
 				foreach ($fileList['data'] as $val) {
 					echo '<i class="file-item" draggable="true" title="'.escapeHtml($val['mf_name']).' ('.shortFileSize( $val['mf_size']).')" data-type="'.$val['mf_type'].'" data-srl="'.$val['mf_srl'].'"></i>';
 				}
 				echo '</div><span class="glyphicon glyphicon-question-sign form-control-feedback" style="pointer-events:auto;cursor:pointer" tabindex="0"></span></div>';
 			}
 	?>
-		<div class="af-editor-upload-button fileupload-group" placeholder="<?php echo getLang('file')?>" style="margin-top:10px">
+		<div class="af-editor-uploader uploader-group" placeholder="<?php echo getLang('file')?>" style="margin-top:10px">
 			<div class="input-group">
 				<div class="file-caption form-control" tabindex="0"></div>
 				<div class="btn btn-primary btn-file" tabindex="0">

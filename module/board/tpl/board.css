@@ -140,11 +140,11 @@
 	width: 80px;
 }
 
-.af-editor-area>textarea {
+.af-editor-content>textarea {
 	min-height: 300px;
 }
 
-.af-editor-area>textarea+iframe {
+.af-editor-content>textarea+iframe {
 	border-color: #5cb85c;
 	min-height: 300px;
 	padding: 1px;
@@ -179,11 +179,11 @@
 	height: 80px;
 }
 
-#board_reply .af-editor-area>textarea {
+#board_reply .af-editor-content>textarea {
 	min-height: 80px;
 }
 
-#board_reply .af-editor-area>textarea+iframe {
+#board_reply .af-editor-content>textarea+iframe {
 	min-height: 80px;
 	margin-bottom: 10px;
 }
