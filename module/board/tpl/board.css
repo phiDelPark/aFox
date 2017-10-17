@@ -16,6 +16,10 @@
 	cursor: pointer;
 }
 
+#board_list .breadcrumb>.active {
+	font-weight: bold;
+}
+
 #board_list .search-form {
 	padding: 0;
 	max-width: 250px;

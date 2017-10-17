@@ -13,7 +13,8 @@ $use_style = ['list','review','album','gallery'];
 		<?php
 			$tmp = explode(',', $_CFG['md_category']);
 			foreach ($tmp as $val) {
-				echo '<li><a href="'.getUrl('','id',$_DATA['id'],'category', urlencode($val)).'">'.$val.'</a></li>';
+				$isEqual = $val == $_DATA['category'];
+				echo '<li'.($isEqual?' class="active"':'').'><a href="'.getUrl('','id',$_DATA['id'],'category', urlencode($val)).'">'.$val.'</a></li>';
 			}
 		?>
 		</ol>
