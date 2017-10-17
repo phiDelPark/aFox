@@ -1,0 +1,29 @@
+{
+  "name": "afox",
+  "version": "1.0.0",
+  "description": "[![release](https://img.shields.io/badge/release-Download-brightgreen.svg)](https://github.com/phiDelPark/aFox/releases) [![License](https://img.shields.io/badge/license-MIT%20License-blue.svg)](https://github.com/phiDelPark/aFox/blob/master/LICENSE)",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt": "^1.0.1"
+  },
+  "devDependencies": {
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-cssmin": "^2.2.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^3.1.0",
+    "grunt-jsbeautifier": "^0.2.13"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phiDelPark/aFox.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/phiDelPark/aFox/issues"
+  },
+  "homepage": "https://github.com/phiDelPark/aFox#readme"
+}
