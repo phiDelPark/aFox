@@ -1,11 +1,23 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	$search = empty($_DATA['search'])?null:'%'.$_DATA['search'].'%';
+	$schs = [];
+	if(!empty($_DATA['search'])) {
+		$search = $_DATA['search'];
+		$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tags'=>'wr_tags','date'=>'wr_regdate'];
+		$ss = explode(':', $search);
+		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
+			$search = trim(implode(':', array_slice($ss,1)));
+			if(!empty($search)) $schs = [$schkeys[$ss[0]].'{LIKE}'=>($ss[0]==='date'?'':'%').$search.'%'];
+		} else {
+			$schs = ['wr_title{LIKE}'=>'%'.$search.'%', 'wr_content{LIKE}'=>'%'.$search.'%'];
+		}
+	}
+
 	$category = empty($_DATA['category'])?null:$_DATA['category'];
 	$doc_list = getDBList(_AF_DOCUMENT_TABLE_,[
 		'md_id'.(empty($category)?'{<>}':'')=>empty($category)?'_AFOXtRASH_':$category,
-		'OR' =>empty($search)?[]:['wr_title{LIKE}'=>$search, 'wr_content{LIKE}'=>$search]
+		'OR' =>$schs
 	],'wr_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
 ?>
 
