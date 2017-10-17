@@ -24,8 +24,11 @@
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
-		<th class="col-xs-1">#<?php echo getLang('board')?></th>
-		<th><?php echo getLang('title')?></th>
+		<th class="col-xs-1"><a href="#" onclick="return data_manage_action()"><i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i><?php echo getLang('data_manage')?></a></th>
+		<th><span class="th_title"><?php echo getLang('title')?></span>
+		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" onclick="data_selecter_allcheck(this)">
+			<a href="#" onclick="return data_selected_move()"><i class="glyphicon glyphicon-send" aria-hidden="true"></i><?php echo getLang('data_move')?></a>
+			<a href="#" onclick="return data_selected_delete()"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i><?php echo getLang('data_delete')?></a></span></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('secret')?></th>
 		<th class="col-xs-1"><?php echo getLang('author')?></th>
@@ -47,8 +50,8 @@
 		$end_page = $doc_list['end_page'];
 
 		foreach ($doc_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].',with_module_config,1" data-modal-target="#document_modal"><th scope="row">'.$value['md_id'].'</th>';
-			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
+			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].',with_module_config,1" data-modal-target="#document_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-event>'.$value['md_id'].'</a></th>';
+			echo '<td class="title"><input type="checkbox" value="'.$value['wr_srl'].'" class="data_selecter" style="display:none;margin-right:5px" except-event>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['wr_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
@@ -76,9 +79,10 @@
 	<ul class="pagination">
 	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['admin'] ?>">
+		<?php if(!empty($_DATA['category'])) {?><input type="hidden" name="category" value="<?php echo $_DATA['category'] ?>"><?php }?>
 		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 		<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
-		<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
+		<?php if(!empty($_DATA['search'])||!empty($_DATA['category'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','','category','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 	</form></li>
 	</ul>
 </nav>
@@ -146,6 +150,58 @@
   </div>
 </div>
 
+<script>
+	function data_manage_action() {
+		var $a = jQuery('#ADM_DEFAULT_MODULE .table');
+		$a.find('.th_title').hide();
+		$a.find('.data_controler').show();
+		$a.find('.data_selecter').show();
+		return false;
+	}
+	function data_selecter_allcheck(t) {
+		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
+			checked = jQuery(t).is(':checked');
+		$a.find('.data_selecter').prop('checked', checked) ;
+	}
+	function data_selected_delete() {
+		if (confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['document']]))) {
+		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
+			data = {};
+			srls = [];
+			$a.find('.data_selecter:checked').each(function(i) {
+				srls[i] = jQuery(this).val();
+			});
+			if (srls.length < 1) {
+				alert($_LANG['warning_no_selected'].sprintf([$_LANG['document']]));
+				return false;
+			}
+			data['wr_srls'] = srls;
+			data['success_return_url'] = current_url;
+			exec_ajax('admin.deleteDocuments', data);
+		}
+		return false;
+	}
+	function data_selected_move() {
+		var md_id = prompt($_LANG['prompt_enter_move_board_id'], '');
+		if (md_id) {
+		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
+			data = {};
+			srls = [];
+			$a.find('.data_selecter:checked').each(function(i) {
+				srls[i] = jQuery(this).val();
+			});
+			if (srls.length < 1) {
+				alert($_LANG['warning_no_selected'].sprintf([$_LANG['document']]));
+				return false;
+			}
+			data['md_id'] = md_id;
+			data['wr_srls'] = srls;
+			data['success_return_url'] = current_url;
+			exec_ajax('admin.moveDocuments', data);
+		}
+		return false;
+	}
+</script>
 <?php
 /* End of file document.php */
 /* Location: ./module/admin/document.php */

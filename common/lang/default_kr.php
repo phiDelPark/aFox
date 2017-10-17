@@ -82,6 +82,7 @@ $_LANG['point'] = '포인트';
 $_LANG['preview'] = '미리보기';
 $_LANG['previous'] = '이전';
 $_LANG['publish'] = '발행';
+$_LANG['question'] = '질문';
 $_LANG['rank'] = '계급';
 $_LANG['read'] = '읽기';
 $_LANG['recycle_bin'] = '휴지통';
@@ -150,6 +151,8 @@ $_LANG['success_saved'] = '저장했습니다.';
 $_LANG['success_sended'] = '발송했습니다.';
 
 // warning_... 경고 오류번호 2001~2999
+$_LANG['warning_not_select'] = '%s은(는) 선택할 수 없습니다.'; // 2201
+$_LANG['warning_no_selected'] = '선택된 %s이(가) 없습니다.'; // 2203
 $_LANG['warning_allowable'] = '%s만 허용됩니다.'; // 2501
 $_LANG['warning_not_allowable'] = '%s는(은) 허용되지 않습니다.'; // 2502
 $_LANG['warning_shortage'] = '%s이(가) 부족합니다.'; // 2701

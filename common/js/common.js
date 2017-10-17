@@ -355,8 +355,10 @@ var $_LANG = [];
 		e.preventDefault();
 		exec_ajax(this);
 	}).on('click', '[data-exec-ajax][data-ajax-param]', function(e) {
-		e.preventDefault();
-		exec_ajax(this);
+		if (!$(e.target).is('[except-event]')) {
+			e.preventDefault();
+			exec_ajax(this);
+		}
 	});
 
 	// <div class="uploader-group" placeholder="File">

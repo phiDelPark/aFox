@@ -1,10 +1,24 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	$search = empty($_DATA['search'])?null:'%'.$_DATA['search'].'%';
+	$schs = [];
+	if(!empty($_DATA['search'])) {
+		$search = $_DATA['search'];
+		$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tags'=>'wr_tags','date'=>'wr_regdate'];
+		$ss = explode(':', $search);
+		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
+			$search = trim(implode(':', array_slice($ss,1)));
+			if(!empty($search)) $schs = [$schkeys[$ss[0]].'{LIKE}'=>($ss[0]==='date'?'':'%').$search.'%'];
+		} else {
+			$schs = ['wr_title{LIKE}'=>'%'.$search.'%', 'wr_content{LIKE}'=>'%'.$search.'%'];
+		}
+	}
+
+	$category = empty($_DATA['category'])?null:$_DATA['category'];
 	$doc_list = getDBList(_AF_DOCUMENT_TABLE_,[
 		'md_id'=>'_AFOXtRASH_',
-		'OR' =>empty($search)?[]:['wr_title{LIKE}'=>$search, 'wr_content{LIKE}'=>$search]
+		'wr_updater'.(empty($category)?'{<>}':'')=>empty($category)?'_AFOXtRASH_':$category,
+		'OR' =>$schs
 	],'wr_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
 ?>
 
@@ -35,8 +49,8 @@
 		$end_page = $doc_list['end_page'];
 
 		foreach ($doc_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"><th scope="row">'.$value['wr_updater'].'</th>';
-			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</td>';
+			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"><th scope="row"><a href="'.getUrl('category',$value['wr_updater']).'" except-event>'.$value['wr_updater'].'</a></th>';
+			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['wr_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
@@ -65,9 +79,10 @@
 	<ul class="pagination">
 	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['admin'] ?>">
+		<?php if(!empty($_DATA['category'])) {?><input type="hidden" name="category" value="<?php echo $_DATA['category'] ?>"><?php }?>
 		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 		<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
-		<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
+		<?php if(!empty($_DATA['search'])||!empty($_DATA['category'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','','category','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 	</form></li>
 	</ul>
 </nav>

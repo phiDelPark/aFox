@@ -1,9 +1,23 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	$search = empty($_DATA['search'])?null:'%'.$_DATA['search'].'%';
+	$schs = [];
+	if(!empty($_DATA['search'])) {
+		$search = $_DATA['search'];
+		$schkeys = ['name'=>'mf_name','desc'=>'mf_description','type'=>'mf_type','date'=>'mf_regdate'];
+		$ss = explode(':', $search);
+		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
+			$search = trim(implode(':', array_slice($ss,1)));
+			if(!empty($search)) $schs = [$schkeys[$ss[0]].'{LIKE}'=>($ss[0]==='date'?'':'%').$search.'%'];
+		} else {
+			$schs = ['mf_name{LIKE}'=>'%'.$search.'%', 'mf_description{LIKE}'=>'%'.$search.'%'];
+		}
+	}
+
+	$category = empty($_DATA['category'])?null:$_DATA['category'];
 	$file_list = getDBList(_AF_FILE_TABLE_,[
-		'OR' =>empty($search)?[]:['mf_name{LIKE}'=>$search, 'mf_type{LIKE}'=>$search]
+		'md_id'.(empty($category)?'{<>}':'')=>empty($category)?'':$category,
+		'OR' =>$schs
 	],'mf_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
 ?>
 
@@ -32,7 +46,7 @@
 		$end_page = $file_list['end_page'];
 
 		foreach ($file_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row">'.$value['md_id'].'</th>';
+			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-event>'.$value['md_id'].'</a></th>';
 			echo '<td class="title">'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
 			echo '<td class="hidden-xs">'.$value['mf_download'].'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.$value['mb_ipaddress'].'</td>';
@@ -60,9 +74,10 @@
 	<ul class="pagination">
 	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['admin'] ?>">
+		<?php if(!empty($_DATA['category'])) {?><input type="hidden" name="category" value="<?php echo $_DATA['category'] ?>"><?php }?>
 		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 		<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
-		<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
+		<?php if(!empty($_DATA['search'])||!empty($_DATA['category'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','','category','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 	</form></li>
 	</ul>
 </nav>

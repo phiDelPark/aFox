@@ -136,6 +136,8 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 	$_LANG['confirm_select_move'] = "<?php echo getLang('confirm_select_move')?>";
 	$_LANG['confirm_select_empty'] = "<?php echo getLang('confirm_select_empty')?>";
 	$_LANG['confirm_select_delete'] = "<?php echo getLang('confirm_select_delete')?>";
+	$_LANG['warning_no_selected'] = "<?php echo getLang('warning_no_selected')?>";
+	$_LANG['prompt_enter_move_board_id'] = "<?php echo getLang('prompt_enter_move_board_id')?>";
 </script>
 <?php
 /* End of file admin.php */

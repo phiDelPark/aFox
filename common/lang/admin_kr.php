@@ -84,9 +84,16 @@ $_LANG['exclude'] = '제외';
 $_LANG['advanced_setup'] = '고급 설정 표시';
 $_LANG['use_member'] = '사용 유저';
 
+$_LANG['data_manage'] = '관리';
+$_LANG['data_move'] = '이동';
+$_LANG['data_copy'] = '복사';
+$_LANG['data_delete'] = '삭제';
+
 $_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
 $_LANG['msg_count_overflow'] = '%s의 최대 수 (%s)를 벗어났습니다.';
 $_LANG['msg_not_welcome_page'] = 'welcome 페이지는 삭제할 수 없습니다.';
+
+$_LANG['prompt_enter_move_board_id'] = '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n분류를 선택하시려면 뒤에 ::분류명을 입력하세요.\n예) module_id::해당분류';
 
 $_LANG['desc_id'] = '아이디는 유일해야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다. (첫 글자는 영문이여야 합니다)';
 $_LANG['desc_base_cdn_list'] = '사용할 jQuery, bootstrap 등의 CDN 서버를 적어주세요. (비워두면 기본값)';
