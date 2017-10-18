@@ -171,6 +171,17 @@
 		$(this).find('.modal-body').html('');
 	});
 
+	$('#ADM_DEFAULT_MODULE').find('a[href="#DataManageAction"]').on('click', function() {
+		var $a = $(this).closest('table');
+		$a.find('.th_title').hide();
+		$a.find('.data_controler').show();
+		$a.find('.data_selecter').show();
+		$a.find('.data_all_selecter').on('click', function() {
+			$a.find('.data_selecter').prop('checked', $(this).is(':checked')) ;
+		});
+		return false;
+	});
+
 	$(document).on('change.af.editor.toolbar', '.af-editor-toolbar', function(e, tar, old, val){
 		var $e = $(this).closest('.af-editor-group');
 		if((tar == 'pg_type' || tar == 'wr_type' || tar == 'rp_type') && $e.length == 1) $e.data('af.editor').switch(val==='2');

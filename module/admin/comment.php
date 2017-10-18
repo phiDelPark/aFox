@@ -34,8 +34,11 @@
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
-		<th class="col-xs-1">#<?php echo getLang('board')?></th>
-		<th><?php echo getLang('title')?></th>
+		<th class="col-xs-1"><i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i>
+			<a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
+		<th><span class="th_title"><?php echo getLang('title')?></span>
+		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter">
+			<a href="#" onclick="return data_selected_delete()"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i><?php echo getLang('data_delete')?></a></span></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('secret')?></th>
 		<th class="col-xs-1"><?php echo getLang('author')?></th>
@@ -58,7 +61,7 @@
 
 		foreach ($cmt_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].',with_module_config,1" data-modal-target="#comment_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-event>'.$value['md_id'].'</a></th>';
-			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
+			echo '<td class="title"><input type="checkbox" value="'.$value['rp_srl'].'" class="data_selecter" style="display:none;margin-right:5px" except-event>'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
 			echo '<td>'.($value['rp_status']?$value['rp_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['rp_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
@@ -149,6 +152,27 @@
 	</form>
   </div>
 </div>
+
+<script>
+	function data_selected_delete() {
+		if (confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['comment']]))) {
+		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
+			data = {};
+			srls = [];
+			$a.find('.data_selecter:checked').each(function(i) {
+				srls[i] = jQuery(this).val();
+			});
+			if (srls.length < 1) {
+				alert($_LANG['warning_no_selected'].sprintf([$_LANG['comment']]));
+				return false;
+			}
+			data['rp_srls'] = srls;
+			data['success_return_url'] = current_url;
+			exec_ajax('admin.deleteComments', data);
+		}
+		return false;
+	}
+</script>
 
 <?php
 /* End of file comment.php */

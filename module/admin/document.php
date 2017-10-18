@@ -24,9 +24,10 @@
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
-		<th class="col-xs-1"><a href="#" onclick="return data_manage_action()"><i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i><?php echo getLang('data_manage')?></a></th>
+		<th class="col-xs-1"><i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i>
+			<a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
 		<th><span class="th_title"><?php echo getLang('title')?></span>
-		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" onclick="data_selecter_allcheck(this)">
+		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter">
 			<a href="#" onclick="return data_selected_move()"><i class="glyphicon glyphicon-send" aria-hidden="true"></i><?php echo getLang('data_move')?></a>
 			<a href="#" onclick="return data_selected_delete()"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i><?php echo getLang('data_delete')?></a></span></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
@@ -151,20 +152,8 @@
 </div>
 
 <script>
-	function data_manage_action() {
-		var $a = jQuery('#ADM_DEFAULT_MODULE .table');
-		$a.find('.th_title').hide();
-		$a.find('.data_controler').show();
-		$a.find('.data_selecter').show();
-		return false;
-	}
-	function data_selecter_allcheck(t) {
-		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
-			checked = jQuery(t).is(':checked');
-		$a.find('.data_selecter').prop('checked', checked) ;
-	}
 	function data_selected_delete() {
-		if (confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['document']]))) {
+		if (confirm($_LANG['confirm_select_to_trash'].sprintf([$_LANG['document']]))) {
 		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
 			data = {};
 			srls = [];
@@ -182,7 +171,7 @@
 		return false;
 	}
 	function data_selected_move() {
-		var md_id = prompt($_LANG['prompt_enter_move_board_id'], '');
+		var md_id = prompt($_LANG['prompt_move_board_id'], '');
 		if (md_id) {
 		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
 			data = {};
