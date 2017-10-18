@@ -17,7 +17,7 @@
 		}
 	}
 
-	$category = empty($_DATA['category'])?'':$dd.'.md_id LIKE '.DB::escape('%'.$_DATA['category'].'%');
+	$category = $dd.(empty($_DATA['category'])?'.md_id <> \'_AFOXtRASH_\'':'.md_id = '.DB::escape($_DATA['category']));
 	$where = empty($search)&&empty($category) ? '1' : '('.$category.(empty($search)||empty($category) ? '' : ' AND ').$search.')';
 	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
 	$count = 20;

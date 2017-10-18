@@ -192,11 +192,15 @@ body {
 	padding: 20px;
 }
 
+.breadcrumb>.active {
+	font-weight: bold;
+}
+
 .table-nowrap th,
 .table-nowrap td {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .table-nowrap td.title {

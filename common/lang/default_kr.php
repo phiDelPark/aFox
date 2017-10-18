@@ -149,6 +149,7 @@ $_LANG['success_logout'] = '로그아웃했습니다.';
 $_LANG['success_moved'] = '이동했습니다.';
 $_LANG['success_saved'] = '저장했습니다.';
 $_LANG['success_sended'] = '발송했습니다.';
+$_LANG['success_finished'] = '작업을 마쳤습니다.';
 
 // warning_... 경고 오류번호 2001~2999
 $_LANG['warning_not_select'] = '%s은(는) 선택할 수 없습니다.'; // 2201

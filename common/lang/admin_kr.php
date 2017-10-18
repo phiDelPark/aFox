@@ -89,6 +89,8 @@ $_LANG['data_move'] = '이동';
 $_LANG['data_copy'] = '복사';
 $_LANG['data_delete'] = '삭제';
 
+$_LANG['empty_recycle_bin'] = '휴지통 비우기';
+
 $_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
 $_LANG['msg_count_overflow'] = '%s의 최대 수 (%s)를 벗어났습니다.';
 $_LANG['msg_not_welcome_page'] = 'welcome 페이지는 삭제할 수 없습니다.';
