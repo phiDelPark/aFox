@@ -101,7 +101,7 @@ class DB {
 		}
 	}
 
-	public static function update( $table, $updates, $wheres) {
+	public static function update($table, $updates, $wheres) {
 		$sets = implode(',', self::escapeArray( $updates, TRUE ));
 		$wheres = implode(' AND ', self::escapeArray( $wheres, TRUE ));
 		try {

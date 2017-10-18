@@ -4,7 +4,19 @@
 	$cd = _AF_COMMENT_TABLE_;
 	$dd = _AF_DOCUMENT_TABLE_;
 
-	$search = empty($_DATA['search'])?'':$cd.'.rp_content LIKE '.DB::escape('%'.$_DATA['search'].'%');
+	$search = '';
+	if(!empty($_DATA['search'])) {
+		$tmp = $_DATA['search'];
+		$schkeys = ['content'=>'rp_content','nick'=>'mb_nick','date'=>'rp_regdate'];
+		$ss = explode(':', $tmp);
+		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
+			$tmp = trim(implode(':', array_slice($ss,1)));
+			if(!empty($tmp)) $search = $cd.'.'.$schkeys[$ss[0]].' LIKE '.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%');
+		} else {
+			$search = $cd.'.rp_content LIKE '.DB::escape('%'.$_DATA['search'].'%');
+		}
+	}
+
 	$category = empty($_DATA['category'])?'':$dd.'.md_id LIKE '.DB::escape('%'.$_DATA['category'].'%');
 	$where = empty($search)&&empty($category) ? '1' : '('.$category.(empty($search)||empty($category) ? '' : ' AND ').$search.')';
 	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
@@ -37,8 +49,7 @@
 		<th class="col-xs-1"><i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i>
 			<a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
 		<th><span class="th_title"><?php echo getLang('title')?></span>
-		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter">
-			<a href="#" onclick="return data_selected_delete()"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i><?php echo getLang('data_delete')?></a></span></th>
+		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <a href="#" onclick="return data_selected_delete()"><?php echo getLang('data_delete')?></a></span></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('secret')?></th>
 		<th class="col-xs-1"><?php echo getLang('author')?></th>

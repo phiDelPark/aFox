@@ -22,7 +22,7 @@ function proc($data) {
 		$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 		$unfilename = _AF_ATTACH_DATA_ . $filetype . '/' . $file['md_id'] . '/' . $file['mf_target'] . '/' . $file['mf_upload_name'];
 
-		if(unlinkFile($unfilename)) {
+		if(!file_exists($unfilename) || unlinkFile($unfilename)) {
 			DB::delete(_AF_FILE_TABLE_,['mf_srl'=>$file['mf_srl']]);
 		}
 

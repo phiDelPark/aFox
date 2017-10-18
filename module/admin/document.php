@@ -27,9 +27,8 @@
 		<th class="col-xs-1"><i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i>
 			<a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
 		<th><span class="th_title"><?php echo getLang('title')?></span>
-		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter">
-			<a href="#" onclick="return data_selected_move()"><i class="glyphicon glyphicon-send" aria-hidden="true"></i><?php echo getLang('data_move')?></a>
-			<a href="#" onclick="return data_selected_delete()"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i><?php echo getLang('data_delete')?></a></span></th>
+		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter"><i class="glyphicon glyphicon-send" aria-hidden="true"></i> <a href="#" onclick="return data_selected_move()"><?php echo getLang('data_move')?></a>
+			<i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <a href="#" onclick="return data_selected_delete()"><?php echo getLang('data_delete')?></a></span></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('secret')?></th>
 		<th class="col-xs-1"><?php echo getLang('author')?></th>

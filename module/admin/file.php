@@ -1,31 +1,55 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	$schs = [];
+	$fl = _AF_FILE_TABLE_;
+	$dd = _AF_DOCUMENT_TABLE_;
+
+	$search = '';
 	if(!empty($_DATA['search'])) {
-		$search = $_DATA['search'];
+		$tmp = $_DATA['search'];
 		$schkeys = ['name'=>'mf_name','desc'=>'mf_description','type'=>'mf_type','date'=>'mf_regdate'];
-		$ss = explode(':', $search);
+		$ss = explode(':', $tmp);
 		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
-			$search = trim(implode(':', array_slice($ss,1)));
-			if(!empty($search)) $schs = [$schkeys[$ss[0]].'{LIKE}'=>($ss[0]==='date'?'':'%').$search.'%'];
+			$tmp = trim(implode(':', array_slice($ss,1)));
+			if(!empty($tmp)) $search = $fl.'.'.$schkeys[$ss[0]].' LIKE '.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%');
 		} else {
-			$schs = ['mf_name{LIKE}'=>'%'.$search.'%', 'mf_description{LIKE}'=>'%'.$search.'%'];
+			$search = '('.$fl.'.mf_name LIKE '.DB::escape('%'.$_DATA['search'].'%').' OR '.$fl.'.mf_description LIKE '.DB::escape('%'.$_DATA['search'].'%').')';
 		}
 	}
 
-	$category = empty($_DATA['category'])?null:$_DATA['category'];
-	$file_list = getDBList(_AF_FILE_TABLE_,[
-		'md_id'.(empty($category)?'{<>}':'')=>empty($category)?'':$category,
-		'OR' =>$schs
-	],'mf_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
+	$category = empty($_DATA['category'])?'':$dd.'.md_id LIKE '.DB::escape('%'.$_DATA['category'].'%');
+	$where = empty($search)&&empty($category) ? '1' : '('.$category.(empty($search)||empty($category) ? '' : ' AND ').$search.')';
+	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
+	$count = 20;
+	$start = (($page - 1) * $count);
+	$file_list = [];
+
+	$out = DB::getList("SELECT SQL_CALC_FOUND_ROWS $fl.*, $dd.md_id FROM $fl INNER JOIN $dd ON $dd.wr_srl = $fl.mf_target WHERE $where ORDER BY $fl.mf_regdate DESC LIMIT $start,$count");
+	if($ex = DB::error()) {
+		echo messageBox($ex->getMessage(),$ex->getCode(), false);
+	} else {
+		$total_count = DB::found();
+		$cur_page = $page;
+		$tal_page = ceil($total_count / $count);
+		$file_list['current_page'] = $cur_page;
+		$file_list['total_page'] = $tal_page;
+		$cur_page--;
+		$str_page = $cur_page - ($cur_page % 10);
+		$end_page = ($tal_page > ($str_page + 10) ? $str_page + 10 : $tal_page);
+		$file_list['start_page'] = ++$str_page;
+		$file_list['end_page'] = $end_page;
+		$file_list['total_count'] = $total_count;
+		$file_list['data'] = $out;
+	}
 ?>
 
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
-		<th class="col-xs-1">#<?php echo getLang('id')?></th>
-		<th><?php echo getLang('name')?></th>
+		<th class="col-xs-1"><i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i>
+			<a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
+		<th><span class="th_title"><?php echo getLang('name')?></span>
+		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <a href="#" onclick="return data_selected_delete()"><?php echo getLang('data_delete')?></a></span></th>
 		<th class="col-xs-1 hidden-xs"><?php echo getLang('download')?></th>
 		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('ip')?></th>
 		<th class="col-xs-1"><?php echo getLang('date')?></th>
@@ -47,7 +71,7 @@
 
 		foreach ($file_list['data'] as $key => $value) {
 			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-event>'.$value['md_id'].'</a></th>';
-			echo '<td class="title">'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
+			echo '<td class="title"><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="display:none;margin-right:5px" except-event>'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
 			echo '<td class="hidden-xs">'.$value['mf_download'].'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.$value['mb_ipaddress'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mf_regdate'])).'</td></tr>';
@@ -149,6 +173,27 @@
 	</form>
   </div>
 </div>
+
+<script>
+	function data_selected_delete() {
+		if (confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['file']]))) {
+		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
+			data = {};
+			srls = [];
+			$a.find('.data_selecter:checked').each(function(i) {
+				srls[i] = jQuery(this).val();
+			});
+			if (srls.length < 1) {
+				alert($_LANG['warning_no_selected'].sprintf([$_LANG['file']]));
+				return false;
+			}
+			data['mf_srls'] = srls;
+			data['success_return_url'] = current_url;
+			exec_ajax('admin.deleteFiles', data);
+		}
+		return false;
+	}
+</script>
 
 <?php
 /* End of file file.php */
