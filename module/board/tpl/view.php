@@ -93,6 +93,7 @@ $_LANG['ok'] = "<?php echo getLang('ok')?>";
 $_LANG['close'] = "<?php echo getLang('close')?>";
 $_LANG['yes'] = "<?php echo getLang('yes')?>";
 $_LANG['no'] = "<?php echo getLang('no')?>";
+$_LANG['error'] = "<?php echo getLang('error')?>";
 $_LANG['comment'] = "<?php echo getLang('comment')?>";
 $_LANG['password'] = "<?php echo getLang('password')?>";
 $_LANG['request_input'] = "<?php echo getLang('request_input')?>";

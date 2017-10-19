@@ -79,3 +79,6 @@ $use_style = ['list','review','album','gallery'];
 	</footer>
 </section>
 
+<script>
+$_LANG['error'] = "<?php echo getLang('error')?>";
+</script>

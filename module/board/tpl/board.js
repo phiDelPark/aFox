@@ -71,6 +71,7 @@
 					$ipu.on('success.exec.ajax', function(e, data, xhr) {
 						e.preventDefault();
 						getCommentCallfunc('success', data, xhr);
+						$(this).remove();
 					});
 				} else {
 					$ipu = $(input_password.sprintf('', $_LANG['confirm_select_delete'].sprintf($_LANG['comment']), $_LANG['password'], $_LANG['ok'], $_LANG['close']));
@@ -78,7 +79,10 @@
 			} else {
 				$ipu = $(confirm_action.sprintf('', $_LANG['confirm_select_delete'].sprintf($_LANG['comment']), $_LANG['yes'], $_LANG['no']));
 			}
-			$ipu.hide().addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
+			$ipu.on('error.exec.ajax', function(e, msg, xhr) {
+				e.preventDefault();
+				$(e.currentTarget).find('>div>div').css('color', 'red').html($_LANG['error'] + ': ' + msg);
+			}).hide().addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
 			$ipu.find('button.btn-default').click(function() {
 				$ipu.fadeOut('slow', function() {
 					$(this).remove();
@@ -191,6 +195,11 @@
 			param = ($relatedTarget.attr('data-param') || '').split(','),
 			url = current_url;
 
+		$form
+			.find('.modal-body>p.error').remove().end()
+			.find('.modal-body>p').show().end()
+			.find('input[name="mb_password"]').val('');
+
 		if (srl && param.length > 1) {
 			url = url.setQuery(param);
 			$form
@@ -207,6 +216,14 @@
 						$form.data('check success', status === 'success');
 						if (status === 'success') {
 							$form.submit();
+							return false;
+						} else if (status === 'error') {
+							var $err = $form.find('.modal-body>p.error');
+							if ($err.length === 0) {
+								$err = $('<p class="error" style="color:red">');
+								$form.find('.modal-body>p').hide().after($err);
+							}
+							$err.html($_LANG['error'] + ': ' + data);
 							return false;
 						}
 					}, response_tags);
