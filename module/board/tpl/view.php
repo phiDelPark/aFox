@@ -14,7 +14,7 @@ $wr_grant_view = $_{'board'}['grant_view'];
 $wr_grant_write = $_{'board'}['grant_write'];
 ?>
 
-<section id="board_view">
+<section id="bdView">
 	<header>
 		<h3 class="clearfix"><?php echo ($wr_secret?'<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ':'').$_{'board'}['wr_title']?></h3>
 		<hr class="divider">

@@ -4,7 +4,7 @@
 	$is_manager = isManager($_DATA['id']);
 ?>
 
-<section id="board_delete">
+<section id="bdDelete">
 	<header>
 		<h3 class="clearfix">
 			<span class="pull-left"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('delete')?></span>

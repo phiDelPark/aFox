@@ -28,10 +28,10 @@ if(!defined('__AFOX__')) exit();
 	?>
 
 			<div class="col-xs-<?php echo ($toggle2?'4':'8').(__MOBILE__?' mobile':'') ?>">
+				<div class="title-container"><h3 class="text-ellipsis"><?php echo ($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true)?></h3></div>
 				<a href="<?php echo (!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp',''))?>">
 					<div class="img-container" style="background-image: url('<?php echo (empty($_image['mf_srl'])?$_tmp_image:_AF_URL_.'?file='.$_image['mf_srl'].'&thumb')?>')"></div>
 				</a>
-				<div class="title-container"><h3 class="text-ellipsis"><?php echo ($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true)?></h3></div>
 			</div>
 
 	<?php

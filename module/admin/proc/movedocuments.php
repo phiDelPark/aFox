@@ -13,7 +13,7 @@ function proc($data) {
 
 	DB::transaction();
 
-	$tmp = explode('::', $data['md_id']);
+	$tmp = explode(':', $data['md_id']);
 	$md_id = trim($tmp[0]);
 	$md_cate = trim($tmp[1]);
 	$wr_srls = is_array($data['wr_srls']) ? $data['wr_srls'] : [$data['wr_srls']];

@@ -32,17 +32,24 @@
 	}
 
 ?>
+<div id="bsPreLoader"></div>
 
-<?php if($err = get_error()) { ?>
-	<div class="auto-hide" data-timer="5">
-		<h3 class="clearfix"><span class="timer-progress pull-left" data-repeat-char="&bull;"></span> <i class="glyphicon glyphicon-warning-sign" aria-hidden="true"></i> <?php echo $err['message']?></h3>
+<?php if($error = get_error()) { ?>
+	<div class="sticky-message panel panel-default">
+		<div class="panel-heading clearfix">
+			<i class="glyphicon glyphicon-warning-sign" aria-hidden="true"></i> <strong><?php echo getLang('alert')?></strong>
+			<a class="pull-right" href="#Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+		</div>
+		<div class="panel-body">
+			<?php echo $error['message']?>
+		</div>
 	</div>
 <?php } ?>
 
 <div class="container">
 
 	<header class="bs-docs-header">
-		<h1 id="logo_title"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
+		<h1 class="logo-title"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
 		<div class="right">
 <?php if (!empty($_MEMBER)) {
 	$notes = getDBList(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], '', 1, 5);
@@ -87,7 +94,7 @@
 				<a href="#" class="dropdown-toggle login-icon" data-toggle="dropdown"><img src="<?php echo $_icon ?>" alt="<?php echo escapeHtml($_MEMBER['mb_nick'])?>" /></a>
 				<ul class="dropdown-menu dropdown-menu-right">
 					<?php if(isManager($_DATA['id'])) { ?>
-					<li><a href="<?php echo _AF_URL_?>?admin"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></a></li>
+					<li><a href="<?php echo _AF_URL_?>?admin" target="_blank"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } else { ?>
 					<li class="dropdown-header"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></li>
 					<?php } ?>

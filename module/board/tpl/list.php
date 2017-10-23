@@ -2,10 +2,10 @@
 if(!defined('__AFOX__')) exit();
 if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURRENT_DOCUMENT_LIST'];
 $is_wr_grant = isGrant($_DATA['id'], 'write');
-$use_style = ['list','review','album','gallery'];
+$use_style = ['list','review','gallery','timeline'];
 ?>
 
-<section id="board_list" class="<?php echo $use_style[abs($_CFG['use_style'])]?>_style"<?php echo empty($_DATA['srl']) ? '' :' style="margin-top:50px"'; ?>>
+<section id="bdList" class="s_<?php echo $use_style[abs($_CFG['use_style'])]?>"<?php echo empty($_DATA['srl']) ? '' :' style="margin-top:50px"'; ?>>
 
 <?php if (empty($_DATA['srl']) && !empty($_CFG['md_category'])) { ?>
 	<header>

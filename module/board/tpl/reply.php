@@ -3,7 +3,7 @@ if(!defined('__AFOX__')) exit();
 $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT_COMMENT_LIST'];
 ?>
 
-<section id="board_reply">
+<section id="bdReply">
 	<article class="clearfix">
 	<?php
 		$current_cpage = $cmt['current_page'];

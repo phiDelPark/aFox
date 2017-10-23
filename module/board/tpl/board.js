@@ -22,7 +22,7 @@
 			data[args[i]] = args[i + 1];
 		}
 
-		var $arp = $i.closest('#board_reply'),
+		var $arp = $i.closest('#bdReply'),
 			$rp = $i.closest('.reply-item'),
 			passform = $i.attr('data-act-password') || '';
 
@@ -141,36 +141,6 @@
 		if ((tar == 'wr_type' || tar == 'rp_type') && $e.length == 1) $e.data('af.editor').switch(val === '2');
 	});
 
-	$('.auto-hide').each(function() {
-		var $i = $(this),
-			stime = ($i.attr('data-timer') || '5') - 1,
-			$prg = $i.find('.timer-progress') || 0,
-			srpt = $prg.attr('data-repeat-char') || '*',
-			time = stime,
-			timerId = 0;
-
-		var _repeat_char = function() {
-			var r = srpt.repeat(time);
-			r = r + '<u>' + srpt + '</u>' + srpt.repeat(stime - time);
-			return r;
-		};
-
-		if ($prg) $prg.html(_repeat_char());
-		timerId = setInterval(function() {
-			if (time < 1) {
-				clearInterval(timerId);
-				$i.animate({
-					bottom: '-=70'
-				}, 1000, function() {
-					$(this).remove();
-				});
-			} else {
-				time--;
-				if ($prg) $prg.html(_repeat_char());
-			}
-		}, 1000);
-	});
-
 	$('.list-table tr[data-hot-track]').click(function() {
 		var $i = $('.wr_title a', this),
 			href = $i.attr('href');
@@ -182,7 +152,7 @@
 		return false;
 	});
 
-	$('#passwordBoxModal', '#board_list').on('show.bs.modal', function(e) {
+	$('#passwordBoxModal', '#bdList').on('show.bs.modal', function(e) {
 		if (typeof e.relatedTarget == 'undefined') {
 			e.preventDefault();
 			return false;

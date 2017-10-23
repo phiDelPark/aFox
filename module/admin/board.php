@@ -122,8 +122,8 @@
 					<div class="radio-control radio-xs">
 						<span class="radio active" data-value="0"><?php echo getLang('Default')?></span>
 						<span class="radio" data-value="1"><?php echo getLang('Review')?></span>
-						<span class="radio" data-value="2"><?php echo getLang('Album')?></span>
-						<span class="radio" data-value="3"><?php echo getLang('Gallery')?></span>
+						<span class="radio" data-value="2"><?php echo getLang('Gallery')?></span>
+						<span class="radio" data-value="3"><?php echo getLang('Timeline')?></span>
 					</div>
 				 </div>
 			</div>

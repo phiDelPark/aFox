@@ -4,7 +4,7 @@
 	$is_manager = isManager($_DATA['id']);
 ?>
 
-<section id="board_write">
+<section id="bdWrite">
 	<header>
 		<h3 class="clearfix">
 			<span class="pull-left"><i class="glyphicon glyphicon-<?php echo $is?'edit':'pencil'?>" aria-hidden="true"></i> <?php echo getLang($is?'edit':'write')?></span>
