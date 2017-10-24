@@ -506,6 +506,11 @@
 	text-decoration: underline;
 }
 
+form .af_editor_rp_content>textarea,
+form .af_editor_rp_content>textarea+iframe {
+	min-height: 80px !important;
+}
+
 @media(max-width:768px) {
 	#bdReply>.reply-editer .area-group button {
 		width: 100%;

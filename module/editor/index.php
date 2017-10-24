@@ -3,7 +3,7 @@ if(!defined('__AFOX__')) exit();
 
 $file_options = (!empty($options['file']) && count($options['file'])==3) ? $options['file'] : false;
 
-$ops = '';
+$ops = 'name:"'. $name . '",';
 $skip_keys = ['file'=>1,'toolbar'=>1,'statebar'=>1];
 foreach ($options as $key => $v) {
 	if(!empty($skip_keys[$key])) continue;
@@ -38,23 +38,47 @@ foreach ($options as $key => $v) {
 		<textarea name="<?php echo $name ?>" class="form-control vresize"<?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo $content ?></textarea>
 	</div>
 <?php if(!empty($options['statebar'])) { ?>
-	<div class="af-statebar-area clearfix" style="margin-top:3px;height:24px;padding:0 0 0 200px">
-		<div class="btn-group btn-group-xs pull-left" role="group" aria-label="..." style="margin-left:-200px">
+	<div class="af-statebar-area clearfix" style="margin-top:3px;height:24px;padding:0 0 0 225px">
+		<div class="btn-group btn-group-xs pull-left" role="group" aria-label="..." style="margin-left:-225px">
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="bold"><i class="glyphicon glyphicon-bold" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="italic"><i class="glyphicon glyphicon-italic" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-default" tabindex="-1" data-type="strikeThrough" style="font-family:serif;font-size:15px;width:24px;height:22px;line-height:0px;text-decoration:line-through"><strong>S</strong></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="header"><i class="glyphicon glyphicon-header" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="insertorderedlist"><i class="glyphicon glyphicon-list" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="indent"><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" data-type="codeblock"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>
 		</div>
-		<div class="btn-group btn-group-xs pull-left" role="group" aria-label="..." style="margin-left:-54px">
-			<button type="button" class="btn btn-default" tabindex="-1" data-type="link" data-toggle="popover"><i class="glyphicon glyphicon-link" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-default" tabindex="-1" data-type="video" data-toggle="popover"><i class="glyphicon glyphicon-facetime-video" aria-hidden="true"></i></button>
+		<div class="btn-group btn-group-xs pull-left" role="group" aria-label="..." style="margin-left:-55px">
+			<a type="button" class="btn btn-default" tabindex="-1" data-type="link" data-toggle="popover"><i class="glyphicon glyphicon-link" aria-hidden="true"></i></a>
+			<a type="button" class="btn btn-default" tabindex="-1" data-type="components" data-toggle="popover"><i class="glyphicon glyphicon-leaf" aria-hidden="true"></i></a>
 		</div>
 		<div class="form-control" style="cursor:help;overflow:hidden;white-space:nowrap;color:#aaa;font-size:12px;font-family:Arial;width:100%;height:22px;padding:2px 5px;text-align:right;margin:0 -150px 0 0">
-			<strong>aFox</strong>
+			<strong>aFox.KR</strong>
 		</div>
 	</div>
+	<script>
+		<?php
+			$components = '';
+			$_COMPONENT_INFO = [];
+			$dir = _AF_PATH_ . 'module/editor/components/';
+			if(is_dir($dir)){
+				$handle = @opendir($dir); // 절대경로
+				while ($file = readdir($handle)) {
+					if($file != '.' && $file != '..') {
+						if(file_exists($dir.$file.'/info.php')) {
+							include $dir.$file.'/info.php';
+							$components .= '["'.$file.'","'.$_COMPONENT_INFO['title'].'"],';
+						}
+					}
+				}
+				@closedir($handle);
+				if(!empty($components)) $components = rtrim($components,',');
+			}
+			unset($handle);
+			unset($_COMPONENT_INFO);
+			echo 'var AF_EDITOR_COMPONENTS = ['.$components.'];';
+		?>
+	</script>
 <?php } ?>
 	<?php
 		if($file_options && $file_options[0] > 0) {
@@ -86,7 +110,7 @@ foreach ($options as $key => $v) {
 <script>
 	var AF_EDITOR_<?php echo strtoupper($name) ?>;
 	$.getScript(
-		"<?php echo _AF_URL_ ?>module/editor/editor.min.js",
+		"<?php echo _AF_URL_ ?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js') ?>",
 		function() {
 			var options = {<?php echo substr($ops, 0, -1) ?>}
 			AF_EDITOR_<?php echo strtoupper($name) ?> = $(".af_editor_<?php echo $name ?>").afEditor(options);

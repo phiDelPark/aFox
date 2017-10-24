@@ -6,9 +6,10 @@ header('P3P: CP="ALL CURa ADMa DEVa TAIa OUR BUS IND PHY ONL UNI PUR FIN COM NAV
 ob_start();
 
 // IP 허용/차단
-if(file_exists(__DIR__ . '/data/config/access_ip.php')) {
+$is_check_ip = __DIR__ . '/data/config/access_ip.php';
+if(file_exists($is_check_ip)) {
+	include $is_check_ip;
 	$is_check_ip = false;
-	include __DIR__ . '/data/config/access_ip.php';
 	foreach ($_ACCESS_IPS as $tmp) {
 		$is_check_ip = preg_match("/^{$tmp}$/", $_SERVER['REMOTE_ADDR']);
 		if ($is_check_ip) break;
@@ -27,7 +28,6 @@ if(!empty($_GET['file'])) {
 require_once __DIR__ . '/initial/common.php';
 
 if(__MODULE__ && !empty($_DATA['act'])) {
-
 	$callproc = 'proc'.ucwords(__MODULE__).'Default';
 
 	if(function_exists($callproc)) {

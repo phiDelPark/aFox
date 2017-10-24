@@ -81,6 +81,7 @@
 			}
 			$ipu.on('error.exec.ajax', function(e, msg, xhr) {
 				e.preventDefault();
+				beep();
 				$(e.currentTarget).find('>div>div').css('color', 'red').html($_LANG['error'] + ': ' + msg);
 			}).hide().addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
 			$ipu.find('button.btn-default').click(function() {
@@ -188,6 +189,7 @@
 							$form.submit();
 							return false;
 						} else if (status === 'error') {
+							beep();
 							var $err = $form.find('.modal-body>p.error');
 							if ($err.length === 0) {
 								$err = $('<p class="error" style="color:red">');

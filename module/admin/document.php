@@ -4,7 +4,7 @@
 	$schs = [];
 	if(!empty($_DATA['search'])) {
 		$search = $_DATA['search'];
-		$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tags'=>'wr_tags','date'=>'wr_regdate'];
+		$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tag'=>'wr_tags','date'=>'wr_regdate','cate'=>'wr_category'];
 		$ss = explode(':', $search);
 		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
 			$search = trim(implode(':', array_slice($ss,1)));

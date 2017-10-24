@@ -23,7 +23,7 @@ if($type === 'gallery') {
 		<?php
 			$w = (100 / $count);
 			foreach ($_list as $val) {
-				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target']).'"><img src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="max-height:150px;margin:0;padding:8px"></a>';
+				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target']).'"><img src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="display:inline-block;max-height:150px;margin:0;padding:8px"></a>';
 			}
 		?>
 		</div>

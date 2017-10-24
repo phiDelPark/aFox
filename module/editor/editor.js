@@ -6,33 +6,17 @@
 (function($) {
 	'use strict';
 
-	function dropFile(e, $i) {
-		var text, data = JSON.parse(e.originalEvent.dataTransfer.getData("TEXT") || '{}'),
+	function dropFile(e, th) {
+		var $i = th.$textarea,
+			text,
+			data = JSON.parse(e.originalEvent.dataTransfer.getData("TEXT") || '{}'),
 			title = data['title'],
 			srl = data['srl'] || data['index'],
 			url = ((data['srl'] || false) ? (request_uri + '?file=' + srl) : 'af-editor-tmpfile=' + srl),
 			type = (data['type'].split('/')[0] || 'binary');
 
-		if ($i[0].tagName == 'TEXTAREA') {
-
-			title = title.escapeMKDW(false);
-
-			switch (type) {
-				case 'image':
-					text = '![' + title + '](' + url + ')';
-					break;
-				case 'video':
-				case 'audio':
-					text = '[' + title + '](' + url + ' "_' + data['type'] + '_")';
-					break;
-				default:
-					text = '[`' + title + '`](' + url + ')';
-					break;
-			}
-
-			pasteTxtWithSel(text, '', '', $i);
-			$i.focus();
-		} else {
+		if (!$i.is(':visible') || $i.length === 0) {
+			$i = th.$element.find('iframe');
 
 			title = title.escapeHtml();
 
@@ -55,165 +39,27 @@
 					break;
 			}
 
-			pasteTxtWithSel(text, '', '', $i);
-			$i.contents().find('body').focus();
-		}
-	}
-
-	function pasteTxtWithSel(sTxt, eTxt, defTxt, $i) {
-		var range;
-
-		if ($i[0].tagName == 'TEXTAREA') {
-
-			var startPos = $i.prop('selectionStart'),
-				endPos = $i.prop('selectionEnd'),
-				v = $i.val(),
-				txtBefore = v.substring(0, startPos),
-				txtAfter = v.substring(startPos + (endPos - startPos), v.length),
-				selTxt = v.substring(startPos, endPos);
-			$i.val(txtBefore + sTxt + (selTxt ? selTxt : defTxt) + eTxt + txtAfter);
-
-			endPos = endPos + sTxt.length + eTxt.length;
-			if ($i[0].setSelectionRange) {
-				$i[0].setSelectionRange(startPos, endPos);
-			} else if ($i[0].createTextRange) {
-				range = $i[0].createTextRange();
-				range.collapse(true);
-				range.moveEnd('character', endPos);
-				range.moveStart('character', startPos);
-				range.select();
-			}
+			th.paste(text, false);
 
 		} else {
 
-			var sel, isie = false,
-				w = $i[0].contentWindow;
-			if (w) {
-				if (w.getSelection) {
-					sel = w.getSelection();
-				} else if (w.document.getSelection) {
-					sel = w.document.getSelection();
-				} else {
-					sel = w.document.selection && w.document.selection.createRange();
-					if (sel.text) {
-						isie = true;
-					} else {
-						return false;
-					}
-				}
-				if (isie) {
-					sel.pasteHTML(sTxt + (sel.text ? sel.text : defTxt) + eTxt);
-				} else if (sel.getRangeAt && sel.rangeCount) {
-					range = sel.getRangeAt(0);
-					var el = w.document.createElement("div");
-					el.appendChild(range.cloneContents());
-					el = $(sTxt + (el.innerText ? el.innerText : defTxt) + eTxt)[0];
-					range.deleteContents();
-					range.insertNode(el);
-				}
-				/**
-				 else {
-					var $body = $i.contents().find('body'),
-						html = $body.html();
-					$body.html(html + sTxt + eTxt);
-				}
-				**/
+			title = title.escapeMKDW(false);
+
+			switch (type) {
+				case 'image':
+					text = '![' + title + '](' + url + ')';
+					break;
+				case 'video':
+				case 'audio':
+					text = '[' + title + '](' + url + ' "_' + data['type'] + '_")';
+					break;
+				default:
+					text = '[`' + title + '`](' + url + ')';
+					break;
 			}
 
+			th.paste(text, false);
 		}
-	}
-
-	function textareaExecCmd(cmd, val, $i) {
-		var sTxt = '',
-			eTxt = '',
-			defTxt = '';
-
-		switch (cmd) {
-			case 'bold':
-				sTxt = '**';
-				eTxt = '**';
-				break;
-			case 'italic':
-				sTxt = '`';
-				eTxt = '`';
-				break;
-			case 'underline':
-				sTxt = '~~';
-				eTxt = '~~';
-				break;
-			case 'header':
-				sTxt = "\n" + '### ';
-				break;
-			case 'insertorderedlist':
-				sTxt = "\n" + '1. ';
-				eTxt = "\n" + '2. ';
-				break;
-			case 'indent':
-				sTxt = "\n" + '> ';
-				eTxt = '';
-				break;
-			case 'codeblock':
-				sTxt = "\n" + '```' + "\n";
-				eTxt = "\n" + '```' + "\n";
-				break;
-			case 'link':
-				sTxt = '<' + val + '>';
-				eTxt = '';
-				break;
-			case 'video':
-				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(.*)/i,
-					t = val.getQuery('t') || val.getQuery('start');
-				sTxt = '<img class="afox_widget" widget="youtube" src="' + val.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" width=\"560\" height=\"315\" vid=\"$4") + '"' + (t ? ' time="' + t + '"' : '') + '>' + "\n";
-				eTxt = '';
-				break;
-		}
-
-		if (sTxt || eTxt) {
-			pasteTxtWithSel(sTxt, eTxt, defTxt, $i);
-		}
-
-		$i.focus();
-	}
-
-	function iFrameExecCmd(cmd, val, $i) {
-		var doc,
-			sTxt = '',
-			eTxt = '';
-
-		switch (cmd) {
-			case 'bold':
-			case 'italic':
-			case 'underline':
-			case 'insertorderedlist':
-				doc = $i[0].contentWindow.document;
-				doc.execCommand(cmd, false, val);
-				break;
-			case 'header':
-				sTxt = '<h3>';
-				eTxt = '</h3>';
-				pasteTxtWithSel(sTxt, eTxt, '&nbsp;', $i);
-				break;
-			case 'indent':
-				sTxt = '<blockquote>';
-				eTxt = '</blockquote>';
-				pasteTxtWithSel(sTxt, eTxt, '&nbsp;', $i);
-				break;
-			case 'codeblock':
-				sTxt = '<pre><code>';
-				eTxt = '</code></pre>';
-				pasteTxtWithSel(sTxt, eTxt, '&nbsp;', $i);
-				break;
-			case 'link':
-				sTxt = '<a href="' + val + '" target="_blank">';
-				eTxt = '</a>';
-				pasteTxtWithSel(sTxt, eTxt, val, $i);
-				break;
-			case 'video':
-				textareaExecCmd('video', val, $i);
-				break;
-		}
-
-		$i.contents().find('body').focus();
 	}
 
 	function setImageTooltip($i) {
@@ -227,12 +73,12 @@
 			});
 		} else {
 			var url = $i.attr('data-srl') || false ? request_uri + '?file=' + $i.attr('data-srl') : $i.attr('data-path');
-			title = title.substring(title.length - 12, title.length);
+			title = title.substring(title.length - 17, title.length);
 			$i.tooltip({
 				html: 1,
 				container: 'body',
 				title: function() {
-					return '<img src="' + url + '" style="width:80px;height:80px"><div style="width:80px;overflow:hidden;white-space:nowrap;">' + title + '</div>';
+					return '<img src="' + url + '" style="width:100px;height:100px"><div style="width:100px;overflow:hidden;white-space:nowrap;">' + title + '</div>';
 				}
 			});
 		}
@@ -303,16 +149,12 @@
 			}
 		}).on('click', '.af-statebar-area>.btn-group>button[tabindex=-1]', function(e, i) {
 			var $i = $(this),
-				$txtarea = $this.$textarea,
+				$txtara = $this.$textarea,
 				$iframe = $this.$element.find('iframe'),
 				type = $i.attr('data-type');
 			$i.blur();
-			if (type == 'link' || type == 'video') return false;
-			if ($txtarea.is(':visible') && $txtarea.length > 0) {
-				textareaExecCmd(type, null, $txtarea);
-			} else if ($iframe.length > 0) {
-				iFrameExecCmd(type, null, $iframe);
-			}
+			if (type == 'link' || type == 'components') return false;
+			$this.exec(type, null);
 		}).on('click', '.af-editor-uploaded>.file-item', function() {
 			var $i = $(this),
 				srl = $i.attr('data-srl'),
@@ -337,7 +179,7 @@
 			e.preventDefault();
 		}).on('drop', '.af-editor-content>textarea', function(e) {
 			e.preventDefault();
-			dropFile(e, $(this));
+			dropFile(e, $this);
 		}).on('insert.af.uploader', '.uploader-group', function(e, files) {
 			e.preventDefault();
 			var $c = $(this).find('.file-caption'),
@@ -391,26 +233,50 @@
 			html: 1,
 			trigger: 'manual',
 			placement: 'top',
-			content: '<div class="input-group"><input type="text" class="form-control" style="width:150px"><a href="#" class="btn btn-default input-group-addon">OK</a></div>'
-		}).click(function() {
-			$(this).popover('toggle');
+			content: '<div class="input-group" style="min-width:150px"></div>'
 		}).on('inserted.bs.popover', function() {
 			var $i = $(this),
 				$popover = $i.data("bs.popover").tip().find('.popover-content'),
 				type = $i.attr('data-type') || '';
-			$popover.find('input').attr('placeholder', type == 'video' ? 'YouTube' : 'Link');
-			$popover.find('a').click(function() {
-				var url = $(this).prev().val() || '',
-					$txtarea = $this.$textarea,
-					$iframe = $this.$element.find('iframe');
-				if ($txtarea.is(':visible') && $txtarea.length > 0) {
-					textareaExecCmd(type, url, $txtarea);
-				} else if ($iframe.length > 0) {
-					iFrameExecCmd(type, url, $iframe);
+			if (type == 'components') {
+				if (AF_EDITOR_COMPONENTS) {
+					var lk = '<div class="list-group" style="margin:0">';
+					for (var i in AF_EDITOR_COMPONENTS) {
+						lk = lk + '<a href="#" class="list-group-item" data-name="' + AF_EDITOR_COMPONENTS[i][0] + '">' + AF_EDITOR_COMPONENTS[i][1] + '</a>';
+					}
+					$popover
+						.attr('style', 'padding:0')
+						.find('.input-group')
+						.html(lk + '</div>')
+						.find('a').click(function() {
+							var name = $(this).attr('data-name');
+							pop_win(request_uri + 'module/editor/component.php?n=' + name + '&k=' + $this.options.name, null, null, 'af_editor_components');
+							return false;
+						});
 				}
+			} else {
+				$popover
+					.find('.input-group')
+					.html('<input type="text" class="form-control" style="width:150px" placeholder="Link"><a href="#" class="btn btn-default input-group-addon">OK</a>')
+					.find('a').click(function() {
+						var url = $(this).prev().val() || '';
+						$this.exec(type, url);
+						return false;
+					});
+			}
+		}).on('shown.bs.popover', function() {
+			var $i = $(this),
+				$ipu = $i.data("bs.popover").tip().find('.popover-content').find('input');
+			if ($ipu.length > 0) {
+				$ipu.focus().select();
+			} else {
+				$ipu = $i;
+			}
+			$ipu.on('blur', function() {
 				$i.popover('hide');
-				return false;
 			});
+		}).on('click', function() {
+			$(this).popover('toggle');
 		});
 
 		this.$element.find('.uploader-group .file-item').each(function() {
@@ -431,9 +297,10 @@
 	};
 
 	AfEditor.prototype.switch = function(swc) {
-		var $txtarea = this.$textarea,
+		var $this = this,
+			$txtara = this.$textarea,
 			$iframe = this.$element.find('iframe'),
-			height = $txtarea.css('height') || '',
+			height = $txtara.css('height') || '',
 			readonly = this.options.readonly;
 
 		if (swc) {
@@ -448,13 +315,13 @@
 								}
 							).on('drop', function(e) {
 								e.preventDefault();
-								dropFile(e, $_i);
+								dropFile(e, $this);
 							});
 						$_i.contents().find("head").html('<link rel="stylesheet" href="' + request_uri + 'module/editor/editor.min.css">');
-						$_i.contents().find('body').html($txtarea.val());
+						$_i.contents().find('body').html($txtara.val());
 						if (!readonly) $_i.contents()[0].designMode = 'on';
 						//$_i[0].contentWindow.document.designMode = 'on';
-					}).insertAfter($txtarea.hide()).end();
+					}).insertAfter($txtara.hide()).end();
 
 				if (readonly) {
 					$iframe.attr('readonly', 'readonly');
@@ -471,21 +338,159 @@
 				text = $iframe.contents().find('body').html();
 				$iframe.remove();
 			} else {
-				text = $txtarea.val();
+				text = $txtara.val();
 			}
 
-			$txtarea.css('height', height).val(text).show();
+			$txtara.css('height', height).val(text).show();
 			if (readonly) {
-				$txtarea.attr('readonly', 'readonly');
+				$txtara.attr('readonly', 'readonly');
 			} else {
-				$txtarea.removeAttr('readonly');
+				$txtara.removeAttr('readonly');
 			}
 		}
-
 	};
 
 	AfEditor.prototype.toggle = function() {
 		this.switch(this.$textarea.is(':visible'));
+	};
+
+	AfEditor.prototype.paste = function(text, fm) {
+		var $i = this.$textarea,
+			range;
+
+		fm = (fm !== false);
+
+		if (!$i.is(':visible') || $i.length === 0) {
+			$i = this.$element.find('iframe');
+		}
+
+		if ($i[0].tagName == 'TEXTAREA') {
+
+			var startPos = $i.prop('selectionStart'),
+				endPos = $i.prop('selectionEnd'),
+				v = $i.val(),
+				txtBefore = v.substring(0, startPos),
+				txtAfter = v.substring(startPos + (endPos - startPos), v.length),
+				selTxt = v.substring(startPos, endPos);
+
+			if (fm) text = text.replace(/%s/, selTxt);
+			$i.val(txtBefore + text + txtAfter);
+
+			endPos = endPos + text.length - selTxt.length;
+			if ($i[0].setSelectionRange) {
+				$i[0].setSelectionRange(startPos, endPos);
+			} else if ($i[0].createTextRange) {
+				range = $i[0].createTextRange();
+				range.collapse(true);
+				range.moveEnd('character', endPos);
+				range.moveStart('character', startPos);
+				range.select();
+			}
+
+			$i.focus();
+
+		} else {
+
+			var sel, isie = false,
+				w = $i[0].contentWindow;
+			if (w) {
+				if (w.getSelection) {
+					sel = w.getSelection();
+				} else if (w.document.getSelection) {
+					sel = w.document.getSelection();
+				} else {
+					sel = w.document.selection && w.document.selection.createRange();
+					if (sel.text) {
+						isie = true;
+					} else {
+						return false;
+					}
+				}
+				if (isie) {
+					if (fm) text = text.replace(/%s/, sel.text);
+					sel.pasteHTML(text);
+				} else if (sel.getRangeAt && sel.rangeCount) {
+					range = sel.getRangeAt(0);
+					var el = w.document.createElement("div");
+					el.appendChild(range.cloneContents());
+					if (fm) text = text.replace(/%s/, el.innerText);
+					range.deleteContents();
+					range.insertNode($(text)[0]);
+				}
+				/**
+				 else {
+					var $body = $i.contents().find('body'),
+						html = $body.html();
+					$body.html(html + text.replace(/%s/, ''));
+				}
+				**/
+			}
+
+			$i.contents().find('body').focus();
+		}
+	};
+
+	AfEditor.prototype.exec = function(cmd, value) {
+		var $i = this.$textarea,
+			doc,
+			text;
+
+		if (!$i.is(':visible') || $i.length === 0) {
+			$i = this.$element.find('iframe');
+		}
+
+		switch (cmd) {
+			case 'bold':
+			case 'italic':
+			case 'strikeThrough':
+			case 'insertorderedlist':
+				if ($i[0].tagName == 'TEXTAREA') {
+					switch (cmd) {
+						case 'bold':
+							this.paste('**%s**');
+							break;
+						case 'italic':
+							this.paste('`%s`');
+							break;
+						case 'strikeThrough':
+							this.paste('~~%s~~');
+							break;
+						case 'insertorderedlist':
+							this.paste("\n" + '1. ' + '%s' + "\n" + '2. ');
+							break;
+					}
+				} else {
+					doc = $i[0].contentWindow.document;
+					doc.execCommand(cmd, false, value);
+				}
+				break;
+			case 'header':
+				this.paste('<h3>%s</h3>');
+				break;
+			case 'indent':
+				this.paste('<blockquote>%s</blockquote>');
+				break;
+			case 'codeblock':
+				this.paste('<pre><code>%s</code></pre>');
+				break;
+			case 'link':
+				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(.*)/i,
+					t = value.getQuery('t') || value.getQuery('start');
+				if (pattern.test(value)) {
+					text = '<img class="afox_widget" widget="youtube" src="' + value.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" width=\"560\" height=\"315\" vid=\"$4") + '"' + (t ? ' time="' + t + '"' : '') + '>' + "\n";
+				} else {
+					text = '<a href="' + value + '" target="_blank">' + value + '</a>';
+					if ($i[0].tagName == 'TEXTAREA') text = '<' + value + '>';
+				}
+				this.paste(text, false);
+				break;
+		}
+
+		if ($i[0].tagName == 'TEXTAREA') {
+			$i.focus();
+		} else {
+			$i.contents().find('body').focus();
+		}
 	};
 
 	// AFEDITOR PLUGIN DEFINITION
