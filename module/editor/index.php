@@ -35,7 +35,7 @@ foreach ($options as $key => $v) {
 	</div>
 <?php } ?>
 	<div class="af-editor-content">
-		<textarea name="<?php echo $name ?>" class="form-control vresize"<?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo $content ?></textarea>
+		<textarea name="<?php echo $name ?>" class="form-control vresize"<?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo escapeHtml($content) ?></textarea>
 	</div>
 <?php if(!empty($options['statebar'])) { ?>
 	<div class="af-statebar-area clearfix" style="margin-top:3px;height:24px;padding:0 0 0 225px">

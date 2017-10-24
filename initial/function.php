@@ -563,7 +563,8 @@ if(!defined('__AFOX__')) exit();
 
 	function escapeHtml($str, $is_strip_tags = false, $quote_style = ENT_COMPAT) {
 		if($is_strip_tags) $str = strip_tags($str);
-		return htmlspecialchars($str, $quote_style | ENT_HTML401, 'UTF-8', false);
+		//$str = str_replace('&', '&amp;', $str);  // double_encode = false
+		return htmlspecialchars($str, $quote_style | ENT_HTML401, 'UTF-8');
 	}
 
 	function xssClean($html, $chkclosed = true) {
