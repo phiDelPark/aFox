@@ -14,6 +14,7 @@ if(!defined('__AFOX__')) exit();
 	<label style="display:block"><input class="option1group" type="checkbox" value="style"> 모든 스타일 삭제</label>
 	</div>
 </div>
+<hr style="margin:10px 0">
 <div style="margin:10px;text-align:right">
 	<button onclick="remove_styles()">확인</button>
 	<button onclick="window.close()">취소</button>

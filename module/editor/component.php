@@ -15,8 +15,9 @@ require_once _AF_EDITOR_PATH_ . 'components/' . $_GET['n'] . '/info.php';
 <meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
 <title><?php echo $_COMPONENT_INFO['title'] ?></title>
 <link href="../../../common/css/bootstrap.min.css" rel="stylesheet">
-<script src="../../../common/js/jquery.min.js" id="def-jQuery-JS"></script>
-<script src="../../../common/js/bootstrap.min.js" id="def-Bootstrap-JS"></script>
+<script src="../../../common/js/jquery.min.js"></script>
+<script src="../../../common/js/bootstrap.min.js"></script>
+<script src="../../../common/js/common.min.js"></script>
 </head>
 <body>
 <?php
