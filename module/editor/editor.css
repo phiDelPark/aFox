@@ -18,12 +18,14 @@ pre {
 }
 
 pre code {
-	padding: 0;
+	padding: 5px;
 	font-size: inherit;
 	color: inherit;
 	white-space: pre-wrap;
-	background-color: transparent;
-	border-radius: 0;
+	background-color: #fff;
+	display: block;
+	border: 1px solid #ccc;
+	border-radius: 3px;
 }
 
 blockquote {

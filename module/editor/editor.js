@@ -319,6 +319,12 @@
 							});
 						$_i.contents().find("head").html('<link rel="stylesheet" href="' + request_uri + 'module/editor/editor.min.css">');
 						$_i.contents().find('body').html($txtara.val());
+						$_i.contents().on('keydown', function(e) {
+							if (e.keyCode == 13) {
+								$this.paste('<br>', false);
+								return false;
+							}
+						});
 						if (!readonly) $_i.contents()[0].designMode = 'on';
 						//$_i[0].contentWindow.document.designMode = 'on';
 					}).insertAfter($txtara.hide()).end();
@@ -365,6 +371,7 @@
 		}
 
 		if ($i[0].tagName == 'TEXTAREA') {
+			$i.focus();
 
 			var startPos = $i.prop('selectionStart'),
 				endPos = $i.prop('selectionEnd'),
@@ -391,6 +398,8 @@
 
 		} else {
 
+			$i.contents().find('body').focus();
+
 			var sel, isie = false,
 				w = $i[0].contentWindow;
 			if (w) {
@@ -416,6 +425,10 @@
 					if (fm) text = text.replace(/%s/, el.innerText);
 					range.deleteContents();
 					range.insertNode($(text)[0]);
+					if (!fm) {
+						range.setStart(sel.focusNode, sel.focusOffset);
+						range.setEnd(sel.anchorNode, sel.anchorOffset);
+					}
 				}
 				/**
 				 else {
