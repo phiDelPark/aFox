@@ -43,6 +43,11 @@
 			}
 		}
 
+		if(act=='admin.getBoard' && data['use_type'] > 6) {
+			data['use_default_type'] = data['use_type'];
+			data['use_type'] = '0';
+		}
+
 		$f[0].dataImport(data);
 
 		if(act=='admin.getBoard' && typeof(data['md_extra']['keys']) != 'undefined') {

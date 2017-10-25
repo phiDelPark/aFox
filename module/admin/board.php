@@ -128,7 +128,10 @@
 				 </div>
 			</div>
 			<div class="form-group">
-				<label><?php echo getLang('type')?></label>
+				<label style="width:100px"><?php echo getLang('type')?></label>
+				<input type="radio" name="use_default_type" value="7" style="margin-left:1px" checked="checked">
+				<input type="radio" name="use_default_type" value="8" style="margin-left:88px">
+				<input type="radio" name="use_default_type" value="9" style="margin-left:88px">
 				<div class="radio-group">
 					<input type="hidden" name="use_type" value="0">
 					<div class="radio-control radio-xs">

@@ -71,7 +71,8 @@ function proc($data) {
 		// 모듈이 없으면 에러
 		if($doc['md_id'] != $module['md_id']) throw new Exception(getLang('error_request'),4303);
 
-		if(!empty($module['use_type'])) $data['rp_type'] = ((int)$module['use_type'])-1;
+		// use_type 값이 1~6 사이이면 모듈에 설정된 값으로 강제 설정
+		if(!empty($module['use_type']) && $module['use_type'] < 7) $data['rp_type'] = ((int)$module['use_type'])-1;
 		if(!empty($module['use_secret'])) $data['rp_secret'] = ((int)$module['use_secret'])-1;
 		if($parent_secret) $data['rp_secret'] = 1;
 

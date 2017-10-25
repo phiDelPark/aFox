@@ -63,9 +63,9 @@
 			<div class="form-group">
 				<?php
 					$issecret = ($is&&$_{'board'}['wr_secret']=='1')?1:0;
-					$ishtml = ($is&&$_{'board'}['wr_type']=='2')||(!$is&&$_CFG['use_type']=='3')?1:0;
+					$ishtml = ($is&&$_{'board'}['wr_type']=='2')||(!$is&&($_CFG['use_type']=='3'||$_CFG['use_type']=='9'))?1:0;
 					$istool = [];
-					if(empty($_CFG['use_type'])) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
+					if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
 					if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [$issecret,'Secret'];
 					displayEditor(
 						'wr_content', $is?$_{'board'}['wr_content']:'',
