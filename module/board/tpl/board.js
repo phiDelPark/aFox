@@ -81,8 +81,8 @@
 			}
 			$ipu.on('error.exec.ajax', function(e, msg, xhr) {
 				e.preventDefault();
-				beep();
 				$(e.currentTarget).find('>div>div').css('color', 'red').html($_LANG['error'] + ': ' + msg);
+				$(e.currentTarget).find('[name="mb_password"]').val('').focus();
 			}).hide().addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
 			$ipu.find('button.btn-default').click(function() {
 				$ipu.fadeOut('slow', function() {
@@ -142,68 +142,58 @@
 		if ((tar == 'wr_type' || tar == 'rp_type') && $e.length == 1) $e.data('af.editor').switch(val === '2');
 	});
 
-	$('.list-table tr[data-hot-track]').click(function() {
-		var $i = $('.wr_title a', this),
-			href = $i.attr('href');
-		if (href == '#' && $i.attr('data-target') == '#passwordBoxModal') {
-			$($i.attr('data-target')).modal('show', $i);
+	$('.list-table tr[data-hot-track], [href="#requirePassword"]').click(function() {
+		var $i = $(this);
+		if ($i[0].tagName == 'TR') $i = $i.find('.wr_title a');
+		var href = $i.attr('href');
+		if (href == '#requirePassword' && $i.attr('data-param')) {
+			var html = '<form action="%s" method="post" autocomplete="off"><p>%s</p><div class="form-group"><input type="password" class="form-control" name="mb_password" placeholder="%s" required /> <span class="sr-only">%s</span></div></form>';
+			msg_box(html.sprintf(current_url, $_LANG['request_input'].sprintf($_LANG['password']), $_LANG['password'], $_LANG['password']), null, ['question', ['OK', 'cancel']], function(key, $body) {
+				if (key == 'ok') {
+					var $form = $body.find('form'),
+						srl = $i.attr('data-srl') || '',
+						param = ($i.attr('data-param') || '').split(','),
+						url = current_url;
+
+					if (srl && param.length > 1) {
+						url = url.setQuery(param);
+						// 이벤트 중복 실행 방지
+						$form.off('submit');
+						$form
+							.on('submit', function() {
+								// 체크가 성공하면 이동
+								if ($form.data('check success') || false) {
+									return true;
+								}
+								var data = {},
+									response_tags = ['wr_srl'];
+								data['wr_srl'] = srl;
+								data['mb_password'] = $form.find('input[name="mb_password"]').val();
+								exec_ajax('board.checkpassword', data, function(status, data, xhr) {
+									$form.data('check success', status === 'success');
+									if (status === 'success') {
+										$form.submit();
+										return false;
+									} else if (status === 'error') {
+										$form.find('>p').html($_LANG['error'] + ': ' + data).css('color', 'red');
+										$form.find('input[name="mb_password"]').val('').focus();
+										return false;
+									}
+								}, response_tags);
+								return false;
+							})
+							.attr('action', url)
+							.submit();
+					}
+				} else {
+					return true;
+				}
+				return false;
+			});
 		} else {
 			location.href = href;
 		}
 		return false;
-	});
-
-	$('#passwordBoxModal', '#bdList').on('show.bs.modal', function(e) {
-		if (typeof e.relatedTarget == 'undefined') {
-			e.preventDefault();
-			return false;
-		}
-
-		var $modal = $(this),
-			$form = $modal.find('form'),
-			$relatedTarget = $(e.relatedTarget),
-			srl = $relatedTarget.attr('data-srl') || '',
-			param = ($relatedTarget.attr('data-param') || '').split(','),
-			url = current_url;
-
-		$form
-			.find('.modal-body>p.error').remove().end()
-			.find('.modal-body>p').show().end()
-			.find('input[name="mb_password"]').val('');
-
-		if (srl && param.length > 1) {
-			url = url.setQuery(param);
-			$form
-				.on('submit', function() {
-					// 체크가 성공하면 이동
-					if ($form.data('check success') || false) {
-						return true;
-					}
-					var data = {},
-						response_tags = ['mb_password'];
-					data['wr_srl'] = srl;
-					data['mb_password'] = $modal.find('input[name="mb_password"]').val();
-					exec_ajax('board.checkpassword', data, function(status, data, xhr) {
-						$form.data('check success', status === 'success');
-						if (status === 'success') {
-							$form.submit();
-							return false;
-						} else if (status === 'error') {
-							beep();
-							var $err = $form.find('.modal-body>p.error');
-							if ($err.length === 0) {
-								$err = $('<p class="error" style="color:red">');
-								$form.find('.modal-body>p').hide().after($err);
-							}
-							$err.html($_LANG['error'] + ': ' + data);
-							return false;
-						}
-					}, response_tags);
-					return false;
-				}).attr('action', url);
-		}
-	}).on('shown.bs.modal', function(e) {
-		$(this).find('[name="mb_password"]').focus();
 	});
 
 	$(window).on('load', function() {

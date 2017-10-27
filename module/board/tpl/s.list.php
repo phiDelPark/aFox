@@ -34,7 +34,7 @@ if(!defined('__AFOX__')) exit();
 			foreach ($_{'board'}['data'] as $key => $val) {
 				$wr_secret =  $val['wr_secret'] == '1';
 				$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
-				echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'><td class="wr_title"><a href="'.(!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','')).'" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
+				echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'><td class="wr_title"><a href="'.(!$wr_permit&&$wr_secret?'#requirePassword" data-srl="'.$val['wr_srl'].'" data-param="srl,'.$val['wr_srl']:getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','')).'" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
 				echo '<div class="clearfix"><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span>';
 				echo '<span class="pull-right">'.date('m/d', strtotime($val['wr_update'])).'</span></div></td></tr>';
 			}
@@ -43,7 +43,7 @@ if(!defined('__AFOX__')) exit();
 				$wr_secret =  $val['wr_secret'] == '1';
 				$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
 				echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'><th class="hidden-xs" scope="row">'.$val['wr_srl'].'</th>';
-				echo '<td class="wr_title"><a href="'.(!$wr_permit&&$wr_secret?'#" data-srl="'.$val['wr_srl'].'" data-toggle="modal" data-param="srl,'.$val['wr_srl'].'" data-target="#passwordBoxModal':getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','')).'" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
+				echo '<td class="wr_title"><a href="'.(!$wr_permit&&$wr_secret?'#requirePassword" data-srl="'.$val['wr_srl'].'" data-param="srl,'.$val['wr_srl']:getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','')).'" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
 				echo '<td nowrap><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';
 				echo '<td class="hidden-xs">'.$val['wr_hit'].'</td>';
 				echo '<td>'.date('Y/m/d', strtotime($val['wr_update'])).'</td></tr>';

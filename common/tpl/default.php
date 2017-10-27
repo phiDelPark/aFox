@@ -8,6 +8,7 @@ if(($_THEME = getCache('_AF_THEME_'._AF_THEME_)) === false) {
 }
 
 @include_once _AF_THEME_PATH_ . 'lang/' . _AF_LANG_ . '.php';
+addJSLang(['ok','cancel','yes','no','calling_server']);
 
 ?>
 <!doctype html>
@@ -35,21 +36,26 @@ if(($_THEME = getCache('_AF_THEME_'._AF_THEME_)) === false) {
 <script src="<?php echo _AF_URL_ ?>common/js/jquery.min.js" id="def-jQuery-JS"></script>
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.min.js" id="def-Bootstrap-JS"></script>
 <?php } ?>
+
+<link rel="stylesheet" href="<?php echo _AF_URL_ . 'common/css/common' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css') ?>">
+<script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
 <script>
 var current_url     = "<?php echo getUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
-var waiting_message = "<?php echo getLang('call_server') ?>";
 </script>
-<link rel="stylesheet" href="<?php echo _AF_URL_ . 'common/css/common' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css') ?>">
-<script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
 <?php @include _AF_THEME_PATH_ . '_head.php'; ?>
 </head>
 <body>
 <?php  include _AF_THEME_PATH_ . (__POPUP__ ? 'popup' : 'index') . '.php'; ?>
 <?php
 @include _AF_THEME_PATH_ . '_tail.php';
+echo '<script>';
+$tmp = [];
+foreach ($_ADDELEMENTS['LANG'] as $val) {foreach ($val as $key){if(!$tmp[$key]){$tmp[$key]=1;echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';}}}
+echo '</script>'."\n";
 foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {echo '<link href="'.$key.'" rel="stylesheet">';}
 foreach ($_ADDELEMENTS['JS'] as $key=>$val) {echo '<script src="'.$key.'"></script>';}
 ?>
+
 </body>
 </html>

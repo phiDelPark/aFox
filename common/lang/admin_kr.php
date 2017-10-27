@@ -95,7 +95,7 @@ $_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
 $_LANG['msg_count_overflow'] = '%s의 최대 수 (%s)를 벗어났습니다.';
 $_LANG['msg_not_welcome_page'] = 'welcome 페이지는 삭제할 수 없습니다.';
 
-$_LANG['confirm_select_to_trash'] = '선택된 %s을(를) 휴지통으로 보내겠습니까?';
+$_LANG['confirm_select_trash'] = '선택된 %s을(를) 휴지통으로 보내겠습니까?';
 $_LANG['prompt_move_board_id'] = '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n분류를 선택하시려면 뒤에 :분류명을 입력하세요.\n예) module_id:해당분류';
 
 $_LANG['desc_id'] = '아이디는 유일해야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다. (첫 글자는 영문이여야 합니다)';

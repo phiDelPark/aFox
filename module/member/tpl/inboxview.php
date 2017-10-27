@@ -1,5 +1,7 @@
 <?php
 	if(!defined('__AFOX__')) exit();
+	require_once 'common.php';
+
 	$_item = getDBItem(_AF_NOTE_TABLE_, ['mb_srl'=>$mb['mb_srl'],'nt_srl'=>$_DATA['srl']]);
 	if(empty($_item['nt_srl'])) return;
 	if($_item['nt_read_date'] === '0000-00-00 00:00:00') {
@@ -22,7 +24,7 @@
 	?>
 	</article>
 	<footer class="area-text-button clearfix" style="text-align:right;margin-bottom:50px">
-		<button type="button" class="btn btn-danger" data-exec-ajax="member.deleteNote" data-ajax-param="nt_srl,<?php echo $_item['nt_srl']?>,success_return_url,<?php echo getUrl('srl','')?>"><?php echo getLang('delete')?></button>
+		<button type="button" class="btn btn-danger" data-exec-ajax="member.deleteNote" data-ajax-param="nt_srl,<?php echo $_item['nt_srl']?>,success_return_url,<?php echo getUrl('srl','')?>" onclick="jQuery(this).data('clicked', confirm($_LANG['confirm_delete'].sprintf([$_LANG['message']]).escapeHtml()))"><?php echo getLang('delete')?></button>
 		<button type="button" class="btn btn-success min-width-100" onclick="return _popSendNoteBox(<?php echo $_item['nt_srl']?>)"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i> <?php echo getLang('reply')?></button>
 	</footer>
 </section>

@@ -1,7 +1,5 @@
 <?php
-
 if(!defined('__AFOX__')) exit();
-
 if(empty($_MEMBER)) goUrl(_AF_URL_, getLang('error_permitted'));
 // 관리자의 아이피, 브라우저와 다르다면 세션을 끊고 관리자에게 메일을 보낸다.
 $admin_key = md5($_MEMBER['mb_regdate'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
@@ -15,6 +13,7 @@ if (get_session('AF_LOGIN_KEY') !== $admin_key) {
 if(in_array($_DATA['admin'],['member','board'])) {
 	@include_once _AF_MODULES_PATH_ . $_DATA['admin'] . '/lang/' . _AF_LANG_ . '.php';
 }
+addJSLang(['menu','addon','theme','board','page','document','comment','file','recycle_bin','confirm_empty','confirm_select_move','confirm_select_empty','confirm_select_delete','warning_no_selected','confirm_select_trash','prompt_move_board_id']);
 
 $_MENU_ICON = ['dashbd'=>'dashboard', 'theme'=>'home', 'menu'=>'menu-hamburger', 'member'=>'user', 'content'=>'list-alt', 'page'=>'list-alt', 'board'=>'list-alt', 'document'=>'list-alt', 'comment'=>'list-alt', 'file'=>'list-alt', 'trash'=>'trash', 'module'=>'th-large', 'addon'=>'random', 'widget'=>'import', 'setup'=>'cog'];
 
@@ -122,26 +121,6 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 
 	</div>
 	<!-- /#wrapper -->
-
-
-<script>
-	$_LANG['menu'] = "<?php echo getLang('menu')?>";
-	$_LANG['addon'] = "<?php echo getLang('addon')?>";
-	$_LANG['theme'] = "<?php echo getLang('theme')?>";
-	$_LANG['board'] = "<?php echo getLang('board')?>";
-	$_LANG['page'] = "<?php echo getLang('page')?>";
-	$_LANG['document'] = "<?php echo getLang('document')?>";
-	$_LANG['comment'] = "<?php echo getLang('comment')?>";
-	$_LANG['file'] = "<?php echo getLang('file')?>";
-	$_LANG['recycle_bin'] = "<?php echo getLang('recycle_bin')?>";
-	$_LANG['confirm_empty'] = "<?php echo getLang('confirm_empty')?>";
-	$_LANG['confirm_select_move'] = "<?php echo getLang('confirm_select_move')?>";
-	$_LANG['confirm_select_empty'] = "<?php echo getLang('confirm_select_empty')?>";
-	$_LANG['confirm_select_delete'] = "<?php echo getLang('confirm_select_delete')?>";
-	$_LANG['warning_no_selected'] = "<?php echo getLang('warning_no_selected')?>";
-	$_LANG['confirm_select_to_trash'] = "<?php echo getLang('confirm_select_to_trash')?>";
-	$_LANG['prompt_move_board_id'] = "<?php echo getLang('prompt_move_board_id')?>";
-</script>
 <?php
 /* End of file admin.php */
 /* Location: ./module/admin/admin.php */

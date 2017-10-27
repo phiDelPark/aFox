@@ -11,7 +11,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 		$start_cpage = $cmt['start_page'];
 		$end_cpage = $cmt['end_page'];
 
-		$not_edit_str = 'style="text-decoration:line-through" onclick="alert(\''.escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES).'\');return false"';
+		$not_edit_str = ' style="text-decoration:line-through" onclick="return msg_box(\''.escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES).'\')"';
 
 		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'.getLang('request_input', ['password'])
 										.'<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'

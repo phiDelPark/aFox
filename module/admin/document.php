@@ -24,7 +24,7 @@
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
-		<th class="col-xs-1"><i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i>
+		<th class="col-xs-1"><i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i>
 			<a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
 		<th><span class="th_title"><?php echo getLang('title')?></span>
 		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter"><i class="glyphicon glyphicon-send" aria-hidden="true"></i> <a href="#" onclick="return data_selected_move()"><?php echo getLang('data_move')?></a>
@@ -152,7 +152,7 @@
 
 <script>
 	function data_selected_delete() {
-		if (confirm($_LANG['confirm_select_to_trash'].sprintf([$_LANG['document']]))) {
+		if (confirm($_LANG['confirm_select_trash'].sprintf([$_LANG['document']]))) {
 		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
 			data = {};
 			srls = [];

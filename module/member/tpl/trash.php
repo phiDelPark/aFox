@@ -1,7 +1,8 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	$mb = $_MEMBER;
+	require_once 'common.php';
 
+	$mb = $_MEMBER;
 	$schs = [];
 	$search = empty($_DATA['search']) ? '' : $_DATA['search'];
 	if(!empty($search)) {
@@ -124,6 +125,4 @@
 		exec_ajax('member.deleteTrash', data);
 		return false;
 	}
-	$_LANG['item'] = "<?php echo getLang('Item')?>";
-	$_LANG['confirm_select_delete'] = "<?php echo getLang('confirm_select_delete')?>";
 </script>

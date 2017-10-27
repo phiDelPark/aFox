@@ -42,6 +42,7 @@ $_LANG['good'] = '좋아';
 $_LANG['grant'] = '승인';
 $_LANG['hate'] = '싫어';
 $_LANG['height'] = '세로';
+$_LANG['help'] = '도움';
 $_LANG['homepage'] = '홈페이지';
 $_LANG['id'] = '아이디';
 $_LANG['inbox'] = '편지함';
@@ -126,7 +127,7 @@ $_LANG['yes'] = '예';
 $_LANG['auto_login'] = '자동 로그인';
 $_LANG['member_find'] = '회원조회';
 $_LANG['member_signup'] = '회원가입';
-$_LANG['call_server'] = '서버에 요청 중입니다. 잠시만 기다려주세요.';
+$_LANG['calling_server'] = '서버에 요청 중입니다. 잠시만 기다려주세요.';
 
 $_LANG['confirm_copy'] = '%s을(를) 복사하시겠습니까?';
 $_LANG['confirm_delete'] = '%s을(를) 삭제하시겠습니까?';
@@ -159,7 +160,7 @@ $_LANG['warning_not_allowable'] = '%s는(은) 허용되지 않습니다.'; // 25
 $_LANG['warning_shortage'] = '%s이(가) 부족합니다.'; // 2701
 
 // invalid_... 올바르지 않은 값 오류번호 3001~3999
-$_LANG['invalid_value'] = '%s의 값이 올바르지 않습니다.';
+$_LANG['invalid_value'] = '%s의 값이 올바르지 않습니다.'; //3001
 
 // error_... 에러시 오류번호 4001~4999
 $_LANG['error_occured'] = '오류가 발생했습니다.'; // 4001

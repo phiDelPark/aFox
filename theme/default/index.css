@@ -18,16 +18,6 @@ pre code {
 	display: block;
 }
 
-#bsPreLoader {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	background: url(img/pre_loader.gif) center no-repeat #fff;
-}
-
 .logo-title {
 	margin: 5px 0;
 }
@@ -226,6 +216,11 @@ ul.message-dropdown>li>a {
 	margin: 15px 0;
 }
 
+#loginModal .modal-header h4 {
+	font-weight: bold;
+	font-size: 16px;
+}
+
 #loginModal .modal-dialog {
 	width: 400px;
 	margin: 70px auto;
@@ -245,13 +240,37 @@ ul.message-dropdown>li>a {
 }
 
 .sticky-message {
-	position: absolute;
+	position: fixed;
 	left: 30px;
 	top: 30px;
 	z-index: 9998;
 	background-color: #fff;
 	min-width: 300px;
 	max-width: 500px;
+}
+
+#bsPreLoader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(img/pre_loader.gif) center no-repeat #fff;
+}
+
+#afMessageBox .modal-dialog {
+	margin: 150px auto 0;
+	max-width: 400px;
+}
+
+#afMessageBox .modal-header {
+	font-weight: bold;
+	font-size: 16px;
+}
+
+#afMessageBox .modal-body {
+	min-height: 70px;
 }
 
 @media(max-width:768px) {
@@ -302,6 +321,9 @@ ul.message-dropdown>li>a {
 		margin: 5px 15px 0 0;
 	}
 	#loginModal .modal-dialog {
+		width: 300px;
+	}
+	#afMessageBox .modal-dialog {
 		width: 300px;
 	}
 }

@@ -2,6 +2,9 @@
  * aFox (http://afox.kr)
  * Copyright 2016 afox, Inc.
  */
+ var AF_EDITOR_WR_CONTENT;
+ var AF_EDITOR_PG_CONTENT;
+ var AF_EDITOR_RP_CONTENT;
 
 +function ($) {
   'use strict';
@@ -104,8 +107,15 @@
 		});
 
 		var $editor = $f.find('.af-editor-group');
-		if($editor.length>0) {
-			$editor.afEditor({});
+		if ($editor.length>0) {
+			var AF_EDITOR = $editor.afEditor({'name':(act=='page.getPage'?'pg':(act=='board.getComment'?'rp':'wr'))+'_content'});
+			if (act=='page.getPage') {
+				AF_EDITOR_PG_CONTENT = AF_EDITOR;
+			} else if (act=='board.getComment') {
+				AF_EDITOR_RP_CONTENT = AF_EDITOR;
+			} else {
+				AF_EDITOR_WR_CONTENT = AF_EDITOR;
+			}
 			var ishtml = ((act=='page.getPage'&&data['pg_type']=='2')
 						||(act=='board.getDocument'&&data['wr_type']=='2')
 						||(act=='board.getComment'&&data['rp_type']=='2'));

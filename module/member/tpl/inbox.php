@@ -1,7 +1,8 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	$mb = $_MEMBER;
+	require_once 'common.php';
 
+	$mb = $_MEMBER;
 	$schs = [];
 	$search = empty($_DATA['search']) ? '' : $_DATA['search'];
 	if(!empty($search)) {
@@ -100,7 +101,7 @@
 	</form>
 	<div class="pull-right">
 		<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
-		<a class="btn btn-default" href="#" onclick="_allRemoveInboxItems()" role="button"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
+		<a class="btn btn-default" href="#" onclick="return _allRemoveInboxItems()" role="button"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 	</div>
 </footer>
 
@@ -120,6 +121,4 @@
 		exec_ajax('member.deleteNote', data);
 		return false;
 	}
-	$_LANG['message'] = "<?php echo getLang('message')?>";
-	$_LANG['confirm_select_delete'] = "<?php echo getLang('confirm_select_delete')?>";
 </script>

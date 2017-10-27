@@ -4,6 +4,7 @@ if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
 		goUrl(_AF_URL_);
 		exit();
 }
+addJSLang(['ok','cancel','yes','no','calling_server']);
 ?>
 <!doctype html>
 <html lang="ko">
@@ -30,14 +31,19 @@ if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
 <script>
 var current_url     = "<?php echo getUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
-var waiting_message = "<?php echo getLang('call_server') ?>";
 </script>
 <link rel="stylesheet" href="<?php echo _AF_URL_ . 'common/css/common' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css') ?>">
 <link rel="stylesheet" href="<?php echo _AF_URL_ . 'module/admin/admin' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.css') ?>">
 <script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
 </head>
 <body>
-<?php include _AF_ADMIN_PATH_ . 'admin.php'; ?>
+<?php
+	include _AF_ADMIN_PATH_ . 'admin.php';
+	echo '<script>';
+	$tmp = [];
+	foreach ($_ADDELEMENTS['LANG'] as $val) {foreach ($val as $key){if(!$tmp[$key]){$tmp[$key]=1;echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';}}}
+	echo '</script>'."\n";
+?>
 <script src="<?php echo _AF_URL_ . 'module/admin/admin' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.js') ?>"></script>
 </body>
 </html>

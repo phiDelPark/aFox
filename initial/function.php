@@ -768,14 +768,19 @@ if(!defined('__AFOX__')) exit();
 		return 'BROWSER';
 	}
 
+	function addCSS($src) {
+		global $_ADDELEMENTS;
+		$_ADDELEMENTS['CSS'][$src] = 1;
+	}
+
 	function addJS($src) {
 		global $_ADDELEMENTS;
 		$_ADDELEMENTS['JS'][$src] = 1;
 	}
 
-	function addCSS($src) {
+	function addJSLang($langs) {
 		global $_ADDELEMENTS;
-		$_ADDELEMENTS['CSS'][$src] = 1;
+		$_ADDELEMENTS['LANG'][] = $langs;
 	}
 
 	function getCache($key) {

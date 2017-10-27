@@ -1,6 +1,8 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
+	addJSLang(['error','id','password','login','auto_login','member_signup','member_find']);
+
 	$menus = getSiteMenu();
 
 	$mainmenu = [];
@@ -38,7 +40,7 @@
 	<div class="sticky-message panel panel-default">
 		<div class="panel-heading clearfix">
 			<i class="glyphicon glyphicon-warning-sign" aria-hidden="true"></i> <strong><?php echo getLang('alert')?></strong>
-			<a class="pull-right" href="#Close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+			<a class="pull-right" href="#Close" onclick="jQuery(this).parent().parent().remove();return false"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
 		</div>
 		<div class="panel-body">
 			<?php echo $error['message']?>
@@ -107,38 +109,7 @@
 				</ul>
 			</span>
 <?php } else { ?>
-			<a href="#" data-toggle="modal" data-target="#loginModal"><i class="glyphicon glyphicon-user fs-2x" aria-hidden="true"></i></a>
-			<!-- Modal -->
-			<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
-				<div class="modal-dialog">
-					<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="member.loginCheck">
-					<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-						<div class="modal-header">
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							<h4 class="modal-title" id="loginModalLabel"><?php echo getLang('login')?></h4>
-						</div>
-						<div class="modal-body">
-								<div class="form-group">
-									<input type="text" class="form-control" name="mb_id" maxlength="20" placeholder="<?php echo getLang('id')?>" required /> <span class="sr-only"><?php echo getLang('id')?></span>
-								</div>
-								<div class="form-group">
-									<input type="password" class="form-control" name="mb_password" placeholder="<?php echo getLang('password')?>" required /> <span class="sr-only"><?php echo getLang('password')?></span>
-								</div>
-								<div class="checkbox">
-									<label><input type="checkbox" name="auto_login" /> <?php echo getLang('auto_login')?></label>
-								</div>
-						</div>
-						<div class="modal-footer">
-							<div class="pull-left">
-								<a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><strong><?php echo getLang('member_signup')?></strong></a> /
-								<a href="<?php echo _AF_URL_ ?>?module=member&disp=findAccount"><?php echo getLang('member_find')?></a>
-							</div>
-							<?php if(!__MOBILE__) { ?><button type="button" class="btn btn-default" data-dismiss="modal"> <?php echo getLang('close')?></a></button><?php } ?>
-							<button type="submit" class="btn btn-primary"><?php echo getLang('login')?></button>
-						</div>
-					</form>
-				</div>
-			</div>
+			<a href="#loginForm"><i class="glyphicon glyphicon-user fs-2x" aria-hidden="true"></i></a>
 <?php } ?>
 		</div>
 	</header>

@@ -1,5 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
+require_once 'common.php';
+
 if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURRENT_DOCUMENT_LIST'];
 $is_wr_grant = isGrant($_DATA['id'], 'write');
 $use_style = ['list','review','gallery','timeline'];
@@ -22,30 +24,6 @@ $use_style = ['list','review','gallery','timeline'];
 <?php } ?>
 
 <?php include dirname(__FILE__) . '/s.' . $use_style[abs($_CFG['use_style'])] . '.php'; ?>
-
-	<!-- Modal -->
-	<div class="modal vertical-center fade" id="passwordBoxModal" tabindex="-1" role="dialog" aria-labelledby="passwordBoxModalLabel">
-		<div class="modal-dialog">
-			<form class="modal-content" action="<?php echo getUrl()?>" class="input-password" method="post" autocomplete="off">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="passwordBoxModalLabel"><i class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></i> <?php echo getLang('alert')?></h4>
-				</div>
-				<div class="modal-body">
-					<p>
-						<?php echo getLang('request_input', ['password'])?>
-					</p>
-					<div class="form-group">
-						<input type="password" class="form-control" name="mb_password" placeholder="<?php echo getLang('password')?>" required /> <span class="sr-only"><?php echo getLang('password')?></span>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<?php if(!__MOBILE__) { ?><button type="button" class="btn btn-default" data-dismiss="modal"> <?php echo getLang('close')?></a></button><?php } ?>
-					<button type="submit" class="btn btn-primary"><?php echo getLang('ok')?></button>
-				</div>
-			</form>
-		</div>
-	</div>
 
 	<nav class="text-center">
 		<ul class="pagination hidden-xs">
@@ -74,11 +52,7 @@ $use_style = ['list','review','gallery','timeline'];
 		</form>
 		<div class="pull-right">
 			<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('disp','','srl','','cpage','','rp','') ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>
-			<a class="btn btn-default" href="<?php echo $is_wr_grant ? getUrl('disp','writeDocument','srl','') : '#' ?>"<?php echo $is_wr_grant ? '':' onclick="alert(\''.escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES).'\');return false"'?> role="button"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i> <?php echo getLang('write') ?></a>
+			<a class="btn btn-default" href="<?php echo $is_wr_grant ? getUrl('disp','writeDocument','srl','') : '#' ?>"<?php echo $is_wr_grant ? '':' onclick="return msg_box(\''.escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES).'\')"'?> role="button"><i class="glyphicon glyphicon-pencil" aria-hidden="true"></i> <?php echo getLang('write') ?></a>
 		</div>
 	</footer>
 </section>
-
-<script>
-$_LANG['error'] = "<?php echo getLang('error')?>";
-</script>

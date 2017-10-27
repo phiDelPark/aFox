@@ -46,7 +46,7 @@
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
-		<th class="col-xs-1"><i class="glyphicon glyphicon-asterisk" aria-hidden="true"></i>
+		<th class="col-xs-1"><i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i>
 			<a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
 		<th><span class="th_title"><?php echo getLang('name')?></span>
 		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <a href="#" onclick="return data_selected_delete()"><?php echo getLang('data_delete')?></a></span></th>

@@ -3,20 +3,20 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(!isset($data['mb_id']) || !isset($data['mb_password'])) return set_error(getLang('error_request'),4303);
-	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['mb_id'])) {
-		return set_error(getLang('error_request'),4303);
-	}
-
-	global $_CFG;
-
 	$mb_id          = trim($data['mb_id']);
 	$mb_password    = trim($data['mb_password']);
-	$auto_login     = isset($data['auto_login']) && $data['auto_login'] == 1;
 
 	if(!$mb_id || !$mb_password) {
 		return set_error(getLang('request_input',[$mb_id?'password':'id']));
 	}
+
+	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $mb_id)) {
+		return set_error(getLang('invalid_value',['id']),3001);
+	}
+
+	$auto_login = isset($data['auto_login']) && $data['auto_login'] == 1;
+
+	global $_CFG;
 
 	$sql = 'SELECT * FROM '._AF_MEMBER_TABLE_.' WHERE mb_id= :1';
 	$mb = DB::get($sql, [$mb_id]);

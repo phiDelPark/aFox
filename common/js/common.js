@@ -11,7 +11,7 @@ if (typeof jQuery === 'undefined') {
 	throw new Error('aFox\'s JavaScript requires Bootstrap');
 }
 
-var $_LANG = [];
+var $_LANG = {};
 
 (function($) {
 	'use strict';
@@ -107,7 +107,7 @@ var $_LANG = [];
 
 	Number.prototype.shortFileSize = function() {
 		var s = this,
-			t = ['Byte', 'KB', 'MB', 'GB'],
+			t = ['B', 'KB', 'MB', 'GB'],
 			i = 0;
 		for (var n = 4; i < n; i++) {
 			if (s <= 1024) break;
@@ -214,6 +214,69 @@ var $_LANG = [];
 		}
 	};
 
+	$.msg_box = window.msg_box = function(text, caption, type, callback) {
+		var html = '<div class="modal fade" id="afMessageBox" tabindex="-1" role="dialog" aria-labelledby="MessageBox" aria-hidden="true" style="z-index:99999"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><i class="glyphicon glyphicon-%s" aria-hidden="true"></i> %s</div><div class="modal-body"></div><div class="modal-footer">%s</div></div></div></div>',
+			icons = {
+				'info': 'info-sign',
+				'question': 'question-sign',
+				'asterisk': 'asterisk',
+				'warning': 'exclamation-sign'
+			},
+			buttons = {
+				'ok': $_LANG['ok'] || 'Ok',
+				'cancel': $_LANG['cancel'] || 'Cancel',
+				'yes': $_LANG['yes'] || 'Yes',
+				'no': $_LANG['no'] || 'No'
+			},
+			btnTmp = '<button type="button" class="btn btn-default%s" data-key="%s">%s</button>',
+			button = btnTmp.sprintf(' btn-primary" data-dismiss="modal', 'ok', buttons['ok']);
+		if (!caption) caption = ($('title').text().split('-') || ['Alert'])[0];
+		if (type && type[1]) {
+			button = '';
+			for (var i in type[1]) {
+				var k = type[1][i].toLowerCase();
+				button = button + btnTmp.sprintf((k.toUpperCase() === type[1][i] ? ' btn-primary' : ''), k, buttons[k]);
+			}
+		}
+		html = html.sprintf(icons[type ? type[0] : 'warning'], caption, button);
+		// modal-body 는 따로 입력해야 치환이 정상적으로 됨
+		var $modal = $(html).find('.modal-body:eq(0)').html(text).end();
+		$modal.prependTo('body')
+			.on('show.bs.modal', function(e) {
+				if ($.isFunction(callback)) {
+					callback('show', $modal.find('.modal-body'));
+				}
+			})
+			.on('hide.bs.modal', function(e) {
+				if ($.isFunction(callback)) {
+					callback('hide', $modal.find('.modal-body'));
+				}
+			})
+			.on('shown.bs.modal', function(e) {
+				$(this).find('.modal-body input[type!="hidden"]:eq(0)').focus();
+			})
+			.on('hidden.bs.modal', function(e) {
+				$(this).remove();
+			})
+			.on('keydown', function(e) {
+				if (e.which == 13 && e.target.tagName != 'TEXTAREA') {
+					e.preventDefault();
+					$(this).find('.modal-footer>button.btn-primary').click();
+				}
+			})
+			.modal('show')
+			.find('.modal-footer>button').on('click', function(e) {
+				if ($.isFunction(callback)) {
+					if (callback($(this).attr('data-key'), $modal.find('.modal-body'))) {
+						$modal.modal('hide');
+					} else {
+						return false;
+					}
+				}
+			});
+		return false;
+	};
+
 	$.pop_win = window.pop_win = function(url, w, h, id) {
 		var popwin = window.open(url, (id || 'af_popup'), 'width=' + (w || '700') + ',height=' + (h || '500') + ',top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no');
 		popwin.focus();
@@ -232,8 +295,7 @@ var $_LANG = [];
 			multipart = ($i.attr('enctype') || '') == 'multipart/form-data',
 			data = param || {};
 
-		if (!waiting_message) waiting_message = '';
-		var $waiting = $('<div class="af_waiting_message alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> ' + waiting_message + '<div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:100%"></div></div></div>');
+		var $waiting = $('<div class="af_waiting_message alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> ' + (($_LANG && $_LANG['calling_server']) ? $_LANG['calling_server'] : 'Please wait...') + '<div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:100%"></div></div></div>');
 		$waiting.hide().appendTo('body').fadeIn(1500);
 
 
@@ -354,11 +416,15 @@ var $_LANG = [];
 	$(document).on('submit', 'form[data-exec-ajax]', function(e) {
 		e.preventDefault();
 		exec_ajax(this);
+		return false;
 	}).on('click', '[data-exec-ajax][data-ajax-param]', function(e) {
-		if (!$(e.target).is('[except-event]')) {
+		var $i = $(e.target);
+		if ($i.is('[except-event]')) return true;
+		if (typeof $i.data('clicked') === 'undefined' || $i.data('clicked') === true) {
 			e.preventDefault();
 			exec_ajax(this);
 		}
+		return false;
 	});
 
 	// <div class="uploader-group" placeholder="File">

@@ -1,6 +1,6 @@
 @charset "utf-8";
-#passwordBoxModal .modal-dialog {
-	margin-top: -250px;
+[data-error] {
+	border: 2px solid red !important;
 }
 
 #bdList>header {

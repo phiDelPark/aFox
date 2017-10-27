@@ -92,7 +92,14 @@
 		this.$textarea = $(element).find('textarea').show();
 		this.options = $.extend({}, AfEditor.DEFAULTS, options);
 
-		var $this = this;
+		var $this = this,
+			$balloon;
+
+		// 풍선 메세지 뛰우기 위해서...
+		if (this.options.required) {
+			$balloon = $('<form style="position:absolute;left:0;top:0;height:1px!important;overflow:hidden!important;border:0!important;opacity:0!important" onsubmit="return false"><input type="text" required><input type="submit"></form>');
+			$balloon.appendTo('BODY');
+		}
 
 		this.$element.closest('form').on('submit', function() {
 			var text = $this.$textarea.val(),
@@ -104,7 +111,12 @@
 			}
 
 			if ($this.options.required && !text) {
-				alert($this.options.required);
+				//alert($this.options.required);
+				var x = $iframe.length ? $iframe.offset() : $this.$textarea.offset();
+				$balloon.css({
+					'left': x.left,
+					'top': x.top
+				}).find('[type="submit"]').click();
 				return false;
 			}
 		});
