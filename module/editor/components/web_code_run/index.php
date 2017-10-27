@@ -38,7 +38,7 @@ if(!defined('__AFOX__')) exit();
 		$iframe = $editor.$element.find('iframe'),
 		$orihtml = $('<div>'+($iframe.length > 0 ? $iframe.contents().find('body').html() : $txtara.val())+'</div>');
 
-	$wecode = $orihtml.find('[web-code-run="area"]');
+	var $wecode = $orihtml.find('[web-code-run="area"]');
 
 	function web_code_select() {
 		var i = $('[name="webCode"]:checked').val();
@@ -74,14 +74,11 @@ if(!defined('__AFOX__')) exit();
 		} else {
 			html = '<blockquote web-code-run="area">' + "\n";
 			html = html + '<cite>%s</cite><hr>' + "\n";
-			html = html + '<pre>CSS:<code web-code-run="css"> ' + "\n";
-			html = html + '%s' + "\n";
+			html = html + '<pre>CSS:<code web-code-run="css"> %s' + "\n";
 			html = html + '</code></pre>' + "\n";
-			html = html + '<pre>SCRIPT:<code web-code-run="script"> ' + "\n";
-			html = html + '%s' + "\n";
+			html = html + '<pre>SCRIPT:<code web-code-run="script"> %s' + "\n";
 			html = html + '</code></pre>' + "\n";
-			html = html + '<pre>HTML:<code web-code-run="html"> ' + "\n";
-			html = html + '%s' + "\n";
+			html = html + '<pre>HTML:<code web-code-run="html"> %s' + "\n";
 			html = html + '</code></pre>' + "\n";
 			html = html + '<button web-code-run="run">코드 실행</button>' + "\n";
 			html = html + '</blockquote>' + "\n";
