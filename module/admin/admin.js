@@ -28,7 +28,7 @@
 			.attr('data-exec-ajax', act.replace(/^([a-z]+).get/,'$1.update'));
 
 		if(type == 'mb_id') {
-			data['new_mb_rank'] = data['mb_rank'] == 's' ? 2 : (data['mb_rank'] == 'm' ? 1 : 0);
+			data['new_mb_rank'] = data['mb_rank'] == 's' ? '2' : (data['mb_rank'] == 'm' ? '1' : '0');
 		} else if (type == 'wr_srl') {
 			if($i.attr('data-modal-target') == '#trash_modal') {
 				$f.attr('data-exec-ajax', act.replace(/^([a-z]+).get/,'$1.restore'));
@@ -176,8 +176,6 @@
 				$f.attr('data-exec-ajax', 'admin.update'+key.toUcFirst()+'Config');
 				if(typeof(data['tpl']) != 'undefined') {
 					$p.html(data['tpl']);
-					$p.find('.radio-group').trigger('radio:repair');
-					$p.find('.switch-group').trigger('switch:repair');
 				}
 			});
 

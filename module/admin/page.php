@@ -124,27 +124,41 @@
 			<label for="id_md_description"><?php echo getLang('explain')?></label>
 			<input type="text" name="md_description" class="form-control" id="id_md_description" maxlength="255">
 		</div>
+		<label><?php echo getLang('view')?></label>
 		<div class="form-group">
-			<label><?php echo getLang('view')?></label>
-			<div class="radio-group">
-				<input type="hidden" name="grant_view" value="0">
-				<div class="radio-control radio-xs">
-					<span class="radio active" data-value="0"><?php echo getLang('all')?></span>
-					<span class="radio" data-value="1"><?php echo getLang('member')?></span>
-					<span class="radio" data-value="m"><?php echo getLang('admin')?></span>
-				</div>
-			 </div>
+			<label class="radio btn min-width-100" tabindex="0">
+				<input type="radio" name="grant_view" value="0">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				<span><?php echo getLang('all')?></span>
+			</label>
+			<label class="radio btn min-width-100" tabindex="0">
+				<input type="radio" name="grant_view" value="1">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				<span><?php echo getLang('member')?></span>
+			</label>
+			<label class="radio btn min-width-100" tabindex="0">
+				<input type="radio" name="grant_view" value="m">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				<span><?php echo getLang('admin')?></span>
+			</label>
 		</div>
+		<label><?php echo getLang('reply')?></label>
 		<div class="form-group">
-			<label><?php echo getLang('reply')?></label>
-			<div class="radio-group">
-				<input type="hidden" name="grant_reply" value="0">
-				<div class="radio-control radio-xs">
-					<span class="radio active" data-value="0"><?php echo getLang('all')?></span>
-					<span class="radio" data-value="1"><?php echo getLang('member')?></span>
-					<span class="radio" data-value="m"><?php echo getLang('admin')?></span>
-				</div>
-			 </div>
+			<label class="radio btn min-width-100" tabindex="0">
+				<input type="radio" name="grant_reply" value="0">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				<span><?php echo getLang('all')?></span>
+			</label>
+			<label class="radio btn min-width-100" tabindex="0">
+				<input type="radio" name="grant_reply" value="1">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				<span><?php echo getLang('member')?></span>
+			</label>
+			<label class="radio btn min-width-100" tabindex="0">
+				<input type="radio" name="grant_reply" value="m">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				<span><?php echo getLang('admin')?></span>
+			</label>
 		</div>
 		<div class="form-group">
 			<?php displayEditor(

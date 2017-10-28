@@ -158,22 +158,17 @@ if (!empty($menus['error'])) echo messageBox($menus['message'],$menus['error'], 
 	  </div>
 	  <div class="modal-body">
 		<div class="form-group" style="margin-top:20px">
-			<div class="switch-group">
-			<input type="hidden" value="0" id="sitemap_mu_collapse">
-				<div class="switch-control">
-					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-					<span class="switch switch-label"><?php echo getLang('collapse')?></span>
-					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-				</div>
-			</div>&nbsp;&nbsp;&nbsp;
-			<div class="switch-group">
-				<input type="hidden" value="0" id="sitemap_mu_new_window">
-				<div class="switch-control">
-					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-					<span class="switch switch-label"><?php echo getLang('new_open_window')?></span>
-					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-				</div>
-			</div>
+			<label style="display:block"><?php echo getLang('option')?></label>
+			<label class="checkbox btn btn-default inline" tabindex="0">
+				<input type="checkbox" value="0" id="sitemap_mu_collapse">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				<?php echo getLang('collapse')?>
+			</label>
+			<label class="checkbox btn btn-default inline" tabindex="0">
+				<input type="checkbox" value="0" id="sitemap_mu_new_window">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				<?php echo getLang('new_open_window')?>
+			</label>
 		</div>
 		<div class="form-group">
 			<label for="sitemap_mu_description"><?php echo getLang('menu_desc')?></label>

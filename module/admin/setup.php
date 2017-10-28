@@ -53,7 +53,7 @@
 			</div>
 		</div>
 	</div>
-	<div>&nbsp;</div>
+	<label><?php echo getLang('option')?></label>
 	<div class="form-group point-group">
 		<label class="sr-only"><?php echo getLang('point')?></label>
 		<div class="form-inline">
@@ -64,50 +64,33 @@
 		</div>
 		<p class="help-block"><?php echo getLang('desc_point')?></p>
 	</div>
-	<div>&nbsp;</div>
 	<div class="form-group">
-		<div class="form-inline">
-			<div class="switch-group">
-				<input type="hidden" name="use_signup" value="<?php echo empty($config['use_signup'])?'0':$config['use_signup']?>">
-				<div class="switch-control">
-					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-					<span class="switch switch-label"><?php echo getLang('member_signup')?></span>
-					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-				</div>
-			</div>&nbsp;&nbsp;
-			<div class="switch-group">
-				<input type="hidden" name="use_visit" value="<?php echo empty($config['use_visit'])?'0':$config['use_visit']?>">
-				<div class="switch-control">
-					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-					<span class="switch switch-label"><?php echo getLang('visit_record')?></span>
-					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-				</div>
-			</div>&nbsp;&nbsp;
-			<div class="switch-group">
-				<input type="hidden" name="protect_file" value="<?php echo empty($config['protect_file'])?'0':$config['protect_file']?>">
-				<div class="switch-control">
-					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-					<span class="switch switch-label"><?php echo getLang('protect_file')?></span>
-					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-				</div>
-			</div>&nbsp;&nbsp;
-			<div class="switch-group">
-				<input type="hidden" name="use_captcha" value="<?php echo empty($config['use_captcha'])?'0':$config['use_captcha']?>">
-				<div class="switch-control">
-					<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-					<span class="switch switch-label"><?php echo getLang('captcha')?></span>
-					<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-				</div>
-			</div>
-		</div>
-		<p class="help-block"><?php echo getLang('desc_options')?></p>
+		<label class="checkbox" tabindex="0">
+			<input type="checkbox" name="use_signup" value="1" <?php echo !empty($config['use_signup'])?'checked':''?>>
+			<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+			<?php echo getLang('desc_use_signup')?>
+		</label>
+		<label class="checkbox" tabindex="0">
+			<input type="checkbox" name="use_visit" value="1" <?php echo !empty($config['use_visit'])?'checked':''?>>
+			<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+			<?php echo getLang('desc_use_visit')?>
+		</label>
+		<label class="checkbox" tabindex="0">
+			<input type="checkbox" name="protect_file" value="1" <?php echo !empty($config['protect_file'])?'checked':''?>>
+			<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+			<?php echo getLang('desc_protect_file')?>
+		</label>
+		<label class="checkbox" tabindex="0">
+			<input type="checkbox" name="use_captcha" value="1" <?php echo !empty($config['use_captcha'])?'checked':''?>>
+			<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+			<?php echo getLang('desc_use_captcha')?>
+		</label>
 	</div>
 	<div class="form-group">
 		<label for="id_base_cdn_list"><?php echo getLang('base_cdn_list')?></label>
 		<textarea class="form-control min-height-100 vresize" name="base_cdn_list" id="id_base_cdn_list" placeholder="<?php echo getLang('how_to_use')?>) &lt;script src=&quot;//cdn.server.com/cdn.js&quot;&gt;&lt;/script&gt;"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'base_cdn_list.php')) include $tmp; ?></textarea>
 		<p class="help-block"><?php echo getLang('desc_base_cdn_list')?></p>
 	</div>
-	<div>&nbsp;</div>
 	<div class="form-group">
 		<?php
 			$_ACCESS_IP_MODE = '';

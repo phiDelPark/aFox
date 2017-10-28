@@ -170,20 +170,7 @@ var $_LANG = {};
 						return this.value === data[key];
 					}).attr('checked', 'checked');
 				} else {
-					if ($item.attr('type') == 'hidden') {
-						$item.val(data[key]);
-						$target = $item.parent();
-						if ($target.hasClass('radio-group')) {
-							$target.find('.radio').removeClass('active');
-							$target.find('.radio[data-value="' + data[key] + '"]').addClass('active');
-						} else if ($target.hasClass('switch-group')) {
-							var von = $target.find('.switch-handle-on').attr('data-value') || 1;
-							if (data[key] == von) $target.addClass('on');
-							else $target.removeClass('on');
-						}
-					} else {
-						$item.val(data[key] == '0' ? '' : data[key]);
-					}
+					$item.val(data[key] == '0' ? '' : data[key]);
 				}
 			} else if ($item.is("select") || $item.is("textarea")) {
 				$item.val(data[key]);
@@ -490,84 +477,12 @@ var $_LANG = {};
 		}
 	});
 
-
-	// <div class="radio-group">
-	// 	<input type="hidden" name="pg_type" value="0">
-	// 	<div class="radio-control radio-xs">
-	// 		<span class="radio active" data-value="0">MKDW</span>
-	// 		<span class="radio" data-value="1">TEXT</span>
-	// 		<span class="radio" data-value="2">HTML</span>
-	// 	</div>
-	// </div>
-	$(document).on('click', '.radio-control', function(e) {
-		var $i = $(e.target),
-			$p = $i.closest('.radio-group');
-		if ($i[0].hasAttribute("readonly") || $i[0].hasAttribute("disabled")) return;
-		if ($i.hasClass('radio')) {
-			var v = $i.attr('data-value') || '0';
-			$p.find('input:hidden').val(v).end().find('.radio').removeClass('active');
-			$i.addClass('active');
-			$p.trigger('changed.af.radio', [v]);
-		}
-	}).on('keydown', '.radio-control .radio', function(e) {
+	// 에이폭스 체크박스 스페이스 바 누르면 클릭
+	$(document).on('keydown', 'label.checkbox,label.radio', function(e) {
 		if (e.which == 13 || e.which == 32) {
 			e.preventDefault();
-			$(this).click();
+			$(this).find('>input').click();
 		}
-	}).on('radio:repair', '.radio-group', function(e) {
-		var $g = $(this),
-			$i = $g.find('input:hidden'),
-			v = $i.val();
-		$g.find('.radio').each(function() {
-			$(this).removeClass('active');
-			if (!this.hasAttribute('tabindex')) $(this).attr('tabindex', '0');
-		});
-		$g.find('.radio[data-value="' + v + '"]').addClass('active');
-	});
-
-
-	// <div class="switch-group">
-	// 	<input type="hidden" name="use_ssl" value="0">
-	// 	<div class="switch-control switch-xs">
-	// 		<span class="switch switch-handle-on" data-value="1">use</span>
-	// 		<span class="switch switch-label">ssl</span>
-	// 		<span class="switch switch-handle-off" data-value="0">notuse</span>
-	// 	</div>
-	// </div>
-	$(document).on('click', '.switch-group', function(e) {
-		var $i = $(this);
-		if ($i[0].hasAttribute("readonly") || $i[0].hasAttribute("disabled")) return;
-		if ($i.data('actioning')) return;
-		$i.data('actioning', true);
-		var on = $i.hasClass('on'),
-			von = $i.find('.switch-handle-on').attr('data-value') || 1,
-			vof = $i.find('.switch-handle-off').attr('data-value') || 0;
-		var ev = $.Event('change.af.switch');
-		$i.trigger(ev, [on, (on ? von : vof)]);
-		if (ev.isDefaultPrevented()) {
-			$i.data('actioning', false);
-			return;
-		}
-		$i.find(".switch-control").animate({
-			left: on ? '-=100' : '+=100',
-		}, 500, function() {
-			$(this).css('left', '');
-			$i.toggleClass('on')
-				.find('input:hidden').val(!on ? von : vof).end()
-				.trigger('changed.af.switch', [!on, (!on ? von : vof)])
-				.data('actioning', false);
-		});
-	}).on('keydown', '.switch-group', function(e) {
-		if (e.which == 13 || e.which == 32) {
-			e.preventDefault();
-			$(this).click();
-		}
-	}).on('switch:repair', '.switch-group', function(e) {
-		var $g = $(this),
-			$i = $g.find('input:hidden'),
-			von = $g.find('.switch-handle-on').attr('data-value') || 1;
-		$g.removeClass('on').addClass(($i.val() || 0) == von ? 'on' : '');
-		if (!$g[0].hasAttribute('tabindex')) $g.attr('tabindex', '0');
 	});
 
 	// 글자 수를 byte로 체크하기 위해
@@ -588,9 +503,6 @@ var $_LANG = {};
 
 	// ... load
 	$(window).on('load', function() {
-		// aFox의 사용자 엘리먼트 값에 맞게 수정
-		$('.radio-group').trigger('radio:repair');
-		$('.switch-group').trigger('switch:repair');
 		$('.uploader-group').trigger('uploader:repair');
 	});
 

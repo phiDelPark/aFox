@@ -307,29 +307,31 @@
 			<input type="text" name="wr_title" class="form-control" id="id_wr_title" maxlength="255" readonly="readonly">
 		</div>
 		<div class="form-group">
-			<div class="form-inline">
-				<div class="switch-group on" readonly="readonly">
-					<input type="hidden" name="wr_type" value="1">
-					<div class="switch-control switch-xs">
-						<span class="switch switch-handle-on">MKDW</span>
-						<span class="switch switch-label"><?php echo getLang('type')?></span>
-						<span class="switch switch-handle-off">HTML</span>
-					</div>
-				</div>&nbsp;&nbsp;&nbsp;
-				<div class="switch-group" readonly="readonly">
-					<input type="hidden" name="wr_secret" value="0">
-					<div class="switch-control switch-xs">
-						<span class="switch switch-handle-on"><?php echo getLang('use')?></span>
-						<span class="switch switch-label"><?php echo getLang('secret')?></span>
-						<span class="switch switch-handle-off"><?php echo getLang('notuse')?></span>
-					</div>
-				</div>
+			<label for="id_wr_content"><?php echo getLang('content')?></label>
+			<div class="pull-right">
+			<label class="radio" tabindex="0" style="margin-top:0;margin-bottom:5px">
+				<input type="radio" name="wr_type" value="0">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				TEXT
+			</label>
+			<label class="radio" tabindex="0" style="margin-top:0;margin-bottom:5px">
+				<input type="radio" name="wr_type" value="1">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				MKDW
+			</label>
+			<label class="radio" tabindex="0" style="margin-top:0;margin-bottom:5px">
+				<input type="radio" name="wr_type" value="2">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				HTML
+			</label>
+			<label class="checkbox inline" tabindex="0" style="margin-top:0;margin-bottom:5px;margin-left:.8em">
+				<input type="checkbox" name="wr_secret" value="1">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+				<?php echo getLang('secret')?>
+			</label>
 			</div>
+			<textarea class="form-control min-height-200 vresize clearfix" name="wr_content" id="id_wr_content" readonly="readonly"></textarea>
 		</div>
-			<div class="form-group">
-				<label for="id_wr_content"><?php echo getLang('content')?></label>
-				<textarea class="form-control min-height-200 vresize" name="wr_content" id="id_wr_content" readonly="readonly"></textarea>
-			</div>
 	  </div>
 	  <div class="modal-footer clearfix">
 		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteDocument" data-add-param="is_empty,1"><?php echo getLang('permanent_delete')?></button>

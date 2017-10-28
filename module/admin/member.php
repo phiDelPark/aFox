@@ -115,16 +115,23 @@
 				</div>
 				<p class="help-block"><?php echo getLang('desc_mb_point')?></p>
 			</div>
+			<label><?php echo getLang('rank')?></label>
 			<div class="form-group">
-				<label><?php echo getLang('rank')?></label>
-				<div class="radio-group">
-					<input type="hidden" name="new_mb_rank" value="0">
-					<div class="radio-control radio-xs">
-						<span class="radio active" data-value="0"><?php echo getLang('member')?></span>
-						<span class="radio" data-value="1"><?php echo getLang('manager')?></span>
-						<span class="radio" data-value="2"><?php echo getLang('admin')?></span>
-					</div>
-				 </div>
+				<label class="radio btn min-width-100" tabindex="0">
+					<input type="radio" name="new_mb_rank" value="0">
+					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+					<span><?php echo getLang('member')?></span>
+				</label>
+				<label class="radio btn min-width-100" tabindex="0">
+					<input type="radio" name="new_mb_rank" value="1">
+					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+					<span><?php echo getLang('manager')?></span>
+				</label>
+				<label class="radio btn min-width-100" tabindex="0">
+					<input type="radio" name="new_mb_rank" value="2">
+					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+					<span><?php echo getLang('admin')?></span>
+				</label>
 			</div>
 			<div class="form-group">
 				<label for="id_mb_nick"><?php echo getLang('nickname')?></label>

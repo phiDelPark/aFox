@@ -40,7 +40,6 @@ $_LANG['agent'] = '에이전트';
 $_LANG['md_id'] = '모듈 아이디';
 $_LANG['base_cdn_list'] = '기본 CDN';
 $_LANG['board_manager'] = '게시판 관리자';
-$_LANG['captcha'] = '보안문자';
 $_LANG['clear_cache'] = '캐시 재생성';
 $_LANG['document_count'] = '문서 수';
 $_LANG['empty_addon'] = $_LANG['empty_module'] = $_LANG['empty_theme'] = '비우기';
@@ -66,7 +65,6 @@ $_LANG['permanent_delete'] = '완전 삭제';
 $_LANG['possible'] = '허용';
 $_LANG['intercept'] = '차단';
 $_LANG['prohibit_id'] = '아이디 제한';
-$_LANG['protect_file'] = '파일보호';
 $_LANG['recycle_bin'] = '휴지통';
 $_LANG['referer'] = '리퍼러';
 $_LANG['removed_addon'] = '삭제된 애드온';
@@ -77,7 +75,7 @@ $_LANG['start_page'] = '시작 페이지';
 $_LANG['terms_of_use'] = '이용약관';
 $_LANG['thumb_fit'] = '크기맞춤';
 $_LANG['view_details'] = '자세히 보기';
-$_LANG['visit_record'] = '방문기록';
+$_LANG['option'] = '옵션';
 
 $_LANG['include'] = '포함';
 $_LANG['exclude'] = '제외';
@@ -106,7 +104,6 @@ $_LANG['desc_extra_keys'] = '확장변수를 사용하시려면 확장변수 이
 $_LANG['desc_list_count'] = '게시판 한페이지에 출력할 목록 수를 설정할 수 있습니다.';
 $_LANG['desc_mb_point'] = '회원 포인트를 설정할 수 있습니다.';
 $_LANG['desc_menu_desc'] = '메뉴에 관련된 설명 혹은 정보등을 입력할 수 있습니다.';
-$_LANG['desc_options'] = '회원가입: 회원가입을 허락할지 설정합니다.'."\n".'방문기록: 방문자 정보를 기록할지 설정합니다.'."\n".'파일보호: 다른 사이트에선 파일을 사용할 수 없게 설정합니다.';
 $_LANG['desc_point'] = '회원에게 지급될 포인트를 설정할 수 있습니다. (포인트 감소는 - 값을 입력하세요)';
 $_LANG['desc_prohibit_id'] = '입력된 단어가 포함된 아이디나 이름은 사용할 수 없습니다. (단어와 단어 사이는 ,로 구분합니다)';
 $_LANG['desc_access_ip'] = '입력된 IP의 접근을 허용 또는 차단할 수 있습니다. 123.123.+ 도 입력 가능. (엔터로 구분)';
@@ -114,6 +111,9 @@ $_LANG['desc_start_page'] = '사이트에서 사용할 시작 페이지를 선�
 $_LANG['desc_terms_of_use'] = '이용약관을 적어주시면 회원 가입시 약관을 출력해줍니다. (비워두면 출력안함)';
 $_LANG['desc_thumbnail'] = '갤러리, 리뷰 게시판에 목록 이미지를 썸네일로 사용하시려면 크기를 입력하세요.';
 $_LANG['desc_access_md_id'] = '선택된 모듈 아이디만 포함 혹은 제외 가능합니다. (선택된 항목이 없으면 모두 포함)';
-
+$_LANG['desc_use_signup'] = '회원가입을 허락할지 설정합니다.';
+$_LANG['desc_use_visit'] = '방문자 정보를 기록할지 설정합니다.';
+$_LANG['desc_protect_file'] = '다른 사이트에선 파일을 사용할 수 없게 설정합니다.';
+$_LANG['desc_use_captcha'] = '사람과 컴퓨터를 판별하는 캡차를 보여줄지 설정합니다.';
 /* End of file admin_kr.php */
 /* Location: ./common/lang/admin_kr.php */
