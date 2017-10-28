@@ -34,7 +34,7 @@
 	}
 
 ?>
-<div id="bsPreLoader"></div>
+<div<?php echo !empty($_THEME['use_loader'])?' id="bsPreLoader"':'' ?>></div>
 
 <?php if($error = get_error()) { ?>
 	<div class="sticky-message panel panel-default">
