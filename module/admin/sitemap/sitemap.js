@@ -249,16 +249,22 @@ jQuery(function($) {
 			kw = $p.find('._new_win_key').val();
 
 		$this.find('#sitemap_mu_description').val(kd);
-		var smc = $this.find('#sitemap_mu_collapse').val(kc).parent(),
-			smw = $this.find('#sitemap_mu_new_window').val(kw).parent();
 
-		if(kc==1) {smc.addClass('on');} else {smc.removeClass('on');}
-		if(kw==1) {smw.addClass('on');} else {smw.removeClass('on');}
+		if(kc=='1') {
+			$this.find('#sitemap_mu_collapse').attr('checked','checked');
+		} else {
+			$this.find('#sitemap_mu_collapse').removeAttr('checked');
+		}
+		if(kw=='1') {
+			$this.find('#sitemap_mu_new_window').attr('checked','checked');
+		} else {
+			$this.find('#sitemap_mu_new_window').removeAttr('checked');
+		}
 
 		$this.find('button.btn-success').off('click').one('click', function(e){
 			$p.find('._desc_key').val($this.find('#sitemap_mu_description').val());
-			$p.find('._collapse_key').val($this.find('#sitemap_mu_collapse').val());
-			$p.find('._new_win_key').val($this.find('#sitemap_mu_new_window').val());
+			$p.find('._collapse_key').val($this.find('#sitemap_mu_collapse:checked').length ? 1 : 0);
+			$p.find('._new_win_key').val($this.find('#sitemap_mu_new_window:checked').length ? 1 : 0);
 			$this.modal('hide');
 			$target.attr('src', request_uri + 'module/admin/sitemap/icon_refresh.png').addClass('gly-normal-right-spin');
 		});
