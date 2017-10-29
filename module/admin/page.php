@@ -34,7 +34,7 @@
 ?>
 
 <p class="navbar">
-  <button type="button" class="btn btn-primary min-width-200" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"><?php echo getLang('new_page')?></button>
+  <button type="button" class="btn btn-primary mw-20" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"><?php echo getLang('new_page')?></button>
 </p>
 
 <table class="table table-hover table-nowrap">
@@ -66,7 +66,7 @@
 			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.$value['grant_view'].'-'.$value['grant_reply'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['pg_update'])).'</td>';
-			echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].',with_module_config,1" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
+			echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].',with_module_config,1" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
 		}
 	}
 ?>
@@ -126,17 +126,17 @@
 		</div>
 		<label><?php echo getLang('view')?></label>
 		<div class="form-group">
-			<label class="radio btn min-width-100" tabindex="0">
-				<input type="radio" name="grant_view" value="0">
+			<label class="radio btn mw-10" tabindex="0">
+				<input type="radio" name="grant_view" value="0" checked>
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				<span><?php echo getLang('all')?></span>
 			</label>
-			<label class="radio btn min-width-100" tabindex="0">
+			<label class="radio btn mw-10" tabindex="0">
 				<input type="radio" name="grant_view" value="1">
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				<span><?php echo getLang('member')?></span>
 			</label>
-			<label class="radio btn min-width-100" tabindex="0">
+			<label class="radio btn mw-10" tabindex="0">
 				<input type="radio" name="grant_view" value="m">
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				<span><?php echo getLang('admin')?></span>
@@ -144,17 +144,17 @@
 		</div>
 		<label><?php echo getLang('reply')?></label>
 		<div class="form-group">
-			<label class="radio btn min-width-100" tabindex="0">
+			<label class="radio btn mw-10" tabindex="0">
 				<input type="radio" name="grant_reply" value="0">
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				<span><?php echo getLang('all')?></span>
 			</label>
-			<label class="radio btn min-width-100" tabindex="0">
-				<input type="radio" name="grant_reply" value="1">
+			<label class="radio btn mw-10" tabindex="0">
+				<input type="radio" name="grant_reply" value="1" checked>
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				<span><?php echo getLang('member')?></span>
 			</label>
-			<label class="radio btn min-width-100" tabindex="0">
+			<label class="radio btn mw-10" tabindex="0">
 				<input type="radio" name="grant_reply" value="m">
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				<span><?php echo getLang('admin')?></span>

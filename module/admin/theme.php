@@ -38,8 +38,8 @@ if(is_dir($theme_dir)) {
 		echo '<tr><th scope="row">'.(escapeHtml(empty($_THEME_INFO['title'])?$name:$_THEME_INFO['title'])).'</th>';
 		echo '<td class="hidden-xs">'.(empty($_THEME_INFO['version'])?'...':$_THEME_INFO['version']).'</td>';
 		echo '<td class="hidden-xs hidden-sm">'.(empty($_THEME_INFO['author'])?'...':'<a href="'.(empty($_THEME_INFO['link'])?'mailto:'.$_THEME_INFO['email'].'"':$_THEME_INFO['link'].'" target="_blank"').'>'.$_THEME_INFO['author'].'</a>').'</td>';
-		echo '<td><button type="button" class="btn btn-'.($theme_id == $name?'info':'primary').' btn-xs min-width-100" data-exec-ajax="admin.updateSetupTheme" data-ajax-param="th_id,'.$name.',success_return_url,'.getUrl().'">'.getLang($theme_id == $name? 'using':'use').'</button></td>';
-		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_theme_modal" data-theme-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
+		echo '<td><button type="button" class="btn btn-'.($theme_id == $name?'info':'primary').' btn-xs mw-10" data-exec-ajax="admin.updateSetupTheme" data-ajax-param="th_id,'.$name.',success_return_url,'.getUrl().'">'.getLang($theme_id == $name? 'using':'use').'</button></td>';
+		echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-toggle="modal" data-target="#admin_theme_modal" data-theme-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
 	}
 }
 ?>
@@ -57,7 +57,7 @@ if(is_dir($theme_dir)) {
 <tbody>
 <?php
 	foreach($th_list as $key => $value) {
-		if($value) echo '<tr><td>'.$key.'</td><td><button type="button" class="btn btn-primary btn-xs min-width-100" data-empty-theme="'.$key.'">'.getLang('empty_theme').'</button></td></tr>';
+		if($value) echo '<tr><td>'.$key.'</td><td><button type="button" class="btn btn-primary btn-xs mw-10" data-empty-theme="'.$key.'">'.getLang('empty_theme').'</button></td></tr>';
 	}
 ?>
 </tbody>

@@ -7,6 +7,6 @@ $default_filter = '18아,18놈,18새끼,18년,18뇬,18노,18것,18넘,개년,개
 
 <div class="form-group">
 	<label for="id_filter">필터</label>
-	<textarea maxbyte="65000" maxlength="65000" class="form-control min-height-100 vresize" name="filter" id="id_filter"><?php echo escapeHtml(empty($_ADDON['filter'])?$default_filter:$_ADDON['filter'])?></textarea>
+	<textarea maxbyte="65000" maxlength="65000" class="form-control mh-10 vresize" name="filter" id="id_filter"><?php echo escapeHtml(empty($_ADDON['filter'])?$default_filter:$_ADDON['filter'])?></textarea>
 	<p class="help-block">입력된 단어가 포함된 내용은 게시할 수 없습니다. (단어와 단어 사이는 ,로 구분합니다)</p>
 </div>

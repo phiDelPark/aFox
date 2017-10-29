@@ -561,10 +561,10 @@ if(!defined('__AFOX__')) exit();
 		return preg_replace('/([\\\`\*\_\{\}\[\]\(\)\>\#\+\-\.\!])/m', '\\\\$1', $str);
 	}
 
-	function escapeHtml($str, $is_strip_tags = false, $quote_style = ENT_COMPAT) {
-		if($is_strip_tags) $str = strip_tags($str);
+	function escapeHtml($str, $strip_tags = false, $quote = ENT_COMPAT, $endouble = true) {
+		if($strip_tags) $str = strip_tags($str);
 		//$str = str_replace('&', '&amp;', $str);  // double_encode = false
-		return htmlspecialchars($str, $quote_style | ENT_HTML401, 'UTF-8');
+		return htmlspecialchars($str, $quote | ENT_HTML401, 'UTF-8', $endouble);
 	}
 
 	function xssClean($html, $chkclosed = true) {
@@ -626,11 +626,17 @@ if(!defined('__AFOX__')) exit();
 		return $html;
 	}
 
-	function toHTML($type, $text, $class='current_content') {
+	function toTEXT($text) {
+		return escapeHtml($text, true, ENT_QUOTES, false);
+	}
+
+	function toHTML($text, $type = 2, $class = 'current_content') {
 		global $_DATA;
 		static $parsedown = null;
 
-		if($type == 1) {
+		if($type == 0) {
+			return '<div class="'.$class.'">'.nl2br(escapeHtml($text)).'</div>';
+		} else if($type == 1) {
 			if($parsedown == null) {
 				$parsedown = new Parsedown();
 				$parsedown->setBreaksEnabled(true)->setMarkupEscaped(false);
@@ -640,8 +646,6 @@ if(!defined('__AFOX__')) exit();
 			$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
 			$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
 			$text = preg_replace($patterns, $replacement, $text);
-		} else if($type == 0) {
-			$text = nl2br(strip_tags($text, '<p><a>'));
 		}
 
 		$text = preg_replace_callback('/<img[^>]*class="afox_widget"\s*([^>]*)>/is',  function($m){

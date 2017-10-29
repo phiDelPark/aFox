@@ -13,7 +13,7 @@
 	<?php if(file_exists($tmp = _AF_CONFIG_DATA_.'terms_of_use.php')) { ?>
 		<div class="form-group">
 			<label for="id_terms_of_use"><?php echo getLang('terms_of_use')?></label>
-			<textarea class="form-control min-height-100 vresize" id="id_terms_of_use"><?php include $tmp; ?></textarea>
+			<textarea class="form-control mh-10 vresize" id="id_terms_of_use"><?php include $tmp; ?></textarea>
 			<p class="help-block"><?php echo getLang('desc_terms_of_use')?></p>
 		</div>
 	<?php } ?>
@@ -62,7 +62,7 @@
 		</div>
 		<div class="form-group">
 			<label for="id_mb_memo"><?php echo getLang('memo')?></label>
-			<textarea class="form-control min-height-100 vresize" name="mb_memo" id="id_mb_memo"><?php echo $ismb?$_MEMBER['mb_memo']:''?></textarea>
+			<textarea class="form-control mh-10 vresize" name="mb_memo" id="id_mb_memo"><?php echo $ismb?$_MEMBER['mb_memo']:''?></textarea>
 			<p class="help-block"><?php echo getLang('desc_member_memo')?></p>
 		</div>
 		<div class="form-group">
@@ -81,6 +81,6 @@
 
 	</div>
 	<div class="modal-footer" style="padding:30px 0 0">
-		<button type="submit" class="btn btn-success min-width-150"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang($ismb?'save':'agree_signup')?></button>
+		<button type="submit" class="btn btn-success mw-10"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang($ismb?'save':'agree_signup')?></button>
 	</div>
 </form>

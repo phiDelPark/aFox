@@ -33,7 +33,7 @@ foreach ($skip_arr as $key => $value) {
 	echo '<tr><th scope="row">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
 	echo '<td class="hidden-xs">'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
 	echo '<td class="hidden-xs hidden-sm">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
-	echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" '.'disabled="disabled">'.getLang('none').'</button></td></tr>';
+	echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" '.'disabled="disabled">'.getLang('none').'</button></td></tr>';
 }
 
 if(is_dir($module_dir)) {
@@ -48,7 +48,7 @@ if(is_dir($module_dir)) {
 		echo '<tr><th scope="row">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
 		echo '<td class="hidden-xs">'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
 		echo '<td class="hidden-xs hidden-sm">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
-		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" onclick="parent.location.replace(\''.getUrl('mid',$name).'\')">'.getLang('setup').'</button></td></tr>';
+		echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" onclick="parent.location.replace(\''.getUrl('mid',$name).'\')">'.getLang('setup').'</button></td></tr>';
 	}
 }
 ?>
@@ -66,7 +66,7 @@ if(is_dir($module_dir)) {
 <tbody>
 <?php
 	foreach($md_list as $key => $value) {
-		if($value) echo '<tr><td>'.$key.'</td><td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" data-empty-module="'.$key.'">'.getLang('empty_module').'</button></td></tr>';
+		if($value) echo '<tr><td>'.$key.'</td><td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs mw-10" data-empty-module="'.$key.'">'.getLang('empty_module').'</button></td></tr>';
 	}
 ?>
 </tbody>

@@ -87,7 +87,7 @@
 	</ul>
 </nav>
 <footer class="clearfix">
-	<form class="search-form pull-left col-xs-5 col-sm-4" action="<?php echo getUrl('') ?>" method="get" style="padding:0;min-width:150px;max-width:250px">
+	<form class="search-form pull-left col-xs-5 col-sm-4 mw-20 xw-30" action="<?php echo getUrl('') ?>" method="get" style="padding:0">
 		<input type="hidden" name="module" value="member">
 		<input type="hidden" name="disp" value="inbox">
 		<div class="input-group">

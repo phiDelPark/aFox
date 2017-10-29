@@ -245,7 +245,7 @@
 			html: 1,
 			trigger: 'manual',
 			placement: 'top',
-			content: '<div class="input-group" style="min-width:150px"></div>'
+			content: '<div class="input-group mw-20"></div>'
 		}).on('inserted.bs.popover', function() {
 			var $i = $(this),
 				$popover = $i.data("bs.popover").tip().find('.popover-content'),
@@ -269,7 +269,7 @@
 			} else {
 				$popover
 					.find('.input-group')
-					.html('<input type="text" class="form-control" style="width:150px" placeholder="Link"><a href="#" class="btn btn-default input-group-addon">OK</a>')
+					.html('<input type="text" class="form-control" placeholder="Link"><a href="#" class="btn btn-default input-group-addon">OK</a>')
 					.find('a').click(function() {
 						var url = $(this).prev().val() || '';
 						$this.exec(type, url);
@@ -372,86 +372,87 @@
 		this.switch(this.$textarea.is(':visible'));
 	};
 
-	AfEditor.prototype.paste = function(text, fm) {
+	AfEditor.prototype.selection = function() {
 		var $i = this.$textarea,
-			range;
-
-		fm = (fm !== false);
+			ret = {};
 
 		if (!$i.is(':visible') || $i.length === 0) {
 			$i = this.$element.find('iframe');
-		}
-
-		if ($i[0].tagName == 'TEXTAREA') {
-			$i.focus();
-
-			var startPos = $i.prop('selectionStart'),
-				endPos = $i.prop('selectionEnd'),
-				v = $i.val(),
-				txtBefore = v.substring(0, startPos),
-				txtAfter = v.substring(startPos + (endPos - startPos), v.length),
-				selTxt = v.substring(startPos, endPos);
-
-			if (fm) text = text.replace(/%s/, selTxt);
-			$i.val(txtBefore + text + txtAfter);
-
-			endPos = endPos + text.length - selTxt.length;
-			if ($i[0].setSelectionRange) {
-				$i[0].setSelectionRange(startPos, endPos);
-			} else if ($i[0].createTextRange) {
-				range = $i[0].createTextRange();
-				range.collapse(true);
-				range.moveEnd('character', endPos);
-				range.moveStart('character', startPos);
-				range.select();
-			}
-
-			$i.focus();
-
-		} else {
-
 			$i.contents().find('body').focus();
 
 			var sel, isie = false,
 				w = $i[0].contentWindow;
+
 			if (w) {
 				if (w.getSelection) {
 					sel = w.getSelection();
 				} else if (w.document.getSelection) {
 					sel = w.document.getSelection();
-				} else {
-					sel = w.document.selection && w.document.selection.createRange();
-					if (sel.text) {
-						isie = true;
-					} else {
-						return false;
-					}
 				}
-				if (isie) {
-					if (fm) text = text.replace(/%s/, sel.text);
-					sel.pasteHTML(text);
-				} else if (sel.getRangeAt && sel.rangeCount) {
-					range = sel.getRangeAt(0);
-					var el = w.document.createElement("div");
-					el.appendChild(range.cloneContents());
-					if (fm) text = text.replace(/%s/, el.innerText);
-					range.deleteContents();
-					range.insertNode($(text)[0]);
-					if (!fm) {
-						range.setStart(sel.focusNode, sel.focusOffset);
-						range.setEnd(sel.anchorNode, sel.anchorOffset);
-					}
-				}
-				/**
-				 else {
-					var $body = $i.contents().find('body'),
-						html = $body.html();
-					$body.html(html + text.replace(/%s/, ''));
-				}
-				**/
+				/** else {
+									sel = w.document.selection && w.document.selection.createRange();
+									if (sel.text) { isie = true; } else { return null; }
+								} **/
+				ret['target'] = $i;
+				ret['window'] = w;
+				ret['selection'] = sel;
+			}
+			/** else {
+							var $body = $i.contents().find('body'),
+								html = $body.html();
+							$body.html(html + text.replace(/%s/, ''));
+						} **/
+		} else {
+			$i.focus();
+			ret['target'] = $i;
+			ret['start'] = $i.prop('selectionStart');
+			ret['end'] = $i.prop('selectionEnd');
+			ret['text'] = $i.val().substring(ret['start'], ret['end']);
+		}
+
+		return ret;
+	};
+
+	AfEditor.prototype.paste = function(text, fm) {
+		var s = this.selection(),
+			range;
+
+		if (s.target[0].tagName == 'TEXTAREA') {
+			if (fm !== false) text = text.replace(/%s/, s.text);
+
+			var v = s.target.val(),
+				txtBefore = v.substring(0, s.start),
+				txtAfter = v.substring(s.start + (s.end - s.start), v.length);
+
+			s.target.val(txtBefore + text + txtAfter);
+
+			s.end = s.end + text.length - s.text.length;
+			if (s.target[0].setSelectionRange) {
+				s.target[0].setSelectionRange(s.start, s.end);
+			} else if (s.target[0].createTextRange) {
+				range = s.target[0].createTextRange();
+				range.collapse(true);
+				range.moveEnd('character', s.end);
+				range.moveStart('character', s.start);
+				range.select();
 			}
 
-			$i.contents().find('body').focus();
+			s.target.focus();
+		} else {
+			range = s.selection.getRangeAt(0);
+
+			if (range) {
+				var el = s.window.document.createElement("div");
+				el.appendChild(range.cloneContents());
+				range.deleteContents();
+				range.insertNode($(fm === false ? text : text.replace(/%s/, el.innerText))[0]);
+				if (fm === false) {
+					range.setStart(s.selection.focusNode, s.selection.focusOffset);
+					range.setEnd(s.selection.anchorNode, s.selection.anchorOffset);
+				}
+			}
+
+			s.target.contents().find('body').focus();
 		}
 	};
 
@@ -504,6 +505,7 @@
 				if (pattern.test(value)) {
 					text = '<img class="afox_widget" widget="youtube" src="' + value.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" width=\"560\" height=\"315\" vid=\"$4") + '"' + (t ? ' time="' + t + '"' : '') + '>' + "\n";
 				} else {
+					if (!value) value = '#';
 					text = '<a href="' + value + '" target="_blank">' + value + '</a>';
 					if ($i[0].tagName == 'TEXTAREA') text = '<' + value + '>';
 				}

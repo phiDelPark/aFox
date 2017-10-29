@@ -8,7 +8,7 @@
 ?>
 
 <p class="navbar">
-  <button type="button" class="btn btn-primary min-width-200" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"><?php echo getLang('new_member')?></button>
+  <button type="button" class="btn btn-primary mw-20" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"><?php echo getLang('new_member')?></button>
 </p>
 
 <table class="table table-hover table-nowrap">
@@ -117,17 +117,17 @@
 			</div>
 			<label><?php echo getLang('rank')?></label>
 			<div class="form-group">
-				<label class="radio btn min-width-100" tabindex="0">
+				<label class="radio btn mw-10" tabindex="0">
 					<input type="radio" name="new_mb_rank" value="0">
 					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 					<span><?php echo getLang('member')?></span>
 				</label>
-				<label class="radio btn min-width-100" tabindex="0">
+				<label class="radio btn mw-10" tabindex="0">
 					<input type="radio" name="new_mb_rank" value="1">
 					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 					<span><?php echo getLang('manager')?></span>
 				</label>
-				<label class="radio btn min-width-100" tabindex="0">
+				<label class="radio btn mw-10" tabindex="0">
 					<input type="radio" name="new_mb_rank" value="2">
 					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 					<span><?php echo getLang('admin')?></span>
@@ -147,7 +147,7 @@
 			</div>
 			<div class="form-group">
 				<label for="id_mb_memo"><?php echo getLang('memo')?></label>
-				<textarea class="form-control min-height-100 vresize" name="mb_memo" id="id_mb_memo"></textarea>
+				<textarea class="form-control mh-10 vresize" name="mb_memo" id="id_mb_memo"></textarea>
 				<p class="help-block"><?php echo getLang('desc_member_memo')?></p>
 			</div>
 			<div class="form-group">

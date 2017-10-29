@@ -70,7 +70,7 @@
 ?>
 
 <p class="navbar">
-  <button type="button" class="btn btn-primary min-width-200" onclick="return empty_recycle_bin()"><?php echo getLang('empty_recycle_bin')?></button>
+  <button type="button" class="btn btn-primary mw-20" onclick="return empty_recycle_bin()"><?php echo getLang('empty_recycle_bin')?></button>
 </p>
 
 		<ol class="breadcrumb">
@@ -185,7 +185,7 @@
 			<input type="text" class="form-control" name="wr_title" id="id_wr_title" maxlength="255" disabled>
 		</div>
 		<div class="form-group">
-			<textarea class="form-control min-height-200 vresize" name="rp_content" id="id_rp_content" readonly="readonly"></textarea>
+			<textarea class="form-control mh-20 vresize" name="rp_content" id="id_rp_content" readonly="readonly"></textarea>
 		</div>
 	  </div>
 	  <div class="modal-footer clearfix">
@@ -310,27 +310,27 @@
 			<label for="id_wr_content"><?php echo getLang('content')?></label>
 			<div class="pull-right">
 			<label class="radio" tabindex="0" style="margin-top:0;margin-bottom:5px">
-				<input type="radio" name="wr_type" value="0">
+				<input type="radio" name="wr_type" value="0" disabled>
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				TEXT
 			</label>
 			<label class="radio" tabindex="0" style="margin-top:0;margin-bottom:5px">
-				<input type="radio" name="wr_type" value="1">
+				<input type="radio" name="wr_type" value="1" disabled>
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				MKDW
 			</label>
 			<label class="radio" tabindex="0" style="margin-top:0;margin-bottom:5px">
-				<input type="radio" name="wr_type" value="2">
+				<input type="radio" name="wr_type" value="2" disabled>
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				HTML
 			</label>
 			<label class="checkbox inline" tabindex="0" style="margin-top:0;margin-bottom:5px;margin-left:.8em">
-				<input type="checkbox" name="wr_secret" value="1">
+				<input type="checkbox" name="wr_secret" value="1" disabled>
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				<?php echo getLang('secret')?>
 			</label>
 			</div>
-			<textarea class="form-control min-height-200 vresize clearfix" name="wr_content" id="id_wr_content" readonly="readonly"></textarea>
+			<textarea class="form-control mh-20 vresize clearfix" name="wr_content" id="id_wr_content" readonly="readonly"></textarea>
 		</div>
 	  </div>
 	  <div class="modal-footer clearfix">

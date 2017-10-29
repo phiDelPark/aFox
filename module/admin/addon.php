@@ -42,7 +42,7 @@ if(is_dir($addon_dir)) {
 		echo '<td class="hidden-xs">'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
 		echo '<td class="hidden-xs hidden-sm">'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
 		echo '<td>'.$opt.'</td>';
-		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_addon_modal" data-addon-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
+		echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-toggle="modal" data-target="#admin_addon_modal" data-addon-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
 	}
 }
 ?>
@@ -60,7 +60,7 @@ if(is_dir($addon_dir)) {
 <tbody>
 <?php
 	foreach($ao_list as $key => $value) {
-		if($value) echo '<tr><td>'.$key.'</td><td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs min-width-100" data-empty-addon="'.$key.'">'.getLang('empty_addon').'</button></td></tr>';
+		if($value) echo '<tr><td>'.$key.'</td><td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs mw-10" data-empty-addon="'.$key.'">'.getLang('empty_addon').'</button></td></tr>';
 	}
 ?>
 </tbody>

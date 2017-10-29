@@ -88,7 +88,7 @@
 	</div>
 	<div class="form-group">
 		<label for="id_base_cdn_list"><?php echo getLang('base_cdn_list')?></label>
-		<textarea class="form-control min-height-100 vresize" name="base_cdn_list" id="id_base_cdn_list" placeholder="<?php echo getLang('how_to_use')?>) &lt;script src=&quot;//cdn.server.com/cdn.js&quot;&gt;&lt;/script&gt;"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'base_cdn_list.php')) include $tmp; ?></textarea>
+		<textarea class="form-control mh-10 vresize" name="base_cdn_list" id="id_base_cdn_list" placeholder="<?php echo getLang('how_to_use')?>) &lt;script src=&quot;//cdn.server.com/cdn.js&quot;&gt;&lt;/script&gt;"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'base_cdn_list.php')) include $tmp; ?></textarea>
 		<p class="help-block"><?php echo getLang('desc_base_cdn_list')?></p>
 	</div>
 	<div class="form-group">
@@ -99,22 +99,22 @@
 			}
 		?>
 		<label for="id_access_ip"><?php echo getLang('ip')?></label>: &nbsp;&nbsp;<label><input type="radio" name="access_ip_mode" value="possible" <?php echo $_ACCESS_IP_MODE=='possible'?' checked':''?>> <?php echo getLang('possible')?></label>&nbsp;&nbsp;<label><input type="radio" name="access_ip_mode" value="intercept"<?php echo $_ACCESS_IP_MODE!='possible'?' checked':''?>> <?php echo getLang('intercept')?></label>
-		<textarea class="form-control min-height-100 vresize" name="access_ip" id="id_access_ip"><?php echo empty($_ACCESS_IPS) ? '' : str_replace("\.", ".", str_replace("[0-9\.]+", "+", implode("\n",$_ACCESS_IPS))); ?></textarea>
+		<textarea class="form-control mh-10 vresize" name="access_ip" id="id_access_ip"><?php echo empty($_ACCESS_IPS) ? '' : str_replace("\.", ".", str_replace("[0-9\.]+", "+", implode("\n",$_ACCESS_IPS))); ?></textarea>
 		<p class="help-block"><?php echo getLang('desc_access_ip')?></p>
 	</div>
 	<div class="form-group">
 		<label for="id_prohibit_id"><?php echo getLang('prohibit_id')?></label>
-		<textarea class="form-control min-height-100 vresize" name="prohibit_id" id="id_prohibit_id"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'prohibit_id.php')) {include $tmp; echo implode(',',$_PROHIBIT_IDS);} ?></textarea>
+		<textarea class="form-control mh-10 vresize" name="prohibit_id" id="id_prohibit_id"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'prohibit_id.php')) {include $tmp; echo implode(',',$_PROHIBIT_IDS);} ?></textarea>
 		<p class="help-block"><?php echo getLang('desc_prohibit_id')?></p>
 	</div>
 	<div class="form-group">
 		<label for="id_terms_of_use"><?php echo getLang('terms_of_use')?></label>
-		<textarea class="form-control min-height-100 vresize" name="terms_of_use" id="id_terms_of_use"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'terms_of_use.php')) include $tmp; ?></textarea>
+		<textarea class="form-control mh-10 vresize" name="terms_of_use" id="id_terms_of_use"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'terms_of_use.php')) include $tmp; ?></textarea>
 		<p class="help-block"><?php echo getLang('desc_terms_of_use')?></p>
 	</div>
 
 	<div class="modal-footer">
-		<button type="submit" class="btn btn-success min-width-150"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
+		<button type="submit" class="btn btn-success mw-20"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
 	</div>
 
 </form>

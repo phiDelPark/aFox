@@ -29,7 +29,7 @@
 				</div>
 				<div class="form-group">
 					<label for="id_wr_content"><?php echo getLang('content')?></label>
-					<textarea class="form-control min-height-200 vresize" id="id_wr_content" readonly="readonly"><?php echo $is?$_{'board'}['wr_content']:''?></textarea>
+					<textarea class="form-control mh-20 vresize" id="id_wr_content" readonly="readonly"><?php echo $is?$_{'board'}['wr_content']:''?></textarea>
 				</div>
 				<div class="area-button">
 					<button type="submit" class="btn btn-warning btn-block"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('delete')?></button>

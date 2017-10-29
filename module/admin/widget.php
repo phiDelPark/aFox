@@ -25,7 +25,7 @@ if(is_dir($widget_dir)) {
 		echo '<tr><th scope="row">'.(escapeHtml(empty($_WIDGET_INFO['title'])?$name:$_WIDGET_INFO['title'])).'</th>';
 		echo '<td class="hidden-xs">'.(empty($_WIDGET_INFO['version'])?'...':$_WIDGET_INFO['version']).'</td>';
 		echo '<td class="hidden-xs hidden-sm">'.(empty($_WIDGET_INFO['author'])?'...':'<a href="'.(empty($_WIDGET_INFO['link'])?'mailto:'.$_WIDGET_INFO['email'].'"':$_WIDGET_INFO['link'].'" target="_blank"').'>'.$_WIDGET_INFO['author'].'</a>').'</td>';
-		echo '<td><button type="button" class="btn btn-primary btn-xs min-width-100" data-toggle="modal" data-target="#admin_widget_modal" data-widget-id="'.$name.'">'.getLang('how_to_use').'</button></td></tr>';
+		echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-toggle="modal" data-target="#admin_widget_modal" data-widget-id="'.$name.'">'.getLang('how_to_use').'</button></td></tr>';
 	}
 }
 ?>
