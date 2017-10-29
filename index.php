@@ -28,6 +28,11 @@ if(!empty($_GET['file'])) {
 require_once __DIR__ . '/initial/common.php';
 
 if(__MODULE__ && !empty($_DATA['act'])) {
+	// 전체 로그인시엔 로그인 체크만 가능
+	if(__FULL_LOGIN__ && $_DATA['act'] != 'loginCheck' && $_DATA['act'] != 'updateMember') {
+		exit();
+	}
+
 	$callproc = 'proc'.ucwords(__MODULE__).'Default';
 
 	if(function_exists($callproc)) {

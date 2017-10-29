@@ -23,5 +23,5 @@ if(!defined('__AFOX__')) exit();
 <h3>* 참고 :</h3>
 <pre>
 1. 입력을 쉽게 하시려면 Web Code Run 에디터 콤포넌트를 사용하세요.
-2. 코드 실행기 특성상 Jave Script의 window load 이벤트는 작동하지 않습니다.
+2. Script의 load 이벤트는 작동하지 않습니다, 대신 ready 이벤트를 사용하세요.
 </pre>

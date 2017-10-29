@@ -16,9 +16,10 @@ function getLogin($f='mb_srl') {
 		$mb = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$mbid}'");
 		if(!DB::error() && !empty($mb['mb_srl'])) return $mb[$f];
 	}
-	return '0';
+	return $f=='mb_rank'?'z':0;
 }
-if($_CFG['use_protect']=='1'&&!empty($_SERVER['HTTP_REFERER'])&& !preg_match('/^https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
+if($_CFG['use_full_login']==1&&empty(getLogin())) setHttpError('401 Unauthorized');
+if($_CFG['use_protect']==1&&!preg_match('/^https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
 static $_file = [];
 $srl = (int)$_GET['file'];
 $thumb = isset($_GET['thumb']);
@@ -89,7 +90,7 @@ if(!empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])){
 // 다운로드 조회를 위해 기록 // setHistoryAction() 함수 안불러서 작성
 if($_file[$key]['type']=='binary'){
 	$point = $_file[$key]['point_download'];
-	$mb_srl = (int)getLogin('mb_srl');
+	$mb_srl = (int)getLogin();
 	if(empty($mb_srl) && $point < 0) setHttpError('401 Unauthorized', true); // -값은 비회원 불가
 	$act = 'mf_download';
 	$uinfo = ['mb_srl'=>$mb_srl,'ipaddress'=>$_SERVER['REMOTE_ADDR']];

@@ -557,12 +557,12 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function escapeMKDW($str, $is_strip_tags = false) {
-		if($is_strip_tags) $str = strip_tags($str);
+		if($is_strip_tags) $str = strip_tags($str, (is_string($strip_tags)?$strip_tags:''));
 		return preg_replace('/([\\\`\*\_\{\}\[\]\(\)\>\#\+\-\.\!])/m', '\\\\$1', $str);
 	}
 
 	function escapeHtml($str, $strip_tags = false, $quote = ENT_COMPAT, $endouble = true) {
-		if($strip_tags) $str = strip_tags($str);
+		if($strip_tags) $str = strip_tags($str, (is_string($strip_tags)?$strip_tags:''));
 		//$str = str_replace('&', '&amp;', $str);  // double_encode = false
 		return htmlspecialchars($str, $quote | ENT_HTML401, 'UTF-8', $endouble);
 	}
@@ -626,16 +626,12 @@ if(!defined('__AFOX__')) exit();
 		return $html;
 	}
 
-	function toTEXT($text) {
-		return escapeHtml($text, true, ENT_QUOTES, false);
-	}
-
 	function toHTML($text, $type = 2, $class = 'current_content') {
 		global $_DATA;
 		static $parsedown = null;
 
 		if($type == 0) {
-			return '<div class="'.$class.'">'.nl2br(escapeHtml($text)).'</div>';
+			$text = nl2br(escapeHtml($text, '<img><a>'));
 		} else if($type == 1) {
 			if($parsedown == null) {
 				$parsedown = new Parsedown();
@@ -662,7 +658,7 @@ if(!defined('__AFOX__')) exit();
 		// 다운로드 권한이 없으면 처리
 		if(!empty($_DATA['id']) && !isGrant($_DATA['id'],'download')) {
 			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
-			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES)."');return false\" \\3";
+			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES,false)."');return false\" \\3";
 			$text = preg_replace($patterns, $replacement, $text);
 		}
 

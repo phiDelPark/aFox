@@ -50,6 +50,9 @@ if($tmp = (isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cook
 	}
 }
 
+// 전체 로그인 사용시 로그인 유저가 아니면
+define('__FULL_LOGIN__', $_CFG['use_full_login'] == 1 && empty($_MEMBER));
+
 if(__REQ_METHOD__ == 'JSON') {
 	$_POST = json_decode(file_get_contents('php://input'), TRUE);
 }

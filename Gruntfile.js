@@ -20,6 +20,7 @@ module.exports = function(grunt) {
           'module/page/tpl/page.min.js' : ['module/page/tpl/page.js'],
           'theme/default/index.min.js' : ['theme/default/index.js'],
           'theme/default/index.min.css' : ['theme/default/index.css'],
+          'theme/default/login.min.css' : ['theme/default/login.css'],
           'common/js/common.min.js' : ['common/js/common.js'],
           'common/css/common.min.css' : ['common/css/common.css']
         }
@@ -101,6 +102,12 @@ module.exports = function(grunt) {
           ext: '.min.css'
         }, {
           expand: true,
+          cwd: 'theme/default/',
+          src: ['login.min.css'],
+          dest: 'theme/default/',
+          ext: '.min.css'
+        }, {
+          expand: true,
           cwd: 'common/css/',
           src: ['common.min.css'],
           dest: 'common/css/',
@@ -135,6 +142,7 @@ module.exports = function(grunt) {
           'module/board/tpl/board.js',
           'module/page/tpl/page.css',
           'module/page/tpl/page.js',
+          'theme/default/login.css',
           'theme/default/index.css',
           'theme/default/index.js',
           'common/css/common.css',

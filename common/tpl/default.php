@@ -46,7 +46,7 @@ var request_uri     = "<?php echo getRequestUri() ?>";
 <?php @include _AF_THEME_PATH_ . '_head.php'; ?>
 </head>
 <body>
-<?php  include _AF_THEME_PATH_ . (__POPUP__ ? 'popup' : 'index') . '.php'; ?>
+<?php  include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'index')) . '.php'; ?>
 <?php
 @include _AF_THEME_PATH_ . '_tail.php';
 echo '<script>';
