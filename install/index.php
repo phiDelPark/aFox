@@ -147,7 +147,8 @@ $create_sql = '
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
-	   protect_file   CHAR(1)      NOT NULL DEFAULT 0,
+	   use_protect    CHAR(1)      NOT NULL DEFAULT 0,
+	   use_full_login CHAR(1)      NOT NULL DEFAULT 0,
 	   point_login    INT(11)      NOT NULL DEFAULT 0)'.$_engine;
 
 mysqli_query($link, $create_sql);

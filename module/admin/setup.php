@@ -66,6 +66,11 @@
 	</div>
 	<div class="form-group">
 		<label class="checkbox" tabindex="0">
+			<input type="checkbox" name="use_full_login" value="1" <?php echo !empty($config['use_full_login'])?'checked':''?>>
+			<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+			<?php echo getLang('desc_use_full_login')?>
+		</label>
+		<label class="checkbox" tabindex="0">
 			<input type="checkbox" name="use_signup" value="1" <?php echo !empty($config['use_signup'])?'checked':''?>>
 			<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 			<?php echo getLang('desc_use_signup')?>
@@ -76,9 +81,9 @@
 			<?php echo getLang('desc_use_visit')?>
 		</label>
 		<label class="checkbox" tabindex="0">
-			<input type="checkbox" name="protect_file" value="1" <?php echo !empty($config['protect_file'])?'checked':''?>>
+			<input type="checkbox" name="use_protect" value="1" <?php echo !empty($config['use_protect'])?'checked':''?>>
 			<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-			<?php echo getLang('desc_protect_file')?>
+			<?php echo getLang('desc_use_protect')?>
 		</label>
 		<label class="checkbox" tabindex="0">
 			<input type="checkbox" name="use_captcha" value="1" <?php echo !empty($config['use_captcha'])?'checked':''?>>

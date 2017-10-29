@@ -42,7 +42,8 @@ function proc($data) {
 				'use_captcha'=>$data['use_captcha'],
 				'use_visit'=>$data['use_visit'],
 				'use_signup'=>$data['use_signup'],
-				'protect_file'=>$data['protect_file'],
+				'use_protect'=>$data['use_protect'],
+				'use_full_login'=>$data['use_full_login'],
 				'point_login'=>(int)$data['point_login']
 			]
 		);
