@@ -15,7 +15,7 @@
 			</div>
 		<?php } else { ?>
 		<form action="/" method="post" autocomplete="off" data-exec-ajax="member.loginCheck" class="modal-content">
-			<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+			<input type="hidden" name="success_return_url" value="<?php echo getUrl('')?>" />
 			<div class="modal-header">
 				<img src="theme/default/img/logo.png">
 			</div>
