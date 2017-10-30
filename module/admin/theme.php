@@ -63,14 +63,14 @@ if(is_dir($theme_dir)) {
 </tbody>
 </table>
 
-<div id="admin_theme_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div id="admin_theme_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="adminThemeModalTitle">
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.getThemeForm">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="th_id" value="" />
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('theme')?></h4>
+		<h4 class="modal-title" id="adminThemeModalTitle"><?php echo getLang('theme')?></h4>
 	  </div>
 	  <div class="modal-body">
 	  </div>

@@ -73,13 +73,13 @@
 	</ul>
 </nav>
 
-<div id="board_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div id="board_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="adminBoardModalTitle">
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.updateBoard">
 		<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 		<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('board')?></h4>
+		<h4 class="modal-title" id="adminBoardModalTitle"><?php echo getLang('board')?></h4>
 		</div>
 		<div class="modal-body">
 			<div class="form-group clearfix" style="margin-bottom:0">

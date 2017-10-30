@@ -202,7 +202,7 @@ var $_LANG = {};
 	};
 
 	$.msg_box = window.msg_box = function(text, caption, type, callback) {
-		var html = '<div class="modal fade" id="afMessageBox" tabindex="-1" role="dialog" aria-labelledby="MessageBox" aria-hidden="true" style="z-index:99999"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><i class="glyphicon glyphicon-%s" aria-hidden="true"></i> %s</div><div class="modal-body"></div><div class="modal-footer">%s</div></div></div></div>',
+		var html = '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="afMsgBox" aria-hidden="true" style="z-index:99999"><div class="modal-dialog"><div class="modal-content"><div class="modal-header" id="afMsgBox"><i class="glyphicon glyphicon-%s" aria-hidden="true"></i> %s</div><div class="modal-body"></div><div class="modal-footer">%s</div></div></div></div>',
 			icons = {
 				'info': 'info-sign',
 				'question': 'question-sign',

@@ -97,14 +97,14 @@
 	</ul>
 </nav>
 
-<div id="page_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div id="page_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="adminPageModalTitle">
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" method="post" autocomplete="off" enctype="multipart/form-data" data-exec-ajax="page.updatePage">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('page')?></h4>
+		<h4 class="modal-title" id="adminPageModalTitle"><?php echo getLang('page')?></h4>
 	  </div>
 	  <div class="modal-body">
 

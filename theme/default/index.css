@@ -216,16 +216,6 @@ ul.message-dropdown>li>a {
 	margin: 15px 0;
 }
 
-#loginModal .modal-header h4 {
-	font-weight: bold;
-	font-size: 16px;
-}
-
-#loginModal .modal-dialog {
-	width: 400px;
-	margin: 70px auto;
-}
-
 .login-icon img {
 	border: 0;
 	color: #000;
@@ -249,7 +239,7 @@ ul.message-dropdown>li>a {
 	max-width: 500px;
 }
 
-#bsPreLoader {
+[aria-labelledby="afPageLoader"] {
 	position: fixed;
 	left: 0px;
 	top: 0px;
@@ -259,17 +249,17 @@ ul.message-dropdown>li>a {
 	background: url(img/pre_loader.gif) center no-repeat #fff;
 }
 
-#afMessageBox .modal-dialog {
+[aria-labelledby="afMsgBox"] .modal-dialog {
 	margin: 150px auto 0;
 	max-width: 400px;
 }
 
-#afMessageBox .modal-header {
+[aria-labelledby="afMsgBox"] .modal-header {
 	font-weight: bold;
 	font-size: 16px;
 }
 
-#afMessageBox .modal-body {
+[aria-labelledby="afMsgBox"] .modal-body {
 	min-height: 70px;
 }
 
@@ -290,9 +280,9 @@ ul.message-dropdown>li>a {
 		padding: 0 10px;
 		width: auto;
 	}
-	.carousel-caption h1 .carousel-caption h2,
-	.carousel-caption h3,
-		{
+	.carousel-caption h1,
+	.carousel-caption h2,
+	.carousel-caption h3 {
 		font-size: 25px;
 	}
 	.header-image {
@@ -320,10 +310,7 @@ ul.message-dropdown>li>a {
 	.bs-docs-footer-links li+li {
 		margin: 5px 15px 0 0;
 	}
-	#loginModal .modal-dialog {
-		width: 300px;
-	}
-	#afMessageBox .modal-dialog {
+	[aria-labelledby="afMsgBox"] .modal-dialog {
 		width: 300px;
 	}
 }

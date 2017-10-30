@@ -5,7 +5,7 @@
 ?>
 
 <div id="fullscreen_bg" class="fullscreen_bg"/>
-<div class="modal fade in"<?php echo $signUp?'':' id="afMessageBox"'?> tabindex="-1" role="login" aria-labelledby="loginBox" aria-hidden="true" style="z-index: 99999; display: block; padding-right: 17px;">
+<div class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="<?php echo $signUp?'afSignUpFormTitle':'afMsgBox'?>" aria-hidden="true" style="z-index: 99999; display: block; padding-right: 17px;">
 	<div class="modal-dialog<?php echo $signUp?' modal-lg':''?>">
 		<?php if($signUp) { ?>
 			<div class="modal-content">
@@ -16,17 +16,16 @@
 		<?php } else { ?>
 		<form action="/" method="post" autocomplete="off" data-exec-ajax="member.loginCheck" class="modal-content">
 			<input type="hidden" name="success_return_url" value="<?php echo getUrl('')?>" />
-			<div class="modal-header">
+			<div class="modal-header" id="<?php echo $signUp?'afSignUpFormTitle':'afMsgBox'?>">
 				<img src="theme/default/img/logo.png">
+				<span class="sr-only"><?php echo escapeHtml($_CFG['title']).' '.getLang('login')?></span>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<input type="text" class="form-control" name="mb_id" maxlength="20" placeholder="<?php echo getLang('id')?>" pattern="^[a-zA-Z]+\w{2,}$" required="">
-					<span class="sr-only"><?php echo getLang('id')?></span>
+					<input type="text" class="form-control" name="mb_id" maxlength="20" placeholder="<?php echo getLang('id')?>" pattern="^[a-zA-Z]+\w{2,}$" required>
 				</div>
 				<div class="form-group">
-					<input type="password" class="form-control" name="mb_password" placeholder="<?php echo getLang('password')?>" required="">
-					<span class="sr-only"><?php echo getLang('password')?></span>
+					<input type="password" class="form-control" name="mb_password" placeholder="<?php echo getLang('password')?>" required>
 				</div>
 				<label class="checkbox" tabindex="0">
 					<input type="checkbox" name="auto_login" value="1">

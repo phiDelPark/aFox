@@ -61,13 +61,11 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 		<input type="hidden" name="wr_srl" value="<?php echo $_DATA['srl'] ?>">
 		<a class="close" href="javascrip:;" style="display:none"><span aria-hidden="true">×</span></a>
 			<div class="form-inline area-mbinfo<?php echo $is_rp_grant&&empty($_MEMBER)?'':' hide'?>">
-				<span class="sr-only"><?php echo getLang('id')?></span>
 				<input type="text" name="mb_nick" class="form-control"<?php echo empty($_MEMBER)?' required':''?> maxlength="20" placeholder="<?php echo getLang('id')?>">
-				<span class="sr-only"><?php echo getLang('password')?></span>
 				<input type="password" name="mb_password" class="form-control"<?php echo empty($_MEMBER)?' required':''?> placeholder="<?php echo getLang('password')?>">
 			</div>
 			<dir class="area-group">
-				<div class="form-group"><span class="sr-only"><?php echo getLang('content')?></span>
+				<div class="form-group">
 					<?php
 						$istool = [];
 						if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['rp_type'] = ['1', ['MKDW'=>'1','HTML'=>'2']];

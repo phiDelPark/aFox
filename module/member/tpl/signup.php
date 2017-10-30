@@ -6,7 +6,7 @@
 <form id="member-signup" method="post" autocomplete="off" enctype="multipart/form-data" data-exec-ajax="member.updateMember">
 <input type="hidden" name="success_return_url" value="<?php echo $ismb?getUrl():getUrl('')?>" />
 
-	<h4 class="signup-title"><?php echo getLang($ismb?'member':'member_signup')?></h4>
+	<h4 class="signup-title" id="afSignUpFormTitle"><?php echo getLang($ismb?'member':'member_signup')?></h4>
 	<hr class="divider">
 	<div class="signup-body">
 <?php if(!$ismb) { ?>

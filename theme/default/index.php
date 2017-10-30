@@ -4,9 +4,9 @@
 	addJSLang(['error','id','password','login','auto_login','member_signup','member_find']);
 
 	$menus = getSiteMenu();
-
 	$mainmenu = [];
 	$submenu = [];
+
 	if(empty($menus['error'])) {
 		$url = getUrl();
 		foreach ($menus['header'] as $val) {
@@ -30,11 +30,16 @@
 				$mainmenu[$muroot] = $val;
 			}
 		}
-
 	}
-
 ?>
-<div<?php echo !empty($_THEME['use_loader'])?' id="bsPreLoader"':'' ?>></div>
+
+<?php if(!empty($_THEME['use_loader'])) { ?>
+<div aria-labelledby="afPageLoader">
+	<span id="afPageLoader" class="sr-only">
+		Please Wait, Loading...
+	</span>
+</div>
+<?php } ?>
 
 <?php if($error = get_error()) { ?>
 	<div class="sticky-message panel panel-default">
@@ -51,7 +56,7 @@
 <div class="container">
 
 	<header class="bs-docs-header">
-		<h1 class="logo-title"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
+		<h1 class="logo-title" role="banner" aria-label="<?php echo escapeHtml($_CFG['title'])?>"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
 		<div class="right">
 <?php if (!empty($_MEMBER)) {
 	$notes = getDBList(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], '', 1, 5);
@@ -114,10 +119,10 @@
 		</div>
 	</header>
 
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse" role="navigation" aria-label="Site Navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9" aria-expanded="false">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#af-navbar-collapse-9" aria-expanded="false">
 					<span class="sr-only">Toggle navigation</span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
@@ -125,7 +130,7 @@
 				</button>
 				<a class="navbar-brand" href="<?php echo getUrl('')?>"><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a>
 			</div>
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+			<div class="collapse navbar-collapse" id="af-navbar-collapse-9">
 				<ul class="nav navbar-nav right">
 
 <?php
@@ -139,7 +144,7 @@
 	</nav>
 
 <?php if ($_DATA['id'] == $_CFG['start']) { ?>
-	<section id="myCarousel" class="carousel slide" data-ride="carousel">
+	<section id="myCarousel" class="carousel slide" data-ride="carousel" role="complementary" aria-label="Site Carousel">
 	  <div class="carousel-inner">
 		<?php for ($i=1; $i < 4; $i++) {  ?>
 			<div class="item<?php echo $i===1 ? ' active':''?>">
@@ -171,7 +176,7 @@
 
 <?php if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) { ?>
 	<div class="bs-docs-body row">
-		<aside class="col-md-3">
+		<aside class="col-md-3" role="navigation" aria-label="Content Menu">
 			<div class="list-group">
 			  <span class="list-group-item disabled">
 				<?php echo $mainmenu['_ACTIVE_']['mu_title'] ?>
@@ -185,10 +190,10 @@
 	?>
 			</div>
 		</aside>
-		<section class="col-md-9">
+		<section class="col-md-9" role="main" aria-label="Site Contents">
 
 <?php } else { ?>
-	<div class="bs-docs-body">
+	<div class="bs-docs-body" role="main" aria-label="Site Contents">
 		<section>
 <?php } ?>
 			<article>
@@ -197,7 +202,7 @@
 		</section>
 	</div>
 
-	<footer class="bs-docs-footer">
+	<footer class="bs-docs-footer" role="contentinfo" aria-label="About Site">
 		<ul class="bs-docs-footer-links">
 		<li style="visibility:hidden"></li>
 <?php

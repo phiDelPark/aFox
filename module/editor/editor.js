@@ -163,7 +163,7 @@
 			var $i = $(this),
 				$txtara = $this.$textarea,
 				$iframe = $this.$element.find('iframe'),
-				type = $i.attr('data-type');
+				type = $i.attr('aria-label');
 			$i.blur();
 			if (type == 'link' || type == 'components') return false;
 			$this.exec(type, null);
@@ -249,7 +249,7 @@
 		}).on('inserted.bs.popover', function() {
 			var $i = $(this),
 				$popover = $i.data("bs.popover").tip().find('.popover-content'),
-				type = $i.attr('data-type') || '';
+				type = $i.attr('aria-label') || '';
 			if (type == 'components') {
 				if (AF_EDITOR_COMPONENTS) {
 					var lk = '<div class="list-group" style="margin:0">';
