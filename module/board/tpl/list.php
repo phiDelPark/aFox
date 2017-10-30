@@ -3,7 +3,7 @@ if(!defined('__AFOX__')) exit();
 require_once 'common.php';
 
 if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURRENT_DOCUMENT_LIST'];
-$is_wr_grant = isGrant($_DATA['id'], 'write');
+$is_wr_grant = isGrant('write', $_DATA['id']);
 $use_style = ['list','review','gallery','timeline'];
 ?>
 

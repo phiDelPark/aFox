@@ -101,7 +101,7 @@ function proc($data) {
 		if ($new_insert) {
 
 			// 권한 체크
-			if(!isGrant($module['md_id'], 'reply')) {
+			if(!isGrant('reply', $module['md_id'])) {
 				throw new Exception(getLang('error_permitted'),4501);
 			}
 

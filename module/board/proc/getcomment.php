@@ -16,7 +16,7 @@ function proc($data) {
 	$doc = getDocument($cmt['wr_srl'], 'md_id,wr_srl,wr_title,wr_updater');
 	if(!empty($doc['error'])) {
 		return set_error($doc['message'],$doc['error']);
-	} else if(!isGrant($doc['md_id'], 'view')) {
+	} else if(!isGrant('view', $doc['md_id'])) {
 		return set_error(getLang('error_permitted'),4501);
 	}
 

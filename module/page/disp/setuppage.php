@@ -8,7 +8,9 @@ function proc($data) {
 		return set_error(getLang($data['id']),901);
 	}
 
-	return getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['id']]);
+	$result = getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['id']]);
+	$result['tpl'] = 'setup';
+	return $result;
 }
 
 /* End of file setuppage.php */

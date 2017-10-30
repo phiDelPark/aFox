@@ -10,7 +10,7 @@ function proc($data) {
 		return set_error($out['message'],$out['error']);
 	} else if(empty($out['md_id'])) {
 		return set_error(getLang('error_founded'),4201);
-	} else if(!isGrant($out['md_id'], 'view')) {
+	} else if(!isGrant('view', $out['md_id'])) {
 		return set_error(getLang('error_permitted'),4501);
 	}
 

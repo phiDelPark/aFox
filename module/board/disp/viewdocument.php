@@ -18,7 +18,7 @@ function proc($data) {
 
 		$PERMIT_KEY = md5($doc['md_id'].'_'.$doc['wr_srl'] . '_' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 
-		if(!isGrant($doc['md_id'], 'view')) {
+		if(!isGrant('view', $doc['md_id'])) {
 			set_session('_AF_SECRET_DOCUMENT_'.$PERMIT_KEY, false);
 			return set_error(getLang('error_permitted'),88088);
 		}

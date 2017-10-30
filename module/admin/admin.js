@@ -68,6 +68,9 @@
 				$f.find('.imagebox').hide();
 				$f.find('.imagebox > img').attr('src', '');
 			}
+		} else if(act=='member.getMember' && data['mb_rank'] == 's') {
+			$f.find('[name="new_mb_rank"]').parent().hide();
+			$f.find('[name="new_mb_rank"][value="2"]').parent().show();
 		}
 
 		$f.find('[data-act-change]').on('click', function() {

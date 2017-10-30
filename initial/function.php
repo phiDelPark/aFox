@@ -484,10 +484,9 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	// 권한 체크
-	function isGrant($md_id, $chk) {
-		if(empty($md_id) || empty($chk)) return false;
+	function getGrant($chk, $md_id) {
+		if(empty($md_id) || empty($chk)) return '';
 
-		global $_MEMBER;
 		static $is_grants = [];
 
 		$key = '_'.$md_id.'@'.$chk;
@@ -495,20 +494,22 @@ if(!defined('__AFOX__')) exit();
 			$is_grants[$key] = 'm'; // 휴지통은 메니져 이상
 		} else if(!isset($is_grants[$key])) {
 			$module = getModule($md_id);
-			if(!empty($module['error'])) return false;
+			if(!empty($module['error'])) return '';
 			$is_grants[$key] = $module['grant_'.$chk];
 		}
 
-		$grant = $is_grants[$key];
+		return $is_grants[$key];
+	}
 
-		if(!empty($grant)) {
-			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
-			if($rank > 115) return false; // s = 115 초과시 에러
-			$grant = ord($grant);
-			return $grant <= $rank; // 0 = 48, z = 122
-		} else {
-			return true;
+	function isGrant($chk, $md_id = '') {
+		if(!empty($md_id)) {
+			$chk = getGrant($chk, $md_id);
 		}
+		if(is_null($chk) || strlen($chk) !== 1) return false;
+		global $_MEMBER;
+		$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
+		// 0 = 48, z = 122 // s = 115 초과시 에러
+		return $rank < 116 && ord($chk) <= $rank;
 	}
 
 	// 권한 체크
@@ -656,7 +657,7 @@ if(!defined('__AFOX__')) exit();
 		}, $text);
 
 		// 다운로드 권한이 없으면 처리
-		if(!empty($_DATA['id']) && !isGrant($_DATA['id'],'download')) {
+		if(!empty($_DATA['id']) && !isGrant('download', $_DATA['id'])) {
 			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
 			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES,false)."');return false\" \\3";
 			$text = preg_replace($patterns, $replacement, $text);

@@ -47,6 +47,8 @@ if($tmp = (isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cook
 		unset($_SESSION['AF_LOGIN_ID']);
 	} else {
 		unset($_MEMBER['mb_password']);
+		$_MEMBER['mb_grade'] = ['m'=>'manager','s'=>'admin'][$_MEMBER['mb_rank']];
+		if (empty($_MEMBER['mb_grade'])) $_MEMBER['mb_grade'] = 'member';
 	}
 }
 
@@ -101,7 +103,11 @@ if($_DATA['module'] == 'admin' || isset($_DATA['admin'])) {
 
 define('__MID__', $_DATA['id']);
 
-if(__MODULE__) require_once _AF_MODULES_PATH_ . __MODULE__ . '/index.php';
+$_PROTECT = [];
+if(__MODULE__) {
+	require_once _AF_MODULES_PATH_ . __MODULE__ . '/protect.php';
+	require_once _AF_MODULES_PATH_ . __MODULE__ . '/index.php';
+}
 
 // CDN 에러면 브라우저 종료전까지 사용안함
 if(!empty($_DATA['cdnerr'])) {

@@ -123,6 +123,8 @@ function proc($data) {
 				} else {
 					$in_data['mb_rank'] = ($data['new_mb_rank'] == 2 ? 's' : 'm');
 				}
+				// 관리자는 지정 못하게
+				if ($in_data['mb_rank'] == 's') unset($in_data['mb_rank']);
 			}
 		} else {
 			unset($in_data['mb_rank']);

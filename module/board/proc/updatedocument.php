@@ -114,7 +114,7 @@ function proc($data) {
 
 		// 권한 체크, 파일 첨부 때문에 먼저 함
 		if ($new_insert) {
-			if(!isGrant($md_id, 'write')) {
+			if(!isGrant('write', $md_id)) {
 				throw new Exception(getLang('error_permitted'),4501);
 			}
 
@@ -186,7 +186,7 @@ function proc($data) {
 
 		if($upload_count>0) {
 			// 권한 체크
-			if(!isGrant($md_id, 'upload')) throw new Exception(getLang('warning_not_allowable', ['upload']), 2502);
+			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warning_not_allowable', ['upload']), 2502);
 			if($file_max < $upload_count) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
 
 			for ($i=0; $i < $upload_count; $i++) {

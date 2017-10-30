@@ -16,9 +16,9 @@ function getLogin($f='mb_srl') {
 		$mb = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$mbid}'");
 		if(!DB::error() && !empty($mb['mb_srl'])) return $mb[$f];
 	}
-	return $f=='mb_rank'?'z':0;
+	return '0';
 }
-if($_CFG['use_full_login']==1&&empty(getLogin())) setHttpError('401 Unauthorized');
+if($_CFG['use_full_login']==1&&empty((int)getLogin())) setHttpError('401 Unauthorized');
 if($_CFG['use_protect']==1&&!preg_match('/^https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
 static $_file = [];
 $srl = (int)$_GET['file'];

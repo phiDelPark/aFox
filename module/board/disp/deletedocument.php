@@ -14,7 +14,7 @@ function proc($data) {
 	// 권한 체크
 	if(!$is_manager) {
 
-		if(!isGrant($doc['md_id'], 'view')) {
+		if(!isGrant('view', $doc['md_id'])) {
 			return set_error(getLang('error_permitted'),4501);
 		}
 
