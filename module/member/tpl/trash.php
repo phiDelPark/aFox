@@ -121,7 +121,7 @@
 	}
 	function _allRemoveTrashItems() {
 		var data = $('#af_member_remove_trash_items')[0].dataExport();
-		if (!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['item']]))) return false;
+		if (!confirm($_LANG['confirm_select_empty'].sprintf([$_LANG['document']]))) return false;
 		exec_ajax('member.deleteTrash', data);
 		return false;
 	}
