@@ -4,7 +4,7 @@
 	$th_list = [];
 	$out = DB::query('SELECT th_id FROM '._AF_THEME_TABLE_.' WHERE 1');
 	if($ex = DB::error()) {
-		echo messageBox($ex->getMessage(), $ex->getCode(), false);
+		messageBox($ex->getMessage(), $ex->getCode(), false);
 	}else {
 		while ($row = DB::assoc($out)) {
 			$th_list[$row['th_id']] = true;

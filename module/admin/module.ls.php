@@ -4,7 +4,7 @@
 	$md_list = [];
 	$out = DB::query('SELECT md_key FROM '._AF_MODULE_TABLE_.' WHERE 1 ORDER BY md_key');
 	if($ex = DB::error()) {
-		echo messageBox($ex->getMessage(),$ex->getCode(), false);
+		messageBox($ex->getMessage(),$ex->getCode(), false);
 	} else {
 		while ($row = DB::assoc($out)) {
 			$md_list[$row['md_key']] = true;

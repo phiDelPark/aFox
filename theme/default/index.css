@@ -31,6 +31,49 @@ pre code {
 	margin-right: -30px;
 }
 
+.navbar .navbar-collapse {
+	position: relative;
+	overflow: hidden !important;
+}
+
+.navbar .nav-collapse .navbar-form {
+	border-width: 0;
+	box-shadow: none;
+}
+
+.navbar-nav.navbar-right .btn:not(.collapsed) {
+	background-color: rgb(111, 84, 153);
+	border-color: rgb(111, 84, 153);
+	color: rgb(255, 255, 255);
+}
+
+.navbar.navbar-inverse .nav-collapse.in {
+	transform: translate(0px, 0px);
+}
+
+.navbar.navbar-inverse .nav-collapse {
+	height: auto !important;
+	transition: transform 0.3s;
+	transform: translate(0px, -50px);
+}
+
+.navbar.navbar-inverse .nav-collapse {
+	background-color: #222;
+}
+
+.navbar .nav-collapse {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0;
+	padding-right: 0;
+	padding-left: 80px;
+	width: 100%;
+}
+
 .carousel {
 	margin-bottom: 30px;
 }
@@ -168,6 +211,7 @@ ul.message-dropdown>li>a {
 	color: #000 !important;
 }
 
+.bs-docs-header .right [aria-label="Search"],
 .bs-docs-header .right .caret {
 	margin-right: 5px;
 }
@@ -229,16 +273,6 @@ ul.message-dropdown>li>a {
 	vertical-align: bottom;
 }
 
-.sticky-message {
-	position: fixed;
-	left: 30px;
-	top: 30px;
-	z-index: 9998;
-	background-color: #fff;
-	min-width: 300px;
-	max-width: 500px;
-}
-
 [aria-labelledby="afPageLoader"] {
 	position: fixed;
 	left: 0px;
@@ -267,6 +301,28 @@ ul.message-dropdown>li>a {
 	.nav.right {
 		float: none;
 		margin-right: -15px;
+	}
+	.navbar .nav-collapse {
+		margin: 7.5px auto;
+		padding: 0;
+	}
+	.navbar .nav-collapse .navbar-form {
+		margin: 0;
+	}
+	.navbar .nav-collapse .navbar-form button {
+		width: 100%
+	}
+	.navbar.navbar-inverse .nav-collapse {
+		transform: translate(-100%, 0px);
+	}
+	.navbar.navbar-inverse .nav-collapse.in {
+		transform: translate(0px, 0px);
+	}
+	.navbar.navbar-inverse .nav-collapse.slide-down {
+		transform: translate(0px, -100%);
+	}
+	.navbar.navbar-inverse .nav-collapse.in.slide-down {
+		transform: translate(0px, 0px);
 	}
 	.carousel-control {
 		font-size: 50px;

@@ -26,7 +26,7 @@
 
 	$out = DB::getList("SELECT SQL_CALC_FOUND_ROWS $fl.*, $dd.md_id FROM $fl INNER JOIN $dd ON $dd.wr_srl = $fl.mf_target WHERE $where ORDER BY $fl.mf_regdate DESC LIMIT $start,$count");
 	if($ex = DB::error()) {
-		echo messageBox($ex->getMessage(),$ex->getCode(), false);
+		messageBox($ex->getMessage(),$ex->getCode(), false);
 	} else {
 		$total_count = DB::found();
 		$cur_page = $page;
@@ -62,7 +62,7 @@
 	$start_page = $current_page = 1;
 
 	if(!empty($file_list['error'])) {
-		echo messageBox($file_list['message'], $file_list['error'], false);
+		messageBox($file_list['message'], $file_list['error'], false);
 	} else {
 		$current_page = $file_list['current_page'];
 		$total_page = $file_list['total_page'];

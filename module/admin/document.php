@@ -42,7 +42,7 @@
 	$start_page = $current_page = 1;
 
 	if(!empty($doc_list['error'])) {
-		echo messageBox($doc_list['message'], $doc_list['error'], false);
+		messageBox($doc_list['message'], $doc_list['error'], false);
 	} else {
 		$current_page = $doc_list['current_page'];
 		$total_page = $doc_list['total_page'];

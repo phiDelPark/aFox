@@ -30,7 +30,7 @@
 	$start_page = $current_page = 1;
 
 	if(!empty($board_list['error'])) {
-		echo messageBox($board_list['message'], $board_list['error'], false);
+		messageBox($board_list['message'], $board_list['error'], false);
 	} else {
 		$current_page = $board_list['current_page'];
 		$total_page = $board_list['total_page'];

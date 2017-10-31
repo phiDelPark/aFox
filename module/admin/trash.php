@@ -52,7 +52,7 @@
 
 	$out = DB::getList($query);
 	if($ex = DB::error()) {
-		echo messageBox($ex->getMessage(),$ex->getCode(), false);
+		messageBox($ex->getMessage(),$ex->getCode(), false);
 	} else {
 		$total_count = DB::found();
 		$cur_page = $page;
@@ -98,7 +98,7 @@
 	$start_page = $current_page = 1;
 
 	if(!empty($trash_list['error'])) {
-		echo messageBox($trash_list['message'], $trash_list['error'], false);
+		messageBox($trash_list['message'], $trash_list['error'], false);
 	} else {
 		$current_page = $trash_list['current_page'];
 		$total_page = $trash_list['total_page'];

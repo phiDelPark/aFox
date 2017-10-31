@@ -30,15 +30,16 @@ function proc($data) {
 			// 비밀글이면
 			if(!$doc['grant_view']) {
 				$input_password = '<form class="input-password" method="post" autocomplete="off">'
+							.'<input type="hidden" name="id" value="%s"><input type="hidden" name="srl" value="%s">'
 							.'%s<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'
 							.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>';
 
 				if(!empty($doc['mb_srl']) || empty($doc['mb_password'])) {
 					return set_error(getLang('error_permitted'),4501);
 				} else if(empty($data['mb_password'])) {
-					return set_error(sprintf($input_password, getLang('request_input', ['password'])), 1);
+					return set_error(sprintf($input_password, $doc['md_id'], $doc['wr_srl'], getLang('request_input', ['password'])), 1);
 				} else if (!checkPassword($data['mb_password'], $doc['mb_password'])) {
-					return set_error(sprintf($input_password, getLang('error_password')), 4801);
+					return set_error(sprintf($input_password, $doc['md_id'], $doc['wr_srl'], getLang('error_password')), 4801);
 				}
 
 				$doc['grant_view'] = true;

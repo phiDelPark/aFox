@@ -224,7 +224,9 @@ if(!defined('__AFOX__')) exit();
 		static $module_cfg = [];
 		if(!isset($module_cfg[$id])) {
 			$out = getDBItem(_AF_MODULE_TABLE_, ['md_id'=>$id]);
-			if(empty($out['error'])) $out = is_null($out) ? set_error(getLang('error_founded'),4201) : $out;
+			if(empty($out['error'])) {
+				$out = is_null($out) ? ['error'=>4201, 'message'=>getLang('error_founded')] : $out;
+			}
 			$module_cfg[$id] = $out;
 		}
 		return empty($get) ? $module_cfg[$id] : $module_cfg[$id][$get];
@@ -689,7 +691,7 @@ if(!defined('__AFOX__')) exit();
 			if($_result['error'] == 88088 && empty($_MEMBER)) {
 				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
 			} else {
-				echo messageBox($_result['message'], $_result['error']);
+				messageBox($_result['message'], $_result['error']);
 			}
 		} else {
 			$_{__MODULE__} = $_result;
@@ -705,13 +707,13 @@ if(!defined('__AFOX__')) exit();
 
 	function displayWidget($widget, $_WIDGET = []){
 		global $_MEMBER;
+		ob_start();
 		if(file_exists(_AF_WIDGETS_PATH_ . $widget . '/index.php')) {
-			ob_start();
 			include _AF_WIDGETS_PATH_ . $widget . '/index.php';
-			return ob_get_clean();
 		} else {
-			return messageBox(getLang('error_founded'), 4201, $widget);
+			messageBox(getLang('error_founded'), 4201, getLang('Widget').': '.$widget);
 		}
+		return ob_get_clean();
 	}
 
 	function displayEditor($name, $content, $options = []) {
@@ -756,7 +758,7 @@ if(!defined('__AFOX__')) exit();
 			$a_icon = ['ok-sign', 'exclamation-sign', 'warning-sign', 'ban-circle'];
 			$title = '<i class="glyphicon glyphicon-'.$a_icon[$type].'" aria-hidden="true"></i> '.(empty($title)?getLang($a_title[$type]):$title);
 		}
-		return '<div class="'. (empty($title)?'alert alert-dismissable alert-':'panel panel-') . '' . $a_type[$type] . '" role="alert">'
+		echo '<div class="'. (empty($title)?'alert alert-dismissable alert-':'panel panel-') . '' . $a_type[$type] . '" role="alert">'
 				. (empty($title)?'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>':'<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3></div>')
 				. '<div' . (empty($title)?'':' class="panel-body"') . '>' . $message . '</div></div>';
 	}

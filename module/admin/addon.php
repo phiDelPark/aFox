@@ -4,7 +4,7 @@
 	$ao_list = [];
 	$out = DB::query('SELECT * FROM '._AF_ADDON_TABLE_.' WHERE 1');
 	if($ex = DB::error()) {
-		echo messageBox($ex->getMessage(), $ex->getCode(), false);
+		messageBox($ex->getMessage(), $ex->getCode(), false);
 	}else {
 		while ($row = DB::assoc($out)) {
 			$ao_list[$row['ao_id']] = (empty($row['use_pc']) ? '-/':'P/').(empty($row['use_mobile']) ? '-':'M');

@@ -41,23 +41,12 @@
 </div>
 <?php } ?>
 
-<?php if($error = get_error()) { ?>
-	<div class="sticky-message panel panel-default">
-		<div class="panel-heading clearfix">
-			<i class="glyphicon glyphicon-warning-sign" aria-hidden="true"></i> <strong><?php echo getLang('alert')?></strong>
-			<a class="pull-right" href="#Close" onclick="jQuery(this).parent().parent().remove();return false"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
-		</div>
-		<div class="panel-body">
-			<?php echo $error['message']?>
-		</div>
-	</div>
-<?php } ?>
-
 <div class="container">
 
 	<header class="bs-docs-header">
 		<h1 class="logo-title" role="banner" aria-label="<?php echo escapeHtml($_CFG['title'])?>"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
 		<div class="right">
+			<span role="search" aria-label="Search"><a class="collapsed"  data-toggle="collapse" href="#nav-collapse3" aria-expanded="false" aria-controls="nav-collapse3"><i class="glyphicon glyphicon-search" aria-hidden="true"></i></a></span>
 <?php if (!empty($_MEMBER)) {
 	$notes = getDBList(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], '', 1, 5);
 ?>
@@ -106,11 +95,11 @@
 					<li class="dropdown-header"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></li>
 					<?php } ?>
 					<li class="divider"></li>
-					<li><a href="<?php echo getUrl('','module','member','disp','inbox') ?>"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('inbox')?></a></li>
-					<li><a href="<?php echo getUrl('','module','member','disp','trash') ?>"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('recycle_bin')?></a></li>
-					<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('setup')?></a></li>
+					<li><a href="<?php echo getUrl('','module','member','disp','inbox') ?>"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('Inbox')?></a></li>
+					<li><a href="<?php echo getUrl('','module','member','disp','trash') ?>"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('Recycle_bin')?></a></li>
+					<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('Setup')?></a></li>
 					<li class="divider"></li>
-					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('logout')?></a></li>
+					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('Logout')?></a></li>
 				</ul>
 			</span>
 <?php } else { ?>
@@ -132,13 +121,21 @@
 			</div>
 			<div class="collapse navbar-collapse" id="af-navbar-collapse-9">
 				<ul class="nav navbar-nav right">
-
 <?php
 	foreach ($mainmenu as $key => $val) {
 		echo '<li'.($key==='_ACTIVE_'?' class="active"':'').'><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a></li>';
 	}
 ?>
 				</ul>
+				<div class="collapse nav navbar-nav nav-collapse slide-down" id="nav-collapse3">
+				<form class="navbar-form navbar-right" role="search" action="<?php echo getUrl('') ?>" method="get">
+					<div class="form-group">
+						<input type="hidden" name="id" value="search">
+						<input type="text" name="combine" class="form-control" placeholder="<?php echo getLang('Search_text')?>" required>
+					</div>
+					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> <?php echo getLang('Search')?></button>
+				</form>
+				</div>
 			</div>
 		</div>
 	</nav>
@@ -197,6 +194,7 @@
 		<section>
 <?php } ?>
 			<article>
+			<?php if($error = get_error()) { messageBox($error['message'], 3); } ?>
 			<?php displayModule()?>
 			</article>
 		</section>
