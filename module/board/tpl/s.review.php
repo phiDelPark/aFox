@@ -12,7 +12,7 @@ if(!defined('__AFOX__')) exit();
 		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 		$_tmp = '<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ';
 
-		$is_manager = isManager($_DATA['id']);
+		$is_manager = isManager(__MID__);
 		$login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 
 		$box_items = [false=>'',true=>''];
@@ -30,7 +30,7 @@ if(!defined('__AFOX__')) exit();
 			$wr_secret =  $val['wr_secret'] == '1';
 			$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
 
-			$_image = DB::get('SELECT mf_srl FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 AND mf_target=:2 AND mf_type LIKE "image%"', [$_DATA['id'],$val['wr_srl']]);
+			$_image = DB::get('SELECT mf_srl FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 AND mf_target=:2 AND mf_type LIKE "image%"', [__MID__,$val['wr_srl']]);
 			$wr_extra_vars = '';
 
 			if (count($_required_extras) > 0) {

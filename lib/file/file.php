@@ -19,7 +19,7 @@ function getLogin($f='mb_srl') {
 	return '0';
 }
 if($_CFG['use_full_login']==1&&empty((int)getLogin())) setHttpError('401 Unauthorized');
-if($_CFG['use_protect']==1&&!preg_match('/^https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
+if($_CFG['use_protect']==1&&!empty($_SERVER['HTTP_REFERER'])&&!preg_match('/^https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
 static $_file = [];
 $srl = (int)$_GET['file'];
 $thumb = isset($_GET['thumb']);

@@ -8,6 +8,7 @@ $_PROTECT['proc.deletepage']	= ['grant' => 's'];
 $_PROTECT['proc.updatepage']	= ['grant' => 's'];
 
 $_PROTECT['proc.getpage']		= ['grant' => '0'];
+$_PROTECT['proc.getpagefilelist']=['grant' => '0'];
 
 /* End of file protect.php */
 /* Location: ./module/page/protect.php */

@@ -249,11 +249,12 @@ if(!defined('__AFOX__')) exit();
 
 	function getFileList($id, $target) {
 		static $filelist = [];
-		if(!isset($filelist[$id])) {
+		$key = $id.'_'.$target;
+		if(!isset($filelist[$key])) {
 			$out = getDBList(_AF_FILE_TABLE_, ['md_id'=>$id,'mf_target'=>$target], 'mf_type');
-			$filelist[$id] = $out;
+			$filelist[$key] = $out;
 		}
-		return $filelist[$id];
+		return $filelist[$key];
 	}
 
 	function setHistoryAction($act, $value, $allowdup = false, $callback = null) {
@@ -488,10 +489,8 @@ if(!defined('__AFOX__')) exit();
 	// 권한 체크
 	function getGrant($chk, $md_id) {
 		if(empty($md_id) || empty($chk)) return '';
-
 		static $is_grants = [];
-
-		$key = '_'.$md_id.'@'.$chk;
+		$key = $md_id.'_'.$chk;
 		if($md_id == '_AFOXtRASH_') {
 			$is_grants[$key] = 'm'; // 휴지통은 메니져 이상
 		} else if(!isset($is_grants[$key])) {
@@ -630,7 +629,6 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function toHTML($text, $type = 2, $class = 'current_content') {
-		global $_DATA;
 		static $parsedown = null;
 
 		if($type == 0) {
@@ -659,7 +657,7 @@ if(!defined('__AFOX__')) exit();
 		}, $text);
 
 		// 다운로드 권한이 없으면 처리
-		if(!empty($_DATA['id']) && !isGrant('download', $_DATA['id'])) {
+		if(!empty(__MID__) && !isGrant('download', __MID__)) {
 			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
 			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES,false)."');return false\" \\3";
 			$text = preg_replace($patterns, $replacement, $text);

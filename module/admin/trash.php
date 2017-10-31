@@ -109,11 +109,11 @@
 
 		foreach ($trash_list['data'] as $key => $value) {
 			if($_DATA['trash'] == 'comment') {
-				$tmp = 'data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].',with_module_config,1" data-modal-target="#comment_modal"';
+				$tmp = ' data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].'" data-modal-target="#comment_modal"';
 			} else if($_DATA['trash'] == 'file') {
 				$tmp = ' data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"';
 			} else {
-				$tmp = 'data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"';
+				$tmp = ' data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"';
 			}
 			echo '<tr class="afox-list-item" '.$tmp.'><th scope="row"><a href="'.getUrl('category',$value['wr_updater']).'" except-event>'.$value['wr_updater'].'</a></th>';
 			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
@@ -154,7 +154,7 @@
 </nav>
 
 <?php if($_DATA['trash'] == 'comment') {?>
-<div id="trash_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="adminTrashModalTitle">
+<div id="comment_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="adminTrashModalTitle">
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" method="post" autocomplete="off">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />

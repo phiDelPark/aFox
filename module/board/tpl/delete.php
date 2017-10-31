@@ -1,7 +1,7 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 	$is = !empty($_{'board'});
-	$is_manager = isManager($_DATA['id']);
+	$is_manager = isManager(__MID__);
 ?>
 
 <section id="bdDelete">

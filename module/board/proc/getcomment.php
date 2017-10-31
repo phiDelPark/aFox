@@ -13,7 +13,7 @@ function proc($data) {
 		return set_error(getLang('error_founded'),4201);
 	}
 
-	$doc = getDocument($cmt['wr_srl'], 'md_id,wr_srl,wr_title,wr_updater');
+	$doc = getDocument($cmt['wr_srl'], 'md_id,wr_srl,wr_title,mb_srl,wr_updater');
 	if(!empty($doc['error'])) {
 		return set_error($doc['message'],$doc['error']);
 	} else if(!isGrant('view', $doc['md_id'])) {
@@ -49,13 +49,16 @@ function proc($data) {
 	unset($cmt['mb_password']);
 	//if($hide_ipaddress) unset($cmt['mb_ipaddress']);
 
-	// 관리자 모드에서 사용하기 위해 필요한 정보 같이 보내기... (관리자만)
-	if(!empty($data['with_module_config']) && isManager($doc['md_id'])) {
-		$cmt['wr_title'] = $doc['wr_title'];
-		$md_id = $doc['md_id'];
-		if($md_id == '_AFOXtRASH_') $md_id = $doc['wr_updater'];
-		$cmt = array_merge($cmt, getModule($md_id));
+	// 문서에 대한 기본 정보 포함
+	if($doc['md_id'] == '_AFOXtRASH_') {
+		$cmt['md_id'] = $doc['wr_updater'];
+		$cmt['wr_trash'] = true;
+	} else {
+		$cmt['md_id'] = $doc['md_id'];
+		$cmt['wr_trash'] = false;
 	}
+	$cmt['wr_title'] = $doc['wr_title'];
+	$cmt['wr_mb_srl'] = $doc['mb_srl'];
 
 	// JSON 사용시 모듈설정이 필요할때를 위해 만든옵션
 	return $cmt;

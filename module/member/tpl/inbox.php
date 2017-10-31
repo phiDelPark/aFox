@@ -97,7 +97,7 @@
 			<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 			</span>
 		</div>
-		<input type="hidden" name="id" value="<?php echo $_DATA['id'] ?>">
+		<input type="hidden" name="id" value="<?php echo __MID__ ?>">
 	</form>
 	<div class="pull-right">
 		<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('srl','') ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>

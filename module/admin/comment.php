@@ -71,7 +71,7 @@
 		$end_page = $cmt_list['end_page'];
 
 		foreach ($cmt_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].',with_module_config,1" data-modal-target="#comment_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-event>'.$value['md_id'].'</a></th>';
+			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].'" data-modal-target="#comment_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-event>'.$value['md_id'].'</a></th>';
 			echo '<td class="title"><input type="checkbox" value="'.$value['rp_srl'].'" class="data_selecter" style="display:none;margin-right:5px" except-event>'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
 			echo '<td>'.($value['rp_status']?$value['rp_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['rp_secret']?'Y':'N').'</td>';

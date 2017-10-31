@@ -3,7 +3,7 @@ if(!defined('__AFOX__')) exit();
 require_once 'common.php';
 
 if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURRENT_DOCUMENT_LIST'];
-$is_wr_grant = isGrant('write', $_DATA['id']);
+$is_wr_grant = isGrant('write', __MID__);
 $use_style = ['list','review','gallery','timeline'];
 ?>
 
@@ -16,7 +16,7 @@ $use_style = ['list','review','gallery','timeline'];
 			$tmp = explode(',', $_CFG['md_category']);
 			foreach ($tmp as $val) {
 				$isEqual = $val == $_DATA['category'];
-				echo '<li'.($isEqual?' class="active"':'').'><a href="'.getUrl('','id',$_DATA['id'],'category', urlencode($val)).'">'.$val.'</a></li>';
+				echo '<li'.($isEqual?' class="active"':'').'><a href="'.getUrl('','id',__MID__,'category', urlencode($val)).'">'.$val.'</a></li>';
 			}
 		?>
 		</ol>
@@ -48,7 +48,7 @@ $use_style = ['list','review','gallery','timeline'];
 				<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 				</span>
 			</div>
-			<input type="hidden" name="id" value="<?php echo $_DATA['id'] ?>">
+			<input type="hidden" name="id" value="<?php echo __MID__ ?>">
 		</form>
 		<div class="pull-right">
 			<?php if(!empty($_DATA['srl'])) {?><a class="btn btn-default" href="<?php echo getUrl('disp','','srl','','cpage','','rp','') ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a><?php }?>

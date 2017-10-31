@@ -1,7 +1,7 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 	$is = !empty($_{'board'})&&!empty($_{'board'}['wr_srl']);
-	$is_manager = isManager($_DATA['id']);
+	$is_manager = isManager(__MID__);
 ?>
 
 <section id="bdWrite">
@@ -15,8 +15,8 @@
 
 	<article class="document-editer">
 	<form onsubmit="return false" method="post" autocomplete="off" enctype="multipart/form-data" data-exec-ajax="board.updateDocument">
-	<input type="hidden" name="success_return_url" value="<?php echo $is?getUrl('disp','','cpage','','rp',''):getUrl('','id',$_DATA['id'])?>">
-	<input type="hidden" name="md_id" value="<?php echo $_DATA['id']?>">
+	<input type="hidden" name="success_return_url" value="<?php echo $is?getUrl('disp','','cpage','','rp',''):getUrl('','id',__MID__)?>">
+	<input type="hidden" name="md_id" value="<?php echo __MID__?>">
 	<input type="hidden" name="wr_srl" value="<?php echo $is?$_{'board'}['wr_srl']:''?>">
 
 		<div>
@@ -70,7 +70,7 @@
 					displayEditor(
 						'wr_content', $is?$_{'board'}['wr_content']:'',
 						[
-							'file'=>array($_CFG['md_file_max'], $_DATA['id'], $is?$_{'board'}['wr_srl']:0),
+							'file'=>array($_CFG['md_file_max'], __MID__, $is?$_{'board'}['wr_srl']:0),
 							'required'=>getLang('request_input',['content']),
 							'html'=>$ishtml,
 							'toolbar'=>array(getLang('content'), $istool),

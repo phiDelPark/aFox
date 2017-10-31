@@ -10,7 +10,7 @@
 	if(empty($menus['error'])) {
 		$url = getUrl();
 		foreach ($menus['header'] as $val) {
-			$is_active = !empty($val['md_id'])&&$val['md_id']==$_DATA['id']?'_ACTIVE_':$val['mu_srl'];
+			$is_active = !empty($val['md_id'])&&$val['md_id']==__MID__?'_ACTIVE_':$val['mu_srl'];
 			if($is_active!='_ACTIVE_' && !empty($val['mu_link']) && strpos($url, $val['mu_link'])!==false) {$is_active='_ACTIVE_';}
 			if((int) $val['mu_parent'] > 0) {
 				if($is_active == '_ACTIVE_') {
@@ -89,7 +89,7 @@
 			?>
 				<a href="#" class="dropdown-toggle login-icon" data-toggle="dropdown"><img src="<?php echo $_icon ?>" alt="<?php echo escapeHtml($_MEMBER['mb_nick'])?>" /></a>
 				<ul class="dropdown-menu dropdown-menu-right">
-					<?php if(isManager($_DATA['id'])) { ?>
+					<?php if(isManager(__MID__)) { ?>
 					<li><a href="<?php echo _AF_URL_?>?admin" target="_blank"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } else { ?>
 					<li class="dropdown-header"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></li>
@@ -140,7 +140,7 @@
 		</div>
 	</nav>
 
-<?php if ($_DATA['id'] == $_CFG['start']) { ?>
+<?php if (__MID__ == $_CFG['start']) { ?>
 	<section id="myCarousel" class="carousel slide" data-ride="carousel" role="complementary" aria-label="Site Carousel">
 	  <div class="carousel-inner">
 		<?php for ($i=1; $i < 4; $i++) {  ?>

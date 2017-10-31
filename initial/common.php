@@ -84,26 +84,21 @@ foreach (['module','id','act','disp'] as $tmp) {
 	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp])) $_DATA[$tmp] = '';
 }
 
-if($_DATA['module'] == 'admin' || isset($_DATA['admin'])) {
-	define('__MODULE__', 'admin');
-} else {
-	// module, id 가 없으면 시작 페이지
-	if(empty($_DATA['module']) && empty($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
-	if(!empty($_DATA['id'])) {
-		$tmp = getModule($_DATA['id']);
-		if(empty($tmp['error'])) {
-			$_CFG = array_merge($_CFG, $tmp);
-			// 모듈 정보에 확장 변수가 있으면 unserialize
-			if(!empty($_CFG['md_extra']) && !is_array($_CFG['md_extra'])) $_CFG['md_extra'] = unserialize($_CFG['md_extra']);
-			$_DATA['module'] = $tmp['md_key'];
-		}
+// module, id 가 없으면 시작 페이지
+if(empty($_DATA['module']) && empty($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
+if($_DATA['module'] != 'admin' && !empty($_DATA['id'])) {
+	$tmp = getModule($_DATA['id']);
+	if(empty($tmp['error'])) {
+		$_CFG = array_merge($_CFG, $tmp);
+		// 모듈 정보에 확장 변수가 있으면 unserialize
+		if(!empty($_CFG['md_extra']) && !is_array($_CFG['md_extra'])) $_CFG['md_extra'] = unserialize($_CFG['md_extra']);
+		$_DATA['module'] = $tmp['md_key'];
 	}
-	define('__MODULE__', $_DATA['module']);
 }
 
+define('__MODULE__', isset($_DATA['admin']) ? 'admin' : $_DATA['module']);
 define('__MID__', $_DATA['id']);
 
-$_PROTECT = [];
 if(__MODULE__) {
 	require_once _AF_MODULES_PATH_ . __MODULE__ . '/protect.php';
 	require_once _AF_MODULES_PATH_ . __MODULE__ . '/index.php';

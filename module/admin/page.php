@@ -66,7 +66,7 @@
 			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.$value['grant_view'].'-'.$value['grant_reply'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['pg_update'])).'</td>';
-			echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].',with_module_config,1" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
+			echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].'" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
 		}
 	}
 ?>

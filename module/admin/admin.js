@@ -18,7 +18,7 @@
 			$f = $m.find('form'),
 			act = $i.attr('data-exec-ajax'),
 			arr = $i.attr('data-ajax-param').split(','),
-			type = arr[0];
+			tp = arr[0];
 
 		$f.find('[id]').each(function(){$(this).attr('id',$(this).attr('id')+'_0');}).end()
 			.find('label[for]').each(function(){$(this).attr('for',$(this).attr('for')+'_0');}).end()
@@ -27,9 +27,9 @@
 			.find('.modal-footer > button.hide').removeClass('hide').end()
 			.attr('data-exec-ajax', act.replace(/^([a-z]+).get/,'$1.update'));
 
-		if(type == 'mb_id') {
+		if(tp == 'mb_id') {
 			data['new_mb_rank'] = data['mb_rank'] == 's' ? '2' : (data['mb_rank'] == 'm' ? '1' : '0');
-		} else if (type == 'wr_srl') {
+		} else if (tp == 'wr_srl') {
 			if($i.attr('data-modal-target') == '#trash_modal') {
 				$f.attr('data-exec-ajax', act.replace(/^([a-z]+).get/,'$1.restore'));
 			}
@@ -51,83 +51,103 @@
 			data['use_type'] = '0';
 		}
 
-		$f[0].dataImport(data);
+		var func_success = function () {
+			$f[0].dataImport(data);
 
-		if(act=='admin.getBoard' && typeof(data['md_extra']['keys']) != 'undefined') {
-			var ext_arr = $.map(data['md_extra']['keys'], function(v) {
-				return v;
-			});
-			$f.find('[name=md_extra_keys]').val(ext_arr.join());
-		} else if(act=='admin.getFile') {
-			var type = (data['mf_type'].split('/')[0] || 'binary');
-
-			if(type == 'image') {
-				$f.find('.imagebox > img').attr('src', request_uri + '?file=' + data['mf_srl']);
-				$f.find('.imagebox').show();
-			} else {
-				$f.find('.imagebox').hide();
-				$f.find('.imagebox > img').attr('src', '');
-			}
-		} else if(act=='member.getMember' && data['mb_rank'] == 's') {
-			$f.find('[name="new_mb_rank"]').parent().hide();
-			$f.find('[name="new_mb_rank"][value="2"]').parent().show();
-		}
-
-		$f.find('[data-act-change]').on('click', function() {
-			var $i = $(this),
-				$f = $i.closest('form'),
-				act = $i.attr('data-act-change'),
-				arr = $i.attr('data-add-param')||'',
-				data = $f[0].dataExport();
-
-			if(arr) {
-				arr = arr.split(',');
-				for (var i = 0, n = arr.length; i < n; i+=2) {
-					data[arr[i]] = arr[i+1];
+			if(act=='admin.getBoard' && typeof(data['md_extra']['keys']) != 'undefined') {
+				var ext_arr = $.map(data['md_extra']['keys'], function(v) {
+					return v;
+				});
+				$f.find('[name=md_extra_keys]').val(ext_arr.join());
+			} else if(act=='admin.getFile') {
+				var type = (data['mf_type'].split('/')[0] || 'binary');
+				if(type == 'image') {
+					$f.find('.imagebox > img').attr('src', request_uri + '?file=' + data['mf_srl']);
+					$f.find('.imagebox').show();
+				} else {
+					$f.find('.imagebox').hide();
+					$f.find('.imagebox > img').attr('src', '');
 				}
+			} else if(act=='member.getMember' && data['mb_rank'] == 's') {
+				$f.find('[name="new_mb_rank"]').parent().hide();
+				$f.find('[name="new_mb_rank"][value="2"]').parent().show();
 			}
 
-			if(act == 'admin.deleteBoard'||act == 'page.deletePage'||act == 'board.deleteDocument') {
-				var tmp = act == 'admin.deleteBoard' ? 'board' : (act == 'page.deletePage'?'page':'document');
-				if (!confirm($_LANG['confirm_select_'+(tmp=='document'&&(!data['is_empty']||data['is_empty']!=='1')?'move':'delete')].sprintf([$_LANG[tmp]]))) return false;
-			} else if(act == 'board.deleteComment'||act == 'admin.deleteFile') {
-				var tmp = act == 'board.deleteComment' ? 'comment' : 'file';
-				if (!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG[tmp]]))) return false;
+			$f.find('[data-act-change]').on('click', function() {
+				var $i = $(this),
+					$f = $i.closest('form'),
+					act = $i.attr('data-act-change'),
+					arr = $i.attr('data-add-param')||'',
+					data = $f[0].dataExport();
+
+				if(arr) {
+					arr = arr.split(',');
+					for (var i = 0, n = arr.length; i < n; i+=2) {
+						data[arr[i]] = arr[i+1];
+					}
+				}
+
+				if(act == 'admin.deleteBoard'||act == 'page.deletePage'||act == 'board.deleteDocument') {
+					var tmp = act == 'admin.deleteBoard' ? 'board' : (act == 'page.deletePage'?'page':'document');
+					if (!confirm($_LANG['confirm_select_'+(tmp=='document'&&(!data['is_empty']||data['is_empty']!=='1')?'move':'delete')].sprintf([$_LANG[tmp]]))) return false;
+				} else if(act == 'board.deleteComment'||act == 'admin.deleteFile') {
+					var tmp = act == 'board.deleteComment' ? 'comment' : 'file';
+					if (!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG[tmp]]))) return false;
+				}
+
+				exec_ajax(act, data);
+				return false;
+			});
+
+			$f.find('button.document_goto').on('click', function() {
+				var $i = $(this),
+					$f = $i.closest('form'),
+					mf = $f.find('input[name=mf_target]').val()||'',
+					wr = $f.find('input[name=wr_srl]').val()||mf,
+					rp = $f.find('input[name=rp_srl]').val()||'';
+				if(!wr) return false;
+				window.open(request_uri+'?srl='+wr+(rp?'#reply_'+rp:''), '_blank');
+			});
+
+			var $editor = $f.find('.af-editor-group');
+			if ($editor.length>0) {
+				var AF_EDITOR = $editor.afEditor({'name':(act=='page.getPage'?'pg':(act=='board.getComment'?'rp':'wr'))+'_content'});
+				if (act=='page.getPage') {
+					AF_EDITOR_PG_CONTENT = AF_EDITOR;
+				} else if (act=='board.getComment') {
+					AF_EDITOR_RP_CONTENT = AF_EDITOR;
+				} else {
+					AF_EDITOR_WR_CONTENT = AF_EDITOR;
+				}
+				var ishtml = ((act=='page.getPage'&&data['pg_type']=='2')
+							||(act=='board.getDocument'&&data['wr_type']=='2')
+							||(act=='board.getComment'&&data['rp_type']=='2'));
+				$m.on('shown.bs.modal', function(){$editor.data('af.editor').switch(ishtml);});
 			}
 
-			exec_ajax(act, data);
-			return false;
-		});
+			$m.find('[name=new_'+tp+']').attr('name','').attr('disabled','disabled').val(data[tp]).end()
+				.on('hidden.bs.modal', function(){$m.remove();})
+				.modal("show");
+		};
 
-		$f.find('button.document_goto').on('click', function() {
-			var $i = $(this),
-				$f = $i.closest('form'),
-				mf = $f.find('input[name=mf_target]').val()||'',
-				wr = $f.find('input[name=wr_srl]').val()||mf,
-				rp = $f.find('input[name=rp_srl]').val()||'';
-			if(!wr) return false;
-			window.open(request_uri+'?srl='+wr+(rp?'#reply_'+rp:''), '_blank');
-		});
-
-		var $editor = $f.find('.af-editor-group');
-		if ($editor.length>0) {
-			var AF_EDITOR = $editor.afEditor({'name':(act=='page.getPage'?'pg':(act=='board.getComment'?'rp':'wr'))+'_content'});
-			if (act=='page.getPage') {
-				AF_EDITOR_PG_CONTENT = AF_EDITOR;
-			} else if (act=='board.getComment') {
-				AF_EDITOR_RP_CONTENT = AF_EDITOR;
-			} else {
-				AF_EDITOR_WR_CONTENT = AF_EDITOR;
-			}
-			var ishtml = ((act=='page.getPage'&&data['pg_type']=='2')
-						||(act=='board.getDocument'&&data['wr_type']=='2')
-						||(act=='board.getComment'&&data['rp_type']=='2'));
-			$m.on('shown.bs.modal', function(){$editor.data('af.editor').switch(ishtml);});
+		if(act=='board.getDocument' || act=='page.getPage') {
+			exec_ajax(act+'filelist', data, function(status, files, xhr){
+				switch(status) {
+					case 'error':
+					break;
+					case 'success':
+						if(files.data.length > 0) {
+							data['files'] = [];
+							data['files'] = $.merge(data['files'], files.data);
+						}
+						func_success();
+						return false;
+					break;
+				}
+			});
+		} else {
+			func_success();
 		}
-
-		$m.find('[name=new_'+type+']').attr('name','').attr('disabled','disabled').val(data[type]).end()
-			.on('hidden.bs.modal', function(){$m.remove();})
-			.modal("show");
 	});
 
 	$('#ADM_DEFAULT_MODULE')

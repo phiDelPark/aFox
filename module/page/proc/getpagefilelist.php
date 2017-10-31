@@ -14,12 +14,21 @@ function proc($data) {
 		return set_error(getLang('error_permitted'),4501);
 	}
 
-	// 페이지는 모듈 정보도 같이 보냄
-	$page = array_merge($page, getModule($page['md_id']));
+	$files = getDBList(_AF_FILE_TABLE_, ['md_id'=>$page['md_id'],'mf_target'=>1], 'mf_type');
+
+	// 요청값이 있으면 요청값만 보냄
+	$response_tags = $data['response_tags'];
+	if(!empty($response_tags) && count($response_tags) > 0) {
+		$response_vals = ['md_id'=>$page['md_id'],'pg_srl'=>$page['pg_srl']];
+		foreach ($response_tags as $value) {
+			$response_vals[$value] = $files[$value];
+		}
+		$files = $response_vals;
+	}
 
 	// JSON 사용시 모듈설정이 필요할때를 위해 만든옵션
-	return  $page;
+	return $files;
 }
 
-/* End of file getpage.php */
-/* Location: ./module/page/proc/getpage.php */
+/* End of file getpagefilelist.php */
+/* Location: ./module/board/proc/getpagefilelist.php */

@@ -27,7 +27,7 @@ if(!defined('__AFOX__')) exit();
 		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 		$_tmp = '<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ';
 
-		$is_manager = isManager($_DATA['id']);
+		$is_manager = isManager(__MID__);
 		$login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 
 		if(__MOBILE__) {
