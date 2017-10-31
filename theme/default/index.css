@@ -18,6 +18,12 @@ pre code {
 	display: block;
 }
 
+mark {
+	color: #000;
+	background: #ff0;
+	padding: 0;
+}
+
 .logo-title {
 	margin: 5px 0;
 }

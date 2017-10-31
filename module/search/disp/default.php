@@ -34,7 +34,7 @@ function proc($data) {
 
 	$_wheres = [
 		'md_id{IN}'=>implode(',', $_mids),
-		'AND' =>$schs
+		'OR' =>$schs
 	];
 
 	if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);

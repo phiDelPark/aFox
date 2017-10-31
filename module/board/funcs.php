@@ -99,5 +99,11 @@ if(!defined('__AFOX__')) exit();
 		return implode(',', $tags);
 	}
 
+	function highlightText($key, $html) {
+		return preg_replace_callback('#((?:(?!<[/a-z]).)*)([^>]*>|$)#si', function($mc)use($key) {
+			return str_ireplace($key, '<mark>'.$key.'</mark>', $mc[1]).$mc[2];
+		}, $html);
+	}
+
 /* End of file funcs.php */
 /* Location: ./module/board/funcs.php */

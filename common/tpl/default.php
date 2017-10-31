@@ -43,19 +43,18 @@ addJSLang(['ok','cancel','yes','no','calling_server']);
 var current_url     = "<?php echo getUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
 </script>
-<?php @include _AF_THEME_PATH_ . '_head.php'; ?>
+<?php @include _AF_THEME_PATH_ . 'head.php'; ?>
 </head>
 <body>
-<?php  include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'index')) . '.php'; ?>
 <?php
-@include _AF_THEME_PATH_ . '_tail.php';
-echo '<script>';
+include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'index')) . '.php';
+
 $tmp = [];
+echo '<script>';
 foreach ($_ADDELEMENTS['LANG'] as $val) {foreach ($val as $key){if(!$tmp[$key]){$tmp[$key]=1;echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';}}}
 echo '</script>'."\n";
 foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {echo '<link href="'.$key.'" rel="stylesheet">';}
 foreach ($_ADDELEMENTS['JS'] as $key=>$val) {echo '<script src="'.$key.'"></script>';}
 ?>
-
 </body>
 </html>
