@@ -15,8 +15,6 @@
 	<form onsubmit="return false" method="post" autocomplete="off" enctype="multipart/form-data" data-exec-ajax="page.updatePage">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl('disp','')?>">
 	<input type="hidden" name="md_id" value="<?php echo __MID__?>">
-	<input type="hidden" name="grant_view" value="<?php echo $_CFG['grant_view']?>">
-	<input type="hidden" name="grant_reply" value="<?php echo $_CFG['grant_reply']?>">
 
 		<div>
 			<div class="form-group">

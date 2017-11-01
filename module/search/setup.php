@@ -1,6 +1,5 @@
 <?php
 if(!defined('__AFOX__')) exit();
-
 @include_once _AF_MODULES_PATH_ . $_DATA['mid'] . '/lang/' . _AF_LANG_ . '.php';
 
 	$_mids = [];

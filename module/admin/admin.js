@@ -150,13 +150,15 @@
 		}
 	});
 
-	$('#ADM_DEFAULT_MODULE')
+	$('#ADM_DEFAULT_MODULE,#ADM_CUSTOM_MODULE')
 	.on('click', '[data-toggle="modal.clone"]', function(){
 		var $m = $($(this).attr('data-target')).clone();
 		$m.on('hidden.bs.modal', function(){$m.remove();}).modal("show");
 		var $editor = $m.find('.af-editor-group');
 		if($editor.length>0) $editor.afEditor({});
-	})
+	});
+
+	$('#ADM_DEFAULT_MODULE')
 	.on('click', '[data-empty-addon],[data-empty-theme]', function(){
 		var key = this.hasAttribute('data-empty-addon') ? 'addon': 'theme';
 		if (!confirm($_LANG['confirm_select_empty'].sprintf([$_LANG[key]]))) return false;
