@@ -13,13 +13,13 @@ if($type === 'gallery') {
 	$_list = getDBList(_AF_DOCUMENT_TABLE_,['md_id'=>$_WIDGET['module']],'wr_regdate desc',1,$count);
 }
 ?>
-<div class="content_widget panel panel-default" style="<?php echo $style?>">
-	<div class="panel-heading clearfix">
+<div class="content_widget panel panel-default" style="<?php echo $style?>" role="group" aria-labelledby="afWidgetTitle">
+	<div class="panel-heading clearfix" id="afWidgetTitle">
 	<?php echo $md_title ?>
 	<a class="pull-right" href="<?php echo getUrl('','id',$_WIDGET['module'])?>"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>
 	</div>
 	<?php if($type === 'gallery') { ?>
-		<div class="panel-body" style="overflow:hidden;padding:8px">
+		<div class="panel-body" style="overflow:hidden;padding:8px" role="list">
 		<?php
 			$w = (100 / $count);
 			foreach ($_list as $val) {
@@ -28,7 +28,7 @@ if($type === 'gallery') {
 		?>
 		</div>
 	<?php } else { ?>
-		<div  class="list-group">
+		<div class="list-group" role="list">
 		<?php
 			foreach ($_list['data'] as $val) {
 				echo '<a class="list-group-item text-ellipsis" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl']).'">'.$val['wr_title'].'</a>';

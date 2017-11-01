@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 ?>
 
-<article class="clearfix">
+<article class="clearfix" role="list">
 	<?php
 		$current_page = $_{'board'}['current_page'];
 		$total_page = $_{'board'}['total_page'];

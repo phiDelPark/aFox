@@ -22,7 +22,7 @@
 
 <form id="af_member_remove_inbox_items" method="post">
 <input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-<table class="table table-hover table-nowrap">
+<table class="table table-hover table-nowrap" role="list">
 <thead>
 	<tr>
 		<?php if(__MOBILE__) { ?>
@@ -121,4 +121,7 @@
 		exec_ajax('member.deleteNote', data);
 		return false;
 	}
+	jQuery('[role="heading"][aria-labelledby="mdMemberTitle"]').each(function() {
+		jQuery(this).prepend('<span><?php echo getLang('inbox') ?></span>');
+	});
 </script>

@@ -16,8 +16,8 @@ $_PROTECT['proc.updatemember']	= ['grant' => '0'];
 
 $_PROTECT['proc.getmember']		= [
 	'grant' => '0',
-	'guest' => 'mb_rank,mb_nick,mb_memo',
-	'member' => 'mb_rank,mb_nick,mb_email,mb_homepage,mb_memo,mb_regdate,mb_login',
+	'guest' => 'mb_srl,mb_rank,mb_nick,mb_memo',
+	'member' => 'mb_srl,mb_rank,mb_nick,mb_email,mb_homepage,mb_memo,mb_regdate,mb_login',
 	'manager' => '*'
 ];
 

@@ -4,7 +4,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 ?>
 
 <section id="bdReply">
-	<article class="clearfix">
+	<article class="clearfix" role="list">
 	<?php
 		$current_cpage = $cmt['current_page'];
 		$total_cpage = $cmt['total_page'];

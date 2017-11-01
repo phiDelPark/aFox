@@ -5,7 +5,7 @@ if(!defined('__AFOX__')) exit();
 <section id="bdList">
 
 <article class="clearfix">
-	<table class="table table-hover list-table">
+	<table class="table table-hover list-table" role="list">
 	<thead>
 		<tr>
 			<?php if(__MOBILE__) { ?>
@@ -26,6 +26,7 @@ if(!defined('__AFOX__')) exit();
 		$total_page = $_{'search'}['total_page'];
 		$start_page = $_{'search'}['start_page'];
 		$end_page = $_{'search'}['end_page'];
+		$total_count = $_{'search'}['total_count'];
 		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 		$_tmp = '<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ';
 
@@ -81,6 +82,9 @@ if(!defined('__AFOX__')) exit();
 			var href = $i.find('.wr_title a').attr('href');
 			window.open(href, '_blank');
 		}
+	});
+	jQuery('[role="heading"][aria-labelledby="mdSearchTitle"]').each(function() {
+		jQuery(this).find('+[role="description"]').prepend('<span><?php echo sprintf(getLang('desc_combine_search_finished'),$total_count) ?></span>');
 	});
 </script>
 

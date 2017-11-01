@@ -3,7 +3,7 @@ if(!defined('__AFOX__')) exit();
 ?>
 
 <article class="clearfix">
-	<ul class="timeline">
+	<ul class="timeline" role="list">
 	<?php
 		$current_page = $_{'board'}['current_page'];
 		$total_page = $_{'board'}['total_page'];

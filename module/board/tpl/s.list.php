@@ -3,7 +3,7 @@ if(!defined('__AFOX__')) exit();
 ?>
 
 <article class="clearfix">
-	<table class="table table-hover list-table">
+	<table class="table table-hover list-table" role="list">
 	<thead>
 		<tr>
 			<?php if(__MOBILE__) { ?>

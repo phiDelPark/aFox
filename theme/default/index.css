@@ -162,6 +162,10 @@ mark {
 	top: 67px;
 	left: 20px;
 	width: 400px;
+	margin: 7px;
+}
+
+.header-image>h3 {
 	margin: 5px;
 }
 
@@ -303,6 +307,10 @@ ul.message-dropdown>li>a {
 	min-height: 70px;
 }
 
+.form-inline input:not([type="hidden"])+input:not([type="hidden"]) {
+	margin-left: 5px;
+}
+
 @media(max-width:768px) {
 	.nav.right {
 		float: none;
@@ -374,5 +382,9 @@ ul.message-dropdown>li>a {
 	}
 	[aria-labelledby="afMsgBox"] .modal-dialog {
 		width: 300px;
+	}
+	.form-inline input:not([type="hidden"])+input:not([type="hidden"]) {
+		margin-left: 0;
+		margin-top: 2px;
 	}
 }

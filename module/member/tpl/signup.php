@@ -3,7 +3,7 @@
 	$ismb = !empty($_MEMBER);
 ?>
 
-<form id="member-signup" method="post" autocomplete="off" enctype="multipart/form-data" data-exec-ajax="member.updateMember">
+<form id="member-signup" method="post" autocomplete="off" enctype="multipart/form-data" data-exec-ajax="member.updateMember" role="form">
 <input type="hidden" name="success_return_url" value="<?php echo $ismb?getUrl():getUrl('')?>" />
 
 	<h4 class="signup-title" id="afSignUpFormTitle"><?php echo getLang($ismb?'member':'member_signup')?></h4>
@@ -84,3 +84,9 @@
 		<button type="submit" class="btn btn-success mw-10"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang($ismb?'save':'agree_signup')?></button>
 	</div>
 </form>
+<script>
+	jQuery('[role="heading"][aria-labelledby="mdMemberTitle"]').each(function() {
+		jQuery(this).prepend('<span><?php echo getLang($ismb?'member':'member_signup') ?></span>');
+		jQuery('#afSignUpFormTitle').remove();
+	});
+</script>

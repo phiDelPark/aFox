@@ -26,7 +26,7 @@ function _checkProtect($key, $data) {
 	if (is_null($_PROTECT[$key][$grade]) || $_PROTECT[$key][$grade] === '*') {
 		$result = $data;
 	} else {
-		$a = explode(',', $_PROTECT[$key][$grade]);
+		$a = explode(',', str_replace(' ', '', $_PROTECT[$key][$grade]));
 		foreach ($a as $val) $result[$val] = $data[$val];
 	}
 	return $result;

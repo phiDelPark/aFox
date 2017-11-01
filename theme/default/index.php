@@ -157,23 +157,24 @@
 	  <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
 	  <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
 	</section>
-
-<?php } else if(!empty($_CFG['md_id'])) { ?>
-
-  <div class="header-image <?php echo strtolower($_DATA['module']) ?>">
-	<h3><?php echo $_CFG['md_title'] ?></h3>
-	<p><?php echo $_CFG['md_description'] ?></p>
-  </div>
-
 <?php } else { ?>
-
-  <div class="header-image"></div>
-
+<div class="header-image">
+	<?php if(__MODULE__) {
+		$md_key = ucfirst(__MODULE__);
+	?>
+		<h3 role="heading" aria-labelledby="md<?php echo $md_key ?>Title">
+			<span id="md<?php echo $md_key ?>Title"><?php echo $_CFG['md_title'] ?></span>
+		</h3>
+		<p role="description"><?php echo $_CFG['md_description'] ?></p>
+	<?php } ?>
+</div>
 <?php } ?>
 
-<?php if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) { ?>
+<?php
+$tmp = 'col-md-9 ';
+if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) { ?>
 	<div class="bs-docs-body row">
-		<aside class="col-md-3" role="navigation" aria-label="Content Menu">
+		<aside class="col-md-3" role="menu" aria-label="Content Menu">
 			<div class="list-group">
 			  <span class="list-group-item disabled">
 				<?php echo $mainmenu['_ACTIVE_']['mu_title'] ?>
@@ -187,12 +188,12 @@
 	?>
 			</div>
 		</aside>
-		<section class="col-md-9" role="main" aria-label="Site Contents">
-
-<?php } else { ?>
-	<div class="bs-docs-body" role="main" aria-label="Site Contents">
-		<section>
+<?php } else {
+$tmp = '';
+?>
+	<div class="bs-docs-body">
 <?php } ?>
+		<section class="<?php echo $tmp.__MODULE__?>" role="main" aria-label="Site Contents">
 			<article>
 			<?php if($error = get_error()) { messageBox($error['message'], 3); } ?>
 			<?php displayModule()?>

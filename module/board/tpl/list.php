@@ -40,7 +40,7 @@ $use_style = ['list','review','gallery','timeline'];
 		</ul>
 	</nav>
 	<footer class="clearfix">
-		<form class="search-form pull-left col-xs-5 col-sm-4" action="<?php echo getUrl('') ?>" method="get">
+		<form class="search-form pull-left col-xs-6 col-sm-4" action="<?php echo getUrl('') ?>" method="get">
 			<div class="input-group">
 				<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 				<span class="input-group-btn">

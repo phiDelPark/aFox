@@ -84,9 +84,10 @@ foreach (['module','id','act','disp'] as $tmp) {
 	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp])) $_DATA[$tmp] = '';
 }
 
+$_DATA['module'] = isset($_DATA['admin']) ? 'admin' : $_DATA['module'];
 // module, id 가 없으면 시작 페이지
 if(empty($_DATA['module']) && empty($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
-if($_DATA['module'] != 'admin' && !empty($_DATA['id'])) {
+if(!empty($_DATA['id'])) {
 	$tmp = getModule($_DATA['id']);
 	if(empty($tmp['error'])) {
 		$_CFG = array_merge($_CFG, $tmp);
@@ -96,7 +97,7 @@ if($_DATA['module'] != 'admin' && !empty($_DATA['id'])) {
 	}
 }
 
-define('__MODULE__', isset($_DATA['admin']) ? 'admin' : $_DATA['module']);
+define('__MODULE__', $_DATA['module']);
 define('__MID__', $_DATA['id']);
 
 if(__MODULE__) {
