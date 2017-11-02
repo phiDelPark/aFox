@@ -43,7 +43,17 @@ addJSLang(['ok','cancel','yes','no','calling_server']);
 var current_url     = "<?php echo getUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
 </script>
-<?php @include _AF_THEME_PATH_ . 'head.php'; ?>
+<?php
+	@include _AF_THEME_PATH_ . 'head.php';
+	foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {
+		echo '<link href="'.$key.'" rel="stylesheet"'.($val!==1?' media="'.$val.'"':'').'>'."\n";
+		$_ADDELEMENTS['CSS'][$key] = true;
+	}
+	foreach ($_ADDELEMENTS['JS'] as $key=>$val) {
+		echo '<script src="'.$key.'"></script>'."\n";
+		$_ADDELEMENTS['JS'][$key] = true;
+	}
+?>
 </head>
 <body>
 <?php
@@ -51,10 +61,22 @@ include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'in
 
 $tmp = [];
 echo '<script>';
-foreach ($_ADDELEMENTS['LANG'] as $val) {foreach ($val as $key){if(!$tmp[$key]){$tmp[$key]=1;echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';}}}
+foreach ($_ADDELEMENTS['LANG'] as $val) {
+	foreach ($val as $key){
+		if(!$tmp[$key]){
+			$tmp[$key]=1;echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';
+		}
+	}
+}
 echo '</script>'."\n";
-foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {echo '<link href="'.$key.'" rel="stylesheet">';}
-foreach ($_ADDELEMENTS['JS'] as $key=>$val) {echo '<script src="'.$key.'"></script>';}
+foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {
+	if ($val === 1 || is_string($val)) {
+		echo '<link href="'.$key.'" rel="stylesheet"'.($val!==1?' media="'.$val.'"':'').'>';
+	}
+}
+foreach ($_ADDELEMENTS['JS'] as $key=>$val) {
+	if ($val === 1) echo '<script src="'.$key.'"></script>';
+}
 ?>
 </body>
 </html>

@@ -54,5 +54,5 @@ function proc($data) {
 	return ['error'=>0, 'message'=>getLang('success_saved')];
 }
 
-/* End of file updatesetup.php */
-/* Location: ./module/search/proc/updatesetup.php */
+/* End of file setupsearch.php */
+/* Location: ./module/search/proc/setupsearch.php */

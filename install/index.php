@@ -578,6 +578,5 @@ chmod($file, 0644);
 </body></html>
 
 <?php
-
 /* End of file index.php */
 /* Location: ./install/index.php */

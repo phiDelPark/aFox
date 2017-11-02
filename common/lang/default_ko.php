@@ -195,5 +195,5 @@ $_LANG['upload_err_code(-1)'] = '업로드한 파일이 HTTP post로 전송된 �
 $_LANG['upload_err_code(-3)'] = '업로드한 파일이 설정된 최대 수 보다 큽니다.'; // 10487
 
 // 오류번호 88088는 사용불가 (로그인폼호출함)
-/* End of file default_kr.php */
-/* Location: ./common/lang/default_kr.php */
+/* End of file default_ko.php */
+/* Location: ./common/lang/default_ko.php */

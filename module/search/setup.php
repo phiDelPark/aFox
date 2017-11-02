@@ -15,26 +15,11 @@ if(!defined('__AFOX__')) exit();
 	$_list = getDBList(_AF_MODULE_TABLE_, ['md_key'=>'board']);
 ?>
 
-<div class="row">
-	<div class="col-lg-12">
-		<h1 class="page-header">
-			<?php echo getLang('combine_search')?>
-			<small><?php echo getLang('setup')?></small>
-		</h1>
-		<ol class="breadcrumb">
-			<li class="active">
-				<i class="glyphicon glyphicon-th-large" aria-hidden="true"></i>
-				<?php echo getLang('info_combine_search')?>
-			</li>
-		</ol>
-	</div>
-</div>
-
 <form action="<?php echo _AF_URL_ ?>" method="post" autocomplete="off" enctype="multipart/form-data">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'module', 'mid', 'search') ?>">
 	<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'module', 'mid', 'search') ?>">
 	<input type="hidden" name="module" value="search">
-	<input type="hidden" name="act" value="updateSetup">
+	<input type="hidden" name="act" value="setupSearch">
 
 <div class="form-group">
 	<label><?php echo getLang('list_count')?></label>

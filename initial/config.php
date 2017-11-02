@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-define('_AF_VERSION_', '0.212');
+define('_AF_VERSION_', '0.215');
 define('__DEBUG__', 0);
 
 /*** SSL 설정 ***/
@@ -80,7 +80,7 @@ if(file_exists(_AF_PATH_ . 'install/update.php')) {
 $_CFG = DB::get('SELECT * FROM '._AF_CONFIG_TABLE_.' WHERE 1');
 if(DB::error()) exit("Please reinstall afox.");
 
-define('_AF_LANG_', empty($_CFG['lang'])?'kr':$_CFG['lang']);
+define('_AF_LANG_', empty($_CFG['lang'])?'ko':$_CFG['lang']);
 define('_AF_THEME_', empty($_CFG['theme'])?'default':$_CFG['theme']);
 define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
 

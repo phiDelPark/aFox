@@ -769,13 +769,15 @@ if(!defined('__AFOX__')) exit();
 		return 'BROWSER';
 	}
 
-	function addCSS($src) {
+	function addCSS($src, $media = '') {
 		global $_ADDELEMENTS;
-		$_ADDELEMENTS['CSS'][$src] = 1;
+		if (isset($_ADDELEMENTS['CSS'][$src])) return;
+		$_ADDELEMENTS['CSS'][$src] = empty($media) ? 1 : $media;
 	}
 
 	function addJS($src) {
 		global $_ADDELEMENTS;
+		if (isset($_ADDELEMENTS['JS'][$src])) return;
 		$_ADDELEMENTS['JS'][$src] = 1;
 	}
 
