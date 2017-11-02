@@ -180,6 +180,30 @@ class DB {
 		return $r;
 	}
 
+	public static function tableExists($table) {
+		try {
+			$r = self::query(
+				"SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :1 AND TABLE_NAME =:2",
+				[self::$options['name'], $table]
+			);
+			return $r->num_rows > 0;
+		} catch (Exception $ex) {
+			throw new Exception($ex->getMessage(), $ex->getCode());
+		}
+	}
+
+	public static function columnExists($table, $column) {
+		try {
+			$r = self::query(
+				"SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :1 AND TABLE_NAME =:2 AND COLUMN_NAME = :3",
+				[self::$options['name'], $table, $column]
+			);
+			return $r->num_rows > 0;
+		} catch (Exception $ex) {
+			throw new Exception($ex->getMessage(), $ex->getCode());
+		}
+	}
+
 	public static function error() {
 		if(mysqli_errno(self::$link)) {
 			return new Exception(mysqli_error(self::$link), mysqli_errno(self::$link));
@@ -188,14 +212,18 @@ class DB {
 		}
 	}
 
-	public static function engine($table) {
+	public static function status($table, $key) {
 		if(self::$link === NULL) {self::connect();}
 		$r = mysqli_query(self::$link, "SHOW TABLE STATUS WHERE Name = '{$table}'");
 		if(mysqli_errno(self::$link)) {
 			throw new Exception(mysqli_error(self::$link), mysqli_errno(self::$link));
 		}
 		$row = mysqli_fetch_assoc($r);
-		return empty($row['Engine'])?'':strtolower($row['Engine']);
+		return empty($key)?$row:strtolower($row[$key]);
+	}
+
+	public static function engine($table) {
+		return self::status($table, 'Engine');
 	}
 
 	public static function version() {
