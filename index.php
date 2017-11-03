@@ -39,9 +39,8 @@ if(__MODULE__ && !empty($_DATA['act'])) {
 			$_result = call_user_func($callproc, $_DATA);
 			triggerCall('after_proc', $_DATA['act'], $_result);
 		}
-		$_result['act'] = $_DATA['act'];
-		$_result['redirect_url'] = empty($_result['error'])?'success_return_url':'error_return_url';
-		$_result['redirect_url'] = isset($_DATA[$_result['redirect_url']])?urldecode($_DATA[$_result['redirect_url']]):'';
+		$redirect_url = empty($_result['error'])?'success_return_url':'error_return_url';
+		if (!empty($_DATA[$redirect_url])) $_result['redirect_url'] = urldecode($_DATA[$redirect_url]);
 	} else {
 		$_result = set_error(getLang('error_request'),4303);
 	}

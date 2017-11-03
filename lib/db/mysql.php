@@ -249,7 +249,8 @@ class DB {
 				if(count($tmp) > 0) $r[] = '('.implode(' '.$key.' ', $tmp).')';
 			} else {
 				$operation = '=';
-				if($useKeys && preg_match("/(.+){(=|<>|<=|>=|<|>|IN|LIKE|IS)}$/", $key, $matches)) {
+				//(=|<>|<=|>=|<|>|IN|LIKE|IS)
+				if($useKeys && preg_match("/(.+){(=|<>|<=|>=|<|>|[A-Z]+)}$/", $key, $matches)) {
 					$key = $matches[1];
 					$operation = $matches[2];
 					if($operation == 'IS') { $key = '('.$key.')'; } // value = ('null' or 'not null')
