@@ -39,11 +39,11 @@ function proc($data) {
 				'theme'=>$data['theme'],
 				'start'=>$data['start'],
 				'title'=>trim($data['title']),
-				'use_captcha'=>$data['use_captcha'],
-				'use_visit'=>$data['use_visit'],
-				'use_signup'=>$data['use_signup'],
-				'use_protect'=>$data['use_protect'],
-				'use_full_login'=>$data['use_full_login'],
+				'use_captcha'=>empty($data['use_captcha'])?'0':'1',
+				'use_visit'=>empty($data['use_visit'])?'0':'1',
+				'use_signup'=>empty($data['use_signup'])?'0':'1',
+				'use_protect'=>empty($data['use_protect'])?'0':'1',
+				'use_full_login'=>empty($data['use_full_login'])?'0':'1',
 				'point_login'=>(int)$data['point_login']
 			]
 		);

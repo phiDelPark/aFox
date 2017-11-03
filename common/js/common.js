@@ -160,11 +160,7 @@ var $_LANG = {};
 						$target.find('.file-caption').html(html ? html : ($target.attr('placeholder') || ''));
 					}
 				} else if ($item.is(':checkbox')) {
-					if (data[key] == 1) {
-						$item.attr('checked', 'checked');
-					} else {
-						$item.removeAttr('checked');
-					}
+					$item[0].checked = data[key] == 1;
 				} else if ($item.is(':radio')) {
 					$item.filter(function() {
 						return this.value === data[key];
