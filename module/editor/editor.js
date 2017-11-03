@@ -331,12 +331,14 @@
 							});
 						$_i.contents().find("head").html('<link rel="stylesheet" href="' + request_uri + 'module/editor/editor.min.css">');
 						$_i.contents().find('body').html($txtara.val());
+						/*
 						$_i.contents().on('keydown', function(e) {
-							if (e.keyCode == 13) {
+							if (e.keyCode == 13 && e.shiftKey !== true) {
 								$this.paste('<br>', false);
 								return false;
 							}
 						});
+						*/
 						if (!readonly) $_i.contents()[0].designMode = 'on';
 						//$_i[0].contentWindow.document.designMode = 'on';
 					}).insertAfter($txtara.hide()).end();
@@ -418,7 +420,7 @@
 			range;
 
 		if (s.target[0].tagName == 'TEXTAREA') {
-			if (fm !== false) text = text.replace(/%s/, s.text);
+			if (fm !== false) text = text.replace(/%s/, s.text ? s.text : (fm || ''));
 
 			var v = s.target.val(),
 				txtBefore = v.substring(0, s.start),
@@ -445,7 +447,7 @@
 				var el = s.window.document.createElement("div");
 				el.appendChild(range.cloneContents());
 				range.deleteContents();
-				range.insertNode($(fm === false ? text : text.replace(/%s/, el.innerText))[0]);
+				range.insertNode($(text.replace(/%s/, (fm === false ? '' : (el.innerText ? el.innerText : (fm || '')))))[0]);
 				if (fm === false) {
 					range.setStart(s.selection.focusNode, s.selection.focusOffset);
 					range.setEnd(s.selection.anchorNode, s.selection.anchorOffset);
@@ -491,13 +493,13 @@
 				}
 				break;
 			case 'header':
-				this.paste('<h3>%s</h3>');
+				this.paste('<h3>%s</h3>', '...');
 				break;
 			case 'indent':
-				this.paste('<blockquote>%s</blockquote>');
+				this.paste('<blockquote>%s</blockquote>', '...');
 				break;
 			case 'codeblock':
-				this.paste('<pre><code>%s</code></pre>');
+				this.paste('<pre><code>%s' + "\n" + '</code></pre>');
 				break;
 			case 'link':
 				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(.*)/i,

@@ -1,6 +1,5 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	require_once 'common.php';
 
 	$_item = getDBItem(_AF_NOTE_TABLE_, ['mb_srl'=>$mb['mb_srl'],'nt_srl'=>$_DATA['srl']]);
 	if(empty($_item['nt_srl'])) return;

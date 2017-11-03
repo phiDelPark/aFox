@@ -1,6 +1,5 @@
 <?php
 if(!defined('__AFOX__')) exit();
-require_once 'common.php';
 
 if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURRENT_DOCUMENT_LIST'];
 $is_wr_grant = isGrant('write', __MID__);

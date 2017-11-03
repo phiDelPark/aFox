@@ -1,6 +1,5 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	require_once 'common.php';
 
 	$mb = $_MEMBER;
 	$schs = [];

@@ -216,7 +216,7 @@
 						<input type="number" class="form-control" id="id_thumb_height" name="thumb_height" min="0" max="9999" maxlength="5" placeholder="<?php echo getLang('Size')?>">
 					</div>
 					&nbsp;&nbsp;
-					<label class="checkbox btn mw-10" tabindex="0">
+					<label class="checkbox btn btn-ms mw-10" tabindex="0">
 						<input type="checkbox" name="thumb_option" value="1">
 						<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 						<span><?php echo getLang('thumb_fit')?></span>

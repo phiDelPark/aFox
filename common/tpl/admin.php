@@ -29,6 +29,7 @@ addJSLang(['ok','cancel','yes','no','calling_server']);
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.min.js" id="def-Bootstrap-JS"></script>
 <?php } ?>
 <script>
+var language        = "<?php echo _AF_LANG_ ?>";
 var current_url     = "<?php echo getUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
 </script>

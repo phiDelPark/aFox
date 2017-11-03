@@ -126,11 +126,11 @@ var $_LANG = {};
 				var $item = $('[name="' + name + '"]');
 				if ($item.eq(0).is(':checkbox') || $item.eq(0).is(':radio')) {
 					$item = $('[name="' + name + '"]:checked');
-					value = $item.map(function() {
-						return this.value;
-					}).get();
-					name = name.slice(0, -2);
 				}
+				value = $item.map(function() {
+					return this.value;
+				}).get();
+				name = name.slice(0, -2);
 			}
 			data[name] = value;
 		}

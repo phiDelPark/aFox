@@ -486,7 +486,20 @@ if(!defined('__AFOX__')) exit();
 		return $ret;
 	}
 
-	// 권한 체크
+	function isManager($md_id) {
+		global $_MEMBER;
+		static $is_manager = [];
+		if(empty($md_id) || empty($_MEMBER['mb_srl'])) return false;
+		// 최고 관리자와 매니저면 true
+		if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
+		if(!isset($is_manager[$md_id])) {
+			$module = getModule($md_id);
+			if(!empty($module['error'])) return false;
+			$is_manager[$md_id] = $module['md_manager'];
+		}
+		return !empty($is_manager[$md_id]) && $is_manager[$md_id] == $_MEMBER['mb_srl'];
+	}
+
 	function getGrant($chk, $md_id) {
 		if(empty($md_id) || empty($chk)) return '';
 		static $is_grants = [];
@@ -498,37 +511,42 @@ if(!defined('__AFOX__')) exit();
 			if(!empty($module['error'])) return '';
 			$is_grants[$key] = $module['grant_'.$chk];
 		}
-
 		return $is_grants[$key];
 	}
 
-	function isGrant($chk, $md_id = '') {
-		if(!empty($md_id)) {
-			$chk = getGrant($chk, $md_id);
-		}
+	function isGrant($chk, $md_id) {
+		return checkGrant(getGrant($chk, $md_id));
+	}
+
+	function checkGrant($chk) {
 		if(is_null($chk) || strlen($chk) !== 1) return false;
 		global $_MEMBER;
 		$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
-		// 0 = 48, z = 122 // s = 115 초과시 에러
-		return $rank < 116 && ord($chk) <= $rank;
+		return $rank < 116 && ord($chk) <= $rank; // 0 = 48, z = 122 // s = 115 초과시 에러
 	}
 
-	// 권한 체크
-	function isManager($md_id) {
+	function checkProtect($key) {
+		global $_PROTECT;
+		$grant = $_PROTECT[$key]['grant'];
+		return !is_null($grant) && checkGrant($grant);
+	}
+
+	function checkProtectData($key, $data) {
+		global $_PROTECT;
 		global $_MEMBER;
-		static $is_manager = [];
-
-		if(empty($md_id) || empty($_MEMBER['mb_srl'])) return false;
-		// 최고 관리자와 매니저면 true
-		if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
-
-		if(!isset($is_manager[$md_id])) {
-			$module = getModule($md_id);
-			if(!empty($module['error'])) return false;
-			$is_manager[$md_id] = $module['md_manager'];
+		$result = [];
+		$grade = empty($_MEMBER['mb_grade']) ? 'guest' : $_MEMBER['mb_grade'];
+		//자기 자신 제외
+		if (!empty($_MEMBER['mb_srl']) && $_MEMBER['mb_srl'] = $data['mb_srl']) {
+			$_PROTECT[$key][$grade] = '*';
 		}
-
-		return !empty($is_manager[$md_id]) && $is_manager[$md_id] == $_MEMBER['mb_srl'];
+		if (is_null($_PROTECT[$key][$grade]) || $_PROTECT[$key][$grade] === '*') {
+			$result = $data;
+		} else {
+			$a = explode(',', str_replace(' ', '', $_PROTECT[$key][$grade]));
+			foreach ($a as $val) $result[$val] = $data[$val];
+		}
+		return $result;
 	}
 
 	function goUrl($url, $msg='') {
@@ -686,6 +704,7 @@ if(!defined('__AFOX__')) exit();
 		}
 
 		if(!empty($_result['error'])) {
+			// 에러 번호가 88088 이면 로그인 폼 보여줌
 			if($_result['error'] == 88088 && empty($_MEMBER)) {
 				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
 			} else {
@@ -699,6 +718,7 @@ if(!defined('__AFOX__')) exit();
 			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
 			$tpl_file = (empty($_{__MODULE__}['tpl'])?'default':$_{__MODULE__}['tpl']).'.php';
 			if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
+			@include_once $tpl_path . 'common.php';
 			include $tpl_path . $tpl_file;
 		}
 	}
