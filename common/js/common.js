@@ -116,6 +116,13 @@ var $_LANG = {};
 		return s.toFixed(1) + t[i];
 	};
 
+	Number.prototype.withCommas = function() {
+		var n = String(this),
+			minus = n.indexOf('-') === 0;
+		n = n.replace(/[^0-9]/g, '').split("").reverse().join("").replace(/(.{3})/g, "$1,").split("").reverse().join("");
+		return (minus ? '-' : '') + ((n.substring(0, 1) == ",") ? n.substring(1, n.length) : n);
+	};
+
 	HTMLFormElement.prototype.dataExport = function() {
 		var name, value, data = {},
 			arrs = $(this).serializeArray();
@@ -195,6 +202,22 @@ var $_LANG = {};
 				$uploads.closest('.af-editor-uploader').prepend(html);
 			}
 		}
+	};
+
+	$.set_cookie = window.set_cookie = function(name, value, expire) {
+		if (expire) {
+			var date = new Date();
+			date.setTime(date.getTime() + (expire * 24 * 60 * 60 * 1000));
+			expire = "; expires=" + date.toGMTString();
+		} else {
+			expire = '';
+		}
+		document.cookie = name + "=" + value + expire + "; path=/";
+	};
+
+	$.get_cookie = window.get_cookie = function(name) {
+		var pair = document.cookie.match(new RegExp(name + '=([^;]+)'));
+		return !!pair ? pair[1] : null;
 	};
 
 	$.msg_box = window.msg_box = function(text, caption, type, callback) {

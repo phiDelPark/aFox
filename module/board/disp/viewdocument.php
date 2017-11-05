@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	$doc = getDocument($data['srl'], true);
+	$doc = getDocument($data['srl'], '*', true);
 	if(!empty($doc['error'])) return set_error(getLang($doc['message']),$doc['error']);
 	if(empty($doc['wr_srl'])) return set_error(getLang('error_founded'),4201);
 

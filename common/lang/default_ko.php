@@ -1,6 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
-// 언어엔 ' (홑따옴표) 는 쓰지마세요. 에러가 발생할 가능성이 있습니다. 필요하면 ` (악센트) 이걸 사용하세요.
+// 언어엔 ' (홑따옴표) 는 쓰지마세요.
+// 에러가 발생할 가능성이 있습니다. 필요하면 ` (악센트) 이걸 사용하세요.
 
 $_LANG['addon'] = '애드온';
 $_LANG['admin'] = '관리자';
@@ -106,6 +107,8 @@ $_LANG['style'] = '스타일';
 $_LANG['system'] = '시스템';
 $_LANG['success'] = '성공';
 $_LANG['target'] = '대상';
+$_LANG['today'] = '오늘';
+$_LANG['tomorrow'] = '내일';
 $_LANG['theme'] = '테마';
 $_LANG['thumbnail'] = '썸네일';
 $_LANG['time'] = '시간';
@@ -123,6 +126,7 @@ $_LANG['width'] = '가로';
 $_LANG['write'] = '글쓰기';
 $_LANG['year'] = '년';
 $_LANG['yes'] = '예';
+$_LANG['yesterday'] = '어제';
 
 $_LANG['auto_login'] = '자동 로그인';
 $_LANG['member_find'] = '회원조회';

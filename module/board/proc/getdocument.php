@@ -6,7 +6,17 @@ function proc($data) {
 	if(!isset($data['wr_srl'])) return set_error(getLang('error_request'),4303);
 
 	global $_MEMBER;
-	$doc = getDocument($data['wr_srl']);
+
+	$field = '*';
+	$default_field = 'md_id,wr_srl,wr_secret,mb_srl,mb_password';
+
+	// 요청값이 있으면 요청값만 보냄
+	$response_tags = $data['response_tags'];
+	if(!empty($response_tags) && count($response_tags) > 0) {
+		$field = $default_field.','.implode(',', $response_tags);
+	}
+
+	$doc = getDocument($data['wr_srl'], $field);
 
 	if(!empty($doc['error'])) {
 		return set_error($doc['message'],$doc['error']);
@@ -29,16 +39,6 @@ function proc($data) {
 		} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
 			return set_error(getLang('error_permitted'),4501);
 		}
-	}
-
-	// 요청값이 있으면 요청값만 보냄
-	$response_tags = $data['response_tags'];
-	if(!empty($response_tags) && count($response_tags) > 0) {
-		$response_vals = ['md_id'=>$doc['md_id'],'wr_srl'=>$doc['wr_srl']];
-		foreach ($response_tags as $value) {
-			$response_vals[$value] = $doc[$value];
-		}
-		$doc = $response_vals;
 	}
 
 	// 비밀번호는 암호화 되있지만 그래도 노출 안되게 제거

@@ -5,7 +5,7 @@ if(!defined('__AFOX__')) exit();
 function proc($data) {
 	if(!isset($data['md_id'])) return set_error(getLang('error_request'),4303);
 
-	$page = getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['md_id']]);
+	$page = getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['md_id']], 'md_id');
 	if(!empty($page['error'])) {
 		return set_error($page['message'],$page['error']);
 	} else if(empty($page['md_id'])) {

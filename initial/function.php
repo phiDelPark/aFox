@@ -834,13 +834,18 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	// set_cookie 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료된 쿠키로 만듬 (제거)
-	function set_cookie($_name, $value, $expire) {
+	// javascript 에서 md5, base64가 없어서 사용하려고 $encode 옵션 추가 (보안이 필요없을때만 사용)
+	function set_cookie($_name, $value, $expire, $encode = true) {
 		$expire = $expire > 0 ? _AF_SERVER_TIME_ + $expire : (empty($expire) ? 0 : _AF_SERVER_TIME_);
-		setcookie(md5($_name), base64_encode($value), $expire, '/', _AF_COOKIE_DOMAIN_);
+		setcookie(
+			$encode?md5($_name):$_name,
+			$encode?base64_encode($value):$value,
+			$expire, '/', _AF_COOKIE_DOMAIN_
+		);
 	}
 
-	function get_cookie($_name) {
-		$cookie = md5($_name);
+	function get_cookie($_name, $encode = true) {
+		$cookie = $encode?md5($_name):$_name;
 		return array_key_exists($cookie, $_COOKIE) ? base64_decode($_COOKIE[$cookie]) : '';
 	}
 

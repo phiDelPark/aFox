@@ -412,6 +412,14 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 	vertical-align: middle;
 }
 
+/*
+.modal-backdrop.in{
+	background-image: url(../img/loading.gif);
+	background-position: center;
+	background-repeat: no-repeat;
+}
+*/
+
 /* ========================================================================
 * http://bootsnipp.com/
 * ======================================================================== */

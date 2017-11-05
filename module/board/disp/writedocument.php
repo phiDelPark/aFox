@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	$doc = empty($data['srl']) ? [] : getDocument($data['srl'], false);
+	$doc = empty($data['srl']) ? [] : getDocument($data['srl']);
 
 	global $_MEMBER;
 	$is_manager = isManager($doc['md_id']);

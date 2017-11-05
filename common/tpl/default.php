@@ -65,7 +65,8 @@ echo '<script>';
 foreach ($_ADDELEMENTS['LANG'] as $val) {
 	foreach ($val as $key){
 		if(!$tmp[$key]){
-			$tmp[$key]=1;echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';
+			$tmp[$key]=1;
+			echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';
 		}
 	}
 }

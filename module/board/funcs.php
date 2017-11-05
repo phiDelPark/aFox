@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 	// TODO 나중에 필요하면 캐시 처리 하자
 
-	function getDocument($srl, $inc_hit = FALSE, $field = '*') {
+	function getDocument($srl, $field = '*', $inc_hit = FALSE) {
 
 		$result = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$srl], $field);
 		if(!empty($result['error'])) return set_error($result['message'], $result['error']);
