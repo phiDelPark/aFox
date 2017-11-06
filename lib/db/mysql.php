@@ -121,7 +121,7 @@ class DB {
 	}
 
 	public static function count($table, $wheres) {
-		$wheres = implode(' AND ', self::escapeArray($wheres, TRUE));
+		$wheres = empty($wheres) ? 1 : implode(' AND ', self::escapeArray($wheres, TRUE));
 		try {
 			$r = self::query("SELECT COUNT(*) as cnt FROM $table WHERE $wheres");
 			if(!is_object($r)) return -1;
