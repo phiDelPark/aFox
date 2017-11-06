@@ -18,6 +18,7 @@ $_LANG['category'] = '분류';
 $_LANG['close'] = '닫기';
 $_LANG['collapse'] = '접기';
 $_LANG['comment'] = '댓글';
+$_LANG['completion'] = '완료';
 $_LANG['content'] = '내용';
 $_LANG['copy'] = '복사';
 $_LANG['count'] = '계수';

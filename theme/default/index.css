@@ -24,6 +24,10 @@ mark {
 	padding: 0;
 }
 
+select.form-control {
+	padding-left: 8px;
+}
+
 .logo-title {
 	margin: 5px 0;
 }

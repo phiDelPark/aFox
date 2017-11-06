@@ -355,13 +355,14 @@ var $_LANG = {};
 					}
 				},
 				complete: function(xhr, status) {
+					$i.data('actioning', false);
+
 					if ($.isFunction(callback)) {
 						callback('complete', status, xhr);
 					} else {
 						$i.trigger('complete.exec.ajax', [status, xhr]);
 					}
 					$waiting.remove();
-					$i.data('actioning', false);
 				},
 				success: function(data, status, xhr) {
 					var ev, err, msg, cancel = false;
@@ -372,6 +373,9 @@ var $_LANG = {};
 						err = (data['error'] && data['error'] != '0') ? data['error'] : 0;
 						msg = err ? data['message'] : '';
 					}
+
+					$i.data('actioning', false);
+
 					if ($.isFunction(callback)) {
 						cancel = callback(err ? 'error' : 'success', err ? msg : data, xhr) === false;
 					} else {
@@ -379,11 +383,7 @@ var $_LANG = {};
 						$i.trigger(ev, err ? [msg, xhr] : [data, xhr]);
 						cancel = ev.isDefaultPrevented();
 					}
-					if (cancel) {
-						$waiting.remove();
-						$i.data('actioning', false);
-						return;
-					}
+					if (cancel) return;
 					if (err) alert(msg.replace(/<br[\s|\/]*>/g, "\n"));
 					if (data['redirect_url']) parent.location.replace(data['redirect_url']);
 				},
@@ -396,6 +396,9 @@ var $_LANG = {};
 						console.log(msg);
 						msg = 'parsererror';
 					} else msg = error;
+
+					$i.data('actioning', false);
+
 					if ($.isFunction(callback)) {
 						cancel = callback('error', msg, xhr) === false;
 					} else {
@@ -403,11 +406,7 @@ var $_LANG = {};
 						$i.trigger(ev, [msg, xhr]);
 						cancel = ev.isDefaultPrevented();
 					}
-					if (cancel) {
-						$waiting.remove();
-						$i.data('actioning', false);
-						return;
-					}
+					if (cancel) return;
 					alert(msg.replace(/<br[\s|\/]*>/g, "\n"));
 					if (data['redirect_url']) parent.location.replace(data['redirect_url']);
 				}
