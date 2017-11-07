@@ -32,9 +32,17 @@ var $_LANG = {};
 	};
 
 	String.prototype.sprintf = function() {
-		var s = this;
-		for (var i = 0, n = arguments.length; i < n; i++) {
-			s = s.replace(/%(s|d)/, arguments[i]);
+		var s = this,
+			a = arguments;
+		a = (a.length === 1 && (a instanceof Object || a instanceof Array)) ? a[0] : a;
+		for (var i = 0, n = a.length; i < n; i++) {
+			s = s.replace(/%([0-9]?)(s|d)/, function(x, y, z) {
+				var out = a[i] + '';
+				if (Number(y || 0) > 0) {
+					while (out.length < y) out = '0' + out;
+				}
+				return out;
+			});
 		}
 		return s;
 	};
