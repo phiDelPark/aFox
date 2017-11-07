@@ -20,7 +20,7 @@ function proc($data) {
 
 		if(!isGrant('view', $doc['md_id'])) {
 			set_session('_AF_SECRET_DOCUMENT_'.$PERMIT_KEY, false);
-			return set_error(getLang('error_permitted'),88088);
+			return set_error(getLang('error_permitted'),4501);
 		}
 
 		if(empty($login_srl) || $login_srl != $doc['mb_srl']) {

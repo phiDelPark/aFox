@@ -76,7 +76,7 @@ function proc($data) {
 		}
 
 		if(!preg_match('/\.(png)$/i', $_FILES['mb_icon']['name'])) {
-			return set_error(getLang('warning_allowable', ['png']),2501);
+			return set_error(getLang('warning_allowable', ['png']),3501);
 		}
 
 		$mb_icon_tmp = $_FILES['mb_icon']['tmp_name'];

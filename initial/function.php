@@ -311,7 +311,7 @@ if(!defined('__AFOX__')) exit();
 		$mb_srl = (int)$mb_srl;
 		// 비회원인데 - 값이면 에러
 		if(empty($mb_srl) && $point < 0) {
-			return set_error(getLang('warning_shortage', ['point']), 2701);
+			return set_error(getLang('warning_shortage', ['point']), 3701);
 		}
 
 		if(empty($mb_srl)) return;
@@ -325,7 +325,7 @@ if(!defined('__AFOX__')) exit();
 
 		// 포인트 모자르면 에러
 		if(($mb['mb_point'] + $point) < 0) {
-			return set_error(getLang('warning_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 2701);
+			return set_error(getLang('warning_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 3701);
 		}
 
 		$_setvals = ['(mb_point)'=>'mb_point'.($point>0?'+':'').$point];
@@ -704,8 +704,8 @@ if(!defined('__AFOX__')) exit();
 		}
 
 		if(!empty($_result['error'])) {
-			// 에러 번호가 88088 이면 로그인 폼 보여줌
-			if($_result['error'] == 88088 && empty($_MEMBER)) {
+			// 에러 번호가 4501 이면 로그인 폼 보여줌
+			if($_result['error'] == 4501 && empty($_MEMBER)) {
 				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
 			} else {
 				messageBox($_result['message'], $_result['error']);

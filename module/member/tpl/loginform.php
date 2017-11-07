@@ -2,11 +2,11 @@
 	if(!defined('__AFOX__')) exit();
 ?>
 
-<form class="login-content" method="post" autocomplete="off" role="form" aria-labelledby="afLoginFormTitle" style="text-align:right" data-exec-ajax="member.loginCheck">
+<form class="login-content" method="post" autocomplete="off" role="form" aria-labelledby="afLoginFormTitle" data-exec-ajax="member.loginCheck">
 <input type="hidden" name="success_return_url" value="<?php echo getUrl()?>">
-	<div class="panel panel-default" style="margin:auto;width:350px">
+	<div class="panel panel-default" style="margin:auto;width:380px">
 		<div class="panel-heading" id="afLoginFormTitle">
-			<h4 class="panel-title"><?php echo getLang('login')?></h4>
+			<strong class="panel-title"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo getLang('login')?></strong>
 		</div>
 		<div class="panel-body" style="padding:25px 20px 20px">
 			<div class="form-group">
@@ -15,10 +15,14 @@
 			<div class="form-group">
 				<input type="password" class="form-control" name="mb_password" placeholder="<?php echo getLang('password')?>" required>
 			</div>
-			<div class="checkbox">
-				<label><input type="checkbox" name="auto_login"> <?php echo getLang('auto_login')?></label>
-			</div>
-			<div class="pull-left">
+			<label class="checkbox" tabindex="0">
+				<input type="checkbox" name="auto_login" value="1">
+				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+					<?php echo getLang('auto_login')?>
+			</label>
+		</div>
+		<div class="panel-footer" style="text-align:right;background-color:transparent">
+			<div class="pull-left" >
 				<a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><strong><?php echo getLang('member_signup')?></strong></a> /
 				<a href="<?php echo _AF_URL_ ?>?module=member&disp=findAccount"><?php echo getLang('member_find')?></a>
 			</div>

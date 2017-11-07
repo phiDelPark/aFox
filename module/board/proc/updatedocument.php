@@ -186,7 +186,7 @@ function proc($data) {
 
 		if($upload_count>0) {
 			// 권한 체크
-			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warning_not_allowable', ['upload']), 2502);
+			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warning_not_allowable', ['upload']), 3502);
 			if($file_max < $upload_count) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
 
 			for ($i=0; $i < $upload_count; $i++) {
@@ -206,7 +206,7 @@ function proc($data) {
 				$fileext = count($fileext) === 1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
-					throw new Exception(getLang('warning_allowable', [$file_exts])."\n", 2501);
+					throw new Exception(getLang('warning_allowable', [$file_exts])."\n", 3501);
 				}
 
 				// 실행 가능한 파일 못하게 처리

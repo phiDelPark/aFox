@@ -13,7 +13,7 @@ function proc($data) {
 	if(!empty($doc) && !$is_manager) {
 
 		if(!isGrant('view', $doc['md_id'])) {
-			return set_error(getLang('error_permitted'),88088);
+			return set_error(getLang('error_permitted'),4501);
 		}
 
 		if(empty($_MEMBER) || $_MEMBER['mb_srl'] != $doc['mb_srl']) {

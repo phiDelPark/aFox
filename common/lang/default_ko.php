@@ -129,7 +129,6 @@ $_LANG['year'] = '년';
 $_LANG['yes'] = '예';
 $_LANG['yesterday'] = '어제';
 
-$_LANG['auto_login'] = '자동 로그인';
 $_LANG['member_find'] = '회원조회';
 $_LANG['member_signup'] = '회원가입';
 $_LANG['calling_server'] = '서버에 요청 중입니다. 잠시만 기다려주세요.';
@@ -148,24 +147,25 @@ $_LANG['confirm_select_move'] = '선택된 %s을(를) 이동하시겠습니까?'
 $_LANG['request_input'] = '%s을(를) 입력하세요.';
 $_LANG['request_select'] = '%s을(를) 선택하세요.';
 
+$_LANG['success_moved'] = '이동했습니다.';
 $_LANG['success_copied'] = '복사했습니다.';
 $_LANG['success_deleted'] = '삭제했습니다.';
-$_LANG['success_login'] = '로그인했습니다.';
-$_LANG['success_logout'] = '로그아웃했습니다.';
-$_LANG['success_moved'] = '이동했습니다.';
 $_LANG['success_saved'] = '저장했습니다.';
 $_LANG['success_sended'] = '발송했습니다.';
+$_LANG['success_connected'] = '연결했습니다.';
+$_LANG['success_login'] = '로그인했습니다.';
+$_LANG['success_logout'] = '로그아웃했습니다.';
 $_LANG['success_finished'] = '작업을 마쳤습니다.';
 
-// warning_... 경고 오류번호 2001~2999
-$_LANG['warning_not_select'] = '%s은(는) 선택할 수 없습니다.'; // 2201
-$_LANG['warning_no_selected'] = '선택된 %s이(가) 없습니다.'; // 2203
-$_LANG['warning_allowable'] = '%s만 허용됩니다.'; // 2501
-$_LANG['warning_not_allowable'] = '%s는(은) 허용되지 않습니다.'; // 2502
-$_LANG['warning_shortage'] = '%s이(가) 부족합니다.'; // 2701
+// invalid_... 올바르지 않은 값 오류번호 2001~2999
+$_LANG['invalid_value'] = '%s의 값이 올바르지 않습니다.'; //2001
 
-// invalid_... 올바르지 않은 값 오류번호 3001~3999
-$_LANG['invalid_value'] = '%s의 값이 올바르지 않습니다.'; //3001
+// warning_... 경고 오류번호 3001~3999
+$_LANG['warning_not_select'] = '%s은(는) 선택할 수 없습니다.'; // 3201
+$_LANG['warning_no_selected'] = '선택된 %s이(가) 없습니다.'; // 3203
+$_LANG['warning_allowable'] = '%s만 허용됩니다.'; // 3501
+$_LANG['warning_not_allowable'] = '%s는(은) 허용되지 않습니다.'; // 3502
+$_LANG['warning_shortage'] = '%s이(가) 부족합니다.'; // 3701
 
 // error_... 에러시 오류번호 4001~4999
 $_LANG['error_occured'] = '오류가 발생했습니다.'; // 4001
@@ -178,14 +178,14 @@ $_LANG['error_password'] = '비밀번호가 다릅니다.'; // 4801
 $_LANG['error_admin'] = '관리자가 아닙니다.'; // 4901
 
 // fail_... 실패시 오류번호 5001~5999
-$_LANG['fail_connect'] = '연결에 실패했습니다.';
-$_LANG['fail_copied'] = '복사에 실패했습니다.';
-$_LANG['fail_deleted'] = '삭제에 실패했습니다.';
-$_LANG['fail_login'] = '로그인에 실패했습니다.';
-$_LANG['fail_logout'] = '로그아웃에 실패했습니다.';
-$_LANG['fail_moved'] = '이동에 실패했습니다.';
-$_LANG['fail_saved'] = '저장에 실패했습니다.';
-$_LANG['fail_sended'] = '발송에 실패했습니다.';
+$_LANG['fail_moved'] = '이동에 실패했습니다.'; // 5101
+$_LANG['fail_copied'] = '복사에 실패했습니다.'; // 5102
+$_LANG['fail_deleted'] = '삭제에 실패했습니다.'; // 5103
+$_LANG['fail_saved'] = '저장에 실패했습니다.'; // 5201
+$_LANG['fail_sended'] = '발송에 실패했습니다.'; // 5301
+$_LANG['fail_connect'] = '연결에 실패했습니다.'; // 5501
+$_LANG['fail_login'] = '로그인에 실패했습니다.'; // 5702
+$_LANG['fail_logout'] = '로그아웃에 실패했습니다.'; // 5703
 
 // upload_err_... 업로드 관련
 $_LANG['upload_err_code(0)'] = '파일 업로드가 성공했습니다.'; // 10400
@@ -199,6 +199,5 @@ $_LANG['upload_err_code(8)'] = '확장에 의해 파일 업로드가 중지되�
 $_LANG['upload_err_code(-1)'] = '업로드한 파일이 HTTP post로 전송된 것이 아닙니다.'; // 10489
 $_LANG['upload_err_code(-3)'] = '업로드한 파일이 설정된 최대 수 보다 큽니다.'; // 10487
 
-// 오류번호 88088는 사용불가 (로그인폼호출함)
 /* End of file default_ko.php */
 /* Location: ./common/lang/default_ko.php */

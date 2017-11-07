@@ -123,7 +123,7 @@ function proc($data) {
 				$fileext = count($fileext)===1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if ($chk_ext && !preg_match('/\.('.($chk_ext).')$/i', $filename)) {
-					throw new Exception(getLang('warning_allowable', [$chk_ext])."\n", 2501);
+					throw new Exception(getLang('warning_allowable', [$chk_ext])."\n", 3501);
 				}
 
 				// 실행 가능한 파일 못하게 처리
