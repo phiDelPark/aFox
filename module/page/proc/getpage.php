@@ -23,7 +23,7 @@ function proc($data) {
 		return set_error(getLang('error_permitted'),4501);
 	}
 
-	// 페이지는 모듈 정보도 같이 보냄
+	// 모듈 정보도 같이 보냄
 	if(empty($response_tags)) $page = array_merge($page, getModule($page['md_id']));
 
 	// JSON 사용시 모듈설정이 필요할때를 위해 만든옵션

@@ -15,7 +15,6 @@ $_PROTECT['proc.updatedocument']	= ['grant' => '0'];
 
 $_PROTECT['proc.getcomment']		= ['grant' => '0'];
 $_PROTECT['proc.getdocument']		= ['grant' => '0'];
-$_PROTECT['proc.getdocumentfilelist']=['grant' => '0'];
 
 /* End of file protect.php */
 /* Location: ./module/board/protect.php */

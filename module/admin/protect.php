@@ -19,13 +19,14 @@ $_PROTECT['proc.updateboard']			= ['grant' => 's'];
 $_PROTECT['proc.emptyrecyclebin']		= ['grant' => 's'];
 $_PROTECT['proc.movedocuments']			= ['grant' => 's'];
 
+$_PROTECT['proc.updatefile']			= ['grant' => 'm'];
+
 $_PROTECT['proc.getaddonform']			= ['grant' => 'm'];
 $_PROTECT['proc.getthemeform']			= ['grant' => 'm'];
 $_PROTECT['proc.getwidgetform']			= ['grant' => 'm'];
 $_PROTECT['proc.getboard']				= ['grant' => 'm'];
-
-$_PROTECT['proc.updatefile']			= ['grant' => 'm'];
 $_PROTECT['proc.getfile']				= ['grant' => 'm'];
+$_PROTECT['proc.getfilelist']			= ['grant' => 'm'];
 
 
 /* End of file protect.php */

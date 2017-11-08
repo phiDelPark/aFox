@@ -131,7 +131,10 @@
 		};
 
 		if(act=='board.getDocument' || act=='page.getPage') {
-			exec_ajax(act+'filelist', data, function(status, files, xhr){
+			exec_ajax('admin.getFilelist', {
+				'md_id': data['md_id'],
+				'mf_target': act=='page.getPage' ? '1' : data['wr_srl']
+			}, function(status, files, xhr){
 				switch(status) {
 					case 'error':
 					break;
