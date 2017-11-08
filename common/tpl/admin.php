@@ -1,9 +1,5 @@
 <?php
 if(!defined('__AFOX__')) exit();
-if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
-		goUrl(_AF_URL_);
-		exit();
-}
 addJSLang(['ok','cancel','yes','no','calling_server']);
 ?>
 <!doctype html>

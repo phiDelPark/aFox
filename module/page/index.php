@@ -19,7 +19,6 @@ function procPageDefault($data) {
 }
 
 function dispPageDefault($data) {
-	$tpl = '';
 	$act = strtolower($data['disp']);
 
 	if (empty($act)) {
@@ -32,7 +31,6 @@ function dispPageDefault($data) {
 	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$act)) {
 		require_once $inc_file;
 		$result = proc($data);
-		if (!empty($tpl)) $result['tpl'] = $tpl;
 		return $result;
 	} else {
 		return set_error(

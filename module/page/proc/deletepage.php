@@ -6,18 +6,12 @@ function proc($data) {
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 	if($data['md_id'] === 'welcome') return set_error(getLang('msg_not_welcome_page'),303);
 
-	global $_MEMBER;
-	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
-
 	DB::transaction();
 
 	try {
 		$page = getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['md_id']]);
 		if(!empty($page['error'])) throw new Exception($page['message'], $page['error']);
 		if(empty($page['md_id'])) throw new Exception(getLang('error_request'),4303);
-
-		// 권한 체크 // 관리자만
-		if(!$is_admin) throw new Exception(getLang('error_permitted'),4501);
 
 		$md_id = $page['md_id'];
 

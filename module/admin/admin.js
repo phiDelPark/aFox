@@ -195,7 +195,8 @@
 			})
 			.on('success.exec.ajax', function(e, data, xhr){
 				e.preventDefault();
-				if(data['act'] == 'update'+key.toUcFirst()+'Config' && data['redirect_url']) {
+				var act = $f.attr('data-exec-ajax');
+				if(act == 'admin.update'+key.toUcFirst()+'Config' && data['redirect_url']) {
 					parent.location.replace(data['redirect_url']);
 				}
 				$f.attr('data-exec-ajax', 'admin.update'+key.toUcFirst()+'Config');

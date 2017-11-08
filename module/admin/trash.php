@@ -70,7 +70,7 @@
 ?>
 
 <p class="navbar">
-  <button type="button" class="btn btn-primary mw-20" onclick="return empty_recycle_bin()"><?php echo getLang('empty_recycle_bin')?></button>
+  <button type="button" class="btn btn-primary mw-20" onclick="return empty_recycle_bin()"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('empty_recycle_bin')?></button>
 </p>
 
 		<ol class="breadcrumb">
@@ -189,7 +189,7 @@
 		</div>
 	  </div>
 	  <div class="modal-footer clearfix">
-		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteComment"><?php echo getLang('permanent_delete')?></button>
+		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteComment"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
 		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
 	  </div>
 	</form>
@@ -251,7 +251,7 @@
 			</div>
 		</div>
 		<div class="modal-footer clearfix">
-			<button type="button" class="btn btn-danger pull-left" data-act-change="admin.deleteFile" data-add-param="is_empty,1"><?php echo getLang('permanent_delete')?></button>
+			<button type="button" class="btn btn-danger pull-left" data-act-change="admin.deleteFile" data-add-param="is_empty,1"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
 			<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
 		</div>
 	</form>
@@ -334,7 +334,7 @@
 		</div>
 	  </div>
 	  <div class="modal-footer clearfix">
-		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteDocument" data-add-param="is_empty,1"><?php echo getLang('permanent_delete')?></button>
+		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteDocument" data-add-param="is_empty,1"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
 		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
 		<button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i> <?php echo getLang('restore')?></button>
 	  </div>

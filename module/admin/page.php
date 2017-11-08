@@ -34,7 +34,7 @@
 ?>
 
 <p class="navbar">
-  <button type="button" class="btn btn-primary mw-20" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"><?php echo getLang('new_page')?></button>
+  <button type="button" class="btn btn-primary mw-20" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('new_page')?></button>
 </p>
 
 <table class="table table-hover table-nowrap">
@@ -193,7 +193,7 @@
 
 	  </div>
 	  <div class="modal-footer clearfix">
-		<button type="button" class="btn btn-danger pull-left hide" data-act-change="page.deletePage"><?php echo getLang('permanent_delete')?></button>
+		<button type="button" class="btn btn-danger pull-left hide" data-act-change="page.deletePage"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
 		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
 		<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
 	  </div>

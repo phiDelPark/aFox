@@ -70,11 +70,13 @@ function proc($data) {
 		}
 
 		// 관리자만 권한 설정 가능
-		if (empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
+		/*
+		if (!isAdmin()) {
 			$data['grant_view'] = $module['grant_view'];
 			$data['grant_reply'] = $module['grant_reply'];
 			$data['grant_download'] = $module['grant_download'];
 		}
+		*/
 
 		if (!empty($data['remove_files'])) {
 

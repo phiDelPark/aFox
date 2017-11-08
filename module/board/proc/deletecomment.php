@@ -43,9 +43,15 @@ function proc($data) {
 			'rp_parent'=>$cmt['rp_parent'],
 			'rp_depth{LIKE}'=>empty($cmt['rp_depth'])?null:$cmt['rp_depth'].'%'
 		]);
-		if ($_cnt > 0 && (!$is_manager||$cmt['rp_status'] == 4)) throw new Exception(getLang('msg_reply_exists'), 4501);
+		if (!$is_manager && $_cnt > 0) throw new Exception(getLang('msg_reply_exists'), 4501);
 
-		if($_cnt > 0 && $is_manager) {
+		// 관리자나 자신이 아니면 휴지통
+		if (!isAdmin() && (empty($_MEMBER) || $_MEMBER['mb_srl'] != $cmt['mb_srl'])) {
+			$_cnt = 1;
+		}
+
+		// 하위 댓글이 있으면 삭제 표시만...
+		if($_cnt > 0) {
 			DB::update(_AF_COMMENT_TABLE_,
 				[
 					'rp_status'=>4,

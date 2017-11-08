@@ -66,7 +66,7 @@
 						<a href="<?php echo getUrl('','module','member','disp','inbox','srl', $val['nt_srl']) ?>">
 							<div class="media">
 								<span class="pull-left">
-									<img class="media-object" src="<?php echo $_icon ?>">
+									<img class="media-object" src="<?php echo $_icon ?>" width="45" height="45">
 								</span>
 								<div class="media-body">
 									<h5 class="media-heading"><strong><?php echo escapeHtml($val['nt_sender_nick']) ?></strong></h5>

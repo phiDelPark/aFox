@@ -11,7 +11,11 @@ function proc($data) {
 	$category = empty($data['category']) ? '' : $data['category'];
 	$search = empty($data['search']) ? '' : $data['search'];
 	$page = empty($data['page']) ? '' : $data['page'];
-	return getDocumentList($data['id'], $page, $search, $category);
+
+	$result = getDocumentList($data['id'], $page, $search, $category);
+	$result['tpl'] = 'list';
+
+	return $result;
 }
 
 /* End of file documentlist.php */

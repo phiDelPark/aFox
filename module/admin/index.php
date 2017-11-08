@@ -4,29 +4,33 @@ if(!defined('__AFOX__')) exit();
 
 @include_once _AF_LANGS_PATH_ . 'admin_' . _AF_LANG_ . '.php';
 
-// 관리자만 접근 가능
-if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') {
-	goUrl(_AF_URL_, getLang('error_admin'));
-	exit('not admin');
+if(empty($_MEMBER) || ($_MEMBER['mb_rank'] != 's' && $_MEMBER['mb_rank'] != 'm')) {
+	goUrl(_AF_URL_, getLang('error_permitted'));
+	exit(getLang('error_permitted'));
 }
 
-function returnUrlMerge($data, $result) {
-	if(!isset($result)) $result = [];
-	$result['act'] = $data['act'];
-	$result['disp'] = $data['disp'];
-	$url_key = empty($result['error'])?'success_return_url':'error_return_url';
-	$result['redirect_url'] = isset($data[$url_key])?urldecode($data[$url_key]):'';
-	return $result;
+// 관리자의 아이피, 브라우저와 다르다면 세션을 끊고 관리자에게 메일을 보낸다.
+$admin_key = md5($_MEMBER['mb_regdate'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+if (get_session('AF_LOGIN_KEY') !== $admin_key) {
+	session_destroy();
+	// TODO 관리자에게 쪽지 보낸다.
+	goUrl(_AF_URL_, getLang('error_permitted'));
+	exit(getLang('error_permitted'));
 }
 
 function procAdminDefault($data) {
-	$include_file = _AF_MODULES_PATH_ . 'admin/proc/'.strtolower($data['act']).'.php';
+	$act = strtolower($data['act']);
+	$dir = _AF_MODULES_PATH_ . 'admin/proc/';
+	$inc_file = $dir . $act . '.php';
 
-	if(file_exists($include_file)) {
-		require_once $include_file;
-		return returnUrlMerge($data, proc($data));
+	if (($is=file_exists($inc_file)) && checkProtect('proc.'.$act)) {
+		require_once $inc_file;
+		return proc($data);
 	} else {
-		return returnUrlMerge($data, set_error(getLang('error_request'),4303));
+		return set_error(
+			getLang($is ? 'error_permitted' : 'error_request'),
+			$is ? 4501 : 4303
+		);
 	}
 }
 

@@ -21,12 +21,10 @@ function procBoardDefault($data) {
 }
 
 function dispBoardDefault($data) {
-	$tpl = '';
 	$act = strtolower($data['disp']);
 
 	if (empty($act)) {
 		$act = empty($data['srl']) ? 'documentlist' : 'viewdocument';
-		$tpl = empty($data['srl']) ? 'list' : 'view';
 		if (empty($data['id']) && empty($data['srl'])) $act = '...error';
 	}
 
@@ -36,7 +34,6 @@ function dispBoardDefault($data) {
 	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$act)) {
 		require_once $inc_file;
 		$result = proc($data);
-		if (!empty($tpl)) $result['tpl'] = $tpl;
 		return $result;
 	} else {
 		return set_error(

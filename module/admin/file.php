@@ -166,7 +166,7 @@
 			</div>
 		</div>
 		<div class="modal-footer clearfix">
-			<button type="button" class="btn btn-danger pull-left" data-act-change="admin.deleteFile" data-add-param="is_empty,1"><?php echo getLang('permanent_delete')?></button>
+			<button type="button" class="btn btn-danger pull-left" data-act-change="admin.deleteFile" data-add-param="is_empty,1"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
 			<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
 			<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
 		</div>

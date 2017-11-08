@@ -124,6 +124,8 @@ function proc($data) {
 	$list = getDocumentList($doc['md_id'], $page, $search, $category);
 	$doc['CURRENT_DOCUMENT_LIST'] = $list;
 
+	$doc['tpl'] = 'view';
+
 	return $doc;
 }
 

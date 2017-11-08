@@ -42,7 +42,6 @@
 	}
 	#siteMap .panel-body>.pull-left{
 		float: none!important;
-		position: fixed;
 	}
 	#siteMap .panel-body>.pull-left>div{
 		display: inline-block;
@@ -50,7 +49,7 @@
 	}
 	#siteMap form {
 		margin-left: 0;
-		margin-top:90px;
+		margin-top: 0;
 	}
 	#siteMap .sitemap-item{
 		white-space: nowrap;

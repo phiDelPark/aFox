@@ -175,7 +175,6 @@ $_LANG['error_request'] = '잘못된 요청입니다.'; // 4303
 $_LANG['error_permitted'] = '권한이 없습니다.'; // 4501
 $_LANG['error_value'] = '값이 올바르지 않습니다.'; // 4601
 $_LANG['error_password'] = '비밀번호가 다릅니다.'; // 4801
-$_LANG['error_admin'] = '관리자가 아닙니다.'; // 4901
 
 // fail_... 실패시 오류번호 5001~5999
 $_LANG['fail_moved'] = '이동에 실패했습니다.'; // 5101

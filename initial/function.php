@@ -486,12 +486,17 @@ if(!defined('__AFOX__')) exit();
 		return $ret;
 	}
 
+	function isAdmin() {
+		global $_MEMBER;
+		return (!empty($_MEMBER['mb_srl']) && $_MEMBER['mb_rank'] == 's');
+	}
+
 	function isManager($md_id) {
 		global $_MEMBER;
 		static $is_manager = [];
-		if(empty($md_id) || empty($_MEMBER['mb_srl'])) return false;
-		// 최고 관리자와 매니저면 true
+		if(empty($_MEMBER['mb_srl'])) return false;
 		if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
+		if(empty($md_id)) return false;
 		if(!isset($is_manager[$md_id])) {
 			$module = getModule($md_id);
 			if(!empty($module['error'])) return false;

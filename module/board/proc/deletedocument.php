@@ -33,6 +33,11 @@ function proc($data) {
 
 		$md_id = $doc['md_id'];
 
+		// 관리자나 자신이 아니면 휴지통
+		if (!isAdmin() && (empty($_MEMBER) || $_MEMBER['mb_srl'] != $doc['mb_srl'])) {
+			unset($data['is_empty']);
+		}
+
 		if(empty($data['is_empty'])) {
 			// 이미 휴지통이면 에러
 			if($md_id == '_AFOXtRASH_') {
