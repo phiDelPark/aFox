@@ -22,6 +22,12 @@ var $_LANG = {};
 		}
 	*/
 
+	jQuery.fn.offOn = function(types, selector, data, fn) {
+		return this
+			.off(types, (typeof selector === 'function') ? undefined : selector)
+			.on(types, selector, data, fn);
+	};
+
 	String.prototype.trim = function() {
 		return this.replace(/^\s+|\s+$/g, "");
 	};
@@ -256,30 +262,31 @@ var $_LANG = {};
 		// modal-body 는 따로 입력해야 치환이 정상적으로 됨
 		var $modal = $(html).find('.modal-body:eq(0)').html(text).end();
 		$modal.prependTo('body')
-			.on('show.bs.modal', function(e) {
+			.offOn('show.bs.modal', function(e) {
 				if ($.isFunction(callback)) {
 					callback('show', $modal.find('.modal-body'));
 				}
 			})
-			.on('hide.bs.modal', function(e) {
+			.offOn('hide.bs.modal', function(e) {
 				if ($.isFunction(callback)) {
 					callback('hide', $modal.find('.modal-body'));
 				}
 			})
-			.on('shown.bs.modal', function(e) {
+			.offOn('shown.bs.modal', function(e) {
 				$(this).find('.modal-body input[type!="hidden"]:eq(0)').focus();
 			})
-			.on('hidden.bs.modal', function(e) {
+			.offOn('hidden.bs.modal', function(e) {
 				$(this).remove();
 			})
-			.on('keydown', function(e) {
+			.offOn('keydown', function(e) {
 				if (e.which == 13 && e.target.tagName != 'TEXTAREA') {
 					e.preventDefault();
 					$(this).find('.modal-footer>button.btn-primary').click();
 				}
 			})
 			.modal('show')
-			.find('.modal-footer>button').on('click', function(e) {
+			.find('.modal-footer>button')
+			.offOn('click', function(e) {
 				if ($.isFunction(callback)) {
 					if (callback($(this).attr('data-key'), $modal.find('.modal-body'))) {
 						$modal.modal('hide');
@@ -426,19 +433,21 @@ var $_LANG = {};
 		}
 	};
 
-	$(document).on('submit', 'form[data-exec-ajax]', function(e) {
-		e.preventDefault();
-		exec_ajax(this);
-		return false;
-	}).on('click', '[data-exec-ajax][data-ajax-param]', function(e) {
-		var $i = $(e.target);
-		if ($i.is('[except-event]')) return true;
-		if (typeof $i.data('clicked') === 'undefined' || $i.data('clicked') === true) {
+	$(document)
+		.on('submit', 'form[data-exec-ajax]', function(e) {
 			e.preventDefault();
 			exec_ajax(this);
-		}
-		return false;
-	});
+			return false;
+		})
+		.on('click', '[data-exec-ajax][data-ajax-param]', function(e) {
+			var $i = $(e.target);
+			if ($i.is('[except-event]')) return true;
+			if (typeof $i.data('clicked') === 'undefined' || $i.data('clicked') === true) {
+				e.preventDefault();
+				exec_ajax(this);
+			}
+			return false;
+		});
 
 	// <div class="uploader-group" placeholder="File">
 	// 	<div class="input-group">
@@ -449,87 +458,95 @@ var $_LANG = {};
 	// 		</div>
 	// 	</div>
 	// </div>
-	$(document).on('change', '.uploader-group input:file', function(e) {
-		var $i = $(this),
-			$g = $i.closest('.uploader-group'),
-			$c = $g.find('.file-caption'),
-			ismt = $i[0].hasAttribute('multiple');
-		if (ismt) $g.addClass('file-list');
-		var ev = $.Event('insert.af.uploader');
-		$g.trigger(ev, [$i.prop("files")]);
-		if (ev.isDefaultPrevented()) return;
-		$c.html('');
-		$.map($i.prop("files"), function(val, i) {
-			var type = (val.type.split('/')[0] || 'binary').escapeHtml(),
-				size = val.size.shortFileSize(),
-				title = val.name.escapeHtml() + ' (' + size + ')';
-			$('<i class="file-item" title="' + (ismt ? title : '') + '" data-type="' + type + '" data-index="' + i + '">')
-				.html(ismt ? '' : title)
-				.appendTo($c);
-		});
-	}).on('click', '.uploader-group .file-caption', function(e) {
-		var $c = $(this),
-			$ci = $c.find('.file-item'),
-			$g = $c.closest('.uploader-group'),
-			$i = $g.find('input:file'),
-			plac = $g.attr('placeholder') || '';
-		if ($ci.length > 0) {
-			var ev = $.Event('delete.af.uploader');
+	$(document)
+		.on('change', '.uploader-group input:file', function(e) {
+			var $i = $(this),
+				$g = $i.closest('.uploader-group'),
+				$c = $g.find('.file-caption'),
+				ismt = $i[0].hasAttribute('multiple');
+			if (ismt) $g.addClass('file-list');
+			var ev = $.Event('insert.af.uploader');
 			$g.trigger(ev, [$i.prop("files")]);
 			if (ev.isDefaultPrevented()) return;
-			$i.val('');
-			$('<input type="hidden" name="remove_files[]" value="' + $i.attr('name') + '">').appendTo($c.text(plac));
-		}
-	}).on('keydown', '.uploader-group .file-caption', function(e) {
-		if (e.which == 13 || e.which == 32) {
-			e.preventDefault();
-			$(this).click();
-		}
-	}).on('keydown', '.uploader-group .btn-file', function(e) {
-		if (e.which == 13 || e.which == 32) {
-			e.preventDefault();
-			$(this).find('input:file').click();
-		}
-	}).on('uploader:repair', '.uploader-group', function(e) {
-		var $g = $(this),
-			$i = $g.find('input:hidden'),
-			$c = $g.find('.file-caption'),
-			plac = $g.attr('placeholder') || '';
-		if (!$c.find('.file-item').length && plac) $c.text(plac);
-		if ($c[0] && !$c[0].hasAttribute('tabindex')) $c.attr('tabindex', '0');
-		if ($i[0] && !$i[0].hasAttribute('tabindex')) {
-			$i.parent().attr('tabindex', '0');
-			$i.attr('tabindex', '-1');
-		}
-	});
+			$c.html('');
+			$.map($i.prop("files"), function(val, i) {
+				var type = (val.type.split('/')[0] || 'binary').escapeHtml(),
+					size = val.size.shortFileSize(),
+					title = val.name.escapeHtml() + ' (' + size + ')';
+				$('<i class="file-item" title="' + (ismt ? title : '') + '" data-type="' + type + '" data-index="' + i + '">')
+					.html(ismt ? '' : title)
+					.appendTo($c);
+			});
+		})
+		.on('click', '.uploader-group .file-caption', function(e) {
+			var $c = $(this),
+				$ci = $c.find('.file-item'),
+				$g = $c.closest('.uploader-group'),
+				$i = $g.find('input:file'),
+				plac = $g.attr('placeholder') || '';
+			if ($ci.length > 0) {
+				var ev = $.Event('delete.af.uploader');
+				$g.trigger(ev, [$i.prop("files")]);
+				if (ev.isDefaultPrevented()) return;
+				$i.val('');
+				$('<input type="hidden" name="remove_files[]" value="' + $i.attr('name') + '">').appendTo($c.text(plac));
+			}
+		})
+		.on('keydown', '.uploader-group .file-caption', function(e) {
+			if (e.which == 13 || e.which == 32) {
+				e.preventDefault();
+				$(this).click();
+			}
+		})
+		.on('keydown', '.uploader-group .btn-file', function(e) {
+			if (e.which == 13 || e.which == 32) {
+				e.preventDefault();
+				$(this).find('input:file').click();
+			}
+		})
+		.on('uploader:repair', '.uploader-group', function(e) {
+			var $g = $(this),
+				$i = $g.find('input:hidden'),
+				$c = $g.find('.file-caption'),
+				plac = $g.attr('placeholder') || '';
+			if (!$c.find('.file-item').length && plac) $c.text(plac);
+			if ($c[0] && !$c[0].hasAttribute('tabindex')) $c.attr('tabindex', '0');
+			if ($i[0] && !$i[0].hasAttribute('tabindex')) {
+				$i.parent().attr('tabindex', '0');
+				$i.attr('tabindex', '-1');
+			}
+		});
 
 	// 에이폭스 체크박스 스페이스 바 누르면 클릭
-	$(document).on('keydown', 'label.checkbox,label.radio', function(e) {
-		if (e.which == 13 || e.which == 32) {
-			e.preventDefault();
-			$(this).find('>input').click();
-		}
-	});
+	$(document)
+		.on('keydown', 'label.checkbox,label.radio', function(e) {
+			if (e.which == 13 || e.which == 32) {
+				e.preventDefault();
+				$(this).find('>input').click();
+			}
+		});
 
 	// 글자 수를 byte로 체크하기 위해
-	$(document).on('keyup', 'input[maxbyte],textarea[maxbyte]', function(e) {
-		var $i = $(this),
-			max = $i.attr('maxbyte') || 0;
-		if (isNaN(max)) return;
-		var b = 0,
-			r = '',
-			val = $i.val();
-		for (var i = 0, c; !isNaN(c = val.charCodeAt(i)); i++) {
-			b += c < 128 ? 1 : (c < 2048 ? 2 : (c < 3936256 ? 3 : 4));
-			if (b > max) break;
-			r += String.fromCharCode(c);
-		}
-		$i.val(r);
-	});
+	$(document)
+		.on('keyup', 'input[maxbyte],textarea[maxbyte]', function(e) {
+			var $i = $(this),
+				max = $i.attr('maxbyte') || 0;
+			if (isNaN(max)) return;
+			var b = 0,
+				r = '',
+				val = $i.val();
+			for (var i = 0, c; !isNaN(c = val.charCodeAt(i)); i++) {
+				b += c < 128 ? 1 : (c < 2048 ? 2 : (c < 3936256 ? 3 : 4));
+				if (b > max) break;
+				r += String.fromCharCode(c);
+			}
+			$i.val(r);
+		});
 
 	// ... load
-	$(window).on('load', function() {
-		$('.uploader-group').trigger('uploader:repair');
-	});
+	$(window)
+		.on('load', function() {
+			$('.uploader-group').trigger('uploader:repair');
+		});
 
 })(jQuery);

@@ -12,7 +12,7 @@
 			var $this = $(this);
 			$this.find('[web-code-run="run"]')
 				.addClass('btn btn-warning btn-lg btn-block')
-				.on('click', function() {
+				.offOn('click', function() {
 				var pw = pop_win('about:blank', '800', null, 'af_editor_components'),
 					code = '<!doctype html><html lang="ko"><head><meta charset="utf-8"><link href="%s" rel="stylesheet"><script src="%s"></script><script src="%s"></script><style>%s</style></head><body><div style="margin:5px">%s</div> <script>%s</script></body></html>',
 					_css = $this.find('[web-code-run="css"]').text() || '',

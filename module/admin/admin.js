@@ -73,7 +73,7 @@
 				$f.find('[name="new_mb_rank"][value="2"]').parent().show();
 			}
 
-			$f.find('[data-act-change]').on('click', function() {
+			$f.find('[data-act-change]').offOn('click', function() {
 				var $i = $(this),
 					$f = $i.closest('form'),
 					act = $i.attr('data-act-change'),
@@ -99,7 +99,7 @@
 				return false;
 			});
 
-			$f.find('button.document_goto').on('click', function() {
+			$f.find('button.document_goto').offOn('click', function() {
 				var $i = $(this),
 					$f = $i.closest('form'),
 					mf = $f.find('input[name=mf_target]').val()||'',
@@ -122,11 +122,11 @@
 				var ishtml = ((act=='page.getPage'&&data['pg_type']=='2')
 							||(act=='board.getDocument'&&data['wr_type']=='2')
 							||(act=='board.getComment'&&data['rp_type']=='2'));
-				$m.on('shown.bs.modal', function(){$editor.data('af.editor').switch(ishtml);});
+				$m.offOn('shown.bs.modal', function(){$editor.data('af.editor').switch(ishtml);});
 			}
 
 			$m.find('[name=new_'+tp+']').attr('name','').attr('disabled','disabled').val(data[tp]).end()
-				.on('hidden.bs.modal', function(){$m.remove();})
+				.offOn('hidden.bs.modal', function(){$m.remove();})
 				.modal("show");
 		};
 
@@ -156,7 +156,7 @@
 	$('#ADM_DEFAULT_MODULE,#ADM_CUSTOM_MODULE')
 	.on('click', '[data-toggle="modal.clone"]', function(){
 		var $m = $($(this).attr('data-target')).clone();
-		$m.on('hidden.bs.modal', function(){$m.remove();}).modal("show");
+		$m.offOn('hidden.bs.modal', function(){$m.remove();}).modal("show");
 		var $editor = $m.find('.af-editor-group');
 		if($editor.length>0) $editor.afEditor({});
 	});
@@ -192,39 +192,43 @@
 
 		$f.attr('data-exec-ajax', 'admin.get'+key.toUcFirst()+'Form')
 			.find('input[name='+(key=='addon'?'ao':(key=='theme'?'th':'wg'))+'_id]').val(id).end()
-			.on('error.exec.ajax', function(e, error, xhr){
+			.offOn('error.exec.ajax', function(e, error, xhr){
 				e.preventDefault();
 				$p.html('<div class="alert alert-danger">' + error + '</div>');
 			})
-			.on('success.exec.ajax', function(e, data, xhr){
+			.offOn('success.exec.ajax', function(e, data, xhr){
 				e.preventDefault();
-				var act = $f.attr('data-exec-ajax');
+				var act = $(e.target).attr('data-exec-ajax');
 				if(act == 'admin.update'+key.toUcFirst()+'Config' && data['redirect_url']) {
 					parent.location.replace(data['redirect_url']);
-				}
-				$f.attr('data-exec-ajax', 'admin.update'+key.toUcFirst()+'Config');
-				if(typeof(data['tpl']) != 'undefined') {
-					$p.html(data['tpl']);
+				} else {
+					$(e.target).attr('data-exec-ajax', 'admin.update'+key.toUcFirst()+'Config');
+					if(typeof(data['tpl']) != 'undefined') {
+						$p.html(data['tpl']);
+					}
 				}
 			});
 
 		$(document).trigger($.Event('submit', { target: $f[0] }));
-	}).on('hidden.bs.modal', '#admin_addon_modal,#admin_theme_modal', function(){
+	})
+	.on('hidden.bs.modal', '#admin_addon_modal,#admin_theme_modal', function(){
 		$(this).find('.modal-body').html('');
 	});
 
-	$('#ADM_DEFAULT_MODULE').find('a[href="#DataManageAction"]').on('click', function() {
+	$('#ADM_DEFAULT_MODULE').find('a[href="#DataManageAction"]')
+	.on('click', function() {
 		var $a = $(this).closest('table');
 		$a.find('.th_title').hide();
 		$a.find('.data_controler').show();
 		$a.find('.data_selecter').show();
-		$a.find('.data_all_selecter').on('click', function() {
+		$a.find('.data_all_selecter').offOn('click', function() {
 			$a.find('.data_selecter').prop('checked', $(this).is(':checked')) ;
 		});
 		return false;
 	});
 
-	$(document).on('change.af.editor.toolbar', '.af-editor-toolbar', function(e, tar, old, val){
+	$(document)
+	.on('change.af.editor.toolbar', '.af-editor-toolbar', function(e, tar, old, val){
 		var $e = $(this).closest('.af-editor-group');
 		if((tar == 'pg_type' || tar == 'wr_type' || tar == 'rp_type') && $e.length == 1) $e.data('af.editor').switch(val==='2');
 	})

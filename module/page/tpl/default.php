@@ -1,11 +1,9 @@
 <?php
 if(!defined('__AFOX__')) exit();
-$is_manager = isManager(__MID__);
-
 echo toHTML($_{'page'}['pg_content'], $_{'page'}['pg_type']);
 ?>
 
-<?php if($is_manager) { ?>
+<?php if(isAdmin(__MID__)) { ?>
 <div class="clearfix">
 	<div class="pull-right">
 		<a href="<?php echo getUrl('disp','setupPage', 'id', __MID__)?>" role="button"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>

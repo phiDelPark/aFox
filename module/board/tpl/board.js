@@ -68,7 +68,7 @@
 			if (passform) {
 				if (act == 'board.getComment') {
 					$ipu = $(input_password.sprintf('', $_LANG['request_input'].sprintf($_LANG['password']), $_LANG['password'], $_LANG['ok'], $_LANG['close']));
-					$ipu.on('success.exec.ajax', function(e, data, xhr) {
+					$ipu.offOn('success.exec.ajax', function(e, data, xhr) {
 						e.preventDefault();
 						getCommentCallfunc('success', data, xhr);
 						$(this).remove();
@@ -79,7 +79,7 @@
 			} else {
 				$ipu = $(confirm_action.sprintf('', $_LANG['confirm_select_delete'].sprintf($_LANG['comment']), $_LANG['yes'], $_LANG['no']));
 			}
-			$ipu.on('error.exec.ajax', function(e, msg, xhr) {
+			$ipu.offOn('error.exec.ajax', function(e, msg, xhr) {
 				e.preventDefault();
 				$(e.currentTarget).find('>div>div').css('color', 'red').html($_LANG['error'] + ': ' + msg);
 				$(e.currentTarget).find('[name="mb_password"]').val('').focus();
@@ -116,7 +116,7 @@
 			}
 		}
 
-		$f.on('success.exec.ajax', function(e, data, xhr) {
+		$f.offOn('success.exec.ajax', function(e, data, xhr) {
 			e.preventDefault();
 			if (data['redirect_url']) {
 				parent.location.replace(data['redirect_url'].setQuery('rp', data['rp_srl']));
@@ -137,68 +137,69 @@
 			}
 		});
 
-	$(document).on('change.af.editor.toolbar', '.af-editor-toolbar', function(e, tar, old, val) {
-		var $e = $(this).closest('.af-editor-group');
-		if ((tar == 'wr_type' || tar == 'rp_type') && $e.length == 1) $e.data('af.editor').switch(val === '2');
-	});
+	$(document)
+		.on('change.af.editor.toolbar', '.af-editor-toolbar', function(e, tar, old, val) {
+			var $e = $(this).closest('.af-editor-group');
+			if ((tar == 'wr_type' || tar == 'rp_type') && $e.length == 1) $e.data('af.editor').switch(val === '2');
+		});
 
-	$('.list-table tr[data-hot-track], [href="#requirePassword"]').click(function() {
-		var $i = $(this);
-		if ($i[0].tagName == 'TR') $i = $i.find('.wr_title a');
-		var href = $i.attr('href');
-		if (href == '#requirePassword' && $i.attr('data-param')) {
-			var html = '<form action="%s" method="post" autocomplete="off"><p>%s</p><div class="form-group"><input type="password" class="form-control" name="mb_password" placeholder="%s" required /> <span class="sr-only">%s</span></div></form>';
-			msg_box(html.sprintf(current_url, $_LANG['request_input'].sprintf($_LANG['password']), $_LANG['password'], $_LANG['password']), null, ['question', ['OK', 'cancel']], function(key, $body) {
-				if (key == 'ok') {
-					var $form = $body.find('form'),
-						srl = $i.attr('data-srl') || '',
-						param = ($i.attr('data-param') || '').split(','),
-						url = current_url;
+	$('.list-table tr[data-hot-track], [href="#requirePassword"]')
+		.click(function() {
+			var $i = $(this);
+			if ($i[0].tagName == 'TR') $i = $i.find('.wr_title a');
+			var href = $i.attr('href');
+			if (href == '#requirePassword' && $i.attr('data-param')) {
+				var html = '<form action="%s" method="post" autocomplete="off"><p>%s</p><div class="form-group"><input type="password" class="form-control" name="mb_password" placeholder="%s" required /> <span class="sr-only">%s</span></div></form>';
+				msg_box(html.sprintf(current_url, $_LANG['request_input'].sprintf($_LANG['password']), $_LANG['password'], $_LANG['password']), null, ['question', ['OK', 'cancel']], function(key, $body) {
+					if (key == 'ok') {
+						var $form = $body.find('form'),
+							srl = $i.attr('data-srl') || '',
+							param = ($i.attr('data-param') || '').split(','),
+							url = current_url;
 
-					if (srl && param.length > 1) {
-						url = url.setQuery(param);
-						// 이벤트 중복 실행 방지
-						$form.off('submit');
-						$form
-							.on('submit', function() {
-								// 체크가 성공하면 이동
-								if ($form.data('check success') || false) {
-									return true;
-								}
-								var data = {},
-									response_tags = ['wr_srl'];
-								data['wr_srl'] = srl;
-								data['mb_password'] = $form.find('input[name="mb_password"]').val();
-								exec_ajax('board.checkpassword', data, function(status, data, xhr) {
-									$form.data('check success', status === 'success');
-									if (status === 'success') {
-										$form.submit();
-										return false;
-									} else if (status === 'error') {
-										$form.find('>p').html($_LANG['error'] + ': ' + data).css('color', 'red');
-										$form.find('input[name="mb_password"]').val('').focus();
-										return false;
+						if (srl && param.length > 1) {
+							url = url.setQuery(param);
+							$form
+								.offOn('submit', function() {
+									// 체크가 성공하면 이동
+									if ($form.data('check success') || false) {
+										return true;
 									}
-								}, response_tags);
-								return false;
-							})
-							.attr('action', url)
-							.submit();
+									var data = {},
+										response_tags = ['wr_srl'];
+									data['wr_srl'] = srl;
+									data['mb_password'] = $form.find('input[name="mb_password"]').val();
+									exec_ajax('board.checkpassword', data, function(status, data, xhr) {
+										$form.data('check success', status === 'success');
+										if (status === 'success') {
+											$form.submit();
+											return false;
+										} else if (status === 'error') {
+											$form.find('>p').html($_LANG['error'] + ': ' + data).css('color', 'red');
+											$form.find('input[name="mb_password"]').val('').focus();
+											return false;
+										}
+									}, response_tags);
+									return false;
+								})
+								.attr('action', url)
+								.submit();
+						}
+					} else {
+						return true;
 					}
-				} else {
-					return true;
-				}
-				return false;
-			});
-		} else {
-			location.href = href;
-		}
-		return false;
-	});
+					return false;
+				});
+			} else {
+				location.href = href;
+			}
+			return false;
+		});
 
-	$(window).on('load', function() {
-		var into = $('a.active[id^=reply_]')[0];
-		if (into) into.scrollIntoView(true);
-	});
+	$(window)
+		.on('load', function() {
+			var into = $('a.active[id^=reply_]')[0];
+			if (into) into.scrollIntoView(true);
+		});
 
 })(jQuery);

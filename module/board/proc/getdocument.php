@@ -51,7 +51,9 @@ function proc($data) {
 	}
 
 	// 모듈 정보도 같이 보냄
-	if(empty($response_tags)) $doc = array_merge($doc, getModule($doc['md_id']));
+	if(empty($response_tags)) {
+		$doc = array_merge($doc, getModule(($doc['md_id']=='_AFOXtRASH_')?$doc['wr_updater']:$doc['md_id']));
+	}
 
 	// JSON 사용시 모듈설정이 필요할때를 위해 만든옵션
 	return $doc;

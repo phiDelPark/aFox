@@ -101,7 +101,7 @@
 			$balloon.appendTo('BODY');
 		}
 
-		this.$element.closest('form').on('submit', function() {
+		this.$element.closest('form').offOn('submit', function() {
 			var text = $this.$textarea.val(),
 				$iframe = $this.$element.find('iframe');
 
@@ -121,7 +121,7 @@
 			}
 		});
 
-		this.$element.on('click', '.af-editor-toolbar>.pull-right', function(e) {
+		this.$element.offOn('click', '.af-editor-toolbar>.pull-right', function(e) {
 			var $g = $(this),
 				$i = $(e.target);
 			if ($g.parent()[0].hasAttribute('readonly')) return;
@@ -154,12 +154,12 @@
 
 			$g.find('input[name="' + target + '"]').val(val);
 			$g.parent().trigger('changed.af.editor.toolbar', [target, old, val]);
-		}).on('keydown', '.af-editor-toolbar>.pull-right>span[tabindex=0]', function(e) {
+		}).offOn('keydown', '.af-editor-toolbar>.pull-right>span[tabindex=0]', function(e) {
 			if (e.which == 13 || e.which == 32) {
 				e.preventDefault();
 				$(this).click();
 			}
-		}).on('click', '.af-statebar-area>.btn-group>button[tabindex=-1]', function(e, i) {
+		}).offOn('click', '.af-statebar-area>.btn-group>button[tabindex=-1]', function(e, i) {
 			var $i = $(this),
 				$txtara = $this.$textarea,
 				$iframe = $this.$element.find('iframe'),
@@ -167,7 +167,7 @@
 			$i.blur();
 			if (type == 'link' || type == 'components') return false;
 			$this.exec(type, null);
-		}).on('click', '.af-editor-uploaded>.file-item', function() {
+		}).offOn('click', '.af-editor-uploaded>.file-item', function() {
 			var $i = $(this),
 				srl = $i.attr('data-srl'),
 				$rm = $('[name="remove_files[]"][value="' + srl + '"]');
@@ -179,7 +179,7 @@
 				$('<input type="hidden" name="remove_files[]" value="' + srl + '">').insertAfter($i);
 				$i.css('color', 'hotpink').attr('title', '(Remove) ' + $i.attr('title'));
 			}
-		}).on('dragstart', '.af-editor-uploaded>.file-item', function(e) {
+		}).offOn('dragstart', '.af-editor-uploaded>.file-item', function(e) {
 			var $i = $(this);
 			if ($i.data && $i.data('bs.tooltip')) $i.tooltip('hide'); // 드래그 시작시 툴팁 감추기
 			e.originalEvent.dataTransfer.setData("TEXT", JSON.stringify({
@@ -187,12 +187,12 @@
 				'srl': $i.attr('data-srl'),
 				'title': $i.attr('data-title') || $i.attr('title')
 			}));
-		}).on('dragover', '.af-editor-content>textarea', function(e) {
+		}).offOn('dragover', '.af-editor-content>textarea', function(e) {
 			e.preventDefault();
-		}).on('drop', '.af-editor-content>textarea', function(e) {
+		}).offOn('drop', '.af-editor-content>textarea', function(e) {
 			e.preventDefault();
 			dropFile(e, $this);
-		}).on('insert.af.uploader', '.uploader-group', function(e, files) {
+		}).offOn('insert.af.uploader', '.uploader-group', function(e, files) {
 			e.preventDefault();
 			var $c = $(this).find('.file-caption'),
 				ismt = $(this).find('input:file')[0].hasAttribute('multiple');
@@ -207,7 +207,7 @@
 				var $item = $('<i class="file-item" draggable="true" title="' + (ismt ? title : '') + '" data-type="' + type + '" data-index="' + i + '" data-path="' + path + '">');
 				$item.text(ismt ? '' : title)
 					.appendTo($c)
-					.on('dragstart', function(e) {
+					.offOn('dragstart', function(e) {
 						var $i = $(this);
 						if ($i.data && $i.data('bs.tooltip')) $i.tooltip('hide'); // 드래그 시작시 툴팁 감추기
 						e.originalEvent.dataTransfer.setData("TEXT", JSON.stringify({
@@ -220,7 +220,7 @@
 
 				setImageTooltip($item);
 			});
-		}).on('delete.af.uploader', '.uploader-group', function(e, files) {
+		}).offOn('delete.af.uploader', '.uploader-group', function(e, files) {
 			e.preventDefault();
 			var $c = $(this).find('.file-caption'),
 				$g = $c.closest('.uploader-group');
@@ -234,7 +234,7 @@
 			placement: 'top',
 			title: $_LANG['help_editor_attach_title'] || '<strong>첨부파일 사용법</strong>',
 			content: $_LANG['help_editor_attach_content'] || '본문에 파일을 보여주려면 아이콘을 잡고 끌어 본문 위로 옮기면 됩니다.<br><br>클릭시엔 삭제 모드가 토글됩니다.'
-		}).on('show.bs.popover', function() {
+		}).offOn('show.bs.popover', function() {
 			$(this).data("bs.popover").tip().css({
 				'max-width': '500px',
 				'font-size': '12px'
@@ -246,7 +246,7 @@
 			trigger: 'manual',
 			placement: 'top',
 			content: '<div class="input-group mw-20"></div>'
-		}).on('inserted.bs.popover', function() {
+		}).offOn('inserted.bs.popover', function() {
 			var $i = $(this),
 				$popover = $i.data("bs.popover").tip().find('.popover-content'),
 				type = $i.attr('aria-label') || '';
@@ -276,7 +276,7 @@
 						return false;
 					});
 			}
-		}).on('shown.bs.popover', function() {
+		}).offOn('shown.bs.popover', function() {
 			var $i = $(this),
 				$ipu = $i.data("bs.popover").tip().find('.popover-content').find('input');
 			if ($ipu.length > 0) {
@@ -284,10 +284,10 @@
 			} else {
 				$ipu = $i;
 			}
-			$ipu.on('blur', function() {
+			$ipu.offOn('blur', function() {
 				$i.popover('hide');
 			});
-		}).on('click', function() {
+		}).offOn('click', function() {
 			$(this).popover('toggle');
 		});
 
@@ -318,21 +318,21 @@
 		if (swc) {
 			if (!$iframe.length) {
 				$iframe = $('<iframe class="form-control vresize">')
-					.on('load', function() {
+					.offOn('load', function() {
 						var $_i = $(this);
 						$_i.contents().find('body')
-							.on('dragover',
+							.offOn('dragover',
 								function(e) {
 									e.preventDefault();
 								}
-							).on('drop', function(e) {
+							).offOn('drop', function(e) {
 								e.preventDefault();
 								dropFile(e, $this);
 							});
 						$_i.contents().find("head").html('<link rel="stylesheet" href="' + request_uri + 'module/editor/editor.min.css">');
 						$_i.contents().find('body').html($txtara.val());
 						/*
-						$_i.contents().on('keydown', function(e) {
+						$_i.contents().offOn('keydown', function(e) {
 							if (e.keyCode == 13 && e.shiftKey !== true) {
 								$this.paste('<br>', false);
 								return false;
