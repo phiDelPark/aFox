@@ -20,7 +20,7 @@ function proc($data) {
 
 			$module = getModule($doc['wr_updater']);
 			if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
-			if(empty($module['md_id']) || $module['md_id'] != $doc['wr_updater']) throw new Exception(getLang('invalid_value',['module']), 303);
+			if(empty($module['md_id']) || $module['md_id'] != $doc['wr_updater']) throw new Exception(getLang('invalid_value',['module']), 2001);
 			$md_id = $module['md_id'];
 
 			// 파일 , 댓글 , 문서 삭제

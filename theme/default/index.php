@@ -195,7 +195,7 @@ $tmp = '';
 <?php } ?>
 		<section class="<?php echo $tmp.__MODULE__?>" role="main" aria-label="Site Contents">
 			<article>
-			<?php if($error = get_error()) { messageBox($error['message'], 3); } ?>
+			<?php if($error = get_error()) { messageBox($error['message'], $error['error']); } ?>
 			<?php displayModule()?>
 			</article>
 		</section>

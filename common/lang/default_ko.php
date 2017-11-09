@@ -161,30 +161,19 @@ $_LANG['success_finished'] = '작업을 마쳤습니다.';
 $_LANG['invalid_value'] = '%s의 값이 올바르지 않습니다.'; //2001
 
 // warning_... 경고 오류번호 3001~3999
-$_LANG['warning_not_select'] = '%s은(는) 선택할 수 없습니다.'; // 3201
-$_LANG['warning_no_selected'] = '선택된 %s이(가) 없습니다.'; // 3203
-$_LANG['warning_allowable'] = '%s만 허용됩니다.'; // 3501
-$_LANG['warning_not_allowable'] = '%s는(은) 허용되지 않습니다.'; // 3502
+$_LANG['warning_exists'] = '같은 %s이(가) 존재합니다.'; // 3101
+$_LANG['warning_selected'] = '선택된 %s이(가) 없습니다.'; // 3203
+$_LANG['warning_not_select'] = '%s은(는) 선택할 수 없습니다.'; // 3205
+$_LANG['warning_allowable'] = '%s만 허용됩니다.'; // 3503
+$_LANG['warning_not_allowable'] = '%s는(은) 허용되지 않습니다.'; // 3505
 $_LANG['warning_shortage'] = '%s이(가) 부족합니다.'; // 3701
 
 // error_... 에러시 오류번호 4001~4999
 $_LANG['error_occured'] = '오류가 발생했습니다.'; // 4001
 $_LANG['error_founded'] = '대상을 찾을 수 없습니다.'; // 4201
-$_LANG['error_exists'] = '같은 대상이 존재합니다.'; //4251
 $_LANG['error_request'] = '잘못된 요청입니다.'; // 4303
 $_LANG['error_permitted'] = '권한이 없습니다.'; // 4501
-$_LANG['error_value'] = '값이 올바르지 않습니다.'; // 4601
 $_LANG['error_password'] = '비밀번호가 다릅니다.'; // 4801
-
-// fail_... 실패시 오류번호 5001~5999
-$_LANG['fail_moved'] = '이동에 실패했습니다.'; // 5101
-$_LANG['fail_copied'] = '복사에 실패했습니다.'; // 5102
-$_LANG['fail_deleted'] = '삭제에 실패했습니다.'; // 5103
-$_LANG['fail_saved'] = '저장에 실패했습니다.'; // 5201
-$_LANG['fail_sended'] = '발송에 실패했습니다.'; // 5301
-$_LANG['fail_connect'] = '연결에 실패했습니다.'; // 5501
-$_LANG['fail_login'] = '로그인에 실패했습니다.'; // 5702
-$_LANG['fail_logout'] = '로그아웃에 실패했습니다.'; // 5703
 
 // upload_err_... 업로드 관련
 $_LANG['upload_err_code(0)'] = '파일 업로드가 성공했습니다.'; // 10400

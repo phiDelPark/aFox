@@ -8,7 +8,7 @@ function proc($data) {
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) {
-		return set_error(getLang('invalid_value', ['id']),701);
+		return set_error(getLang('invalid_value', ['id']),2001);
 	}
 
 	$md_extra = [];
@@ -18,7 +18,7 @@ function proc($data) {
 	// 분류값 정리
 	if(!empty($data['md_category'])) {
 		if(preg_match('/[\x{21}-\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_category'])) {
-			return set_error(getLang('invalid_value', ['category']),701);
+			return set_error(getLang('invalid_value', ['category']),2001);
 		}
 
 		$tmpa = explode(',', $data['md_category']);
@@ -33,7 +33,7 @@ function proc($data) {
 	// 확장 변수 키값
 	if(!empty($data['md_extra_keys'])) {
 		if(preg_match('/[\x{21}-\x{29}\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_extra_keys'])) {
-			return set_error(getLang('invalid_value', ['extra_keys']),701);
+			return set_error(getLang('invalid_value', ['extra_keys']),2001);
 		}
 
 		$tmpa = explode(',', $data['md_extra_keys']);
@@ -66,7 +66,7 @@ function proc($data) {
 	$md_manager = $data['md_manager'];
 	if(!empty($md_manager)) {
 		$mb = getMember($md_manager);
-		if(empty($mb['mb_srl'])) return set_error(getLang('invalid_value', ['admin']),701);
+		if(empty($mb['mb_srl'])) return set_error(getLang('invalid_value', ['admin']),2001);
 		$md_manager = (int) $mb['mb_srl'];
 	}
 
@@ -116,7 +116,7 @@ function proc($data) {
 			);
 		} else {
 			if(isset($data['new_md_id'])) {
-				throw new Exception(getLang('error_exists'), 4251);
+				throw new Exception(getLang('warning_exists', ['id']), 3101);
 			}
 
 			DB::update(_AF_MODULE_TABLE_,

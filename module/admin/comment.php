@@ -174,7 +174,7 @@
 				srls[i] = jQuery(this).val();
 			});
 			if (srls.length < 1) {
-				alert($_LANG['warning_no_selected'].sprintf([$_LANG['comment']]));
+				alert($_LANG['warning_selected'].sprintf([$_LANG['comment']]));
 				return false;
 			}
 			data['rp_srls'] = srls;

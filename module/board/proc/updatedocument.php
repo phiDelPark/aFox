@@ -68,7 +68,7 @@ function proc($data) {
 				throw new Exception(getLang('request_input',['category']), 3);
 			}
 			if(preg_match('/[\x{21}-\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['wr_category'])) {
-				throw new Exception(getLang('invalid_value', ['category']), 701);
+				throw new Exception(getLang('invalid_value', ['category']), 2001);
 			}
 		} else {
 			$data['wr_category'] = '';
@@ -186,7 +186,7 @@ function proc($data) {
 
 		if($upload_count>0) {
 			// 권한 체크
-			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warning_not_allowable', ['upload']), 3502);
+			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warning_not_allowable', ['upload']), 3505);
 			if($file_max < $upload_count) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
 
 			for ($i=0; $i < $upload_count; $i++) {
@@ -206,7 +206,7 @@ function proc($data) {
 				$fileext = count($fileext) === 1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
-					throw new Exception(getLang('warning_allowable', [$file_exts])."\n", 3501);
+					throw new Exception(getLang('warning_allowable', [$file_exts])."\n", 3503);
 				}
 
 				// 실행 가능한 파일 못하게 처리

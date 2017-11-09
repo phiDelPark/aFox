@@ -11,7 +11,7 @@ function proc($data) {
 	}
 
 	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $mb_id)) {
-		return set_error(getLang('invalid_value',['id']),3001);
+		return set_error(getLang('invalid_value',['id']),2001);
 	}
 
 	$auto_login = isset($data['auto_login']) && $data['auto_login'] == 1;

@@ -9,7 +9,7 @@ function proc($data) {
 	if (empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	if (!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) {
-		return set_error(getLang('invalid_value', ['id']),701);
+		return set_error(getLang('invalid_value', ['id']),2001);
 	}
 
 	$upload_count = 0;
@@ -65,7 +65,7 @@ function proc($data) {
 			$module = getModule($md_id);
 		} else {
 			if (isset($data['new_md_id'])) {
-				throw new Exception(getLang('error_exists'), 4251);
+				throw new Exception(getLang('warning_exists', ['id']), 3101);
 			}
 		}
 
@@ -125,7 +125,7 @@ function proc($data) {
 				$fileext = count($fileext)===1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
 				if ($chk_ext && !preg_match('/\.('.($chk_ext).')$/i', $filename)) {
-					throw new Exception(getLang('warning_allowable', [$chk_ext])."\n", 3501);
+					throw new Exception(getLang('warning_allowable', [$chk_ext])."\n", 3503);
 				}
 
 				// 실행 가능한 파일 못하게 처리

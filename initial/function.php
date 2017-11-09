@@ -772,10 +772,9 @@ if(!defined('__AFOX__')) exit();
 		return round($size, 1) . $tails[$i];
 	}
 
-	function messageBox($message, $type = 0, $title = '') {
-		$type = ($type > 4000) ? 3 : ($type > 3 ? 2 : $type);
+	function messageBox($message, $type = 1, $title = '') {
+		$type = $type>2000 ? (($type>2000&&$type<4000) ? 2 : 3) : ($type>3 ? 1 : $type);
 		$a_type = ['success', 'info', 'warning', 'danger'];
-		// 타이틀 값에 false 가 들어오면 타이틀바 제거
 		if($title !== false) {
 			$a_title = ['success', 'alert', 'warning', 'error'];
 			$a_icon = ['ok-sign', 'exclamation-sign', 'warning-sign', 'ban-circle'];

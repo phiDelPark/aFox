@@ -15,15 +15,15 @@ function proc($data) {
 	$data['mb_homepage'] = trim(strip_tags($data['mb_homepage']));
 
 	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['mb_id'])) {
-		return set_error(getLang('invalid_value', ['id']),701);
+		return set_error(getLang('invalid_value', ['id']),2001);
 	}
 
 	if(!preg_match('/^[\w-]+((?:\.|\+|\~)[\w-]+)*@[\w-]+(\.[\w-]+)+$/', $data['mb_email'])) {
-		return set_error(getLang('invalid_value', ['email']),701);
+		return set_error(getLang('invalid_value', ['email']),2001);
 	}
 
 	if(!empty($data['mb_homepage'])&&!preg_match('/^(https?|ftp):\/\/[\w-]+(\.[\w-]+)+(:\d+)?/', $data['mb_homepage'])) {
-		return set_error(getLang('invalid_value', ['homepage']),701);
+		return set_error(getLang('invalid_value', ['homepage']),2001);
 	}
 
 	if(!empty($data['new_mb_password'])) {
@@ -35,7 +35,7 @@ function proc($data) {
 		$new_password = false;
 	}
 
-	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
+	$is_admin = isAdmin();
 
 	// 금지 아이디 체크
 	$file = _AF_CONFIG_DATA_ . 'prohibit_id.php';
@@ -51,12 +51,19 @@ function proc($data) {
 
 	$member = getMember($data['mb_id']);
 	if(!empty($member['error'])) return set_error($member['message'],$member['error']);
+
+	// 수정은 자신이나 관리자만 가능
+	if(!$is_admin && !empty($member['mb_id']) && (empty($_MEMBER)||$_MEMBER['mb_id']!=$member['mb_id'])) {
+		return set_error(getLang('error_permitted'),4501);
+	}
+
 	//이메일 체크
 	if(empty($member['mb_id']) || ($data['mb_email'] != $member['mb_email'])) {
 		$out = getDBItem(_AF_MEMBER_TABLE_, ['mb_email'=>$data['mb_email']], 'mb_email');
 		if(!empty($out['error'])) return set_error($out['message'],$out['error']);
 		if(!empty($out['mb_email'])) return set_error(getLang('msg_email_exists'),802);
 	}
+
 	//닉네임 체크
 	if(empty($member['mb_id']) || ($data['mb_nick'] != $member['mb_nick'])) {
 		$out = getDBItem(_AF_MEMBER_TABLE_, ['mb_nick'=>$data['mb_nick']], 'mb_nick');
@@ -76,14 +83,14 @@ function proc($data) {
 		}
 
 		if(!preg_match('/\.(png)$/i', $_FILES['mb_icon']['name'])) {
-			return set_error(getLang('warning_allowable', ['png']),3501);
+			return set_error(getLang('warning_allowable', ['png']),3503);
 		}
 
 		$mb_icon_tmp = $_FILES['mb_icon']['tmp_name'];
 
 		$size = getimagesize($mb_icon_tmp);
 		if($size[0] > 100 || $size[1] > 100 || $size[0] < 50 || $size[1] < 50) {
-			return set_error(getLang('invalid_value',['size']),701);
+			return set_error(getLang('invalid_value',['size']),2001);
 		}
 
 		$destination = '/profile_image.png';
@@ -145,7 +152,7 @@ function proc($data) {
 		} else {
 
 			if(isset($data['new_mb_id'])) {
-				throw new Exception(getLang('error_exists'), 4251);
+				throw new Exception(getLang('warning_exists', ['id']), 3101);
 			}
 
 			if($remove_mb_icon) {

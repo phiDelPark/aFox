@@ -160,7 +160,7 @@
 				srls[i] = jQuery(this).val();
 			});
 			if (srls.length < 1) {
-				alert($_LANG['warning_no_selected'].sprintf([$_LANG['document']]));
+				alert($_LANG['warning_selected'].sprintf([$_LANG['document']]));
 				return false;
 			}
 			data['wr_srls'] = srls;
@@ -179,7 +179,7 @@
 				srls[i] = jQuery(this).val();
 			});
 			if (srls.length < 1) {
-				alert($_LANG['warning_no_selected'].sprintf([$_LANG['document']]));
+				alert($_LANG['warning_selected'].sprintf([$_LANG['document']]));
 				return false;
 			}
 			data['md_id'] = md_id;

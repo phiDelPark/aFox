@@ -184,7 +184,7 @@
 				srls[i] = jQuery(this).val();
 			});
 			if (srls.length < 1) {
-				alert($_LANG['warning_no_selected'].sprintf([$_LANG['file']]));
+				alert($_LANG['warning_selected'].sprintf([$_LANG['file']]));
 				return false;
 			}
 			data['mf_srls'] = srls;
