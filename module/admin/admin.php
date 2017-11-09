@@ -12,6 +12,8 @@ $_MENU_ICON = ['dashbd'=>'dashboard', 'theme'=>'home', 'menu'=>'menu-hamburger',
 
 $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 
+$is_admin = isAdmin();
+
 ?>
 
 <div id="wrapper">
@@ -43,19 +45,22 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 			<!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
 			<div class="collapse navbar-collapse navbar-ex1-collapse">
 				<ul class="nav navbar-nav side-nav">
-
+					<?php if($is_admin) { ?>
 					<li role="presentation"<?php echo empty($_DATA['admin']) ? ' class="active"': '' ?>><a href="./?admin"><i class="glyphicon glyphicon-dashboard" aria-hidden="true"></i> <?php echo getLang('menu_name_dashbd')?></a></li>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'theme' ? ' class="active"': '' ?>><a href="./?admin=theme"><i class="glyphicon glyphicon-home" aria-hidden="true"></i> <?php echo getLang('menu_name_theme')?></a></li>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'menu' ? ' class="active"': '' ?>><a href="./?admin=menu"><i class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></i> <?php echo getLang('menu_name_menu')?></a></li>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'member' ? ' class="active"': '' ?>><a href="./?admin=member"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo getLang('menu_name_member')?></a></li>
+					<?php } ?>
 					<li role="presentation"><a href="#" data-toggle="collapse" data-target="#content" onclick="return false"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i> <?php echo getLang('menu_name_content')?></a>
-						<ul id="content" class="collapse<?php echo in_array($_DATA['admin'], ['page','board','document','comment','file','trash'])?' in':''?>">
+						<ul id="content" class="collapse<?php echo (!$is_admin||in_array($_DATA['admin'], ['page','board','document','comment','file','trash']))?' in':''?>">
+							<?php if($is_admin) { ?>
 							<li<?php echo $_DATA['admin'] == 'page' ? ' class="active"': '' ?>>
 								<a href="./?admin=page"><i class="glyphicon glyphicon-chevron-right" aria-hidden="true"></i> <?php echo getLang('menu_name_page')?></a>
 							</li>
 							<li<?php echo $_DATA['admin'] == 'board' ? ' class="active"': '' ?>>
 								<a href="./?admin=board"><i class="glyphicon glyphicon-chevron-right" aria-hidden="true"></i> <?php echo getLang('menu_name_board')?></a>
 							</li>
+							<?php } ?>
 							<li<?php echo $_DATA['admin'] == 'document' ? ' class="active"': '' ?>>
 								<a href="./?admin=document"><i class="glyphicon glyphicon-chevron-right" aria-hidden="true"></i> <?php echo getLang('menu_name_document')?></a>
 							</li>
@@ -65,16 +70,22 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 							<li<?php echo $_DATA['admin'] == 'file' ? ' class="active"': '' ?>>
 								<a href="./?admin=file"><i class="glyphicon glyphicon-chevron-right" aria-hidden="true"></i> <?php echo getLang('menu_name_file')?></a>
 							</li>
+							<?php if($is_admin) { ?>
 							<li<?php echo $_DATA['admin'] == 'trash' ? ' class="active"': '' ?>>
 								<a href="./?admin=trash"><i class="glyphicon glyphicon-chevron-right" aria-hidden="true"></i> <?php echo getLang('menu_name_trash')?></a>
 							</li>
+							<?php } ?>
 						</ul>
 					</li>
+					<?php if($is_admin) { ?>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'visit' ? ' class="active"': '' ?>><a href="./?admin=visit"><i class="glyphicon glyphicon-globe" aria-hidden="true"></i> <?php echo getLang('menu_name_visit')?></a></li>
+					<?php } ?>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'module' ? ' class="active"': '' ?>><a href="./?admin=module"><i class="glyphicon glyphicon-th-large" aria-hidden="true"></i> <?php echo getLang('menu_name_module')?></a></li>
+					<?php if($is_admin) { ?>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'addon' ? ' class="active"': '' ?>><a href="./?admin=addon"><i class="glyphicon glyphicon-random" aria-hidden="true"></i> <?php echo getLang('menu_name_addon')?></a></li>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'widget' ? ' class="active"': '' ?>><a href="./?admin=widget"><i class="glyphicon glyphicon-import" aria-hidden="true"></i> <?php echo getLang('menu_name_widget')?></a></li>
 					<li role="presentation"<?php echo $_DATA['admin'] == 'setup' ? ' class="active"': '' ?>><a href="./?admin=setup"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('menu_name_setup')?></a></li>
+					<?php } ?>
 				</ul>
 			</div>
 			<!-- /.navbar-collapse -->
@@ -102,7 +113,7 @@ $admin = empty($_DATA['admin']) ? 'dashbd' :  $_DATA['admin'];
 				<!-- /.row -->
 
 				<?php
-					if (!isAdmin() && in_array($_DATA['admin'],['setup'])) {
+					if (!$is_admin && !in_array($admin,['dashbd','document','comment','file','module'])) {
 						messageBox(getLang('error_permitted'), 4501, false);
 					} else {
 						if (is_array($err = get_error())) messageBox($err['message'], $err['error'], false);

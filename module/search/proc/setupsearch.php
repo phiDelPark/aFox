@@ -3,9 +3,6 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	global $_MEMBER;
-	// 관리자만 접근 가능
-	if(empty($_MEMBER) || $_MEMBER['mb_rank'] != 's') return set_error(getLang('error_founded'),4201);
 
 	DB::transaction();
 
