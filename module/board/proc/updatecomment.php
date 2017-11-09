@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(empty($data['wr_srl']) && empty($data['rp_parent']) && empty($data['rp_srl'])) return set_error(getLang('error_request'),4303);
-	if(empty($data['rp_content'])) return set_error(getLang('request_input', ['content']));
+	if(empty($data['rp_content'])) return set_error(getLang('request_input', ['content']),1);
 
 	global $_MEMBER;
 
@@ -81,7 +81,7 @@ function proc($data) {
 		if(empty($_MEMBER)) {
 			$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
 			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
-				throw new Exception(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 3);
+				throw new Exception(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
 			}
 			$data['mb_srl'] = 0;
 			$data['mb_rank'] = 0;

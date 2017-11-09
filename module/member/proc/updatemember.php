@@ -141,7 +141,7 @@ function proc($data) {
 		if (empty($member['mb_id'])) {
 
 			if(empty($data['new_mb_id']) || empty($new_password)) {
-				throw new Exception(getLang('request_input',[empty($data['new_mb_id'])?'id':'password']), 3);
+				throw new Exception(getLang('request_input',[empty($data['new_mb_id'])?'id':'password']), 1);
 			}
 
 			$in_data['mb_id'] = $data['mb_id'];
@@ -152,7 +152,7 @@ function proc($data) {
 		} else {
 
 			if(isset($data['new_mb_id'])) {
-				throw new Exception(getLang('warning_exists', ['id']), 3101);
+				throw new Exception(getLang('warning_exists', ['id']), 3103);
 			}
 
 			if($remove_mb_icon) {

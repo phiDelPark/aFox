@@ -31,7 +31,7 @@ function proc($data) {
 		// 권한 체크
 		if(empty($_MEMBER) || empty($doc['mb_srl'])) {
 			if(empty($data['mb_password'])) {
-				return set_error(getLang('request_input', ['password']));
+				return set_error(getLang('request_input', ['password']),1);
 			}
 			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
 				return set_error(getLang('error_password'),4801);

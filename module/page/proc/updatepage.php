@@ -65,7 +65,7 @@ function proc($data) {
 			$module = getModule($md_id);
 		} else {
 			if (isset($data['new_md_id'])) {
-				throw new Exception(getLang('warning_exists', ['id']), 3101);
+				throw new Exception(getLang('warning_exists', ['id']), 3103);
 			}
 		}
 

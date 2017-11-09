@@ -116,7 +116,18 @@ function proc($data) {
 			);
 		} else {
 			if(isset($data['new_md_id'])) {
-				throw new Exception(getLang('warning_exists', ['id']), 3101);
+				throw new Exception(getLang('warning_exists', ['id']), 3103);
+			}
+
+			if (!empty($data['md_category'])) {
+				$diff = array_diff(explode(',',$module['md_category']),explode(',',$data['md_category']));
+				if (count($diff)>0) {
+					foreach ($diff as $value) {
+						if (DB::count(_AF_DOCUMENT_TABLE_, ['md_id'=>$data['md_id'], 'wr_category'=>$value]) > 0) {
+							throw new Exception(getLang('msg_not_change_category', [$value]), 3);
+						}
+					}
+				}
 			}
 
 			DB::update(_AF_MODULE_TABLE_,

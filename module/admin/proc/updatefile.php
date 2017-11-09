@@ -3,13 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-
 	if(empty($data['mf_srl']) || empty($data['mf_name'])) return set_error(getLang('error_request'),4303);
-
-	global $_MEMBER;
-	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
-	// 권한 체크 // 관리자만
-	if(!$is_admin) return set_error(getLang('error_permitted'), 4501);
 
 	$out = getDBItem(_AF_FILE_TABLE_, ['mf_srl'=>$data['mf_srl']]);
 	if(!empty($out['error'])) return set_error($out['message'],$out['error']);

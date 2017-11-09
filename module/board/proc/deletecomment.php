@@ -27,7 +27,7 @@ function proc($data) {
 		if(!$is_manager) {
 			if(empty($_MEMBER) || empty($cmt['mb_srl'])) {
 				if(empty($data['mb_password'])) {
-					throw new Exception(getLang('request_input', ['password']), 3);
+					throw new Exception(getLang('request_input', ['password']), 1);
 				}
 				if (empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
 					throw new Exception(getLang('error_permitted'),4501);

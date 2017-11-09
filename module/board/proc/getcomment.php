@@ -40,7 +40,7 @@ function proc($data) {
 		// 권한 체크
 		if(empty($_MEMBER) || empty($cmt['mb_srl'])) {
 			if(empty($data['mb_password'])) {
-				return set_error(getLang('request_input', ['password']));
+				return set_error(getLang('request_input', ['password']),1);
 			}
 			if (empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
 				return set_error(getLang('error_permitted'),4501);

@@ -7,7 +7,7 @@ function proc($data) {
 	$mb_password    = trim($data['mb_password']);
 
 	if(!$mb_id || !$mb_password) {
-		return set_error(getLang('request_input',[$mb_id?'password':'id']));
+		return set_error(getLang('request_input',[$mb_id?'password':'id']),1);
 	}
 
 	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $mb_id)) {

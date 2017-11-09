@@ -5,7 +5,7 @@ if(!defined('__AFOX__')) exit();
 function proc($data) {
 	global $_MEMBER;
 	if(empty($data['mb_srl']) || empty($_MEMBER['mb_srl'])) return set_error(getLang('error_request'),4303);
-	if(empty($data['nt_content'])) return set_error(getLang('request_input', ['content']));
+	if(empty($data['nt_content'])) return set_error(getLang('request_input', ['content']),1);
 
 	$srl = $data['mb_srl'];
 	$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];

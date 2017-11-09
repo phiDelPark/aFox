@@ -25,7 +25,7 @@ function proc($data) {
 		// 권한 체크
 		if(empty($_MEMBER)) {
 			if(empty($data['mb_password'])) {
-				throw new Exception(getLang('request_input', ['password']), 3);
+				throw new Exception(getLang('request_input', ['password']), 1);
 			}
 			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
 				throw new Exception(getLang('error_permitted'),4501);

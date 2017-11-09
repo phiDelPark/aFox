@@ -5,15 +5,15 @@ if(!defined('__AFOX__')) exit();
 function proc($data) {
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 	$data['wr_title'] = trim(strip_tags($data['wr_title']));
-	if(empty($data['wr_title'])) return set_error(getLang('request_input', ['title']));
+	if(empty($data['wr_title'])) return set_error(getLang('request_input', ['title']),1);
 
 	global $_MEMBER;
+
+	$is_admin = isAdmin();
 
 	$module = getModule($data['md_id']);
 	if(!empty($module['error'])) return set_error($module['message'],$module['error']);
 	if(empty($module['md_id'])) return set_error(getLang('error_request'),4303);
-
-	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
 
 	// use_type 값이 1~6 사이이면 모듈에 설정된 값으로 강제 설정
 	if(!empty($module['use_type']) && $module['use_type'] < 7) $data['wr_type'] = ((int)$module['use_type'])-1;
@@ -65,7 +65,7 @@ function proc($data) {
 
 		if(!empty($module['md_category'])) {
 			if(empty($data['wr_category'])) {
-				throw new Exception(getLang('request_input',['category']), 3);
+				throw new Exception(getLang('request_input',['category']), 1);
 			}
 			if(preg_match('/[\x{21}-\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['wr_category'])) {
 				throw new Exception(getLang('invalid_value', ['category']), 2001);
@@ -82,7 +82,7 @@ function proc($data) {
 				foreach($module['md_extra']['keys'] as $ex_key=>$ex_caption){
 					$extra_val = trim($data['wr_extra_var_'.$ex_key]);
 					if(empty($extra_val) && substr($ex_caption,-1,1) === '*') {
-						throw new Exception(getLang('request_input',[substr($ex_caption,0,-1)]), 3);
+						throw new Exception(getLang('request_input',[substr($ex_caption,0,-1)]), 1);
 					}
 					$wr_extra_vars[$ex_key] = cutstr($extra_val,255,'');
 				}
@@ -97,7 +97,7 @@ function proc($data) {
 		if(empty($_MEMBER)) {
 			$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
 			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
-				throw new Exception(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 3);
+				throw new Exception(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
 			}
 			$data['mb_srl'] = 0;
 			$data['mb_rank'] = 0;

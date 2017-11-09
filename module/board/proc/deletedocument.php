@@ -21,7 +21,7 @@ function proc($data) {
 		if(!isManager($doc['md_id'])) {
 			if(empty($_MEMBER) || empty($doc['mb_srl'])) {
 				if(empty($data['mb_password'])) {
-					throw new Exception(getLang('request_input', ['password']), 3);
+					throw new Exception(getLang('request_input', ['password']), 1);
 				}
 				if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
 					throw new Exception(getLang('error_permitted'),4501);

@@ -5,11 +5,8 @@ if(!defined('__AFOX__')) exit();
 function proc($data) {
 	if(empty($data['md_id']) || empty($data['wr_srls'])) return set_error(getLang('error_request'),4303);
 
-	global $_MEMBER;
-	$is_admin = !empty($_MEMBER) && $_MEMBER['mb_rank'] == 's';
-
 	// 권한 체크 // 관리자만
-	if(!$is_admin) return set_error(getLang('error_permitted'), 4501);
+	if(!isAdmin()) return set_error(getLang('error_permitted'), 4501);
 
 	DB::transaction();
 
@@ -23,6 +20,14 @@ function proc($data) {
 
 		if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
 		if(empty($module['md_id'])) throw new Exception(getLang('error_founded'),4201);
+
+		if (!empty($module['md_category'])) {
+			if (empty($md_cate)) throw new Exception(getLang('request_input', ['category']), 1);
+			$md_categorys = explode(',', $module['md_category']);
+			if (!in_array($md_cate, $md_categorys)) {
+				throw new Exception(getLang('warning_not_exists', [$md_cate]), 3105);
+			}
+		}
 
 		$param = ['md_id'=>$md_id];
 		if(!empty($md_cate)) $param['wr_category'] = $md_cate;

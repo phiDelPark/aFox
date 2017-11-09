@@ -161,7 +161,8 @@ $_LANG['success_finished'] = '작업을 마쳤습니다.';
 $_LANG['invalid_value'] = '%s의 값이 올바르지 않습니다.'; //2001
 
 // warning_... 경고 오류번호 3001~3999
-$_LANG['warning_exists'] = '같은 %s이(가) 존재합니다.'; // 3101
+$_LANG['warning_exists'] = '같은 %s이(가) 존재합니다.'; // 3103
+$_LANG['warning_not_exists'] = '%s이(가) 존재하지 않습니다.'; // 3105
 $_LANG['warning_selected'] = '선택된 %s이(가) 없습니다.'; // 3203
 $_LANG['warning_not_select'] = '%s은(는) 선택할 수 없습니다.'; // 3205
 $_LANG['warning_allowable'] = '%s만 허용됩니다.'; // 3503
