@@ -1,13 +1,12 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-
 	$ao_list = [];
-	$out = DB::query('SELECT * FROM '._AF_ADDON_TABLE_.' WHERE 1');
+	$out = DB::query('SELECT * FROM '._AF_TRIGGER_TABLE_.' WHERE tg_key=\'A\'');
 	if($ex = DB::error()) {
 		messageBox($ex->getMessage(), $ex->getCode(), false);
 	}else {
 		while ($row = DB::assoc($out)) {
-			$ao_list[$row['ao_id']] = (empty($row['use_pc']) ? '-/':'P/').(empty($row['use_mobile']) ? '-':'M');
+			$ao_list[$row['tg_id']] = (empty($row['use_pc']) ? '-/':'P/').(empty($row['use_mobile']) ? '-':'M');
 		}
 	}
 ?>

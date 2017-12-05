@@ -124,7 +124,4 @@
 		exec_ajax('member.deleteTrash', data);
 		return false;
 	}
-	jQuery('[role="heading"][aria-labelledby="mdMemberTitle"]').each(function() {
-		jQuery(this).prepend('<span><?php echo getLang('recycle_bin') ?></span>');
-	});
 </script>

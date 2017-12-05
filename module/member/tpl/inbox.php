@@ -120,7 +120,4 @@
 		exec_ajax('member.deleteNote', data);
 		return false;
 	}
-	jQuery('[role="heading"][aria-labelledby="mdMemberTitle"]').each(function() {
-		jQuery(this).prepend('<span><?php echo getLang('inbox') ?></span>');
-	});
 </script>

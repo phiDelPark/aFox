@@ -1,15 +1,13 @@
 <?php
 if(!defined('__AFOX__')) exit();
 // 테마 설정 저장
-if(($_THEME = getCache('_AF_THEME_'._AF_THEME_)) === false) {
+if(empty($_THEME = get_cache('_AF_THEME_'._AF_THEME_))) {
 	$_THEME = getDBItem(_AF_THEME_TABLE_, ['th_id'=>_AF_THEME_], 'th_extra');
 	if(empty($_THEME['error'])) $_THEME = unserialize($_THEME['th_extra']);
-	setCache('_AF_THEME_'._AF_THEME_,$_THEME);
+	set_cache('_AF_THEME_'._AF_THEME_,$_THEME);
 }
-
 @include_once _AF_THEME_PATH_ . 'lang/' . _AF_LANG_ . '.php';
 addJSLang(['ok','cancel','yes','no','calling_server']);
-
 ?>
 <!doctype html>
 <html lang="ko">

@@ -364,56 +364,6 @@ if(!defined('__AFOX__')) exit();
 		]);
 	}
 
-	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
-	function triggerCall($position, $trigger, &$data) {
-		static $addons = null;
-		static $call = null;
-		// 관리자 모듈은 넘어감
-		if(__MODULE__ == 'admin') return $data;
-
-		if($addons == null) {
-			DB::getList('SELECT ao_id,ao_extra FROM '._AF_ADDON_TABLE_.' WHERE '.(__MOBILE__?'use_mobile':'use_pc').'=1',
-				[],
-				function($r)use(&$addons) {
-					while ($tmp = DB::assoc($r)) $addons[$tmp['ao_id']] = $tmp['ao_extra']; // unserialize는 필요할때 하기로...
-				}
-			);
-		}
-
-		if($call == null) {
-			$call =	function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
-				$r = include $include_file;
-				return empty($r['error']) ? $_DATA : $r;
-			};
-		}
-
-		foreach ($addons as $key => $value) {
-			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
-			if(file_exists($include_file)) {
-
-				if(($_extra = getCache('_AF_ADDON_'.$key)) === false) {
-					$_extra = unserialize($addons[$key]);
-					setCache('_AF_ADDON_'.$key, $_extra);
-				}
-				$addons[$key] = $_extra;
-
-				if(!empty($addons[$key]['access_md_ids'])) {
-					$acc_md = $addons[$key]['access_mode'];
-					$is_acc = !empty(__MID__) && in_array(__MID__, $addons[$key]['access_md_ids']);
-					if(($acc_md == 'include' && !$is_acc)||($acc_md == 'exclude' && $is_acc)) continue;
-				}
-
-				$result = $call($include_file, strtolower($position), strtolower($trigger), $addons[$key], $data);
-				if(!empty($result['error'])) {
-					$result['redirect_url'] = isset($data['error_return_url'])?urldecode($data['error_return_url']):'';
-					return $result;
-				}
-
-				$data = $result;
-			}
-		}
-	}
-
 	function moveUpFile($file, $dest, $max_size = 0) {
 		if($file['error'] === UPLOAD_ERR_OK) {
 			// HTTP post로 전송된 것인지 체크합니다.
@@ -700,7 +650,7 @@ if(!defined('__AFOX__')) exit();
 
 		if(function_exists($callproc)) {
 			$_result = triggerCall('before_disp', $trigger, $_DATA);
-			if(!$_result) {
+			if(empty($_result['error'])) {
 				$_result = call_user_func($callproc, $_DATA);
 				triggerCall('after_disp', $trigger, $_result);
 			}
@@ -741,6 +691,60 @@ if(!defined('__AFOX__')) exit();
 
 	function displayEditor($name, $content, $options = []) {
 		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
+	}
+
+	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
+	function triggerCall($position, $trigger, &$data) {
+		static $triggers = null;
+		static $addon_call = null;
+		// 관리자 모듈은 넘어감
+		if(__MODULE__ == 'admin') return $data;
+
+		if($triggers == null) {
+			$triggers = ['A'=>[],'M'=>[]];
+			DB::getList('SELECT tg_key,tg_id FROM '._AF_TRIGGER_TABLE_.' WHERE '.(__MOBILE__?'use_mobile':'use_pc').'=1 ORDER BY tg_key', [],
+				function($r)use(&$triggers) {
+					while ($tmp = DB::assoc($r)) $triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
+				}
+			);
+		}
+
+		// TODO 모듈용 트리거 작성 준비
+		//foreach ($triggers['M'] as $key => $value) {
+		//}
+
+		if($addon_call == null) {
+			$addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
+				$r = include $include_file;
+				return empty($r['error']) ? $_DATA : $r;
+			};
+		}
+
+		foreach ($triggers['A'] as $key => $value) {
+			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
+			if(file_exists($include_file)) {
+
+				if(empty($_extra = get_cache('_AF_ADDON_'.$key))) {
+					$_extra = DB::get('SELECT ao_extra FROM '._AF_ADDON_TABLE_.' WHERE ao_id=\''.$key.'\'');
+					$_extra = $_extra ? unserialize($_extra['ao_extra']) : [];
+					set_cache('_AF_ADDON_'.$key, $_extra);
+				}
+
+				if(!empty($_extra['access_md_ids'])) {
+					$acc_md = $_extra['access_mode'];
+					$is_acc = !empty(__MID__) && in_array(__MID__, $_extra['access_md_ids']);
+					if(($acc_md == 'include' && !$is_acc)||($acc_md == 'exclude' && $is_acc)) continue;
+				}
+
+				$result = $addon_call($include_file, strtolower($position), strtolower($trigger), $_extra, $data);
+				if(!empty($result['error'])) {
+					$result['redirect_url'] = isset($data['error_return_url'])?urldecode($data['error_return_url']):'';
+					return $result;
+				}
+
+				$data = $result;
+			}
+		}
 	}
 
 	function cutstr($str, $length, $tail = '...') {
@@ -810,73 +814,14 @@ if(!defined('__AFOX__')) exit();
 		$_ADDELEMENTS['LANG'][] = $langs;
 	}
 
-	function getCache($key) {
-		$file = _AF_CACHE_DATA_. md5($key). '.php';
-		if(file_exists($file)){
-			include($file);
-			if(!empty($_CACHE_EXPIRE) && $_CACHE_EXPIRE < _AF_SERVER_TIME_) {
-				@unlinkFile($file);
-				return false;
-			}
-			return $_CACHE_DATA;
-		} else return false;
-	}
-
-	// $expire = 0 유지 - 값이면 삭제
-	function setCache($key, $value, $expire = 0) {
-		$file = _AF_CACHE_DATA_. md5($key). '.php';
-		if(file_exists($file)) @unlinkFile($file);
-		if($expire < 0) {
-			@unlinkFile($file);
-		} else {
-			$dir = dirname($file);
-			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
-			$expire = $expire > 0 ? _AF_SERVER_TIME_ + $expire : 0;
-			$str = '<?php if(!defined(\'__AFOX__\')) exit(); $_CACHE_EXPIRE='.$expire.'; $_CACHE_DATA='.var_export($value, true).'; ?>';
-			file_put_contents($file, $str, LOCK_EX);
-		}
-	}
-
-	// set_cookie 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료된 쿠키로 만듬 (제거)
-	// javascript 에서 md5, base64가 없어서 사용하려고 $encode 옵션 추가 (보안이 필요없을때만 사용)
-	function set_cookie($_name, $value, $expire, $encode = true) {
-		$expire = $expire > 0 ? _AF_SERVER_TIME_ + $expire : (empty($expire) ? 0 : _AF_SERVER_TIME_);
-		setcookie(
-			$encode?md5($_name):$_name,
-			$encode?base64_encode($value):$value,
-			$expire, '/', _AF_COOKIE_DOMAIN_
-		);
-	}
-
-	function get_cookie($_name, $encode = true) {
-		$cookie = $encode?md5($_name):$_name;
-		return array_key_exists($cookie, $_COOKIE) ? base64_decode($_COOKIE[$cookie]) : '';
-	}
-
-	function set_session($_name, $value) {
-		$_SESSION[$_name] = $value;
-	}
-
-	function get_session($_name) {
-		return isset($_SESSION[$_name]) ? $_SESSION[$_name] : '';
-	}
-
-	function set_error($message, $error = 3) {
-		return $_SESSION['AF_VALIDATOR_ERROR'] = ['error'=>$error, 'message'=>$message];
-	}
-
-	function get_error() {
-		return isset($_SESSION['AF_VALIDATOR_ERROR']) ? $_SESSION['AF_VALIDATOR_ERROR'] : '';
-	}
-
-	function debugPrint($_out = null) {
+	function debugPrint($o = null) {
 		if(!(__DEBUG__ & 1)) return;
 		$print = [date('== Y-m-d H:i:s ==')];
-		$type = gettype($_out);
+		$type = gettype($o);
 		if(in_array($type, ['array', 'object', 'resource'])) {
-			$print[] = print_r($_out, true);
+			$print[] = print_r($o, true);
 		} else {
-			$print[] = $type . '(' . var_export($_out, true) . ')'.PHP_EOL;
+			$print[] = $type . '(' . var_export($o, true) . ')'.PHP_EOL;
 		}
 		file_put_contents(_AF_PATH_ . '_debug.php', implode(PHP_EOL, $print).PHP_EOL, FILE_APPEND|LOCK_EX);
 	}

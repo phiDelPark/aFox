@@ -8,11 +8,10 @@ function proc($data) {
 	DB::transaction();
 
 	try {
-		DB::delete(_AF_ADDON_TABLE_,
-			[
-				'ao_id'=>$data['ao_id']
-			]
-		);
+
+		DB::delete(_AF_TRIGGER_TABLE_,['tg_key'=>'A','tg_id'=>$data['ao_id']]);
+		DB::delete(_AF_ADDON_TABLE_,['ao_id'=>$data['ao_id']]);
+
 	} catch (Exception $ex) {
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());

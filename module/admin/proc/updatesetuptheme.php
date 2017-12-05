@@ -20,7 +20,7 @@ function proc($data) {
 		);
 
 		// 캐시 삭제 시켜 재생성
-		setCache('_AF_THEME_'.$data['th_id'], 0, -1);
+		set_cache('_AF_THEME_'.$data['th_id'], 0, -1);
 
 	} catch (Exception $ex) {
 		DB::rollback();

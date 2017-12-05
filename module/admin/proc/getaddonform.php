@@ -16,13 +16,15 @@ function proc($data) {
 	if(!empty($_ADDON['error'])) {
 		return set_error( $_ADDON['message'],$_ADDON['error']);
 	}
-	if(empty($_ADDON['use_pc'])) $_ADDON['use_pc'] = 0;
-	if(empty($_ADDON['use_mobile'])) $_ADDON['use_mobile'] = 0;
 	if(!empty($_ADDON['ao_extra'])) {
 		$extra = unserialize($_ADDON['ao_extra']);
 		unset($_ADDON['ao_extra']);
 		$_ADDON = array_merge($_ADDON, $extra);
 	}
+
+	$out = getDBItem(_AF_TRIGGER_TABLE_, ['tg_key'=>'A','tg_id'=>$data['ao_id']]);
+	$_ADDON['use_pc'] = empty($out['use_pc']) ? 0 : $out['use_pc'];
+	$_ADDON['use_mobile'] = empty($out['use_mobile']) ? 0 : $out['use_mobile'];
 
 	$_ADDON_INFO = [];
 	@require_once _AF_ADDONS_PATH_ . $data['ao_id'] . '/info.php';

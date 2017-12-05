@@ -13,11 +13,6 @@ function proc($data) {
 		$use_pc = empty($data['use_pc'])?'0':$data['use_pc'];
 		$use_mobile = empty($data['use_mobile'])?'0':$data['use_mobile'];
 
-		$out = getDBItem(_AF_ADDON_TABLE_, ['ao_id'=>$ao_id], 'ao_id');
-		if(!empty($out['error'])) throw new Exception($out['message'], $out['error']);
-
-		$addon_exists = !empty($out['ao_id']);
-
 		$remove_array = ['ao_id', 'use_pc', 'use_mobile', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url','response_tags'];
 		foreach ($remove_array as $value) {
 			if(isset($data[$value])) unset($data[$value]);
@@ -29,29 +24,26 @@ function proc($data) {
 			throw new Exception(getLang('msg_max_overflow', [65535]), 1401);
 		}
 
-		if($addon_exists) {
-			DB::update(_AF_ADDON_TABLE_,
-				[
-					'use_pc'=>$use_pc,
-					'use_mobile'=>$use_mobile,
-					'ao_extra'=>$extra
-				], [
-					'ao_id'=>$ao_id
-				]
-			);
-		} else {
-			DB::insert(_AF_ADDON_TABLE_,
-				[
-					'ao_id'=>$ao_id,
-					'use_pc'=>$use_pc,
-					'use_mobile'=>$use_mobile,
-					'ao_extra'=>$extra
-				]
-			);
-		}
+		DB::delete(_AF_TRIGGER_TABLE_,['tg_key'=>'A','tg_id'=>$ao_id]);
+		DB::delete(_AF_ADDON_TABLE_,['ao_id'=>$ao_id]);
+
+		DB::insert(_AF_ADDON_TABLE_,
+			[
+				'ao_id'=>$ao_id,
+				'ao_extra'=>$extra
+			]
+		);
+		DB::insert(_AF_TRIGGER_TABLE_,
+			[
+				'tg_key'=>'A',
+				'tg_id'=>$ao_id,
+				'use_pc'=>$use_pc,
+				'use_mobile'=>$use_mobile
+			]
+		);
 
 		// 캐시 삭제 시켜 재생성
-		setCache('_AF_ADDON_'.$ao_id, 0, -1);
+		set_cache('_AF_ADDON_'.$ao_id, 0, -1);
 
 	} catch (Exception $ex) {
 		DB::rollback();

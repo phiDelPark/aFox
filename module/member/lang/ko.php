@@ -20,5 +20,12 @@ $_LANG['msg_nick_exists'] = '같은 별명이 이미 등록 되어있습니다.'
 $_LANG['msg_prohibit_id'] = '이 아이디나 별명은 사용하실 수 없습니다.';
 $_LANG['msg_wrong_password'] = '가입된 회원아이디가 아니거나 비밀번호가 틀립니다.'."\n".'비밀번호는 대소문자를 구분합니다.';
 
+$_LANG['md_title_inbox'] = '편지함';
+$_LANG['md_description_inbox'] = '';
+$_LANG['md_title_trash'] = '휴지통';
+$_LANG['md_description_trash'] = '';
+$_LANG['md_title_signup'] = getLang(empty($_MEMBER)?'member_signup':'member');
+$_LANG['md_description_signup'] = '';
+
 /* End of file ko.php */
 /* Location: ./module/member/lang/ko.php */

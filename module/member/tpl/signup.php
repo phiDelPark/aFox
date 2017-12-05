@@ -86,7 +86,6 @@
 </form>
 <script>
 	jQuery('[role="heading"][aria-labelledby="mdMemberTitle"]').each(function() {
-		jQuery(this).prepend('<span><?php echo getLang($ismb?'member':'member_signup') ?></span>');
 		jQuery('#afSignUpFormTitle').remove();
 	});
 </script>

@@ -14,6 +14,7 @@ define('_AF_HISTORY_TABLE_', 'afox_histories');
 define('_AF_VISITOR_TABLE_', 'afox_visitors');
 define('_AF_NOTE_TABLE_', 'afox_notes');
 define('_AF_FILE_TABLE_', 'afox_files');
+define('_AF_TRIGGER_TABLE_', 'afox_triggers');
 
 ?>
 <!doctype html><html lang="ko"><head><meta charset="utf-8"></head><body>
@@ -49,12 +50,13 @@ if(empty($_POST['db_name'])) {
 	echo '<strong style="display:inline-block;width:150px">DB 이름*</strong> : <input type="text" name="db_name" value=""><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 종류*</strong> : <select name="db_type"><option value="myisam" selected>MyISAM</option><option value="innodb">InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 아이디*</strong> : <input type="text" name="db_user" value=""><br>';
-	echo '<strong style="display:inline-block;width:150px">DB 비밀번호*</strong> : <input type="text" name="db_pass" value=""><br><br><br>';
+	echo '<strong style="display:inline-block;width:150px">DB 비밀번호*</strong> : <input type="text" name="db_pass" value=""><br><br>';
 	echo '<h3>에이폭스 도메인 설정</h3>';
 	echo '<span style="display:inline-block;width:150px">내 도메인</span> : <input type="text" name="domain" value="'.$_SERVER['HTTP_HOST'].'"><br>';
 	echo '<span style="display:inline-block;padding-left:163px">현재 이 사이트의 도메인을 입력하세요.</span><br>';
 	echo '<span style="display:inline-block;width:150px">쿠키 도메인</span> : <input type="text" name="cookie_domain" value=""><br>';
 	echo '<span style="display:inline-block;padding-left:163px">쿠키 도메인 www.afox.kr 와 afox.kr 은 서로 다른 도메인으로 인식합니다.<br>쿠키를 공유하려면 .afox.kr 과 같이 입력하세요.</span><br><br>';
+	echo '<span style="display:inline-block;width:150px">표준시간대</span> : <input type="text" name="time_zone" value="Asia/Seoul"><br><br>';
 	echo '<button type="submit">설치 시작</button></form>';
 
 	exit();
@@ -76,20 +78,19 @@ if(empty($_POST['db_host'])||empty($_POST['db_port'])||empty($_POST['db_name'])|
 	exit("* 필수 값을 모두 채워 주세요.");
 }
 
+$charset = 'utf8';
 $db_host = $_POST['db_host'];
 $db_port = $_POST['db_port'];
 $db_name = $_POST['db_name'];
 $db_user = $_POST['db_user'];
 $db_pass = $_POST['db_pass'];
-
-$charset = 'utf8';
-$time_zone = 'Asia/Seoul';
+$time_zone = empty($_POST['time_zone']) ? 'Asia/Seoul' : $_POST['time_zone'];
 
 $domain = empty(trim($_POST['domain'])) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['domain']));
 $cookie_domain = empty(trim($_POST['cookie_domain'])) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['cookie_domain']));
 
 echo $cookie_domain;
-exit("* 필수 값을 모두 채워 주세요.");
+
 $is_innodb = $_POST['db_type'] == 'innodb16' || $_POST['db_type'] == 'innodb8' || $_POST['db_type'] == 'innodb';
 $innodb_option = !$is_innodb || $_POST['db_type'] == 'innodb' ? '' : ($_POST['db_type'] == 'innodb16' ? '16' : '8');
 
@@ -125,7 +126,7 @@ if($is_innodb){
 	if($innodb_option==='') {
 	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPACT DEFAULT CHARSET='.$charset.';';
 	} else {
-	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE='.($innodb_option?'16':'8').' DEFAULT CHARSET='.$charset.';';
+	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE='.$innodb_option.' DEFAULT CHARSET='.$charset.';';
 	}
 } else {
 	$_engine = ' ENGINE=MyISAM DEFAULT CHARSET='.$charset.';';
@@ -214,13 +215,9 @@ $_err_keys = _AF_ADDON_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_ADDON_TABLE_.' (
 	   ao_id          VARCHAR(255) NOT NULL,
-	   use_pc         CHAR(1)      NOT NULL DEFAULT 0,
-	   use_mobile     CHAR(1)      NOT NULL DEFAULT 0,
 	   ao_extra       TEXT         NOT NULL DEFAULT \'\',
 
-	  UNIQUE KEY ID_UK (ao_id),
-	  INDEX PC_IX (use_pc),
-	  INDEX MOBILE_IX (use_mobile))'.$_engine;
+	  UNIQUE KEY ID_UK (ao_id))'.$_engine;
 
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
@@ -423,6 +420,20 @@ $create_sql = '
 mysqli_query($link, $create_sql);
 if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
 
+$_err_keys = _AF_TRIGGER_TABLE_;
+$create_sql = '
+	  CREATE TABLE IF NOT EXISTS '._AF_TRIGGER_TABLE_.' (
+	   tg_key         CHAR(1)      NOT NULL,
+	   tg_id          VARCHAR(255) NOT NULL,
+	   use_pc         CHAR(1)      NOT NULL DEFAULT 0,
+	   use_mobile     CHAR(1)      NOT NULL DEFAULT 0,
+
+	  INDEX PC_IX (use_pc),
+	  INDEX MOBILE_IX (use_mobile))'.$_engine;
+
+mysqli_query($link, $create_sql);
+if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+
 $_err_keys = 'insert_members';
 $sql = 'SELECT mb_id FROM '._AF_MEMBER_TABLE_.' WHERE mb_id = \'admin\'';
 $r = mysqli_query($link, $sql);
@@ -526,6 +537,7 @@ chmod($file, 0644);
 $success_msg = "<br>설치 성공<br><br>관리자 아이디 : admin<br>관리자 비밀번호 : 0000<br><br>주의 : 관리자 로그인 후에 관리자 페이지에 접속 후 관리자 비밀번호를 바꿔주세요.<br><br>";
 
 // 새로 설치가 아닐때를 대비 업데이트 체크
+/*
 $upbuild = 1;
 function __AFOX__delete_updatefiles($dir) {
 	@chmod($dir . 'update/1.php', 0777);
@@ -544,6 +556,7 @@ function __AFOX__flush_msg($msg) {
 	flush();
 	sleep(1);
 }
+
 $dir = dirname(__FILE__) . '/';
 if(file_exists($dir . 'update.php')) {
 	__AFOX__flush_msg("<br>설치를 마치고 업데이트를 체크하는중...<br>");
@@ -553,15 +566,12 @@ if(file_exists($dir . 'update.php')) {
 			include $dir . 'update/'.$i.'.php';
 		}
 		mysqli_commit($link);
-		echo $success_msg;
 		__AFOX__delete_updatefiles($dir);
 	} catch (Exception $ex) {
 		mysqli_rollback($link);
-		echo $success_msg.'</body></html>';
+		echo $error_msg.'</body></html>';
 		exit;
 	} // finally {}
-} else {
-	echo $success_msg;
 }
 
 $file = $datadir.'config/_update.php';
@@ -572,9 +582,11 @@ fwrite($f, "<?php\nif(!defined('__AFOX__')) exit();\n");
 fwrite($f, "\$_UPBUILD={$upbuild};");
 fclose($f);
 chmod($file, 0644);
+*/
+
+echo $success_msg;
 
 ?>
-
 </body></html>
 
 <?php

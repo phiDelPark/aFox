@@ -41,7 +41,7 @@ select.form-control {
 	margin-right: -30px;
 }
 
-.navbar .navbar-collapse {
+.navbar .container-fluid {
 	position: relative;
 	overflow: hidden !important;
 }
@@ -69,6 +69,9 @@ select.form-control {
 
 .navbar.navbar-inverse .nav-collapse {
 	background-color: #222;
+	margin-left: 50px;
+	margin-right: 0;
+	padding-right: 60px;
 }
 
 .navbar .nav-collapse {
