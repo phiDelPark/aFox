@@ -218,7 +218,11 @@ var $_LANG = {};
 		}
 	};
 
+	// ?et_cookie 함수에서 md5, base64 를 적용하려면 jquery.md5.min.js 를 로드해야합니다.
+	// 참고로 php 에서 사용되는 ?et_cookie 함수는 md5, base64 를 기본 적용하기에 서로 상호작용 하려면 jquery.md5.min.js 를 로드해야합니다.
 	$.set_cookie = window.set_cookie = function(name, value, expire) {
+		if (typeof $.md5 !== 'undefined') name = $.md5(name);
+		if (typeof $.base64 !== 'undefined') value = $.base64.encode(value);
 		if (expire) {
 			var date = new Date();
 			date.setTime(date.getTime() + (expire * 24 * 60 * 60 * 1000));
@@ -226,12 +230,14 @@ var $_LANG = {};
 		} else {
 			expire = '';
 		}
-		document.cookie = name + "=" + value + expire + "; path=/";
+		document.cookie = name + "=" + encodeURIComponent(value) + expire + "; path=/";
 	};
-
 	$.get_cookie = window.get_cookie = function(name) {
+		if (typeof $.md5 !== 'undefined') name = $.md5(name);
 		var pair = document.cookie.match(new RegExp(name + '=([^;]+)'));
-		return !!pair ? pair[1] : null;
+		var value = !!pair ? decodeURIComponent(pair[1]) : null;
+		if (value !== null && typeof $.base64 !== 'undefined') value = $.base64.decode(value);
+		return value;
 	};
 
 	$.msg_box = window.msg_box = function(text, caption, type, callback) {
