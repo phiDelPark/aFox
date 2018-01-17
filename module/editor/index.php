@@ -87,9 +87,9 @@ foreach ($options as $key => $v) {
 			$file_target = $file_options[2];
 			$fileList = empty($file_id) ? [] : getFileList($file_id, $file_target);
 
-			if(!empty($fileList['data']) && count($fileList['data'])>0) {
+			if(!empty($fileList) && count($fileList)>0) {
 				echo '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded uploader-group file-list form-control" style="margin-top:10px;height:auto;min-height:34px">';
-				foreach ($fileList['data'] as $val) {
+				foreach ($fileList as $val) {
 					echo '<i class="file-item" draggable="true" title="'.escapeHtml($val['mf_name']).' ('.shortFileSize( $val['mf_size']).')" data-type="'.$val['mf_type'].'" data-srl="'.$val['mf_srl'].'"></i>';
 				}
 				echo '</div><span class="glyphicon glyphicon-question-sign form-control-feedback" style="pointer-events:auto;cursor:pointer" tabindex="0"></span></div>';

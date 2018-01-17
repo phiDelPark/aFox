@@ -36,8 +36,8 @@
 			</div>
 			<div class="modal-footer">
 				<div class="pull-left">
-					<?php if(!empty($_CFG['use_signup'])) { ?><a href="http://192.168.0.5/?module=member&amp;disp=signUp"><strong><?php echo getLang('member_signup')?></strong></a> /<?php } ?>
-					<a href="http://192.168.0.5/?module=member&amp;disp=findAccount"><?php echo getLang('member_find')?></a>
+					<?php if(!empty($_CFG['use_signup'])) { ?><a href="<?php echo _AF_URL_ ?>?module=member&amp;disp=signUp"><strong><?php echo getLang('member_signup')?></strong></a> /<?php } ?>
+					<a href="<?php echo _AF_URL_ ?>?module=member&amp;disp=findAccount"><?php echo getLang('member_find')?></a>
 				</div>
 				<button type="submit" class="btn btn-default btn-primary" data-key="ok"><?php echo getLang('login')?></button>
 			</div>

@@ -17,8 +17,8 @@ if (!empty($menus['error'])) messageBox($menus['message'],$menus['error'], false
 			<div class="panel-body clearfix">
 
 				<header class="pull-left">
-				<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(1);"><br><?php echo getLang('insert')?></div>
-				<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return siteMapItemSave(1);"><br><?php echo getLang('save')?></div>
+				<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(1);" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
+				<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return siteMapItemSave(1);" style="cursor:pointer"><br><?php echo getLang('save')?></div>
 				</header>
 
 				<form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off" data-type="1">
@@ -85,8 +85,8 @@ if (!empty($menus['error'])) messageBox($menus['message'],$menus['error'], false
 			<div class="panel-body clearfix">
 
 				<header class="pull-left">
-				<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(2);"><br><?php echo getLang('insert')?></div>
-				<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return siteMapItemSave(2);"><br><?php echo getLang('save')?></div>
+				<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(2);" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
+				<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return siteMapItemSave(2);" style="cursor:pointer"><br><?php echo getLang('save')?></div>
 				</header>
 
 				<form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off" data-type="2">

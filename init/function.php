@@ -91,7 +91,7 @@ if(!defined('__AFOX__')) exit();
 			unset($url_info['port']);
 		}
 
-		$url[$ssl_mode][$domain_key] = sprintf('%s://%s%s%s', $use_ssl ? 'https' : $url_info['scheme'], $url_info['host'], $url_info['port'] ? ':' . $url_info['port'] : '', $url_info['path']);
+		$url[$ssl_mode][$domain_key] = sprintf('%s://%s%s%s', $use_ssl ? 'https' : $url_info['scheme'], $url_info['host'], empty($url_info['port']) ? '' : ':' . $url_info['port'], $url_info['path']);
 
 		return $url[$ssl_mode][$domain_key];
 	}
@@ -148,60 +148,13 @@ if(!defined('__AFOX__')) exit();
 		return $escape ? nl2br(escapeHtml($result)) : $result;
 	}
 
-	function getDBItem($table, $wheres = [], $field = '*') {
-		$wheres = count($wheres) > 0 ? implode(' AND ', DB::escapeArray($wheres, TRUE)) : '1';
-		if(empty($wheres)) $wheres = '1';
-		$r = DB::get("SELECT {$field} FROM $table WHERE {$wheres}");
-		return ($ex=DB::error()) ? set_error($ex->getMessage(), $ex->getCode()) : $r;
-	}
-
-	function getDBList($table, $wheres = [], $order = '', $page = 0, $count = 0, $callback = null) {
-		$limit = '';
-
-		if($count>0){
-			$page = (int)($page > 0 ? $page - 1 : 0);
-			$limit = ' LIMIT '.(int)($page * $count).','.(int)$count;
-		}
-
-		$order = empty($order) ? '' : ' ORDER BY '.$order;
-		$wheres = count($wheres) > 0 ? implode(' AND ', DB::escapeArray($wheres, TRUE)) : '1';
-		if(empty($wheres)) $wheres = '1';
-
-		try {
-			$r = DB::getList("SELECT SQL_CALC_FOUND_ROWS * FROM $table WHERE {$wheres}{$order}{$limit}", [], $callback);
-
-			$total_count = DB::found();
-			$result = [];
-
-			if($count>0){
-				$cur_page = ++$page;
-				$tal_page = ceil($total_count / $count);
-				$result['current_page'] = $cur_page;
-				$result['total_page'] = $tal_page;
-				$cur_page--;
-				$str_page = $cur_page - ($cur_page % 10);
-				$end_page = ($tal_page > ($str_page + 10) ? $str_page + 10 : $tal_page);
-				$result['start_page'] = ++$str_page;
-				$result['end_page'] = $end_page;
-			}
-
-			$result['total_count'] = $total_count;
-			$result['data'] = $r;
-
-			return $result;
-		} catch (Exception $ex) {
-			return set_error($ex->getMessage(), $ex->getCode());
-		}
-	}
-
 	function getSiteMenu($get = '') {
 		static $menus = [];
 		if(!isset($menus['header']) || !isset($menus['footer'])) {
 			for ($i=0; $i < 2; $i++) {
-				$sql = 'SELECT * FROM '._AF_MENU_TABLE_.' WHERE mu_type=:1  ORDER BY mu_srl';
-				$out = DB::getList($sql, $i, function($r){
+				$out = DB::gets(_AF_MENU_TABLE_, ['mu_type'=>$i], ['mu_srl'=>'ASC'], function($r){
 					$rset = [];
-					while ($row = mysqli_fetch_assoc($r)) {
+					while ($row = DB::assoc($r)) {
 						if(preg_match('/^[a-zA-Z]+\w{2,}$/',$row['mu_link'])) {
 							$row['md_id'] = $row['mu_link'];
 							$row['mu_link'] = getUrl('','id',$row['md_id']);
@@ -210,9 +163,6 @@ if(!defined('__AFOX__')) exit();
 					}
 					return $rset;
 				});
-				if($ex = DB::error()) {
-					$out = set_error($ex->getMessage(), $ex->getCode());
-				}
 				$menus[$i == 0 ? 'header' : 'footer'] = $out;
 			}
 		}
@@ -223,10 +173,8 @@ if(!defined('__AFOX__')) exit();
 	function getModule($id, $get = '') {
 		static $module_cfg = [];
 		if(!isset($module_cfg[$id])) {
-			$out = getDBItem(_AF_MODULE_TABLE_, ['md_id'=>$id]);
-			if(empty($out['error'])) {
-				$out = is_null($out) ? ['error'=>4201, 'message'=>getLang('error_founded')] : $out;
-			}
+			$out = DB::get(_AF_MODULE_TABLE_, ['md_id'=>$id]);
+			if(empty($out)) $out = set_error(getLang('error_founded'), 4201);
 			$module_cfg[$id] = $out;
 		}
 		return empty($get) ? $module_cfg[$id] : $module_cfg[$id][$get];
@@ -236,8 +184,8 @@ if(!defined('__AFOX__')) exit();
 		static $members = [];
 		if(!isset($members[$id])) {
 			$skey = is_numeric($id) ? 'mb_srl' : 'mb_id';
-			$out = getDBItem(_AF_MEMBER_TABLE_, [$skey => $id]);
-			if(empty($out['error']) && !empty($out['mb_srl'])) {
+			$out = DB::get(_AF_MEMBER_TABLE_, [$skey => $id]);
+			if(!empty($out['mb_srl'])) {
 				$out['mb_icon'] = '';
 				$_icon = $out['mb_srl'].'/profile_image.png';
 				if(file_exists(_AF_MEMBER_DATA_.$_icon)) $out['mb_icon'] = _AF_URL_.'data/member/'.$_icon;
@@ -251,10 +199,29 @@ if(!defined('__AFOX__')) exit();
 		static $filelist = [];
 		$key = $id.'_'.$target;
 		if(!isset($filelist[$key])) {
-			$out = getDBList(_AF_FILE_TABLE_, ['md_id'=>$id,'mf_target'=>$target], 'mf_type');
+			$out = DB::gets(_AF_FILE_TABLE_, ['md_id'=>$id,'mf_target'=>$target], 'mf_type');
 			$filelist[$key] = $out;
 		}
 		return $filelist[$key];
+	}
+
+	function setDataListInfo($data, $total, $page, $count) {
+		$result = [];
+		$page = empty($page) ? 1 : $page;
+		if($count>0){
+			$cur_page = $page;
+			$tal_page = ceil($total / $count);
+			$result['current_page'] = $cur_page;
+			$result['total_page'] = $tal_page;
+			$cur_page--;
+			$str_page = $cur_page - ($cur_page % 10);
+			$end_page = ($tal_page > ($str_page + 10) ? $str_page + 10 : $tal_page);
+			$result['start_page'] = ++$str_page;
+			$result['end_page'] = $end_page;
+		}
+		$result['total_count'] = $total;
+		$result['data'] = $data;
+		return $result;
 	}
 
 	function setHistoryAction($act, $value, $allowdup = false, $callback = null) {
@@ -270,21 +237,19 @@ if(!defined('__AFOX__')) exit();
 		DB::transaction();
 
 		try {
-			$r = DB::select(_AF_HISTORY_TABLE_,
+			$_r = DB::get(_AF_HISTORY_TABLE_,
 				[
 					'hs_action'=>$act.'('.$value.')',
 					$pkey=>$pval
 				]
 			);
-
-			$uinfo['data'] = DB::assoc($r);
-			if($allowdup || is_null($uinfo['data'])) {
+			if($allowdup || empty($_r)) {
 				DB::insert(_AF_HISTORY_TABLE_,
 					[
 						'mb_srl'=>$uinfo['mb_srl'],
 						'mb_ipaddress'=>$uinfo['ipaddress'],
 						'hs_action'=>$act.'('.$value.')',
-						'(hs_regdate)'=>'NOW()'
+						'^hs_regdate'=>'NOW()'
 					]
 				);
 			}
@@ -316,8 +281,8 @@ if(!defined('__AFOX__')) exit();
 
 		if(empty($mb_srl)) return;
 
-		$mb = DB::get('SELECT mb_point,mb_rank FROM '._AF_MEMBER_TABLE_.' WHERE mb_srl='.$mb_srl);
-		if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
+		$mb = DB::get(_AF_MEMBER_TABLE_, 'mb_point,mb_rank', ['mb_srl'=>$mb_srl]);
+		if(empty($mb)) return set_error(getLang('error_request'),4303);
 
 		$mb_rank = ord($mb['mb_rank']);
 		// 115 초과시 에러... 115는 관리자. 109는 메니져
@@ -328,7 +293,7 @@ if(!defined('__AFOX__')) exit();
 			return set_error(getLang('warning_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 3701);
 		}
 
-		$_setvals = ['(mb_point)'=>'mb_point'.($point>0?'+':'').$point];
+		$_setvals = ['^mb_point'=>'mb_point'.($point>0?'+':'').$point];
 
 		// 99이하는 일반 회원, 포인트에 따라 계급 조정
 		if($mb_rank < 100) {
@@ -360,7 +325,7 @@ if(!defined('__AFOX__')) exit();
 			'nt_sender'=>$sender,
 			'nt_sender_nick'=>$nick,
 			'nt_content'=>xssClean($msg),
-			'(nt_send_date)'=>'NOW()'
+			'^nt_send_date'=>'NOW()'
 		]);
 	}
 
@@ -491,11 +456,12 @@ if(!defined('__AFOX__')) exit();
 		global $_MEMBER;
 		$result = [];
 		$grade = empty($_MEMBER['mb_grade']) ? 'guest' : $_MEMBER['mb_grade'];
+		if(empty($data['mb_srl'])) $data['mb_srl'] = null;
 		//자기 자신 제외
 		if (!empty($_MEMBER['mb_srl']) && $_MEMBER['mb_srl'] = $data['mb_srl']) {
 			$_PROTECT[$key][$grade] = '*';
 		}
-		if (is_null($_PROTECT[$key][$grade]) || $_PROTECT[$key][$grade] === '*') {
+		if (!isset($_PROTECT[$key][$grade]) || $_PROTECT[$key][$grade] === '*') {
 			$result = $data;
 		} else {
 			$a = explode(',', str_replace(' ', '', $_PROTECT[$key][$grade]));
@@ -630,7 +596,8 @@ if(!defined('__AFOX__')) exit();
 		}, $text);
 
 		// 다운로드 권한이 없으면 처리
-		if(!empty(__MID__) && !isGrant('download', __MID__)) {
+		$_md = __MID__;
+		if(!empty($_md) && !isGrant('download', $_md)) {
 			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
 			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES,false)."');return false\" \\3";
 			$text = preg_replace($patterns, $replacement, $text);
@@ -702,9 +669,12 @@ if(!defined('__AFOX__')) exit();
 
 		if($triggers == null) {
 			$triggers = ['A'=>[],'M'=>[]];
-			DB::getList('SELECT tg_key,tg_id FROM '._AF_TRIGGER_TABLE_.' WHERE '.(__MOBILE__?'use_mobile':'use_pc').'=1 ORDER BY tg_key', [],
+			DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
+				[(__MOBILE__?'use_mobile':'use_pc')=>1], 'tg_key',
 				function($r)use(&$triggers) {
-					while ($tmp = DB::assoc($r)) $triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
+					while ($tmp = DB::assoc($r)) {
+						$triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
+					}
 				}
 			);
 		}
@@ -724,15 +694,17 @@ if(!defined('__AFOX__')) exit();
 			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
 			if(file_exists($include_file)) {
 
-				if(empty($_extra = get_cache('_AF_ADDON_'.$key))) {
-					$_extra = DB::get('SELECT ao_extra FROM '._AF_ADDON_TABLE_.' WHERE ao_id=\''.$key.'\'');
+				$_extra = get_cache('_AF_ADDON_'.$key);
+				if(empty($_extra)) {
+					$_extra = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
 					$_extra = $_extra ? unserialize($_extra['ao_extra']) : [];
 					set_cache('_AF_ADDON_'.$key, $_extra);
 				}
 
 				if(!empty($_extra['access_md_ids'])) {
 					$acc_md = $_extra['access_mode'];
-					$is_acc = !empty(__MID__) && in_array(__MID__, $_extra['access_md_ids']);
+					$_md = __MID__;
+					$is_acc = !empty($_md) && in_array($_md, $_extra['access_md_ids']);
 					if(($acc_md == 'include' && !$is_acc)||($acc_md == 'exclude' && $is_acc)) continue;
 				}
 
@@ -814,17 +786,5 @@ if(!defined('__AFOX__')) exit();
 		$_ADDELEMENTS['LANG'][] = $langs;
 	}
 
-	function debugPrint($o = null) {
-		if(!(__DEBUG__ & 1)) return;
-		$print = [date('== Y-m-d H:i:s ==')];
-		$type = gettype($o);
-		if(in_array($type, ['array', 'object', 'resource'])) {
-			$print[] = print_r($o, true);
-		} else {
-			$print[] = $type . '(' . var_export($o, true) . ')'.PHP_EOL;
-		}
-		file_put_contents(_AF_PATH_ . '_debug.php', implode(PHP_EOL, $print).PHP_EOL, FILE_APPEND|LOCK_EX);
-	}
-
 /* End of file function.php */
-/* Location: ./initial/function.php */
+/* Location: ./init/function.php */

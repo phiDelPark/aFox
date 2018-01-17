@@ -18,8 +18,7 @@ function proc($data) {
 
 	global $_CFG;
 
-	$sql = 'SELECT * FROM '._AF_MEMBER_TABLE_.' WHERE mb_id= :1';
-	$mb = DB::get($sql, [$mb_id]);
+	$mb = DB::get(_AF_MEMBER_TABLE_, ['mb_id'=>$mb_id]);
 	if($ex = DB::error()) return set_error($ex->getMessage(),$ex->getCode());
 
 	if(empty($mb['mb_srl']) || !checkPassword($mb_password, $mb['mb_password'])) {
@@ -45,13 +44,13 @@ function proc($data) {
 		set_cookie('AF_AUTO_LOGIN', '', -1);
 	}
 
-	$setvalues = ['(mb_login)'=>'NOW()'];
+	$setvalues = ['^mb_login'=>'NOW()'];
 
 	if(substr($mb['mb_login'], 0, 10) != date('Y-m-d')) {
 		// 포인트
 		if(!empty($_CFG['point_login'])) {
 			$point = (int) $_CFG['point_login'];
-			$setvalues['(mb_point)'] = 'mb_point'.($point>0?'+':'').$point;
+			$setvalues['^mb_point'] = 'mb_point'.($point>0?'+':'').$point;
 		}
 		setHistoryAction('mb_login', $mb['mb_srl'], true);
 	}

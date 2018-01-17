@@ -9,8 +9,7 @@ function proc($data) {
 	DB::transaction();
 
 	try {
-		$page = getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['md_id']]);
-		if(!empty($page['error'])) throw new Exception($page['message'], $page['error']);
+		$page = DB::get(_AF_PAGE_TABLE_, ['md_id'=>$data['md_id']]);
 		if(empty($page['md_id'])) throw new Exception(getLang('error_request'),4303);
 
 		$md_id = $page['md_id'];

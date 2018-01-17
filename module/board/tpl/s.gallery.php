@@ -22,8 +22,7 @@ if(!defined('__AFOX__')) exit();
 		foreach ($_{'board'}['data'] as $key => $val) {
 			$wr_secret =  $val['wr_secret'] == '1';
 			$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
-			$_image = DB::get('SELECT mf_srl FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 AND mf_target=:2 AND mf_type LIKE "image%"', [__MID__,$val['wr_srl']]);
-
+			$_image = DB::get(_AF_FILE_TABLE_, ['md_id'=>__MID__, 'mf_target'=>$val['wr_srl'], 'mf_type{LIKE}'=>'image%']);
 			echo $toggle?'':'<div class="item_area clearfix">';
 	?>
 

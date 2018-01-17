@@ -16,9 +16,7 @@ function proc($data) {
 	$wr_srls = is_array($data['wr_srls']) ? $data['wr_srls'] : [$data['wr_srls']];
 
 	try {
-		$module = getDBItem(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$md_id]);
-
-		if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
+		$module = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$md_id]);
 		if(empty($module['md_id'])) throw new Exception(getLang('error_founded'),4201);
 
 		if (!empty($module['md_category'])) {

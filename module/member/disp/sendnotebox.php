@@ -10,7 +10,7 @@ function proc($data) {
 		return set_error(getLang('error_request'),4303);
 	}
 
-	$_item = getDBItem(_AF_NOTE_TABLE_, ['nt_srl'=>$data['srl']]);
+	$_item = DB::get(_AF_NOTE_TABLE_, ['nt_srl'=>$data['srl']]);
 	if(empty($_item['nt_sender'])) return set_error(getLang('error_founded'),4201);
 
 	return $result = ['nt_sender'=>$_item['nt_sender'],'nt_sender_nick'=>$_item['nt_sender_nick'],'tpl'=>'sendnotebox'];

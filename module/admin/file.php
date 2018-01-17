@@ -22,25 +22,9 @@
 	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
 	$count = 20;
 	$start = (($page - 1) * $count);
-	$file_list = [];
-
-	$out = DB::getList("SELECT SQL_CALC_FOUND_ROWS $fl.*, $dd.md_id FROM $fl INNER JOIN $dd ON $dd.wr_srl = $fl.mf_target WHERE $where ORDER BY $fl.mf_regdate DESC LIMIT $start,$count");
-	if($ex = DB::error()) {
-		messageBox($ex->getMessage(),$ex->getCode(), false);
-	} else {
-		$total_count = DB::found();
-		$cur_page = $page;
-		$tal_page = ceil($total_count / $count);
-		$file_list['current_page'] = $cur_page;
-		$file_list['total_page'] = $tal_page;
-		$cur_page--;
-		$str_page = $cur_page - ($cur_page % 10);
-		$end_page = ($tal_page > ($str_page + 10) ? $str_page + 10 : $tal_page);
-		$file_list['start_page'] = ++$str_page;
-		$file_list['end_page'] = $end_page;
-		$file_list['total_count'] = $total_count;
-		$file_list['data'] = $out;
-	}
+	$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS $fl.*, $dd.md_id FROM $fl INNER JOIN $dd ON $dd.wr_srl = $fl.mf_target WHERE $where ORDER BY $fl.mf_regdate DESC LIMIT $start,$count", true);
+	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+	$file_list = setDataListInfo($file_list, DB::found(), $page, $count);
 ?>
 
 <table class="table table-hover table-nowrap">
@@ -61,8 +45,8 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if(!empty($file_list['error'])) {
-		messageBox($file_list['message'], $file_list['error'], false);
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
 	} else {
 		$current_page = $file_list['current_page'];
 		$total_page = $file_list['total_page'];

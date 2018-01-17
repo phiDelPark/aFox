@@ -8,9 +8,10 @@ function proc($data) {
 	if(isset($data['new_mb_id'])) $data['mb_id'] = $data['new_mb_id'];
 	$data['mb_id'] = trim($data['mb_id']);
 
-	if(empty($data['mb_id'])||empty(trim($data['mb_nick']))) return set_error(getLang('error_request'),4303);
+	$mb_nick = trim(strip_tags($data['mb_nick']));
+	if(empty($data['mb_id'])||empty($mb_nick)) return set_error(getLang('error_request'),4303);
 
-	$data['mb_nick'] = trim(strip_tags($data['mb_nick']));
+	$data['mb_nick'] = $mb_nick;
 	$data['mb_email'] = trim(strip_tags($data['mb_email']));
 	$data['mb_homepage'] = trim(strip_tags($data['mb_homepage']));
 
@@ -59,15 +60,15 @@ function proc($data) {
 
 	//이메일 체크
 	if(empty($member['mb_id']) || ($data['mb_email'] != $member['mb_email'])) {
-		$out = getDBItem(_AF_MEMBER_TABLE_, ['mb_email'=>$data['mb_email']], 'mb_email');
-		if(!empty($out['error'])) return set_error($out['message'],$out['error']);
+		$out = DB::get(_AF_MEMBER_TABLE_, 'mb_email', ['mb_email'=>$data['mb_email']]);
+		if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
 		if(!empty($out['mb_email'])) return set_error(getLang('msg_email_exists'),802);
 	}
 
 	//닉네임 체크
 	if(empty($member['mb_id']) || ($data['mb_nick'] != $member['mb_nick'])) {
-		$out = getDBItem(_AF_MEMBER_TABLE_, ['mb_nick'=>$data['mb_nick']], 'mb_nick');
-		if(!empty($out['error'])) return set_error($out['message'],$out['error']);
+		$out = DB::get(_AF_MEMBER_TABLE_, 'mb_nick', ['mb_nick'=>$data['mb_nick']]);
+		if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
 		if(!empty($out['mb_nick'])) return set_error(getLang('msg_nick_exists'),802);
 	}
 
@@ -145,10 +146,10 @@ function proc($data) {
 			}
 
 			$in_data['mb_id'] = $data['mb_id'];
-			$in_data['(mb_regdate)'] = 'NOW()';
+			$in_data['^mb_regdate'] = 'NOW()';
 
 			DB::insert(_AF_MEMBER_TABLE_, $in_data);
-			$mb_srl = DB::insertId();
+			$mb_srl = DB::insert_id();
 		} else {
 
 			if(isset($data['new_mb_id'])) {

@@ -2,6 +2,7 @@
 	if(!defined('__AFOX__')) exit();
 
 	$search = '';
+	$_DATA['trash'] = empty($_DATA['trash']) ? null : $_DATA['trash'];
 
 	if($_DATA['trash'] == 'comment') {
 		$cd = _AF_COMMENT_TABLE_;
@@ -40,7 +41,6 @@
 	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
 	$count = 20;
 	$start = (($page - 1) * $count);
-	$trash_list = [];
 
 	if($_DATA['trash'] == 'comment') {
 		$query = "SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id, $dd.wr_srl, $dd.wr_updater, $dd.wr_update, $cd.rp_content AS wr_title, $cd.rp_status AS wr_status, $cd.rp_secret AS wr_secret, $cd.rp_regdate AS wr_regdate FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.wr_srl WHERE $where ORDER BY $cd.rp_regdate DESC LIMIT $start,$count";
@@ -50,23 +50,9 @@
 		$query = "SELECT SQL_CALC_FOUND_ROWS * FROM $cd WHERE $where ORDER BY wr_regdate DESC LIMIT $start,$count";
 	}
 
-	$out = DB::getList($query);
-	if($ex = DB::error()) {
-		messageBox($ex->getMessage(),$ex->getCode(), false);
-	} else {
-		$total_count = DB::found();
-		$cur_page = $page;
-		$tal_page = ceil($total_count / $count);
-		$trash_list['current_page'] = $cur_page;
-		$trash_list['total_page'] = $tal_page;
-		$cur_page--;
-		$str_page = $cur_page - ($cur_page % 10);
-		$end_page = ($tal_page > ($str_page + 10) ? $str_page + 10 : $tal_page);
-		$trash_list['start_page'] = ++$str_page;
-		$trash_list['end_page'] = $end_page;
-		$trash_list['total_count'] = $total_count;
-		$trash_list['data'] = $out;
-	}
+	$trash_list = DB::query($query, true);
+	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+	$trash_list = setDataListInfo($trash_list, DB::found(), $page, $count);
 ?>
 
 <p class="navbar">
@@ -97,8 +83,8 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if(!empty($trash_list['error'])) {
-		messageBox($trash_list['message'], $trash_list['error'], false);
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
 	} else {
 		$current_page = $trash_list['current_page'];
 		$total_page = $trash_list['total_page'];

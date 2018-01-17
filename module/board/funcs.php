@@ -4,10 +4,14 @@ if(!defined('__AFOX__')) exit();
 
 	function getDocument($srl, $field = '*', $inc_hit = FALSE) {
 
-		$result = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$srl], $field);
-		if(!empty($result['error'])) return set_error($result['message'], $result['error']);
+		$field = $field.','.implode(',', ['md_id','mb_srl']);
+		$result = DB::get(_AF_DOCUMENT_TABLE_, $field, ['wr_srl'=>$srl]);
+		if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
+		if(empty($result['md_id'])||$result['md_id']=='_AFOXtRASH_') {
+			return set_error(getLang('error_request'),4303);
+		}
 
-		if($inc_hit && empty($result['error'])) {
+		if($inc_hit && !empty($result)) {
 			$md_id = $result['md_id'];
 			$wr_mb = $result['mb_srl'];
 			$out = setHistoryAction('wr_hit', $srl, false, function($v)use($srl,$md_id,$wr_mb){
@@ -25,7 +29,7 @@ if(!defined('__AFOX__')) exit();
 				$uval = ($v['mb_srl'] > 0 ? $v['mb_srl']:$v['ipaddress']);
 				DB::update(_AF_DOCUMENT_TABLE_,
 					[
-						'(wr_hit)'=>'wr_hit+1'
+						'^wr_hit'=>'wr_hit+1'
 					], [
 						'wr_srl'=>$srl,
 						$ukey => $uval
@@ -37,7 +41,7 @@ if(!defined('__AFOX__')) exit();
 		return $result;
 	}
 
-	function getDocumentList($id, $page, $search = '', $category = '', $wheres = [], $order = 'wr_regdate desc', $callback = null) {
+	function getDocumentList($id, $page, $search = '', $category = '', $order = 'wr_regdate', $callback = null) {
 		$schs = [];
 		if(!empty($search)) {
 			$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tag'=>'wr_tags','date'=>'wr_regdate'];
@@ -49,18 +53,19 @@ if(!defined('__AFOX__')) exit();
 				$schs = ['wr_title{LIKE}'=>'%'.$search.'%', 'wr_content{LIKE}'=>'%'.$search.'%'];
 			}
 		}
+
 		$_wheres = [
 			'md_id'=>$id,
-			'AND' =>empty($category)?[]:['wr_category'=>$category],
-			'OR' =>$schs
+			'(_AND_)' =>empty($category)?[]:['wr_category'=>$category],
+			'(_OR_)' =>$schs
 		];
-		if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
 		$list_count = getModule($id, 'md_list_count');
+		if(empty($list_count)) $list_count = 20;
 
 		if (empty($callback)) {
 			$callback = function($r) {
 				$rset = [];
-				while ($row = mysqli_fetch_assoc($r)) {
+				while ($row = DB::assoc($r)) {
 					// 확장 변수가 있으면 unserialize
 					if(!empty($row['wr_extra']) && !is_array($row['wr_extra'])) {
 						$row['wr_extra'] = unserialize($row['wr_extra']);
@@ -70,17 +75,16 @@ if(!defined('__AFOX__')) exit();
 				return $rset;
 			};
 		}
-		return getDBList(_AF_DOCUMENT_TABLE_, $_wheres, $order, $page, $list_count, $callback);
+		$_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres, $order, (((empty($page)?1:$page)-1)*$list_count).','.$list_count);
+		return setDataListInfo($_list, DB::found(), $page, $list_count);
 	}
 
 	function getComment($srl, $field = '*') {
-		return getDBItem(_AF_COMMENT_TABLE_, ['rp_srl'=>$srl], $field);
+		return DB::get(_AF_COMMENT_TABLE_, $field, ['rp_srl'=>$srl]);
 	}
 
-	function getCommentList($srl, $page, $wheres = [], $order = 'rp_parent,rp_depth', $callback = null) {
-		$_wheres = ['wr_srl'=>$srl];
-		if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
-		return getDBList(_AF_COMMENT_TABLE_, $_wheres, $order, $page, 0, $callback);
+	function getCommentList($srl, $callback = null) {
+		return DB::gets(_AF_COMMENT_TABLE_, ['wr_srl'=>$srl], ['rp_parent'=>'asc','rp_depth'=>'asc'], $callback);
 	}
 
 	function getHashtags($content) {

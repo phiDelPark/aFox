@@ -15,9 +15,10 @@ function proc($data) {
 	try {
 
 		$callback = function($r) {
-			while ($row = mysqli_fetch_assoc($r)) {
+			while ($row = DB::assoc($r)) {
 				$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
-				$filetype = strtolower(array_shift(explode('/', $row['mf_type'])));
+				$filetype = explode('/', $row['mf_type']);
+				$filetype = strtolower(array_shift($filetype));
 				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 				$unfilename = _AF_ATTACH_DATA_ . $filetype . '/' . $row['md_id'] . '/' . $row['mf_target'] . '/' . $row['mf_upload_name'];
 
@@ -28,7 +29,7 @@ function proc($data) {
 			return [];
 		};
 
-		DB::getList('SELECT * FROM '._AF_FILE_TABLE_.' WHERE mf_srl IN ('.implode(',', $mf_srls).')', [], $callback);
+		DB::query('SELECT * FROM '._AF_FILE_TABLE_.' WHERE mf_srl IN ('.implode(',', $mf_srls).')', $callback);
 
 	} catch (Exception $ex) {
 		DB::rollback();

@@ -14,8 +14,7 @@ function proc($data) {
 
 		foreach ($wr_srls as $wr_srl) {
 
-			$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['md_id'=>'_AFOXtRASH_','wr_srl'=>$wr_srl,'mb_srl'=>$mb_srl]);
-			if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
+			$doc = DB::get(_AF_DOCUMENT_TABLE_, ['md_id'=>'_AFOXtRASH_','wr_srl'=>$wr_srl,'mb_srl'=>$mb_srl]);
 			if(empty($doc['wr_srl'])) throw new Exception(getLang('error_request'),4303);
 
 			$module = getModule($doc['wr_updater']);

@@ -12,7 +12,7 @@ function proc($data) {
 	try {
 
 		$callback = function($r) {
-			while ($row = mysqli_fetch_assoc($r)) {
+			while ($row = DB::assoc($r)) {
 				$wr_srl = $row['wr_srl'];
 				$md_id = $row['wr_updater'];
 				// 파일 , 댓글 , 문서 삭제
@@ -27,7 +27,7 @@ function proc($data) {
 			return [];
 		};
 
-		DB::getList('SELECT wr_srl,wr_updater FROM '._AF_DOCUMENT_TABLE_.' WHERE md_id=\'_AFOXtRASH_\'', [], $callback);
+		DB::query('SELECT wr_srl,wr_updater FROM '._AF_DOCUMENT_TABLE_.' WHERE md_id=\'_AFOXtRASH_\'', $callback);
 		DB::delete(_AF_DOCUMENT_TABLE_,['md_id'=>'_AFOXtRASH_']);
 
 	} catch (Exception $ex) {

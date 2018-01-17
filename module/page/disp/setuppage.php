@@ -8,7 +8,7 @@ function proc($data) {
 		return set_error(getLang($data['id']),901);
 	}
 
-	$result = getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['id']]);
+	$result = DB::get(_AF_PAGE_TABLE_, ['md_id'=>$data['id']]);
 	$result['tpl'] = 'setup';
 	return $result;
 }

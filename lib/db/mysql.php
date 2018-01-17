@@ -5,190 +5,371 @@
  */
 
 class DB {
-	private static $link = NULL;
-	private static $options = [];
+	private static $link = null;
+	private static $info = array(
+		'last_query' => null,
+		'num_rows' => null,
+		'insert_id' => null
+	);
+
+	private static $where = '';
+	private static $group = '';
+	private static $order = '';
+	private static $limit = '';
+
+	private static $option = [];
+
+	public static function last_query() {
+		return self::$info['last_query'];
+	}
+
+	public static function num_rows() {
+		return self::$info['num_rows'];
+	}
+
+	public static function insert_id() {
+		return self::$info['insert_id'];
+	}
 
 	private static function connect() {
-		$o = self::$options;
-		mysqli_report(MYSQLI_REPORT_OFF);
-		self::$link = new mysqli(isset($o['host'])   ? $o['host']   : 'localhost',
-							 isset($o['user'])   ? $o['user']   : 'root',
-							 isset($o['pass'])   ? $o['pass']   : '',
-							 isset($o['name'])   ? $o['name'] : 'default',
-							 isset($o['port'])   ? $o['port']   : 3306,
-							 isset($o['sock'])   ? $o['sock']   : FALSE );
-		if( mysqli_connect_errno() ) {
-			die(mysqli_connect_error() . ' (' . mysqli_connect_errno() . ')');
+		$o = self::$option;
+
+		if(($l = mysql_connect(
+			(isset($o['host'])   ? $o['host']   : 'localhost').':'.
+			(isset($o['port'])   ? $o['port']   : 3306),
+			 isset($o['user'])   ? $o['user']   : 'root',
+			 isset($o['pass'])   ? $o['pass']   : ''
+		)) && mysql_select_db(isset($o['name']) ? $o['name'] : 'default', $l)) {
+			self::$link = $l;
+			mysql_set_charset(isset($o['charset']) ? $o['charset'] : "utf8");
+			mysql_query("SET time_zone = '".(
+				isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul"
+			)."'");
+			mysql_query("SET AUTOCOMMIT=1");
+		} else {
+			die('Could not connect to MySQL database.');
 		}
-		mysqli_query(self::$link, "SET NAMES ".(isset($o['charset']) ? $o['charset'] : "utf8"));
-		mysqli_query(self::$link, "SET time_zone = '".(isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul")."'");
-		mysqli_autocommit(self::$link, TRUE);
 	}
 
 	public static function init( /*array*/ $o) {
-		self::$options = $o;
+		self::$option = $o;
 	}
 
-	public static function query($query, $params = []) {
-		if(self::$link === NULL) {self::connect();}
-		if(!is_array($params)) {
-			$params = array_slice(func_get_args(), 1);
+	private static function __where($info, $type = 'AND') {
+		$r = [];
+		foreach($info as $field => $value){
+			if(empty($field)) continue;
+			if(is_array($value) && ($field == '(_AND_)' || $field == '(_OR_)')) {
+				$type = $field == '(_OR_)' ? 'OR' : 'AND';
+				$tmp = self::__where($value, $type);
+				if(count($tmp) > 0) $r[] = '('.implode(' '.$type.' ', $tmp).')';
+			} else {
+				$operator = '=';
+				//(=|<>|<=|>=|<|>|IN|LIKE|IS)
+				if(preg_match("/(.+){(=|<>|<=|>=|<|>|[A-Z]+)}$/", $field, $m)) {
+					$field = $m[1];
+					$operator = $m[2];
+					if($operator == 'IS') {
+						if(strpos($field, '^') !== 0) $field = '^'.$field;
+					} elseif($operator == 'IN') {
+						if(strpos($field, '^') !== 0) $field = '^'.$field;
+						$value = explode(',', $value);
+						if(count($value)===0 || empty($value[0])) continue;
+						foreach ($value as $k=>$v) $value[$k] = self::__quotes($v);
+						$value = '('.implode(',', $value).')';
+					}
+				}
+				if(strpos($field, '^') === 0)
+					$field = substr($field, 1);
+				else $value = self::__quotes($value);
+				if(empty($field) && !empty($value)) $r[] = $value;
+				else $r[] = sprintf("`%s`%s %s", $field, $operator, $value);
+			}
+		}
+		return $r;
+	}
+
+	private static function __order($by, $order_type = 'DESC') {
+		$group = [];
+		$order = self::$order;
+		if(!is_array($by)) $by = explode(',', $by);
+		foreach($by as $field => $type){
+			if(is_int($field) && !preg_match('/(DESC|desc|ASC|asc)/', $type)){
+				$field = $type;
+				$type = $order_type;
+			}
+			if(strtoupper($type) === 'GROUP') {
+				$group[] = $field;
+			} else {
+				if($field === '^')
+					$order .= sprintf("%s %s", empty($order)?'ORDER BY':',', $type);
+				else
+					$order .= sprintf("%s `%s` %s", empty($order)?'ORDER BY':',', $field, $type);
+			}
+		}
+		self::$order = $order;
+		self::$group = count($group) > 0 ? 'GROUP BY '.implode(',', $group) : '';
+	}
+
+	private static function __limit($limit) {
+		self::$limit = 'LIMIT '.$limit;
+	}
+
+	private static function __sets($opts) {
+		if(!empty($opts[0])) {
+			$r = self::__where($opts[0]);
+			if(count($r) > 0) self::$where = 'WHERE '.implode(' AND ', $r);
+		}elseif(is_array($opts[0])) self::$where = 'WHERE 1';
+		if(!empty($opts[1])) self::__order($opts[1]);
+		if(!empty($opts[2])) self::__limit($opts[2]);
+	}
+
+	private static function __extra() {
+		$extra = '';
+		if(!empty(self::$where)) $extra .= ' '.self::$where;
+		if(!empty(self::$group)) $extra .= ' '.self::$group;
+		if(!empty(self::$order)) $extra .= ' '.self::$order;
+		if(!empty(self::$limit)) $extra .= ' '.self::$limit;
+		// cleanup
+		self::$where = '';
+		self::$group = '';
+		self::$order = '';
+		self::$limit = '';
+		return $extra;
+	}
+
+	private static function __quotes($val) {
+		if($val === true || $val === false) { return (int)$val; }
+		else if(is_int($val) || is_float($val)) { return $val; }
+		else { return "'".str_replace(
+					['\\',"\0","\n","\r","'",'"',"\x1a"],
+					['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],
+					$val
+				)."'";
+			}
+		//연결이 안되있을때도 동작하기 위해 str_replace 사용
+		//return "'".mysql_real_escape_string($val)."'";
+	}
+
+	public static function query($qry, $params = [], $return = false) {
+		if(self::$link === null) {self::connect();}
+		if($params === true || is_callable($params)) {
+			$return = $params !== true ? $params : true;
+			$params = [];
 		}
 		if(!empty($params)) {
-			$query = preg_replace_callback(
-						'/:(\d+)/',
+			if(!is_array($params)) $params = array_slice(func_get_args(), 1);
+			$qry = preg_replace_callback('/:(\d+)/',
 						function ($m) use ($params) {
-						  return self::escape($params[$m[1] - 1]);
-						}, $query
+						  return self::__quotes($params[$m[1] - 1]);
+						}, $qry
 					);
 		}
-		$result = mysqli_query(self::$link, $query);
-		if(mysqli_errno(self::$link)) {
-			throw new Exception(mysqli_error(self::$link), mysqli_errno(self::$link));
-		}
-
-		return $result;
-	}
-
-	public static function get($query, $params = []) {
-		try {
-			$r = self::query($query, $params);
-			if(!is_object($r)) return [];
-			$rset = [];
-			while ($row = mysqli_fetch_assoc($r)) {
-				$rset[] = $row; break;
+		self::$info['last_query'] = $qry;
+		$result = mysql_query($qry);
+		if(mysql_errno()) {
+			throw new Exception(mysql_error(), mysql_errno());
+			return false;
+		} else {
+			if(is_resource($result)){
+				self::$info['num_rows'] = mysql_num_rows($result);
 			}
-			return array_shift($rset);
-		} catch (Exception $ex) {
-			throw new Exception($ex->getMessage(), $ex->getCode());
+			if(is_callable($return)){
+				return $return($result);
+			}elseif($return){
+				$data = array();
+				while($row = mysql_fetch_assoc($result)){
+					$data[] = $row;
+				}
+				mysql_free_result($result);
+				return $data;
+			}
+			return true;
 		}
 	}
 
-	public static function getList($query, $params = [], $callback = NULL) {
-		try {
-			$r = self::query($query, $params);
-			if(!is_object($r)) return [];
-			if($callback){
-				$rset = $callback($r);
-			}else{
-				$rset = [];
-				while ($row = mysqli_fetch_assoc($r)) {
-					$rset[] = $row;
+	public static function __gets($table, $select = '*', $one = false, $callback = null) {
+		if(self::$link === null) {self::connect();}
+		$data = [];
+		$sql = sprintf("SELECT %s FROM %s%s", $select, $table, self::__extra());
+		self::$info['last_query'] = $sql;
+		if(!($result = mysql_query($sql))){
+			throw new Exception(mysql_error(), mysql_errno());
+		}elseif(is_resource($result)){
+			$num_rows = mysql_num_rows($result);
+			self::$info['num_rows'] = $num_rows;
+			if($num_rows !== 0){
+				if($one){
+					$data = mysql_fetch_assoc($result);
+				}else{
+					if(is_callable($callback)){
+						return $callback($result);
+					}
+					while($row = mysql_fetch_assoc($result)){
+						$data[] = $row;
+					}
 				}
 			}
-			return $rset;
-		} catch (Exception $ex) {
-			throw new Exception($ex->getMessage(), $ex->getCode());
+		}
+		mysql_free_result($result);
+		return $data;
+	}
+
+	/*
+	DB::get(_TABLE_)
+	DB::get(_TABLE_, 'mb_srl', ['mb_id'=>'admin'])
+	DB::get(_TABLE_, ['mb_id'=>'admin','mb_srl{>}'=>1], 'mb_id', '1,5')
+	*/
+	public static function get($table, $select = '*') {
+		$anum = func_num_args();
+		$args = func_get_args();
+		$select = $anum > 1 ? $args[1] : '*';
+		$i = 2;
+		if(is_array($select)){
+			$select = '*';
+			$i--;
+		}
+		if($anum > $i) self::__sets(array_slice($args, $i));
+		return self::__gets($table, $select, true);
+	}
+
+	public static function gets($table) {
+		$callback = null;
+		$anum = func_num_args();
+		$args = func_get_args();
+		$select = $anum > 1 ? $args[1] : '*';
+		$i = 2;
+		if(is_array($select)){
+			$select = '*';
+			$i--;
+		}
+		if($anum > $i) {
+			if(is_callable($args[$anum - 1])){
+				$callback = $args[$anum - 1];
+				$args[$anum - 1] = null;
+			}
+			self::__sets(array_slice($args, $i));
+		}
+		return self::__gets($table, $select, false, $callback);
+	}
+
+	/*
+	DB::insert(_TABLE_, [_DATA_])
+	*/
+	public static function insert($table, $data) {
+		if(self::$link === null) {self::connect();}
+		$fields = '';
+		$values = '';
+		foreach($data as $col => $value){
+			if(strpos($col, '^') === 0){
+				$col = substr($col, 1);
+			}
+			else $value = self::__quotes($value);
+			$fields .= sprintf("`%s`,", $col);
+			$values .= sprintf("%s,", $value);
+		}
+		$fields = substr($fields, 0, -1);
+		$values = substr($values, 0, -1);
+		$sql = sprintf("INSERT INTO %s (%s) VALUES (%s)", $table, $fields, $values);
+		self::$info['last_query'] = $sql;
+		if(!mysql_query($sql)){
+			throw new Exception(mysql_error(), mysql_errno());
+		}else{
+			self::$info['insert_id'] = mysql_insert_id();
+			return true;
 		}
 	}
 
-	public static function select($table, $wheres, $fields = []) {
-		$wheres = implode(' AND ', self::escapeArray($wheres, TRUE));
-		$fields = count($fields) > 0 ? implode(',', $fields) : '*';
-		try {
-			return self::query("SELECT $fields FROM $table WHERE $wheres");
-		} catch (Exception $ex) {
-			throw new Exception($ex->getMessage(), $ex->getCode());
+	/*
+	DB::update(_TABLE_, [_DATA_], ['mb_id'=>'admin','mb_srl{>}'=>1])
+	*/
+	public static function update($table, $data) {
+		if(func_num_args() > 2) self::__sets(array_slice(func_get_args(), 2));
+		if(empty(self::$where)){
+			throw new Exception("Where is not set. Can't update whole table.", 1);
+		}else{
+			if(self::$link === null) {self::connect();}
+			$update = '';
+			foreach($data as $col => $value){
+				if(strpos($col, '^') === 0)
+					$col = substr($col, 1);
+				else $value = self::__quotes($value);
+				$update .= sprintf("`%s`=%s, ", $col, $value);
+			}
+			$update = substr($update, 0, -2);
+			$sql = sprintf("UPDATE %s SET %s%s", $table, $update, self::__extra());
+			self::$info['last_query'] = $sql;
+			if(!mysql_query($sql)){
+				throw new Exception(mysql_error(), mysql_errno());
+			}else{
+				return true;
+			}
 		}
 	}
 
-	public static function insert($table, $inserts) {
-		$sets = implode( ',', self::escapeArray( $inserts, TRUE ) );
-		try {
-			return self::query("INSERT INTO $table SET $sets");
-		} catch (Exception $ex) {
-			throw new Exception($ex->getMessage(), $ex->getCode());
+	/*
+	DB::delete(_TABLE_, ['mb_id'=>'admin','mb_srl{>}'=>1])
+	*/
+	public static function delete($table) {
+		if(func_num_args() > 1) self::__sets(array_slice(func_get_args(), 1));
+		if(self::$link === null) {self::connect();}
+		$sql = sprintf("DELETE FROM %s%s", $table, self::__extra());
+		self::$info['last_query'] = $sql;
+		if(!mysql_query($sql)){
+			throw new Exception(mysql_error(), mysql_errno());
+		}else{
+			return true;
 		}
 	}
 
-	public static function update($table, $updates, $wheres) {
-		$sets = implode(',', self::escapeArray( $updates, TRUE ));
-		$wheres = implode(' AND ', self::escapeArray( $wheres, TRUE ));
-		try {
-			return self::query("UPDATE $table SET $sets WHERE $wheres");
-		} catch (Exception $ex) {
-			throw new Exception($ex->getMessage(), $ex->getCode());
+	/*
+	DB::count(_TABLE_, ['mb_id'=>'admin','mb_srl{>}'=>1])
+	*/
+	public static function count($table) {
+		if(func_num_args() > 1) self::__sets(array_slice(func_get_args(), 1));
+		$result = self::get($table, 'COUNT(*) as cnt');
+		if(mysql_errno()){
+			throw new Exception(mysql_error(), mysql_errno());
+			return -1;
 		}
-	}
-
-	public static function delete($table, $wheres) {
-		$wheres = implode(' AND ', self::escapeArray($wheres, TRUE));
-		try {
-			return self::query("DELETE FROM $table WHERE $wheres");
-		} catch (Exception $ex) {
-			throw new Exception($ex->getMessage(), $ex->getCode());
-		}
-	}
-
-	public static function count($table, $wheres) {
-		$wheres = empty($wheres) ? 1 : implode(' AND ', self::escapeArray($wheres, TRUE));
-		try {
-			$r = self::query("SELECT COUNT(*) as cnt FROM $table WHERE $wheres");
-			if(!is_object($r)) return -1;
-			$row = mysqli_fetch_assoc($r);
-			return $row['cnt'];
-		} catch (Exception $ex) {
-			throw new Exception($ex->getMessage(), $ex->getCode());
-		}
-	}
-
-	public static function num($result) {
-		return mysqli_num_rows($result);
-	}
-
-	public static function row($result) {
-		return mysqli_fetch_row($result);
-	}
-
-	public static function assoc($result) {
-		return mysqli_fetch_assoc($result);
-	}
-
-	public static function object($result) {
-		return mysqli_fetch_object($result);
+		return $result['cnt'];
 	}
 
 	public static function found() {
-		$r = self::query('SELECT FOUND_ROWS() AS foundRows');
-		$row = mysqli_fetch_assoc($r);
-		return $row['foundRows'];
+		$result = self::query("SELECT FOUND_ROWS() as c", true);
+		if(mysql_errno()){
+			throw new Exception(mysql_error(), mysql_errno());
+			return -1;
+		}
+		return $result[0]['c'];
 	}
 
-	public static function affected() {
-		return mysqli_affected_rows(self::$link);
+	public static function assoc($res) {
+		return mysql_fetch_assoc($res);
 	}
 
-	public static function insertId() {
-		return mysqli_insert_id(self::$link);
-	}
-
-	public static function transaction($flags = MYSQLI_TRANS_START_READ_WRITE) {
-		if(self::$link === NULL) {self::connect();}
-		mysqli_autocommit(self::$link, FALSE);
-		return mysqli_begin_transaction(self::$link, $flags);
+	public static function transaction() {
+		if(self::$link === null) {self::connect();}
+		mysql_query("SET AUTOCOMMIT=0; START TRANSACTION");
 	}
 
 	public static function commit() {
-		$r = mysqli_commit(self::$link);
-		mysqli_autocommit(self::$link, TRUE);
-		return $r;
+		mysql_query("COMMIT; SET AUTOCOMMIT=1");
 	}
 
 	public static function rollback() {
-		$r = mysqli_rollback(self::$link);
-		mysqli_autocommit(self::$link, TRUE);
-		return $r;
+		mysql_query("ROLLBACK; SET AUTOCOMMIT=1");
 	}
 
 	public static function tableExists($table) {
 		try {
 			$r = self::query(
 				"SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :1 AND TABLE_NAME =:2",
-				[self::$options['name'], $table]
+				[self::$option['name'], $table]
 			);
 			return $r->num_rows > 0;
-		} catch (Exception $ex) {
-			throw new Exception($ex->getMessage(), $ex->getCode());
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
 
@@ -196,29 +377,21 @@ class DB {
 		try {
 			$r = self::query(
 				"SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :1 AND TABLE_NAME =:2 AND COLUMN_NAME = :3",
-				[self::$options['name'], $table, $column]
+				[self::$option['name'], $table, $column]
 			);
 			return $r->num_rows > 0;
-		} catch (Exception $ex) {
-			throw new Exception($ex->getMessage(), $ex->getCode());
-		}
-	}
-
-	public static function error() {
-		if(mysqli_errno(self::$link)) {
-			return new Exception(mysqli_error(self::$link), mysqli_errno(self::$link));
-		} else {
-			return FALSE;
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
 
 	public static function status($table, $key) {
 		if(self::$link === NULL) {self::connect();}
-		$r = mysqli_query(self::$link, "SHOW TABLE STATUS WHERE Name = '{$table}'");
-		if(mysqli_errno(self::$link)) {
-			throw new Exception(mysqli_error(self::$link), mysqli_errno(self::$link));
+		$r = mysql_query("SHOW TABLE STATUS WHERE Name = '{$table}'");
+		if(mysql_errno()){
+			throw new Exception(mysql_error(), mysql_errno());
 		}
-		$row = mysqli_fetch_assoc($r);
+		$row = mysql_fetch_assoc($r);
 		return empty($key)?$row:strtolower($row[$key]);
 	}
 
@@ -226,58 +399,32 @@ class DB {
 		return self::status($table, 'Engine');
 	}
 
-	public static function version() {
+	public static function version($chk_version = null, $operator = '>=') {
 		if(self::$link === NULL) {self::connect();}
-		return mysqli_get_client_version(self::$link);
-	}
-
-	public static function escape($s) {
-		if($s === TRUE || $s === FALSE) { return (int)$s; }
-		else if(is_int($s) || is_float($s)) { return $s; }
-		else { return "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],$s)."'"; }
-		//연결이 안되있을때도 동작하기 위해 str_replace 사용
-		//if(self::$link === NULL) {self::connect();}
-		//return "'".mysqli_real_escape_string(self::$link, $s)."'";
-	}
-
-	public static function escapeArray(&$fields, $useKeys = FALSE) {
-		$r = [];
-		foreach($fields as $key => &$val) {
-			if(is_null($val)) continue;
-			if(is_array($val) && ($key == 'AND' || $key == 'OR')) {
-				$tmp = self::escapeArray($val, $useKeys);
-				if(count($tmp) > 0) $r[] = '('.implode(' '.$key.' ', $tmp).')';
-			} else {
-				$operation = '=';
-				//(=|<>|<=|>=|<|>|IN|LIKE|IS)
-				if($useKeys && preg_match("/(.+){(=|<>|<=|>=|<|>|[A-Z]+)}$/", $key, $matches)) {
-					$key = $matches[1];
-					$operation = $matches[2];
-					if($operation == 'IS') { $key = '('.$key.')'; } // value = ('null' or 'not null')
-					else if($operation == 'IN') {
-						$key = '('.$key.')';
-						$val = explode(',', $val);
-						if(count($val)===0 || empty($val[0])) continue;
-						foreach ($val as $k=>$v) $val[$k] = self::escape($v);
-						$val = '('.implode(',', $val).')';
-					}
-				}
-				if($q_skip = preg_match("/^\((.+?)\)$/", $key, $matches)) {
-					$key = $matches[1];
-				}
-				$r[] = ($useKeys ? "`$key` $operation ":'') . ($q_skip ? $val : self::escape($val));
-			}
+		$version = mysql_get_client_info();
+		if (empty($chk_version)) {
+			return $version;
+		} else {
+			return version_compare($version, $chk_version, $operator);
 		}
-		return $r;
 	}
 
-	// deprecated
-	public static function quotes($s) {
-		return self::escape($s);
+	public static function escape($str) {
+		return str_replace(
+					['\\',"\0","\n","\r","'",'"',"\x1a"],
+					['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],
+					$str
+				);
+		// 연결이 되야 사용 가능하기에 안씀
+		// return mysql_real_escape_string($str);
 	}
-	// deprecated
-	public static function quotesArray(&$fields, $useKeys = FALSE) {
-		return self::escapeArray($fields, $useKeys);
+
+	public static function error() {
+		if(mysql_errno()) {
+			return new Exception(mysql_error(), mysql_errno());
+		} else {
+			return false;
+		}
 	}
 }
 

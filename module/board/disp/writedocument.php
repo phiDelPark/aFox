@@ -6,6 +6,11 @@ function proc($data) {
 	$doc = empty($data['srl']) ? [] : getDocument($data['srl']);
 
 	global $_MEMBER;
+
+	if(empty($doc['md_id'])) $doc['md_id'] = __MID__;
+	if(empty($doc['wr_secret'])) $doc['wr_secret'] = null;
+	if(empty($doc['wr_extra'])) $doc['wr_extra'] = null;
+
 	$is_manager = isManager($doc['md_id']);
 	$is_secret = $doc['wr_secret'] == '1';
 

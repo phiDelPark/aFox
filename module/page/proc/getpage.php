@@ -14,10 +14,8 @@ function proc($data) {
 		$field = $default_field.','.implode(',', $response_tags);
 	}
 
-	$page = getDBItem(_AF_PAGE_TABLE_, ['md_id'=>$data['md_id']], $field);
-	if(!empty($page['error'])) {
-		return set_error($page['message'],$page['error']);
-	} else if(empty($page['md_id'])) {
+	$page = DB::get(_AF_PAGE_TABLE_, $field, ['md_id'=>$data['md_id']]);
+	if(empty($page['md_id'])) {
 		return set_error(getLang('error_founded'),4201);
 	} else if(!isGrant('view', $page['md_id'])) {
 		return set_error(getLang('error_permitted'),4501);

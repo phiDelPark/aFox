@@ -1,6 +1,11 @@
 <?php
 define('__AFOX__',   TRUE);
 
+// 서버 필요 조건
+// * UTF-8
+// * PHP version 5.4.12 이상
+// * MYSQL version 5.1.56 이상
+
 define('_AF_CONFIG_TABLE_', 'afox_config');
 define('_AF_MEMBER_TABLE_', 'afox_members');
 define('_AF_MODULE_TABLE_', 'afox_modules');
@@ -15,6 +20,22 @@ define('_AF_VISITOR_TABLE_', 'afox_visitors');
 define('_AF_NOTE_TABLE_', 'afox_notes');
 define('_AF_FILE_TABLE_', 'afox_files');
 define('_AF_TRIGGER_TABLE_', 'afox_triggers');
+
+require_once dirname(__FILE__) . '/../lib/db/mysql.php';
+
+if(!function_exists('password_hash')) {
+	defined('PASSWORD_BCRYPT') or define('PASSWORD_BCRYPT', '');
+	function password_hash($password, $algo) {
+		$result = DB::query("SELECT password('$password') as pass", true);
+		return $result[0]['pass'];
+	}
+}
+if(!function_exists('password_verify')) {
+	function password_verify($password, $hash) {
+		$password = password_hash($password, 'PASSWORD_BCRYPT');
+		return !empty($hash) && $password === $hash;
+	}
+}
 
 ?>
 <!doctype html><html lang="ko"><head><meta charset="utf-8"></head><body>
@@ -40,15 +61,15 @@ if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 
 if(empty($_POST['db_name'])) {
 
-	if(version_compare(PHP_VERSION, '5.5.0', '<')) {
-		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 5.5.0 이상 버전을 사용해주세요. </h3>';
+	if(version_compare(PHP_VERSION, '5.4.12', '<')) {
+		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 5.4.12 이상 버전을 사용해주세요. </h3>';
 	}
 
 	echo '<h3>에이폭스 CMS 설치</h3><form action="index.php" method="post" autocomplete="off">';
 	echo '<strong style="display:inline-block;width:150px">DB 호스트*</strong> : <input type="text" name="db_host" value="localhost"><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 포트*</strong> : <input type="text" name="db_port" value="3306"><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 이름*</strong> : <input type="text" name="db_name" value=""><br>';
-	echo '<strong style="display:inline-block;width:150px">DB 종류*</strong> : <select name="db_type"><option value="myisam" selected>MyISAM</option><option value="innodb">InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
+	echo '<strong style="display:inline-block;width:150px">DB 종류*</strong> : <select name="db_type"><option value="myisam">MyISAM</option><option value="innodb" '.(version_compare(PHP_VERSION, '5.5.0', '>=')?'selected':'').'>InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 아이디*</strong> : <input type="text" name="db_user" value=""><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 비밀번호*</strong> : <input type="text" name="db_pass" value=""><br><br>';
 	echo '<h3>에이폭스 도메인 설정</h3>';
@@ -86,8 +107,10 @@ $db_user = $_POST['db_user'];
 $db_pass = $_POST['db_pass'];
 $time_zone = empty($_POST['time_zone']) ? 'Asia/Seoul' : $_POST['time_zone'];
 
-$domain = empty(trim($_POST['domain'])) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['domain']));
-$cookie_domain = empty(trim($_POST['cookie_domain'])) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['cookie_domain']));
+$__tmp = trim($_POST['domain']);
+$domain = empty($__tmp) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['domain']));
+$__tmp = trim($_POST['cookie_domain']);
+$cookie_domain = empty($__tmp) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['cookie_domain']));
 
 echo $cookie_domain;
 
@@ -104,25 +127,22 @@ $o = array(
 'time_zone'=>$time_zone
 );
 
-mysqli_report(MYSQLI_REPORT_OFF);
+$o['host'] = isset($o['host'])   ? $o['host']   : 'localhost';
+$o['user'] = isset($o['user'])   ? $o['user']   : 'root';
+$o['pass'] = isset($o['pass'])   ? $o['pass']   : '';
+$o['name'] = isset($o['name'])   ? $o['name'] : 'default';
+$o['port'] = isset($o['port'])   ? $o['port']   : 3306;
+$o['sock'] = isset($o['sock'])   ? $o['sock']   : FALSE;
+$o['charset'] = isset($o['charset']) ? $o['charset'] : "utf8";
+$o['time_zone'] = isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul";
 
-$link = new mysqli(isset($o['host'])   ? $o['host']   : 'localhost',
-					 isset($o['user'])   ? $o['user']   : 'root',
-					 isset($o['pass'])   ? $o['pass']   : '',
-					 isset($o['name'])   ? $o['name'] : 'default',
-					 isset($o['port'])   ? $o['port']   : 3306,
-					 isset($o['sock'])   ? $o['sock']   : FALSE );
-if( mysqli_connect_errno() ) {
-	die(mysqli_connect_error() . ' (' . mysqli_connect_errno() . ')');
-}
-mysqli_query($link, "SET NAMES ".(isset($o['charset']) ? $o['charset'] : "utf8"));
-mysqli_query($link, "SET time_zone = '".(isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul")."'");
+DB::init($o);
 
 if($is_innodb){
 	// 서버에서 Barracuda를 지원하면 Barracuda로 설치하지만 아니면 Antelope로 설치된다.
 	// 단, 루트 사용자는 동적 설정이 가능하다.
-	@mysqli_query($link, "SET GLOBAL innodb_file_format=Barracuda");
-	@mysqli_query($link, "SET GLOBAL innodb_file_per_table=ON");
+	@DB::query("SET GLOBAL innodb_file_format=Barracuda");
+	@DB::query("SET GLOBAL innodb_file_per_table=ON");
 	if($innodb_option==='') {
 	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPACT DEFAULT CHARSET='.$charset.';';
 	} else {
@@ -132,8 +152,7 @@ if($is_innodb){
 	$_engine = ' ENGINE=MyISAM DEFAULT CHARSET='.$charset.';';
 }
 
-mysqli_autocommit($link, FALSE);
-mysqli_begin_transaction($link, MYSQLI_TRANS_START_READ_WRITE);
+DB::transaction();
 
 // 관리에 편하게 메인 설정들은 접두어 안 붙임
 
@@ -152,8 +171,8 @@ $create_sql = '
 	   use_full_login CHAR(1)      NOT NULL DEFAULT 0,
 	   point_login    INT(11)      NOT NULL DEFAULT 0)'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 
 $_err_keys = _AF_THEME_TABLE_;
@@ -164,8 +183,8 @@ $create_sql = '
 
 	  UNIQUE KEY ID_UK (th_id))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_MENU_TABLE_;
 $create_sql = '
@@ -183,8 +202,8 @@ $create_sql = '
 	  INDEX SRL_IX (mu_srl),
 	  INDEX TYPE_IX (mu_type))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_MEMBER_TABLE_;
 $create_sql = '
@@ -208,8 +227,8 @@ $create_sql = '
 	  UNIQUE KEY ID_UK (mb_id),
 	  INDEX RANK_IX (mb_rank))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_ADDON_TABLE_;
 $create_sql = '
@@ -219,8 +238,8 @@ $create_sql = '
 
 	  UNIQUE KEY ID_UK (ao_id))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_MODULE_TABLE_;
 $create_sql = '
@@ -258,8 +277,8 @@ $create_sql = '
 	  UNIQUE KEY ID_UK (md_id),
 	  INDEX KEY_IX (md_key))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_DOCUMENT_TABLE_;
 $create_sql = '
@@ -297,8 +316,8 @@ $create_sql = '
 	  INDEX MEMBER_IX (mb_srl),
 	  INDEX IP_IX (mb_ipaddress))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_COMMENT_TABLE_;
 $create_sql = '
@@ -328,8 +347,8 @@ $create_sql = '
 	  INDEX MEMBER_IX (mb_srl),
 	  INDEX IP_IX (mb_ipaddress))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_PAGE_TABLE_;
 $create_sql = '
@@ -345,8 +364,8 @@ $create_sql = '
 
 	  UNIQUE KEY ID_UK (md_id))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_FILE_TABLE_;
 $create_sql = '
@@ -369,8 +388,8 @@ $create_sql = '
 	  INDEX MEMBER_IX (mb_srl),
 	  INDEX IP_IX (mb_ipaddress))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_HISTORY_TABLE_;
 $create_sql = '
@@ -385,8 +404,8 @@ $create_sql = '
 	  INDEX ACTION_IX (hs_action),
 	  INDEX REGDATE_IX (hs_regdate))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_NOTE_TABLE_;
 $create_sql = '
@@ -403,8 +422,8 @@ $create_sql = '
 	  INDEX MEMBER_IX (mb_srl),
 	  INDEX SENDER_IX (nt_sender))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_VISITOR_TABLE_;
 $create_sql = '
@@ -417,8 +436,8 @@ $create_sql = '
 	  INDEX AGENT_IX (vs_agent),
 	  INDEX REGDATE_IX (vs_regdate))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = _AF_TRIGGER_TABLE_;
 $create_sql = '
@@ -431,25 +450,21 @@ $create_sql = '
 	  INDEX PC_IX (use_pc),
 	  INDEX MOBILE_IX (use_mobile))'.$_engine;
 
-mysqli_query($link, $create_sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
 $_err_keys = 'insert_members';
-$sql = 'SELECT mb_id FROM '._AF_MEMBER_TABLE_.' WHERE mb_id = \'admin\'';
-$r = mysqli_query($link, $sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
-$row = mysqli_fetch_assoc($r);
-if (!$row['mb_id']) {
+$row = DB::get(_AF_MEMBER_TABLE_, 'mb_id', ['mb_id'=>'admin']);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
+if (empty($row['mb_id'])) {
 	$sql = 'INSERT INTO '._AF_MEMBER_TABLE_.' (`mb_rank`, `mb_id`, `mb_password`, `mb_nick`, `mb_regdate`) VALUES ("%s", "%s", "%s", "%s", NOW())';
-	mysqli_query($link, sprintf($sql, 's', 'admin', password_hash('0000', PASSWORD_BCRYPT), '관리자'));
+	DB::query(sprintf($sql, 's', 'admin', password_hash('0000', PASSWORD_BCRYPT), '관리자'));
 }
 
 $_err_keys = 'insert_themes';
-$sql = 'SELECT th_id FROM '._AF_THEME_TABLE_.' WHERE th_id = \'default\'';
-$r = mysqli_query($link, $sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
-$row = mysqli_fetch_assoc($r);
-if (!$row['th_id']) {
+$row = DB::get(_AF_THEME_TABLE_, 'th_id', ['th_id'=>'default']);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
+if (empty($row['th_id'])) {
 	$tmp = [];
 	$tmp['carousel_item_1'] = '<h1>헤드라인 예제</h1><p>이것은 헤드라인 예제입니다.<br>이 헤드라인은 (테마 설정)에서 사용자가 원하는 대로 작성하시면 됩니다.<br>에이폭스는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.</p><a class="btn btn-primary" href="#">오늘 가입</a>';
 	$tmp['carousel_item_2'] = '<h1>두번째 헤드라인 예제</h1><p>에이폭스는 누구나 쉽고 편하고 자유롭게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS(Content Management System)입니다.<br>afox에 의해 디자인되고 만들어 졌으며 코드 기여자의 도움과 코어 팀에 의해 유지보수 됩니다.</p><a class="btn btn-primary" href="#">자세히 알아보기</a>';
@@ -457,49 +472,43 @@ if (!$row['th_id']) {
 	$tmp['footer_html'] = '에이폭스는 <a href="http://afox.kr" target="_blank">@afox</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.';
 	$tmp = "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],serialize($tmp))."'";
 	$sql = 'INSERT INTO '._AF_THEME_TABLE_.' (`th_id`, `th_extra`) VALUES ("default", '.$tmp.')';
-	mysqli_query($link, $sql);
+	DB::query($sql);
 }
 
 $_err_keys = 'insert_config';
-$sql = 'SELECT theme FROM '._AF_CONFIG_TABLE_.' WHERE 1';
-$r = mysqli_query($link, $sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
-$row = mysqli_fetch_assoc($r);
-if (!$row['theme']) {
+$row = DB::get(_AF_CONFIG_TABLE_, 'theme', []);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
+if (empty($row['theme'])) {
 	$sql = 'INSERT INTO '._AF_CONFIG_TABLE_.' (`theme`, `start`, `title`, `use_signup`) VALUES ("default", "welcome", "에이폭스", "1")';
-	mysqli_query($link, $sql);
+	DB::query($sql);
 }
 
 $_err_keys = 'insert_modules';
-$sql = 'SELECT md_id FROM '._AF_MODULE_TABLE_.' WHERE md_id = \'welcome\'';
-$r = mysqli_query($link, $sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
-$row = mysqli_fetch_assoc($r);
-if (!$row['md_id']) {
+$row = DB::get(_AF_MODULE_TABLE_, 'md_id', ['md_id'=>'welcome']);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
+if (empty($row['md_id'])) {
 	$sql = 'INSERT INTO '._AF_MODULE_TABLE_.' (`md_id`, `md_key`, `md_title`, `md_regdate`) VALUES ("%s", "%s", "%s", NOW())';
-	mysqli_query($link, sprintf($sql, 'welcome', 'page', ''));
+	DB::query(sprintf($sql, 'welcome', 'page', ''));
 }
 
 $_err_keys = 'insert_pages';
-$sql = 'SELECT md_id FROM '._AF_PAGE_TABLE_.' WHERE md_id = \'welcome\'';
-$r = mysqli_query($link, $sql);
-if(mysqli_errno($link)) throw new Exception(mysqli_error($link), mysqli_errno($link));
-$row = mysqli_fetch_assoc($r);
-if (!$row['md_id']) {
+$row = DB::get(_AF_PAGE_TABLE_, 'md_id', ['md_id'=>'welcome']);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
+if (empty($row['md_id'])) {
 	$doc_data = '';
 	$fp = fopen(dirname(__FILE__) . '/../README.md',"r");
 	while( !feof($fp) ) $doc_data .= fgets($fp);
 	fclose($fp);
 	$sql = 'INSERT INTO '._AF_PAGE_TABLE_.' (`md_id`, `pg_type`, `pg_content`, `pg_update`, `pg_regdate`) VALUES ("%s", "1", %s, NOW(), NOW())';
-	mysqli_query($link, sprintf($sql, 'welcome', "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],$doc_data)."'"));
+	DB::query(sprintf($sql, 'welcome', "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],$doc_data)."'"));
 }
 
 } catch (Exception $ex) {
-	mysqli_rollback($link);
+	DB::rollback();
 	exit('{"STATUS":' . $ex->getCode() . ',"MESSAGE":"'.$_err_keys.': ' . $ex->getMessage() .'"}');
 }
 
-mysqli_commit($link);
+DB::commit();
 
 $file = $datadir.'config/prohibit_id.php';
 $f = @fopen($file, 'w');

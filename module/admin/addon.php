@@ -1,13 +1,14 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	$ao_list = [];
-	$out = DB::query('SELECT * FROM '._AF_TRIGGER_TABLE_.' WHERE tg_key=\'A\'');
+	$ao_list = DB::gets(_AF_TRIGGER_TABLE_,['tg_key'=>'A'], function ($r) {
+		$rset = [];
+		while ($row = DB::assoc($r)) {
+			$rset[$row['tg_id']] = (empty($row['use_pc']) ? '-/':'P/').(empty($row['use_mobile']) ? '-':'M');
+		}
+		return $rset;
+	});
 	if($ex = DB::error()) {
 		messageBox($ex->getMessage(), $ex->getCode(), false);
-	}else {
-		while ($row = DB::assoc($out)) {
-			$ao_list[$row['tg_id']] = (empty($row['use_pc']) ? '-/':'P/').(empty($row['use_mobile']) ? '-':'M');
-		}
 	}
 ?>
 

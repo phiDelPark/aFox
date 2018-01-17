@@ -17,8 +17,8 @@ function proc($data) {
 		// 휴지통으로 보냄
 		DB::update(_AF_DOCUMENT_TABLE_,
 			[
-				'(wr_updater)'=>_AF_DOCUMENT_TABLE_.'.md_id',
-				'(wr_update)'=>'NOW()',
+				'^wr_updater'=>_AF_DOCUMENT_TABLE_.'.md_id',
+				'^wr_update'=>'NOW()',
 				'md_id'=>'_AFOXtRASH_'
 			], [
 				'wr_srl{IN}'=>implode(',', $wr_srls)

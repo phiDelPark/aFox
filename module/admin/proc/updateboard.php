@@ -99,7 +99,7 @@ function proc($data) {
 					'use_secret'=>$data['use_secret'],
 					'thumb_width'=>abs($data['thumb_width']),
 					'thumb_height'=>abs($data['thumb_height']),
-					'thumb_option'=>$data['thumb_option'],
+					'thumb_option'=>empty($data['thumb_option'])?0:1,
 					'point_view'=>empty($data['point_view'])?'0':$data['point_view'],
 					'point_write'=>empty($data['point_write'])?'0':$data['point_write'],
 					'point_reply'=>empty($data['point_reply'])?'0':$data['point_reply'],
@@ -111,7 +111,7 @@ function proc($data) {
 					'grant_upload'=>empty($data['grant_upload'])?'0':$data['grant_upload'],
 					'grant_download'=>empty($data['grant_download'])?'0':$data['grant_download'],
 					'md_extra'=>empty($md_extra)?'':serialize($md_extra),
-					'(md_regdate)'=>'NOW()'
+					'^md_regdate'=>'NOW()'
 				]
 			);
 		} else {

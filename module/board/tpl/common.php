@@ -5,6 +5,9 @@
 	addCSS(_AF_URL_ . 'module/board/tpl/board'. (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css'));
 	addJS(_AF_URL_ . 'module/board/tpl/board'. (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
 
+	// 구버전 sql 용 초기화
+	$_DATA['category'] = empty($_DATA['category']) ? null : $_DATA['category'];
+
 /* End of file common.php */
 /* Location: ./module/board/tpl/common.php */
 /* This file is read to first */

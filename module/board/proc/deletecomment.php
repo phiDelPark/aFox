@@ -12,12 +12,10 @@ function proc($data) {
 	$rp_srl = (int) abs(empty($data['rp_srl']) ? 0 : $data['rp_srl']);
 
 	try {
-		$cmt = getDBItem(_AF_COMMENT_TABLE_, ['rp_srl'=>$rp_srl], 'wr_srl, rp_status, rp_parent, rp_depth, mb_srl, mb_password');
-		if(!empty($cmt['error'])) throw new Exception($cmt['message'], $cmt['error']);
+		$cmt = DB::get(_AF_COMMENT_TABLE_, 'wr_srl, rp_status, rp_parent, rp_depth, mb_srl, mb_password', ['rp_srl'=>$rp_srl]);
 		if(empty($cmt['wr_srl'])) throw new Exception(getLang('error_founded'), 4201);
 
-		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$cmt['wr_srl']], 'md_id, wr_srl');
-		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
+		$doc = DB::get(_AF_DOCUMENT_TABLE_, 'md_id, wr_srl', ['wr_srl'=>$cmt['wr_srl']]);
 		if(empty($doc['wr_srl']) || ($doc['wr_srl'] != $cmt['wr_srl'])) throw new Exception(getLang('error_request'),4303);
 
 		$wr_srl = $doc['wr_srl'];
@@ -37,20 +35,16 @@ function proc($data) {
 			}
 		}
 
+		$cmt['rp_depth'] = empty($cmt['rp_depth'])?null:$cmt['rp_depth'];
 		$_cnt = DB::count(_AF_COMMENT_TABLE_, [
 			'wr_srl'=>$cmt['wr_srl'],
 			'rp_srl{<>}'=>$rp_srl,
 			'rp_parent'=>$cmt['rp_parent'],
-			'rp_depth{LIKE}'=>empty($cmt['rp_depth'])?null:$cmt['rp_depth'].'%'
+			empty($cmt['rp_depth'])?'':'rp_depth{LIKE}'=>$cmt['rp_depth'].'%'
 		]);
 		if (!$is_manager && $_cnt > 0) throw new Exception(getLang('msg_reply_exists'), 4501);
 
-		// 관리자나 자신이 아니면 휴지통
-		if (!isAdmin() && (empty($_MEMBER) || $_MEMBER['mb_srl'] != $cmt['mb_srl'])) {
-			$_cnt = 1;
-		}
-
-		// 하위 댓글이 있으면 삭제 표시만...
+		// 하위 댓글이 있으면 삭제 표시만... (관리자전용)
 		if($_cnt > 0) {
 			DB::update(_AF_COMMENT_TABLE_,
 				[
@@ -73,7 +67,7 @@ function proc($data) {
 			setHistoryAction('wr_reply', $wr_srl, false, function($v)use($wr_srl){
 				DB::update(
 					_AF_DOCUMENT_TABLE_,
-					['(wr_reply)'=>'wr_reply-1'],
+					['^wr_reply'=>'wr_reply-1'],
 					['wr_srl'=>$wr_srl]
 				);
 			});

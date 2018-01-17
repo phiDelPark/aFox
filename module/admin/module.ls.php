@@ -1,14 +1,14 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-
-	$md_list = [];
-	$out = DB::query('SELECT md_key FROM '._AF_MODULE_TABLE_.' WHERE 1 ORDER BY md_key');
-	if($ex = DB::error()) {
-		messageBox($ex->getMessage(),$ex->getCode(), false);
-	} else {
-		while ($row = DB::assoc($out)) {
-			$md_list[$row['md_key']] = true;
+	$md_list = DB::gets(_AF_MODULE_TABLE_,'md_key',[],'md_key', function ($r) {
+		$rset = [];
+		while ($row = DB::assoc($r)) {
+			$rset[$row['md_key']] = true;
 		}
+		return $rset;
+	});
+	if($ex = DB::error()) {
+		messageBox($ex->getMessage(), $ex->getCode(), false);
 	}
 ?>
 

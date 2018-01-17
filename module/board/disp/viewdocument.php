@@ -60,9 +60,11 @@ function proc($data) {
 		$doc['wr_extra'] = unserialize($doc['wr_extra']);
 	}
 
+	if(empty($data['mb_password'])) $data['mb_password'] = null;
+
 	// 댓글 목록에 권한설정
 	$mdid = $doc['md_id'];
-	$rsrl = $data['rp'];
+	$rsrl = empty($data['rp']) ? null : $data['rp'];
 	$pass = empty($rsrl) ? '' : $data['mb_password'];
 
 	// 문서 주인일경우 첫번째 댓글에만 권한 부여
@@ -89,7 +91,7 @@ function proc($data) {
 				// 비밀글이 아니면 권한부여
 				if($row['rp_secret'] != '1' || get_session('_AF_SECRET_COMMENT_'.$RP_PERMIT_KEY)) {
 					$rp_permit = $_len + 1;
-				} else if(!empty($pass) && $rsrl == $row['rp_srl']) {
+				} else if(!empty($pass) && $rsrl === $row['rp_srl']) {
 					// 비밀번호가 넘어오면 권한체크
 					if(checkPassword($pass, $row['mb_password'])) {
 						$rp_permit = $_len + 1;
@@ -115,8 +117,8 @@ function proc($data) {
 
 	//unset($doc['mb_password']);
 
-	$cpage = empty($data['cpage']) ? '' : $data['cpage'];
-	$doc['CURRENT_COMMENT_LIST'] = getCommentList($data['srl'], $cpage, [], 'rp_parent,rp_depth', $call);
+	//$cpage = empty($data['cpage']) ? '' : $data['cpage'];
+	$doc['CURRENT_COMMENT_LIST'] = getCommentList($data['srl'], $call);
 
 	$category = empty($data['category']) ? '' : $data['category'];
 	$search = empty($data['search']) ? '' : $data['search'];

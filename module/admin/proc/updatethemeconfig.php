@@ -11,8 +11,8 @@ function proc($data) {
 
 		$th_id = $data['th_id'];
 
-		$out = getDBItem(_AF_THEME_TABLE_, ['th_id'=>$th_id], 'th_id');
-		if(!empty($out['error'])) throw new Exception($out['message'], $out['error']);
+		$out = DB::get(_AF_THEME_TABLE_, 'th_id', ['th_id'=>$th_id]);
+		if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
 
 		$theme_exists = !empty($out['th_id']);
 

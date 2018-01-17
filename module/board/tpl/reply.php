@@ -1,22 +1,17 @@
 <?php
 if(!defined('__AFOX__')) exit();
-$cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT_COMMENT_LIST'];
+$cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? [] : $_{'board'}['CURRENT_COMMENT_LIST'];
 ?>
 
 <section id="bdReply">
 	<article class="clearfix" role="list">
 	<?php
-		$current_cpage = $cmt['current_page'];
-		$total_cpage = $cmt['total_page'];
-		$start_cpage = $cmt['start_page'];
-		$end_cpage = $cmt['end_page'];
-
 		$not_edit_str = ' style="text-decoration:line-through" onclick="return msg_box(\''.escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES).'\')"';
 
 		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'.getLang('request_input', ['password'])
 										.'<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'
 										.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>';
-		foreach ($cmt['data'] as $key => $value) {
+		foreach ($cmt as $key => $value) {
 
 			$_len = strlen($value['rp_depth']);
 
@@ -38,22 +33,6 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? false : $_{'board'}['CURRENT
 		}
 	?>
 	</article>
-	<?php if($total_cpage > 1) { ?>
-	<nav class="text-center">
-		<ul class="pagination pagination-sm  hidden-xs">
-		<?php if($start_cpage>10) echo '<li><a href="'.getUrl('cpage',$start_cpage-10).'">&laquo;</a></li>'; ?>
-		<li<?php echo $current_cpage <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_cpage <= 1 ? '#" onclick="return false' : getUrl('cpage',$current_cpage-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
-		<?php for ($i=$start_cpage; $i <= $end_cpage; $i++) echo '<li'.($current_cpage == $i ? ' class="active"' : '').'><a href="'.getUrl('cpage',$i).'">'.$i.'</a></li>'; ?>
-		<li<?php echo $current_cpage >= $total_cpage ? ' class="disabled"' : ''?>><a href="<?php echo $current_cpage >= $total_cpage ? '#" onclick="return false' : getUrl('cpage',$current_cpage+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
-		<?php if(($total_cpage-$end_cpage)>0) echo '<li><a href="'.getUrl('cpage',$end_cpage+1).'">&raquo;</a></li>'; ?>
-		</ul>
-		<ul class="pager visible-xs-block">
-			<li class="previous<?php echo $current_cpage <= 1?' disabled':''?>"><a href="<?php echo  $current_cpage <= 1 ? '#" onclick="return false' : getUrl('cpage',$current_cpage-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
-			<li><span class="col-xs-5"><?php echo $current_cpage.' / '.$total_cpage?></span></li>
-			<li class="next<?php echo $current_cpage >= $total_cpage?' disabled':''?>"><a href="<?php echo $current_cpage >= $total_cpage ? '#" onclick="return false' : getUrl('cpage',$current_cpage+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
-		</ul>
-	</nav>
-	<?php } ?>
 
 	<footer class="reply-editer">
 		<form method="post" autocomplete="off" data-exec-ajax="board.updateComment">

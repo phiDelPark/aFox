@@ -19,7 +19,7 @@ function proc($data) {
 					'md_title'=>getLang('combine_search'),
 					'md_list_count'=>empty($data['md_list_count']) ? 20 : abs($data['md_list_count']),
 					'md_extra'=>empty($md_extra)?'':serialize($md_extra),
-					'(md_regdate)'=>'NOW()'
+					'^md_regdate'=>'NOW()'
 				]
 			);
 		} else {
@@ -36,13 +36,6 @@ function proc($data) {
 
 	} catch (Exception $ex) {
 		DB::rollback();
-
-		/*
-		// myisam면 rollback 수동으로 해야됨
-		if(DB::engine(_AF_MODULE_TABLE_) === 'myisam') {
-
-		}
-		*/
 		return set_error($ex->getMessage(),$ex->getCode());
 	}
 

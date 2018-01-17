@@ -32,8 +32,7 @@ function proc($data) {
 	DB::transaction();
 
 	try {
-		DB::query('DELETE FROM '._AF_CONFIG_TABLE_.' WHERE 1');
-
+		DB::delete(_AF_CONFIG_TABLE_);
 		DB::insert(_AF_CONFIG_TABLE_,
 			[
 				'theme'=>$data['theme'],

@@ -1,14 +1,15 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	$th_list = [];
-	$out = DB::query('SELECT th_id FROM '._AF_THEME_TABLE_.' WHERE 1');
+	$th_list = DB::gets(_AF_THEME_TABLE_, 'th_id', [], function ($r) {
+		$rset = [];
+		while ($row = DB::assoc($r)) {
+			$rset[$row['th_id']] = true;
+		}
+		return $rset;
+	});
 	if($ex = DB::error()) {
 		messageBox($ex->getMessage(), $ex->getCode(), false);
-	}else {
-		while ($row = DB::assoc($out)) {
-			$th_list[$row['th_id']] = true;
-		}
 	}
 	$theme_id = empty($_CFG['theme']) ? 'default' : $_CFG['theme'];
 ?>

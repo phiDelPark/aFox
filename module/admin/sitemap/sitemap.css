@@ -35,6 +35,7 @@
 #siteMap .draggable .summary{border-left:1px solid #ccc;padding-left:10px;margin-left:10px;font-size:11px;color:#999}
 #siteMap .form-inline{cursor:move}
 #siteMapRoot1 .input-sm,#siteMapRoot2 .input-sm{max-width:180px;display:inline;margin:5px}
+#siteMapRoot1 .side input[type="image"],#siteMapRoot2 .side input[type="image"]{cursor:pointer}
 @media(max-width:992px) {
 	#siteMap .panel-body {
 		padding-top: 0;

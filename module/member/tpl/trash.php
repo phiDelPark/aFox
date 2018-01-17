@@ -14,7 +14,9 @@
 			$schs = ['wr_title{LIKE}'=>'%'.$search.'%', 'wr_content{LIKE}'=>'%'.$search.'%'];
 		}
 	}
-	$_list = getDBList(_AF_DOCUMENT_TABLE_,['md_id'=>'_AFOXtRASH_','mb_srl'=>$mb['mb_srl'],'OR'=>$schs],'wr_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
+	$_list = DB::gets(_AF_DOCUMENT_TABLE_,'SQL_CALC_FOUND_ROWS *',['md_id'=>'_AFOXtRASH_','mb_srl'=>$mb['mb_srl'],'(_OR_)'=>$schs],'wr_regdate', (((empty($_DATA['page'])?1:$_DATA['page'])-1)*20).',20');
+	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+	$_list = setDataListInfo($_list, DB::found(), $_DATA['page'], 20);
 
 	if(!empty($_DATA['srl'])) include 'trashview.php';
 ?>
@@ -43,8 +45,8 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if(!empty($_list['error'])) {
-		messageBox($_list['message'], $_list['error'], false);
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
 	} else {
 		$current_page = $_list['current_page'];
 		$total_page = $_list['total_page'];

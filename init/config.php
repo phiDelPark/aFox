@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-define('_AF_VERSION_', '0.222');
+define('_AF_VERSION_', '0.237');
 define('__DEBUG__', 0);
 
 /*** SSL 설정 ***/
@@ -27,9 +27,9 @@ define('_AF_NOTE_TABLE_', 'afox_notes');
 define('_AF_FILE_TABLE_', 'afox_files');
 define('_AF_TRIGGER_TABLE_', 'afox_triggers');
 
-define('_AF_PATH_', substr(str_replace('\\', '/', dirname(__FILE__)), 0, -8) . '/');
+define('_AF_PATH_', substr(str_replace('\\', '/', dirname(__FILE__)), 0, -4) . '/');
 
-define('_AF_INIT_PATH_', _AF_PATH_ . 'initial/');
+define('_AF_INIT_PATH_', _AF_PATH_ . 'init/');
 define('_AF_LIBS_PATH_', _AF_PATH_ . 'lib/');
 define('_AF_ADMIN_PATH_', _AF_PATH_ . 'module/admin/');
 define('_AF_MODULES_PATH_', _AF_PATH_ . 'module/');
@@ -76,7 +76,7 @@ if(file_exists(_AF_PATH_ . 'install/update.php')) {
 }
 
 // 기본 사이트 정보 가져오기
-$_CFG = DB::get('SELECT * FROM '._AF_CONFIG_TABLE_.' WHERE 1');
+$_CFG = DB::get(_AF_CONFIG_TABLE_);
 if(DB::error()) exit("Please reinstall afox.");
 
 define('_AF_LANG_', empty($_CFG['lang'])?'ko':$_CFG['lang']);
@@ -101,6 +101,30 @@ function set_session($key, $val) { $_SESSION[$key] = $val; }
 function get_session($key) { return isset($_SESSION[$key]) ? $_SESSION[$key] : ''; }
 function set_error($msg, $err = 3) { return $_SESSION['AF_VALIDATOR_ERROR'] = ['error'=>$err, 'message'=>$msg]; }
 function get_error() { return isset($_SESSION['AF_VALIDATOR_ERROR']) ? $_SESSION['AF_VALIDATOR_ERROR'] : ''; }
+function debugPrint($o = null) {
+	if(!(__DEBUG__ & 1)) return;
+	$print = [date('== Y-m-d H:i:s ==')];
+	$type = gettype($o);
+	if(in_array($type, ['array', 'object', 'resource'])) {
+		$print[] = print_r($o, true);
+	} else {
+		$print[] = $type . '(' . var_export($o, true) . ')'.PHP_EOL;
+	}
+	file_put_contents(_AF_PATH_ . '_debug.php', implode(PHP_EOL, $print).PHP_EOL, FILE_APPEND|LOCK_EX);
+}
+if(!function_exists('password_hash')) {
+	defined('PASSWORD_BCRYPT') or define('PASSWORD_BCRYPT', '');
+	function password_hash($password, $algo) {
+		$result = DB::query("SELECT password('$password') as pass", true);
+		return $result[0]['pass'];
+	}
+}
+if(!function_exists('password_verify')) {
+	function password_verify($password, $hash) {
+		$password = password_hash($password, 'PASSWORD_BCRYPT');
+		return !empty($hash) && $password === $hash;
+	}
+}
 
 /* End of file config.php */
-/* Location: ./initial/config.php */
+/* Location: ./init/config.php */

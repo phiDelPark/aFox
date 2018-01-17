@@ -1,7 +1,8 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-
 	$schs = [];
+	$_DATA['page'] = empty($_DATA['page'])?1:$_DATA['page'];
+
 	if(!empty($_DATA['search'])) {
 		$search = $_DATA['search'];
 		$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tag'=>'wr_tags','date'=>'wr_regdate','cate'=>'wr_category'];
@@ -15,10 +16,12 @@
 	}
 
 	$category = empty($_DATA['category'])?null:$_DATA['category'];
-	$doc_list = getDBList(_AF_DOCUMENT_TABLE_,[
+	$doc_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', [
 		'md_id'.(empty($category)?'{<>}':'')=>empty($category)?'_AFOXtRASH_':$category,
-		'OR' =>$schs
-	],'wr_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
+		'(_OR_)' =>$schs
+	],'wr_regdate', (($_DATA['page']-1)*20).',20');
+	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+	$doc_list = setDataListInfo($doc_list, DB::found(), $_DATA['page'], 20);
 ?>
 
 <table class="table table-hover table-nowrap">
@@ -41,8 +44,8 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if(!empty($doc_list['error'])) {
-		messageBox($doc_list['message'], $doc_list['error'], false);
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
 	} else {
 		$current_page = $doc_list['current_page'];
 		$total_page = $doc_list['total_page'];

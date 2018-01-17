@@ -56,9 +56,8 @@ function proc($data) {
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
 
 	try {
-		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'md_id, mb_srl, mb_password');
-
-		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
+		$doc = DB::get(_AF_DOCUMENT_TABLE_, 'md_id, mb_srl, mb_password', ['wr_srl'=>$wr_srl]);
+		if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
 		if(!empty($wr_srl) && (empty($doc['md_id']) || $doc['md_id'] != $md_id)) {
 			throw new Exception(getLang('error_request'),4303);
 		}
@@ -129,10 +128,10 @@ function proc($data) {
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
 					'mb_ipaddress'=>$data['mb_ipaddress'],
-					'(wr_regdate)'=>'NOW()'
+					'^wr_regdate'=>'NOW()'
 				]
 			)) {
-				$wr_srl = DB::insertId();
+				$wr_srl = DB::insert_id();
 			}
 			if (empty($wr_srl)) {
 				throw new Exception(getLang('error_occured'), 4001);
@@ -157,19 +156,18 @@ function proc($data) {
 		if(!empty($data['remove_files'])) {
 
 			foreach ($data['remove_files'] as $val) {
-				$out = DB::select(_AF_FILE_TABLE_, [
+				$file = DB::get(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>$wr_srl,
 					'mf_srl'=>$val
 				]);
-
-				$file = DB::assoc($out);
 				if(!empty($file) && true === DB::delete(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>$wr_srl,
 					'mf_srl'=>$val])
 				) {
-					$filetype = strtolower(array_shift(explode('/', $file['mf_type'])));
+					$filetype = explode('/', $file['mf_type']);
+					$filetype = strtolower(array_shift($filetype));
 					$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 					$unlink_files[] = _AF_ATTACH_DATA_.$filetype.'/'.$md_id.'/'.$wr_srl.'/'.$file['mf_upload_name'];
 				}
@@ -198,8 +196,8 @@ function proc($data) {
 					'tmp_name' => $files['tmp_name'][$i],'error' => $files['error'][$i],
 					'size' => $files['size'][$i]
 				];
-
-				$filetype = strtolower(array_shift(explode('/', $file['type'])));
+				$filetype = explode('/', $file['type']);
+				$filetype = strtolower(array_shift($filetype));
 				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 				$filename = $file['name'];
 				$fileext = explode('.', $filename);
@@ -229,10 +227,10 @@ function proc($data) {
 					'mf_type'=>$file['type'],
 					'mb_srl'=>$data['mb_srl'],
 					'mb_ipaddress'=>$data['mb_ipaddress'],
-					'(mf_regdate)'=>'NOW()'
+					'^mf_regdate'=>'NOW()'
 				]);
 
-				$new_files[] = $mf_srl = DB::insertId();
+				$new_files[] = $mf_srl = DB::insert_id();
 				$file_count++;
 
 				if($data['wr_type'] == 2) {
@@ -257,7 +255,7 @@ function proc($data) {
 				'wr_tags'=>$data['wr_tags'],
 				'wr_file'=>$file_count,
 				'wr_extra'=>empty($wr_extra)?'':serialize($wr_extra),
-				'(wr_update)'=>'NOW()'
+				'^wr_update'=>'NOW()'
 			], [
 				'wr_srl'=>$wr_srl
 			]
@@ -278,15 +276,16 @@ function proc($data) {
 	} catch (Exception $ex) {
 		DB::rollback();
 
-		// myisam면 rollback 수동으로 해야됨
-		if(DB::engine(_AF_DOCUMENT_TABLE_) === 'myisam') {
+		// MySQL 5.5 이전 버전은 트랜잭션을 지원 안한다.
+		// Engine == MyISAM 트랜잭션을 지원 안한다.
+		if (DB::version('5.5.0', '<')) {
 			if($new_insert && !empty($wr_srl)) {
 				@DB::delete(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl]);
 				@DB::delete(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>$wr_srl]);
 			} else if(count($new_files)>0) {
 				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $new_files)]);
 			}
-			// myisam면 삭제된 파일은 그냥 지움
+			// 트랜잭션을 지원 안하면 삭제된 파일은 그냥 지움
 			foreach ($unlink_files as $val) @unlinkFile($val);
 		}
 

@@ -1,9 +1,10 @@
 <?php
 if(!defined('__AFOX__')) exit();
 // 테마 설정 저장
-if(empty($_THEME = get_cache('_AF_THEME_'._AF_THEME_))) {
-	$_THEME = getDBItem(_AF_THEME_TABLE_, ['th_id'=>_AF_THEME_], 'th_extra');
-	if(empty($_THEME['error'])) $_THEME = unserialize($_THEME['th_extra']);
+$_THEME = get_cache('_AF_THEME_'._AF_THEME_);
+if(empty($_THEME)) {
+	$_THEME = DB::get(_AF_THEME_TABLE_, 'th_extra', ['th_id'=>_AF_THEME_]);
+	if(!empty($_THEME)) $_THEME = unserialize($_THEME['th_extra']);
 	set_cache('_AF_THEME_'._AF_THEME_,$_THEME);
 }
 @include_once _AF_THEME_PATH_ . 'lang/' . _AF_LANG_ . '.php';
@@ -62,7 +63,7 @@ $tmp = [];
 echo '<script>';
 foreach ($_ADDELEMENTS['LANG'] as $val) {
 	foreach ($val as $key){
-		if(!$tmp[$key]){
+		if(empty($tmp[$key])){
 			$tmp[$key]=1;
 			echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';
 		}

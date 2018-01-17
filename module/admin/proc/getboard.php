@@ -6,10 +6,8 @@ function proc($data) {
 
 	if(!isset($data['md_id'])) return set_error(getLang('error_request'),4303);
 
-	$out = getDBItem(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$data['md_id']]);
-	if(!empty($out['error'])) {
-		return set_error($out['message'],$out['error']);
-	}
+	$out = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$data['md_id']]);
+	if(empty($out)) return set_error(getLang('error_founded'),4201);
 
 	if($out['md_id']) {
 		// KB 로 바꿈

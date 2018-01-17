@@ -8,9 +8,9 @@ $style = isset($_WIDGET['style']) ? $_WIDGET['style'] : 'width:100%';
 
 $md_title = getModule($_WIDGET['module'], 'md_title');
 if($type === 'gallery') {
-	$_list = DB::getList('SELECT * FROM '._AF_FILE_TABLE_.' WHERE md_id=:1 and mf_type like \'image%\' and mf_size > 1023 GROUP BY mf_target ORDER BY rand() LIMIT '.$count, [$_WIDGET['module']]);
+	$_list = DB::gets(_AF_FILE_TABLE_,['md_id'=>$_WIDGET['module']],['^'=>'rand()','mf_target'=>'GROUP'],$count);
 } else {
-	$_list = getDBList(_AF_DOCUMENT_TABLE_,['md_id'=>$_WIDGET['module']],'wr_regdate desc',1,$count);
+	$_list = DB::gets(_AF_DOCUMENT_TABLE_,['md_id'=>$_WIDGET['module']],'wr_regdate',$count);
 }
 ?>
 <div class="content_widget panel panel-default" style="<?php echo $style?>" role="group" aria-labelledby="afWidgetTitle">
@@ -30,7 +30,7 @@ if($type === 'gallery') {
 	<?php } else { ?>
 		<div class="list-group" role="list">
 		<?php
-			foreach ($_list['data'] as $val) {
+			foreach ($_list as $val) {
 				echo '<a class="list-group-item text-ellipsis" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl']).'">'.$val['wr_title'].'</a>';
 			}
 		?>

@@ -56,11 +56,11 @@ function proc($data) {
 					'md_id'=>$md_id,
 					'md_key'=>'page',
 					'md_title'=>$data['md_title'],
-					'(md_regdate)'=>'NOW()'
+					'^md_regdate'=>'NOW()'
 				]
 			);
 
-			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$md_id,'(pg_regdate)'=>'NOW()']);
+			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$md_id,'^pg_regdate'=>'NOW()']);
 
 			$module = getModule($md_id);
 		} else {
@@ -81,19 +81,18 @@ function proc($data) {
 		if (!empty($data['remove_files'])) {
 
 			foreach ($data['remove_files'] as $val) {
-				$out = DB::select(_AF_FILE_TABLE_, [
+				$file = DB::get(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>1,
 					'mf_srl'=>$val
 				]);
-
-				$file = DB::assoc($out);
 				if (!empty($file) && true === DB::delete(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>1,
 					'mf_srl'=>$val])
 				) {
-					$filetype = strtolower(array_shift(explode('/', $file['mf_type'])));
+					$filetype = explode('/', $file['mf_type']);
+					$filetype = strtolower(array_shift($filetype));
 					$filetype = empty($file_types[$filetype]) ? 'binary' : $filetype;
 					$unlink_files[] = _AF_ATTACH_DATA_.$filetype.'/'.$md_id.'/1/'.$file['mf_upload_name'];
 				}
@@ -118,7 +117,8 @@ function proc($data) {
 					'size' => $files['size'][$i]
 				];
 
-				$filetype = strtolower(array_shift(explode('/', $file['type'])));
+				$filetype = explode('/', $file['type']);
+				$filetype = strtolower(array_shift($filetype));
 				$filetype = empty($file_types[$filetype]) ? 'binary' : $filetype;
 				$filename = $file['name'];
 				$fileext = explode('.', $filename);
@@ -148,10 +148,10 @@ function proc($data) {
 					'mf_type'=>$file['type'],
 					'mb_srl'=>0,
 					'mb_ipaddress'=>$mb_ipaddress,
-					'(mf_regdate)'=>'NOW()'
+					'^mf_regdate'=>'NOW()'
 				]);
 
-				$new_files[] = $mf_srl = DB::insertId();
+				$new_files[] = $mf_srl = DB::insert_id();
 				$file_count++;
 
 				if ($data['pg_type'] == 2) {
@@ -189,7 +189,7 @@ function proc($data) {
 				'pg_type'=>$data['pg_type'],
 				'pg_content'=>$data['pg_content'],
 				'pg_file'=>$file_count,
-				'(pg_update)'=>'NOW()'
+				'^pg_update'=>'NOW()'
 			], [
 				'md_id'=>$md_id
 			]
@@ -204,8 +204,9 @@ function proc($data) {
 	} catch (Exception $ex) {
 		DB::rollback();
 
-		// myisam면 rollback 수동으로 해야됨
-		if (DB::engine(_AF_PAGE_TABLE_) === 'myisam') {
+		// MySQL 5.5 이전 버전은 트랜잭션을 지원 안한다.
+		// Engine == MyISAM 트랜잭션을 지원 안한다.
+		if (DB::version('5.5.0', '<')) {
 			if ($new_insert && !empty($wr_srl)) {
 				@DB::delete(_AF_PAGE_TABLE_, ['md_id'=>$md_id]);
 				@DB::delete(_AF_MODULE_TABLE_, ['md_id'=>$md_id]);
@@ -213,7 +214,7 @@ function proc($data) {
 			} else if (count($new_files)>0) {
 				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $new_files)]);
 			}
-			// myisam면 삭제된 파일은 그냥 지움
+			// 트랜잭션을 지원 안하면 삭제된 파일은 그냥 지움
 			foreach ($unlink_files as $val) @unlinkFile($val);
 		}
 

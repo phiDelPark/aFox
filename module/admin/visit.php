@@ -1,10 +1,13 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
+	$_DATA['page'] = empty($_DATA['page'])?1:$_DATA['page'];
 	$search = empty($_DATA['search'])?null:'%'.$_DATA['search'].'%';
-	$vs_list = getDBList(_AF_VISITOR_TABLE_,[
-		'OR' =>empty($search)?[]:['vs_agent{LIKE}'=>$search, 'vs_referer{LIKE}'=>$search]
-	],'vs_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
+	$vs_list = DB::gets(_AF_VISITOR_TABLE_, 'SQL_CALC_FOUND_ROWS *', [
+		'(_OR_)' =>empty($search)?[]:['vs_agent{LIKE}'=>$search, 'vs_referer{LIKE}'=>$search]
+	],'vs_regdate', (($_DATA['page']-1)*20).',20');
+	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+	$vs_list = setDataListInfo($vs_list, DB::found(), $_DATA['page'], 20);
 ?>
 
 <table class="table table-hover table-nowrap">
@@ -22,8 +25,8 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if(!empty($vs_list['error'])) {
-		messageBox($vs_list['message'], $vs_list['error'], false);
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
 	} else {
 		$current_page = $vs_list['current_page'];
 		$total_page = $vs_list['total_page'];

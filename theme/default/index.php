@@ -6,6 +6,7 @@
 	$menus = getSiteMenu();
 	$mainmenu = [];
 	$submenu = [];
+	$muroot = '';
 
 	if(empty($menus['error'])) {
 		$url = getUrl();
@@ -48,13 +49,13 @@
 		<div class="right">
 			<span role="search" aria-label="Search"><a class="collapsed"  data-toggle="collapse" href="#nav-collapse3" aria-expanded="false" aria-controls="nav-collapse3"><i class="glyphicon glyphicon-search" aria-hidden="true"></i></a></span>
 <?php if (!empty($_MEMBER)) {
-	$notes = getDBList(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], '', 1, 5);
+	$notes = DB::gets(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], 'nt_send_date', '1,5');
 ?>
-			<?php if(empty($notes['error']) && $notes['total_count'] > 0){ ?>
+			<?php if(!empty($notes)){ ?>
 			<span>
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <strong class="caret"></strong></a>
 				<ul class="dropdown-menu message-dropdown dropdown-menu-right">
-					<?php foreach ($notes['data'] as $val) {
+					<?php foreach ($notes as $val) {
 						$_icon = $val['nt_sender'].'/profile_image.png';
 						if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
 							$_icon = _AF_URL_ . 'data/member/' . $_icon;

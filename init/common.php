@@ -10,7 +10,7 @@ if($_CFG['use_visit'] == '1' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_AD
 	set_cookie('ck_visit_ip', $_SERVER['REMOTE_ADDR'], 86400); // 하루동안 저장
 	if(checkUserAgent() != 'BOT') {
 		$tmp = empty($_SERVER['HTTP_REFERER'])?'':strip_tags($_SERVER['HTTP_REFERER']);
-		DB::insert(_AF_VISITOR_TABLE_, ['mb_ipaddress'=>strip_tags($_SERVER['REMOTE_ADDR']),'vs_agent'=>strip_tags($_SERVER['HTTP_USER_AGENT']),'vs_referer'=>$tmp,'(vs_regdate)'=>'NOW()']);
+		DB::insert(_AF_VISITOR_TABLE_, ['mb_ipaddress'=>strip_tags($_SERVER['REMOTE_ADDR']),'vs_agent'=>strip_tags($_SERVER['HTTP_USER_AGENT']),'vs_referer'=>$tmp,'^vs_regdate'=>'NOW()']);
 	}
 }
 
@@ -23,7 +23,7 @@ define('_AF_THEME_URL_', _AF_URL_ . 'theme/' . _AF_THEME_ . '/');
 // 로그인 중이면 맴버 정보 가져오기
 if($tmp = (isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cookie('AF_LOGIN_ID'))) {
 	if(preg_match('/^[a-zA-Z]+\w{2,}$/', $tmp)) {
-		$_MEMBER = DB::get("SELECT * FROM "._AF_MEMBER_TABLE_." WHERE mb_id = '{$tmp}'");
+		$_MEMBER = DB::get(_AF_MEMBER_TABLE_, ['mb_id'=>$tmp]);
 		if(DB::error() || empty($_MEMBER['mb_srl'])){
 			unset($_MEMBER);
 		} else {
@@ -47,7 +47,8 @@ if($tmp = (isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cook
 		unset($_SESSION['AF_LOGIN_ID']);
 	} else {
 		unset($_MEMBER['mb_password']);
-		$_MEMBER['mb_grade'] = ['m'=>'manager','s'=>'admin'][$_MEMBER['mb_rank']];
+		$tmp = ['m'=>'manager','s'=>'admin'];
+		$_MEMBER['mb_grade'] = $tmp[$_MEMBER['mb_rank']];
 		if (empty($_MEMBER['mb_grade'])) $_MEMBER['mb_grade'] = 'member';
 	}
 }
@@ -69,12 +70,12 @@ define('__POPUP__', !empty($_DATA['popup']) && $_DATA['popup'] === '1');
 // 문서번호만 오면 id 가져옴
 if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))) {
 	if(empty($_DATA['srl'])) {
-		$tmp = getDBItem(_AF_COMMENT_TABLE_,['rp_srl'=>(int)$_DATA['rp']], 'wr_srl');
-		if(empty($tmp['error'])) $_DATA['srl'] = $tmp['wr_srl'];
+		$tmp = DB::get(_AF_COMMENT_TABLE_, 'wr_srl', ['rp_srl'=>(int)$_DATA['rp']]);
+		if(!empty($tmp['wr_srl'])) $_DATA['srl'] = $tmp['wr_srl'];
 	}
 	if(!empty($_DATA['srl'])) {
-		$tmp = getDBItem(_AF_DOCUMENT_TABLE_,['wr_srl'=>(int)$_DATA['srl']], 'md_id');
-		if(empty($tmp['error'])) $_DATA['id'] = $tmp['md_id'];
+		$tmp = DB::get(_AF_DOCUMENT_TABLE_, 'md_id', ['wr_srl'=>(int)$_DATA['srl']]);
+		if(!empty($tmp['md_id'])) $_DATA['id'] = $tmp['md_id'];
 	}
 	setQuery('','id',empty($_DATA['id'])?'':$_DATA['id'],'srl',empty($_DATA['srl'])?'':$_DATA['srl'],'rp',empty($_DATA['rp'])?'':$_DATA['rp']);
 }
@@ -101,6 +102,10 @@ define('__MODULE__', $_DATA['module']);
 define('__MID__', $_DATA['id']);
 
 if(__MODULE__) {
+	if(!file_exists(_AF_MODULES_PATH_ . __MODULE__ . '/index.php')) {
+		goUrl(_AF_URL_);
+		exit();
+	}
 	require_once _AF_MODULES_PATH_ . __MODULE__ . '/protect.php';
 	require_once _AF_MODULES_PATH_ . __MODULE__ . '/index.php';
 }
@@ -126,4 +131,4 @@ header("Pragma: no-cache"); // HTTP 1.0.
 header("Expires: 0"); // Proxies.
 
 /* End of file common.php */
-/* Location: ./initial/common.php */
+/* Location: ./init/common.php */

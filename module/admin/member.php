@@ -1,10 +1,13 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
+	$_DATA['page'] = empty($_DATA['page'])?1:$_DATA['page'];
 	$search = empty($_DATA['search'])?null:'%'.$_DATA['search'].'%';
-	$member_list = getDBList(_AF_MEMBER_TABLE_,[
-		'OR' =>empty($search)?[]:['mb_id{LIKE}'=>$search, 'mb_nick{LIKE}'=>$search]
-	],'mb_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
+	$member_list = DB::gets(_AF_MEMBER_TABLE_, 'SQL_CALC_FOUND_ROWS *', [
+		'(_OR_)' =>empty($search)?[]:['mb_id{LIKE}'=>$search, 'mb_nick{LIKE}'=>$search]
+	],'mb_regdate', (($_DATA['page']-1)*20).',20');
+	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+	$member_list = setDataListInfo($member_list, DB::found(), $_DATA['page'], 20);
 ?>
 
 <p class="navbar">
@@ -29,8 +32,8 @@
 	$start_page = $current_page = 1;
 	$rank_arr = ['61'=>getLang('manager'),'67'=>getLang('admin')];
 
-	if(!empty($member_list['error'])) {
-		messageBox($member_list['message'], $member_list['error'], false);
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
 	} else {
 		$current_page = $member_list['current_page'];
 		$total_page = $member_list['total_page'];

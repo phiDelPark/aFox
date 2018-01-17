@@ -1,11 +1,8 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	$config = getDBItem(_AF_CONFIG_TABLE_, []);
-	if(!empty($config['error'])) {
-		messageBox($config['message'],$config['error'], false);
-	}
-
+	$config = DB::get(_AF_CONFIG_TABLE_);
+	if($ex=DB::error()) messageBox($ex->getMessage(), $ex->getCode(), false);
 ?>
 
 <form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off" enctype="multipart/form-data">

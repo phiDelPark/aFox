@@ -12,9 +12,7 @@ function proc($data) {
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
 
 	try {
-		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'wr_srl, wr_updater, md_id, mb_srl, mb_password');
-
-		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
+		$doc = DB::get(_AF_DOCUMENT_TABLE_, 'wr_srl, wr_updater, md_id, mb_srl, mb_password', ['wr_srl'=>$wr_srl]);
 		if(empty($doc['wr_srl'])) throw new Exception(getLang('error_request'),4303);
 
 		// 권한 체크
@@ -48,7 +46,7 @@ function proc($data) {
 				[
 					'md_id'=>'_AFOXtRASH_',
 					'wr_updater'=>$md_id,
-					'(wr_update)'=>'NOW()'
+					'^wr_update'=>'NOW()'
 				], [
 					'wr_srl'=>$wr_srl
 				]

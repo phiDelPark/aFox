@@ -15,10 +15,8 @@ function proc($data) {
 	if(!file_exists($_template_file)) {
 		return set_error(getLang('error_founded'),4201);
 	}
-
-	$_THEME = DB::query('SELECT th_extra FROM '._AF_THEME_TABLE_.' WHERE th_id=:1',[$data['th_id']]);
+	$_THEME = DB::get(_AF_THEME_TABLE_,'th_extra',['th_id'=>$data['th_id']]);
 	if(!$ex = DB::error()) {
-		$_THEME = DB::assoc($_THEME);
 		$_THEME = empty($_THEME['th_extra'])?[]:unserialize($_THEME['th_extra']);
 		$_THEME['th_id'] = $data['th_id'];
 	} else {

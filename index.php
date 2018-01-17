@@ -25,7 +25,7 @@ if(!empty($_GET['file'])) {
 	exit();
 }
 
-require_once __DIR__ . '/initial/common.php';
+require_once __DIR__ . '/init/common.php';
 
 if(__MODULE__ && !empty($_DATA['act'])) {
 	// 전체 로그인시엔 일부 함수만 실행가능

@@ -9,25 +9,10 @@
 	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
 	$count = 20;
 	$start = (($page - 1) * $count);
-	$page_list = [];
 
-	$out = DB::getList("SELECT SQL_CALC_FOUND_ROWS * FROM $pg INNER JOIN $md ON $md.md_id = $pg.md_id WHERE $where ORDER BY $pg.pg_regdate DESC LIMIT $start,$count");
-	if($ex = DB::error()) {
-		messageBox($ex->getMessage(),$ex->getCode(), false);
-	} else {
-		$total_count = DB::found();
-		$cur_page = $page;
-		$tal_page = ceil($total_count / $count);
-		$page_list['current_page'] = $cur_page;
-		$page_list['total_page'] = $tal_page;
-		$cur_page--;
-		$str_page = $cur_page - ($cur_page % 10);
-		$end_page = ($tal_page > ($str_page + 10) ? $str_page + 10 : $tal_page);
-		$page_list['start_page'] = ++$str_page;
-		$page_list['end_page'] = $end_page;
-		$page_list['total_count'] = $total_count;
-		$page_list['data'] = $out;
-	}
+	$page_list = DB::query("SELECT SQL_CALC_FOUND_ROWS * FROM $pg INNER JOIN $md ON $md.md_id = $pg.md_id WHERE $where ORDER BY $pg.pg_regdate DESC LIMIT $start,$count",true);
+	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+	$page_list = setDataListInfo($page_list, DB::found(), $page, $count);
 
 	$_type = ['TEXT','MARKDOWN','HTML'];
 
@@ -54,19 +39,24 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if(count($page_list) > 0) {
-		$current_page = $page_list['current_page'];
-		$total_page = $page_list['total_page'];
-		$start_page = $page_list['start_page'];
-		$end_page = $page_list['end_page'];
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
+	} else {
+		if(count($page_list) > 0) {
+			$current_page = $page_list['current_page'];
+			$total_page = $page_list['total_page'];
+			$start_page = $page_list['start_page'];
+			$end_page = $page_list['end_page'];
 
-		foreach ($page_list['data'] as $key => $value) {
-			echo '<tr><th scope="row"><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
-			echo '<td class="hidden-xs hidden-sm">'.$_type[$value['pg_type']].'</td>';
-			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td>';
-			echo '<td class="hidden-xs hidden-sm">'.$value['grant_view'].'-'.$value['grant_reply'].'-'.$value['grant_download'].'</td>';
-			echo '<td>'.date('Y/m/d', strtotime($value['pg_update'])).'</td>';
-			echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].'" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
+			foreach ($page_list['data'] as $key => $value) {
+				$pg_type = $_type[(int)$value['pg_type']];
+				echo '<tr><th scope="row"><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
+				echo '<td class="hidden-xs hidden-sm">'.$pg_type.'</td>';
+				echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td>';
+				echo '<td class="hidden-xs hidden-sm">'.$value['grant_view'].'-'.$value['grant_reply'].'-'.$value['grant_download'].'</td>';
+				echo '<td>'.date('Y/m/d', strtotime($value['pg_update'])).'</td>';
+				echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-exec-ajax="page.getPage" data-ajax-param="md_id,'.$value['md_id'].'" data-modal-target="#page_modal">'.getLang('setup').'</button></td></tr>';
+			}
 		}
 	}
 ?>

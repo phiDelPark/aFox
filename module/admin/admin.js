@@ -139,9 +139,9 @@
 					case 'error':
 					break;
 					case 'success':
-						if(files.data.length > 0) {
+						if(files && files.length > 0) {
 							data['files'] = [];
-							data['files'] = $.merge(data['files'], files.data);
+							data['files'] = $.merge(data['files'], files);
 						}
 						func_success();
 						return false;

@@ -7,22 +7,19 @@ function proc($data) {
 	if(!isset($data['ao_id'])) return set_error(getLang('error_request'),4303);
 
 	$_template_file = _AF_ADDONS_PATH_ . $data['ao_id'] . '/setup.php';
+	if(!file_exists($_template_file)) return set_error(getLang('error_founded'),4201);
 
-	if(!file_exists($_template_file)) {
-		return set_error(getLang('error_founded'),4201);
-	}
+	$_ADDON = DB::get(_AF_ADDON_TABLE_, ['ao_id'=>$data['ao_id']]);
+	if(DB::error()) return set_error($error->getMessage(),$error->getCode());
 
-	$_ADDON = getDBItem(_AF_ADDON_TABLE_, ['ao_id'=>$data['ao_id']]);
-	if(!empty($_ADDON['error'])) {
-		return set_error( $_ADDON['message'],$_ADDON['error']);
-	}
+	if(empty($_ADDON['access_mode'])) $_ADDON['access_mode'] = null;
 	if(!empty($_ADDON['ao_extra'])) {
 		$extra = unserialize($_ADDON['ao_extra']);
 		unset($_ADDON['ao_extra']);
 		$_ADDON = array_merge($_ADDON, $extra);
 	}
 
-	$out = getDBItem(_AF_TRIGGER_TABLE_, ['tg_key'=>'A','tg_id'=>$data['ao_id']]);
+	$out = DB::get(_AF_TRIGGER_TABLE_, ['tg_key'=>'A','tg_id'=>$data['ao_id']]);
 	$_ADDON['use_pc'] = empty($out['use_pc']) ? 0 : $out['use_pc'];
 	$_ADDON['use_mobile'] = empty($out['use_mobile']) ? 0 : $out['use_mobile'];
 
@@ -46,7 +43,7 @@ function proc($data) {
 
 	require($_template_file);
 
-	$out = DB::query('SELECT md_id FROM '._AF_MODULE_TABLE_.' WHERE 1 ORDER BY md_key');
+	$_list = DB::gets(_AF_MODULE_TABLE_,'md_id',[],'md_key');
 	if(!DB::error()) {
 		echo '<hr style="margin:25px 0 20px"><a href="#" style="display:block;padding:5px" onclick="jQuery(this).next().removeClass(\'hide\').end().remove();return false">'.getLang('advanced_setup').'</a><div class="hide"><div><label>'.getLang('md_id').':</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="include"'.($_ADDON['access_mode']!='exclude'?' checked="checked"':'').'> '.getLang('include').'</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="exclude"'.($_ADDON['access_mode']=='exclude'?' checked="checked"':'').'> '.getLang('exclude').'</label></div><p class="help-block">'.getLang('desc_access_md_id').'</p><div>';
 
@@ -57,7 +54,7 @@ function proc($data) {
 			}
 		}
 
-		while ($row = DB::assoc($out)) {
+		foreach ($_list as $row) {
 			echo '<label><input name="access_md_ids[]" type="checkbox" value="'.$row['md_id'].'"'.($access_md_ids[$row['md_id']]===true?' checked="checked"':'').'> '.$row['md_id'].'</label>&nbsp;&nbsp;';
 		}
 

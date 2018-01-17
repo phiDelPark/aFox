@@ -12,7 +12,9 @@ if(!defined('__AFOX__')) exit();
 		$_count = empty($_this['md_list_count'])?20:$_this['md_list_count'];
 	}
 
-	$_list = getDBList(_AF_MODULE_TABLE_, ['md_key'=>'board']);
+	$_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', ['md_key'=>'board']);
+	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+	//$_list = setDataListInfo($_list, DB::found(), $_DATA['page'], 20);
 ?>
 
 <form action="<?php echo _AF_URL_ ?>" method="post" autocomplete="off" enctype="multipart/form-data">
@@ -53,16 +55,16 @@ if(!defined('__AFOX__')) exit();
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if(!empty($_list['error'])) {
-		messageBox($_list['message'], $_list['error'], false);
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
 	} else {
-		$current_page = $_list['current_page'];
-		$total_page = $_list['total_page'];
-		$start_page = $_list['start_page'];
-		$end_page = $_list['end_page'];
+		//$current_page = $_list['current_page'];
+		//$total_page = $_list['total_page'];
+		//$start_page = $_list['start_page'];
+		//$end_page = $_list['end_page'];
 
-		foreach ($_list['data'] as $key => $value) {
-			echo '<tr><th scope="row"><input type="checkbox" name="md_ids[]" value="'.$value['md_id'].'" class="data_selecter" style="margin-right:5px" except-event'.(array_search($value['md_id'], $_mids)===false?'':' checked').'>'.$value['md_id'].'</th>';
+		foreach ($_list as $key => $value) {
+			echo '<tr><th scope="row"><input type="checkbox" name="md_ids[]" value="'.$value['md_id'].'" class="data_selecter" style="margin-right:5px" except-event'.(empty($_mids)||array_search($value['md_id'], $_mids)===false?'':' checked').'>'.$value['md_id'].'</th>';
 			echo '<td>'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td></tr>';
 		}
 	}

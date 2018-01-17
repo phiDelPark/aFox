@@ -11,14 +11,13 @@ function proc($data) {
 	DB::transaction();
 
 	try {
-		$module = getDBItem(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$data['md_id']]);
-		if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
+		$module = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$data['md_id']]);
 		if(empty($module['md_id'])) throw new Exception(getLang('error_request'),4303);
 
 		$md_id = $module['md_id'];
 
 		$sql = 'SELECT md_id,wr_srl,wr_updater FROM '._AF_DOCUMENT_TABLE_.' WHERE md_id=:1 OR (md_id=\'_AFOXtRASH_\' AND wr_updater=:2)';
-		DB::getList($sql, [$md_id,$md_id], function($r){
+		DB::query($sql, [$md_id,$md_id], function($r){
 			while ($row = DB::assoc($r)) {
 				$_md_id = ($row['md_id'] === '_AFOXtRASH_') ? $row['wr_updater'] : $row['md_id'];
 				$_wr_srl = $row['wr_srl'];

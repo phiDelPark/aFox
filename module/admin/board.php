@@ -1,17 +1,18 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-
+	$_DATA['page'] = empty($_DATA['page'])?1:$_DATA['page'];
 	$search = empty($_DATA['search'])?null:'%'.$_DATA['search'].'%';
-	$board_list = getDBList(_AF_MODULE_TABLE_,[
+	$board_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', [
 		'md_key'=>'board',
-		'OR' =>empty($search)?[]:['md_id{LIKE}'=>$search, 'md_title{LIKE}'=>$search]
-	],'md_regdate desc', empty($_DATA['page']) ? 1 : $_DATA['page'], 20);
+		'(_OR_)' =>empty($search)?[]:['md_id{LIKE}'=>$search, 'md_title{LIKE}'=>$search]
+	], 'md_regdate', (($_DATA['page']-1)*20).',20');
+	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+	$board_list = setDataListInfo($board_list, DB::found(), $_DATA['page'], 20);
 ?>
 
 <p class="navbar">
   <button type="button" class="btn btn-primary mw-20" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('new_board')?></button>
 </p>
-
 
 <table class="table table-hover table-nowrap">
 <thead>
@@ -29,8 +30,8 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if(!empty($board_list['error'])) {
-		messageBox($board_list['message'], $board_list['error'], false);
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
 	} else {
 		$current_page = $board_list['current_page'];
 		$total_page = $board_list['total_page'];

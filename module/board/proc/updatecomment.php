@@ -21,8 +21,7 @@ function proc($data) {
 	try {
 
 		if(!empty($rp_srl)) {
-			$cmt = getDBItem(_AF_COMMENT_TABLE_, ['rp_srl'=>$rp_srl], 'wr_srl, rp_parent, rp_secret, rp_depth, mb_srl, mb_password');
-			if(!empty($cmt['error'])) throw new Exception($cmt['message'], $cmt['error']);
+			$cmt = DB::get(_AF_COMMENT_TABLE_, 'wr_srl, rp_parent, rp_secret, rp_depth, mb_srl, mb_password', ['rp_srl'=>$rp_srl]);
 			if(empty($cmt['wr_srl'])) throw new Exception(getLang('error_founded'), 4201);
 			$wr_srl = (int) abs(empty($cmt['wr_srl']) ? 0 : $cmt['wr_srl']);
 
@@ -41,30 +40,29 @@ function proc($data) {
 				$_end_char = chr(0x7E);
 				$rp_depth = $cmt['rp_depth'];
 
-				$_wheres = [
-					'wr_srl'=>$wr_srl,
-					'rp_parent'=>$rp_root,
-					'rp_depth{LIKE}'=>empty($cmt['rp_depth'])?null:$cmt['rp_depth'].'%'
-				];
+				$_out1 = DB::get(_AF_COMMENT_TABLE_,
+					'MAX(SUBSTRING(rp_depth,'.$_len.',1)) as reply',
+					[
+						'wr_srl'=>$wr_srl,
+						'rp_parent'=>$rp_root,
+						'rp_depth{LIKE}'=>empty($cmt['rp_depth'])?null:$cmt['rp_depth'].'%',
+						'^'=>'SUBSTRING(`rp_depth`,'.$_len.',1)<>\'\''
+					]
+				);
 
-				$wheres = implode(' AND ', DB::escapeArray($_wheres, TRUE)).' AND SUBSTRING(`rp_depth`,'.$_len.',1)<>\'\'';
-				$_out1 = DB::get('SELECT MAX(SUBSTRING(rp_depth,'.$_len.',1)) as reply FROM '._AF_COMMENT_TABLE_.' WHERE '.$wheres);
-
-				if (!$_out1['reply']) {
+				if (empty($_out1['reply'])) {
 					$rp_depth .= $_begin_char;
 				} else if (ord($_out1['reply']) == ord($_end_char))
 					throw new Exception(getLang('msg_not_write_reply'), 571);
 				else $rp_depth .= chr(ord($_out1['reply']) + 1);
 			}
 		} else {
-			$_out1 = getDBItem(_AF_COMMENT_TABLE_, ['wr_srl'=>$wr_srl], 'max(rp_parent) as max');
+			$_out1 = DB::get(_AF_COMMENT_TABLE_, 'max(rp_parent) as max', ['wr_srl'=>$wr_srl]);
 			$rp_root = $_out1['max'] + 1;
 		}
 
-		$doc = getDBItem(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl], 'md_id,mb_srl');
-		if(!empty($doc['error'])) throw new Exception($doc['message'], $doc['error']);
-		// 문서가 없으면 에러
-		if(empty($wr_srl)) throw new Exception(getLang('error_founded'), 4201);
+		$doc = DB::get(_AF_DOCUMENT_TABLE_, 'wr_srl,md_id,mb_srl', ['wr_srl'=>$wr_srl]);
+		if(empty($doc['wr_srl'])) throw new Exception(getLang('error_founded'), 4201);
 
 		$module = getModule($doc['md_id']);
 		if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
@@ -118,19 +116,19 @@ function proc($data) {
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
 					'mb_ipaddress'=>$data['mb_ipaddress'],
-					'(rp_regdate)'=>'NOW()',
-					'(rp_update)'=>'NOW()'
+					'^rp_regdate'=>'NOW()',
+					'^rp_update'=>'NOW()'
 				]
 			);
 
-			$ret_rp_srl = DB::insertId();
+			$ret_rp_srl = DB::insert_id();
 
 			// 포인트 사용중이면
 			$_r = setPoint((int)$module['point_reply']);
 			if(!empty($_r['error'])) throw new Exception($_r['message'], $_r['error']);
 
 			setHistoryAction('wr_reply', $wr_srl, false, function($v)use($wr_srl){
-				DB::update(_AF_DOCUMENT_TABLE_, ['(wr_reply)'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);
+				DB::update(_AF_DOCUMENT_TABLE_, ['^wr_reply'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);
 			});
 
 			sendNote(empty($sendsrl) ? $doc['mb_srl'] : $sendsrl,
@@ -156,7 +154,7 @@ function proc($data) {
 					'rp_secret'=>$data['rp_secret'],
 					'rp_type'=>$data['rp_type'],
 					'rp_content'=>$data['rp_content'],
-					'(rp_update)'=>'NOW()'
+					'^rp_update'=>'NOW()'
 				], [
 					'rp_srl'=>$rp_srl
 				]
@@ -174,8 +172,9 @@ function proc($data) {
 	} catch (Exception $ex) {
 		DB::rollback();
 
-		// myisam면 rollback 수동으로 해야됨
-		if(DB::engine(_AF_COMMENT_TABLE_) === 'myisam') {
+		// MySQL 5.5 이전 버전은 트랜잭션을 지원 안한다.
+		// Engine == MyISAM 트랜잭션을 지원 안한다.
+		if (DB::version('5.5.0', '<')) {
 			if($new_insert && !empty($ret_rp_srl)) {
 				@DB::delete(_AF_COMMENT_TABLE_, ['rp_srl'=>$ret_rp_srl]);
 			}

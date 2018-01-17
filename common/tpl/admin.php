@@ -40,7 +40,7 @@ var request_uri     = "<?php echo getRequestUri() ?>";
 	$tmp = [];
 	foreach ($_ADDELEMENTS['LANG'] as $val) {
 		foreach ($val as $key){
-			if(!$tmp[$key]){
+			if(empty($tmp[$key])){
 			$tmp[$key]=1;
 			echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';
 			}

@@ -8,7 +8,7 @@ function proc($data) {
 	}
 
 	$search = empty($data['combine']) ? '' : $data['combine'];
-	$page = empty($data['page']) ? '' : $data['page'];
+	$page = empty($data['page']) ? 1 : $data['page'];
 
 	$_mids = [];
 	$_count = 20;
@@ -34,12 +34,13 @@ function proc($data) {
 
 	$_wheres = [
 		'md_id{IN}'=>implode(',', $_mids),
-		'OR' =>$schs
+		'(_OR_)' =>$schs
 	];
 
-	if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
+	//if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
 
-	return getDBList(_AF_DOCUMENT_TABLE_, $_wheres, 'md_id,wr_regdate desc', $page, $_count);
+	$_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres, 'md_id,wr_regdate', (($page-1)*$_count).','.$_count);
+	return setDataListInfo($_list, DB::found(), $page, $_count);
 }
 
 /* End of file default.php */

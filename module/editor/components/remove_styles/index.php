@@ -16,8 +16,8 @@ if(!defined('__AFOX__')) exit();
 </div>
 <hr style="margin:10px 0">
 <div style="margin:10px;text-align:right">
-	<button onclick="remove_styles()">확인</button>
-	<button onclick="window.close()">취소</button>
+	<button class="btn btn-default" onclick="remove_styles()">확인</button>
+	<button class="btn btn-default" onclick="window.close()">취소</button>
 </div>
 <script>
 	function remove_styles() {
