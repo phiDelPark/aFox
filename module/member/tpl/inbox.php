@@ -3,6 +3,7 @@
 
 	$mb = $_MEMBER;
 	$schs = [];
+	$_DATA['page'] = empty($_DATA['page'])?1:$_DATA['page'];
 	$search = empty($_DATA['search']) ? '' : $_DATA['search'];
 	if(!empty($search)) {
 		$schkeys = ['date'=>'nt_send_date','read'=>'nt_read_date'];
@@ -14,7 +15,7 @@
 			$schs = ['nt_sender_nick{LIKE}'=>'%'.$search.'%'];
 		}
 	}
-	$_list = DB::gets(_AF_NOTE_TABLE_,'SQL_CALC_FOUND_ROWS *',['mb_srl'=>$mb['mb_srl'],'(_OR_)'=>$schs],'nt_send_date', (((empty($_DATA['page'])?1:$_DATA['page'])-1)*20).',20');
+	$_list = DB::gets(_AF_NOTE_TABLE_,'SQL_CALC_FOUND_ROWS *',['mb_srl'=>$mb['mb_srl'],'(_OR_)'=>$schs],'nt_send_date', (($_DATA['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 	$_list = setDataListInfo($_list, DB::found(), $_DATA['page'], 20);
 

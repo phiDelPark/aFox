@@ -3,6 +3,7 @@
 
 	$mb = $_MEMBER;
 	$schs = [];
+	$_DATA['page'] = empty($_DATA['page'])?1:$_DATA['page'];
 	$search = empty($_DATA['search']) ? '' : $_DATA['search'];
 	if(!empty($search)) {
 		$schkeys = ['tag'=>'wr_tags','nick'=>'mb_nick','date'=>'wr_regdate'];
@@ -14,7 +15,7 @@
 			$schs = ['wr_title{LIKE}'=>'%'.$search.'%', 'wr_content{LIKE}'=>'%'.$search.'%'];
 		}
 	}
-	$_list = DB::gets(_AF_DOCUMENT_TABLE_,'SQL_CALC_FOUND_ROWS *',['md_id'=>'_AFOXtRASH_','mb_srl'=>$mb['mb_srl'],'(_OR_)'=>$schs],'wr_regdate', (((empty($_DATA['page'])?1:$_DATA['page'])-1)*20).',20');
+	$_list = DB::gets(_AF_DOCUMENT_TABLE_,'SQL_CALC_FOUND_ROWS *',['md_id'=>'_AFOXtRASH_','mb_srl'=>$mb['mb_srl'],'(_OR_)'=>$schs],'wr_regdate', (($_DATA['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 	$_list = setDataListInfo($_list, DB::found(), $_DATA['page'], 20);
 
