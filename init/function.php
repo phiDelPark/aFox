@@ -227,6 +227,15 @@ if(!defined('__AFOX__')) exit();
 	function setHistoryAction($act, $value, $allowdup = false, $callback = null) {
 		global $_MEMBER;
 
+		// 비회원은 기록안함
+		if (empty($_MEMBER)) {
+			if($callback != null) {
+				$_r = $callback(['data'=>true,'mb_srl'=>0,'ipaddress'=>$_SERVER['REMOTE_ADDR']]);
+				if(!empty($_r['error'])) return set_error($_r['message'], $_r['error']);
+			}
+			return true;
+		}
+
 		$uinfo = [];
 		$uinfo['mb_srl'] = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
 		$uinfo['ipaddress'] = $_SERVER['REMOTE_ADDR'];
@@ -237,13 +246,13 @@ if(!defined('__AFOX__')) exit();
 		DB::transaction();
 
 		try {
-			$_r = DB::get(_AF_HISTORY_TABLE_,
+			$uinfo['data'] = DB::get(_AF_HISTORY_TABLE_,
 				[
 					'hs_action'=>$act.'('.$value.')',
 					$pkey=>$pval
 				]
 			);
-			if($allowdup || empty($_r)) {
+			if($allowdup || empty($uinfo['data'])) {
 				DB::insert(_AF_HISTORY_TABLE_,
 					[
 						'mb_srl'=>$uinfo['mb_srl'],
@@ -253,7 +262,6 @@ if(!defined('__AFOX__')) exit();
 					]
 				);
 			}
-
 			if($callback != null) {
 				$_r = $callback($uinfo);
 				if(!empty($_r['error'])) throw new Exception($_r['message'], $_r['error']);
