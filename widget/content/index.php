@@ -8,7 +8,7 @@ $style = isset($_WIDGET['style']) ? $_WIDGET['style'] : 'width:100%';
 
 $md_title = getModule($_WIDGET['module'], 'md_title');
 if($type === 'gallery') {
-	$_list = DB::gets(_AF_FILE_TABLE_,['md_id'=>$_WIDGET['module']],['^'=>'rand()','mf_target'=>'GROUP'],$count);
+	$_list = DB::gets(_AF_FILE_TABLE_,['md_id'=>$_WIDGET['module'],'mf_type{LIKE}'=>'image%'],['^'=>'rand()','mf_target'=>'GROUP'],$count);
 } else {
 	$_list = DB::gets(_AF_DOCUMENT_TABLE_,['md_id'=>$_WIDGET['module']],'wr_regdate',$count);
 }
