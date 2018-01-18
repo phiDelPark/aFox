@@ -328,20 +328,12 @@ class DB {
 	public static function count($table) {
 		if(func_num_args() > 1) self::__sets(array_slice(func_get_args(), 1));
 		$result = self::get($table, 'COUNT(*) as cnt');
-		if(mysql_errno()){
-			throw new Exception(mysql_error(), mysql_errno());
-			return -1;
-		}
-		return $result['cnt'];
+		return mysql_errno() ? -1 : (int)$result['cnt'];
 	}
 
 	public static function found() {
 		$result = self::query("SELECT FOUND_ROWS() as c", true);
-		if(mysql_errno()){
-			throw new Exception(mysql_error(), mysql_errno());
-			return -1;
-		}
-		return $result[0]['c'];
+		return mysql_errno() ? -1 : $result[0]['c'];
 	}
 
 	public static function assoc($res) {
