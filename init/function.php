@@ -535,20 +535,19 @@ if(!defined('__AFOX__')) exit();
 						$val = preg_replace_callback('/&#(?:x([a-fA-F0-9]+)|0*(\d+));/', function ($c) {return chr(($c[1]?'0x00'.$c[1]:$c[2])+0);}, $m[3][$idx] . $m[4][$idx]);
 						$val = preg_replace('/^\s+|[\t\n\r]+/', '', $val);
 						if(preg_match('/^[a-z]+script:/i', $val)) continue;
-						$attrs[$name] = $val;
+						$attrs[strtolower(trim($name))] = $val;
 					}
 				}
+				// widget 관리자만 사용가능
+				if(isset($attrs['widget']) && $tag == 'img' && !isAdmin()) return "";
 				if(isset($attrs['style']) && preg_match('@(?:/\*|\*/|\n|:\s*expression\s*\()@i', $attrs['style'])) unset($attrs['style']);
 				$attr = array();
 				foreach($attrs as $name => $val) {
 					if($tag == 'object' || $tag == 'embed' || $tag == 'a') {
-						$attribute = strtolower(trim($name));
-						if($attribute == 'data' || $attribute == 'src' || $attribute == 'href') {
+						if($name == 'data' || $name == 'src' || $name == 'href') {
 							if(stripos($val, 'data:') === 0) continue;
 						}
-					}
-					if($tag == 'img') {
-						$attribute = strtolower(trim($name));
+					} elseif($tag == 'img') {
 						if(stripos($val, 'data:') === 0) continue;
 					}
 					$val = str_replace('"', '&quot;', $val);
@@ -592,14 +591,12 @@ if(!defined('__AFOX__')) exit();
 			$text = preg_replace($patterns, $replacement, $text);
 		}
 
-		$text = preg_replace_callback('/<img[^>]*class="afox_widget"\s*([^>]*)>/is',  function($m){
-			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)) {
-				$attrs = [];
+		$text = preg_replace_callback('/<img[^>]*widget="([a-zA-Z_]+)"\s*([^>]*)>/is',  function($m){
+			$attrs = ['widget'=>$m[1]];
+			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[2], $m2)) {
 				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
-				if(!empty($attrs['widget'])) {
-					return displayWidget($attrs['widget'], $attrs);
-				}
 			}
+			if(!empty($attrs['widget'])) return displayWidget($attrs['widget'], $attrs);
 			return '';
 		}, $text);
 

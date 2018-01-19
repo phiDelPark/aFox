@@ -333,7 +333,7 @@
 						$_i.contents().find('body').html($txtara.val());
 						/*
 						$_i.contents().offOn('keydown', function(e) {
-							if (e.keyCode == 13 && e.shiftKey !== true) {
+							if (e.which == 13 && e.shiftKey !== true) {
 								$this.paste('<br>', false);
 								return false;
 							}
@@ -505,7 +505,7 @@
 				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(.*)/i,
 					t = value.getQuery('t') || value.getQuery('start');
 				if (pattern.test(value)) {
-					text = '<img class="afox_widget" widget="youtube" src="' + value.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" width=\"560\" height=\"315\" vid=\"$4") + '"' + (t ? ' time="' + t + '"' : '') + '>' + "\n";
+					text = '<img widget="youtube" src="' + value.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" width=\"560\" height=\"315\" vid=\"$4") + '"' + (t ? ' time="' + t + '"' : '') + '>' + "\n";
 				} else {
 					if (!value) value = '#';
 					text = '<a href="' + value + '" target="_blank">' + value + '</a>';

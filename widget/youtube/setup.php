@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 <h2>위젯 코드 예제</h2>
 <pre>
-&lt;img class="afox_widget" widget="youtube" vid="아이디"&gt;
+&lt;img widget="youtube" vid="아이디"&gt;
 
 * 사용 가능한 옵션 *
   width     : 동영상 넓이
@@ -17,5 +17,5 @@ if(!defined('__AFOX__')) exit();
 
 <h3>예제 1</h3>
 <pre>
-&lt;img class="afox_widget" widget="youtube" vid="id" start="45" rel="0"&gt;
+&lt;img widget="youtube" vid="id" start="45" rel="0"&gt;
 </pre>

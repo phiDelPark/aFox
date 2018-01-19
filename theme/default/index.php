@@ -179,9 +179,12 @@ if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) { ?>
 			<div class="list-group">
 			  <span class="list-group-item disabled">
 				<?php echo $mainmenu['_ACTIVE_']['mu_title'] ?>
+				<?php if(__MOBILE__){ ?>
+				<a class="pull-right" data-toggle="collapse" href="#collapseAfSubMenu" aria-expanded="false" aria-controls="collapseAfSubMenu"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
+				<?php } ?>
 			  </span>
 			</div>
-			<div class="list-group">
+			<div class="list-group<?php echo __MOBILE__?' collapse" id="collapseAfSubMenu':'' ?>">
 	<?php
 		foreach ($submenu['_ACTIVE_'] as $key => $val) {
 			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a>';

@@ -4,7 +4,9 @@ if(empty($_WIDGET['module']) || __MODULE__ != 'page') return;
 
 $type = isset($_WIDGET['type']) ? $_WIDGET['type'] : 'default';
 $count = isset($_WIDGET['count']) ? (int)$_WIDGET['count'] : 5;
-$style = isset($_WIDGET['style']) ? $_WIDGET['style'] : 'width:100%';
+$class = isset($_WIDGET['class']) ? $_WIDGET['class'] : '';
+$style = isset($_WIDGET['style']) ? 'style="'.$_WIDGET['style'].'"' : '';
+$style = __MOBILE__ && isset($_WIDGET['mobile-style']) ? 'style="'.$_WIDGET['mobile-style'].'"' : $style;
 
 $md_title = getModule($_WIDGET['module'], 'md_title');
 if($type === 'gallery') {
@@ -13,7 +15,8 @@ if($type === 'gallery') {
 	$_list = DB::gets(_AF_DOCUMENT_TABLE_,['md_id'=>$_WIDGET['module']],'wr_regdate',$count);
 }
 ?>
-<div class="content_widget panel panel-default" style="<?php echo $style?>" role="group" aria-labelledby="afWidgetTitle">
+<div class="content_widget <?php echo $class?>" <?php echo $style?>>
+<div class="panel panel-default" role="group" aria-labelledby="afWidgetTitle">
 	<div class="panel-heading clearfix" id="afWidgetTitle">
 	<?php echo $md_title ?>
 	<a class="pull-right" href="<?php echo getUrl('','id',$_WIDGET['module'])?>"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>
@@ -36,7 +39,7 @@ if($type === 'gallery') {
 		?>
 		</div >
 	<?php } ?>
-</div>
+</div></div>
 
 <?php
 

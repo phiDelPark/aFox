@@ -8,7 +8,7 @@ $_LANG['terms_of_use'] = '이용약관';
 $_LANG['verify_password'] = '비밀번호 확인';
 
 $_LANG['desc_change_mb_password'] = '비밀번호를 변경하시려면 비밀번호와 확인을 입력하세요.';
-$_LANG['desc_id'] = '아이디는 유일해야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다. (첫 글자는 영문이여야 합니다)';
+$_LANG['desc_id'] = '아이디 첫 글자는 영문이여야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다.';
 $_LANG['desc_member_icon'] = '회원 아이콘은 가로,세로 100x100 크기의 png 파일로 등록해주세요.';
 $_LANG['desc_member_memo'] = '회원 프로필에 표시할 메모를 입력할 수 있습니다. (Markdown 지원)';
 $_LANG['desc_new_mb_password'] = '비밀번호와 비밀번호 확인을 입력하세요.';
