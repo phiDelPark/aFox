@@ -5,7 +5,7 @@
 ?>
 
 <div id="fullscreen_bg" class="fullscreen_bg"/>
-<div class="modal fade in" tabindex="-1" role="dialog" aria-labelledby="<?php echo $signUp?'afSignUpFormTitle':'afMsgBox'?>" aria-hidden="true" style="z-index: 99999; display: block; padding-right: 17px;">
+<div role="dialog" aria-labelledby="<?php echo $signUp?'afSignUpFormTitle':'afMsgBox'?>" style="z-index:99999;display:block">
 	<div class="modal-dialog<?php echo $signUp?' modal-lg':''?>">
 		<?php if($signUp) { ?>
 			<div class="modal-content">

@@ -1,1 +1,1 @@
-@charset "utf-8";body{background-color:#1b1b1b;padding-top:40px}.fullscreen_bg{position:fixed;top:0;right:0;bottom:0;left:0;background-size:cover;background-position:50% 50%;background-image:url(img/bg.jpg);background-repeat:repeat}
+@charset "utf-8";body{background-color:#1b1b1b;padding-top:40px}.fullscreen_bg{position:fixed;top:0;right:0;bottom:0;left:0;background-size:cover;background-position:50% 50%;background-image:url(img/bg.jpg);background-repeat:repeat;overflow-y:auto}
