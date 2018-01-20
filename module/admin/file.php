@@ -1,40 +1,67 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
+	$duplicate = !empty($_DATA['duplicate']);
+	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
+	$count = $duplicate ? 30 : 20;
+	$start = (($page - 1) * $count);
+
 	$fl = _AF_FILE_TABLE_;
 	$dd = _AF_DOCUMENT_TABLE_;
 
-	$search = '';
-	if(!empty($_DATA['search'])) {
-		$tmp = $_DATA['search'];
-		$schkeys = ['name'=>'mf_name','desc'=>'mf_description','type'=>'mf_type','date'=>'mf_regdate'];
-		$ss = explode(':', $tmp);
-		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
-			$tmp = trim(implode(':', array_slice($ss,1)));
-			if(!empty($tmp)) $search = $fl.'.'.$schkeys[$ss[0]].' LIKE '.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%');
-		} else {
-			$search = '('.$fl.'.mf_name LIKE '.DB::escape('%'.$_DATA['search'].'%').' OR '.$fl.'.mf_description LIKE '.DB::escape('%'.$_DATA['search'].'%').')';
+	if($duplicate){
+		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS a.*, d.wr_title FROM $fl as a INNER JOIN $dd as d ON d.wr_srl = a.mf_target, (select mf_target,mf_name,mf_size from $fl where mf_link<>1 and mf_size>0 group by mf_name,mf_size having count(*) > 1) as b WHERE a.mf_link<>1 and a.mf_size=b.mf_size AND a.mf_name=b.mf_name ORDER BY a.mf_name,a.mf_regdate LIMIT $start,$count" , true);
+	}else {
+		$search = '';
+		if(!empty($_DATA['search'])) {
+			$tmp = $_DATA['search'];
+			$schkeys = ['name'=>'mf_name','desc'=>'mf_description','type'=>'mf_type','date'=>'mf_regdate'];
+			$ss = explode(':', $tmp);
+			if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
+				$tmp = trim(implode(':', array_slice($ss,1)));
+				if(!empty($tmp)) $search = 'f.'.$schkeys[$ss[0]].' LIKE '.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%');
+			} else {
+				$search = '(f.mf_name LIKE '.DB::escape('%'.$_DATA['search'].'%').' OR f.mf_description LIKE '.DB::escape('%'.$_DATA['search'].'%').')';
+			}
 		}
-	}
 
-	$category = $dd.(empty($_DATA['category'])?'.md_id <> \'_AFOXtRASH_\'':'.md_id = '.DB::escape($_DATA['category']));
-	$where = empty($search)&&empty($category) ? '1' : '('.$category.(empty($search)||empty($category) ? '' : ' AND ').$search.')';
-	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
-	$count = 20;
-	$start = (($page - 1) * $count);
-	$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS $fl.*, $dd.md_id FROM $fl INNER JOIN $dd ON $dd.wr_srl = $fl.mf_target WHERE $where ORDER BY $fl.mf_regdate DESC LIMIT $start,$count", true);
+		$category = 'd'.(empty($_DATA['category'])?'.md_id <> \'_AFOXtRASH_\'':'.md_id = '.DB::escape($_DATA['category']));
+		$where = empty($search)&&empty($category) ? '1' : '('.$category.(empty($search)||empty($category) ? '' : ' AND ').$search.')';
+		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS f.*, d.md_id FROM $fl as f INNER JOIN $dd as d ON d.wr_srl = f.mf_target WHERE $where ORDER BY f.mf_regdate DESC LIMIT $start,$count", true);
+	}
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 	$file_list = setDataListInfo($file_list, DB::found(), $page, $count);
-?>
 
+	if($duplicate) {
+		messageBox(getLang('desc_data_combine'), 2, false);
+	}
+	if($error) {
+		messageBox($error['message'], $error['error'], false);
+	}
+?>
+<?php if($duplicate) { ?>
+<a class="btn btn-success" href="#" onclick="return data_selected_combine()"><?php echo getLang('data_combine')?></a>
+<?php } ?>
 <table class="table table-hover table-nowrap">
 <thead>
 	<tr>
-		<th class="col-xs-1"><i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i>
-			<a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
+		<?php if($duplicate) { ?>
+		<th class="col-xs-1"><?php echo getLang('select')?></th>
+		<th class="col-xs-1"><?php echo getLang('module')?></th>
+		<th class="col-xs-1">.</th>
+		<?php } else { ?>
+		<th class="col-xs-1">
+			<i class="glyphicon glyphicon-option-vertical" aria-hidden="true"></i>
+			<a href="#DataManageAction"><?php echo getLang('data_manage')?></a>
+		</th>
+		<?php } ?>
 		<th><span class="th_title"><?php echo getLang('name')?></span>
-		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <a href="#" onclick="return data_selected_delete()"><?php echo getLang('data_delete')?></a></span></th>
+		<span class="data_controler" style="display:none"><input type="checkbox" style="margin-right:5px" class="data_all_selecter"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <a href="#" onclick="return data_selected_delete()"><?php echo getLang('data_delete')?></a> <i class="glyphicon glyphicon-search" aria-hidden="true"></i> <a href="<?php echo getUrl('duplicate',1)?>"><?php echo getLang('duplicate_files')?></a></span></th>
+		<?php if($duplicate) { ?>
+		<th class="col-xs-1 hidden-xs"><?php echo getLang('size')?></th>
+		<?php } else { ?>
 		<th class="col-xs-1 hidden-xs"><?php echo getLang('download')?></th>
+		<?php } ?>
 		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('ip')?></th>
 		<th class="col-xs-1"><?php echo getLang('date')?></th>
 	</tr>
@@ -45,20 +72,34 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
-		messageBox($error['message'], $error['error'], false);
-	} else {
+	if(!$error) {
 		$current_page = $file_list['current_page'];
 		$total_page = $file_list['total_page'];
 		$start_page = $file_list['start_page'];
 		$end_page = $file_list['end_page'];
 
 		foreach ($file_list['data'] as $key => $value) {
+			if($duplicate) {
+			$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
+			$filetype = explode('/', $value['mf_type']);
+			$filetype = strtolower(array_shift($filetype));
+			$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
+			$unfilename = _AF_URL_ .'data/attach/'. $filetype . '/' . $value['md_id'] . '/' . $value['mf_target'] . '/' . $value['mf_upload_name'];
+			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row" rowspan="2"><input type="radio" name="mf_standard" value="'.$value['mf_srl'].'" class="data_standard" style="margin-right:5px" except-event><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="margin-right:5px" except-event></th>';
+			echo '<td scope="row" rowspan="2" style="padding:2px"><img src="'.($unfilename).'" width="65" height="65"></td>';
+			echo '<td scope="row">'.$value['md_id'].'</td>';
+			echo '<td class="title">'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
+			echo '<td class="hidden-xs">'.shortFileSize($value['mf_size']).'</td>';
+			} else {
 			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-event>'.$value['md_id'].'</a></th>';
-			echo '<td class="title"><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="display:none;margin-right:5px" except-event>'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
+			echo '<td class="title"'.(empty($value['mf_size'])?' style="text-decoration:line-through"':'').'><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="display:none;margin-right:5px" except-event>'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
 			echo '<td class="hidden-xs">'.$value['mf_download'].'</td>';
+			}
 			echo '<td class="hidden-xs hidden-sm">'.$value['mb_ipaddress'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mf_regdate'])).'</td></tr>';
+			if($duplicate) {
+				echo '<tr><td class="title" colspan="4" style="color:#555;text-decoration:underline"><a href="'.getUrl('','id',$value['md_id'],'srl',$value['mf_target']).'" target="_blank">'.escapeHtml(cutstr($value['wr_title'],50)).'</a></td></tr>';
+			}
 		}
 	}
 ?>
@@ -79,6 +120,7 @@
 		<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
 		<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
 	</ul>
+	<?php if(!$duplicate) { ?>
 	<ul class="pagination">
 	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['admin'] ?>">
@@ -88,6 +130,7 @@
 		<?php if(!empty($_DATA['search'])||!empty($_DATA['category'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','','category','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 	</form></li>
 	</ul>
+	<?php } ?>
 </nav>
 
 <div id="file_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="adminFileModalTitle">
@@ -162,7 +205,7 @@
 	function data_selected_delete() {
 		if (confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['file']]))) {
 		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
-			data = {};
+			data = {},
 			srls = [];
 			$a.find('.data_selecter:checked').each(function(i) {
 				srls[i] = jQuery(this).val();
@@ -174,6 +217,33 @@
 			data['mf_srls'] = srls;
 			data['success_return_url'] = current_url;
 			exec_ajax('admin.deleteFiles', data);
+		}
+		return false;
+	}
+	function data_selected_combine() {
+		if (confirm($_LANG['confirm_select_combine'].sprintf([$_LANG['file']]))) {
+		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
+			data = {},
+			srls = [],
+			standards = [];
+			$a.find('.data_standard:checked').each(function(i) {
+				standards[i] = jQuery(this).val();
+			});
+			if(standards.length < 1) {
+				alert($_LANG['warning_selected'].sprintf([$_LANG['standard_point']]));
+				return false;
+			}
+			$a.find('.data_selecter:checked').each(function(i) {
+				srls[i] = jQuery(this).val();
+			});
+			if (srls.length < 1) {
+				alert($_LANG['warning_selected'].sprintf([$_LANG['file']]));
+				return false;
+			}
+			data['mf_srls'] = srls;
+			data['mf_standard'] = standards[0];
+			data['success_return_url'] = current_url;
+			exec_ajax('admin.combineFiles', data);
 		}
 		return false;
 	}

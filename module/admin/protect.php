@@ -7,6 +7,7 @@ $_PROTECT['proc.deletecomments']		= ['grant' => 's'];
 $_PROTECT['proc.deletedocuments']		= ['grant' => 's'];
 $_PROTECT['proc.deletefile']			= ['grant' => 's'];
 $_PROTECT['proc.deletefiles']			= ['grant' => 's'];
+$_PROTECT['proc.combinefiles']			= ['grant' => 's'];
 $_PROTECT['proc.deletethemeconfig']		= ['grant' => 's'];
 
 $_PROTECT['proc.updateaddonconfig']		= ['grant' => 's'];

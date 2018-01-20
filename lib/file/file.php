@@ -29,6 +29,11 @@ $key = $srl.($thumb?'_thumb'.$_GET['thumb']:'');
 if(!isset($_f[$key])){
 	$out = DB::get(_AF_FILE_TABLE_,['mf_srl'=>$srl]);
 	if(DB::error()) setHttpError('400 Bad Request');
+	if($out['mf_link']=='1'){
+		if(!is_numeric($out['mf_upload_name'])||(int)$out['mf_upload_name']<1) setHttpError('400 Bad Request');
+		$out = DB::get(_AF_FILE_TABLE_,['mf_srl'=>$out['mf_upload_name']]);
+		if(DB::error()) setHttpError('400 Bad Request');
+	}
 	$tmp=explode('/',$out['mf_type']);
 	$ft=strtolower(array_shift($tmp));
 	$fts=array('binary'=>0,'image'=>1,'video'=>2,'audio'=>3);

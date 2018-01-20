@@ -18,8 +18,8 @@ aFox는 여러분들의 개발 참여를 기다립니다.
 
 ## 서버 필요 조건
 * UTF-8
-* PHP version 5.4.12 이상
-* MYSQL version 5.1.56 이상
+* PHP version 5.4 이상
+* MYSQL version 5.1 이상
 
 ## 사용 라이브러리
 * jQuery
