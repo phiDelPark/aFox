@@ -10,7 +10,9 @@ $style = __MOBILE__ && isset($_WIDGET['mobile-style']) ? 'style="'.$_WIDGET['mob
 
 $md_title = getModule($_WIDGET['module'], 'md_title');
 if($type === 'gallery') {
-	$_list = DB::gets(_AF_FILE_TABLE_,['md_id'=>$_WIDGET['module'],'mf_type{LIKE}'=>'image%'],['^'=>'rand()','mf_target'=>'GROUP'],$count);
+	$fl = _AF_FILE_TABLE_;
+	$dd = _AF_DOCUMENT_TABLE_;
+	$_list = DB::query("SELECT f.*, d.md_id FROM $fl as f INNER JOIN $dd as d ON d.wr_srl=f.mf_target AND d.md_id = f.md_id WHERE f.md_id=:1 AND f.mf_size>:2 AND f.mf_type LIKE :3 GROUP BY f.mf_target ORDER BY rand() DESC LIMIT 5", [$_WIDGET['module'],500, 'image%'], true);
 } else {
 	$_list = DB::gets(_AF_DOCUMENT_TABLE_,['md_id'=>$_WIDGET['module']],'wr_regdate',$count);
 }

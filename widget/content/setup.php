@@ -7,7 +7,7 @@ if(!defined('__AFOX__')) exit();
 &lt;img widget="content" module="아이디"&gt;
 
 * 사용 가능한 옵션 *
-  type          : 목록 타입 (사용가능한 타입 default 또는 gallery)
+  type          : 목록 타입 (default, gallery)
   count         : 목록 수
   class         : CSS 클래스
   style         : 스타일
