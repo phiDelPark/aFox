@@ -3,8 +3,8 @@ define('__AFOX__',   TRUE);
 
 // 서버 필요 조건
 // * UTF-8
-// * PHP version 5.4.12 이상
-// * MYSQL version 5.1.56 이상
+// * PHP version 5.4.0 이상
+// * MYSQL version 5.1.0 이상
 
 define('_AF_CONFIG_TABLE_', 'afox_config');
 define('_AF_MEMBER_TABLE_', 'afox_members');
@@ -61,8 +61,8 @@ if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 
 if(empty($_POST['db_name'])) {
 
-	if(version_compare(PHP_VERSION, '5.4.12', '<')) {
-		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 5.4.12 이상 버전을 사용해주세요. </h3>';
+	if(version_compare(PHP_VERSION, '5.4.0', '<')) {
+		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 5.4.0 이상 버전을 사용해주세요. </h3>';
 	}
 
 	echo '<h3>에이폭스 CMS 설치</h3><form action="index.php" method="post" autocomplete="off">';
@@ -377,6 +377,7 @@ $create_sql = '
 	   mf_upload_name  VARCHAR(255) NOT NULL,
 	   mf_type         VARCHAR(255) NOT NULL,
 	   mf_size         INT(11)      NOT NULL,
+	   mf_link         CHAR(1)      NOT NULL DEFAULT 0,
 	   mf_download     INT(11)      NOT NULL DEFAULT 0,
 	   mf_description  VARCHAR(255) NOT NULL DEFAULT \'\',
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
