@@ -3,12 +3,17 @@ if(!defined('__AFOX__')) exit();
 	// TODO 나중에 필요하면 캐시 처리 하자
 
 	function getDocument($srl, $field = '*', $inc_hit = FALSE) {
+		global $_MEMBER;
 
 		$field = $field.','.implode(',', ['md_id','mb_srl']);
 		$result = DB::get(_AF_DOCUMENT_TABLE_, $field, ['wr_srl'=>$srl]);
 		if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
-		if(empty($result['md_id'])||$result['md_id']=='_AFOXtRASH_') {
+		if(empty($result['md_id'])) {
 			return set_error(getLang('error_request'),4303);
+		}elseif($result['md_id']=='_AFOXtRASH_'){
+			//휴지통은 관리자 혹은 자신만 가능
+			if(empty($_MEMBER) || empty($_MEMBER['mb_srl']) || (!isManager($result['wr_updater'])&&$_MEMBER['mb_srl']!=$result['mb_srl']))
+			return set_error(getLang('error_permitted'),4501);
 		}
 
 		if($inc_hit && !empty($result)) {

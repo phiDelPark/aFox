@@ -19,6 +19,8 @@ if(file_exists($is_check_ip)) {
 	}
 }
 
+require_once __DIR__ . '/init/config.php';
+
 // 파일번호가 넘어오면 파일읽기
 if(!empty($_GET['file'])) {
 	require_once __DIR__ . '/lib/file/file.php';
@@ -34,10 +36,11 @@ if(__MODULE__ && !empty($_DATA['act'])) {
 	}
 	$callproc = 'proc'.ucwords(__MODULE__).'Default';
 	if(function_exists($callproc)) {
-		$_result = triggerCall('before_proc', $_DATA['act'], $_DATA);
-		if(empty($_result['error'])) {
+		if(triggerCall('before_proc', $_DATA['act'], $_DATA)) {
 			$_result = call_user_func($callproc, $_DATA);
 			triggerCall('after_proc', $_DATA['act'], $_result);
+		} else {
+			$_result = get_error();
 		}
 		$redirect_url = empty($_result['error'])?'success_return_url':'error_return_url';
 		if (!empty($_DATA[$redirect_url])) $_result['redirect_url'] = urldecode($_DATA[$redirect_url]);

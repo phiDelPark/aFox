@@ -122,6 +122,7 @@ function proc($data) {
 			if (!empty($data['md_category'])) {
 				$diff = array_diff(explode(',',$module['md_category']),explode(',',$data['md_category']));
 				if (count($diff)>0) {
+					//TODO db get category in 으로 한번에 하게 코드 바꾸자 다음에...
 					foreach ($diff as $value) {
 						if (DB::count(_AF_DOCUMENT_TABLE_, ['md_id'=>$data['md_id'], 'wr_category'=>$value]) > 0) {
 							throw new Exception(getLang('msg_not_change_category', [$value]), 3);

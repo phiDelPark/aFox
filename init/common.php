@@ -1,11 +1,10 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-require_once dirname(__FILE__) . '/config.php';
-
 @include_once _AF_LANGS_PATH_ . 'default_' . _AF_LANG_ . '.php';
 require_once _AF_INIT_PATH_ . 'function.php';
 
+// 방문 기록 사용시
 if($_CFG['use_visit'] == '1' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_ADDR']) {
 	set_cookie('ck_visit_ip', $_SERVER['REMOTE_ADDR'], 86400); // 하루동안 저장
 	if(checkUserAgent() != 'BOT') {
@@ -56,9 +55,6 @@ if($tmp = (isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cook
 	}
 }
 
-// 전체 로그인 사용시 로그인 유저가 아니면
-define('__FULL_LOGIN__', $_CFG['use_full_login'] == 1 && empty($_MEMBER));
-
 if(__REQ_METHOD__ == 'JSON') {
 	$_POST = json_decode(file_get_contents('php://input'), TRUE);
 }
@@ -67,8 +63,6 @@ if(__REQ_METHOD__ == 'JSON') {
 $_DATA = is_null($_POST) ? $_GET : (is_null($_GET) ? $_POST : array_merge($_POST, $_GET));
 unset($_GET);
 unset($_POST);
-
-define('__POPUP__', !empty($_DATA['popup']) && $_DATA['popup'] === '1');
 
 // 문서번호만 오면 id 가져옴
 if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))) {
@@ -101,8 +95,11 @@ if(!empty($_DATA['id'])) {
 	}
 }
 
-define('__MODULE__', $_DATA['module']);
 define('__MID__', $_DATA['id']);
+define('__MODULE__', $_DATA['module']);
+define('__POPUP__', !empty($_DATA['popup']) && $_DATA['popup'] === '1');
+// 전체 로그인 사용시 로그인 유저가 아니면
+define('__FULL_LOGIN__', $_CFG['use_full_login'] == 1 && empty($_MEMBER));
 
 if(__MODULE__) {
 	if(!file_exists(_AF_MODULES_PATH_ . __MODULE__ . '/index.php')) {

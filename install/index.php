@@ -73,8 +73,8 @@ if(empty($_POST['db_name'])) {
 	echo '<strong style="display:inline-block;width:150px">DB 아이디*</strong> : <input type="text" name="db_user" value=""><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 비밀번호*</strong> : <input type="text" name="db_pass" value=""><br><br>';
 	echo '<h3>에이폭스 도메인 설정</h3>';
-	echo '<span style="display:inline-block;width:150px">내 도메인</span> : <input type="text" name="domain" value="'.$_SERVER['HTTP_HOST'].'"><br>';
-	echo '<span style="display:inline-block;padding-left:163px">현재 이 사이트의 도메인을 입력하세요.</span><br>';
+	echo '<span style="display:inline-block;width:150px">내 도메인</span> : <input type="text" name="domain" value=""><br>';
+	echo '<span style="display:inline-block;padding-left:163px">현재 이 사이트의 도메인을 입력하세요.<br>도메인이 자주 바뀌면 비워두셔도 됩니다. 단, 문제 발생시 적어주세요.</span><br>';
 	echo '<span style="display:inline-block;width:150px">쿠키 도메인</span> : <input type="text" name="cookie_domain" value=""><br>';
 	echo '<span style="display:inline-block;padding-left:163px">쿠키 도메인 www.afox.kr 와 afox.kr 은 서로 다른 도메인으로 인식합니다.<br>쿠키를 공유하려면 .afox.kr 과 같이 입력하세요.</span><br><br>';
 	echo '<span style="display:inline-block;width:150px">표준시간대</span> : <input type="text" name="time_zone" value="Asia/Seoul"><br><br>';

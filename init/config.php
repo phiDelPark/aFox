@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-define('_AF_VERSION_', '0.237');
+define('_AF_VERSION_', '0.247');
 define('__DEBUG__', 0);
 
 /*** SSL 설정 ***/
@@ -9,8 +9,6 @@ define('_AF_USE_SSL_', 0); // 1 = always, 2 = optional
 define('_AF_HTTP_PORT_', 80);
 define('_AF_HTTPS_PORT_', 443);
 /**************/
-
-define('_AF_SERVER_TIME_', time());
 
 define('_AF_CONFIG_TABLE_', 'afox_config');
 define('_AF_MEMBER_TABLE_', 'afox_members');
@@ -47,12 +45,12 @@ define('_AF_CACHE_DATA_', _AF_PATH_ . 'data/cache/');
 define('_AF_DIR_PERMIT_', 0755);
 define('_AF_FILE_PERMIT_', 0644);
 
-
 // 이 아래 부터는 자동으로 입력 혹은 불러와야할 정보들
 (@include_once(_AF_CONFIG_DATA_ . '_db_config.php')) OR die("Please install afox.");
 define('_AF_DOMAIN_', $_DBINFO['domain']);
 define('_AF_COOKIE_DOMAIN_', $_DBINFO['cookie_domain']);
 define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
+define('_AF_SERVER_TIME_', time());
 
 date_default_timezone_set(_AF_TIME_ZONE_);
 session_set_cookie_params(0, '/', _AF_COOKIE_DOMAIN_);
@@ -83,35 +81,52 @@ define('_AF_LANG_', empty($_CFG['lang'])?'ko':$_CFG['lang']);
 define('_AF_THEME_', empty($_CFG['theme'])?'default':$_CFG['theme']);
 define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
 
-// 데이터 관리를 위해 공통으로 사용할 필수 함수들... //
+
+// 아래부턴 데이터 관리를 위해 공통으로 사용할 필수 함수들... //
+// function.php 에 포함 안하는 이유는? load 안해도 사용하기 위해... //
 function set_cache($key, $val, $exp = 0) {
-	if(file_exists($f = _AF_CACHE_DATA_. md5($key). '.php')) { @chmod($f, 0707); @unlink($f); }
-	$dir = dirname($f); if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
+	if(file_exists($f = _AF_CACHE_DATA_. md5($key). '.php')) {
+		@chmod($f, 0707);
+		@unlink($f);
+	}
+	$dir = dirname($f);
+	if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
 	$s='<?php if(!defined(\'__AFOX__\')) exit(); $_CACHE_EXPIRE='.(empty($exp)?0:_AF_SERVER_TIME_+$exp).'; $_CACHE_DATA='.var_export($val, true).'; ?>';
 	file_put_contents($f, $s, LOCK_EX);
 }
 function get_cache($key) {
 	if(!file_exists($f = _AF_CACHE_DATA_. md5($key). '.php')) return;
-	include($f); if(!empty($_CACHE_EXPIRE) && $_CACHE_EXPIRE < _AF_SERVER_TIME_) { @chmod($f, 0707); @unlink($f); return; } return $_CACHE_DATA;
-}
-// 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료로 만듬 (제거)
-function set_cookie($key, $val, $exp = 0) { setcookie(md5($key), base64_encode($val), empty($exp)?0:_AF_SERVER_TIME_+$exp, '/', _AF_COOKIE_DOMAIN_); }
-function get_cookie($key) { return array_key_exists($cki = md5($key), $_COOKIE) ? base64_decode($_COOKIE[$cki]) : ''; }
-function set_session($key, $val) { $_SESSION[$key] = $val; }
-function get_session($key) { return isset($_SESSION[$key]) ? $_SESSION[$key] : ''; }
-function set_error($msg, $err = 3) { return $_SESSION['AF_VALIDATOR_ERROR'] = ['error'=>$err, 'message'=>$msg]; }
-function get_error() { return isset($_SESSION['AF_VALIDATOR_ERROR']) ? $_SESSION['AF_VALIDATOR_ERROR'] : ''; }
-function debugPrint($o = null) {
-	if(!(__DEBUG__ & 1)) return;
-	$print = [date('== Y-m-d H:i:s ==')];
-	$type = gettype($o);
-	if(in_array($type, ['array', 'object', 'resource'])) {
-		$print[] = print_r($o, true);
-	} else {
-		$print[] = $type . '(' . var_export($o, true) . ')'.PHP_EOL;
+	include($f);
+	if(!empty($_CACHE_EXPIRE) && $_CACHE_EXPIRE < _AF_SERVER_TIME_) {
+		@chmod($f, 0707);
+		@unlink($f);
+		return;
 	}
-	file_put_contents(_AF_PATH_ . '_debug.php', implode(PHP_EOL, $print).PHP_EOL, FILE_APPEND|LOCK_EX);
+	return $_CACHE_DATA;
 }
+
+// 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료로 만듬 (제거)
+function set_cookie($key, $val, $exp = 0) {
+	setcookie(md5($key), base64_encode($val), empty($exp)?0:_AF_SERVER_TIME_+$exp, '/', _AF_COOKIE_DOMAIN_);
+}
+function get_cookie($key) {
+	return array_key_exists($cki = md5($key), $_COOKIE) ? base64_decode($_COOKIE[$cki]) : '';
+}
+
+function set_session($key, $val) {
+	$_SESSION[$key] = $val;
+}
+function get_session($key) {
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : '';
+}
+
+function set_error($msg, $err = 3) {
+	return $_SESSION['AF_VALIDATOR_ERROR'] = ['error'=>$err, 'message'=>$msg];
+}
+function get_error() {
+	return isset($_SESSION['AF_VALIDATOR_ERROR']) ? $_SESSION['AF_VALIDATOR_ERROR'] : '';
+}
+
 if(!function_exists('password_hash')) {
 	defined('PASSWORD_BCRYPT') or define('PASSWORD_BCRYPT', '');
 	function password_hash($password, $algo) {
@@ -124,6 +139,18 @@ if(!function_exists('password_verify')) {
 		$password = password_hash($password, 'PASSWORD_BCRYPT');
 		return !empty($hash) && $password === $hash;
 	}
+}
+
+function debugPrint($o = null) {
+	if(!(__DEBUG__ & 1)) return;
+	$print = [date('== Y-m-d H:i:s ==')];
+	$type = gettype($o);
+	if(in_array($type, ['array', 'object', 'resource'])) {
+		$print[] = print_r($o, true);
+	} else {
+		$print[] = $type . '(' . var_export($o, true) . ')'.PHP_EOL;
+	}
+	file_put_contents(_AF_PATH_ . '_debug.php', implode(PHP_EOL, $print).PHP_EOL, FILE_APPEND|LOCK_EX);
 }
 
 /* End of file config.php */

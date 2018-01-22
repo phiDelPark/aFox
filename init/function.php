@@ -621,10 +621,11 @@ if(!defined('__AFOX__')) exit();
 		$callproc = 'disp'.ucwords(__MODULE__).'Default';
 
 		if(function_exists($callproc)) {
-			$_result = triggerCall('before_disp', $trigger, $_DATA);
-			if(empty($_result['error'])) {
+			if(triggerCall('before_disp', $trigger, $_DATA)) {
 				$_result = call_user_func($callproc, $_DATA);
 				triggerCall('after_disp', $trigger, $_result);
+			} else {
+				$_result = get_error();
 			}
 		} else {
 			$_result = set_error(getLang('error_request'),4303);
@@ -665,13 +666,70 @@ if(!defined('__AFOX__')) exit();
 		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
 	}
 
+	function triggerAddonCall($addons, $position, $trigger, &$data) {
+		static $addon_call = null;
+		if($addon_call == null) {
+			$addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
+				include $include_file;
+				return $_DATA;
+			};
+		}
+		$position=strtolower($position);
+		$trigger=strtolower($trigger);
+		foreach ($addons as $key => $value) {
+			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
+			if(file_exists($include_file)) {
+				$_extra = get_cache('_AF_ADDON_'.$key);
+				if(empty($_extra)) {
+					$_extra = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
+					$_extra = $_extra ? unserialize($_extra['ao_extra']) : [];
+					set_cache('_AF_ADDON_'.$key, $_extra);
+				}
+				if(!empty($_extra['access_md_ids'])) {
+					$acc_md = $_extra['access_mode'];
+					$_md = __MID__;
+					$is_acc = !empty($_md) && in_array($_md, $_extra['access_md_ids']);
+					if(($acc_md == 'include' && !$is_acc)||($acc_md == 'exclude' && $is_acc)) continue;
+				}
+				$data = $addon_call($include_file, $position, $trigger, $_extra, $data);
+			}
+		}
+		return true;
+	}
+
+	function triggerModuleCall($modules, $position, $trigger, &$data) {
+		static $module_call = null;
+		$position=explode('_', strtolower($position));
+		$position=$position[0];
+		if(empty($position[1])||$position[1]) return $data;
+		if($module_call == null) {
+			$module_call = function($include_file, $called_position, $called_trigger, $_DATA) {
+				include $include_file;
+				$r = [];
+				$called_trigger = $called_position.'_'.$called_trigger;
+				if(function_exists($called_trigger)){
+					$r = call_user_func($called_trigger, $_DATA);
+				}
+				return $r === true ? $_DATA : false;
+			};
+		}
+		$trigger=strtolower($trigger);
+		foreach ($modules as $key => $value) {
+			$include_file = _AF_MODULES_PATH_.'/'.$key.'/trigger.php';
+			if(file_exists($include_file)) {
+				$result = $module_call($include_file, $position, $trigger, $data);
+				if($result === false) return false;
+				$data = $result;
+			}
+		}
+		return true;
+	}
+
 	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
 	function triggerCall($position, $trigger, &$data) {
 		static $triggers = null;
-		static $addon_call = null;
 		// 관리자 모듈은 넘어감
 		if(__MODULE__ == 'admin') return $data;
-
 		if($triggers == null) {
 			$triggers = ['A'=>[],'M'=>[]];
 			DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
@@ -683,45 +741,13 @@ if(!defined('__AFOX__')) exit();
 				}
 			);
 		}
-
-		// TODO 모듈용 트리거 작성 준비
-		//foreach ($triggers['M'] as $key => $value) {
-		//}
-
-		if($addon_call == null) {
-			$addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
-				$r = include $include_file;
-				return empty($r['error']) ? $_DATA : $r;
-			};
+		if(count($triggers['A']) > 0){
+			$result = triggerAddonCall($triggers['A'], $position, $trigger, $data);
 		}
-
-		foreach ($triggers['A'] as $key => $value) {
-			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
-			if(file_exists($include_file)) {
-
-				$_extra = get_cache('_AF_ADDON_'.$key);
-				if(empty($_extra)) {
-					$_extra = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
-					$_extra = $_extra ? unserialize($_extra['ao_extra']) : [];
-					set_cache('_AF_ADDON_'.$key, $_extra);
-				}
-
-				if(!empty($_extra['access_md_ids'])) {
-					$acc_md = $_extra['access_mode'];
-					$_md = __MID__;
-					$is_acc = !empty($_md) && in_array($_md, $_extra['access_md_ids']);
-					if(($acc_md == 'include' && !$is_acc)||($acc_md == 'exclude' && $is_acc)) continue;
-				}
-
-				$result = $addon_call($include_file, strtolower($position), strtolower($trigger), $_extra, $data);
-				if(!empty($result['error'])) {
-					$result['redirect_url'] = isset($data['error_return_url'])?urldecode($data['error_return_url']):'';
-					return $result;
-				}
-
-				$data = $result;
-			}
+		if(count($triggers['M']) > 0){
+			$result = triggerModuleCall($triggers['M'], $position, $trigger, $data);
 		}
+		return $result;
 	}
 
 	function cutstr($str, $length, $tail = '...') {
