@@ -2,8 +2,8 @@
 if(!defined('__AFOX__')) exit();
 function setHttpError($e,$b=false){
 header('HTTP/1.1 '.$e); header("Connection: close");
-if($b){$_SESSION['AF_VALIDATOR_ERROR']=['error'=>3,'message'=>'HTTP/1.1 '.$e];
-header('Location: '.$_SERVER['HTTP_REFERER']);} exit;
+if($b){set_error('HTTP/1.1 '.$e, 3); header('Location: '.$_SERVER['HTTP_REFERER']);}
+exit;
 }
 function file_triggerModuleCall($f,$_DATA) {
 include $f; $r=null; $t='before_filedownload';
@@ -59,7 +59,7 @@ if(!isset($_f[$key])){
 			$size = $_GET['thumb'];
 			if(empty($size)){ //썸네일 사이즈 빈값이면 모듈설정 사용
 				$module = DB::get(_AF_MODULE_TABLE_, 'md_id,thumb_width,thumb_height,thumb_option', ['md_id'=>$out['md_id']]);
-				if(empty($module['md_id'])) setHttpError('400 Bad Request', true);
+				if(empty($module['md_id'])) setHttpError('400 Bad Request');
 				$tw = (int)$module['thumb_width'];
 				$th = (int)$module['thumb_height'];
 				$fit = $module['thumb_option']==='1';
@@ -80,8 +80,10 @@ if(!isset($_f[$key])){
 		}
 	}
 }
-if(!$_f[$key]['permission']) setHttpError('401 Unauthorized', true); //binary 다운로드 불가면 에러
-if(($_f[$key]['type']=='binary'||(!$thumb&&$_f[$key]['type']=='image'))&& !file_triggerCall($_f[$key])) setHttpError('401 Unauthorized', true); //fileDownload 트리거 호출
+if(!$_f[$key]['permission']) setHttpError('401 Unauthorized', $_f[$key]['type']=='binary');
+if($_f[$key]['type']=='binary') { //fileDownload 트리거 호출
+	if(!file_triggerCall($_f[$key])) setHttpError('401 Unauthorized', true);
+}
 if(!$fp = @fopen($_f[$key]['path'], 'rb')) setHttpError('404 Not Found');
 $fstat=fstat($fp);
 if(!empty($_SERVER['HTTP_IF_MODIFIED_SINCE'])){

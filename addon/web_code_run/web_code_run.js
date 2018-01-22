@@ -18,7 +18,7 @@
 					_css = $this.find('[web-code-run="css"]').text() || '',
 					_html = $this.find('[web-code-run="html"]').text() || '',
 					_script = $this.find('[web-code-run="script"]').text() || '';
-				code = code.sprintf('../../../common/css/bootstrap.min.css', '../../../common/js/jquery.min.js', '../../../common/js/bootstrap.min.js', _css, _html, _script);
+				code = code.sprintf('./common/css/bootstrap.min.css', './common/js/jquery.min.js', './common/js/bootstrap.min.js', _css, _html, _script);
 				pw.document.open('text/html', 'replace');
 				pw.document.write(code);
 				pw.document.close();
