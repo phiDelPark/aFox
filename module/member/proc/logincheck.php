@@ -19,11 +19,37 @@ function proc($data) {
 	global $_CFG;
 
 	$mb = DB::get(_AF_MEMBER_TABLE_, ['mb_id'=>$mb_id]);
-	if($ex = DB::error()) return set_error($ex->getMessage(),$ex->getCode());
+	if($ex = DB::error()) return set_error('error', 3);
 
-	if(empty($mb['mb_srl']) || !checkPassword($mb_password, $mb['mb_password'])) {
-		return set_error(getLang('msg_wrong_password'),4601);
+	$count_key = 'af_login_try_' . $_SERVER['REMOTE_ADDR'];
+	$captcha_key = 'af_captcha_' . $_SERVER['REMOTE_ADDR'];
+	$try_count = (int)get_session($count_key);
+
+	if($try_count > 2) {
+		if(empty($data['captcha_code'])) {
+			return set_error(getLang('request_input',['captcha_code']), 4001);
+		}
+		$captcha = get_session($captcha_key);
+		if(empty($captcha) || $data['captcha_code'] != $captcha['code']) {
+			return set_error(getLang('invalid_value',['captcha_code']), 4001);
+		} else {
+			set_session($count_key, '');
+			set_session($captcha_key, '');
+			$try_count = 0;
+		}
 	}
+
+	if($try_count > 2 || empty($mb['mb_srl']) || !checkPassword($mb_password, $mb['mb_password'])) {
+		set_session($count_key, ++$try_count);
+		if($try_count > 2) {
+			return set_error(getLang('msg_login_overtry'), 4001);
+		} else {
+			return set_error(getLang('msg_wrong_password'), 4801);
+		}
+	}
+
+	set_session($count_key, '');
+	set_session($captcha_key, '');
 
 	// 정상적인 접근이면 암호화된 비밀번호로 교체
 	$mb_password    = $mb['mb_password'];

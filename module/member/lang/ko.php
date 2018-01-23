@@ -19,6 +19,7 @@ $_LANG['msg_email_exists'] = '같은 메일이 이미 등록 되어있습니다.
 $_LANG['msg_nick_exists'] = '같은 별명이 이미 등록 되어있습니다.';
 $_LANG['msg_prohibit_id'] = '이 아이디나 별명은 사용하실 수 없습니다.';
 $_LANG['msg_wrong_password'] = '가입된 회원아이디가 아니거나 비밀번호가 틀립니다.'."\n".'비밀번호는 대소문자를 구분합니다.';
+$_LANG['msg_login_overtry'] = '로그인 시도를 3회 초과하였습니다.'."\n".'인증코드를 다시 메일로 받아 같이 적어주십시요.';
 
 $_LANG['md_title_inbox'] = '편지함';
 $_LANG['md_description_inbox'] = '';

@@ -119,15 +119,12 @@ function proc($data) {
 				throw new Exception(getLang('warning_exists', ['id']), 3103);
 			}
 
-			if (!empty($data['md_category'])) {
+			if ($data['md_category'] != $module['md_category']) {
 				$diff = array_diff(explode(',',$module['md_category']),explode(',',$data['md_category']));
-				if (count($diff)>0) {
-					//TODO db get category in 으로 한번에 하게 코드 바꾸자 다음에...
-					foreach ($diff as $value) {
-						if (DB::count(_AF_DOCUMENT_TABLE_, ['md_id'=>$data['md_id'], 'wr_category'=>$value]) > 0) {
-							throw new Exception(getLang('msg_not_change_category', [$value]), 3);
-						}
-					}
+				if (count($diff)>0 && !empty($diff[0])) {
+					$diff = implode(',', $diff);
+					$out = DB::get(_AF_DOCUMENT_TABLE_, 'wr_category', ['md_id'=>$data['md_id'], 'wr_category{IN}'=>$diff]);
+					if(!empty($out)) throw new Exception(getLang('msg_not_change_category', [$out['wr_category']]), 3);
 				}
 			}
 

@@ -79,9 +79,9 @@
 			} else {
 				$ipu = $(confirm_action.sprintf('', $_LANG['confirm_select_delete'].sprintf($_LANG['comment']), $_LANG['yes'], $_LANG['no']));
 			}
-			$ipu.offOn('error.exec.ajax', function(e, msg, xhr) {
+			$ipu.offOn('error.exec.ajax', function(e, error, xhr) {
 				e.preventDefault();
-				$(e.currentTarget).find('>div>div').css('color', 'red').html($_LANG['error'] + ': ' + msg);
+				$(e.currentTarget).find('>div>div').css('color', 'red').html($_LANG['error'] + ': ' + error['message']);
 				$(e.currentTarget).find('[name="mb_password"]').val('').focus();
 			}).hide().addClass('inside_massage_box').prependTo($rp.find('>.right')).fadeIn('slow');
 			$ipu.find('button.btn-default').click(function() {
@@ -175,7 +175,7 @@
 											$form.submit();
 											return false;
 										} else if (status === 'error') {
-											$form.find('>p').html($_LANG['error'] + ': ' + data).css('color', 'red');
+											$form.find('>p').html($_LANG['error'] + ': ' + data['message']).css('color', 'red');
 											$form.find('input[name="mb_password"]').val('').focus();
 											return false;
 										}

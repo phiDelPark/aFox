@@ -386,26 +386,28 @@ var $_LANG = {};
 					$waiting.remove();
 				},
 				success: function(data, status, xhr) {
-					var ev, err, msg, cancel = false;
+					var ev, cancel = false;
 					if (typeof data == 'string') {
-						err = -1;
-						msg = xhr.responseText.replace(/<[^>]+>/g, '');
+						data = [];
+						data['error'] = '1';
+						data['message'] = xhr.responseText.replace(/<[^>]+>/g, '');
 					} else {
-						err = (data['error'] && data['error'] != '0') ? data['error'] : 0;
-						msg = err ? data['message'] : '';
+						if (!data['error']) data['error'] = '0';
+						if (!data['message']) data['message'] = '';
 					}
 
 					$i.data('actioning', false);
+					var err = data['error'] !== '0';
 
 					if ($.isFunction(callback)) {
-						cancel = callback(err ? 'error' : 'success', err ? msg : data, xhr) === false;
+						cancel = callback(err ? 'error' : 'success', data, xhr) === false;
 					} else {
 						ev = $.Event(err ? 'error.exec.ajax' : 'success.exec.ajax');
-						$i.trigger(ev, err ? [msg, xhr] : [data, xhr]);
+						$i.trigger(ev, [data, xhr]);
 						cancel = ev.isDefaultPrevented();
 					}
 					if (cancel) return;
-					if (err) alert(msg.replace(/<br[\s|\/]*>/g, "\n"));
+					if (err) alert(data['message'].replace(/<br[\s|\/]*>/g, "\n"));
 					if (data['redirect_url']) parent.location.replace(data['redirect_url']);
 				},
 				error: function(xhr, status, error) {
@@ -418,17 +420,21 @@ var $_LANG = {};
 						msg = 'parsererror';
 					} else msg = error;
 
+					var data = [];
+					data['error'] = '1';
+					data['message'] = msg;
+
 					$i.data('actioning', false);
 
 					if ($.isFunction(callback)) {
-						cancel = callback('error', msg, xhr) === false;
+						cancel = callback('error', data, xhr) === false;
 					} else {
 						var ev = $.Event('error.exec.ajax');
-						$i.trigger(ev, [msg, xhr]);
+						$i.trigger(ev, [data, xhr]);
 						cancel = ev.isDefaultPrevented();
 					}
 					if (cancel) return;
-					alert(msg.replace(/<br[\s|\/]*>/g, "\n"));
+					alert(data['message'].replace(/<br[\s|\/]*>/g, "\n"));
 					if (data['redirect_url']) parent.location.replace(data['redirect_url']);
 				}
 			});

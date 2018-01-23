@@ -1,7 +1,7 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	addJSLang(['error','id','password','login','auto_login','member_signup','member_find']);
+	addJSLang(['error','id','password','login','auto_login','member_signup','member_find','captcha_code']);
 
 	$menus = getSiteMenu();
 	$mainmenu = [];
@@ -103,8 +103,10 @@
 					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('Logout')?></a></li>
 				</ul>
 			</span>
-<?php } else { ?>
-			<a href="#loginForm"><i class="glyphicon glyphicon-user fs-2x" aria-hidden="true"></i></a>
+<?php } else {
+	$try_count = (int)get_session('af_login_try_' . $_SERVER['REMOTE_ADDR']);
+?>
+			<a href="#loginForm"<?php echo $try_count>2 ? ' captcha="1"' : '' ?>><i class="glyphicon glyphicon-user fs-2x" aria-hidden="true"></i></a>
 <?php } ?>
 		</div>
 	</header>

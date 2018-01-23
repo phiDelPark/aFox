@@ -33,7 +33,7 @@ $_LANG['disagree'] = '동의안함';
 $_LANG['document'] = '문서';
 $_LANG['download'] = '다운로드';
 $_LANG['edit'] = '수정';
-$_LANG['email'] = '이메일';
+$_LANG['email'] = '메일';
 $_LANG['error'] = '에러';
 $_LANG['expand'] = '펼치기';
 $_LANG['explain'] = '설명';
@@ -131,6 +131,9 @@ $_LANG['yesterday'] = '어제';
 
 $_LANG['member_find'] = '회원조회';
 $_LANG['member_signup'] = '회원가입';
+$_LANG['mail_address'] = '메일주소';
+$_LANG['authenticode'] = '인증코드';
+$_LANG['captcha_code'] = '보안문자';
 $_LANG['calling_server'] = '서버에 요청 중입니다. 잠시만 기다려주세요.';
 
 $_LANG['confirm_copy'] = '%s을(를) 복사하시겠습니까?';

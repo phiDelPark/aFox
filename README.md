@@ -25,6 +25,7 @@ aFox는 여러분들의 개발 참여를 기다립니다.
 * jQuery
 * Bootstrap
 * Parsedown
+* simpleCAPTCHA
 
 ## 지원 라이브러리
 * Font Awesome

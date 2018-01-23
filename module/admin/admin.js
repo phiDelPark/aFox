@@ -194,7 +194,7 @@
 			.find('input[name='+(key=='addon'?'ao':(key=='theme'?'th':'wg'))+'_id]').val(id).end()
 			.offOn('error.exec.ajax', function(e, error, xhr){
 				e.preventDefault();
-				$p.html('<div class="alert alert-danger">' + error + '</div>');
+				$p.html('<div class="alert alert-danger">' + error['message'] + '</div>');
 			})
 			.offOn('success.exec.ajax', function(e, data, xhr){
 				e.preventDefault();
