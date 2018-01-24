@@ -9,21 +9,21 @@
 		$dd = _AF_DOCUMENT_TABLE_;
 		if(!empty($_DATA['search'])) {
 			$schkeys = ['content'=>'rp_content','nick'=>'mb_nick','date'=>'rp_regdate'];
-			$search = $cd.'.rp_content LIKE '.DB::escape('%'.$_DATA['search'].'%');
+			$search = $cd.'.rp_content LIKE \''.DB::escape('%'.$_DATA['search'].'%').'\'';
 		}
 	} else if($_DATA['trash'] == 'file') {
 		$cd = _AF_FILE_TABLE_;
 		$dd = _AF_DOCUMENT_TABLE_;
 		if(!empty($_DATA['search'])) {
 			$schkeys = ['name'=>'mf_name','desc'=>'mf_description','type'=>'mf_type','date'=>'mf_regdate'];
-			$search = '('.$cd.'.mf_name LIKE '.DB::escape('%'.$_DATA['search'].'%').' OR '.$cd.'.mf_description LIKE '.DB::escape('%'.$_DATA['search'].'%').')';
+			$search = '('.$cd.'.mf_name LIKE \''.DB::escape('%'.$_DATA['search'].'%').'\' OR '.$cd.'.mf_description LIKE \''.DB::escape('%'.$_DATA['search'].'%').'\')';
 		}
 	} else {
 		$cd = _AF_DOCUMENT_TABLE_;
 		$dd = _AF_DOCUMENT_TABLE_;
 		if(!empty($_DATA['search'])) {
 			$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tags'=>'wr_tags','date'=>'wr_regdate'];
-			$search = '(wr_title LIKE '.DB::escape('%'.$_DATA['search'].'%').' OR wr_content LIKE '.DB::escape('%'.$_DATA['search'].'%').')';
+			$search = '(wr_title LIKE \''.DB::escape('%'.$_DATA['search'].'%').'\' OR wr_content LIKE \''.DB::escape('%'.$_DATA['search'].'%').'\')';
 		}
 	}
 
@@ -32,7 +32,7 @@
 		$ss = explode(':', $tmp);
 		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
 			$tmp = trim(implode(':', array_slice($ss,1)));
-			if(!empty($tmp)) $search = $cd.'.'.$schkeys[$ss[0]].' LIKE '.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%');
+			if(!empty($tmp)) $search = $cd.'.'.$schkeys[$ss[0]].' LIKE \''.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%').'\'';
 		}
 	}
 
@@ -131,6 +131,7 @@
 	<ul class="pagination">
 	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['admin'] ?>">
+		<input type="hidden" name="trash" value="<?php echo empty($_DATA['trash'])?'':$_DATA['trash'] ?>">
 		<?php if(!empty($_DATA['category'])) {?><input type="hidden" name="category" value="<?php echo $_DATA['category'] ?>"><?php }?>
 		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_text') ?>" required>
 		<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>

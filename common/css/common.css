@@ -89,31 +89,6 @@
 	display: block;
 }
 
-.radio:after,
-.checkbox:after {
-	content: '';
-	display: table;
-	clear: both;
-}
-
-.radio:focus,
-.checkbox:focus {
-	border-color: #66afe9;
-	outline: 0;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
-}
-
-.radio,
-.checkbox.inline {
-	display: inline-block;
-}
-
-.radio+.radio,
-.checkbox.inline+.checkbox {
-	margin-left: .5em;
-}
-
 .radio .cr,
 .checkbox .cr {
 	position: relative;
@@ -143,6 +118,57 @@
 	margin-left: 0.04em;
 }
 
+.radio.btn,
+.checkbox.btn {
+	border: 0;
+	padding: 0;
+	color: #333;
+	background-color: #fff;
+}
+
+.checkbox.btn {
+	padding-left: 27px;
+	border: 1px solid #ccc;
+	background-color: #eee;
+}
+
+.radio.btn .cr {
+	display: none;
+}
+
+.checkbox.btn .cr {
+	position: absolute;
+	left: 5px;
+	top: 0;
+	border: 0;
+}
+
+.checkbox.btn-ms {
+	padding-left: 32px;
+}
+
+.checkbox.btn-ms .cr {
+	left: 7px;
+	top: 7px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+}
+
+.radio:after,
+.checkbox:after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+.radio:focus,
+.checkbox:focus {
+	border-color: #66afe9;
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
 .radio input[type="radio"],
 .checkbox input[type="checkbox"] {
 	display: none;
@@ -161,84 +187,37 @@
 	transform: scale(0) rotateZ(-50deg);
 }
 
-.radio input[type="radio"]:checked+.cr>.cr-icon,
-.checkbox input[type="checkbox"]:checked+.cr>.cr-icon {
-	transform: scale(1) rotateZ(0deg);
-	opacity: 1;
-}
-
-.radio input[type="radio"]:disabled+.cr,
-.checkbox input[type="checkbox"]:disabled+.cr {
-	opacity: .7;
-	background-color: #ddd;
-	cursor: not-allowed;
-}
-
-.radio.btn,
-.checkbox.btn.inline,
-label:not([class="radio"]):not([class="checkbox"])+.radio,
-label:not([class="radio"]):not([class="checkbox"])+.checkbox {
-	margin-top: 0;
-}
-
-.radio.btn,
-.checkbox.btn {
-	border: 0;
-	padding: 0;
-	color: #333;
-	background-color: #fff;
-}
-
-.checkbox.btn {
-	padding-left: 27px;
-	border: 1px solid #ccc;
-	background-color: #eee;
-}
-
-.checkbox.btn-ms {
-	padding-left: 32px;
-}
-
-.radio.btn .cr {
-	display: none;
-}
-
-.checkbox.btn .cr {
-	border: 0;
-	position: absolute;
-	left: 5px;
-	top: 0;
-}
-
-.checkbox.btn-ms .cr {
-	left: 7px;
-	top: 7px;
-}
-
 .radio.btn input[type="radio"]+.cr+span,
 .checkbox.btn input[type="checkbox"]+.cr+span {
 	border: 1px solid #ccc;
 	display: block;
-	padding: 1px 5px;
+	padding: 3px 7px;
 	border-radius: 3px;
 	color: #333;
 	background-color: #fff;
 	font-size: 12px;
-	line-height: 17px;
+	line-height: 1;
 }
 
+.radio.btn-ms input[type="radio"]+.cr+span,
 .checkbox.btn-ms input[type="checkbox"]+.cr+span {
 	padding: 7px 12px;
 	font-size: 14px;
-	line-height: 19px;
+	line-height: 18px;
 	border-radius: 4px;
 }
 
 .checkbox.btn input[type="checkbox"]+.cr+span {
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
 	border: 0;
 	border-left: 1px solid #ccc;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.radio input[type="radio"]:checked+.cr>.cr-icon,
+.checkbox input[type="checkbox"]:checked+.cr>.cr-icon {
+	transform: scale(1) rotateZ(0deg);
+	opacity: 1;
 }
 
 .radio.btn input[type="radio"]:checked+.cr+span {
@@ -247,9 +226,34 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 	border-color: #2e6da4;
 }
 
-.radio.btn input[type="radio"]:disabled+.cr+span {
-	background-color: #eee;
+.radio input[type="radio"]:disabled+.cr,
+.radio.btn input[type="radio"]:disabled+.cr+span,
+.checkbox input[type="checkbox"]:disabled+.cr {
+	opacity: .7;
+	background-color: #ddd;
 	cursor: not-allowed;
+	color: #333;
+}
+
+.radio.btn,
+.checkbox.btn,
+label:not([class="radio"]):not([class="checkbox"])+.radio,
+label:not([class="radio"]):not([class="checkbox"])+.checkbox {
+	margin-top: 0;
+}
+
+.radio.btn,
+.radio.inline,
+.checkbox.btn,
+.checkbox.inline {
+	display: inline-block;
+}
+
+.radio.btn+.radio,
+.radio.inline+.radio,
+.checkbox.btn+.checkbox,
+.checkbox.inline+.checkbox {
+	margin-left: .5em;
 }
 
 .input-group .radio,

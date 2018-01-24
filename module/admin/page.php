@@ -4,7 +4,7 @@
 	$md = _AF_MODULE_TABLE_;
 	$pg = _AF_PAGE_TABLE_;
 
-	$search = empty($_DATA['search'])?'':DB::escape('%'.$_DATA['search'].'%');
+	$search = empty($_DATA['search'])?'':'\''.DB::escape('%'.$_DATA['search'].'%').'\'';
 	$where = empty($search) ? '1' : '('.$md.'.md_title LIKE '.$search.' OR '.$pg.'.pg_content LIKE '.$search.')';
 	$page = (int)isset($_DATA['page']) ? (($_DATA['page'] < 1) ? 1 : $_DATA['page']) : 1;
 	$count = 20;

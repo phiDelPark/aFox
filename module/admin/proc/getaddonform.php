@@ -36,8 +36,12 @@ function proc($data) {
 		.'<div class="row"><label class="col-md-2">'.getLang('author').'</label> '.$author.' ('.escapeHtml($_ADDON_INFO['email']).')</div>'
 		.'<p class="help-block">'.nl2br(escapeHtml($_ADDON_INFO['description'])).'</p></div>';
 
-	echo '<div><label style="margin-right:20px"><input name="use_pc" type="checkbox" value="1"'.($_ADDON['use_pc']=='1'?' checked="checked"':'').'> PC</label>'
-		.'<label><input name="use_mobile" type="checkbox" value="1"'.($_ADDON['use_mobile']=='1'?' checked="checked"':'').'> Mobile</label></div><hr style="margin:10px 0 25px">';
+	echo '<div><label class="checkbox inline" tabindex="0">'
+		.'<input type="checkbox" name="use_pc" value="1"'.($_ADDON['use_pc']=='1'?' checked':'').'>'
+		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>PC</strong></label>'
+		.'<label class="checkbox inline" tabindex="0">'
+		.'<input type="checkbox" name="use_mobile" value="1"'.($_ADDON['use_mobile']=='1'?' checked':'').'>'
+		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>Mobile</strong></label></div><hr style="margin:10px 0 25px">';
 
 	unset($data);
 

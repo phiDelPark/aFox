@@ -106,7 +106,7 @@
 <?php } else {
 	$try_count = (int)get_session('af_login_try_' . $_SERVER['REMOTE_ADDR']);
 ?>
-			<a href="#loginForm"<?php echo $try_count>2 ? ' captcha="1"' : '' ?>><i class="glyphicon glyphicon-user fs-2x" aria-hidden="true"></i></a>
+			<a href="#loginForm"<?php echo ($_CFG['use_captcha']=='1'||$try_count>2)?' captcha="1"':'' ?>><i class="glyphicon glyphicon-user fs-2x" aria-hidden="true"></i></a>
 <?php } ?>
 		</div>
 	</header>

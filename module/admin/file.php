@@ -19,9 +19,9 @@
 			$ss = explode(':', $tmp);
 			if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
 				$tmp = trim(implode(':', array_slice($ss,1)));
-				if(!empty($tmp)) $search = 'f.'.$schkeys[$ss[0]].' LIKE '.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%');
+				if(!empty($tmp)) $search = 'f.'.$schkeys[$ss[0]].' LIKE \''.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%').'\'';
 			} else {
-				$search = '(f.mf_name LIKE '.DB::escape('%'.$_DATA['search'].'%').' OR f.mf_description LIKE '.DB::escape('%'.$_DATA['search'].'%').')';
+				$search = '(f.mf_name LIKE \''.DB::escape('%'.$_DATA['search'].'%').'\' OR f.mf_description LIKE \''.DB::escape('%'.$_DATA['search'].'%').'\')';
 			}
 		}
 

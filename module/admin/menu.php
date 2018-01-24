@@ -159,12 +159,12 @@ if (!empty($menus['error'])) messageBox($menus['message'],$menus['error'], false
 	  <div class="modal-body">
 		<div class="form-group" style="margin-top:20px">
 			<label style="display:block"><?php echo getLang('option')?></label>
-			<label class="checkbox btn inline" tabindex="0">
+			<label class="checkbox inline" tabindex="0">
 				<input type="checkbox" value="1" id="sitemap_mu_collapse">
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				<span><?php echo getLang('collapse')?></span>
 			</label>
-			<label class="checkbox btn inline" tabindex="0">
+			<label class="checkbox inline" tabindex="0">
 				<input type="checkbox" value="1" id="sitemap_mu_new_window">
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				<span><?php echo getLang('new_open_window')?></span>

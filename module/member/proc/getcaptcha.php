@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 
-	include(_AF_LIBS_PATH_.'/simplecaptcha/simple-php-captcha.php');
+	include(_AF_LIBS_PATH_.'simplecaptcha/simple-php-captcha.php');
 	$captcha = simple_php_captcha();
 	set_session('af_captcha_' . $_SERVER['REMOTE_ADDR'], $captcha);
 

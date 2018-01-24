@@ -25,7 +25,7 @@ function proc($data) {
 	$captcha_key = 'af_captcha_' . $_SERVER['REMOTE_ADDR'];
 	$try_count = (int)get_session($count_key);
 
-	if($try_count > 2) {
+	if($_CFG['use_captcha'] == '1' || $try_count > 2) {
 		if(empty($data['captcha_code'])) {
 			return set_error(getLang('request_input',['captcha_code']), 4001);
 		}

@@ -3,8 +3,8 @@
 	addJSLang(['error','id','password','login','auto_login','member_signup','member_find']);
 	$signUp =  __MODULE__ == 'member' && $_DATA['disp'] == 'signUp';
 	$try_count = get_session('af_login_try_' . $_SERVER['REMOTE_ADDR']);
-	if($try_count > 2) {
-		include(_AF_LIBS_PATH_.'/simplecaptcha/simple-php-captcha.php');
+	if($_CFG['use_captcha'] == '1' || $try_count > 2) {
+		include(_AF_LIBS_PATH_.'simplecaptcha/simple-php-captcha.php');
 		$captcha = simple_php_captcha();
 		set_session('af_captcha_' . $_SERVER['REMOTE_ADDR'], $captcha);
 	}
@@ -37,7 +37,7 @@
 				<?php if(!empty($captcha)) { ?>
 				<div class="captcha-group clearfix">
 					<div class="form-group pull-left">
-						<img src="<?php echo $captcha['image_src'] ?>" alt="CAPTCHA code">
+						<img src="<?php echo './lib/'.$captcha['image_src'] ?>" alt="CAPTCHA code">
 					</div>
 					<div class="form-group pull-right">
 						<input type="text" class="form-control" placeholder="<?php echo getLang('captcha_code')?>" name="captcha_code" required>
