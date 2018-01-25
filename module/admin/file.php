@@ -25,7 +25,7 @@
 			}
 		}
 
-		$category = 'd'.(empty($_DATA['category'])?'.md_id <> \'_AFOXtRASH_\'':'.md_id = '.DB::escape($_DATA['category']));
+		$category = 'd'.(empty($_DATA['category'])?'.md_id <> \'_AFOXtRASH_\'':'.md_id = \''.DB::escape($_DATA['category']).'\'');
 		$where = empty($search)&&empty($category) ? '1' : '('.$category.(empty($search)||empty($category) ? '' : ' AND ').$search.')';
 		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS f.*, d.md_id FROM $fl as f INNER JOIN $dd as d ON d.wr_srl = f.mf_target WHERE $where ORDER BY f.mf_regdate DESC LIMIT $start,$count", true);
 	}
