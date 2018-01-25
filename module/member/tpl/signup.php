@@ -22,7 +22,7 @@
 			<div class="form-inline">
 				<input type="text" name="new_mb_id" class="form-control" id="id_new_mb_id" required maxlength="11" pattern="^[a-zA-Z]+\w{2,}$">
 				<input type="hidden" name="mb_id" value="" />
-			<p class="help-block"><?php echo getLang('desc_id')?></p>
+			<p class="help-block"><?php echo getLang('desc_mb_id')?></p>
 		</div>
 <?php
 	} else {
@@ -46,7 +46,7 @@
 				<input type="password" name="new_mb_password" class="form-control" id="id_new_mb_password"<?php echo $ismb ?'':' required'?> placeholder="<?php echo getLang('password')?>">
 				<input type="password" name="verify_mb_password" class="form-control"<?php echo $ismb ?'':' required'?> placeholder="<?php echo getLang('verify_password')?>">
 			</div>
-			<p class="help-block"><?php echo getLang($ismb?'desc_change_mb_password':'desc_new_mb_password')?></p>
+			<p class="help-block"><?php echo getLang($ismb?'desc_change_password':'desc_mb_password')?></p>
 		</div>
 		<div class="form-group">
 			<label for="id_mb_nick"><?php echo getLang('nickname')?></label>

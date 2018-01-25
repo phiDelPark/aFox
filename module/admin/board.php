@@ -97,7 +97,7 @@
 					</div>
 				</div>
 			</div>
-			<p class="help-block"><?php echo getLang('desc_id')?></p>
+			<p class="help-block"><?php echo getLang('desc_mb_id')?></p>
 			<div class="form-group">
 				<label for="id_md_title"><?php echo getLang('title')?></label>
 				<input type="text" name="md_title" class="form-control" id="id_md_title" maxlength="255">

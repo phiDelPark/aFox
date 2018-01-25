@@ -7,7 +7,6 @@ if(empty($_THEME)) {
 	if(!empty($_THEME)) $_THEME = unserialize($_THEME['th_extra']);
 	set_cache('_AF_THEME_'._AF_THEME_,$_THEME);
 }
-@include_once _AF_THEME_PATH_ . 'lang/' . _AF_LANG_ . '.php';
 addJSLang(['ok','cancel','yes','no','calling_server']);
 ?>
 <!doctype html>
@@ -44,14 +43,14 @@ var current_url     = "<?php echo getUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
 </script>
 <?php
-	@include _AF_THEME_PATH_ . 'head.php';
+	@include _AF_THEME_PATH_ . 'common.php';
 	foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {
 		echo '<link href="'.$key.'" rel="stylesheet"'.($val!==1?' media="'.$val.'"':'').'>'."\n";
-		$_ADDELEMENTS['CSS'][$key] = true;
+		$_ADDELEMENTS['CSS'][$key] = 0;
 	}
 	foreach ($_ADDELEMENTS['JS'] as $key=>$val) {
 		echo '<script src="'.$key.'"></script>'."\n";
-		$_ADDELEMENTS['JS'][$key] = true;
+		$_ADDELEMENTS['JS'][$key] = 0;
 	}
 ?>
 </head>

@@ -1,8 +1,6 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	addJSLang(['error','id','password','login','auto_login','member_signup','member_find','captcha_code']);
-
 	$menus = getSiteMenu();
 	$mainmenu = [];
 	$submenu = [];
@@ -47,7 +45,7 @@
 	<header class="bs-docs-header">
 		<h1 class="logo-title" role="banner" aria-label="<?php echo escapeHtml($_CFG['title'])?>"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
 		<div class="right">
-			<span role="search" aria-label="Search"><a class="collapsed"  data-toggle="collapse" href="#nav-collapse3" aria-expanded="false" aria-controls="nav-collapse3"><i class="glyphicon glyphicon-search" aria-hidden="true"></i></a></span>
+			<span role="search" aria-label="Search"><a class="collapsed"  data-toggle="collapse" href="#nav-collapse3" aria-expanded="false" aria-controls="nav-collapse3"><i class="glyphicon glyphicon-search" aria-hidden="true" style="font-weight:bold"></i></a></span>
 <?php if (!empty($_MEMBER)) {
 	$notes = DB::gets(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], 'nt_send_date', '1,5');
 ?>

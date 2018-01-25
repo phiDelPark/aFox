@@ -102,14 +102,15 @@
 					</div>
 				</div>
 			</div>
-			<p class="help-block"><?php echo getLang('desc_id')?></p>
+			<p class="help-block"><?php echo getLang('desc_mb_id')?></p>
 			<div class="form-group">
 				<label for="id_mb_password"><?php echo getLang('password')?></label>
 				<div class="form-inline">
 					<input type="password" name="new_mb_password" class="form-control" id="id_mb_password" placeholder="<?php echo getLang('password')?>" required>
 					<input type="password" name="verify_mb_password" class="form-control" placeholder="<?php echo getLang('verify_password')?>" required>
 				</div>
-				<p class="help-block"><?php echo getLang('desc_change_mb_password')?></p>
+				<p class="help-block"><?php echo getLang('desc_mb_password')?></p>
+				<p class="help-block" style="display:none"><?php echo getLang('desc_change_password')?></p>
 			</div>
 			<div class="form-group">
 				<label for="id_mb_point"><?php echo getLang('point')?></label>

@@ -104,7 +104,7 @@
 				<input type="text" name="new_md_id" class="form-control" id="id_md_id" required maxlength="11" pattern="^[a-zA-Z]+\w{2,}$">
 				<input type="hidden" name="md_id" value="" />
 			</div>
-			<p class="help-block"><?php echo getLang('desc_id')?></p>
+			<p class="help-block"><?php echo getLang('desc_mb_id')?></p>
 		</div>
 		<div class="form-group">
 			<label for="id_md_title"><?php echo getLang('title')?></label>

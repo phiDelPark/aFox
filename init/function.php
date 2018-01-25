@@ -639,13 +639,14 @@ if(!defined('__AFOX__')) exit();
 				messageBox($_result['message'], $_result['error']);
 			}
 		} else {
-			$_{__MODULE__} = $_result;
-			unset($_result);
 			unset($trigger);
+			unset($callproc);
 			// 테마에 스킨(tpl)이 있으면 사용
 			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
-			$tpl_file = (empty($_{__MODULE__}['tpl'])?'default':$_{__MODULE__}['tpl']).'.php';
+			$tpl_file = (empty($_result['tpl']) ? 'default' : $_result['tpl']).'.php';
 			if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
+			$_{__MODULE__} = $_result;
+			unset($_result);
 			@include_once $tpl_path . 'common.php';
 			include $tpl_path . $tpl_file;
 		}

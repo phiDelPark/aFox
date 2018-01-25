@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
-// 언어엔 ' (홑따옴표) 는 쓰지마세요.
-// 에러가 발생할 가능성이 있습니다. 필요하면 ` (악센트) 이걸 사용하세요.
+// 에러가 발생할 가능성이 있으니 언어에 ' (홑따옴표)는 쓰지마세요.
+// 필요하면 ` (악센트) 이걸 사용하세요.
 
 $_LANG['addon'] = '애드온';
 $_LANG['admin'] = '관리자';
@@ -32,12 +32,11 @@ $_LANG['detail'] = '자세히';
 $_LANG['disagree'] = '동의안함';
 $_LANG['document'] = '문서';
 $_LANG['download'] = '다운로드';
-$_LANG['edit'] = '수정';
+$_LANG['edit'] = '편집';
 $_LANG['email'] = '메일';
 $_LANG['error'] = '에러';
 $_LANG['expand'] = '펼치기';
 $_LANG['explain'] = '설명';
-$_LANG['favicon'] = '파비콘';
 $_LANG['file'] = '파일';
 $_LANG['find'] = '찾기';
 $_LANG['good'] = '좋아';
@@ -64,7 +63,7 @@ $_LANG['memo'] = '메모';
 $_LANG['menu'] = '메뉴';
 $_LANG['message'] = '메세지';
 $_LANG['min'] = '최소';
-$_LANG['modify'] = '변경';
+$_LANG['modify'] = '수정';
 $_LANG['module'] = '모듈';
 $_LANG['month'] = '월';
 $_LANG['move'] = '이동';
@@ -90,9 +89,8 @@ $_LANG['rank'] = '계급';
 $_LANG['read'] = '읽기';
 $_LANG['recycle_bin'] = '휴지통';
 $_LANG['refresh'] = '새로고침';
-$_LANG['regdate'] = '등록 날짜';
+$_LANG['regdate'] = '등록일';
 $_LANG['register'] = '등록';
-$_LANG['reload'] = '다시 읽기';
 $_LANG['reply'] = '답변';
 $_LANG['restore'] = '복구';
 $_LANG['save'] = '저장';

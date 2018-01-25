@@ -1,6 +1,6 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	addJSLang(['error','id','password','login','auto_login','member_signup','member_find']);
+
 	$signUp =  __MODULE__ == 'member' && $_DATA['disp'] == 'signUp';
 	$try_count = get_session('af_login_try_' . $_SERVER['REMOTE_ADDR']);
 	if($_CFG['use_captcha'] == '1' || $try_count > 2) {

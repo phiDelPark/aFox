@@ -102,12 +102,13 @@ define('__POPUP__', !empty($_DATA['popup']) && $_DATA['popup'] === '1');
 define('__FULL_LOGIN__', $_CFG['use_full_login'] == 1 && empty($_MEMBER));
 
 if(__MODULE__) {
-	if(!file_exists(_AF_MODULES_PATH_ . __MODULE__ . '/index.php')) {
+	$tmp = _AF_MODULES_PATH_ . __MODULE__;
+	if(!file_exists($tmp . '/index.php')) {
 		goUrl(_AF_URL_);
 		exit();
 	}
-	require_once _AF_MODULES_PATH_ . __MODULE__ . '/protect.php';
-	require_once _AF_MODULES_PATH_ . __MODULE__ . '/index.php';
+	require_once $tmp . '/protect.php';
+	require_once $tmp . '/index.php';
 }
 
 // CDN 에러면 브라우저 종료전까지 사용안함

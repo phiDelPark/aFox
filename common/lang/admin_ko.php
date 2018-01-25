@@ -1,20 +1,21 @@
 <?php
 if(!defined('__AFOX__')) exit();
-// 언어엔 ' (홑따옴표) 는 쓰지마세요. 에러가 발생할 가능성이 있습니다. 필요하면 ` (악센트) 이걸 사용하세요.
+// 에러가 발생할 가능성이 있으니 언어에 ' (홑따옴표)는 쓰지마세요.
+// 필요하면 ` (악센트) 이걸 사용하세요.
 
 $_LANG['menu_name_addon'] = '애드온 설정';
-$_LANG['menu_name_board'] = '게시판';
-$_LANG['menu_name_comment'] = '댓글';
+$_LANG['menu_name_board'] = $_LANG['board'];
+$_LANG['menu_name_comment'] = $_LANG['comment'];
 $_LANG['menu_name_content'] = '콘텐츠 보기';
 $_LANG['menu_name_dashbd'] = '대시보드';
-$_LANG['menu_name_document'] = '문서';
-$_LANG['menu_name_file'] = '파일';
+$_LANG['menu_name_document'] = $_LANG['document'];
+$_LANG['menu_name_file'] = $_LANG['file'];
 $_LANG['menu_name_member'] = '회원 설정';
 $_LANG['menu_name_menu'] = '사이트 메뉴';
 $_LANG['menu_name_module'] = '모듈 설정';
-$_LANG['menu_name_page'] = '페이지';
+$_LANG['menu_name_page'] = $_LANG['page'];
 $_LANG['menu_name_theme'] = '사이트 테마';
-$_LANG['menu_name_trash'] = '휴지통';
+$_LANG['menu_name_trash'] = $_LANG['recycle_bin'];
 $_LANG['menu_name_visit'] = '방문 기록';
 $_LANG['menu_name_widget'] = '위젯 설정';
 $_LANG['menu_name_setup'] = '사이트 설정';
@@ -47,6 +48,7 @@ $_LANG['empty_addon'] = $_LANG['empty_module'] = $_LANG['empty_theme'] = '비우
 $_LANG['extra_keys'] = '확장변수';
 $_LANG['file_extension'] = '첨부 가능 확장자';
 $_LANG['foot_menu'] = '하단 메뉴';
+$_LANG['favicon'] = '파비콘';
 $_LANG['goto'] = '찾아가기';
 $_LANG['how_to_use'] = '사용법';
 $_LANG['list_count'] = '목록 수';
@@ -84,9 +86,9 @@ $_LANG['advanced_setup'] = '고급 설정 표시';
 $_LANG['use_member'] = '사용 유저';
 
 $_LANG['data_manage'] = '관리';
-$_LANG['data_move'] = '이동';
-$_LANG['data_copy'] = '복사';
-$_LANG['data_delete'] = '삭제';
+$_LANG['data_move'] = $_LANG['move'];
+$_LANG['data_copy'] = $_LANG['copy'];
+$_LANG['data_delete'] = $_LANG['delete'];
 $_LANG['data_combine'] = '합치기';
 
 $_LANG['standard_point'] = '기준점';
@@ -102,7 +104,7 @@ $_LANG['confirm_select_trash'] = '선택된 %s을(를) 휴지통으로 보내겠
 
 $_LANG['prompt_move_board_id'] = '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n분류를 선택하시려면 뒤에 :분류명을 입력하세요.\n예) module_id:해당분류';
 
-$_LANG['desc_id'] = '아이디는 유일해야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다. (첫 글자는 영문이여야 합니다)';
+$_LANG['desc_mb_id'] = '아이디 첫 글자는 영문이여야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다.';
 $_LANG['desc_base_cdn_list'] = '사용할 jQuery, bootstrap 등의 CDN 서버를 적어주세요. (비워두면 기본값)';
 $_LANG['desc_board_file'] = '첨부 파일의 최대 수와 최대 크기(KB)를 정할 수 있습니다. (첨부 확장자는 ,로 구분합니다)';
 $_LANG['desc_category'] = '게시판에서 사용할 분류를 입력하세요. (단어와 단어 사이는 ,로 구분합니다)'."\n".'* 주의 * 특수문자는 사용할 수 없으며 한 분류당 글자수는 20자로 제한됩니다.';
