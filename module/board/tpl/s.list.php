@@ -11,7 +11,7 @@ if(!defined('__AFOX__')) exit();
 			<?php } else { ?>
 			<th class="col-xs-1 hidden-xs"><?php echo getLang('number')?></th>
 			<th><?php echo getLang('title')?></th>
-			<th class="col-xs-3 col-md-2"><?php echo getLang('name')?></th>
+			<th class="col-xs-2"><?php echo getLang('name')?></th>
 			<th class="col-xs-1 hidden-xs"><?php echo getLang('view')?></th>
 			<th class="col-xs-1"><?php echo getLang('date')?></th>
 			<?php } ?>
