@@ -22,11 +22,11 @@
 
 		$f.find('[id]').each(function(){$(this).attr('id',$(this).attr('id')+'_0');}).end()
 			.find('label[for]').each(function(){$(this).attr('for',$(this).attr('for')+'_0');}).end()
+			.find('.modal-footer > button.hide').removeClass('hide').end()
+			.attr('data-exec-ajax', act.replace(/^([a-z]+).get/,'$1.update')).end()
 			.find('[name=new_mb_password]').val('').removeAttr('required').end()
 			.find('[name=verify_mb_password]').val('').removeAttr('required')
-			.parent().next().hide().next().show().end()
-			.find('.modal-footer > button.hide').removeClass('hide').end()
-			.attr('data-exec-ajax', act.replace(/^([a-z]+).get/,'$1.update'));
+			.parent().next().hide().next().show().end();
 
 		if(tp == 'mb_id') {
 			data['new_mb_rank'] = data['mb_rank'] == 's' ? '2' : (data['mb_rank'] == 'm' ? '1' : '0');
