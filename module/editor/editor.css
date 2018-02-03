@@ -48,8 +48,11 @@ h3 {
 }
 
 img[widget] {
-	width: 100%;
-	height: 35px;
+	border: 1px dashed #e4e4e4;
+}
+
+img[widget]:not([src]):not([width]) {
 	background: transparent url(widget.png) repeat;
-	border: 0;
+	width: 100%;
+	height: 29px;
 }

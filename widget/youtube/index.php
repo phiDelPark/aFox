@@ -30,7 +30,7 @@ $width = (int) empty($_WIDGET['width'])?'560':$_WIDGET['width'];
 $height = (int) empty($_WIDGET['height'])?'315':$_WIDGET['height'];
 ?>
 
-<iframe src="https://www.youtube.com/embed/<?php echo escapeHtml($_WIDGET['vid'].(empty($opts)?'':'?'.$opts)) ?>" width="<?php echo $width ?>" height="<?php echo $height ?>" frameborder="0" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/<?php echo $_WIDGET['vid'].(empty($opts)?'':'?'.$opts) ?>" width="<?php echo $width ?>" height="<?php echo $height ?>" frameborder="0" allowfullscreen></iframe>
 
 <?php
 

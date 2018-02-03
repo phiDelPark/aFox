@@ -502,16 +502,18 @@
 				this.paste('<pre><code>%s' + "\n" + '</code></pre>');
 				break;
 			case 'link':
+				value = decodeURIComponent(value).replace(/&amp;/g, '&');
 				var pattern = /https?:\/\/([a-z\.]*youtub?e?)\.(com|be)(\/embed\/|\/watch\?v\=|\/)([^\?\&]+)(.*)/i,
 					t = value.getQuery('t') || value.getQuery('start');
 				if (pattern.test(value)) {
 					text = '<img widget="youtube" src="' + value.replace(pattern, "https://img.youtube.com/vi/$4/mqdefault.jpg\" width=\"560\" height=\"315\" vid=\"$4") + '"' + (t ? ' time="' + t + '"' : '') + '>' + "\n";
+					this.paste(text, false);
 				} else {
 					if (!value) value = '#';
-					text = '<a href="' + value + '" target="_blank">' + value + '</a>';
+					text = '<a href="' + value + '" target="_blank">%s</a>';
 					if ($i[0].tagName == 'TEXTAREA') text = '<' + value + '>';
+					this.paste(text, value);
 				}
-				this.paste(text, false);
 				break;
 		}
 
