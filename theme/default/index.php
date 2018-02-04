@@ -159,7 +159,7 @@
 	  <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
 	</section>
 <?php } else { ?>
-<div class="header-image">
+<div class="header-image <?php echo __MODULE__ ?>">
 	<?php if(__MODULE__) {
 		$md_key = ucfirst(__MODULE__);
 	?>
