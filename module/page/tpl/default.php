@@ -1,6 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
-echo toHTML($_{'page'}['pg_content'], $_{'page'}['pg_type']);
+$pg_content = toHTML($_{'page'}['pg_content'], $_{'page'}['pg_type']);
+echo preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1scroll-src\\3', $pg_content);
 ?>
 
 <?php if(isAdmin(__MID__)) { ?>

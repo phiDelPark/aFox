@@ -591,13 +591,12 @@ if(!defined('__AFOX__')) exit();
 			$text = preg_replace($patterns, $replacement, $text);
 		}
 
-		$text = preg_replace_callback('/<img[^>]*widget="([a-zA-Z_]+)"\s*([^>]*)>/is',  function($m){
-			$attrs = ['widget'=>$m[1]];
-			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[2], $m2)) {
+		$text = preg_replace_callback('/<img([^>]*\s+widget\s*=[^>]*)>/is', function($m){
+			$attrs = [];
+			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)) {
 				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
 			}
-			if(!empty($attrs['widget'])) return displayWidget($attrs['widget'], $attrs);
-			return '';
+			return empty($attrs['widget']) ? '' : displayWidget($attrs['widget'], $attrs);
 		}, $text);
 
 		// 다운로드 권한이 없으면 처리

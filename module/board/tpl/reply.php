@@ -16,7 +16,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? [] : $_{'board'}['CURRENT_CO
 			$_len = strlen($value['rp_depth']);
 
 			$_icon = $value['mb_srl'].'/profile_image.png';
-			$_icon = _AF_URL_ . (file_exists(_AF_MEMBER_DATA_.$_icon) ? 'data/member/' . $_icon : 'module/board/tpl/user_default.jpg');
+			$_icon = _AF_URL_ . (file_exists(_AF_MEMBER_DATA_.$_icon) ? 'data/member/' . $_icon : 'common/img/user_default.jpg');
 
 			$rp_secret = $value['rp_secret'] == '1';
 			$rp_content = $value['grant_view'] ? $value['rp_content'] : (!empty($value['mb_srl'])?getLang($rp_secret?'msg_is_secret':'error_permitted'):sprintf($input_password,getUrl('rp',$value['rp_srl'])));

@@ -198,8 +198,21 @@
 
 	$(window)
 		.on('load', function() {
-			var into = $('a.active[id^=reply_]')[0];
-			if (into) into.scrollIntoView(true);
+			var into = $('a.active[id^=reply_]');
+			if (into.length > 0) {
+				into[0].scrollIntoView(true);
+			} else {
+				$(this).trigger('scroll');
+			}
+		})
+		.on('scroll', function() {
+			$('img[scroll-src]').each(function() {
+				var $th = $(this);
+				if ($th.offset().top < ($(window).scrollTop() + $(window).height() + 100)) {
+					$th.attr('src', $th.attr('scroll-src') || '#');
+					$th.removeAttr('scroll-src');
+				}
+			});
 		});
 
 })(jQuery);

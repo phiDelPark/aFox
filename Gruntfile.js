@@ -78,9 +78,9 @@ module.exports = function(grunt) {
       minify: {
         files: [{
           expand: true,
-          cwd: 'module/editor/tpl/',
+          cwd: 'module/editor/',
           src: ['editor.min.css'],
-          dest: 'module/editor/tpl/',
+          dest: 'module/editor/',
           ext: '.min.css'
         }, {
           expand: true,
