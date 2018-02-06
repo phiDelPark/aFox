@@ -84,25 +84,19 @@ define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
 
 // 아래부턴 데이터 관리를 위해 공통으로 사용할 필수 함수들... //
 // function.php 에 포함 안하는 이유는? load 안해도 사용하기 위해... //
-function set_cache($key, $val, $exp = 0) {
-	if(file_exists($f = _AF_CACHE_DATA_. md5($key). '.php')) {
-		@chmod($f, 0707);
-		@unlink($f);
-	}
-	$dir = dirname($f);
-	if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
-	$s='<?php if(!defined(\'__AFOX__\')) exit(); $_CACHE_EXPIRE='.(empty($exp)?0:_AF_SERVER_TIME_+$exp).'; $_CACHE_DATA='.var_export($val, true).'; ?>';
-	file_put_contents($f, $s, LOCK_EX);
+
+function set_error($msg, $err = 3) {
+	return $_SESSION['AF_VALIDATOR_ERROR'] = ['error'=>$err, 'message'=>$msg];
 }
-function get_cache($key) {
-	if(!file_exists($f = _AF_CACHE_DATA_. md5($key). '.php')) return;
-	include($f);
-	if(!empty($_CACHE_EXPIRE) && $_CACHE_EXPIRE < _AF_SERVER_TIME_) {
-		@chmod($f, 0707);
-		@unlink($f);
-		return;
-	}
-	return $_CACHE_DATA;
+function get_error() {
+	return isset($_SESSION['AF_VALIDATOR_ERROR']) ? $_SESSION['AF_VALIDATOR_ERROR'] : '';
+}
+
+function set_session($key, $val) {
+	$_SESSION[$key] = $val;
+}
+function get_session($key) {
+	return isset($_SESSION[$key]) ? $_SESSION[$key] : '';
 }
 
 // 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료로 만듬 (제거)
@@ -113,18 +107,32 @@ function get_cookie($key) {
 	return array_key_exists($cki = md5($key), $_COOKIE) ? base64_decode($_COOKIE[$cki]) : '';
 }
 
-function set_session($key, $val) {
-	$_SESSION[$key] = $val;
+// 만료시간이 0이면 직접 지우기까지 계속 유지
+function set_cache($key, $val, $exp = 0) {
+	$dir = _AF_CACHE_DATA_. md5($key);
+	if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
+	$h = @opendir($dir);
+	while ($e = readdir($h)) {
+		if($e != '.' && $e != '..') {
+			@chmod($dir.'/'.$e, 0707); @unlink($dir.'/'.$e);
+		}
+	} @closedir($h);
+	$s='<?php if(!defined(\'__AFOX__\'))exit();$_EXPIRE='.(empty($exp)?0:_AF_SERVER_TIME_+$exp).';$_DATA='.var_export($val, true).'; ?>';
+	file_put_contents($dir.'/'.md5(_AF_SERVER_TIME_).'.php', $s, LOCK_EX);
 }
-function get_session($key) {
-	return isset($_SESSION[$key]) ? $_SESSION[$key] : '';
-}
-
-function set_error($msg, $err = 3) {
-	return $_SESSION['AF_VALIDATOR_ERROR'] = ['error'=>$err, 'message'=>$msg];
-}
-function get_error() {
-	return isset($_SESSION['AF_VALIDATOR_ERROR']) ? $_SESSION['AF_VALIDATOR_ERROR'] : '';
+function get_cache($key) {
+	$dir = _AF_CACHE_DATA_. md5($key);
+	if(!is_dir($dir)) return;
+	$f = ''; $h = @opendir($dir);
+	while ($e = readdir($h)) {
+		if(($e != '.') && ($e != '..')) { $f = $dir.'/'.$e; break; }
+	} @closedir($h);
+	if(!file_exists($f)) return; include($f);
+	if(!empty($_EXPIRE) && $_EXPIRE < _AF_SERVER_TIME_) {
+		@chmod($f, 0707); @unlink($f);
+		@chmod($dir, 0707); @unlink($dir); return;
+	}
+	return $_DATA;
 }
 
 if(!function_exists('password_hash')) {

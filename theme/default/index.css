@@ -13,11 +13,6 @@ body>.container {
 	min-height: 100%;
 }
 
-pre code {
-	padding: 5px;
-	display: block;
-}
-
 mark {
 	color: #000;
 	background: #ff0;

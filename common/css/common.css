@@ -83,6 +83,24 @@
 	font-size: 5em;
 }
 
+.text-ellipsis {
+	overflow: hidden;
+	-ms-text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	display: block;
+	white-space: nowrap;
+}
+
+.unselectable {
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+	user-select: none;
+	user-drag: none;
+}
+
 .radio,
 .checkbox {
 	font-weight: 400;
@@ -368,35 +386,6 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 	height: 100%;
 }
 
-.text-ellipsis {
-	overflow: hidden;
-	-ms-text-overflow: ellipsis;
-	-o-text-overflow: ellipsis;
-	text-overflow: ellipsis;
-	display: block;
-	white-space: nowrap;
-}
-
-.unselectable {
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-webkit-user-select: none;
-	-webkit-user-drag: none;
-	user-select: none;
-	user-drag: none;
-}
-
-.af_waiting_message {
-	position: fixed;
-	top: 10px;
-	left: 10px;
-	z-index: 99999;
-}
-
-.af_waiting_message .progress {
-	margin: 10px 0 0;
-}
-
 .modal.vertical-center {
 	text-align: center;
 	padding: 0!important;
@@ -416,13 +405,16 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 	vertical-align: middle;
 }
 
-/*
-.modal-backdrop.in{
-	background-image: url(../img/loading.gif);
-	background-position: center;
-	background-repeat: no-repeat;
+.af_waiting_message {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	z-index: 99999;
 }
-*/
+
+.af_waiting_message .progress {
+	margin: 10px 0 0;
+}
 
 /* ========================================================================
 * http://bootsnipp.com/

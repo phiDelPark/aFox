@@ -15,17 +15,7 @@ pre {
 	background-color: #f5f5f5;
 	border: 1px solid #ccc;
 	border-radius: 4px;
-}
-
-pre code {
-	padding: 5px;
-	font-size: inherit;
-	color: inherit;
-	white-space: pre-wrap;
-	background-color: #fff;
-	display: block;
-	border: 1px solid #ccc;
-	border-radius: 3px;
+	overflow: auto;
 }
 
 blockquote {

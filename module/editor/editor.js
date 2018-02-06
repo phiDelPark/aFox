@@ -63,25 +63,30 @@
 	}
 
 	function setImageTooltip($i) {
-		var title = $i.attr('title');
+		var title = $i.attr('data-title') || $i.attr('title');
 		$i.removeAttr('title');
 		$i.attr('data-title', title);
 
-		if ($i.attr('data-type').substring(0, 5) !== 'image') {
-			$i.tooltip({
-				container: 'body'
-			});
-		} else {
+		var size = '';
+		title = title.replace(/(.+)(\([a-zA-Z0-9.]+\)$)/g, function(match, p1, p2) {
+			size = p2;
+			return p1.trim();
+		}).escapeHtml();
+
+		title = '<div>' + title + '</div><div>' + size + '</div>';
+
+		if ($i.attr('data-type').substring(0, 5) === 'image') {
 			var url = $i.attr('data-srl') || false ? request_uri + '?file=' + $i.attr('data-srl') : $i.attr('data-path');
-			title = title.substring(title.length - 17, title.length);
-			$i.tooltip({
-				html: 1,
-				container: 'body',
-				title: function() {
-					return '<img src="' + url + '" style="width:100px;height:100px"><div style="width:100px;overflow:hidden;white-space:nowrap;">' + title + '</div>';
-				}
-			});
+			title = '<img src="' + url + '" style="width:100px;height:100px"><div style="width:100px;overflow:hidden;white-space:nowrap">' + title + '</div>';
 		}
+
+		$i.tooltip({
+			html: 1,
+			container: 'body',
+			title: function() {
+				return title;
+			}
+		});
 	}
 
 	// AFEDITOR CLASS DEFINITION

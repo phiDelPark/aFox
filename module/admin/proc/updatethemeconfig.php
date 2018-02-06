@@ -33,8 +33,8 @@ function proc($data) {
 			DB::insert(_AF_THEME_TABLE_,['th_id'=>$th_id,'th_extra'=>$extra]);
 		}
 
-		// 캐시 삭제 시켜 재생성
-		set_cache('_AF_THEME_'.$th_id, 0, -1);
+		// 캐시 재생성
+		set_cache('_AF_THEME_'.$th_id, $data);
 
 	} catch (Exception $ex) {
 		DB::rollback();

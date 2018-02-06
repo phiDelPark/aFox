@@ -5,6 +5,7 @@
 	$mainmenu = [];
 	$submenu = [];
 	$muroot = '';
+	$submenuactivetitle = '';
 
 	if(empty($menus['error'])) {
 		$url = getUrl();
@@ -22,6 +23,7 @@
 					unset($mainmenu[$muroot]);
 					$muroot = '_ACTIVE_';
 					$val['_ACTIVE_'] = 1;
+					$submenuactivetitle = $val['mu_title'];
 				}
 				$submenu[$muroot][] = $val;
 			} else {
@@ -173,18 +175,22 @@
 
 <?php
 $tmp = 'col-md-9 ';
-if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) { ?>
+if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) {
+	if(empty($submenuactivetitle)) $submenuactivetitle = $mainmenu['_ACTIVE_']['mu_title'];
+?>
 	<div class="bs-docs-body row">
 		<aside class="col-md-3" role="menu" aria-label="Content Menu">
 			<div class="list-group">
-			  <span class="list-group-item disabled">
-				<?php echo $mainmenu['_ACTIVE_']['mu_title'] ?>
-				<?php if(__MOBILE__){ ?>
-				<a class="pull-right" data-toggle="collapse" href="#collapseAfSubMenu" aria-expanded="false" aria-controls="collapseAfSubMenu"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></a>
-				<?php } ?>
-			  </span>
+				<span class="list-group-item disabled">
+					<span class="<?php echo __MODULE__ != 'page'?' hidden-xs hidden-sm':'' ?>"><?php echo $mainmenu['_ACTIVE_']['mu_title'] ?></span>
+					<?php if(__MODULE__ != 'page'){ ?>
+					<span class="hidden-md"><?php echo $submenuactivetitle ?></span>
+					<span class="pull-right glyphicon glyphicon-menu-hamburger hidden-md" aria-hidden="true"></span>
+					<a class="hidden-md" style="position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer"></a>
+					<?php } ?>
+				</span>
 			</div>
-			<div class="list-group<?php echo __MOBILE__?' collapse" id="collapseAfSubMenu':'' ?>">
+			<div class="list-group<?php echo __MODULE__ != 'page'?' hidden-xs hidden-sm':'' ?>">
 	<?php
 		foreach ($submenu['_ACTIVE_'] as $key => $val) {
 			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a>';

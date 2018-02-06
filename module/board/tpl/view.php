@@ -70,7 +70,7 @@ $wr_grant_write = $_{'board'}['grant_write'];
 	?>
 		<div class="profile-text clearfix">
 			<div class="left"><img src="<?php echo $_icon ?>" alt="Profile" class="profile"></div>
-			<div class="right"><?php echo toHTML($doc_mb['mb_memo'], 1, 'mb_memo') ?></div>
+			<div class="right"><?php echo toHTML($doc_mb['mb_memo'], 1, 'member_memo') ?></div>
 		</div>
 	<?php } ?>
 	</article>

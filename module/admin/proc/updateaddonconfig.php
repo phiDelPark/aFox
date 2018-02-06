@@ -42,8 +42,8 @@ function proc($data) {
 			]
 		);
 
-		// 캐시 삭제 시켜 재생성
-		set_cache('_AF_ADDON_'.$ao_id, 0, -1);
+		// 캐시 재생성
+		set_cache('_AF_ADDON_'.$ao_id, $data);
 
 	} catch (Exception $ex) {
 		DB::rollback();

@@ -75,6 +75,31 @@
 			return false;
 		});
 
+		$('aside[role="menu"]:eq(0)').each(function() {
+			var $this = $(this);
+			$this.find('a.hidden-md').offOn('click', function() {
+				var $lst = $this.find('.list-group.hidden-xs');
+				if ($lst.length > 0) {
+					$lst.addClass('collapse')
+						.removeClass('hidden-xs hidden-sm')
+						.animate({
+							height: "toggle"
+						}, function() {
+							$(this).addClass('in').removeAttr('style');
+						});
+				} else {
+					$this.find('.list-group.collapse.in')
+						.animate({
+							height: "toggle"
+						}, function() {
+							$(this).addClass('hidden-xs hidden-sm')
+								.removeClass('collapse in')
+								.removeAttr('style');
+						});
+				}
+			});
+		});
+
 		$('[aria-labelledby="afPageLoader"]').fadeOut("slow");
 	});
 

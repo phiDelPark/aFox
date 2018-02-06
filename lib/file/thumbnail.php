@@ -33,7 +33,7 @@ function thumbnail($source, $destination, $width, $height, $fit = false) {
 			imageFill($idst, 0, 0, imageColorAllocate($idst, 255,255,255));
 			ImageCopyResampled($idst, $isrc, $_x, $_y, 0, 0, $width, $height, $iifo[0], $iifo[1]);
 			imageInterlace($idst);
-			imagePNG($idst, $destination);
+			imagePNG($idst, $destination, 9);
 			@chmod($destination, _AF_FILE_PERMIT_);
 			imageDestroy($idst);
 			imageDestroy($isrc);
