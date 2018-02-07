@@ -57,7 +57,7 @@ if(!defined('__AFOX__')) exit();
 
 	// XE getRequestUri 참고 https://www.xpressengine.com/
 	function getRequestUri($ssl_mode = FOLLOW_REQUEST_SSL) {
-		static $url = [];
+		static $__url = [];
 
 		if(!isset($_SERVER['SERVER_PROTOCOL'])) return; // Check HTTP Request
 
@@ -66,7 +66,7 @@ if(!defined('__AFOX__')) exit();
 		$domain = _AF_DOMAIN_ ? _AF_DOMAIN_ : $_SERVER['HTTP_HOST'];
 		$domain_key = md5($domain);
 
-		if(isset($url[$ssl_mode][$domain_key])) return $url[$ssl_mode][$domain_key];
+		if(isset($__url[$ssl_mode][$domain_key])) return $__url[$ssl_mode][$domain_key];
 
 		$current_use_ssl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
 
@@ -79,21 +79,21 @@ if(!defined('__AFOX__')) exit();
 		$target_url = 'http://' . $domain . getScriptPath();
 		if(substr_compare($target_url, '/', -1) !== 0) $target_url.= '/';
 
-		$url_info = parse_url($target_url);
-		if($current_use_ssl != $use_ssl) unset($url_info['port']);
+		$_info = parse_url($target_url);
+		if($current_use_ssl != $use_ssl) unset($_info['port']);
 
 		$cfg_port = $use_ssl ? _AF_HTTPS_PORT_ : _AF_HTTP_PORT_;
 		$def_port = $use_ssl ? 443 : 80;
 
 		if($cfg_port != $def_port) {
-			$url_info['port'] = $cfg_port;
-		} elseif(isset($url_info['port']) && $url_info['port'] == $def_port) {
-			unset($url_info['port']);
+			$_info['port'] = $cfg_port;
+		} elseif(isset($_info['port']) && $_info['port'] == $def_port) {
+			unset($_info['port']);
 		}
 
-		$url[$ssl_mode][$domain_key] = sprintf('%s://%s%s%s', $use_ssl ? 'https' : $url_info['scheme'], $url_info['host'], empty($url_info['port']) ? '' : ':' . $url_info['port'], $url_info['path']);
+		$__url[$ssl_mode][$domain_key] = sprintf('%s://%s%s%s', $use_ssl ? 'https' : $_info['scheme'], $_info['host'], empty($_info['port']) ? '' : ':' . $_info['port'], $_info['path']);
 
-		return $url[$ssl_mode][$domain_key];
+		return $__url[$ssl_mode][$domain_key];
 	}
 
 	function getRequestMethod() {
@@ -106,9 +106,9 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getScriptPath() {
-		static $url = null;
-		if($url == null) $url = preg_replace('/index.php$/i', '', str_replace('\\', '/', $_SERVER['SCRIPT_NAME']));
-		return $url;
+		static $__url = null;
+		if($__url == null) $__url = preg_replace('/index.php$/i', '', str_replace('\\', '/', $_SERVER['SCRIPT_NAME']));
+		return $__url;
 	}
 
 	function getUrl() {
@@ -149,8 +149,8 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getSiteMenu($get = '') {
-		static $menus = [];
-		if(!isset($menus['header']) || !isset($menus['footer'])) {
+		static $__menus = [];
+		if(!isset($__menus['header']) || !isset($__menus['footer'])) {
 			for ($i=0; $i < 2; $i++) {
 				$out = DB::gets(_AF_MENU_TABLE_, ['mu_type'=>$i], ['mu_srl'=>'ASC'], function($r){
 					$rset = [];
@@ -163,26 +163,26 @@ if(!defined('__AFOX__')) exit();
 					}
 					return $rset;
 				});
-				$menus[$i == 0 ? 'header' : 'footer'] = $out;
+				$__menus[$i == 0 ? 'header' : 'footer'] = $out;
 			}
 		}
-		return empty($get) ? $menus : $menus[$get];
+		return empty($get) ? $__menus : $__menus[$get];
 	}
 
 	// 모듈 설정 가져오기
 	function getModule($id, $get = '') {
-		static $module_cfg = [];
-		if(!isset($module_cfg[$id])) {
+		static $__md_cfg = [];
+		if(!isset($__md_cfg[$id])) {
 			$out = DB::get(_AF_MODULE_TABLE_, ['md_id'=>$id]);
 			if(empty($out)) $out = set_error(getLang('error_founded'), 4201);
-			$module_cfg[$id] = $out;
+			$__md_cfg[$id] = $out;
 		}
-		return empty($get) ? $module_cfg[$id] : $module_cfg[$id][$get];
+		return empty($get) ? $__md_cfg[$id] : $__md_cfg[$id][$get];
 	}
 
 	function getMember($id, $get = '') {
-		static $members = [];
-		if(!isset($members[$id])) {
+		static $__members = [];
+		if(!isset($__members[$id])) {
 			$skey = is_numeric($id) ? 'mb_srl' : 'mb_id';
 			$out = DB::get(_AF_MEMBER_TABLE_, [$skey => $id]);
 			if(!empty($out['mb_srl'])) {
@@ -190,19 +190,19 @@ if(!defined('__AFOX__')) exit();
 				$_icon = $out['mb_srl'].'/profile_image.png';
 				if(file_exists(_AF_MEMBER_DATA_.$_icon)) $out['mb_icon'] = _AF_URL_.'data/member/'.$_icon;
 			}
-			$members[$id] = $out;
+			$__members[$id] = $out;
 		}
-		return empty($get) ? $members[$id] : $members[$id][$get];
+		return empty($get) ? $__members[$id] : $__members[$id][$get];
 	}
 
 	function getFileList($id, $target) {
-		static $filelist = [];
+		static $__file_list = [];
 		$key = $id.'_'.$target;
-		if(!isset($filelist[$key])) {
+		if(!isset($__file_list[$key])) {
 			$out = DB::gets(_AF_FILE_TABLE_, ['md_id'=>$id,'mf_target'=>$target], 'mf_type');
-			$filelist[$key] = $out;
+			$__file_list[$key] = $out;
 		}
-		return $filelist[$key];
+		return $__file_list[$key];
 	}
 
 	function setDataListInfo($data, $total, $page, $count) {
@@ -416,30 +416,30 @@ if(!defined('__AFOX__')) exit();
 
 	function isManager($md_id) {
 		global $_MEMBER;
-		static $is_manager = [];
+		static $__managers = [];
 		if(empty($_MEMBER['mb_srl'])) return false;
 		if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
 		if(empty($md_id)) return false;
-		if(!isset($is_manager[$md_id])) {
+		if(!isset($__managers[$md_id])) {
 			$module = getModule($md_id);
 			if(!empty($module['error'])) return false;
-			$is_manager[$md_id] = $module['md_manager'];
+			$__managers[$md_id] = $module['md_manager'];
 		}
-		return !empty($is_manager[$md_id]) && $is_manager[$md_id] == $_MEMBER['mb_srl'];
+		return !empty($__managers[$md_id]) && $__managers[$md_id] == $_MEMBER['mb_srl'];
 	}
 
 	function getGrant($chk, $md_id) {
 		if(empty($md_id) || empty($chk)) return '';
-		static $is_grants = [];
+		static $__is_grants = [];
 		$key = $md_id.'_'.$chk;
 		if($md_id == '_AFOXtRASH_') {
-			$is_grants[$key] = 'm'; // 휴지통은 메니져 이상
-		} else if(!isset($is_grants[$key])) {
+			$__is_grants[$key] = 'm'; // 휴지통은 메니져 이상
+		} else if(!isset($__is_grants[$key])) {
 			$module = getModule($md_id);
 			if(!empty($module['error'])) return '';
-			$is_grants[$key] = $module['grant_'.$chk];
+			$__is_grants[$key] = $module['grant_'.$chk];
 		}
-		return $is_grants[$key];
+		return $__is_grants[$key];
 	}
 
 	function isGrant($chk, $md_id) {
@@ -575,16 +575,16 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function toHTML($text, $type = 2, $class = 'current_content') {
-		static $parsedown = null;
+		static $__parsedown = null;
 
 		if($type == 0) {
 			$text = nl2br(escapeHtml($text, '<img><a>'));
 		} else if($type == 1) {
-			if($parsedown == null) {
-				$parsedown = new Parsedown();
-				$parsedown->setBreaksEnabled(true)->setMarkupEscaped(false);
+			if($__parsedown == null) {
+				$__parsedown = new Parsedown();
+				$__parsedown->setBreaksEnabled(true)->setMarkupEscaped(false);
 			}
-			$text =$parsedown->text($text);
+			$text =$__parsedown->text($text);
 			// 비디오,오디오 처리
 			$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
 			$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
@@ -667,9 +667,9 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function triggerAddonCall($addons, $position, $trigger, &$data) {
-		static $addon_call = null;
-		if($addon_call == null) {
-			$addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
+		static $__addon_call = null;
+		if($__addon_call == null) {
+			$__addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
 				include $include_file;
 				return $_DATA;
 			};
@@ -677,33 +677,33 @@ if(!defined('__AFOX__')) exit();
 		$position=strtolower($position);
 		$trigger=strtolower($trigger);
 		foreach ($addons as $key => $value) {
-			$include_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
-			if(file_exists($include_file)) {
-				$_extra = get_cache('_AF_ADDON_'.$key);
-				if(empty($_extra)) {
-					$_extra = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
-					$_extra = $_extra ? unserialize($_extra['ao_extra']) : [];
-					set_cache('_AF_ADDON_'.$key, $_extra);
+			$_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
+			if(file_exists($_file)) {
+				$_ex = get_cache('_AF_ADDON_'.$key);
+				if(empty($_ex)) {
+					$_ex = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
+					$_ex = $_ex ? unserialize($_ex['ao_extra']) : [];
+					set_cache('_AF_ADDON_'.$key, $_ex);
 				}
-				if(!empty($_extra['access_md_ids'])) {
-					$acc_md = $_extra['access_mode'];
+				if(!empty($_ex['access_md_ids'])) {
+					$_acc_md = $_ex['access_mode'];
 					$_md = __MID__;
-					$is_acc = !empty($_md) && in_array($_md, $_extra['access_md_ids']);
-					if(($acc_md == 'include' && !$is_acc)||($acc_md == 'exclude' && $is_acc)) continue;
+					$_is_acc = !empty($_md) && in_array($_md, $_ex['access_md_ids']);
+					if(($_acc_md == 'include' && !$_is_acc)||($_acc_md == 'exclude' && $_is_acc)) continue;
 				}
-				$data = $addon_call($include_file, $position, $trigger, $_extra, $data);
+				$data = $__addon_call($_file, $position, $trigger, $_ex, $data);
 			}
 		}
 		return true;
 	}
 
 	function triggerModuleCall($modules, $position, $trigger, &$data) {
-		static $module_call = null;
+		static $__module_call = null;
 		$position=explode('_', strtolower($position));
 		$position=$position[0];
 		if(empty($position[1])||$position[1]) return $data;
-		if($module_call == null) {
-			$module_call = function($include_file, $called_position, $called_trigger, $_DATA) {
+		if($__module_call == null) {
+			$__module_call = function($include_file, $called_position, $called_trigger, $_DATA) {
 				include $include_file;
 				$r = [];
 				$called_trigger = $called_position.'_'.$called_trigger;
@@ -715,9 +715,9 @@ if(!defined('__AFOX__')) exit();
 		}
 		$trigger=strtolower($trigger);
 		foreach ($modules as $key => $value) {
-			$include_file = _AF_MODULES_PATH_.'/'.$key.'/trigger.php';
-			if(file_exists($include_file)) {
-				$result = $module_call($include_file, $position, $trigger, $data);
+			$_file = _AF_MODULES_PATH_.'/'.$key.'/trigger.php';
+			if(file_exists($_file)) {
+				$result = $__module_call($_file, $position, $trigger, $data);
 				if($result === false) return false;
 				$data = $result;
 			}
@@ -727,27 +727,32 @@ if(!defined('__AFOX__')) exit();
 
 	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
 	function triggerCall($position, $trigger, &$data) {
-		static $triggers = null;
+		static $__triggers = null;
 		// 관리자 모듈은 넘어감
-		if(__MODULE__ == 'admin') return $data;
-		if($triggers == null) {
-			$triggers = ['A'=>[],'M'=>[]];
+		if(__MODULE__ == 'admin') return true;
+		if($__triggers == null) {
+			$__triggers = ['A'=>[],'M'=>[]];
+			global $_MEMBER;
+			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 			DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
-				[(__MOBILE__?'use_mobile':'use_pc')=>1], 'tg_key',
-				function($r)use(&$triggers) {
+				[
+					(__MOBILE__?'use_mobile':'use_pc')=>1,
+					'^'=>'ASCII(grant_access)<='.$rank
+				], 'tg_key',
+				function($r)use(&$__triggers) {
 					while ($tmp = DB::assoc($r)) {
-						$triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
+						$__triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
 					}
 				}
 			);
 		}
-		if(count($triggers['A']) > 0){
-			$result = triggerAddonCall($triggers['A'], $position, $trigger, $data);
+		if(count($__triggers['A']) > 0){
+			$result = triggerAddonCall($__triggers['A'], $position, $trigger, $data);
 		}
-		if(count($triggers['M']) > 0){
-			$result = triggerModuleCall($triggers['M'], $position, $trigger, $data);
+		if(count($__triggers['M']) > 0){
+			$result = triggerModuleCall($__triggers['M'], $position, $trigger, $data);
 		}
-		return $result;
+		return true;
 	}
 
 	function cutstr($str, $length, $tail = '...') {

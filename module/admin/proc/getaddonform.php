@@ -13,6 +13,7 @@ function proc($data) {
 	if(DB::error()) return set_error($error->getMessage(),$error->getCode());
 
 	if(empty($_ADDON['access_mode'])) $_ADDON['access_mode'] = null;
+
 	if(!empty($_ADDON['ao_extra'])) {
 		$extra = unserialize($_ADDON['ao_extra']);
 		unset($_ADDON['ao_extra']);
@@ -22,6 +23,7 @@ function proc($data) {
 	$out = DB::get(_AF_TRIGGER_TABLE_, ['tg_key'=>'A','tg_id'=>$data['ao_id']]);
 	$_ADDON['use_pc'] = empty($out['use_pc']) ? 0 : $out['use_pc'];
 	$_ADDON['use_mobile'] = empty($out['use_mobile']) ? 0 : $out['use_mobile'];
+	$_ADDON['grant_access'] = empty($out['grant_access']) ? '0' : $out['grant_access'];
 
 	$_ADDON_INFO = [];
 	@require_once _AF_ADDONS_PATH_ . $data['ao_id'] . '/info.php';
@@ -41,7 +43,15 @@ function proc($data) {
 		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>PC</strong></label>'
 		.'<label class="checkbox inline" tabindex="0">'
 		.'<input type="checkbox" name="use_mobile" value="1"'.($_ADDON['use_mobile']=='1'?' checked':'').'>'
-		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>Mobile</strong></label></div><hr style="margin:10px 0 25px">';
+		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>Mobile</strong></label></div>'
+		.'<div class="form-group"><label class="radio btn mw-10" tabindex="0">'
+		.'<input type="radio" name="grant_access" value="0"'.($_ADDON['grant_access']=='0'?' checked':'').'>'
+		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>'
+		.'<span>'.getLang('all').'</span></label><label class="radio btn mw-10" tabindex="0">'
+		.'<input type="radio" name="grant_access" value="1"'.($_ADDON['grant_access']!='0'&&$_ADDON['grant_access']!='m'?' checked':'').'>'
+		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><span>'.getLang('member').'</span>'
+		.'</label><label class="radio btn mw-10" tabindex="0"><input type="radio" name="grant_access" value="m"'.($_ADDON['grant_access']=='m'?' checked':'').'>'
+		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><span>'.getLang('admin').'</span></label></div><hr style="margin:10px 0 25px">';
 
 	unset($data);
 
@@ -49,7 +59,10 @@ function proc($data) {
 
 	$_list = DB::gets(_AF_MODULE_TABLE_,'md_id',[],'md_key');
 	if(!DB::error()) {
-		echo '<hr style="margin:25px 0 20px"><a href="#" style="display:block;padding:5px" onclick="jQuery(this).next().removeClass(\'hide\').end().remove();return false">'.getLang('advanced_setup').'</a><div class="hide"><div><label>'.getLang('md_id').':</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="include"'.($_ADDON['access_mode']!='exclude'?' checked="checked"':'').'> '.getLang('include').'</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="exclude"'.($_ADDON['access_mode']=='exclude'?' checked="checked"':'').'> '.getLang('exclude').'</label></div><p class="help-block">'.getLang('desc_access_md_id').'</p><div>';
+
+		echo '<hr style="margin:25px 0 20px">
+			<a href="#" style="display:block;padding:5px" onclick="jQuery(this).next().removeClass(\'hide\').end().remove();return false">'.getLang('advanced_setup').'</a>
+			<div class="hide"><div><label>'.getLang('md_id').':</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="include"'.($_ADDON['access_mode']!='exclude'?' checked="checked"':'').'> '.getLang('include').'</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="exclude"'.($_ADDON['access_mode']=='exclude'?' checked="checked"':'').'> '.getLang('exclude').'</label></div><p class="help-block">'.getLang('desc_access_md_id').'</p><div>';
 
 		$access_md_ids = [];
 		if(!empty($_ADDON['access_md_ids'])) {
@@ -59,7 +72,7 @@ function proc($data) {
 		}
 
 		foreach ($_list as $row) {
-			echo '<label><input name="access_md_ids[]" type="checkbox" value="'.$row['md_id'].'"'.($access_md_ids[$row['md_id']]===true?' checked="checked"':'').'> '.$row['md_id'].'</label>&nbsp;&nbsp;';
+			echo '<label><input name="access_md_ids[]" type="checkbox" value="'.$row['md_id'].'"'.(empty($access_md_ids[$row['md_id']])?'':' checked="checked"').'> '.$row['md_id'].'</label>&nbsp;&nbsp;';
 		}
 
 		echo '</div></div>';

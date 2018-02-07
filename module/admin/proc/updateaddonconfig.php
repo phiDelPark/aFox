@@ -12,8 +12,9 @@ function proc($data) {
 		$ao_id = $data['ao_id'];
 		$use_pc = empty($data['use_pc'])?'0':$data['use_pc'];
 		$use_mobile = empty($data['use_mobile'])?'0':$data['use_mobile'];
+		$grant_access = empty($data['grant_access'])?'0':$data['grant_access'];
 
-		$remove_array = ['ao_id', 'use_pc', 'use_mobile', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url','response_tags'];
+		$remove_array = ['ao_id', 'use_pc', 'use_mobile', 'grant_access', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url','response_tags'];
 		foreach ($remove_array as $value) {
 			if(isset($data[$value])) unset($data[$value]);
 		}
@@ -38,7 +39,8 @@ function proc($data) {
 				'tg_key'=>'A',
 				'tg_id'=>$ao_id,
 				'use_pc'=>$use_pc,
-				'use_mobile'=>$use_mobile
+				'use_mobile'=>$use_mobile,
+				'grant_access'=>$grant_access
 			]
 		);
 

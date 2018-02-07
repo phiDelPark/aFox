@@ -10,8 +10,8 @@ include $f; $r=null; $t='before_filedownload';
 if(function_exists($t)){$r=call_user_func($t, [$_DATA]);}
 return $r===true ? $_DATA : false;
 }
-function file_triggerCall(&$data) {
-$s=DB::gets(_AF_TRIGGER_TABLE_,'tg_id',['tg_key'=>'M']);
+function file_triggerCall($rank, &$data) {
+$s=DB::gets(_AF_TRIGGER_TABLE_,'tg_id',['tg_key'=>'M','^'=>'ASCII(grant_access)<='.$rank]);
 foreach ($s as $v) {$inf=_AF_MODULES_PATH_.'/'.$v['tg_id'].'/trigger.php';
 if(file_exists($inf)) {$r=file_triggerModuleCall($inf,$data);if($r===false) return false;$data=$r;}
 } return true;
@@ -82,7 +82,7 @@ if(!isset($_f[$key])){
 }
 if(!$_f[$key]['permission']) setHttpError('401 Unauthorized', $_f[$key]['type']=='binary');
 if($_f[$key]['type']=='binary') { //fileDownload 트리거 호출
-	if(!file_triggerCall($_f[$key])) setHttpError('401 Unauthorized', true);
+	if(!file_triggerCall(ord($mb_rank),$_f[$key])) setHttpError('401 Unauthorized', true);
 }
 if(!$fp = @fopen($_f[$key]['path'], 'rb')) setHttpError('404 Not Found');
 $fstat=fstat($fp);

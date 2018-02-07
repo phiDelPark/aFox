@@ -3,7 +3,9 @@
 	$ao_list = DB::gets(_AF_TRIGGER_TABLE_,['tg_key'=>'A'], function ($r) {
 		$rset = [];
 		while ($row = DB::assoc($r)) {
-			$rset[$row['tg_id']] = (empty($row['use_pc']) ? '-/':'P/').(empty($row['use_mobile']) ? '-':'M');
+			$g = strtoupper($row['grant_access']);
+			if(empty($row['grant_access'])||$row['grant_access']=='0') $g = '--';
+			$rset[$row['tg_id']] = (empty($row['use_pc'])?'--/':'P/').(empty($row['use_mobile'])?'--/':'M/').$g;
 		}
 		return $rset;
 	});
