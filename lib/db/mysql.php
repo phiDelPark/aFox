@@ -115,15 +115,6 @@ class DB {
 		self::$limit = 'LIMIT '.$limit;
 	}
 
-	private static function __sets($opts) {
-		if(!empty($opts[0])) {
-			$r = self::__where($opts[0]);
-			if(count($r) > 0) self::$where = 'WHERE '.implode(' AND ', $r);
-		}elseif(is_array($opts[0])) self::$where = 'WHERE 1';
-		if(!empty($opts[1])) self::__order($opts[1]);
-		if(!empty($opts[2])) self::__limit($opts[2]);
-	}
-
 	private static function __extra() {
 		$extra = '';
 		if(!empty(self::$where)) $extra .= ' '.self::$where;
@@ -169,7 +160,6 @@ class DB {
 		$result = mysql_query($qry);
 		if(mysql_errno()) {
 			throw new Exception(mysql_error(), mysql_errno());
-			return false;
 		} else {
 			if(is_resource($result)){
 				self::$info['num_rows'] = mysql_num_rows($result);
@@ -215,6 +205,15 @@ class DB {
 		return $data;
 	}
 
+	private static function __sets($opts) {
+		if(!empty($opts[0])) {
+			$r = self::__where($opts[0]);
+			if(count($r) > 0) self::$where = 'WHERE '.implode(' AND ', $r);
+		}elseif(is_array($opts[0])) self::$where = 'WHERE 1';
+		if(!empty($opts[1])) self::__order($opts[1]);
+		if(!empty($opts[2])) self::__limit($opts[2]);
+	}
+
 	/*
 	DB::get(_TABLE_)
 	DB::get(_TABLE_, 'mb_srl', ['mb_id'=>'admin'])
@@ -230,7 +229,11 @@ class DB {
 			$i--;
 		}
 		if($anum > $i) self::__sets(array_slice($args, $i));
-		return self::__gets($table, $select, true);
+		try{
+			return self::__gets($table, $select, true);
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage(), $e->getCode());
+		}
 	}
 
 	public static function gets($table) {
@@ -250,7 +253,11 @@ class DB {
 			}
 			self::__sets(array_slice($args, $i));
 		}
-		return self::__gets($table, $select, false, $callback);
+		try{
+			return self::__gets($table, $select, false, $callback);
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage(), $e->getCode());
+		}
 	}
 
 	/*
@@ -327,13 +334,21 @@ class DB {
 	*/
 	public static function count($table) {
 		if(func_num_args() > 1) self::__sets(array_slice(func_get_args(), 1));
-		$result = self::get($table, 'COUNT(*) as cnt');
-		return mysql_errno() ? -1 : (int)$result['cnt'];
+		try{
+			$result = self::get($table, 'COUNT(*) as cnt');
+			return (int)$result['cnt'];
+		} catch (Exception $e) {
+			return -1;
+		}
 	}
 
 	public static function found() {
-		$result = self::query("SELECT FOUND_ROWS() as c", true);
-		return mysql_errno() ? -1 : $result[0]['c'];
+		try{
+			$result = self::query("SELECT FOUND_ROWS() as c", true);
+			return (int)$result[0]['c'];
+		} catch (Exception $e) {
+			return -1;
+		}
 	}
 
 	public static function assoc($res) {
@@ -388,7 +403,11 @@ class DB {
 	}
 
 	public static function engine($table) {
-		return self::status($table, 'Engine');
+		try {
+			return self::status($table, 'Engine');
+		} catch (Exception $e) {
+			throw new Exception($e->getMessage(), $e->getCode());
+		}
 	}
 
 	public static function version($chk_version = null, $operator = '>=') {
