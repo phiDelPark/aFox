@@ -184,9 +184,9 @@ if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) {
 				<span class="list-group-item disabled">
 					<span class="<?php echo __MODULE__ != 'page'?' hidden-xs hidden-sm':'' ?>"><?php echo $mainmenu['_ACTIVE_']['mu_title'] ?></span>
 					<?php if(__MODULE__ != 'page'){ ?>
-					<span class="hidden-md"><?php echo $submenuactivetitle ?></span>
-					<span class="pull-right glyphicon glyphicon-menu-hamburger hidden-md" aria-hidden="true"></span>
-					<a class="hidden-md" style="position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer"></a>
+					<span class="hidden-md hidden-lg"><?php echo $submenuactivetitle ?></span>
+					<span class="pull-right glyphicon glyphicon-menu-hamburger hidden-md hidden-lg" aria-hidden="true"></span>
+					<a class="hidden-md hidden-lg" style="position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer"></a>
 					<?php } ?>
 				</span>
 			</div>

@@ -8,16 +8,16 @@
   'use strict';
 
 	$(window).on('load', function() {
-		var scripts = $('script[src^="'+request_uri+'addon/object_manager/object_manager.js?"]'),
-			link_blank = true,
-			autosize_image = true,
-			autosize_video = true;
+		var js = $('script[src^="'+request_uri+'addon/object_manager/object_manager.js?"]:eq(0)'),
+			link_blank = false,
+			autosize_image = false,
+			autosize_video = false;
 
-		if(scripts.length>0) {
-			scripts = scripts.attr('src').getQuery();
-			if((scripts['l'] || '1') == '0') link_blank = false;
-			if((scripts['i'] || '1') == '0') autosize_image = false;
-			if((scripts['v'] || '1') == '0') autosize_video = false;
+		if(js.length>0) {
+			js = js.attr('src').getQuery();
+			if((js['l'] || '0') == '1') link_blank = true;
+			if((js['i'] || '0') == '1') autosize_image = true;
+			if((js['v'] || '0') == '1') autosize_video = true;
 		}
 
 		if(autosize_video === true) {
@@ -34,7 +34,10 @@
 				function img_resize(){
 					var w1 = $th.closest('.current_content').width(),
 						w2 = $th.width();
-					if(w1<w2) $th.attr('width', '100%');
+					if(w1<w2) {
+						$th.attr('width', '100%');
+						$th.removeAttr('height');
+					}
 					$th.on('load', img_resize);
 				}
 				img_resize();

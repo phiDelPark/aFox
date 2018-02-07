@@ -491,7 +491,7 @@ $row = DB::get(_AF_MODULE_TABLE_, 'md_id', ['md_id'=>'welcome']);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 if (empty($row['md_id'])) {
 	$sql = 'INSERT INTO '._AF_MODULE_TABLE_.' (`md_id`, `md_key`, `md_title`, `md_regdate`) VALUES ("%s", "%s", "%s", NOW())';
-	DB::query(sprintf($sql, 'welcome', 'page', ''));
+	DB::query(sprintf($sql, 'welcome', 'page', 'CMS'));
 }
 
 $_err_keys = 'insert_pages';
