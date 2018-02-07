@@ -112,8 +112,6 @@ $domain = empty($__tmp) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('
 $__tmp = trim($_POST['cookie_domain']);
 $cookie_domain = empty($__tmp) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['cookie_domain']));
 
-echo $cookie_domain;
-
 $is_innodb = $_POST['db_type'] == 'innodb16' || $_POST['db_type'] == 'innodb8' || $_POST['db_type'] == 'innodb';
 $innodb_option = !$is_innodb || $_POST['db_type'] == 'innodb' ? '' : ($_POST['db_type'] == 'innodb16' ? '16' : '8');
 
@@ -141,8 +139,11 @@ DB::init($o);
 if($is_innodb){
 	// 서버에서 Barracuda를 지원하면 Barracuda로 설치하지만 아니면 Antelope로 설치된다.
 	// 단, 루트 사용자는 동적 설정이 가능하다.
-	@DB::query("SET GLOBAL innodb_file_format=Barracuda");
-	@DB::query("SET GLOBAL innodb_file_per_table=ON");
+	try {
+		@DB::query("SET GLOBAL innodb_file_format=Barracuda");
+		@DB::query("SET GLOBAL innodb_file_per_table=ON");
+	} catch (Exception $e) {
+	}
 	if($innodb_option==='') {
 	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPACT DEFAULT CHARSET='.$charset.';';
 	} else {
