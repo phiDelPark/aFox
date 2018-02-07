@@ -142,8 +142,8 @@ select.form-control {
 }
 
 .carousel .active {
-	margin-top: 0!important;
-	padding-top: 0!important;
+	margin-top: 0 !important;
+	padding-top: 0 !important;
 }
 
 .header-image {

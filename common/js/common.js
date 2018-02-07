@@ -40,12 +40,13 @@ var $_LANG = {};
 	String.prototype.sprintf = function() {
 		var s = this,
 			a = arguments;
-		a = (a.length === 1 && (a instanceof Object || a instanceof Array)) ? a[0] : a;
+		a = (a.length === 1 && typeof a[0] === 'object') ? a[0] : a;
 		for (var i = 0, n = a.length; i < n; i++) {
 			s = s.replace(/%([0-9]?)(s|d)/, function(x, y, z) {
 				var out = a[i] + '';
 				if (Number(y || 0) > 0) {
-					while (out.length < y) out = '0' + out;
+					var t1 = z == 'd' ? '0' : '_';
+					while (out.length < y) out = t1 + out;
 				}
 				return out;
 			});
