@@ -448,6 +448,7 @@ $create_sql = '
 	   tg_id          VARCHAR(255) NOT NULL,
 	   use_pc         CHAR(1)      NOT NULL DEFAULT 0,
 	   use_mobile     CHAR(1)      NOT NULL DEFAULT 0,
+	   grant_access   CHAR(1)      NOT NULL DEFAULT 0,
 
 	  INDEX PC_IX (use_pc),
 	  INDEX MOBILE_IX (use_mobile))'.$_engine;
