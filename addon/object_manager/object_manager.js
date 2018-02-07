@@ -22,16 +22,22 @@
 
 		if(autosize_video === true) {
 			$('.current_content video,.current_content iframe[src*="youtube.com"]').each(function(){
-				var w1 = $(this).closest('.current_content').width(),
-					w2 = $(this).width();
-				$(this).attr('width', w1).attr('height', (w1*0.5625));
+				var $th = $(this),
+					w1 = $th.closest('.current_content').width(),
+					w2 = $th.width();
+				$th.attr('width', w1).attr('height', (w1*0.5625));
 			});
 		}
 		if(autosize_image === true) {
 			$('.current_content img').each(function(){
-				var w1 = $(this).closest('.current_content').width(),
-					w2 = $(this).width();
-				if(w1<w2) $(this).attr('width', '100%');
+				var $th = $(this);
+				function img_resize(){
+					var w1 = $th.closest('.current_content').width(),
+						w2 = $th.width();
+					if(w1<w2) $th.attr('width', '100%');
+					$th.on('load', img_resize);
+				}
+				img_resize();
 			});
 		}
 		if(link_blank === true) {
