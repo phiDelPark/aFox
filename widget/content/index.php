@@ -20,7 +20,7 @@ if($type === 'gallery') {
 <div class="content_widget <?php echo $class?>" <?php echo $style?>>
 <div class="panel panel-default" role="group" aria-labelledby="afWidgetTitle">
 	<div class="panel-heading clearfix" id="afWidgetTitle">
-	<?php echo $md_title ?>
+	<?php echo empty($md_title)?'':$md_title ?>
 	<a class="pull-right" href="<?php echo getUrl('','id',$_WIDGET['module'])?>"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>
 	</div>
 	<?php if($type === 'gallery') { ?>

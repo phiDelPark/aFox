@@ -30,7 +30,7 @@
 $addon_dir = _AF_ADDONS_PATH_;
 if(is_dir($addon_dir)) {
 	foreach(glob($addon_dir.'*', GLOB_ONLYDIR) as $dir) {
-		$opt = '-/-';
+		$opt = '--/--/--';
 		$name = basename($dir);
 		if(isset($ao_list[$name])) {
 			$opt = $ao_list[$name];

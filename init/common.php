@@ -87,7 +87,7 @@ $_DATA['module'] = isset($_DATA['admin']) ? 'admin' : $_DATA['module'];
 if(empty($_DATA['module']) && empty($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
 if(!empty($_DATA['id'])) {
 	$tmp = getModule($_DATA['id']);
-	if(empty($tmp['error'])) {
+	if(!empty($tmp)) {
 		$_CFG = array_merge($_CFG, $tmp);
 		// 모듈 정보에 확장 변수가 있으면 unserialize
 		if(!empty($_CFG['md_extra']) && !is_array($_CFG['md_extra'])) $_CFG['md_extra'] = unserialize($_CFG['md_extra']);

@@ -65,8 +65,8 @@ function proc($data) {
 		if(empty($doc['wr_srl'])) throw new Exception(getLang('error_founded'), 4201);
 
 		$module = getModule($doc['md_id']);
-		if(!empty($module['error'])) throw new Exception($module['message'], $module['error']);
 		// 모듈이 없으면 에러
+		if(empty($module)) throw new Exception(getLang('error_founded'), 4201);
 		if($doc['md_id'] != $module['md_id']) throw new Exception(getLang('error_request'),4303);
 
 		// use_type 값이 1~6 사이이면 모듈에 설정된 값으로 강제 설정

@@ -174,7 +174,7 @@ if(!defined('__AFOX__')) exit();
 		static $__md_cfg = [];
 		if(!isset($__md_cfg[$id])) {
 			$out = DB::get(_AF_MODULE_TABLE_, ['md_id'=>$id]);
-			if(empty($out)) $out = set_error(getLang('error_founded'), 4201);
+			if(empty($out)||empty($out['md_id'])) $out = [];
 			$__md_cfg[$id] = $out;
 		}
 		return empty($get) ? $__md_cfg[$id] : $__md_cfg[$id][$get];
@@ -422,7 +422,7 @@ if(!defined('__AFOX__')) exit();
 		if(empty($md_id)) return false;
 		if(!isset($__managers[$md_id])) {
 			$module = getModule($md_id);
-			if(!empty($module['error'])) return false;
+			if(empty($module)) return false;
 			$__managers[$md_id] = $module['md_manager'];
 		}
 		return !empty($__managers[$md_id]) && $__managers[$md_id] == $_MEMBER['mb_srl'];
@@ -436,7 +436,7 @@ if(!defined('__AFOX__')) exit();
 			$__is_grants[$key] = 'm'; // 휴지통은 메니져 이상
 		} else if(!isset($__is_grants[$key])) {
 			$module = getModule($md_id);
-			if(!empty($module['error'])) return '';
+			if(empty($module)) return '';
 			$__is_grants[$key] = $module['grant_'.$chk];
 		}
 		return $__is_grants[$key];
