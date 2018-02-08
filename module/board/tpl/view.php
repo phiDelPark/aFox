@@ -34,8 +34,8 @@ $wr_grant_write = $_{'board'}['grant_write'];
 				$tmp = @$_{'board'}['wr_extra']['vars'][$ex_key];
 				if(preg_match('/^https?:\/\/.+/', $tmp)) $tmp = '<a href="'.escapeHtml($tmp).'" target="_blank">'.$tmp.'</a>';
 	?>
-			<div class="clearfix">
-				<strong><?php echo $ex_name?></strong>
+			<div class="text-ellipsis clearfix">
+				<strong class="col-sm-2"><?php echo $ex_name?></strong>
 				<span><?php echo $tmp?></span>
 			</div>
 	<?php

@@ -253,11 +253,15 @@
 }
 
 #bdView>article>.wr_extra_vars>div>strong {
-	width: 120px;
+	min-width: 55px;
+	max-width: 110px;
 	display: inline-block;
-	padding: 3px;
-	border-right: 1px solid #ddd;
-	margin-right: 3px;
+	padding: 3px 5px 3px 0;
+}
+
+#bdView>article>.wr_extra_vars>div>strong+span {
+	border-left: 1px solid #ddd;
+	padding: 3px 0 3px 8px;
 }
 
 #bdList .item_area {

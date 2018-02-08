@@ -108,12 +108,12 @@
 			</div>
 			<div class="form-group">
 				<label for="id_md_category"><?php echo getLang('category')?></label>
-				<input type="text" name="md_category" class="form-control" id="id_md_category" maxlength="255" pattern="^[^\x21-\x2b\x2d-\x2f\x3a-\x40\x5b-\x60]+">
+				<input type="text" name="md_category" class="form-control" id="id_md_category" maxlength="255" pattern="^[^\x21-\x2b\x2d\x2f\x3a-\x40\x5b-\x60]+">
 				<p class="help-block"><?php echo getLang('desc_category')?></p>
 			</div>
 			<div class="form-group">
 				<label for="id_md_extra_keys"><?php echo getLang('extra_keys')?></label>
-				<input type="text" name="md_extra_keys" class="form-control" id="id_md_extra_keys" maxlength="255" pattern="^[^\x21-\x29\x2b\x2d-\x2f\x3a-\x40\x5b-\x60]+">
+				<input type="text" name="md_extra_keys" class="form-control" id="id_md_extra_keys" maxlength="255" pattern="^[^\x21-\x29\x2b\x2d\x2f\x3a-\x40\x5b-\x60]+">
 				<p class="help-block"><?php echo getLang('desc_extra_keys')?></p>
 			</div>
 			<label><?php echo getLang('style')?></label>

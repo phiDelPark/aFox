@@ -17,7 +17,7 @@ function proc($data) {
 
 	// 분류값 정리
 	if(!empty($data['md_category'])) {
-		if(preg_match('/[\x{21}-\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_category'])) {
+		if(preg_match('/[\x{21}-\x{2b}\x{2d}\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_category'])) {
 			return set_error(getLang('invalid_value', ['category']),2001);
 		}
 
@@ -32,7 +32,7 @@ function proc($data) {
 
 	// 확장 변수 키값
 	if(!empty($data['md_extra_keys'])) {
-		if(preg_match('/[\x{21}-\x{29}\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_extra_keys'])) {
+		if(preg_match('/[\x{21}-\x{29}\x{2b}\x{2d}\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_extra_keys'])) {
 			return set_error(getLang('invalid_value', ['extra_keys']),2001);
 		}
 
