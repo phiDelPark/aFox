@@ -23,20 +23,6 @@ define('_AF_TRIGGER_TABLE_', 'afox_triggers');
 
 require_once dirname(__FILE__) . '/../lib/db/mysql.php';
 
-if(!function_exists('password_hash')) {
-	defined('PASSWORD_BCRYPT') or define('PASSWORD_BCRYPT', '');
-	function password_hash($password, $algo) {
-		$result = DB::query("SELECT password('$password') as pass", true);
-		return $result[0]['pass'];
-	}
-}
-if(!function_exists('password_verify')) {
-	function password_verify($password, $hash) {
-		$password = password_hash($password, 'PASSWORD_BCRYPT');
-		return !empty($hash) && $password === $hash;
-	}
-}
-
 ?>
 <!doctype html><html lang="ko"><head><meta charset="utf-8"></head><body>
 
@@ -44,18 +30,18 @@ if(!function_exists('password_verify')) {
 $datadir = dirname(__FILE__) . '/../data/';
 
 if(file_exists($datadir.'config/_db_config.php')) {
-	  exit("이미 설치되어있습니다.");
+	exit("<br>이미 설치되어있습니다.<br><br>다시 설치하시려면 아래 파일을 지워주세요.<br>./data/config/_db_config.php");
 }
 
 if(is_dir($datadir) || @mkdir($datadir, 0707)) {
 	if(is_dir($datadir)) { chmod($datadir, 0707); }
 } else {
-	exit("${mydir} 디렉토리를 생성하지 못했습니다.");
+	exit("<br>${datadir} 디렉토리를 생성하지 못했습니다.");
 }
 
 if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
  if (!(is_readable($datadir) && is_writeable($datadir) && is_executable($datadir))){
-	exit("${mydir} 디렉토리 퍼미션을 707로 변경하여 주세요.");
+	exit("<br>${datadir} 디렉토리 퍼미션을 707로 변경하여 주세요.");
  }
 }
 
@@ -135,6 +121,22 @@ $o['charset'] = isset($o['charset']) ? $o['charset'] : "utf8";
 $o['time_zone'] = isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul";
 
 DB::init($o);
+
+define('_AF_PASSWORD_ALGORITHM_', function_exists('password_hash')?'BCRYPT':'MYSQL');
+function createHash($password) {
+	try {
+		$password = trim($password);
+		if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT') {
+			return password_hash($password, PASSWORD_BCRYPT);
+		} else {
+			$password =  DB::escape($password);
+			$result = DB::query("SELECT password('$password') as pass", true);
+			return $result[0]['pass'];
+		}
+	} catch (Exception $ex) {
+		exit($ex->getMessage());
+	}
+}
 
 if($is_innodb){
 	// 서버에서 Barracuda를 지원하면 Barracuda로 설치하지만 아니면 Antelope로 설치된다.
@@ -461,7 +463,7 @@ $row = DB::get(_AF_MEMBER_TABLE_, 'mb_id', ['mb_id'=>'admin']);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 if (empty($row['mb_id'])) {
 	$sql = 'INSERT INTO '._AF_MEMBER_TABLE_.' (`mb_rank`, `mb_id`, `mb_password`, `mb_nick`, `mb_regdate`) VALUES ("%s", "%s", "%s", "%s", NOW())';
-	DB::query(sprintf($sql, 's', 'admin', password_hash('0000', PASSWORD_BCRYPT), '관리자'));
+	DB::query(sprintf($sql, 's', 'admin', createHash('0000'), '관리자'));
 }
 
 $_err_keys = 'insert_themes';

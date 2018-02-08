@@ -132,12 +132,7 @@ class DB {
 	private static function __quotes($val) {
 		if($val === true || $val === false) { return (int)$val; }
 		else if(is_int($val) || is_float($val)) { return $val; }
-		else { return "'".str_replace(
-					['\\',"\0","\n","\r","'",'"',"\x1a"],
-					['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],
-					$val
-				)."'";
-			}
+		else { return "'".self::escape($val)."'"; }
 		//연결이 안되있을때도 동작하기 위해 str_replace 사용
 		//return "'".mysql_real_escape_string($val)."'";
 	}

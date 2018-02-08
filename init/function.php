@@ -492,15 +492,30 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function createHash($password) {
-		return password_hash(trim($password), PASSWORD_BCRYPT);
+		try {
+			$password = trim($password);
+			if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT') {
+				return password_hash($password, PASSWORD_BCRYPT);
+			} else {
+				$password =  DB::escape($password);
+				$result = DB::query("SELECT password('$password') as pass", true);
+				return $result[0]['pass'];
+			}
+		} catch (Exception $ex) {
+			exit($ex->getMessage());
+		}
 	}
 
 	function checkPassword($password, $hash) {
 		try {
-			return password_verify($password, $hash);
-		} catch (InvalidHashException $ex) {
-			exit($ex->getMessage());
-		} catch (CannotPerformOperationException $ex) {
+			$password = trim($password);
+			if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT') {
+				return password_verify($password, $hash);
+			} else {
+				$password = createHash($password);
+				return !empty($hash) && $password === $hash;
+			}
+		} catch (Exception $ex) {
 			exit($ex->getMessage());
 		}
 	}

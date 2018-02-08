@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-define('_AF_VERSION_', '0.262');
+define('_AF_VERSION_', '0.272');
 define('__DEBUG__', 0);
 
 /*** SSL 설정 ***/
@@ -44,6 +44,7 @@ define('_AF_CACHE_DATA_', _AF_PATH_ . 'data/cache/');
 
 define('_AF_DIR_PERMIT_', 0755);
 define('_AF_FILE_PERMIT_', 0644);
+define('_AF_PASSWORD_ALGORITHM_', function_exists('password_hash')?'BCRYPT':'MYSQL');
 
 // 이 아래 부터는 자동으로 입력 혹은 불러와야할 정보들
 (@include_once(_AF_CONFIG_DATA_ . '_db_config.php')) OR die("Please install afox.");
@@ -133,20 +134,6 @@ function get_cache($key) {
 		@chmod($dir, 0707); @unlink($dir); return;
 	}
 	return $_DATA;
-}
-
-if(!function_exists('password_hash')) {
-	defined('PASSWORD_BCRYPT') or define('PASSWORD_BCRYPT', '');
-	function password_hash($password, $algo) {
-		$result = DB::query("SELECT password('$password') as pass", true);
-		return $result[0]['pass'];
-	}
-}
-if(!function_exists('password_verify')) {
-	function password_verify($password, $hash) {
-		$password = password_hash($password, 'PASSWORD_BCRYPT');
-		return !empty($hash) && $password === $hash;
-	}
 }
 
 function debugPrint($o = null) {
