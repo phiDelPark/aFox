@@ -80,7 +80,7 @@ if(!defined('__AFOX__')) exit();
 				return $rset;
 			};
 		}
-		$_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres, $order, (((empty($page)?1:$page)-1)*$list_count).','.$list_count);
+		$_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres, $order, (((empty($page)?1:$page)-1)*$list_count).','.$list_count, $callback);
 		return setDataListInfo($_list, DB::found(), $page, $list_count);
 	}
 
