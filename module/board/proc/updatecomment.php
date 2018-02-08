@@ -172,9 +172,8 @@ function proc($data) {
 	} catch (Exception $ex) {
 		DB::rollback();
 
-		// MySQL 5.5 이전 버전은 트랜잭션을 지원 안한다.
 		// Engine == MyISAM 트랜잭션을 지원 안한다.
-		if (DB::version('5.5.0', '<')) {
+		if (DB::engine(_AF_COMMENT_TABLE_) == 'myisam') {
 			if($new_insert && !empty($ret_rp_srl)) {
 				@DB::delete(_AF_COMMENT_TABLE_, ['rp_srl'=>$ret_rp_srl]);
 			}
