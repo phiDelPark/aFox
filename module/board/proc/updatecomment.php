@@ -124,12 +124,16 @@ function proc($data) {
 			$ret_rp_srl = DB::insert_id();
 
 			// 포인트 사용중이면
-			$_r = setPoint((int)$module['point_reply']);
-			if(!empty($_r['error'])) throw new Exception($_r['message'], $_r['error']);
+			$point = (int)$module['point_reply'];
+			if($point !== 0) {
+				$_r = setPoint($point);
+				if(!empty($_r['error'])) {
+					//TODO 에러시 메세지 보냄
+				}
+				setHistoryAction('wr_comment::'.$ret_rp_srl.'::'.$wr_srl, $point);
+			}
 
-			setHistoryAction('wr_reply', $wr_srl, false, function($v)use($wr_srl){
-				DB::update(_AF_DOCUMENT_TABLE_, ['^wr_reply'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);
-			});
+			DB::update(_AF_DOCUMENT_TABLE_, ['^wr_reply'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);
 
 			sendNote(empty($sendsrl) ? $doc['mb_srl'] : $sendsrl,
 					cutstr(strip_tags($data['rp_content']),200)

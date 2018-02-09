@@ -224,6 +224,7 @@ if(!defined('__AFOX__')) exit();
 		return $result;
 	}
 
+	// 포인트 체크를 위해 기록
 	function setHistoryAction($act, $value, $allowdup = false, $callback = null) {
 		global $_MEMBER;
 
@@ -248,7 +249,7 @@ if(!defined('__AFOX__')) exit();
 		try {
 			$uinfo['data'] = DB::get(_AF_HISTORY_TABLE_,
 				[
-					'hs_action'=>$act.'('.$value.')',
+					'hs_action{LIKE}'=>$act.'::%',
 					$pkey=>$pval
 				]
 			);
@@ -257,7 +258,7 @@ if(!defined('__AFOX__')) exit();
 					[
 						'mb_srl'=>$uinfo['mb_srl'],
 						'mb_ipaddress'=>$uinfo['ipaddress'],
-						'hs_action'=>$act.'('.$value.')',
+						'hs_action'=>$act.'::'.$value,
 						'^hs_regdate'=>'NOW()'
 					]
 				);
@@ -290,11 +291,9 @@ if(!defined('__AFOX__')) exit();
 		if(empty($mb_srl)) return;
 
 		$mb = DB::get(_AF_MEMBER_TABLE_, 'mb_point,mb_rank', ['mb_srl'=>$mb_srl]);
-		if(empty($mb)) return set_error(getLang('error_request'),4303);
-
-		$mb_rank = ord($mb['mb_rank']);
+		$mb_rank = empty($mb) ? 255 : ord($mb['mb_rank']);
 		// 115 초과시 에러... 115는 관리자. 109는 메니져
-		if($mb_rank > 115) set_error(getLang('error_request'),4303);
+		if($mb_rank > 115) return set_error(getLang('error_request'),4303);
 
 		// 포인트 모자르면 에러
 		if(($mb['mb_point'] + $point) < 0) {

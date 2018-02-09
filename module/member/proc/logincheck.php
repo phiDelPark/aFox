@@ -51,13 +51,13 @@ function proc($data) {
 	set_session($count_key, '');
 	set_session($captcha_key, '');
 
-	// 정상적인 접근이면 암호화된 비밀번호로 교체
-	$mb_password    = $mb['mb_password'];
+	// 암호화된 비밀번호로 교체
+	$mb_password = $mb['mb_password'];
 
 	// TODO 차단 탈퇴 인증 체크,
 
 	set_session('AF_LOGIN_ID', $mb['mb_id']);
-	// FLASH XSS 공격에 대응하기 위하여 회원의 고유키를 생성해 놓는다. 관리자에서 검사함 - 110106
+	// FLASH XSS 공격에 대응하기 위하여 회원의 고유키를 생성해 놓는다.
 	set_session('AF_LOGIN_KEY', md5($mb['mb_regdate'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']));
 
 	// 최고 관리자는 자동 로그인 안함
@@ -73,12 +73,21 @@ function proc($data) {
 	$setvalues = ['^mb_login'=>'NOW()'];
 
 	if(substr($mb['mb_login'], 0, 10) != date('Y-m-d')) {
-		// 포인트
-		if(!empty($_CFG['point_login'])) {
-			$point = (int) $_CFG['point_login'];
+		// 포인트 //TODO 포인트 - 시 모자르면 로그인 못하게 할까?
+		$point = (int)(empty($_CFG['point_login'])?0:$_CFG['point_login']);
+		if($point !== 0) {
 			$setvalues['^mb_point'] = 'mb_point'.($point>0?'+':'').$point;
+			// 아직 $_MEMBER 에 정보가 없기에 직접 입력 필요
+			// setHistoryAction('mb_login', $point, true);
+			DB::insert(_AF_HISTORY_TABLE_,
+				[
+					'mb_srl'=>$mb['mb_srl'],
+					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
+					'hs_action'=>'mb_login::'.$point,
+					'^hs_regdate'=>'NOW()'
+				]
+			);
 		}
-		setHistoryAction('mb_login', $mb['mb_srl'], true);
 	}
 
 	DB::update(_AF_MEMBER_TABLE_, $setvalues, ['mb_srl'=>$mb['mb_srl']]);

@@ -17,31 +17,41 @@ if(!defined('__AFOX__')) exit();
 		}
 
 		if($inc_hit && !empty($result)) {
-			$md_id = $result['md_id'];
 			$wr_mb = $result['mb_srl'];
-			$out = setHistoryAction('wr_hit', $srl, false, function($v)use($srl,$md_id,$wr_mb){
-				// 처음에만 카운터 올림, 포인트 사용
-				if(!empty($v['data'])) return;
+			$point = (int) getModule($result['md_id'], 'point_view');
 
-				// 자신은 포인트 사용 안함
-				if(empty($wr_mb) || ($wr_mb !== $v['mb_srl'])) {
-					$_r = setPoint((int) getModule($md_id, 'point_view'));
-					if(!empty($_r['error'])) return set_error($_r['message'], $_r['error']);
-				}
+			if($point !== 0) {
+				$_out = setHistoryAction('wr_hit::'.$srl, $point, false, function($v)use($srl,$wr_mb,$point){
+					// 처음에만 포인트 사용
+					if(!empty($v['data'])) return;
+					// 자신은 포인트 사용 안함
+					if(empty($wr_mb) || $wr_mb !== $v['mb_srl']) {
+						$_r = setPoint($point);
+						if(!empty($_r['error'])) return set_error($_r['message'], $_r['error']);
+					}
+				});
+				if(!empty($_out['error'])) return set_error($_out['message'], $_out['error']);
+			}
 
+			$uinfo = [
+				'mb_srl'=>empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'],
+				'ipaddress'=>$_SERVER['REMOTE_ADDR']
+			];
+
+			$hit_key = 'afox_wr_hit::'.$srl;
+			$hit_chk = get_session($hit_key);
+			if(empty($hit_chk)) $hit_chk = get_cookie($hit_key);
+			if(empty($hit_chk)) {
 				// 자신은 카운터 안올림
-				$ukey = ($v['mb_srl'] > 0 ? 'mb_srl':'mb_ipaddress').'{<>}';
-				$uval = ($v['mb_srl'] > 0 ? $v['mb_srl']:$v['ipaddress']);
+				$ukey = ($uinfo['mb_srl'] > 0 ? 'mb_srl':'mb_ipaddress').'{<>}';
+				$uval = ($uinfo['mb_srl'] > 0 ? $uinfo['mb_srl']:$uinfo['ipaddress']);
 				DB::update(_AF_DOCUMENT_TABLE_,
-					[
-						'^wr_hit'=>'wr_hit+1'
-					], [
-						'wr_srl'=>$srl,
-						$ukey => $uval
-					]
+					['^wr_hit'=>'wr_hit+1'],
+					['wr_srl'=>$srl, $ukey=>$uval]
 				);
-			});
-			if(!empty($out['error'])) return set_error($out['message'], $out['error']);
+			}
+			set_session($hit_key, true);
+			set_cookie($hit_key, true, 86400 * 31);
 		}
 		return $result;
 	}

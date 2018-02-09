@@ -64,13 +64,9 @@ function proc($data) {
 				]
 			);
 
-			setHistoryAction('wr_reply', $wr_srl, false, function($v)use($wr_srl){
-				DB::update(
-					_AF_DOCUMENT_TABLE_,
-					['^wr_reply'=>'wr_reply-1'],
-					['wr_srl'=>$wr_srl]
-				);
-			});
+			//TODO History를 검색해서 포인트 있으면 회수 코드 작성하기
+
+			DB::update(_AF_DOCUMENT_TABLE_, ['^wr_reply'=>'wr_reply-1'], ['wr_srl'=>$wr_srl]);
 		}
 
 	} catch (Exception $ex) {

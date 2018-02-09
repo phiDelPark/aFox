@@ -64,6 +64,8 @@ function proc($data) {
 			DB::delete(_AF_COMMENT_TABLE_,['wr_srl'=>$wr_srl]);
 			DB::delete(_AF_FILE_TABLE_,['md_id'=>$md_id,'mf_target'=>$wr_srl]);
 			DB::delete(_AF_DOCUMENT_TABLE_,['wr_srl'=>$wr_srl]);
+
+			//TODO History를 검색해서 포인트 있으면 회수 코드 작성하기
 		}
 
 		// 파일 삭제 // 휴지통 이동이면 썸네일만 제거

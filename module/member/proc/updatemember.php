@@ -75,7 +75,6 @@ function proc($data) {
 	// 아이콘 삭제 값이 넘어오면
 	$remove_mb_icon = !empty($data['remove_files'][0]) && $data['remove_files'][0] == 'mb_icon';
 
-	$destination = '';
 	$mb_icon_tmp = '';
 	if(!empty($_FILES['mb_icon']['tmp_name'])) {
 		// 파일이 여러개 넘어오면 에러
@@ -94,7 +93,6 @@ function proc($data) {
 			return set_error(getLang('invalid_value',['size']),2001);
 		}
 
-		$destination = '/profile_image.png';
 		// 디비에 등록된 후 옮기기 위해 임시폴더에 유지
 		$ret = moveUpFile($_FILES['mb_icon'], '', 500000);
 		if(!empty($ret['error'])) return set_error($ret['message'],$ret['error']);
@@ -172,7 +170,7 @@ function proc($data) {
 
 		// 정상적으로 디비에 입력되면 아이콘도 이동
 		if($mb_icon_tmp) {
-			$destination = _AF_MEMBER_DATA_.$mb_srl.$destination;
+			$destination = _AF_MEMBER_DATA_.$mb_srl.'/profile_image.png';
 			$dir = dirname($destination);
 			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) {
 				throw new Exception(getLang('upload_err_code(7)'), 10407);
@@ -186,7 +184,7 @@ function proc($data) {
 		}
 
 		// TODO 나중에 닉네임 바꿀때 시간 제한 둘때 사용하기 위해서 기록
-		setHistoryAction('mb_nick', $mb_srl);
+		setHistoryAction('mb_nick', $data['mb_id']);
 
 	} catch (Exception $ex) {
 		DB::rollback();

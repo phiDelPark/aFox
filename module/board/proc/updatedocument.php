@@ -136,10 +136,6 @@ function proc($data) {
 				throw new Exception(getLang('error_occured'), 4001);
 			}
 
-			// 포인트 사용중이면
-			$_r = setPoint((int)$module['point_write']);
-			if(!empty($_r['error'])) throw new Exception($_r['message'], $_r['error']);
-
 		} else {
 			if(empty($_MEMBER)) {
 				if(empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
@@ -259,6 +255,16 @@ function proc($data) {
 				'wr_srl'=>$wr_srl
 			]
 		);
+
+		// 포인트 사용중이고 새글이면
+		$point = (int)$module['point_write'];
+		if($new_insert && $point !== 0){
+			$_r = setPoint($point);
+			if(!empty($_r['error'])) {
+				//TODO 에러시 메세지 보냄
+			}
+			setHistoryAction('wr_document::'.$wr_srl, $point);
+		}
 
 		// 모두 완료 되면 지워진 파일 완전 삭제
 		foreach ($unlink_files as $val) @unlinkFile($val);
