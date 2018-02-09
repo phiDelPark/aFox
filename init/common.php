@@ -26,15 +26,15 @@ define('_AF_THEME_URL_', _AF_URL_ . 'theme/' . _AF_THEME_ . '/');
 if($tmp = (isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cookie('AF_LOGIN_ID'))) {
 	if(preg_match('/^[a-zA-Z]+\w{2,}$/', $tmp)) {
 		$_MEMBER = DB::get(_AF_MEMBER_TABLE_, ['mb_id'=>$tmp]);
-		if(DB::error() || empty($_MEMBER['mb_srl'])){
+		if(DB::error() || empty($_MEMBER['mb_srl'])) {
 			unset($_MEMBER);
 		} else {
 			$tmp = $_MEMBER['mb_srl'].'/profile_image.png';
 			if(file_exists(_AF_MEMBER_DATA_.$tmp)) $_MEMBER['mb_icon'] = _AF_URL_.'data/member/'.$tmp;
-			// 쿠키이면... 키검사... 최고 관리자는 쿠키사용안함
+			// 쿠키이면... 키검사... 최고 관리자는 쿠키 사용안함
 			if(!isset($_SESSION['AF_LOGIN_ID'])) {
-				$tmp = get_cookie('AF_AUTO_LOGIN');
-				if($_MEMBER['mb_rank'] == 's' || empty($tmp) || ($tmp !== md5($_SERVER['SERVER_ADDR'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] . $_MEMBER['mb_password']))) {
+				$tmp = $_MEMBER['mb_rank'] == 's' ? '' : get_cookie('AF_AUTO_LOGIN');
+				if(empty($tmp) || $tmp!=md5($_SERVER['SERVER_ADDR'].$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'].$_MEMBER['mb_password'])) {
 					unset($_MEMBER);
 				} else {
 					set_session('AF_LOGIN_ID', $_MEMBER['mb_id']);
@@ -79,7 +79,9 @@ if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))) {
 
 // 유효성 검사
 foreach (['module','id','act','disp'] as $tmp) {
-	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp])) $_DATA[$tmp] = '';
+	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp])) {
+		$_DATA[$tmp] = '';
+	}
 }
 
 $_DATA['module'] = isset($_DATA['admin']) ? 'admin' : $_DATA['module'];
@@ -90,7 +92,9 @@ if(!empty($_DATA['id'])) {
 	if(!empty($tmp)) {
 		$_CFG = array_merge($_CFG, $tmp);
 		// 모듈 정보에 확장 변수가 있으면 unserialize
-		if(!empty($_CFG['md_extra']) && !is_array($_CFG['md_extra'])) $_CFG['md_extra'] = unserialize($_CFG['md_extra']);
+		if(!empty($_CFG['md_extra']) && !is_array($_CFG['md_extra'])) {
+			$_CFG['md_extra'] = unserialize($_CFG['md_extra']);
+		}
 		$_DATA['module'] = $tmp['md_key'];
 	}
 }
@@ -124,12 +128,14 @@ define('_AF_USE_BASE_CDN_', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp
 $_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
 $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
 
-unset($tmp);
-header('Content-Type: text/html; charset=utf-8');
+$tmp = __REQ_METHOD__=='JSON'||__REQ_METHOD__=='XML'?'application/json':'text/html';
+header('Content-Type: '.$tmp.'; charset=UTF-8');
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-header("Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0"); // HTTP 1.1.
-header("Pragma: no-cache"); // HTTP 1.0.
-header("Expires: 0"); // Proxies.
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+unset($tmp);
 
 /* End of file common.php */
 /* Location: ./init/common.php */

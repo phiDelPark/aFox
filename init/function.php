@@ -91,18 +91,23 @@ if(!defined('__AFOX__')) exit();
 			unset($_info['port']);
 		}
 
-		$__url[$ssl_mode][$domain_key] = sprintf('%s://%s%s%s', $use_ssl ? 'https' : $_info['scheme'], $_info['host'], empty($_info['port']) ? '' : ':' . $_info['port'], $_info['path']);
+		$__url[$ssl_mode][$domain_key] = sprintf(
+			'%s://%s%s%s',
+			$use_ssl ? 'https' : $_info['scheme'],
+			$_info['host'],
+			empty($_info['port']) ? '' : ':' . $_info['port'],
+			$_info['path']
+		);
 
 		return $__url[$ssl_mode][$domain_key];
 	}
 
 	function getRequestMethod() {
-		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
-			$type = strpos($_SERVER['HTTP_ACCEPT'], 'json') ? 'JSON' : 'XML';
+		if(isset($_SERVER[($s='HTTP_X_REQUESTED_WITH')]) && $_SERVER[$s] == 'XMLHttpRequest') {
+			return strpos($_SERVER['HTTP_ACCEPT'], 'json') ? 'JSON' : 'XML';
 		} else {
-			$type = $_SERVER['REQUEST_METHOD'];
+			return $_SERVER['REQUEST_METHOD'];
 		}
-		return $type;
 	}
 
 	function getScriptPath() {
@@ -410,35 +415,23 @@ if(!defined('__AFOX__')) exit();
 
 	function isAdmin() {
 		global $_MEMBER;
-		return (!empty($_MEMBER['mb_srl']) && $_MEMBER['mb_rank'] == 's');
+		return !empty($_MEMBER['mb_srl']) && $_MEMBER['mb_rank'] == 's';
 	}
 
 	function isManager($md_id) {
 		global $_MEMBER;
-		static $__managers = [];
-		if(empty($_MEMBER['mb_srl'])) return false;
+		if(empty($md_id) || empty($_MEMBER['mb_srl'])) return false;
 		if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
-		if(empty($md_id)) return false;
-		if(!isset($__managers[$md_id])) {
-			$module = getModule($md_id);
-			if(empty($module)) return false;
-			$__managers[$md_id] = $module['md_manager'];
-		}
-		return !empty($__managers[$md_id]) && $__managers[$md_id] == $_MEMBER['mb_srl'];
+		$module = getModule($md_id);
+		if(empty($module) || empty($module['md_manager'])) return false;
+		return $module['md_manager'] == $_MEMBER['mb_srl'];
 	}
 
 	function getGrant($chk, $md_id) {
 		if(empty($md_id) || empty($chk)) return '';
-		static $__is_grants = [];
-		$key = $md_id.'_'.$chk;
-		if($md_id == '_AFOXtRASH_') {
-			$__is_grants[$key] = 'm'; // 휴지통은 메니져 이상
-		} else if(!isset($__is_grants[$key])) {
-			$module = getModule($md_id);
-			if(empty($module)) return '';
-			$__is_grants[$key] = $module['grant_'.$chk];
-		}
-		return $__is_grants[$key];
+		if($md_id == '_AFOXtRASH_') return 'm'; // 휴지통은 메니져 이상
+		$module = getModule($md_id);
+		return empty($module) ? '' : $module['grant_'.$chk];
 	}
 
 	function isGrant($chk, $md_id) {

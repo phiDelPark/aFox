@@ -30,7 +30,7 @@
 		<?php if(__MOBILE__) { ?>
 		<th><input type="checkbox"> <?php echo getLang('content')?></th>
 		<?php } else { ?>
-		<th class="col-xs-1"><?php echo getLang('nickname')?></th>
+		<th class="col-xs-1"><?php echo getLang('name')?></th>
 		<th><?php echo getLang('content')?></th>
 		<th class="col-xs-1"><?php echo getLang('status')?></th>
 		<th class="col-xs-1"><?php echo getLang('date')?></th>

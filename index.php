@@ -49,9 +49,8 @@ if(__MODULE__ && !empty($_DATA['act'])) {
 	}
 
 	if(__REQ_METHOD__ == 'JSON' || __REQ_METHOD__ == 'XML') {
-		unset($_SESSION['AF_VALIDATOR_ERROR']);
-		header('Content-Type: application/json');
 		echo json_encode($_result);
+		unset($_SESSION['AF_VALIDATOR_ERROR']);
 	} else {
 		goUrl(empty($_result['redirect_url']) ? _AF_URL_ : $_result['redirect_url']);
 	}

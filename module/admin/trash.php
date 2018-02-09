@@ -226,7 +226,7 @@
 			<div class="form-group imagebox" style="display:none">
 				<label><?php echo getLang('preview')?></label>
 				<br>
-				<img style="width:auto;height:100px">
+				<img style="height:100px;max-width:100%;width:auto">
 			</div>
 			<div class="form-group">
 				<label for="id_mf_name"><?php echo getLang('name')?></label>

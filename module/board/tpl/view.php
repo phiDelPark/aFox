@@ -55,7 +55,7 @@ $wr_grant_write = $_{'board'}['grant_write'];
 		<?php
 			$hashtags = explode(',', $_{'board'}['wr_tags']);
 			foreach ($hashtags as $val) {
-				echo '<a href="'.getUrl('','id',__MID__,'search','tags:'.$val).'"><strong>#</strong>'.$val.'</a>'."\n";
+				echo '<a href="'.getUrl('','id',__MID__,'search','tag:'.$val).'"><strong>#</strong>'.$val.'</a>'."\n";
 			}
 		?>
 	</div>
