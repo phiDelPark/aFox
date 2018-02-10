@@ -11,7 +11,7 @@ function proc($data) {
 		return set_error(getLang('invalid_value', ['id']),2001);
 	}
 
-	$md_extra = [];
+	$ex_keys = [];
 	$data['md_title'] = trim($data['md_title']);
 	$data['md_list_count'] = empty($data['md_list_count']) ? 20 : abs($data['md_list_count']);
 
@@ -54,7 +54,7 @@ function proc($data) {
 			if(count($md_extra_keys) > 99) {
 				return set_error(getLang('msg_count_overflow', ['extra_keys','99']));
 			}
-			$md_extra['keys'] = $md_extra_keys;
+			$ex_keys['keys'] = $md_extra_keys;
 		}
 	}
 
@@ -110,7 +110,7 @@ function proc($data) {
 					'grant_reply'=>empty($data['grant_reply'])?'0':$data['grant_reply'],
 					'grant_upload'=>empty($data['grant_upload'])?'0':$data['grant_upload'],
 					'grant_download'=>empty($data['grant_download'])?'0':$data['grant_download'],
-					'md_extra'=>empty($md_extra)?'':serialize($md_extra),
+					'md_extra'=>serialize($ex_keys),
 					'^md_regdate'=>'NOW()'
 				]
 			);
@@ -126,6 +126,24 @@ function proc($data) {
 					$out = DB::get(_AF_DOCUMENT_TABLE_, 'wr_category', ['md_id'=>$data['md_id'], 'wr_category{IN}'=>$diff]);
 					if(!empty($out)) throw new Exception(getLang('msg_not_change_category', [$out['wr_category']]), 3);
 				}
+			}
+
+			// 확장 변수가 있으면 unserialize
+			if(!empty($module['md_extra']) && !is_array($module['md_extra'])) {
+				$_extras = unserialize($module['md_extra']);
+			} else {
+				$_extras = [];
+			}
+			// 확장변수 키가 있으면 합침
+			if(empty($ex_keys)) {
+				unset($_extras['keys']);
+			} else {
+				$_extras['keys'] = $ex_keys['keys'];
+			}
+			// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
+			$_extras = serialize($_extras);
+			if(strlen($_extras) > 65535) {
+				throw new Exception(getLang('msg_max_overflow', [65535]), 1401);
 			}
 
 			DB::update(_AF_MODULE_TABLE_,
@@ -155,7 +173,7 @@ function proc($data) {
 					'grant_reply'=>empty($data['grant_reply'])?'0':$data['grant_reply'],
 					'grant_upload'=>empty($data['grant_upload'])?'0':$data['grant_upload'],
 					'grant_download'=>empty($data['grant_download'])?'0':$data['grant_download'],
-					'md_extra'=>empty($md_extra)?'':serialize($md_extra)
+					'md_extra'=>$_extras
 				], [
 					'md_id'=>$data['md_id']
 				]

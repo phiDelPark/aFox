@@ -65,7 +65,7 @@ function proc($data) {
 			if(empty($data['wr_category'])) {
 				throw new Exception(getLang('request_input',['category']), 1);
 			}
-			if(preg_match('/[\x{21}-\x{2b}\x{2d}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['wr_category'])) {
+			if(preg_match('/[\x{21}-\x{2b}\x{2d}\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['wr_category'])) {
 				throw new Exception(getLang('invalid_value', ['category']), 2001);
 			}
 		} else {
@@ -203,7 +203,7 @@ function proc($data) {
 				}
 
 				// 실행 가능한 파일 못하게 처리
-				$fileext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x', ('.'.$fileext));
+				$fileext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', ('.'.$fileext));
 
 				$filename = md5($filename.time().$i) . '.' . $fileext;
 				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/' . $wr_srl . '/' . $filename;

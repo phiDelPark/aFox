@@ -11,7 +11,7 @@ function proc($data) {
 	$name = explode('.', $data['mf_name']);
 	$ext = count($name)===1 ? 'none' : $name[count($name)-1];
 	$name = count($name)===1 ? $name[0] : substr($data['mf_name'], 0, strlen('.'.$ext) * -1);
-	$ext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|jsp|asp|inc)/i', '$0-x', ('.'.$ext));
+	$ext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', ('.'.$ext));
 
 	DB::transaction();
 

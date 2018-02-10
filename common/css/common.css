@@ -105,11 +105,13 @@
 .checkbox {
 	font-weight: 400;
 	display: block;
+	line-height: normal !important;
+	text-indent: initial !important;
 }
 
 .radio .cr,
 .checkbox .cr {
-	position: relative;
+	position: relative !important;
 	display: inline-block;
 	border: 1px solid #a9a9a9;
 	border-radius: .25em;
@@ -125,7 +127,7 @@
 
 .radio .cr .cr-icon,
 .checkbox .cr .cr-icon {
-	position: absolute;
+	position: absolute !important;
 	font-size: .8em;
 	line-height: 0;
 	top: 50%;
@@ -155,7 +157,7 @@
 }
 
 .checkbox.btn .cr {
-	position: absolute;
+	position: absolute !important;
 	left: 5px;
 	top: 0;
 	border: 0;
@@ -189,7 +191,7 @@
 
 .radio input[type="radio"],
 .checkbox input[type="checkbox"] {
-	display: none;
+	display: none !important;
 }
 
 .radio input[type="radio"]+.cr>.cr-icon,
@@ -264,7 +266,7 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 .radio.inline,
 .checkbox.btn,
 .checkbox.inline {
-	display: inline-block;
+	display: inline-block !important;
 }
 
 .radio.btn+.radio,
@@ -276,15 +278,15 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 
 .input-group .radio,
 .input-group .checkbox {
-	display: table-cell;
-	line-height: initial;
+	display: table-cell !important;
+	line-height: initial !important;
 	width: auto;
 }
 
 .uploader-group .btn-file {
-	position: relative;
+	position: relative !important;
 	white-space: nowrap;
-	display: table-cell;
+	display: table-cell !important;
 	padding: 6px 16px;
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
@@ -297,7 +299,7 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 }
 
 .uploader-group .btn-file>input[type=file] {
-	position: absolute;
+	position: absolute !important;
 	top: 0;
 	right: 0;
 	min-width: 100%;
@@ -322,7 +324,7 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 }
 
 .uploader-group .file-item {
-	position: relative;
+	position: relative !important;
 	top: 0;
 	left: -5px;
 	width: 100%;
@@ -406,7 +408,7 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 }
 
 .af_waiting_message {
-	position: fixed;
+	position: fixed !important;
 	top: 10px;
 	left: 10px;
 	z-index: 99999;

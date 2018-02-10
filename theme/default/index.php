@@ -47,7 +47,7 @@
 	<header class="bs-docs-header">
 		<h1 class="logo-title" role="banner" aria-label="<?php echo escapeHtml($_CFG['title'])?>"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
 		<div class="right">
-			<span role="search" aria-label="Search"><a class="collapsed"  data-toggle="collapse" href="#nav-collapse3" aria-expanded="false" aria-controls="nav-collapse3"><i class="glyphicon glyphicon-search" aria-hidden="true" style="font-weight:bold"></i></a></span>
+			<span role="search" aria-label="Search"><a class="collapsed" data-toggle="collapse" href="#nav-collapse3" aria-expanded="false" aria-controls="nav-collapse3"><i class="glyphicon glyphicon-search" aria-hidden="true" style="font-weight:bold"></i></a></span>
 <?php if (!empty($_MEMBER)) {
 	$notes = DB::gets(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], 'nt_send_date', '1,5');
 ?>
@@ -171,9 +171,31 @@
 		<p role="description"><?php echo $_CFG['md_description'] ?></p>
 	<?php } ?>
 </div>
-<?php } ?>
+<?php }
 
-<?php
+	// 테마에 모듈 스킨(tpl)이 있으면 사용
+	$config_file = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/config.php';
+	if(!file_exists($config_file)) $config_file = _AF_MODULES_PATH_.__MODULE__.'/tpl/config.php';
+	if(file_exists($config_file) && isManager(__MODULE__)) {
+?>
+<div id="af_md_config" class="clearfix" role="config">
+	<div class="btn-toggle">
+		<i class="glyphicon glyphicon-cog" aria-hidden="true"></i>
+		<i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
+	</div>
+	<div class="config-area">
+		<div class="config-header">
+			<strong><?php echo $_CFG['md_title'] ?></strong>
+		</div>
+		<div class="config-content clearfix">
+			<?php
+			@include  $config_file;
+			?>
+		</div>
+	</div>
+</div>
+<?php }
+
 $tmp = 'col-md-9 ';
 if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) {
 	if(empty($submenuactivetitle)) $submenuactivetitle = $mainmenu['_ACTIVE_']['mu_title'];

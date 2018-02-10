@@ -100,6 +100,33 @@
 			});
 		});
 
+		$('#af_md_config').each(function() {
+			var $this = $(this),
+				$btn = $this.find('.btn-toggle');
+			$btn.find('.glyphicon-ok').offOn('click', function() {
+				if (confirm($_LANG['confirm_save'].sprintf($_LANG['setup'])) === true) {
+					$this.find('form[data-exec-ajax]:eq(0)').submit();
+				}
+			});
+			$btn.find('.glyphicon-cog').offOn('click', function() {
+				var w1 = $this.find('.config-area').width(),
+					w2 = $this.find('.config-content').width();
+				$this.find('.config-area').animate({
+					width: w1 != 0 ? 0 : w2
+				});
+			});
+			$this.find('#config_menus li>a:first-child').offOn('click', function() {
+				var $el = $(this).parent().find('>div');
+				if ($el.css('display') == 'none') {
+					$this.find('#config_menus li>div').hide();
+					$el.animate({
+						height: "toggle"
+					});
+				}
+				return false;
+			});
+		});
+
 		$('[aria-labelledby="afPageLoader"]').fadeOut("slow");
 	});
 

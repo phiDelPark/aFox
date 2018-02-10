@@ -9,9 +9,10 @@ $_PROTECT['disp.deletedocument']	= ['grant' => '0'];
 $_PROTECT['proc.checkpassword']		= ['grant' => '0'];
 $_PROTECT['proc.deletecomment']		= ['grant' => '0'];
 $_PROTECT['proc.deletedocument']	= ['grant' => '0'];
-$_PROTECT['proc.restoredocument']	= ['grant' => '0'];
 $_PROTECT['proc.updatecomment']		= ['grant' => '0'];
 $_PROTECT['proc.updatedocument']	= ['grant' => '0'];
+$_PROTECT['proc.updateconfig']		= ['grant' => 'm'];
+$_PROTECT['proc.restoredocument']	= ['grant' => '1'];
 
 $_PROTECT['proc.getcomment']		= ['grant' => '0'];
 $_PROTECT['proc.getdocument']		= ['grant' => '0'];

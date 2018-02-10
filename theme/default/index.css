@@ -313,6 +313,130 @@ ul.message-dropdown>li>a {
 	margin-left: 5px;
 }
 
+#af_md_config {
+	position: fixed;
+	z-index: 9980;
+	left: 0;
+	top: 132px;
+	background-color: #222;
+	border-color: #080808;
+	border-radius: 0 0 4px 0;
+	color: #9d9d9d;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+#af_md_config .config-area {
+	overflow: hidden;
+	width: 0;
+	max-width: 300px !important;
+	min-height: 75px !important;
+}
+
+#af_md_config .btn-toggle {
+	position: absolute;
+	right: 0;
+	top: 0;
+	background-color: #222;
+	border-color: #080808;
+	margin: 0 -35px 0 0 !important;
+	width: 35px !important;
+	height: auto !important;
+	border-radius: 0 4px 4px 0;
+	padding: 0 0 2px 0 !important;
+}
+
+#af_md_config .btn-toggle>.glyphicon {
+	font-size: 22px !important;
+	padding: 5px !important;
+	margin: 0 0 0 1px !important;
+	cursor: pointer;
+}
+
+#af_md_config .config-header,
+#af_md_config #config_menus {
+	display: block;
+	float: left;
+	width: 100%;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+#af_md_config .config-header,
+#af_md_config #config_menus li>a {
+	color: #999;
+	display: block;
+	text-decoration: none;
+	width: 100%;
+	background: #252525;
+	border-top: 1px solid #373737;
+	border-bottom: 1px solid #1A1A1A;
+	-webkit-transition: background .5s;
+	-moz-transition: background .5s;
+	-o-transition: background .5s;
+	-ms-transition: background .5s;
+	transition: background .5s;
+}
+
+#af_md_config .config-header,
+#af_md_config #config_menus li {
+	line-height: 35px;
+	text-indent: 20px;
+}
+
+#af_md_config #config_menus li:before,
+#af_md_config #config_menus li:after {
+	display: table;
+	content: " ";
+}
+
+#af_md_config #config_menus li:after {
+	clear: both;
+}
+
+#af_md_config #config_menus li>a {
+	color: #999999;
+	display: block;
+	text-decoration: none;
+}
+
+#af_md_config #config_menus li>a:hover {
+	color: #fff;
+	background: rgba(255, 255, 255, 0.2);
+	text-decoration: none;
+}
+
+#af_md_config #config_menus li>a:active,
+#af_md_config #config_menus li>a:focus {
+	text-decoration: none;
+}
+
+#af_md_config #config_menus li>div {
+	padding: 0 20px;
+	display: none;
+}
+
+#af_md_config #config_menus li:last-child>a {
+	border-radius: 0 0 4px 0;
+}
+
+#af_md_config #config_menus li:first-child>div {
+	display: block;
+}
+
+#af_md_config .config-header {
+	height: 35px;
+	line-height: 30px;
+	font-size: 18px;
+	margin-bottom: 5px;
+}
+
+#af_md_config .config-content {
+	min-width: 150px;
+	width: auto;
+}
+
 @media(max-width:768px) {
 	.nav.right {
 		float: none;

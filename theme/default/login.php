@@ -24,7 +24,7 @@
 			<input type="hidden" name="error_return_url" value="<?php echo getUrl('')?>" />
 			<input type="hidden" name="success_return_url" value="<?php echo getUrl('')?>" />
 			<div class="modal-header" id="<?php echo $signUp?'afSignUpFormTitle':'afMsgBox'?>">
-				<img src="theme/default/img/logo.png">
+				<img src="theme/default/img/logo.png" width="100%" style="max-width:310px">
 				<span class="sr-only"><?php echo escapeHtml($_CFG['title']).' '.getLang('login')?></span>
 			</div>
 			<div class="modal-body">

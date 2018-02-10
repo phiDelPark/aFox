@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 @include_once _AF_THEME_PATH_ . 'lang/' . _AF_LANG_ . '.php';
 
-addJSLang(['error','id','password','login','auto_login','member_signup','member_find','captcha_code']);
+addJSLang(['error','id','password','login','auto_login','member_signup','member_find','captcha_code','confirm_save','setup']);
 addCSS(_AF_THEME_URL_ . 'index' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css'));
 addJS(_AF_THEME_URL_ . 'index' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
 if(__FULL_LOGIN__) {
