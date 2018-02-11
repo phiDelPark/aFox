@@ -5,10 +5,10 @@ if(!defined('__AFOX__')) exit();
 <article class="clearfix">
 	<ul class="timeline" role="list">
 	<?php
-		$current_page = $_{'board'}['current_page'];
-		$total_page = $_{'board'}['total_page'];
-		$start_page = $_{'board'}['start_page'];
-		$end_page = $_{'board'}['end_page'];
+		$current_page = $LIST['current_page'];
+		$total_page = $LIST['total_page'];
+		$start_page = $LIST['start_page'];
+		$end_page = $LIST['end_page'];
 		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 		$_tmp = '<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ';
 
@@ -26,9 +26,9 @@ if(!defined('__AFOX__')) exit();
 			}
 		}
 
-		foreach ($_{'board'}['data'] as $key => $val) {
+		foreach ($LIST['data'] as $key => $val) {
 			$wr_secret =  $val['wr_secret'] == '1';
-			$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
+			$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
 
 			$_image = DB::get(_AF_FILE_TABLE_, ['md_id'=>__MID__, 'mf_target'=>$val['wr_srl'], 'mf_type{LIKE}'=>'image%']);
 			$wr_extra_vars = '';

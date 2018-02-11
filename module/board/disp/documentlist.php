@@ -12,8 +12,10 @@ function proc($data) {
 	$search = empty($data['search']) ? '' : $data['search'];
 	$page = empty($data['page']) ? '' : $data['page'];
 
-	$result = getDocumentList($data['id'], $page, $search, $category);
+	$result = [];
 	$result['tpl'] = 'list';
+	$result['_DOCUMENT_LIST_'] = getDocumentList($data['id'], $page, $search, $category);
+	$result['_COMMENT_LIST_'] = [];
 
 	return $result;
 }

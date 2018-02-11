@@ -64,7 +64,7 @@ if(!defined('__AFOX__')) exit();
 		//$end_page = $_list['end_page'];
 
 		foreach ($_list as $key => $value) {
-			echo '<tr><th scope="row"><input type="checkbox" name="md_ids[]" value="'.$value['md_id'].'" class="data_selecter" style="margin-right:5px" except-event'.(empty($_mids)||array_search($value['md_id'], $_mids)===false?'':' checked').'>'.$value['md_id'].'</th>';
+			echo '<tr><th scope="row"><input type="checkbox" name="md_ids[]" value="'.$value['md_id'].'" class="data_selecter" style="margin-right:5px" except-exec-event'.(empty($_mids)||array_search($value['md_id'], $_mids)===false?'':' checked').'>'.$value['md_id'].'</th>';
 			echo '<td>'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td></tr>';
 		}
 	}

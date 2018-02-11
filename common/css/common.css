@@ -107,6 +107,7 @@
 	display: block;
 	line-height: normal !important;
 	text-indent: initial !important;
+	white-space: nowrap;
 }
 
 .radio .cr,

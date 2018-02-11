@@ -8,7 +8,7 @@ function proc($data) {
 	if(isset($data['new_mb_id'])) $data['mb_id'] = $data['new_mb_id'];
 	$data['mb_id'] = trim($data['mb_id']);
 
-	$mb_nick = trim(strip_tags($data['mb_nick']));
+	$mb_nick = cutstr(trim(strip_tags($data['mb_nick'])),11,'');
 	if(empty($data['mb_id'])||empty($mb_nick)) return set_error(getLang('error_request'),4303);
 
 	$data['mb_nick'] = $mb_nick;

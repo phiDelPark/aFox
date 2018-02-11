@@ -117,18 +117,17 @@ function proc($data) {
 
 	//unset($doc['mb_password']);
 
-	//$cpage = empty($data['cpage']) ? '' : $data['cpage'];
-	$doc['CURRENT_COMMENT_LIST'] = getCommentList($data['srl'], $call);
-
 	$category = empty($data['category']) ? '' : $data['category'];
 	$search = empty($data['search']) ? '' : $data['search'];
 	$page = empty($data['page']) ? '' : $data['page'];
-	$list = getDocumentList($doc['md_id'], $page, $search, $category);
-	$doc['CURRENT_DOCUMENT_LIST'] = $list;
+	//$cpage = empty($data['cpage']) ? '' : $data['cpage'];
 
-	$doc['tpl'] = 'view';
+	$result = $doc;
+	$result['tpl'] = 'view';
+	$result['_DOCUMENT_LIST_'] = getDocumentList($doc['md_id'], $page, $search, $category);
+	$result['_COMMENT_LIST_'] = getCommentList($doc['wr_srl'], $call);
 
-	return $doc;
+	return $result;
 }
 
 /* End of file viewdocument.php */

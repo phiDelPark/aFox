@@ -1,6 +1,5 @@
 <?php
 if(!defined('__AFOX__')) exit();
-$cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? [] : $_{'board'}['CURRENT_COMMENT_LIST'];
 ?>
 
 <section id="bdReply">
@@ -11,7 +10,7 @@ $cmt = empty($_{'board'}['CURRENT_COMMENT_LIST']) ? [] : $_{'board'}['CURRENT_CO
 		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'.getLang('request_input', ['password'])
 										.'<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'
 										.'<span class="input-group-btn"><button class="btn btn-default" type="submit">'. getLang('ok').'</button></span></div></form>';
-		foreach ($cmt as $key => $value) {
+		foreach ($REPLYS as $key => $value) {
 
 			$_len = strlen($value['rp_depth']);
 

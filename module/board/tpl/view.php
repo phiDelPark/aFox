@@ -4,24 +4,26 @@ if(!defined('__AFOX__')) exit();
 $is_manager = isManager(__MID__);
 $is_rp_grant = isGrant('reply', __MID__);
 
-$wr_mb_srl = $_{'board'}['mb_srl'];
+$wr_mb_srl = $DOC['mb_srl'];
 if(!empty($wr_mb_srl)) {
 	$doc_mb = getMember($wr_mb_srl);
 }
 
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
-$wr_secret = $_{'board'}['wr_secret'] == '1';
-$wr_grant_view = $_{'board'}['grant_view'];
-$wr_grant_write = $_{'board'}['grant_write'];
+$wr_secret = $DOC['wr_secret'] == '1';
+$wr_grant_view = $DOC['grant_view'];
+$wr_grant_write = $DOC['grant_write'];
+
+$is_col_update = $use_style=='list'&&array_search('wr_update', $COLUMNS)!==false;
 ?>
 
 <section id="bdView">
 	<header>
-		<h3 class="clearfix"><?php echo ($wr_secret?'<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ':'').$_{'board'}['wr_title']?></h3>
+		<h3 class="clearfix"><?php echo ($wr_secret?'<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ':'').$DOC['wr_title']?></h3>
 		<hr class="divider">
 		<div class="clearfix">
-			<span class="pull-left"><?php echo '<span class="mb_nick" data-srl="'.$wr_mb_srl.'" data-rank="'.(ord($_{'board'}['mb_rank']) - 48).'">'.$_{'board'}['mb_nick'].'</span>'?></span>
-			<span class="pull-right"><?php echo date((__MOBILE__?'y':'Y').getLang('year').' m'.getLang('month').' d'.getLang('day').' A h:i', strtotime($_{'board'}['wr_regdate']))?></span>
+			<span class="pull-left"><?php echo '<span class="mb_nick" data-srl="'.$wr_mb_srl.'" data-rank="'.(ord($DOC['mb_rank']) - 48).'">'.$DOC['mb_nick'].'</span>'?></span>
+			<span class="pull-right"><?php echo date((__MOBILE__?'y':'Y').getLang('year').' m'.getLang('month').' d'.getLang('day').' A h:i', strtotime($DOC[$is_col_update?'wr_update':'wr_regdate']))?></span>
 		</div>
 	</header>
 	<article>
@@ -31,7 +33,7 @@ $wr_grant_write = $_{'board'}['grant_write'];
 		if (!empty($md_extra_keys)) {
 			echo '<div class="wr_extra_vars">';
 			foreach($md_extra_keys as $ex_key=>$ex_name) {
-				$tmp = @$_{'board'}['wr_extra']['vars'][$ex_key];
+				$tmp = @$DOC['wr_extra']['vars'][$ex_key];
 				if(preg_match('/^https?:\/\/.+/', $tmp)) $tmp = '<a href="'.escapeHtml($tmp).'" target="_blank">'.$tmp.'</a>';
 	?>
 			<div class="text-ellipsis clearfix">
@@ -45,15 +47,15 @@ $wr_grant_write = $_{'board'}['grant_write'];
 	?>
 
 	<?php
-		$wr_content = ($wr_grant_view || !$wr_secret) ? $_{'board'}['wr_content'] : getLang('error_permitted');
-		$wr_content = toHTML($wr_content, $_{'board'}['wr_type']);
+		$wr_content = ($wr_grant_view || !$wr_secret) ? $DOC['wr_content'] : getLang('error_permitted');
+		$wr_content = toHTML($wr_content, $DOC['wr_type']);
 		$wr_content = preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1scroll-src\\3', $wr_content);
 		echo empty($_DATA['search']) ? $wr_content : highlightText($_DATA['search'], $wr_content);
 	?>
-	<?php if(!empty($_{'board'}['wr_tags'])) { ?>
+	<?php if(!empty($DOC['wr_tags'])) { ?>
 	<div class="hashtags">
 		<?php
-			$hashtags = explode(',', $_{'board'}['wr_tags']);
+			$hashtags = explode(',', $DOC['wr_tags']);
 			foreach ($hashtags as $val) {
 				echo '<a href="'.getUrl('','id',__MID__,'search','tag:'.$val).'"><strong>#</strong>'.$val.'</a>'."\n";
 			}
@@ -82,8 +84,8 @@ $wr_grant_write = $_{'board'}['grant_write'];
 			<?php
 				$not_edit_str = '#" style="text-decoration:line-through" onclick="return msg_box(\''.escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES).'\')';
 			?>
-			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
-			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$_{'board'}['wr_srl'].'" data-param="srl,'.$_{'board'}['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$DOC['wr_srl'].'" data-param="srl,'.$DOC['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
+			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$DOC['wr_srl'].'" data-param="srl,'.$DOC['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 		</div>
 	</footer>
 </section>

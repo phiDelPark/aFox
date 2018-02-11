@@ -34,6 +34,7 @@ if(__MODULE__ && !empty($_DATA['act'])) {
 	if(__FULL_LOGIN__ && __MODULE__ != 'member') {
 		exit();
 	}
+
 	$callproc = 'proc'.ucwords(__MODULE__).'Default';
 	if(function_exists($callproc)) {
 		if(triggerCall('before_proc', $_DATA['act'], $_DATA)) {
@@ -42,13 +43,16 @@ if(__MODULE__ && !empty($_DATA['act'])) {
 		} else {
 			$_result = get_error();
 		}
+
 		$redirect_url = empty($_result['error'])?'success_return_url':'error_return_url';
-		if (!empty($_DATA[$redirect_url])) $_result['redirect_url'] = urldecode($_DATA[$redirect_url]);
+		if (!empty($_DATA[$redirect_url])) {
+			$_result['redirect_url'] = urldecode($_DATA[$redirect_url]);
+		}
 	} else {
 		$_result = set_error(getLang('error_request'),4303);
 	}
 
-	if(__REQ_METHOD__ == 'JSON' || __REQ_METHOD__ == 'XML') {
+	if(__REQ_METHOD__ == 'JSON' || __REQ_METHOD__ == 'JSCALLBACK') {
 		echo json_encode($_result);
 		unset($_SESSION['AF_VALIDATOR_ERROR']);
 	} else {

@@ -128,8 +128,10 @@
 
 	$('[data-exec-ajax="board.updateDocument"],[data-exec-ajax="board.updateComment"]')
 		.on('success.exec.ajax', function(e, data, xhr) {
+			var isd = $(this).attr('data-exec-ajax') == 'board.updateDocument',
+				except = $(this).attr('data-except') || '';
 			e.preventDefault();
-			var isd = $(this).attr('data-exec-ajax') == 'board.updateDocument';
+			data[except] = '';
 			if (data['redirect_url']) {
 				parent.location.replace(data['redirect_url'].setQuery(
 					isd ? 'srl' : 'rp', data[isd ? 'wr_srl' : 'rp_srl']
@@ -195,6 +197,70 @@
 			}
 			return false;
 		});
+
+	$('#af_gallery_modal').on('show.bs.modal', function(e) {
+		var index = 0,
+			$b = $(this).find('.modal-body'),
+			$c = $(this).find('.modal-content'),
+			$bp = $(this).find('button.close.prev'),
+			$bn = $(this).find('button.close.next'),
+			id = $(e.relatedTarget).attr('data-mf-srls') || '',
+			imgs = id.split(',');
+		$b.html('<img src="' + (imgs[index] ? ('./?file=' + imgs[index]) : './common/img/no_image.png') + '">');
+
+		if (imgs.length > 1) {
+			$bp.show().offOn('click', function() {
+				index--;
+				if (index < 0) index = imgs.length - 1;
+				$c.css({
+					'top': '',
+					'left': ''
+				});
+				$b.find('img').attr('src', './?file=' + imgs[index]);
+			});
+			$bn.show().offOn('click', function() {
+				index++;
+				if (index >= imgs.length) index = 0;
+				$c.css({
+					'top': '',
+					'left': ''
+				});
+				$b.find('img').attr('src', './?file=' + imgs[index]);
+			});
+		} else {
+			$bp.hide();
+			$bn.hide();
+		}
+
+		var _MOUSE_POSITION = null;
+		$c.css({
+			'top': '',
+			'left': ''
+		});
+		$c.offOn('mouseup', function() {
+			_MOUSE_POSITION = null;
+		}).offOn('mousedown', function(e) {
+			_MOUSE_POSITION = {
+				x: e.pageX,
+				y: e.pageY,
+				left: $c.offset().left,
+				top: $c.offset().top
+			};
+		}).offOn('mousemove', function(e) {
+			if (_MOUSE_POSITION) {
+				var current_mouse_position = {
+						x: e.pageX,
+						y: e.pageY
+					},
+					change_x = current_mouse_position.x - _MOUSE_POSITION.x,
+					change_y = current_mouse_position.y - _MOUSE_POSITION.y;
+				$c.offset({
+					left: _MOUSE_POSITION.left + change_x,
+					top: _MOUSE_POSITION.top + change_y
+				});
+			}
+		});
+	});
 
 	$(window)
 		.on('load', function() {

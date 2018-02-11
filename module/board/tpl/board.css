@@ -275,6 +275,7 @@
 }
 
 #bdList .item_area>div {
+	margin: 0;
 	padding: 0;
 	padding-left: 15px;
 }
@@ -314,14 +315,24 @@
 	padding: 0;
 }
 
-#bdList.s_gallery .item_area h3 {
+#bdList.s_gallery .item_area .title-container>div {
 	background-color: rgba(0, 0, 0, 0.8);
 	color: #fff;
 	opacity: 1;
-	padding: 5px 7px;
-	margin: 0 30px 0 15px;
 	font-size: 16px;
 	border-radius: 5px;
+	padding: 5px 7px;
+	margin: 0 30px 0 15px;
+	font-style: bold;
+	font-size: 1.2em;
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+#bdList.s_gallery .item_area .title-container>div>div+div {
+	font-style: normal;
+	font-size: .8em;
 }
 
 #bdList.s_gallery .item_area>div>.title-container {
@@ -341,6 +352,33 @@
 
 #bdList.s_gallery .img-container {
 	height: 250px;
+}
+
+#bdList.s_gallery .item_area>div .edit-button {
+	position: absolute;
+	top: 15px;
+	left: auto;
+	right: 15px;
+	opacity: 0;
+}
+
+#bdList.s_gallery .item_area>div .edit-button .glyphicon {
+	font-size: 24px;
+	width: 30px;
+	height: 30px;
+	background: #000;
+	padding: 3px;
+	border-radius: 5px;
+	opacity: .5;
+	color: #fff;
+}
+
+#bdList .item_area>div:first-child .edit-button {
+	right: 30px;
+}
+
+#bdList.s_gallery .item_area>div:hover .edit-button {
+	opacity: 1;
 }
 
 #bdList .wr_extra_area {
@@ -513,6 +551,60 @@
 form .af_editor_rp_content>textarea,
 form .af_editor_rp_content>textarea+iframe {
 	min-height: 80px !important;
+}
+
+#af_gallery_modal .modal-content {
+	display: inline-block !important;
+	position: fixed !important;
+	margin-left: 8px;
+	min-width: 100px;
+	min-height: 100px;
+	background: #fff url("../../../common/img/loader.gif") no-repeat center center;
+	left: 50%;
+	transform: translate(-50%, 0);
+}
+
+#af_gallery_modal button {
+	position: fixed !important;
+	top: 10px;
+	left: 50%;
+	border: 3px solid #ddd;
+	font-size: 50px;
+	width: 50px;
+	height: 50px;
+	z-index: 999;
+	margin-left: -25px;
+}
+
+#af_gallery_modal .prev,
+#af_gallery_modal .next {
+	left: 35px;
+	top: 50%;
+	border-width: 1px;
+	-webkit-transform: scale(1, 3);
+	-moz-transform: scale(1, 3);
+	-ms-transform: scale(1, 3);
+	-o-transform: scale(1, 3);
+	transform: scale(1, 3);
+}
+
+#af_gallery_modal .next {
+	left: auto;
+	right: 10px;
+}
+
+#af_gallery_modal button,
+#af_gallery_modal .modal-content img {
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	-webkit-user-drag: none;
+	user-select: none;
+	user-drag: none;
+}
+
+#af_gallery_modal .modal-content img {
+	pointer-events: none;
 }
 
 @media(max-width:768px) {

@@ -454,7 +454,7 @@ var $_LANG = {};
 		})
 		.on('click', '[data-exec-ajax][data-ajax-param]', function(e) {
 			var $i = $(e.target);
-			if ($i.is('[except-event]')) return true;
+			if ($i.is('[except-exec-event]')) return true;
 			if (typeof $i.data('clicked') === 'undefined' || $i.data('clicked') === true) {
 				e.preventDefault();
 				exec_ajax(this);

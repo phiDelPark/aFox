@@ -39,9 +39,12 @@ function proc($data) {
 		}
 	}
 
-	$doc['tpl'] = 'delete';
+	$result = $doc;
+	$result['tpl'] = 'delete';
+	$result['_DOCUMENT_LIST_'] = [];
+	$result['_COMMENT_LIST_'] = [];
 
-	return $doc;
+	return $result;
 }
 
 /* End of file deletedocument.php */

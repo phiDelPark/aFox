@@ -1,9 +1,9 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-$_change_filter = '좋아,사랑해,이쁘니,귀요미,♡';
-
 if($called_position == 'before_proc' && ($called_trigger == 'updatecomment' || $called_trigger == 'updatedocument')) {
+
+	$_change_filter = '좋아,사랑해,이쁘니,귀요미,♡';
 
 	$key = $called_trigger == 'updatecomment' ? 'rp_content' : 'wr_content' ;
 

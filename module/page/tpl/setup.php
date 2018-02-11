@@ -28,16 +28,16 @@
 			<div class="form-group">
 				<?php
 					displayEditor(
-						'pg_content', $_{'page'}['pg_content'],
+						'pg_content', $PAGE['pg_content'],
 						[
 							'file'=>[9000, __MID__, 1],
-							'html'=>$_{'page'}['pg_type']==='2',
+							'html'=>$PAGE['pg_type']==='2',
 							'statebar'=>true,
 							'toolbar'=>array(
 								getLang('content'),
 								[
 									'pg_type'=>[
-										$_{'page'}['pg_type'],
+										$PAGE['pg_type'],
 										['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']
 									]
 								]

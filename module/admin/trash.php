@@ -101,7 +101,7 @@
 			} else {
 				$tmp = ' data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"';
 			}
-			echo '<tr class="afox-list-item" '.$tmp.'><th scope="row"><a href="'.getUrl('category',$value['wr_updater']).'" except-event>'.$value['wr_updater'].'</a></th>';
+			echo '<tr class="afox-list-item" '.$tmp.'><th scope="row"><a href="'.getUrl('category',$value['wr_updater']).'" except-exec-event>'.$value['wr_updater'].'</a></th>';
 			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($_DATA['trash'] == 'file'?'-':($value['wr_secret']?'Y':'N')).'</td>';
@@ -296,17 +296,17 @@
 		<div class="form-group">
 			<label for="id_wr_content"><?php echo getLang('content')?></label>
 			<div class="pull-right">
-			<label class="radio" tabindex="0" style="margin-top:0;margin-bottom:5px">
+			<label class="radio inline" tabindex="0" style="margin-top:0;margin-bottom:5px">
 				<input type="radio" name="wr_type" value="0" disabled>
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				TEXT
 			</label>
-			<label class="radio" tabindex="0" style="margin-top:0;margin-bottom:5px">
+			<label class="radio inline" tabindex="0" style="margin-top:0;margin-bottom:5px">
 				<input type="radio" name="wr_type" value="1" disabled>
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				MKDW
 			</label>
-			<label class="radio" tabindex="0" style="margin-top:0;margin-bottom:5px">
+			<label class="radio inline" tabindex="0" style="margin-top:0;margin-bottom:5px">
 				<input type="radio" name="wr_type" value="2" disabled>
 				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 				HTML

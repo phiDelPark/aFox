@@ -1,12 +1,10 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-if(!empty($_{'board'}['CURRENT_DOCUMENT_LIST'])) $_{'board'} = $_{'board'}['CURRENT_DOCUMENT_LIST'];
 $is_wr_grant = isGrant('write', __MID__);
-$use_style = ['list','review','gallery','timeline'];
 ?>
 
-<section id="bdList" class="s_<?php echo $use_style[abs($_CFG['use_style'])]?>"<?php echo empty($_DATA['srl']) ? '' :' style="margin-top:50px"'; ?>>
+<section id="bdList" class="s_<?php echo $use_style?>"<?php echo empty($_DATA['srl']) ? '' :' style="margin-top:50px"'; ?>>
 
 <?php if (empty($_DATA['srl']) && !empty($_CFG['md_category'])) { ?>
 	<header>
@@ -22,7 +20,7 @@ $use_style = ['list','review','gallery','timeline'];
 	</header>
 <?php } ?>
 
-<?php include dirname(__FILE__) . '/s.' . $use_style[abs($_CFG['use_style'])] . '.php'; ?>
+<?php include dirname(__FILE__) . '/s.' . $use_style . '.php'; ?>
 
 	<nav class="text-center">
 		<ul class="pagination hidden-xs">

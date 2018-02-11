@@ -53,8 +53,8 @@
 		$end_page = $doc_list['end_page'];
 
 		foreach ($doc_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#document_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-event>'.$value['md_id'].'</a></th>';
-			echo '<td class="title"><input type="checkbox" value="'.$value['wr_srl'].'" class="data_selecter" style="display:none;margin-right:5px" except-event>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
+			echo '<tr class="afox-list-item" data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#document_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-exec-event>'.$value['md_id'].'</a></th>';
+			echo '<td class="title"><input type="checkbox" value="'.$value['wr_srl'].'" class="data_selecter" style="display:none;margin-right:5px" except-exec-event>'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['wr_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';

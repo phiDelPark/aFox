@@ -427,14 +427,16 @@ ul.message-dropdown>li>a {
 
 #af_md_config .config-header {
 	height: 35px;
-	line-height: 30px;
+	line-height: 35px;
 	font-size: 18px;
 	margin-bottom: 5px;
+	white-space: nowrap;
 }
 
 #af_md_config .config-content {
 	min-width: 150px;
 	width: auto;
+	white-space: nowrap;
 }
 
 @media(max-width:768px) {

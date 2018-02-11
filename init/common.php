@@ -128,7 +128,7 @@ define('_AF_USE_BASE_CDN_', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp
 $_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
 $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
 
-$tmp = __REQ_METHOD__=='JSON'||__REQ_METHOD__=='XML'?'application/json':'text/html';
+$tmp = __REQ_METHOD__=='JSON'||__REQ_METHOD__=='JSCALLBACK'?'application/json':'text/html';
 header('Content-Type: '.$tmp.'; charset=UTF-8');
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');

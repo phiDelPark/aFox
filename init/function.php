@@ -104,7 +104,7 @@ if(!defined('__AFOX__')) exit();
 
 	function getRequestMethod() {
 		if(isset($_SERVER[($s='HTTP_X_REQUESTED_WITH')]) && $_SERVER[$s] == 'XMLHttpRequest') {
-			return strpos($_SERVER['HTTP_ACCEPT'], 'json') ? 'JSON' : 'XML';
+			return strpos($_SERVER['HTTP_ACCEPT'],'json')?'JSON':(strpos($_SERVER['HTTP_ACCEPT'],'xml')?'XMLRPC':'JSCALLBACK');
 		} else {
 			return $_SERVER['REQUEST_METHOD'];
 		}
@@ -151,6 +151,10 @@ if(!defined('__AFOX__')) exit();
 			$escape = $args1;
 		}
 		return $escape ? nl2br(escapeHtml($result)) : $result;
+	}
+	function setLang($key, $value) {
+		global $_LANG;
+		$_LANG[strtolower($key)] = $value;
 	}
 
 	function getSiteMenu($get = '') {

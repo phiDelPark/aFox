@@ -50,7 +50,7 @@
 		</div>
 		<div class="form-group">
 			<label for="id_mb_nick"><?php echo getLang('nickname')?></label>
-			<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" maxlength="20" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_nick']):''?>" required>
+			<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" maxlength="11" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_nick']):''?>" required>
 		</div>
 		<div class="form-group">
 			<label for="id_mb_email"><?php echo getLang('email')?></label>

@@ -43,14 +43,17 @@ function proc($data) {
 		}
 	}
 
-	$doc['tpl'] = 'write';
-
 	// 확장 변수가 있으면 unserialize
 	if(!empty($doc['wr_extra']) && !is_array($doc['wr_extra'])) {
 		$doc['wr_extra'] = unserialize($doc['wr_extra']);
 	}
 
-	return $doc;
+	$result = $doc;
+	$result['tpl'] = 'write';
+	$result['_DOCUMENT_LIST_'] = [];
+	$result['_COMMENT_LIST_'] = [];
+
+	return $result;
 }
 
 /* End of file writedocument.php */

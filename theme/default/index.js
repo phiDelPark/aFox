@@ -110,7 +110,7 @@
 			});
 			$btn.find('.glyphicon-cog').offOn('click', function() {
 				var w1 = $this.find('.config-area').width(),
-					w2 = $this.find('.config-content').width();
+					w2 = $this.find('#config_menus').width();
 				$this.find('.config-area').animate({
 					width: w1 != 0 ? 0 : w2
 				});
