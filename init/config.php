@@ -64,7 +64,7 @@ unset($_MEMBER);
 
 // DB 라이브러리 미리 로드
 // SQL Injection 대비를 위해 DB 사용시 보통은 escape 되지만 직접 query를 사용할땐 escape를 직접하거나 parameter 사용
-require_once _AF_PATH_ . 'lib/db/mysql.php';
+require_once _AF_PATH_ . 'lib/db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
 DB::init($_DBINFO);
 unset($_DBINFO); // 쓰고나면 정보 제거
 
