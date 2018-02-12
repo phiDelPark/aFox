@@ -1,7 +1,6 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	$_item = DB::get(_AF_DOCUMENT_TABLE_, ['md_id'=>'_AFOXtRASH_','mb_srl'=>$mb['mb_srl'],'wr_srl'=>$_DATA['srl']]);
-	if(empty($_item['wr_srl'])) return;
+	$_item = &$_{'member'};
 ?>
 <section>
 	<header>

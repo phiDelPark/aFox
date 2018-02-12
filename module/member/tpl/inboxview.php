@@ -1,7 +1,7 @@
 <?php
 	if(!defined('__AFOX__')) exit();
+	$_item = &$_{'member'};
 
-	$_item = DB::get(_AF_NOTE_TABLE_, ['mb_srl'=>$mb['mb_srl'],'nt_srl'=>$_DATA['srl']]);
 	if(empty($_item['nt_srl'])) return;
 	if($_item['nt_read_date'] === '0000-00-00 00:00:00') {
 		DB::update(_AF_NOTE_TABLE_, ['^nt_read_date'=>'NOW()'], ['nt_srl'=>$_DATA['srl']]);
@@ -19,7 +19,7 @@
 	</header>
 	<article style="padding:20px 5px 30px;min-height:200px">
 	<?php
-		echo $_item['nt_content'];
+		echo toHTML($_item['nt_content'], 0);
 	?>
 	</article>
 	<footer class="area-text-button clearfix" style="text-align:right;margin-bottom:50px">

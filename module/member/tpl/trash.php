@@ -1,25 +1,8 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-
-	$mb = $_MEMBER;
-	$schs = [];
-	$_DATA['page'] = empty($_DATA['page'])?1:$_DATA['page'];
-	$search = empty($_DATA['search']) ? '' : $_DATA['search'];
-	if(!empty($search)) {
-		$schkeys = ['tag'=>'wr_tags','nick'=>'mb_nick','date'=>'wr_regdate'];
-		$ss = explode(':', $search);
-		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
-			$search = trim(implode(':', array_slice($ss,1)));
-			if(!empty($search)) $schs = [$schkeys[$ss[0]].'{LIKE}'=>$search.'%'];
-		} else {
-			$schs = ['wr_title{LIKE}'=>'%'.$search.'%', 'wr_content{LIKE}'=>'%'.$search.'%'];
-		}
-	}
-	$_list = DB::gets(_AF_DOCUMENT_TABLE_,'SQL_CALC_FOUND_ROWS *',['md_id'=>'_AFOXtRASH_','mb_srl'=>$mb['mb_srl'],'(_OR_)'=>$schs],'wr_regdate', (($_DATA['page']-1)*20).',20');
-	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$_list = setDataListInfo($_list, $_DATA['page'], 20, DB::foundRows());
-
 	if(!empty($_DATA['srl'])) include 'trashview.php';
+
+	$_list = &$_{'member'}['_DOCUMENT_LIST_'];
 ?>
 
 <form id="af_member_remove_trash_items" method="post">
@@ -46,31 +29,27 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
-		messageBox($error['message'], $error['error'], false);
-	} else {
-		$current_page = $_list['current_page'];
-		$total_page = $_list['total_page'];
-		$start_page = $_list['start_page'];
-		$end_page = $_list['end_page'];
-		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
+	$current_page = $_list['current_page'];
+	$total_page = $_list['total_page'];
+	$start_page = $_list['start_page'];
+	$end_page = $_list['end_page'];
+	$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
-		foreach ($_list['data'] as $key => $value) {
-			echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _trashItemClick(event,\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\')">';
-			if(__MOBILE__) {
-				echo '<td class="wr_title"><a href="#" onclick="return false">'.escapeHtml($value['wr_title'], true).'</a>';
-				echo '<div class="clearfix"><input type="checkbox"> <span>'.date('y/m/d', strtotime($value['wr_regdate'])).'</span>';
-				echo '<span class="pull-right">Del:'.date('y/m/d', strtotime($value['wr_update'])).'</span></div></td>';
-			} else {
-				echo '<th scope="row">'.$value['wr_srl'].'</th>';
-				echo '<td><a href="#" onclick="return false">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
-				echo '<td class="hidden-xs">'.($value['wr_secret']?'Y':'N').'</td>';
-				echo '<td nowrap>'.escapeHtml($value['mb_nick'],true).'</td>';
-				echo '<td class="hidden-xs">'.date('y/m/d', strtotime($value['wr_regdate'])).'</td>';
-				echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td><td><input type="checkbox" name="wr_srl[]" value="'.$value['wr_srl'].'"></td>';
-			}
-			echo '</tr>';
+	foreach ($_list['data'] as $key => $value) {
+		echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _trashItemClick(event,\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\')">';
+		if(__MOBILE__) {
+			echo '<td class="wr_title"><a href="#" onclick="return false">'.escapeHtml($value['wr_title'], true).'</a>';
+			echo '<div class="clearfix"><input type="checkbox"> <span>'.date('y/m/d', strtotime($value['wr_regdate'])).'</span>';
+			echo '<span class="pull-right">Del:'.date('y/m/d', strtotime($value['wr_update'])).'</span></div></td>';
+		} else {
+			echo '<th scope="row">'.$value['wr_srl'].'</th>';
+			echo '<td><a href="#" onclick="return false">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
+			echo '<td class="hidden-xs">'.($value['wr_secret']?'Y':'N').'</td>';
+			echo '<td nowrap>'.escapeHtml($value['mb_nick'],true).'</td>';
+			echo '<td class="hidden-xs">'.date('y/m/d', strtotime($value['wr_regdate'])).'</td>';
+			echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td><td><input type="checkbox" name="wr_srl[]" value="'.$value['wr_srl'].'"></td>';
 		}
+		echo '</tr>';
 	}
 ?>
 

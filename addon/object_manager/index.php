@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 
 if(__REQ_METHOD__ == 'GET'|| __REQ_METHOD__ == 'POST') {
-	if($called_position == 'after_disp' && $called_trigger == 'default' && !empty($_DATA['wr_content'])) {
+	if($called_position == 'after_disp' && ($called_trigger == 'default' || $called_trigger == 'trash' || $called_trigger == 'inbox') && (!empty($_DATA['wr_content'])||!empty($_DATA['pg_content'])||!empty($_DATA['nt_content']))) {
 
 		$opt = '';
 		$opt .= (empty($_ADDON['link_blank']) ? 'l=0&' : 'l=1&');

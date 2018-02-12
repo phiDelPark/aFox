@@ -58,10 +58,13 @@
 	margin: 20px 5px 10px;
 }
 
+#bdView>article {
+	padding: 0 5px;
+	margin: 0;
+}
+
 #bdView>article>.current_content {
 	min-height: 300px;
-	padding: 0 5px;
-	overflow-x: hidden;
 }
 
 #bdReply .reply-item .current_replies {

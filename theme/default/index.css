@@ -13,6 +13,12 @@ body>.container {
 	min-height: 100%;
 }
 
+article>.current_content {
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+}
+
 mark {
 	color: #000;
 	background: #ff0;

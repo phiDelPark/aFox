@@ -1,25 +1,8 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-
-	$mb = $_MEMBER;
-	$schs = [];
-	$_DATA['page'] = empty($_DATA['page'])?1:$_DATA['page'];
-	$search = empty($_DATA['search']) ? '' : $_DATA['search'];
-	if(!empty($search)) {
-		$schkeys = ['date'=>'nt_send_date','read'=>'nt_read_date'];
-		$ss = explode(':', $search);
-		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
-			$search = trim(implode(':', array_slice($ss,1)));
-			if(!empty($search)) $schs = [$schkeys[$ss[0]].'{LIKE}'=>$search.'%'];
-		} else {
-			$schs = ['nt_sender_nick{LIKE}'=>'%'.$search.'%'];
-		}
-	}
-	$_list = DB::gets(_AF_NOTE_TABLE_,'SQL_CALC_FOUND_ROWS *',['mb_srl'=>$mb['mb_srl'],'(_OR_)'=>$schs],'nt_send_date', (($_DATA['page']-1)*20).',20');
-	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$_list = setDataListInfo($_list, $_DATA['page'], 20, DB::foundRows());
-
 	if(!empty($_DATA['srl'])) include 'inboxview.php';
+
+	$_list = &$_{'member'}['_DOCUMENT_LIST_'];
 ?>
 
 <form id="af_member_remove_inbox_items" method="post">
@@ -45,29 +28,25 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
-		messageBox($error['message'], $error['error'], false);
-	} else {
-		$current_page = $_list['current_page'];
-		$total_page = $_list['total_page'];
-		$start_page = $_list['start_page'];
-		$end_page = $_list['end_page'];
-		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
+	$current_page = $_list['current_page'];
+	$total_page = $_list['total_page'];
+	$start_page = $_list['start_page'];
+	$end_page = $_list['end_page'];
+	$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
-		foreach ($_list['data'] as $key => $value) {
-			echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _inboxItemClick(event,\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\')">';
-			if(__MOBILE__) {
-				echo '<td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),255).'</a>';
-				echo '<div class="clearfix"><input type="checkbox"> <span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';
-				echo '<span class="pull-right">Send:'.date('y/m/d', strtotime($value['nt_send_date'])).'</span></div></td>';
-			} else {
-				echo '<th scope="row"'.($value['nt_sender']?'':' style="font-weight:normal"').' nowrap>'.$value['nt_sender_nick'].'</th>';
-				echo '<td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),90).'</a></td>';
-				echo '<td>'.($value['nt_read_date'] === '0000-00-00 00:00:00'?$unread_str:date('y/m/d', strtotime($value['nt_read_date']))).'</td>';
-				echo '<td>'.date('y/m/d', strtotime($value['nt_send_date'])).'</td><td><input type="checkbox" name="nt_srl[]" value="'.$value['nt_srl'].'"></td>';
-			}
-			echo '</tr>';
+	foreach ($_list['data'] as $key => $value) {
+		echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _inboxItemClick(event,\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\')">';
+		if(__MOBILE__) {
+			echo '<td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),255).'</a>';
+			echo '<div class="clearfix"><input type="checkbox"> <span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';
+			echo '<span class="pull-right">Send:'.date('y/m/d', strtotime($value['nt_send_date'])).'</span></div></td>';
+		} else {
+			echo '<th scope="row"'.($value['nt_sender']?'':' style="font-weight:normal"').' nowrap>'.$value['nt_sender_nick'].'</th>';
+			echo '<td><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),90).'</a></td>';
+			echo '<td>'.($value['nt_read_date'] === '0000-00-00 00:00:00'?$unread_str:date('y/m/d', strtotime($value['nt_read_date']))).'</td>';
+			echo '<td>'.date('y/m/d', strtotime($value['nt_send_date'])).'</td><td><input type="checkbox" name="nt_srl[]" value="'.$value['nt_srl'].'"></td>';
 		}
+		echo '</tr>';
 	}
 ?>
 
