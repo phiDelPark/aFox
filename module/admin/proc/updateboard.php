@@ -68,6 +68,8 @@ function proc($data) {
 		$mb = getMember($md_manager);
 		if(empty($mb['mb_srl'])) return set_error(getLang('invalid_value', ['admin']),2001);
 		$md_manager = (int) $mb['mb_srl'];
+	} else {
+		$md_manager = 0;
 	}
 
 	DB::transaction();

@@ -72,6 +72,18 @@ function proc($data) {
 		if(!empty($out['mb_nick'])) return set_error(getLang('msg_nick_exists'),802);
 	}
 
+	// 확장 변수가 있으면 unserialize
+	if(!empty($member['mb_extra']) && !is_array($member['mb_extra'])) {
+		$_extras = unserialize($member['mb_extra']);
+	} else {
+		$_extras = [];
+	}
+	// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
+	$_extras = serialize($_extras);
+	if(strlen($_extras) > 65535) {
+		return set_error(getLang('msg_max_overflow', [65535]), 1401);
+	}
+
 	// 아이콘 삭제 값이 넘어오면
 	$remove_mb_icon = !empty($data['remove_files'][0]) && $data['remove_files'][0] == 'mb_icon';
 
@@ -107,7 +119,8 @@ function proc($data) {
 			'mb_nick'=>$data['mb_nick'],
 			'mb_email'=>$data['mb_email'],
 			'mb_homepage'=>$data['mb_homepage'],
-			'mb_memo'=>xssClean($data['mb_memo'])
+			'mb_memo'=>xssClean($data['mb_memo']),
+			'mb_extra'=>$_extras
 		];
 
 		if($new_password) $in_data['mb_password'] = $new_password;
@@ -137,6 +150,8 @@ function proc($data) {
 			unset($in_data['mb_point']);
 		}
 
+		$in_data['mb_point'] = empty($in_data['mb_point']) ? 0 : $in_data['mb_point'];
+
 		if (empty($member['mb_id'])) {
 
 			if(empty($data['new_mb_id']) || empty($new_password)) {
@@ -145,6 +160,7 @@ function proc($data) {
 
 			$in_data['mb_id'] = $data['mb_id'];
 			$in_data['^mb_regdate'] = 'NOW()';
+			$in_data['^mb_login'] = 'NOW()';
 
 			DB::insert(_AF_MEMBER_TABLE_, $in_data);
 			$mb_srl = DB::insertId();

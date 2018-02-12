@@ -47,7 +47,7 @@ define('_AF_FILE_PERMIT_', 0644);
 define('_AF_PASSWORD_ALGORITHM_', function_exists('password_hash')?'BCRYPT':'MYSQL');
 
 // 이 아래 부터는 자동으로 입력 혹은 불러와야할 정보들
-(@include_once(_AF_CONFIG_DATA_ . '_db_config.php')) OR die("Please install afox.");
+(@include_once(_AF_CONFIG_DATA_ . '_db_config.php')) OR die("Please <a href=\"./install/\">install</a> afox.");
 define('_AF_DOMAIN_', $_DBINFO['domain']);
 define('_AF_COOKIE_DOMAIN_', $_DBINFO['cookie_domain']);
 define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);

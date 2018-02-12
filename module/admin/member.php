@@ -131,7 +131,7 @@
 					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 					<span><?php echo getLang('manager')?></span>
 				</label>
-				<label class="radio btn mw-10" tabindex="0" style="display:none">
+				<label class="radio btn mw-10" tabindex="0" style="display:none!important">
 					<input type="radio" name="new_mb_rank" value="2">
 					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 					<span><?php echo getLang('admin')?></span>

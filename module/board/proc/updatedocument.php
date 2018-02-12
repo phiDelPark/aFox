@@ -127,7 +127,8 @@ function proc($data) {
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
 					'mb_ipaddress'=>$data['mb_ipaddress'],
-					'^wr_regdate'=>'NOW()'
+					'^wr_regdate'=>'NOW()',
+					'^wr_update'=>'NOW()'
 				]
 			)) {
 				$wr_srl = DB::insertId();

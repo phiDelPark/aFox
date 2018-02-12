@@ -20,7 +20,8 @@ function proc($data) {
 		'nt_sender'=>$sender,
 		'nt_sender_nick'=>$nick,
 		'nt_content'=>$msg,
-		'^nt_send_date'=>'NOW()'
+		'^nt_send_date'=>'NOW()',
+		'^nt_read_date'=>'0000-00-00 00:00:00'
 	]);
 
 	return ['error'=>0, 'message'=>getLang('success_sended')];

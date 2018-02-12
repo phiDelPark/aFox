@@ -56,11 +56,12 @@ function proc($data) {
 					'md_id'=>$md_id,
 					'md_key'=>'page',
 					'md_title'=>$data['md_title'],
+					'md_extra'=>'',
 					'^md_regdate'=>'NOW()'
 				]
 			);
 
-			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$md_id,'^pg_regdate'=>'NOW()']);
+			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$md_id,'^pg_regdate'=>'NOW()','^pg_update'=>'NOW()']);
 
 			$module = getModule($md_id);
 		} else {

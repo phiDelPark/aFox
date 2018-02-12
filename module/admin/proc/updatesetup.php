@@ -35,6 +35,7 @@ function proc($data) {
 		DB::delete(_AF_CONFIG_TABLE_);
 		DB::insert(_AF_CONFIG_TABLE_,
 			[
+				'lang'=>$data['lang'],
 				'theme'=>$data['theme'],
 				'start'=>$data['start'],
 				'title'=>trim($data['title']),

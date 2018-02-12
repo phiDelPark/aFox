@@ -9,6 +9,7 @@
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
 	<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
 	<input type="hidden" name="act" value="updateSetup">
+	<input type="hidden" name="lang" value="ko">
 	<input type="hidden" name="theme" value="<?php echo empty($config['theme'])?'default':$config['theme']?>">
 
 	<div class="form-group">
