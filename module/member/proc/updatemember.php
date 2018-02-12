@@ -127,7 +127,7 @@ function proc($data) {
 
 		// 등급과 포인트는 관리자만 지정 가능
 		if($is_admin){
-			if(isset($data['mb_point'])) $in_data['mb_point'] = $data['mb_point'];
+			if(isset($data['mb_point'])) $in_data['mb_point'] = (int)$data['mb_point'];
 
 			// 더 낮은 등급이 못 바꿈
 			if(!isset($in_data['mb_point']) || (!empty($member['mb_rank']) && ord($member['mb_rank']) >= ord($_MEMBER['mb_rank']))) {
@@ -150,8 +150,6 @@ function proc($data) {
 			unset($in_data['mb_point']);
 		}
 
-		$in_data['mb_point'] = empty($in_data['mb_point']) ? 0 : $in_data['mb_point'];
-
 		if (empty($member['mb_id'])) {
 
 			if(empty($data['new_mb_id']) || empty($new_password)) {
@@ -161,6 +159,7 @@ function proc($data) {
 			$in_data['mb_id'] = $data['mb_id'];
 			$in_data['^mb_regdate'] = 'NOW()';
 			$in_data['^mb_login'] = 'NOW()';
+			if(empty($in_data['mb_point'])) $in_data['mb_point'] = 0;
 
 			DB::insert(_AF_MEMBER_TABLE_, $in_data);
 			$mb_srl = DB::insertId();

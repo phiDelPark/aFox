@@ -467,7 +467,7 @@ $_err_keys = 'insert_members';
 $row = DB::get(_AF_MEMBER_TABLE_, 'mb_id', ['mb_id'=>'admin']);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 if (empty($row['mb_id'])) {
-	$sql = 'INSERT INTO '._AF_MEMBER_TABLE_.' (`mb_rank`, `mb_id`, `mb_password`, `mb_nick`, `mb_memo`, `mb_regdate`, `mb_login`, `mb_block_id`, `mb_extra`) VALUES ("%s", "%s", "%s", "%s", "", NOW(), NOW(), "", "")';
+	$sql = 'INSERT INTO '._AF_MEMBER_TABLE_.' (`mb_point`, `mb_rank`, `mb_id`, `mb_password`, `mb_nick`, `mb_memo`, `mb_regdate`, `mb_login`, `mb_block_id`, `mb_extra`) VALUES (0, "%s", "%s", "%s", "%s", "", NOW(), NOW(), "", "")';
 	DB::query(sprintf($sql, 's', 'admin', createHash($af_pass), '관리자'));
 }
 
