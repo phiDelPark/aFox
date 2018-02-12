@@ -52,7 +52,7 @@
 
 	$trash_list = DB::query($query, true);
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$trash_list = setDataListInfo($trash_list, DB::found(), $page, $count);
+	$trash_list = setDataListInfo($trash_list, $page, $count, DB::foundRows());
 ?>
 
 <p class="navbar">

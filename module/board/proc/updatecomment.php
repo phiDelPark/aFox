@@ -121,7 +121,7 @@ function proc($data) {
 				]
 			);
 
-			$ret_rp_srl = DB::insert_id();
+			$ret_rp_srl = DB::insertId();
 
 			// 포인트 사용중이면
 			$point = (int)$module['point_reply'];

@@ -14,7 +14,7 @@ if(!defined('__AFOX__')) exit();
 
 	$_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', ['md_key'=>'board']);
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	//$_list = setDataListInfo($_list, DB::found(), $_DATA['page'], 20);
+	//$_list = setDataListInfo($_list, $_DATA['page'], 20, DB::foundRows());
 ?>
 
 <form action="<?php echo _AF_URL_ ?>" method="post" autocomplete="off" enctype="multipart/form-data">

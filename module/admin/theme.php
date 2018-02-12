@@ -3,7 +3,7 @@
 
 	$th_list = DB::gets(_AF_THEME_TABLE_, 'th_id', [], function ($r) {
 		$rset = [];
-		while ($row = DB::assoc($r)) {
+		while ($row = DB::fetch($r)) {
 			$rset[$row['th_id']] = true;
 		}
 		return $rset;

@@ -40,7 +40,7 @@ function proc($data) {
 	//if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
 
 	$_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres, 'md_id,wr_regdate', (($page-1)*$_count).','.$_count);
-	return setDataListInfo($_list, DB::found(), $page, $_count);
+	return setDataListInfo($_list, $page, $_count, DB::foundRows());
 }
 
 /* End of file default.php */

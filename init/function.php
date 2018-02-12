@@ -163,7 +163,7 @@ if(!defined('__AFOX__')) exit();
 			for ($i=0; $i < 2; $i++) {
 				$out = DB::gets(_AF_MENU_TABLE_, ['mu_type'=>$i], ['mu_srl'=>'ASC'], function($r){
 					$rset = [];
-					while ($row = DB::assoc($r)) {
+					while ($row = DB::fetch($r)) {
 						if(preg_match('/^[a-zA-Z]+\w{2,}$/',$row['mu_link'])) {
 							$row['md_id'] = $row['mu_link'];
 							$row['mu_link'] = getUrl('','id',$row['md_id']);
@@ -214,7 +214,7 @@ if(!defined('__AFOX__')) exit();
 		return $__file_list[$key];
 	}
 
-	function setDataListInfo($data, $total, $page, $count) {
+	function setDataListInfo($data, $page, $count, $total) {
 		$result = [];
 		$page = empty($page) ? 1 : $page;
 		if($count>0){
@@ -751,7 +751,7 @@ if(!defined('__AFOX__')) exit();
 					'^'=>'ASCII(grant_access)<='.$rank
 				], 'tg_key',
 				function($r)use(&$__triggers) {
-					while ($tmp = DB::assoc($r)) {
+					while ($tmp = DB::fetch($r)) {
 						$__triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
 					}
 				}

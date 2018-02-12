@@ -19,16 +19,16 @@ class DB {
 
 	private static $option = [];
 
-	public static function last_query() {
+	public static function lastQuery() {
 		return self::$info['last_query'];
 	}
 
-	public static function num_rows() {
-		return self::$info['num_rows'];
+	public static function insertId() {
+		return self::$info['insert_id'];
 	}
 
-	public static function insert_id() {
-		return self::$info['insert_id'];
+	public static function numRows() {
+		return self::$info['num_rows'];
 	}
 
 	private static function connect() {
@@ -337,7 +337,7 @@ class DB {
 		}
 	}
 
-	public static function found() {
+	public static function foundRows() {
 		try{
 			$result = self::query("SELECT FOUND_ROWS() as c", true);
 			return (int)$result[0]['c'];
@@ -346,8 +346,28 @@ class DB {
 		}
 	}
 
-	public static function assoc($res) {
-		return mysql_fetch_assoc($res);
+	public static function fetch($res, $type = 'assoc') {
+		switch ($type) {
+			case 'array':
+				return mysql_fetch_array($res);
+			break;
+			case 'assoc':
+				return mysql_fetch_assoc($res);
+			break;
+			case 'field':
+				return mysql_fetch_field($res);
+			break;
+			case 'lengths':
+				return mysql_fetch_lengths($res);
+			break;
+			case 'object':
+				return mysql_fetch_object($res);
+			break;
+			case 'row':
+				return mysql_fetch_row($res);
+			break;
+		}
+		throw new Exception("Where is not type.", 1);
 	}
 
 	public static function transaction() {
@@ -363,24 +383,15 @@ class DB {
 		mysql_query("ROLLBACK; SET AUTOCOMMIT=1");
 	}
 
-	public static function tableExists($table) {
+	public static function exists($table, $column = '') {
 		try {
-			$r = self::query(
-				"SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :1 AND TABLE_NAME =:2",
-				[self::$option['name'], $table]
-			);
-			return $r->num_rows > 0;
-		} catch (Exception $e) {
-			throw new Exception($e->getMessage(), $e->getCode());
-		}
-	}
-
-	public static function columnExists($table, $column) {
-		try {
-			$r = self::query(
-				"SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :1 AND TABLE_NAME =:2 AND COLUMN_NAME = :3",
-				[self::$option['name'], $table, $column]
-			);
+			$params = [self::$option['name'], $table];
+			$query = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :1 AND TABLE_NAME =:2";
+			if(!empty($column)){
+				$params[] = $column;
+				$query .= " AND COLUMN_NAME = :3";
+			}
+			$r = self::query($query, $params);
 			return $r->num_rows > 0;
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage(), $e->getCode());

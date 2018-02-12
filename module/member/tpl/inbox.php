@@ -17,7 +17,7 @@
 	}
 	$_list = DB::gets(_AF_NOTE_TABLE_,'SQL_CALC_FOUND_ROWS *',['mb_srl'=>$mb['mb_srl'],'(_OR_)'=>$schs],'nt_send_date', (($_DATA['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$_list = setDataListInfo($_list, DB::found(), $_DATA['page'], 20);
+	$_list = setDataListInfo($_list, $_DATA['page'], 20, DB::foundRows());
 
 	if(!empty($_DATA['srl'])) include 'inboxview.php';
 ?>

@@ -7,7 +7,7 @@
 		'(_OR_)' =>empty($search)?[]:['vs_agent{LIKE}'=>$search, 'vs_referer{LIKE}'=>$search]
 	],'vs_regdate', (($_DATA['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$vs_list = setDataListInfo($vs_list, DB::found(), $_DATA['page'], 20);
+	$vs_list = setDataListInfo($vs_list, $_DATA['page'], 20, DB::foundRows());
 ?>
 
 <table class="table table-hover table-nowrap">

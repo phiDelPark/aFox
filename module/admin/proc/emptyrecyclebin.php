@@ -12,7 +12,7 @@ function proc($data) {
 	try {
 
 		$callback = function($r) {
-			while ($row = DB::assoc($r)) {
+			while ($row = DB::fetch($r)) {
 				$wr_srl = $row['wr_srl'];
 				$md_id = $row['wr_updater'];
 				// 파일 , 댓글 , 문서 삭제

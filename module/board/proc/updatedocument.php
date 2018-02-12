@@ -130,7 +130,7 @@ function proc($data) {
 					'^wr_regdate'=>'NOW()'
 				]
 			)) {
-				$wr_srl = DB::insert_id();
+				$wr_srl = DB::insertId();
 			}
 			if (empty($wr_srl)) {
 				throw new Exception(getLang('error_occured'), 4001);
@@ -225,7 +225,7 @@ function proc($data) {
 					'^mf_regdate'=>'NOW()'
 				]);
 
-				$new_files[] = $mf_srl = DB::insert_id();
+				$new_files[] = $mf_srl = DB::insertId();
 				$file_count++;
 
 				if($data['wr_type'] == 2) {

@@ -24,7 +24,7 @@
 	$start = (($page - 1) * $count);
 	$cmt_list = DB::query("SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.wr_srl WHERE $where ORDER BY $cd.rp_regdate DESC LIMIT $start,$count", true);
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$cmt_list = setDataListInfo($cmt_list, DB::found(), $page, $count);
+	$cmt_list = setDataListInfo($cmt_list, $page, $count, DB::foundRows());
 ?>
 
 <table class="table table-hover table-nowrap">

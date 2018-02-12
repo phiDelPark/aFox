@@ -17,7 +17,7 @@
 	}
 	$_list = DB::gets(_AF_DOCUMENT_TABLE_,'SQL_CALC_FOUND_ROWS *',['md_id'=>'_AFOXtRASH_','mb_srl'=>$mb['mb_srl'],'(_OR_)'=>$schs],'wr_regdate', (($_DATA['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$_list = setDataListInfo($_list, DB::found(), $_DATA['page'], 20);
+	$_list = setDataListInfo($_list, $_DATA['page'], 20, DB::foundRows());
 
 	if(!empty($_DATA['srl'])) include 'trashview.php';
 ?>

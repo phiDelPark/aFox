@@ -15,7 +15,7 @@ function proc($data) {
 	try {
 
 		$callback = function($r) {
-			while ($row = DB::assoc($r)) {
+			while ($row = DB::fetch($r)) {
 				$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 				$filetype = explode('/', $row['mf_type']);
 				$filetype = strtolower(array_shift($filetype));

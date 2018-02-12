@@ -80,7 +80,7 @@ if(!defined('__AFOX__')) exit();
 		if (empty($callback)) {
 			$callback = function($r) {
 				$rset = [];
-				while ($row = DB::assoc($r)) {
+				while ($row = DB::fetch($r)) {
 					// 확장 변수가 있으면 unserialize
 					if(!empty($row['wr_extra']) && !is_array($row['wr_extra'])) {
 						$row['wr_extra'] = unserialize($row['wr_extra']);
@@ -91,7 +91,7 @@ if(!defined('__AFOX__')) exit();
 			};
 		}
 		$_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres, $order, (((empty($page)?1:$page)-1)*$list_count).','.$list_count, $callback);
-		return setDataListInfo($_list, DB::found(), $page, $list_count);
+		return setDataListInfo($_list, $page, $list_count, DB::foundRows());
 	}
 
 	function getComment($srl, $field = '*') {

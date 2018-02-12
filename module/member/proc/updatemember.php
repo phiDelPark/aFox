@@ -147,7 +147,7 @@ function proc($data) {
 			$in_data['^mb_regdate'] = 'NOW()';
 
 			DB::insert(_AF_MEMBER_TABLE_, $in_data);
-			$mb_srl = DB::insert_id();
+			$mb_srl = DB::insertId();
 		} else {
 
 			if(isset($data['new_mb_id'])) {

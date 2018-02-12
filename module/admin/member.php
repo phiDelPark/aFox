@@ -7,7 +7,7 @@
 		'(_OR_)' =>empty($search)?[]:['mb_id{LIKE}'=>$search, 'mb_nick{LIKE}'=>$search]
 	],'mb_regdate', (($_DATA['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$member_list = setDataListInfo($member_list, DB::found(), $_DATA['page'], 20);
+	$member_list = setDataListInfo($member_list, $_DATA['page'], 20, DB::foundRows());
 ?>
 
 <p class="navbar">

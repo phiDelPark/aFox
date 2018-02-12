@@ -30,7 +30,7 @@
 		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS f.*, d.md_id FROM $fl as f INNER JOIN $dd as d ON d.wr_srl = f.mf_target WHERE $where ORDER BY f.mf_regdate DESC LIMIT $start,$count", true);
 	}
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$file_list = setDataListInfo($file_list, DB::found(), $page, $count);
+	$file_list = setDataListInfo($file_list, $page, $count, DB::foundRows());
 
 	if($duplicate) {
 		messageBox(getLang('desc_data_combine'), 2, false);

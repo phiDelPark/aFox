@@ -78,7 +78,7 @@ function proc($data) {
 		$rset = [];
 		$_prlen = 0;
 		$rp_permit = 0;
-		while ($row = DB::assoc($r)) {
+		while ($row = DB::fetch($r)) {
 			$_len = strlen($row['rp_depth']);
 
 			// 권한해제 (더이상 하위 댓글이 없으면...)

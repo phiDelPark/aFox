@@ -21,7 +21,7 @@
 		'(_OR_)' =>$schs
 	],'wr_regdate', (($_DATA['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$doc_list = setDataListInfo($doc_list, DB::found(), $_DATA['page'], 20);
+	$doc_list = setDataListInfo($doc_list, $_DATA['page'], 20, DB::foundRows());
 ?>
 
 <table class="table table-hover table-nowrap">

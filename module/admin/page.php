@@ -12,7 +12,7 @@
 
 	$page_list = DB::query("SELECT SQL_CALC_FOUND_ROWS * FROM $pg INNER JOIN $md ON $md.md_id = $pg.md_id WHERE $where ORDER BY $pg.pg_regdate DESC LIMIT $start,$count",true);
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$page_list = setDataListInfo($page_list, DB::found(), $page, $count);
+	$page_list = setDataListInfo($page_list, $page, $count, DB::foundRows());
 
 	$_type = ['TEXT','MARKDOWN','HTML'];
 

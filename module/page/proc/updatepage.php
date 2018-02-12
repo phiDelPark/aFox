@@ -151,7 +151,7 @@ function proc($data) {
 					'^mf_regdate'=>'NOW()'
 				]);
 
-				$new_files[] = $mf_srl = DB::insert_id();
+				$new_files[] = $mf_srl = DB::insertId();
 				$file_count++;
 
 				if ($data['pg_type'] == 2) {
