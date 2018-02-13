@@ -4,6 +4,19 @@
  * Copyright 2016 afox, Inc.
  */
 
+/*! use
+ * DB::init(array(
+ * 'host'=>$db_host,
+ * 'port'=>$db_port,
+ * 'name'=>$db_name,
+ * 'user'=>$db_user,
+ * 'pass'=>$db_pass,
+ * 'charset'=>$charset,
+ * 'time_zone'=>$time_zone
+ * ));
+ * DB::query($query_string);
+ */
+
 class DB {
 	private static $link = null;
 	private static $info = array(
@@ -34,11 +47,11 @@ class DB {
 	private static function connect() {
 		$o = self::$option;
 		$l = mysqli_connect(
-			(isset($o['host'])   ? $o['host']   : 'localhost').':'.
-			(isset($o['port'])   ? $o['port']   : 3306),
-			 isset($o['user'])   ? $o['user']   : 'root',
-			 isset($o['pass'])   ? $o['pass']   : '',
-			 isset($o['name'])   ? $o['name']   : 'default'
+			isset($o['host'])   ? $o['host']   : 'localhost',
+			isset($o['user'])   ? $o['user']   : 'root',
+			isset($o['pass'])   ? $o['pass']   : '',
+			isset($o['name'])   ? $o['name']   : 'default',
+			isset($o['port'])   ? $o['port']   : 3306
 		);
 
 		if(mysqli_connect_errno()) {
@@ -103,10 +116,8 @@ class DB {
 			if(strtoupper($type) === 'GROUP') {
 				$group[] = $field;
 			} else {
-				if($field === '^')
-					$order .= sprintf("%s %s", empty($order)?'ORDER BY':',', $type);
-				else
-					$order .= sprintf("%s `%s` %s", empty($order)?'ORDER BY':',', $field, $type);
+				$cm = empty($order) ? 'ORDER BY' : ',';
+				$order .= $field=='^'?sprintf("%s %s",$cm,$type):sprintf("%s `%s` %s",$cm,$field,$type);
 			}
 		}
 		self::$order = $order;
@@ -114,7 +125,7 @@ class DB {
 	}
 
 	private static function __limit($limit) {
-		self::$limit = 'LIMIT '.$limit;
+		self::$limit = preg_match('/[0-9,\s]+/', $limit) ? 'LIMIT '.$limit : '';
 	}
 
 	private static function __extra() {
@@ -213,11 +224,16 @@ class DB {
 		if(!empty($opts[2])) self::__limit($opts[2]);
 	}
 
-	/*
+	/** // only one
 	DB::get(_TABLE_)
-	DB::get(_TABLE_, 'mb_srl', ['mb_id'=>'admin'])
-	DB::get(_TABLE_, ['mb_id'=>'admin','mb_srl{>}'=>1], 'mb_id', '1,5')
-	*/
+	DB::get(_TABLE_, 'select', ['where'=>'value'])
+	DB::get(_TABLE_, ['where'=>'value']) // default select = '*'
+	// where group (or,and)
+	DB::get(_TABLE_, ['where'=>'value', '(_OR_)'=>['w1'=>'v1','w2'=>'v2']])
+		-> WHERE where=value AND (w1=v1 OR w2=v2)
+	DB::get(_TABLE_, ['(_OR_)'=>['w1'=>'v1','w2'=>'v2'], '(_AND_)'=>['w3'=>'v3','w4'=>'v4']])
+		-> WHERE (w1=v1 OR w2=v2) AND (w3=v3 AND w4=v4)
+	**/
 	public static function get($table, $select = '*') {
 		$anum = func_num_args();
 		$args = func_get_args();
@@ -229,12 +245,29 @@ class DB {
 		}
 		if($anum > $i) self::__sets(array_slice($args, $i));
 		try{
+			self::__limit('1');
 			return self::__gets($table, $select, true);
 		} catch (Exception $e) {
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
 
+	/** // list
+	DB::gets(_TABLE_)
+	DB::gets(_TABLE_, 'select', ['where'=>'value'])
+	// operator : ['field{(=|<>|<=|>=|<|>|IN|LIKE|IS)}'=>'value']
+	DB::gets(_TABLE_, ['where'=>'value','field1{>}'=>1,'field2{LIKE}'=>'value%'])
+	// command : ['^field'=>'command()'] // first char = '^' // not __quotes
+	DB::gets(_TABLE_, ['where'=>'value','^field'=>'NOW()','^'=>'LOWER(field)=\'abc\''])
+	// order by and (limit = 'start,count')
+	DB::gets(_TABLE_, ['where'=>'value'], 'order', '5,20')
+	DB::gets(_TABLE_, ['where'=>'value'], 'order1,order2', '1,5')
+	DB::gets(_TABLE_, ['where'=>'value'], ['order'=>'ASC'], '1,5')
+	// order by and group by
+	DB::gets(_TABLE_, ['where'=>'value'], ['order'=>'DESC','group'=>'GROUP'], '1,5')
+	// command order by : ['^'=>'command()']
+	DB::gets(_TABLE_, ['where'=>'value'], ['^'=>'rand()'], '1,5')
+	**/
 	public static function gets($table) {
 		$callback = null;
 		$anum = func_num_args();
@@ -259,9 +292,9 @@ class DB {
 		}
 	}
 
-	/*
+	/**
 	DB::insert(_TABLE_, [_DATA_])
-	*/
+	**/
 	public static function insert($table, $data) {
 		if(self::$link === null) {self::connect();}
 		$fields = '';
@@ -287,9 +320,9 @@ class DB {
 		}
 	}
 
-	/*
-	DB::update(_TABLE_, [_DATA_], ['mb_id'=>'admin','mb_srl{>}'=>1])
-	*/
+	/**
+	DB::update(_TABLE_, [_DATA_], ['where'=>'value'])
+	**/
 	public static function update($table, $data) {
 		if(func_num_args() > 2) self::__sets(array_slice(func_get_args(), 2));
 		if(empty(self::$where)){
@@ -315,9 +348,10 @@ class DB {
 		}
 	}
 
-	/*
-	DB::delete(_TABLE_, ['mb_id'=>'admin','mb_srl{>}'=>1])
-	*/
+	/**
+	DB::delete(_TABLE_) // all
+	DB::delete(_TABLE_, ['where'=>'value'])
+	**/
 	public static function delete($table) {
 		if(func_num_args() > 1) self::__sets(array_slice(func_get_args(), 1));
 		if(self::$link === null) {self::connect();}
@@ -331,9 +365,10 @@ class DB {
 		}
 	}
 
-	/*
-	DB::count(_TABLE_, ['mb_id'=>'admin','mb_srl{>}'=>1])
-	*/
+	/**
+	DB::count(_TABLE_) // all
+	DB::count(_TABLE_, ['where'=>'value'])
+	**/
 	public static function count($table) {
 		if(func_num_args() > 1) self::__sets(array_slice(func_get_args(), 1));
 		try{
@@ -423,6 +458,7 @@ class DB {
 		}
 	}
 
+	// exemple: DB::version('5.5.0', '<')
 	public static function version($chk_version = null, $operator = '>=') {
 		if(self::$link === NULL) {self::connect();}
 		$version = mysqli_get_client_info();
