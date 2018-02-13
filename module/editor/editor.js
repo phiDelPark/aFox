@@ -12,7 +12,7 @@
 			data = JSON.parse(e.originalEvent.dataTransfer.getData("TEXT") || '{}'),
 			title = data['title'],
 			srl = data['srl'] || data['index'],
-			url = ((data['srl'] || false) ? (request_uri + '?file=' + srl) : 'af-editor-tmpfile=' + srl),
+			url = ((data['srl'] || false) ? (request_uri + '?file=' + srl) : 'afox-editor-tmpfile=' + srl),
 			type = (data['type'].split('/')[0] || 'binary');
 
 		if (!$i.is(':visible') || $i.length === 0) {
@@ -21,7 +21,7 @@
 			title = title.escapeHtml();
 
 			if (data['path'] || false) {
-				url = data['path'] + '" data-af-editor-tmpfile="' + srl;
+				url = data['path'] + '" afox-editor-tmpfile="' + srl;
 			} else url = url.escapeHtml();
 
 			switch (type) {

@@ -156,10 +156,10 @@ function proc($data) {
 				$file_count++;
 
 				if ($data['pg_type'] == 2) {
-					$patterns = '/(<[a|img|source][^>]*)([src|href])(=[\"\']?[^>\"\']+[\"\']?)([^>]*data-af-editor-tmpfile=[\"\']?'.$i.'[\"\']?)([^>]*>)/i';
+					$patterns = '/(<[a|img|source][^>]*)([src|href])(=[\"\']?[^>\"\']+[\"\']?)([^>]*afox-editor-tmpfile=[\"\']?'.$i.'[\"\']?)([^>]*>)/i';
 					$replacement = "\\1\\2=\""._AF_URL_."?file={$mf_srl}\"\\5";
 				} else {
-					$patterns = '/(\[.+\]\()(af-editor-tmpfile='.$i.')(\s?"?[^\)"]*"?\))/i';
+					$patterns = '/(\[.+\]\()(afox-editor-tmpfile='.$i.')(\s?"?[^\)"]*"?\))/i';
 					$replacement = "\\1"._AF_URL_."?file={$mf_srl}\\3";
 				}
 				$data['pg_content'] = preg_replace($patterns, $replacement, $data['pg_content']);
