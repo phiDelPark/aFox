@@ -412,7 +412,7 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 	position: fixed !important;
 	top: 10px;
 	left: 10px;
-	z-index: 99999;
+	z-index: 99998;
 }
 
 .af_waiting_message .progress {

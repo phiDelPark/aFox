@@ -448,16 +448,18 @@ var $_LANG = {};
 
 	$(document)
 		.on('submit', 'form[data-exec-ajax]', function(e) {
+			var msg = $(this).attr('data-ajax-confirm') || '';
 			e.preventDefault();
-			exec_ajax(this);
+			if (!msg || confirm(msg) === true) exec_ajax(this);
 			return false;
 		})
 		.on('click', '[data-exec-ajax][data-ajax-param]', function(e) {
 			var $i = $(e.target);
 			if ($i.is('[except-exec-event]')) return true;
 			if (typeof $i.data('clicked') === 'undefined' || $i.data('clicked') === true) {
+				var msg = $(this).attr('data-ajax-confirm') || '';
 				e.preventDefault();
-				exec_ajax(this);
+				if (!msg || confirm(msg) === true) exec_ajax(this);
 			}
 			return false;
 		});
