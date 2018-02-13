@@ -5,7 +5,7 @@ if(!defined('__AFOX__')) exit();
 <section id="bdReply">
 	<article class="clearfix" role="list">
 	<?php
-		$not_edit_str = ' style="text-decoration:line-through" onclick="return msg_box(\''.escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES).'\')"';
+		$not_edit_str = ' style="text-decoration:line-through" data-msg-box="warning" data-title="'.getLang('error_permitted').'"';
 
 		$input_password = '<form action="%s" class="input-password" method="post" autocomplete="off">'.getLang('request_input', ['password'])
 										.'<div class="input-group" style="margin-top:10px"><input class="form-control" name="mb_password" type="password" placeholder="'. getLang('password').'" required>'

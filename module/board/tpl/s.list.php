@@ -5,6 +5,7 @@ setLang('srl', getLang('number'));
 setLang('hit', getLang('view'));
 setLang('nick', getLang('name'));
 $hidexs = ['wr_srl'=>1,'wr_hit'=>1,'wr_good'=>1,'wr_hate'=>1];
+$show_column = $CONFIGS['show_column'];
 ?>
 
 <article class="clearfix">
@@ -13,7 +14,7 @@ $hidexs = ['wr_srl'=>1,'wr_hit'=>1,'wr_good'=>1,'wr_hate'=>1];
 	<thead>
 		<tr>
 			<?php
-				foreach ($COLUMNS as $col) {
+				foreach ($show_column as $col) {
 					echo '<th class="'.$col.(empty($hidexs[$col])?'':' col-xs-1 hidden-xs').'">'.getLang(substr($col,3)).'</th>';
 				}
 			?>
@@ -33,7 +34,7 @@ $hidexs = ['wr_srl'=>1,'wr_hit'=>1,'wr_good'=>1,'wr_hate'=>1];
 		$login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 
 		if(__MOBILE__) {
-			$is_col_update = array_search('wr_update', $COLUMNS)!==false;
+			$is_col_update = array_search('wr_update', $show_column)!==false;
 			foreach ($LIST['data'] as $key => $val) {
 				$wr_secret =  $val['wr_secret'] == '1';
 				$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
@@ -46,7 +47,7 @@ $hidexs = ['wr_srl'=>1,'wr_hit'=>1,'wr_good'=>1,'wr_hate'=>1];
 				$wr_secret =  $val['wr_secret'] == '1';
 				$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
 				echo '<tr data-hot-track'.($val['wr_srl']==$srl?' class="active"':'').'>';
-				foreach ($COLUMNS as $col) {
+				foreach ($show_column as $col) {
 					switch ($col) {
 						case 'wr_title':
 							echo '<td class="wr_title"><a href="'.(!$wr_permit&&$wr_secret?'#requirePassword" data-srl="'.$val['wr_srl'].'" data-param="srl,'.$val['wr_srl']:getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','')).'" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';

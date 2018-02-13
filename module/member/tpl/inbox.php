@@ -97,9 +97,13 @@
 		$(th).closest('table').find('[type=checkbox]').prop('checked', ck);
 	}
 	function _allRemoveInboxItems() {
-		var data = $('#af_member_remove_inbox_items')[0].dataExport();
-		if (!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['message']]))) return false;
-		exec_ajax('member.deleteNote', data);
+		msg_box($_LANG['confirm_select_delete'].sprintf([$_LANG['message']]), '', ['question', ['OK', 'cancel']], function(key){
+			if (key == 'ok') {
+				var data = $('#af_member_remove_inbox_items')[0].dataExport();
+				exec_ajax('member.deleteNote', data);
+			}
+			return true;
+		});
 		return false;
 	}
 </script>

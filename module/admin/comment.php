@@ -55,8 +55,8 @@
 		$end_page = $cmt_list['end_page'];
 
 		foreach ($cmt_list['data'] as $key => $value) {
-			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].'" data-modal-target="#comment_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" except-exec-event>'.$value['md_id'].'</a></th>';
-			echo '<td class="title"><input type="checkbox" value="'.$value['rp_srl'].'" class="data_selecter" style="display:none;margin-right:5px" except-exec-event>'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
+			echo '<tr class="afox-list-item" data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].'" data-modal-target="#comment_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" data-except-ajax>'.$value['md_id'].'</a></th>';
+			echo '<td class="title"><input type="checkbox" value="'.$value['rp_srl'].'" class="data_selecter" style="display:none;margin-right:5px" data-except-ajax>'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
 			echo '<td>'.($value['rp_status']?$value['rp_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($value['rp_secret']?'Y':'N').'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';

@@ -6,8 +6,8 @@ if(!defined('__AFOX__')) exit();
 $_LANG['list_style'] = '목록 스타일';
 $_LANG['gallery_style'] = '갤러리 스타일';
 $_LANG['review_style'] = '리뷰 스타일';
-$_LANG['print_extra_vars'] = '필수 확장변수 출력';
-$_LANG['download_button'] = '다운로드 버튼 보기';
+$_LANG['print_extra_vars'] = '확장변수 (only *)';
+$_LANG['btn_download'] = '다운로드 (zip,7z)';
 $_LANG['modal_image_view'] = '클릭시 모달로 보기';
 
 /* End of file ko.php */

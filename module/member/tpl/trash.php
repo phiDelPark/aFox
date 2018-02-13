@@ -101,9 +101,13 @@
 		$(th).closest('table').find('[type=checkbox]').prop('checked', ck);
 	}
 	function _allRemoveTrashItems() {
-		var data = $('#af_member_remove_trash_items')[0].dataExport();
-		if (!confirm($_LANG['confirm_select_empty'].sprintf([$_LANG['document']]))) return false;
-		exec_ajax('member.deleteTrash', data);
+		msg_box($_LANG['confirm_select_empty'].sprintf([$_LANG['document']]), '', ['question', ['OK', 'cancel']], function(key){
+			if (key == 'ok') {
+				var data = $('#af_member_remove_trash_items')[0].dataExport();
+				exec_ajax('member.deleteTrash', data);
+			}
+			return true;
+		});
 		return false;
 	}
 </script>

@@ -12,12 +12,11 @@ $_DATA['category'] = empty($_DATA['category']) ? null : $_DATA['category'];
 if(!isset($_CFG['md_extra']['configs'])) {
 	$_CFG['md_extra']['configs'] = [
 		'show_column'=>['wr_srl','wr_title','mb_nick','wr_hit','wr_regdate'],
-		'review_author'=>1
+		'show_rv_column'=>['mb_nick','extra_vars','wr_update']
 	];
 }
 
 $CONFIGS = &$_CFG['md_extra']['configs'];
-$COLUMNS = $_CFG['md_extra']['configs']['show_column'];
 
 $DOC = &$_{'board'};
 $LIST = &$_{'board'}['_DOCUMENT_LIST_'];

@@ -84,7 +84,7 @@ if(!defined('__AFOX__')) exit();
 		}
 	});
 	jQuery('[role="heading"][aria-labelledby="mdSearchTitle"]').each(function() {
-		jQuery(this).find('+[role="description"]').prepend('<span><?php echo sprintf(getLang('desc_combine_search_finished'),$total_count) ?></span>');
+		jQuery(this).find('+[role="description"]').prepend('<span><?php echo getLang('desc_combine_search_finished', [$total_count]) ?></span>');
 	});
 </script>
 

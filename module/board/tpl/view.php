@@ -5,16 +5,16 @@ $is_manager = isManager(__MID__);
 $is_rp_grant = isGrant('reply', __MID__);
 
 $wr_mb_srl = $DOC['mb_srl'];
-if(!empty($wr_mb_srl)) {
-	$doc_mb = getMember($wr_mb_srl);
-}
+if(!empty($wr_mb_srl)) $doc_mb = getMember($wr_mb_srl);
 
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 $wr_secret = $DOC['wr_secret'] == '1';
 $wr_grant_view = $DOC['grant_view'];
 $wr_grant_write = $DOC['grant_write'];
 
-$is_col_update = $use_style=='list'&&array_search('wr_update', $COLUMNS)!==false;
+$show_column = $CONFIGS[$use_style=='review'?'show_rv_column':'show_column'];
+$is_btn_download = array_search('btn_download',$show_column)!==false;
+$is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('wr_update',$show_column)!==false);
 ?>
 
 <section id="bdView">
@@ -44,12 +44,23 @@ $is_col_update = $use_style=='list'&&array_search('wr_update', $COLUMNS)!==false
 			}
 			echo '</div>';
 		}
+
+		if($is_btn_download) {
+			$_files = DB::gets(_AF_FILE_TABLE_, ['md_id'=>__MID__,'mf_target'=>$DOC['wr_srl'],'mf_type{LIKE}'=>'application%','(_OR_)'=>['^'=>'LOWER(`mf_name`)LIKE\'%.zip\'OR LOWER(`mf_name`)LIKE\'%.7z\'']]);
+			if (!empty($_files)) {
+				echo '<div class="wr_extra_vars">';
+				foreach($_files as $_file) {
+					echo '<div class="text-ellipsis clearfix"><strong class="col-sm-2">'.getLang('download').'</strong> <span><a href="./?file='.$_file['mf_srl'].'"><code>'.$_file['mf_name'].'</code></a></span></div>';
+				}
+				echo '</div>';
+			}
+		}
 	?>
 
 	<?php
 		$wr_content = ($wr_grant_view || !$wr_secret) ? $DOC['wr_content'] : getLang('error_permitted');
 		$wr_content = toHTML($wr_content, $DOC['wr_type']);
-		$wr_content = preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1scroll-src\\3', $wr_content);
+		$wr_content = preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1data-scroll-src\\3', $wr_content);
 		echo empty($_DATA['search']) ? $wr_content : highlightText($_DATA['search'], $wr_content);
 	?>
 	<?php if(!empty($DOC['wr_tags'])) { ?>
@@ -82,7 +93,7 @@ $is_col_update = $use_style=='list'&&array_search('wr_update', $COLUMNS)!==false
 		</div>
 		<div class="pull-right">
 			<?php
-				$not_edit_str = '#" style="text-decoration:line-through" onclick="return msg_box(\''.escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES).'\')';
+				$not_edit_str = '#" style="text-decoration:line-through" data-msg-box="warning" data-title="'.getLang('error_permitted');
 			?>
 			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$DOC['wr_srl'].'" data-param="srl,'.$DOC['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
 			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$DOC['wr_srl'].'" data-param="srl,'.$DOC['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>

@@ -16,11 +16,11 @@
 			$(this).trigger('scroll');
 		})
 		.on('scroll', function() {
-			$('img[scroll-src]').each(function() {
+			$('img[data-scroll-src]').each(function() {
 				var $th = $(this);
 				if ($th.offset().top < ($(window).scrollTop() + $(window).height() + 100)) {
-					$th.attr('src', $th.attr('scroll-src') || '#');
-					$th.removeAttr('scroll-src');
+					$th.attr('src', $th.attr('data-scroll-src') || '#');
+					$th.removeAttr('data-scroll-src');
 				}
 			});
 		});

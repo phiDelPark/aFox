@@ -101,7 +101,7 @@
 			} else {
 				$tmp = ' data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"';
 			}
-			echo '<tr class="afox-list-item" '.$tmp.'><th scope="row"><a href="'.getUrl('category',$value['wr_updater']).'" except-exec-event>'.$value['wr_updater'].'</a></th>';
+			echo '<tr class="afox-list-item" '.$tmp.'><th scope="row"><a href="'.getUrl('category',$value['wr_updater']).'" data-except-ajax>'.$value['wr_updater'].'</a></th>';
 			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.($_DATA['trash'] == 'file'?'-':($value['wr_secret']?'Y':'N')).'</td>';

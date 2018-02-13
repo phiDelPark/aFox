@@ -246,10 +246,6 @@
 	margin-top: 20px;
 }
 
-#bdView>article>.wr_extra_vars {
-	margin-bottom: 30px
-}
-
 #bdView>article>.wr_extra_vars>div {
 	margin: 0 3px 3px;
 	border-bottom: 1px solid #ddd;
@@ -265,6 +261,10 @@
 #bdView>article>.wr_extra_vars>div>strong+span {
 	border-left: 1px solid #ddd;
 	padding: 3px 0 3px 8px;
+}
+
+#bdView>article>.wr_extra_vars+.current_content {
+	margin-top: 30px
 }
 
 #bdList .item_area {
@@ -559,7 +559,6 @@ form .af_editor_rp_content>textarea+iframe {
 #af_gallery_modal .modal-content {
 	display: inline-block !important;
 	position: fixed !important;
-	margin-left: 8px;
 	min-width: 100px;
 	min-height: 100px;
 	background: #fff url("../../../common/img/loader.gif") no-repeat center center;
@@ -575,7 +574,7 @@ form .af_editor_rp_content>textarea+iframe {
 	font-size: 50px;
 	width: 50px;
 	height: 50px;
-	z-index: 999;
+	z-index: 2;
 	margin-left: -25px;
 }
 

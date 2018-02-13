@@ -47,7 +47,7 @@ if(!defined('__AFOX__')) exit();
 				<div class="title-container">
 					<div>
 						<div class="text-ellipsis"><?php echo ($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true)?></div>
-						<?php if(!empty($CONFIGS['gallery_author'])) {
+						<?php if(!empty($CONFIGS['show_gl_column'])) {
 						echo '<div><span class="mb_nick pull-left" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.$val['mb_nick'].'</span><span class="pull-right">'.date('Y/m/d', strtotime($val['wr_update'])).'</span></div>';
 						} ?>
 					</div>
