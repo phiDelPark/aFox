@@ -266,6 +266,7 @@ var $_LANG = {};
 			}
 		}
 		html = html.sprintf(icons[type ? type[0] : 'warning'], caption, button);
+		var $focus = $(':focus');
 		// modal-body 는 따로 입력해야 치환이 정상적으로 됨
 		var $modal = $(html).find('.modal-body:eq(0)').html(text).end();
 		$modal.prependTo('body')
@@ -284,6 +285,7 @@ var $_LANG = {};
 			})
 			.offOn('hidden.bs.modal', function(e) {
 				$(this).remove();
+				$focus.focus();
 			})
 			.offOn('keydown', function(e) {
 				if (e.which == 13 && e.target.tagName != 'TEXTAREA') {
@@ -447,19 +449,49 @@ var $_LANG = {};
 	};
 
 	$(document)
-		.on('submit', 'form[data-exec-ajax]', function(e) {
-			var msg = $(this).attr('data-ajax-confirm') || '';
-			e.preventDefault();
-			if (!msg || confirm(msg) === true) exec_ajax(this);
+		.on('click', '[data-msg-box]', function(e) {
+			var $this = $(this);
+			if ($this.data('clicked') === true) return true;
+			e.stopImmediatePropagation();
+			var type = $this.attr('data-msg-box') || 'warning',
+				title = $this.attr('data-title') || $this.attr('title') || '';
+			msg_box(title, '', [type, (type == 'question') ? ['OK', 'cancel'] : ['OK']], function(key) {
+				if (type == 'question' && key == 'ok') {
+					$this.data('clicked', true);
+					var event = document.createEvent("MouseEvents");
+					event.initEvent("click", false, true);
+					$this[0].dispatchEvent(event);
+				}
+				return true;
+			});
 			return false;
 		})
 		.on('click', '[data-exec-ajax][data-ajax-param]', function(e) {
-			var $i = $(e.target);
-			if ($i.is('[except-exec-event]')) return true;
-			if (typeof $i.data('clicked') === 'undefined' || $i.data('clicked') === true) {
-				var msg = $(this).attr('data-ajax-confirm') || '';
-				e.preventDefault();
-				if (!msg || confirm(msg) === true) exec_ajax(this);
+			var $this = $(this),
+				$i = $(e.target);
+			if ($i.is('[data-except-ajax]')) return true;
+			var msg = $this.attr('data-ajax-confirm') || '';
+			e.preventDefault();
+			if (msg != '') {
+				msg_box(msg, '', ['question', ['OK', 'cancel']], function(key) {
+					if (key == 'ok') exec_ajax($this);
+					return true;
+				});
+			} else {
+				exec_ajax(this);
+			}
+			return false;
+		})
+		.on('submit', 'form[data-exec-ajax]', function(e) {
+			var msg = $(this).attr('data-ajax-confirm') || '';
+			e.preventDefault();
+			if (msg != '') {
+				msg_box(msg, '', ['question', ['OK', 'cancel']], function(key) {
+					if (key == 'ok') exec_ajax($this);
+					return true;
+				});
+			} else {
+				exec_ajax(this);
 			}
 			return false;
 		});
