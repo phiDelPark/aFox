@@ -40,7 +40,7 @@
 
 		foreach ($board_list['data'] as $key => $value) {
 			echo '<tr><th scope="row"><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
-			echo '<td>'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td>';
+			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td>';
 			echo '<td class="hidden-xs hidden-sm">'.$value['grant_list'].'-'.$value['grant_view'].'-'.$value['grant_write'].'-'.$value['grant_reply'].'-'.$value['grant_upload'].'-'.$value['grant_download'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['md_regdate'])).'</td>';
 			echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-exec-ajax="admin.getBoard" data-ajax-param="md_id,'.$value['md_id'].'" data-modal-target="#board_modal">'.getLang('setup').'</button></td></tr>';
