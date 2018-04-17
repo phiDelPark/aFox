@@ -14,8 +14,7 @@
 <thead class="table-nowrap">
 	<tr>
 		<th class="col-xs-1">#<?php echo getLang('ip')?></th>
-		<th class="col-md-6"><?php echo getLang('agent')?></th>
-		<th><?php echo getLang('referer')?></th>
+		<th><?php echo getLang('agent')?></th>
 		<th class="col-xs-1"><?php echo getLang('date')?></th>
 	</tr>
 </thead>
@@ -35,8 +34,7 @@
 
 		foreach ($vs_list['data'] as $key => $value) {
 			echo '<tr><th scope="row">'.$value['mb_ipaddress'].'</th>';
-			echo '<td class="title">'.escapeHtml($value['vs_agent']).'</td>';
-			echo '<td class="title">'.escapeHtml($value['vs_referer']).'</td>';
+			echo '<td class="title">'.escapeHtml($value['vs_agent']).(empty($value['vs_referer'])?'':'<br><a href="'.$value['vs_referer'].'" target="_blank">'.escapeHtml($value['vs_referer']).'</a>').'</td>';
 			echo '<td>'.date('y/m/d h:i', strtotime($value['vs_regdate'])).'</td></tr>';
 		}
 	}
