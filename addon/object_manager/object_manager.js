@@ -9,12 +9,14 @@
 
 	$(window).on('load', function() {
 		var js = $('script[src^="'+request_uri+'addon/object_manager/object_manager.js?"]:eq(0)'),
+			module = '',
 			link_blank = false,
 			autosize_image = false,
 			autosize_video = false;
 
 		if(js.length>0) {
 			js = js.attr('src').getQuery();
+			module = js['m'] || '';
 			if((js['l'] || '0') == '1') link_blank = true;
 			if((js['i'] || '0') == '1') autosize_image = true;
 			if((js['v'] || '0') == '1') autosize_video = true;
@@ -43,7 +45,7 @@
 				img_resize();
 			});
 		}
-		if(link_blank === true) {
+		if(module == 'board' && link_blank === true) {
 			$('.current_content a[href]').each(function(){
 				$(this).attr('target', '_blank');
 			});
