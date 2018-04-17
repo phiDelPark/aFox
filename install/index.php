@@ -530,9 +530,9 @@ chmod($file, 0644);
 $file = $datadir.'config/base_cdn_list.php';
 $f = @fopen($file, 'w');
 fwrite($f, "<?php if(!defined('__AFOX__')) exit();?>\n");
-fwrite($f, '<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">'."\n");
-fwrite($f, '<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.3/jquery.min.js"></script>'."\n");
-fwrite($f, '<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>'."\n");
+fwrite($f, '<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>'."\n");
+fwrite($f, '<link href="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">'."\n");
+fwrite($f, '<script src="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>'."\n");
 fclose($f);
 chmod($file, 0644);
 
