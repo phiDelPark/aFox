@@ -12,7 +12,7 @@ function proc($data) {
 	$is_admin = isAdmin();
 
 	$module = getModule($data['md_id']);
-	if(empty($module)) throw new Exception(getLang('error_founded'), 4201);
+	if(empty($module)) return set_error(getLang('error_founded'), 4201);
 
 	// use_type 값이 1~6 사이이면 모듈에 설정된 값으로 강제 설정
 	if(!empty($module['use_type']) && $module['use_type'] < 7) $data['wr_type'] = ((int)$module['use_type'])-1;

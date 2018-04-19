@@ -17,5 +17,8 @@ $_PROTECT['proc.restoredocument']	= ['grant' => '1'];
 $_PROTECT['proc.getcomment']		= ['grant' => '0'];
 $_PROTECT['proc.getdocument']		= ['grant' => '0'];
 
+$_PROTECT['proc.updategood']		= ['grant' => '1'];
+$_PROTECT['proc.updatehate']		= ['grant' => '1'];
+
 /* End of file protect.php */
 /* Location: ./module/board/protect.php */

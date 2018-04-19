@@ -83,7 +83,7 @@
 
 			<div class="area-button row">
 				<?php if($is&&$modal_image_view){ ?>
-				<button type="button" class="btn btn-warning col-xs-3" data-exec-ajax="board.deleteDocument" data-ajax-param="wr_srl,<?php echo $DOC['wr_srl']?>,success_return_url,<?php echo getUrl('disp','','cpage','','rp','')?>" data-ajax-confirm="<?php echo getLang('confirm_delete',['document'])?>"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('delete')?></button>
+				<button type="button" class="btn btn-warning col-xs-3" data-exec-ajax="board.deleteDocument" data-ajax-param="wr_srl,<?php echo $DOC['wr_srl']?>,success_return_url,<?php echo urlencode(getUrl('disp','','cpage','','rp',''))?>" data-ajax-confirm="<?php echo getLang('confirm_delete',['document'])?>"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('delete')?></button>
 				<?php } ?>
 				<button type="submit" class="btn btn-success <?php echo $is&&$modal_image_view?'col-xs-9':'btn-block'?>"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
 			</div>

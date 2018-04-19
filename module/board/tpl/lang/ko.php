@@ -9,6 +9,10 @@ $_LANG['review_style'] = '리뷰 스타일';
 $_LANG['print_extra_vars'] = '확장변수 (only *)';
 $_LANG['btn_download'] = '다운로드 (zip,7z)';
 $_LANG['modal_image_view'] = '클릭시 모달로 보기';
+$_LANG['common_option'] = '공통 옵션';
+$_LANG['show_good_button'] = '좋아요 버튼';
+$_LANG['show_hate_button'] = '싫어요 버튼';
+
 
 /* End of file ko.php */
 /* Location: ./module/board/tpl/lang/ko.php */

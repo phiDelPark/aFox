@@ -63,6 +63,17 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 		$wr_content = preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1data-scroll-src\\3', $wr_content);
 		echo empty($_DATA['search']) ? $wr_content : highlightText($_DATA['search'], $wr_content);
 	?>
+
+	<?php if(!empty($CONFIGS['show_button'])) { ?>
+	<div class="show_buttons">
+		<?php
+			foreach ($CONFIGS['show_button'] as $val) {
+				$_ajax = empty($login_srl) ? '' : ' data-exec-ajax="board.update'.ucfirst($val).'" data-ajax-param="wr_srl,'.$DOC['wr_srl'].',success_return_url,'.urlencode(getUrl()).'"';
+				echo '<button type="button" class="btn btn-default" style="color:'.($val=='good'?'#3c763d':'#a94442').'"'.$_ajax.'><i class="glyphicon glyphicon-thumbs-'.($val=='good'?'up':'down').'" aria-hidden="true"></i> <span>'.getLang($val).'</span><br><span>'.$DOC['wr_'.$val].'</span></button>';
+			}
+		?>
+	</div>
+	<?php } ?>
 	<?php if(!empty($DOC['wr_tags'])) { ?>
 	<div class="hashtags">
 		<?php

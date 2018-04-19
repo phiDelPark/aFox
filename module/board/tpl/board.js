@@ -262,6 +262,15 @@
 		});
 	});
 
+	$('[data-exec-ajax="board.updateGood"],[data-exec-ajax="board.updateHate"]')
+		.on('success.exec.ajax', function(e, data, xhr) {
+			e.preventDefault();
+			var $th = $(this),
+				key = ($th.attr('data-exec-ajax') || '').toLowerCase().replace('board.update', 'wr_'),
+				cnt = data[key] || 0;
+			$th.find('span:eq(1)').html(cnt);
+		});
+
 	$(window)
 		.on('load', function() {
 			var into = $('a.active[id^=reply_]');

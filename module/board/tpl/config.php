@@ -15,6 +15,7 @@ if(!isset($_CFG['md_extra']['configs'])) {
 $configs = $_CFG['md_extra']['configs'];
 $show_column = array_flip($configs['show_column']);
 $show_rv_column = array_flip($configs['show_rv_column']);
+$show_button = array_flip($configs['show_button']);
 ?>
 
 <form method="post" autocomplete="off" data-exec-ajax="board.updateConfig">
@@ -22,8 +23,23 @@ $show_rv_column = array_flip($configs['show_rv_column']);
 	<input type="hidden" name="md_id" value="<?php echo __MID__?>">
 	<ul id="config_menus" style="width:200px">
 		<li>
+			<a href="#"><?php echo getLang('common_option')?></a>
+			<div class="form-group" style="display:none">
+				<label class="checkbox" tabindex="0">
+					<input type="checkbox" name="show_button[]" value="good"<?php echo isset($show_button['good'])?' checked':''?>>
+					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+					<span><?php echo getLang('show_good_button')?></span>
+				</label>
+				<label class="checkbox" tabindex="0">
+					<input type="checkbox" name="show_button[]" value="hate"<?php echo isset($show_button['hate'])?' checked':''?>>
+					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+					<span><?php echo getLang('show_hate_button')?></span>
+				</label>
+			</div>
+		</li>
+		<li>
 			<a href="#"><?php echo getLang('list_style')?></a>
-			<div class="form-group"<?php echo $current_style!='list'?' style="display:none"':''?>>
+			<div class="form-group"<?php echo $current_style=='list'?' style="display:block"':''?>>
 				<label class="checkbox" tabindex="0">
 					<input type="checkbox" name="show_column[]" value="wr_srl"<?php echo isset($show_column['wr_srl'])?' checked':''?>>
 					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>

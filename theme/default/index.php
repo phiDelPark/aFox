@@ -79,7 +79,7 @@
 					</li>
 					<?php } ?>
 					<li class="message-footer">
-						<a href="#" data-exec-ajax="member.readAllNotes" data-ajax-param="success_return_url,<?php echo getUrl()?>">Mark all messages as read</a>
+						<a href="#" data-exec-ajax="member.readAllNotes" data-ajax-param="success_return_url,<?php echo urlencode(getUrl())?>">Mark all messages as read</a>
 					</li>
 				</ul>
 			</span>
@@ -100,7 +100,7 @@
 					<li><a href="<?php echo getUrl('','module','member','disp','trash') ?>"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('Recycle_bin')?></a></li>
 					<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('Setup')?></a></li>
 					<li class="divider"></li>
-					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo getUrl('')?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('Logout')?></a></li>
+					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo urlencode(getUrl(''))?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('Logout')?></a></li>
 				</ul>
 			</span>
 <?php } else {

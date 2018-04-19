@@ -242,8 +242,25 @@
 	height: 25px;
 }
 
-#bdView>article>.hashtags {
+#bdView>article>.hashtags,
+#bdView>article>.show_buttons {
 	margin-top: 20px;
+}
+
+#bdView>article>.show_buttons {
+	text-align: center;
+}
+
+#bdView>article>.show_buttons>button {
+	margin: 5px;
+}
+
+#bdView>article>.show_buttons>button span+br+span {
+	display: block;
+	color: #333;
+	margin-top: 2px;
+	padding-top: 2px;
+	border-top: 1px solid #eee;
 }
 
 #bdView>article>.wr_extra_vars>div {

@@ -42,7 +42,7 @@ foreach ($options as $key => $v) {
 		<div class="btn-group btn-group-xs pull-left" role="toolbar" aria-label="Editor Controls" style="margin-left:-225px">
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="bold"><i class="glyphicon glyphicon-bold" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="italic"><i class="glyphicon glyphicon-italic" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="strikeThrough" style="font-family:serif;font-size:15px;width:24px;height:22px;line-height:0px;text-decoration:line-through"><strong>S</strong></button>
+			<button type="button" class="btn btn-default" tabindex="-1" aria-label="strikeThrough"><strong style="font-family:serif;font-size:15px;width:12px;height:12px;line-height:1;text-decoration:line-through">S</strong></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="header"><i class="glyphicon glyphicon-header" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="insertorderedlist"><i class="glyphicon glyphicon-list" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="indent"><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i></button>
