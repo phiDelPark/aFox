@@ -6,13 +6,13 @@ if($b){set_error('HTTP/1.1 '.$e, 3); header('Location: '.$_SERVER['HTTP_REFERER'
 exit;
 }
 function file_triggerModuleCall($f,$_DATA) {
-include $f; $r=null; $t='before_filedownload';
+include $f; $r=null; $t='before_proc';
 if(function_exists($t)){$r=call_user_func($t, [$_DATA]);}
 return $r===true ? $_DATA : false;
 }
 function file_triggerCall($rank, &$data) {
 $s=DB::gets(_AF_TRIGGER_TABLE_,'tg_id',['tg_key'=>'M','^'=>'ASCII(grant_access)<='.$rank]);
-foreach ($s as $v) {$inf=_AF_MODULES_PATH_.'/'.$v['tg_id'].'/trigger.php';
+foreach ($s as $v) {$inf=_AF_MODULES_PATH_.'/'.$v['tg_id'].'/trigger/filedownload.php';
 if(file_exists($inf)) {$r=file_triggerModuleCall($inf,$data);if($r===false) return false;$data=$r;}
 } return true;
 }

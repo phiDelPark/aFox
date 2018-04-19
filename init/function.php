@@ -431,15 +431,15 @@ if(!defined('__AFOX__')) exit();
 		return $module['md_manager'] == $_MEMBER['mb_srl'];
 	}
 
+	function isGrant($chk, $md_id) {
+		return checkGrant(getGrant($chk, $md_id));
+	}
+
 	function getGrant($chk, $md_id) {
 		if(empty($md_id) || empty($chk)) return '';
 		if($md_id == '_AFOXtRASH_') return 'm'; // 휴지통은 메니져 이상
 		$module = getModule($md_id);
 		return empty($module) ? '' : $module['grant_'.$chk];
-	}
-
-	function isGrant($chk, $md_id) {
-		return checkGrant(getGrant($chk, $md_id));
 	}
 
 	function checkGrant($chk) {
@@ -474,17 +474,18 @@ if(!defined('__AFOX__')) exit();
 		return $result;
 	}
 
-	function goUrl($url, $msg='') {
-		$url = str_replace("&amp;", "&", $url);
-		if (headers_sent()) {
-			echo '<script>'.($msg?'alert("'.$msg.'");':'').' location.replace("'.$url.'");</script>'
-				.'<noscript>'.($msg ? $msg . '<br><br><a href="'.$url.'">'.$url.'</a>'
-				: '<meta http-equiv="refresh" content="0;url='.$url.'" />').'</noscript>';
-		} else {
-			if($msg) set_error($msg, 1);
-			header('Location: '.$url);
+	function checkPassword($password, $hash) {
+		try {
+			$password = trim($password);
+			if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT') {
+				return password_verify($password, $hash);
+			} else {
+				$password = createHash($password);
+				return !empty($hash) && $password === $hash;
+			}
+		} catch (Exception $ex) {
+			exit($ex->getMessage());
 		}
-		exit;
 	}
 
 	function createHash($password) {
@@ -496,20 +497,6 @@ if(!defined('__AFOX__')) exit();
 				$password =  DB::escape($password);
 				$result = DB::query("SELECT password('$password') as pass", true);
 				return $result[0]['pass'];
-			}
-		} catch (Exception $ex) {
-			exit($ex->getMessage());
-		}
-	}
-
-	function checkPassword($password, $hash) {
-		try {
-			$password = trim($password);
-			if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT') {
-				return password_verify($password, $hash);
-			} else {
-				$password = createHash($password);
-				return !empty($hash) && $password === $hash;
 			}
 		} catch (Exception $ex) {
 			exit($ex->getMessage());
@@ -711,23 +698,20 @@ if(!defined('__AFOX__')) exit();
 
 	function triggerModuleCall($modules, $position, $trigger, &$data) {
 		static $__module_call = null;
-		$position=explode('_', strtolower($position));
-		$position=$position[0];
-		if(empty($position[1])||$position[1]) return $data;
 		if($__module_call == null) {
 			$__module_call = function($include_file, $called_position, $called_trigger, $_DATA) {
 				include $include_file;
 				$r = [];
-				$called_trigger = $called_position.'_'.$called_trigger;
-				if(function_exists($called_trigger)){
-					$r = call_user_func($called_trigger, $_DATA);
+				if(function_exists($called_position)) {
+					$r = call_user_func($called_position, $_DATA);
 				}
 				return $r === true ? $_DATA : false;
 			};
 		}
+		$position=strtolower($position);
 		$trigger=strtolower($trigger);
 		foreach ($modules as $key => $value) {
-			$_file = _AF_MODULES_PATH_.'/'.$key.'/trigger.php';
+			$_file = _AF_MODULES_PATH_.'/'.$key.'/trigger/'.$trigger.'.php';
 			if(file_exists($_file)) {
 				$result = $__module_call($_file, $position, $trigger, $data);
 				if($result === false) return false;
@@ -767,6 +751,13 @@ if(!defined('__AFOX__')) exit();
 		return true;
 	}
 
+	function installModuleTrigger($id, $access) {
+		if(DB::count(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access])!==1){
+			DB::delete(_AF_TRIGGER_TABLE_,['tg_id'=>$id]);
+			DB::insert(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access]);
+		}
+	}
+
 	function cutstr($str, $length, $tail = '...') {
 		$count = 0;
 		if($length < 1) return $str;
@@ -796,6 +787,27 @@ if(!defined('__AFOX__')) exit();
 		return round($size, 1) . $tails[$i];
 	}
 
+	function checkUserAgent() {
+		$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
+		if(preg_match("/bot|daum|crawl|slurp|spider|watchmouse|pingdom\.com|feedfetcher-google|request/", $agent)) return 'BOT';
+		if(preg_match("/phone|iphone|itouch|ipod|symbian|android|htc_|htc-|palmos|blackberry|opera mini|iemobile|windows ce|nokia|fennec|hiptop|kindle|mot |mot-|webos\/|samsung|sonyericsson|^sie-|nintendo/", $agent)) return 'MOBILE';
+		if(preg_match("/mobile|pda;|avantgo|eudoraweb|minimo|netfront|brew|teleca|lg;|lge |wap;| wap /", $agent)) return 'MOBILE';
+		return 'BROWSER';
+	}
+
+	function goUrl($url, $msg='') {
+		$url = str_replace("&amp;", "&", $url);
+		if (headers_sent()) {
+			echo '<script>'.($msg?'alert("'.$msg.'");':'').' location.replace("'.$url.'");</script>'
+				.'<noscript>'.($msg ? $msg . '<br><br><a href="'.$url.'">'.$url.'</a>'
+				: '<meta http-equiv="refresh" content="0;url='.$url.'" />').'</noscript>';
+		} else {
+			if($msg) set_error($msg, 1);
+			header('Location: '.$url);
+		}
+		exit;
+	}
+
 	function messageBox($message, $type = 1, $title = '') {
 		$type = $type>2000 ? (($type>2000&&$type<4000) ? 2 : 3) : ($type>3 ? 1 : $type);
 		$a_type = ['success', 'info', 'warning', 'danger'];
@@ -807,14 +819,6 @@ if(!defined('__AFOX__')) exit();
 		echo '<div class="'. (empty($title)?'alert alert-dismissable alert-':'panel panel-') . '' . $a_type[$type] . '" role="alert">'
 				. (empty($title)?'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>':'<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3></div>')
 				. '<div' . (empty($title)?'':' class="panel-body"') . '>' . $message . '</div></div>';
-	}
-
-	function checkUserAgent() {
-		$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-		if(preg_match("/bot|daum|crawl|slurp|spider|watchmouse|pingdom\.com|feedfetcher-google|request/", $agent)) return 'BOT';
-		if(preg_match("/phone|iphone|itouch|ipod|symbian|android|htc_|htc-|palmos|blackberry|opera mini|iemobile|windows ce|nokia|fennec|hiptop|kindle|mot |mot-|webos\/|samsung|sonyericsson|^sie-|nintendo/", $agent)) return 'MOBILE';
-		if(preg_match("/mobile|pda;|avantgo|eudoraweb|minimo|netfront|brew|teleca|lg;|lge |wap;| wap /", $agent)) return 'MOBILE';
-		return 'BROWSER';
 	}
 
 	function addCSS($src, $media = '') {
