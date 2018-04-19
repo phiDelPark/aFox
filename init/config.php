@@ -1,7 +1,7 @@
 ﻿<?php
 if(!defined('__AFOX__')) exit();
 
-define('_AF_VERSION_', '0.292');
+define('_AF_VERSION_', '0.296');
 define('__DEBUG__', 0);
 
 /*** SSL 설정 ***/
@@ -24,6 +24,7 @@ define('_AF_VISITOR_TABLE_', 'afox_visitors');
 define('_AF_NOTE_TABLE_', 'afox_notes');
 define('_AF_FILE_TABLE_', 'afox_files');
 define('_AF_TRIGGER_TABLE_', 'afox_triggers');
+define('_AF_REPORT_TABLE_', 'afox_reports');
 
 define('_AF_PATH_', substr(str_replace('\\', '/', dirname(__FILE__)), 0, -4) . '/');
 

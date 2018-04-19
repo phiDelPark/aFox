@@ -20,6 +20,7 @@ define('_AF_VISITOR_TABLE_', 'afox_visitors');
 define('_AF_NOTE_TABLE_', 'afox_notes');
 define('_AF_FILE_TABLE_', 'afox_files');
 define('_AF_TRIGGER_TABLE_', 'afox_triggers');
+define('_AF_REPORT_TABLE_', 'afox_reports');
 
 require_once dirname(__FILE__) . '/../lib/db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
 
@@ -422,7 +423,7 @@ $create_sql = '
 	   nt_srl          INT(11)      NOT NULL AUTO_INCREMENT,
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
 	   nt_sender       INT(11)      NOT NULL DEFAULT 0,
-	   nt_sender_nick  VARCHAR(20)  NOT NULL DEFAULT \'\',
+	   nt_sender_nick  VARCHAR(20)  NOT NULL,
 	   nt_send_date    datetime     NOT NULL,
 	   nt_read_date    datetime     NOT NULL,
 	   nt_content      TEXT,
@@ -459,6 +460,25 @@ $create_sql = '
 
 	  INDEX PC_IX (use_pc),
 	  INDEX MOBILE_IX (use_mobile))'.$_engine;
+
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
+
+$_err_keys = _AF_REPORT_TABLE_;
+$create_sql = '
+	  CREATE TABLE IF NOT EXISTS '._AF_REPORT_TABLE_.' (
+	   re_srl          INT(11)      NOT NULL AUTO_INCREMENT,
+	   re_type         CHAR(1)      NOT NULL DEFAULT 0,
+	   re_target       INT(11)      NOT NULL DEFAULT 0,
+	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
+	   re_sender       INT(11)      NOT NULL DEFAULT 0,
+	   re_sender_nick  VARCHAR(20)  NOT NULL,
+	   re_send_date    datetime     NOT NULL,
+	   re_content      TEXT,
+
+	  CONSTRAINT SRL_PK PRIMARY KEY (re_srl),
+	  INDEX MEMBER_IX (mb_srl),
+	  INDEX SENDER_IX (re_sender))'.$_engine;
 
 DB::query($create_sql);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
@@ -521,20 +541,24 @@ if (empty($row['md_id'])) {
 DB::commit();
 
 $file = $datadir.'config/prohibit_id.php';
-$f = @fopen($file, 'w');
-fwrite($f, "<?php if(!defined('__AFOX__')) exit();\n");
-fwrite($f, "\$_PROHIBIT_IDS=array('system','시스템','admin','administrator','관리자','운영자','주인장','어드민','webmaster','웹마스터','sysop','시삽','시샵','manager','매니저','메니저','root','루트','support','서포트','guest','방문객');");
-fclose($f);
-chmod($file, 0644);
+if(!file_exists($file)) {
+	$f = @fopen($file, 'w');
+	fwrite($f, "<?php if(!defined('__AFOX__')) exit();\n");
+	fwrite($f, "\$_PROHIBIT_IDS=array('system','시스템','admin','administrator','관리자','운영자','주인장','어드민','webmaster','웹마스터','sysop','시삽','시샵','manager','매니저','메니저','root','루트','support','서포트','guest','방문객');");
+	fclose($f);
+	chmod($file, 0644);
+}
 
 $file = $datadir.'config/base_cdn_list.php';
-$f = @fopen($file, 'w');
-fwrite($f, "<?php if(!defined('__AFOX__')) exit();?>\n");
-fwrite($f, '<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>'."\n");
-fwrite($f, '<link href="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">'."\n");
-fwrite($f, '<script src="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>'."\n");
-fclose($f);
-chmod($file, 0644);
+if(!file_exists($file)) {
+	$f = @fopen($file, 'w');
+	fwrite($f, "<?php if(!defined('__AFOX__')) exit();?>\n");
+	fwrite($f, '<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>'."\n");
+	fwrite($f, '<link href="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">'."\n");
+	fwrite($f, '<script src="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>'."\n");
+	fclose($f);
+	chmod($file, 0644);
+}
 
 $file = $datadir.'config/_db_config.php';
 $f = @fopen($file, 'w');
