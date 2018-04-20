@@ -7,7 +7,7 @@ require_once _AF_INIT_PATH_ . 'function.php';
 // 방문 기록 사용시
 if($_CFG['use_visit'] == '1' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_ADDR']) {
 	set_cookie('ck_visit_ip', $_SERVER['REMOTE_ADDR'], 86400); // 하루동안 저장
-	if(checkUserAgent() != 'BOT') {
+	if(!isCrawler()) {
 		$tmp = strip_tags($_SERVER['REMOTE_ADDR']);
 		if(DB::count(_AF_VISITOR_TABLE_, ['mb_ipaddress'=>$tmp,'^'=>'TIMESTAMPDIFF(HOUR,`vs_regdate`,DATE_ADD(NOW(),INTERVAL -1 HOUR))<1']) === 0) {
 		DB::insert(_AF_VISITOR_TABLE_, ['mb_ipaddress'=>$tmp,'vs_agent'=>strip_tags($_SERVER['HTTP_USER_AGENT']),
@@ -16,7 +16,7 @@ if($_CFG['use_visit'] == '1' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_AD
 	}
 }
 
-define('__MOBILE__', checkUserAgent() == 'MOBILE');
+define('__MOBILE__', isMobilePhone());
 define('__REQ_METHOD__', getRequestMethod());
 
 define('_AF_URL_', getRequestUri());

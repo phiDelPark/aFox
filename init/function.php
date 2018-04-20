@@ -787,12 +787,21 @@ if(!defined('__AFOX__')) exit();
 		return round($size, 1) . $tails[$i];
 	}
 
-	function checkUserAgent() {
+	function isCrawler() {
 		$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
-		if(preg_match("/bot|daum|crawl|slurp|spider|watchmouse|pingdom\.com|feedfetcher-google|request/", $agent)) return 'BOT';
-		if(preg_match("/phone|iphone|itouch|ipod|symbian|android|htc_|htc-|palmos|blackberry|opera mini|iemobile|windows ce|nokia|fennec|hiptop|kindle|mot |mot-|webos\/|samsung|sonyericsson|^sie-|nintendo/", $agent)) return 'MOBILE';
-		if(preg_match("/mobile|pda;|avantgo|eudoraweb|minimo|netfront|brew|teleca|lg;|lge |wap;| wap /", $agent)) return 'MOBILE';
-		return 'BROWSER';
+		return preg_match("/bot|crawl|slurp|spider|facebook|fetch|twikle|wotbox|pingdom|yahooseeker|google keyword|curl|request/", $agent);
+	}
+
+	function isMobilePhone() {
+		$agent = $_SERVER['HTTP_USER_AGENT'];
+		// Check if user-agent is a tablet PC as iPad or Andoid tablet.
+		if(preg_match("/iPad|Android|webOS|hp-tablet|PlayBook/", $agent)) {
+			//if(strpos($agent, 'Android') !== FALSE && strpos($agent, 'Mobile') === FALSE) return 'TABLET';
+			if(!preg_match("/Opera Mini|Opera Mobi/", $agent)) return true;
+		}
+		// Detect mobile device by user agent
+		if(preg_match("/iPod|iPhone|Android|BlackBerry|SymbianOS|Bada|Tizen|Kindle|Wii|SCH-|SPH-|CANU-|Windows Phone|Windows CE|POLARIS|Palm|Dorothy Browser|Mobile|Opera Mobi|Opera Mini|Minimo|AvantGo|NetFront|Nokia|LGPlayer|SonyEricsson|HTC/i", $agent)) return true;
+		return false;
 	}
 
 	function goUrl($url, $msg='') {
