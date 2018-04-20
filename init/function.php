@@ -331,92 +331,6 @@ if(!defined('__AFOX__')) exit();
 		}
 	}
 
-	function sendNote($srl, $msg, $nick = '') {
-		global $_MEMBER;
-		$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
-		$nick = empty($_MEMBER) ? ($nick ? $nick : getLang('none')) : $_MEMBER['mb_nick'];
-		if(empty($srl) || $srl === $sender) return false;
-		DB::insert(_AF_NOTE_TABLE_, [
-			'mb_srl'=>$srl,
-			'nt_sender'=>$sender,
-			'nt_sender_nick'=>$nick,
-			'nt_content'=>xssClean($msg),
-			'^nt_send_date'=>'NOW()'
-		]);
-	}
-
-	function moveUpFile($file, $dest, $max_size = 0) {
-		if($file['error'] === UPLOAD_ERR_OK) {
-			// HTTP post로 전송된 것인지 체크합니다.
-			if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('UPLOAD_ERR_CODE(-1)'),10489);
-
-			if($file['size'] <= 0) {
-				return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
-			} if ($max_size > 0 && $max_size < $file['size']) {
-				return set_error(getLang('UPLOAD_ERR_CODE(2)'),10402);
-			}
-			// 이동 경로가 없으면 이동 안함, 오류 체크는함
-			if(empty($dest)) return true;
-			// 폴더 없으면 만듬
-			$dir = dirname($dest);
-			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) {
-				return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
-			}
-			// 파일이 있으면 지움
-			if(file_exists($dest)) {
-				if(!unlinkFile($dest)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
-			}
-			if (move_uploaded_file($file['tmp_name'], $dest)) {
-				@chmod($dest, _AF_FILE_PERMIT_);
-			} else {
-				return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
-			}
-		} else {
-			return set_error(getLang('UPLOAD_ERR_CODE('.$file['error'].')'),10400+$file['error']);
-		}
-	}
-
-	function unlinkFile($file) {
-		@chmod($file, 0707);
-		if(!@unlink($file)) {
-			@chmod($file, _AF_FILE_PERMIT_);
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	function unlinkDir($dir) {
-		@chmod($dir, 0707);
-		if(!@rmdir($dir)) {
-			@chmod($dir, _AF_DIR_PERMIT_);
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	function unlinkAll($dir, $subdir = true) {
-		// 폴더가 없어도 성공으로 간주
-		$ret = true;
-		if(is_dir($dir)){
-			$handle = @opendir($dir); // 절대경로
-			while ($file = readdir($handle)) {
-				if($file != '.' && $file != '..') {
-					// 하위 폴더이면...
-					if($subdir && is_dir($dir.$file.'/')) {
-						unlinkAll($dir.$file.'/', $subdir);
-					} else {
-						unlinkFile($dir.$file);
-					}
-				}
-			}
-			@closedir($handle);
-			$ret = unlinkDir($dir);
-		}
-		return $ret;
-	}
-
 	function isAdmin() {
 		global $_MEMBER;
 		return !empty($_MEMBER['mb_srl']) && $_MEMBER['mb_rank'] == 's';
@@ -432,14 +346,15 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function isGrant($chk, $md_id) {
-		return checkGrant(getGrant($chk, $md_id));
-	}
-
-	function getGrant($chk, $md_id) {
-		if(empty($md_id) || empty($chk)) return '';
-		if($md_id == '_AFOXtRASH_') return 'm'; // 휴지통은 메니져 이상
-		$module = getModule($md_id);
-		return empty($module) ? '' : $module['grant_'.$chk];
+		if(empty($md_id) || empty($chk)) return false;
+		if($md_id == '_AFOXtRASH_') {
+			$grant = 'm'; // 휴지통은 메니져 이상
+		} else {
+			$module = getModule($md_id);
+			if(empty($module)) return false;
+			$grant =  $module['grant_'.$chk];
+		}
+		return checkGrant($grant);
 	}
 
 	function checkGrant($chk) {
@@ -500,6 +415,185 @@ if(!defined('__AFOX__')) exit();
 			}
 		} catch (Exception $ex) {
 			exit($ex->getMessage());
+		}
+	}
+
+	function sendNote($srl, $msg, $nick = '') {
+		global $_MEMBER;
+		$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
+		$nick = empty($_MEMBER) ? ($nick ? $nick : getLang('none')) : $_MEMBER['mb_nick'];
+		if(empty($srl) || $srl === $sender) return false;
+		DB::insert(_AF_NOTE_TABLE_, [
+			'mb_srl'=>$srl,
+			'nt_sender'=>$sender,
+			'nt_sender_nick'=>$nick,
+			'nt_content'=>xssClean($msg),
+			'^nt_send_date'=>'NOW()'
+		]);
+	}
+
+	function triggerAddonCall($addons, $position, $trigger, &$data) {
+		static $__addon_call = null;
+		if($__addon_call == null) {
+			$__addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
+				include $include_file;
+				return $_DATA;
+			};
+		}
+		$position=strtolower($position);
+		$trigger=strtolower($trigger);
+		foreach ($addons as $key => $value) {
+			$_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
+			if(file_exists($_file)) {
+				$_ex = get_cache('_AF_ADDON_'.$key);
+				if(empty($_ex)) {
+					$_ex = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
+					$_ex = $_ex ? unserialize($_ex['ao_extra']) : [];
+					set_cache('_AF_ADDON_'.$key, $_ex);
+				}
+				if(!empty($_ex['access_md_ids'])) {
+					$_acc_md = $_ex['access_mode'];
+					$_md = __MID__;
+					$_is_acc = !empty($_md) && in_array($_md, $_ex['access_md_ids']);
+					if(($_acc_md == 'include' && !$_is_acc)||($_acc_md == 'exclude' && $_is_acc)) continue;
+				}
+				$data = $__addon_call($_file, $position, $trigger, $_ex, $data);
+			}
+		}
+		return true;
+	}
+
+	function triggerModuleCall($modules, $position, $trigger, &$data) {
+		static $__module_call = null;
+		if($__module_call == null) {
+			$__module_call = function($include_file, $called_position, $called_trigger, $_DATA) {
+				include $include_file;
+				$r = [];
+				if(function_exists($called_position)) {
+					$r = call_user_func($called_position, $_DATA);
+				}
+				return $r === true ? $_DATA : false;
+			};
+		}
+		$position=strtolower($position);
+		$trigger=strtolower($trigger);
+		foreach ($modules as $key => $value) {
+			$_file = _AF_MODULES_PATH_.'/'.$key.'/trigger/'.$trigger.'.php';
+			if(file_exists($_file)) {
+				$result = $__module_call($_file, $position, $trigger, $data);
+				if($result === false) return false;
+				$data = $result;
+			}
+		}
+		return true;
+	}
+
+	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
+	function triggerCall($position, $trigger, &$data) {
+		static $__triggers = null;
+		// 관리자 모듈은 넘어감
+		if(__MODULE__ == 'admin') return true;
+		if($__triggers == null) {
+			$__triggers = ['A'=>[],'M'=>[]];
+			global $_MEMBER;
+			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
+			DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
+				[
+					(__MOBILE__?'use_mobile':'use_pc')=>1,
+					'^'=>'ASCII(grant_access)<='.$rank
+				], 'tg_key',
+				function($r)use(&$__triggers) {
+					while ($tmp = DB::fetch($r)) {
+						$__triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
+					}
+				}
+			);
+		}
+		if(count($__triggers['A']) > 0){
+			$result = triggerAddonCall($__triggers['A'], $position, $trigger, $data);
+		}
+		if(count($__triggers['M']) > 0){
+			$result = triggerModuleCall($__triggers['M'], $position, $trigger, $data);
+		}
+		return true;
+	}
+
+	function installModuleTrigger($id, $access) {
+		if(DB::count(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access])!==1){
+			DB::delete(_AF_TRIGGER_TABLE_,['tg_id'=>$id]);
+			DB::insert(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access]);
+		}
+	}
+
+	function unlinkFile($file) {
+		@chmod($file, 0707);
+		if(!@unlink($file)) {
+			@chmod($file, _AF_FILE_PERMIT_);
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function unlinkDir($dir) {
+		@chmod($dir, 0707);
+		if(!@rmdir($dir)) {
+			@chmod($dir, _AF_DIR_PERMIT_);
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	function unlinkAll($dir, $subdir = true) {
+		// 폴더가 없어도 성공으로 간주
+		$ret = true;
+		if(is_dir($dir)){
+			$handle = @opendir($dir); // 절대경로
+			while ($file = readdir($handle)) {
+				if($file != '.' && $file != '..') {
+					// 하위 폴더이면...
+					if($subdir && is_dir($dir.$file.'/')) {
+						unlinkAll($dir.$file.'/', $subdir);
+					} else {
+						unlinkFile($dir.$file);
+					}
+				}
+			}
+			@closedir($handle);
+			$ret = unlinkDir($dir);
+		}
+		return $ret;
+	}
+
+	function moveUpFile($file, $dest, $max_size = 0) {
+		if($file['error'] === UPLOAD_ERR_OK) {
+			// HTTP post로 전송된 것인지 체크합니다.
+			if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('UPLOAD_ERR_CODE(-1)'),10489);
+
+			if($file['size'] <= 0) {
+				return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
+			} if ($max_size > 0 && $max_size < $file['size']) {
+				return set_error(getLang('UPLOAD_ERR_CODE(2)'),10402);
+			}
+			// 이동 경로가 없으면 이동 안함, 오류 체크는함
+			if(empty($dest)) return true;
+			// 폴더 없으면 만듬
+			$dir = dirname($dest);
+			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) {
+				return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
+			}
+			// 파일이 있으면 지움
+			if(file_exists($dest)) {
+				if(!unlinkFile($dest)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
+			}
+			if (move_uploaded_file($file['tmp_name'], $dest)) {
+				@chmod($dest, _AF_FILE_PERMIT_);
+			} else {
+				return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
+			}
+		} else {
+			return set_error(getLang('UPLOAD_ERR_CODE('.$file['error'].')'),10400+$file['error']);
 		}
 	}
 
@@ -665,99 +759,6 @@ if(!defined('__AFOX__')) exit();
 		@include_once _AF_MODULES_PATH_ . 'editor/index.php';
 	}
 
-	function triggerAddonCall($addons, $position, $trigger, &$data) {
-		static $__addon_call = null;
-		if($__addon_call == null) {
-			$__addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
-				include $include_file;
-				return $_DATA;
-			};
-		}
-		$position=strtolower($position);
-		$trigger=strtolower($trigger);
-		foreach ($addons as $key => $value) {
-			$_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
-			if(file_exists($_file)) {
-				$_ex = get_cache('_AF_ADDON_'.$key);
-				if(empty($_ex)) {
-					$_ex = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
-					$_ex = $_ex ? unserialize($_ex['ao_extra']) : [];
-					set_cache('_AF_ADDON_'.$key, $_ex);
-				}
-				if(!empty($_ex['access_md_ids'])) {
-					$_acc_md = $_ex['access_mode'];
-					$_md = __MID__;
-					$_is_acc = !empty($_md) && in_array($_md, $_ex['access_md_ids']);
-					if(($_acc_md == 'include' && !$_is_acc)||($_acc_md == 'exclude' && $_is_acc)) continue;
-				}
-				$data = $__addon_call($_file, $position, $trigger, $_ex, $data);
-			}
-		}
-		return true;
-	}
-
-	function triggerModuleCall($modules, $position, $trigger, &$data) {
-		static $__module_call = null;
-		if($__module_call == null) {
-			$__module_call = function($include_file, $called_position, $called_trigger, $_DATA) {
-				include $include_file;
-				$r = [];
-				if(function_exists($called_position)) {
-					$r = call_user_func($called_position, $_DATA);
-				}
-				return $r === true ? $_DATA : false;
-			};
-		}
-		$position=strtolower($position);
-		$trigger=strtolower($trigger);
-		foreach ($modules as $key => $value) {
-			$_file = _AF_MODULES_PATH_.'/'.$key.'/trigger/'.$trigger.'.php';
-			if(file_exists($_file)) {
-				$result = $__module_call($_file, $position, $trigger, $data);
-				if($result === false) return false;
-				$data = $result;
-			}
-		}
-		return true;
-	}
-
-	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
-	function triggerCall($position, $trigger, &$data) {
-		static $__triggers = null;
-		// 관리자 모듈은 넘어감
-		if(__MODULE__ == 'admin') return true;
-		if($__triggers == null) {
-			$__triggers = ['A'=>[],'M'=>[]];
-			global $_MEMBER;
-			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
-			DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
-				[
-					(__MOBILE__?'use_mobile':'use_pc')=>1,
-					'^'=>'ASCII(grant_access)<='.$rank
-				], 'tg_key',
-				function($r)use(&$__triggers) {
-					while ($tmp = DB::fetch($r)) {
-						$__triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
-					}
-				}
-			);
-		}
-		if(count($__triggers['A']) > 0){
-			$result = triggerAddonCall($__triggers['A'], $position, $trigger, $data);
-		}
-		if(count($__triggers['M']) > 0){
-			$result = triggerModuleCall($__triggers['M'], $position, $trigger, $data);
-		}
-		return true;
-	}
-
-	function installModuleTrigger($id, $access) {
-		if(DB::count(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access])!==1){
-			DB::delete(_AF_TRIGGER_TABLE_,['tg_id'=>$id]);
-			DB::insert(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access]);
-		}
-	}
-
 	function cutstr($str, $length, $tail = '...') {
 		$count = 0;
 		if($length < 1) return $str;
@@ -818,16 +819,23 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function messageBox($message, $type = 1, $title = '') {
-		$type = $type>2000 ? (($type>2000&&$type<4000) ? 2 : 3) : ($type>3 ? 1 : $type);
 		$a_type = ['success', 'info', 'warning', 'danger'];
-		if($title !== false) {
-			$a_title = ['success', 'alert', 'warning', 'error'];
-			$a_icon = ['ok-sign', 'exclamation-sign', 'warning-sign', 'ban-circle'];
-			$title = '<i class="glyphicon glyphicon-'.$a_icon[$type].'" aria-hidden="true"></i> '.(empty($title)?getLang($a_title[$type]):$title);
+		$a_title = ['success', 'alert', 'warning', 'error'];
+		$a_icon = ['ok-sign', 'exclamation-sign', 'warning-sign', 'ban-circle'];
+		$type = ($type>2000 && $type<6000) ? ($type<4000 ? 2 : 3) : ($type>3 ? 1 : $type);
+
+		$msg = '<div class="';
+		if($title === false) {
+			$msg .= 'alert alert-dismissable alert-'. $a_type[$type] . '" role="alert">';
+			$msg .= '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><div>';
+		} else {
+			if(empty($title)) $title = getLang($a_title[$type]);
+			$msg .= 'panel panel-'. $a_type[$type] . '" role="alert"><div class="panel-heading"><h3 class="panel-title">';
+			$msg .= '<i class="glyphicon glyphicon-'.$a_icon[$type].'" aria-hidden="true"></i> '.$title.'</h3></div><div class="panel-body">';
 		}
-		echo '<div class="'. (empty($title)?'alert alert-dismissable alert-':'panel panel-') . '' . $a_type[$type] . '" role="alert">'
-				. (empty($title)?'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>':'<div class="panel-heading"><h3 class="panel-title">'.$title.'</h3></div>')
-				. '<div' . (empty($title)?'':' class="panel-body"') . '>' . $message . '</div></div>';
+		$msg .= $message . '</div></div>';
+
+		echo $msg;
 	}
 
 	function addCSS($src, $media = '') {
