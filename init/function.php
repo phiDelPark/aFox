@@ -161,17 +161,20 @@ if(!defined('__AFOX__')) exit();
 		static $__menus = [];
 		if(!isset($__menus['header']) || !isset($__menus['footer'])) {
 			for ($i=0; $i < 2; $i++) {
-				$out = DB::gets(_AF_MENU_TABLE_, ['mu_type'=>$i], ['mu_srl'=>'ASC'], function($r){
-					$rset = [];
-					while ($row = DB::fetch($r)) {
-						if(preg_match('/^[a-zA-Z]+\w{2,}$/',$row['mu_link'])) {
-							$row['md_id'] = $row['mu_link'];
-							$row['mu_link'] = getUrl('','id',$row['md_id']);
+				$out = DB::gets(_AF_MENU_TABLE_,
+					['mu_type'=>$i], ['mu_srl'=>'ASC'],
+					function($r){
+						$rset = [];
+						while ($row = DB::fetch($r)) {
+							if(preg_match('/^[a-zA-Z]+\w{2,}$/',$row['mu_link'])) {
+								$row['md_id'] = $row['mu_link'];
+								$row['mu_link'] = getUrl('','id',$row['md_id']);
+							}
+							$rset[] = $row;
 						}
-						$rset[] = $row;
+						return $rset;
 					}
-					return $rset;
-				});
+				);
 				$__menus[$i == 0 ? 'header' : 'footer'] = $out;
 			}
 		}
@@ -233,35 +236,55 @@ if(!defined('__AFOX__')) exit();
 		return $result;
 	}
 
-	// 포인트 체크를 위해 기록
+	function getHistoryAction($act) {
+		global $_MEMBER;
+		if(empty($_MEMBER)) return null;
+
+		return DB::gets(_AF_HISTORY_TABLE_,
+			'hs_action,hs_regdate',
+			[
+				'hs_action{LIKE}' => $act.'::%',
+				'mb_srl' => $_MEMBER['mb_srl']
+			],
+			'hs_regdate',
+			function($r) {
+				$ret = [];
+				while ($tmp = DB::fetch($r)) {
+					$ret[] = explode('::', $tmp['hs_regdate'].'::'.$tmp['hs_action']);
+				}
+				return $ret;
+			}
+		);
+	}
+
+	// 활동 체크를 위해 기록
 	function setHistoryAction($act, $value, $allowdup = false, $callback = null) {
 		global $_MEMBER;
 
 		// 비회원은 기록안함
 		if (empty($_MEMBER)) {
 			if($callback != null) {
-				$_r = $callback(['data'=>true,'mb_srl'=>0,'ipaddress'=>$_SERVER['REMOTE_ADDR']]);
+				$_r = $callback([
+					'data'=>true,
+					'mb_srl'=>0,
+					'ipaddress'=>$_SERVER['REMOTE_ADDR']
+				]);
 				if(!empty($_r['error'])) return set_error($_r['message'], $_r['error']);
 			}
 			return true;
 		}
 
-		$uinfo = [];
-		$uinfo['mb_srl'] = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
-		$uinfo['ipaddress'] = $_SERVER['REMOTE_ADDR'];
-
-		$pkey = ($uinfo['mb_srl'] > 0 ? 'mb_srl':'mb_ipaddress');
-		$pval = ($uinfo['mb_srl'] > 0 ? $uinfo['mb_srl']:$uinfo['ipaddress']);
+		$uinfo = [
+			'mb_srl' => $_MEMBER['mb_srl'],
+			'ipaddress' => $_SERVER['REMOTE_ADDR']
+		];
 
 		DB::transaction();
 
 		try {
-			$uinfo['data'] = DB::get(_AF_HISTORY_TABLE_,
-				[
-					'hs_action{LIKE}'=>$act.'::%',
-					$pkey=>$pval
-				]
-			);
+			$uinfo['data'] = getHistoryAction($act);
+
+			// 중복 허용일 경우가 아니면 한번만 입력
 			if($allowdup || empty($uinfo['data'])) {
 				DB::insert(_AF_HISTORY_TABLE_,
 					[
