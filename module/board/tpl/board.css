@@ -407,6 +407,12 @@
 	margin-bottom: 2px;
 }
 
+#bdList.s_list .wr_title>span {
+	font-size: 12px;
+	font-family: sans-serif, tahoma;
+	color: #999;
+}
+
 #bdList .img-container {
 	width: 100%;
 	height: 100%;
