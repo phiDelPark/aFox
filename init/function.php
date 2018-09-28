@@ -637,7 +637,7 @@ if(!defined('__AFOX__')) exit();
 		$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*+>#i', '', $html);
 
 		// remove src hack // XE removeSrcHack https://www.xpressengine.com/
-		$html = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|data\-[a-z\-]+|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i',
+		$html = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|data\-[a-z\-]+|class|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i',
 			function ($match) {
 				$tag = strtolower($match[2]);
 				if($tag == 'xmp') return "<{$match[1]}xmp>";
@@ -653,18 +653,21 @@ if(!defined('__AFOX__')) exit();
 						$attrs[strtolower(trim($name))] = $val;
 					}
 				}
+
 				if(isset($attrs['widget']) && $tag == 'img' && !isAdmin()) return ""; // widget 관리자만 사용가능
+				if(isset($attrs['class'])) unset($attrs['class']);
 				if(isset($attrs['style']) && preg_match('@(?:/\*|\*/|\n|:\s*expression\s*\()@i', $attrs['style'])) unset($attrs['style']);
+
 				$attr = array();
 				foreach($attrs as $name => $val) {
-					if(stripos($name, 'data-') === 0) { // ajax 못하게 처리
-						continue;
-					} elseif($tag == 'object' || $tag == 'embed' || $tag == 'a') {
-						if($name == 'data' || $name == 'src' || $name == 'href') {
+					if(stripos($name, 'data') === 0) { // ajax 못하게 처리
+						if($name == 'data' && ($tag == 'object' || $tag == 'embed' || $tag == 'a')) {
+							if(stripos($val, 'data:') === 0) continue;
+						} else continue;
+					} elseif($tag == 'object' || $tag == 'embed' || $tag == 'a' || $tag == 'img') {
+						if($tag == 'img' || $name == 'src' || $name == 'href') {
 							if(stripos($val, 'data:') === 0) continue;
 						}
-					} elseif($tag == 'img') {
-						if(stripos($val, 'data:') === 0) continue;
 					}
 					$val = str_replace('"', '&quot;', $val);
 					$attr[] = $name . "=\"{$val}\"";
