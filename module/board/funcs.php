@@ -103,16 +103,14 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getHashtags($content) {
-		$tags = array('a', 'pre', 'xml', 'textarea', 'input', 'select', 'option', 'code', 'script', 'style', 'iframe', 'button', 'img', 'embed', 'object', 'ins');
+		$tags = array('pre', 'code', 'xml', 'textarea', 'input', 'select', 'option', 'script', 'style', 'iframe', 'button', 'img', 'embed', 'object', 'ins');
 		$pattern = '/<(' . implode('|', $tags) . ')[^>]*>.*?<\/\1>/si';
 		$content= preg_replace($pattern, '',$content);
 		$content= htmlspecialchars_decode(strip_tags($content), ENT_QUOTES);
 		$tags = [];
-		$pattern = '/(?:^:|^|\s|>|&nbsp;)(#([\w|ㄱ-ㅎ|ㅏ-ㅣ|가-힣\-]+)){1,}/';
-		preg_replace_callback($pattern, function($mc)use(&$tags) {
-			if(@preg_match_all('/#([\w|ㄱ-ㅎ|ㅏ-ㅣ|가-힣\-]+)/', $mc[0], $matches)) {
-				$tags[] = $matches[1][0];
-			}
+		$pattern = '/#([\w|ㄱ-ㅎ|ㅏ-ㅣ|가-힣\-\_]+){1,}/';
+		preg_replace_callback($pattern, function($matches)use(&$tags) {
+			$tags[md5($matches[1])] = $matches[1];
 			return '';
 		}, $content);
 		return implode(',', $tags);
