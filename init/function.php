@@ -634,7 +634,7 @@ if(!defined('__AFOX__')) exit();
 	function xssClean($html, $chkclosed = true) {
 		$html = preg_replace('#<!--.*?-->#i', '', $html);
 		$html = preg_replace('#</*\w+:\w[^>]*+>#i', '', $html);
-		$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|title|xml)[^>]*+>#i', '', $html);
+		$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|title|xml'.(isAdmin()?'':'|s(?:cript|tyle)').')[^>]*+>#i', '', $html);
 
 		// remove src hack // XE removeSrcHack https://www.xpressengine.com/
 		$html = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|data\-[a-z\-]+|class|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i',
@@ -654,8 +654,10 @@ if(!defined('__AFOX__')) exit();
 					}
 				}
 
-				if(isset($attrs['widget']) && $tag == 'img' && !isAdmin()) return ""; // widget 관리자만 사용가능
-				if(isset($attrs['class'])) unset($attrs['class']);
+				if(!isAdmin()){ // widget, class 관리자만 사용가능
+					if(isset($attrs['widget']) && $tag == 'img') return "";
+					if(isset($attrs['class'])) unset($attrs['class']);
+				}
 				if(isset($attrs['style']) && preg_match('@(?:/\*|\*/|\n|:\s*expression\s*\()@i', $attrs['style'])) unset($attrs['style']);
 
 				$attr = array();

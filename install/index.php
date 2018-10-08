@@ -577,7 +577,7 @@ fwrite($f, ");");
 fclose($f);
 chmod($file, 0644);
 
-$success_msg = "<br>설치 성공<br><br>관리자 아이디 : admin<br>관리자 비밀번호 : ".$af_pass."<br><br>주의 : 관리자 로그인 후에 관리자 페이지에 접속 후 관리자 비밀번호를 바꿔주세요.<br><br>";
+$success_msg = "<br><b>설치 성공</b><br><br>관리자 아이디 : admin<br>관리자 비밀번호 : ".$af_pass."<br><br>설치를 성공적으로 마쳤습니다.";
 
 // 새로 설치가 아닐때를 대비 업데이트 체크
 /*

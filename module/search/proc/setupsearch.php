@@ -9,7 +9,7 @@ function proc($data) {
 	try {
 		$module = getModule('search');
 		$md_extra = [];
-		$md_extra['md_ids'] = $data['md_ids'];
+		$md_extra['md_ids'] = empty($data['md_ids']) ? [] : $data['md_ids'];
 
 		if (empty($module['md_id'])) {
 			DB::insert(_AF_MODULE_TABLE_,
