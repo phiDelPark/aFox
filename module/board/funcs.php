@@ -105,10 +105,11 @@ if(!defined('__AFOX__')) exit();
 	function getHashtags($content) {
 		$tags = array('pre', 'code', 'xml', 'textarea', 'input', 'select', 'option', 'script', 'style', 'iframe', 'button', 'img', 'embed', 'object', 'ins');
 		$pattern = '/<(' . implode('|', $tags) . ')[^>]*>.*?<\/\1>/si';
-		$content= preg_replace($pattern, '',$content);
+		$content= preg_replace($pattern, ' ',$content);
 		$content= htmlspecialchars_decode(strip_tags($content), ENT_QUOTES);
 		$tags = [];
-		$pattern = '/#([\w|ㄱ-ㅎ|ㅏ-ㅣ|가-힣\-\_]+){1,}/';
+		$pattern = '/#([\x{3131}-\x{314e}\x{314f}-\x{3163}\x{ac00}-\x{d7a3}\w\-\_]{2,})/u';
+
 		preg_replace_callback($pattern, function($matches)use(&$tags) {
 			$tags[md5($matches[1])] = $matches[1];
 			return '';
