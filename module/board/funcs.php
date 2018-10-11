@@ -106,7 +106,7 @@ if(!defined('__AFOX__')) exit();
 		$tags = array('pre', 'code', 'xml', 'textarea', 'input', 'select', 'option', 'script', 'style', 'iframe', 'button', 'img', 'embed', 'object', 'ins');
 		$pattern = '/<(' . implode('|', $tags) . ')[^>]*>.*?<\/\1>/si';
 		$content= preg_replace($pattern, ' ',$content);
-		$content= htmlspecialchars_decode(strip_tags($content), ENT_QUOTES);
+		$content= htmlspecialchars_decode(str_replace("\n", " ", strip_tags($content)), ENT_QUOTES);
 		$tags = [];
 		$pattern = '/#([\x{3131}-\x{314e}\x{314f}-\x{3163}\x{ac00}-\x{d7a3}\w\-\_]{2,})/u';
 
