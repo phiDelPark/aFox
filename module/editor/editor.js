@@ -35,7 +35,7 @@
 					text += 'Your browser does not support the audio element.</' + type + '>';
 					break;
 				default:
-					text = '<a href="' + url + '"><code>' + title + '</code></a>';
+					text = '<code><a href="' + url + '">' + title + '</a></code>';
 					break;
 			}
 

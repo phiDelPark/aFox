@@ -1,4 +1,8 @@
 @charset "utf-8";
+blockquote {
+	font-size: inherit;
+}
+
 [data-error] {
 	border: 2px solid red !important;
 }
