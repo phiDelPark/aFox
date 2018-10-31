@@ -632,13 +632,16 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function xssClean($html, $chkclosed = true) {
+		$admin = isAdmin();
+
 		$html = preg_replace('#<!--.*?-->#i', '', $html);
 		$html = preg_replace('#</*\w+:\w[^>]*+>#i', '', $html);
-		$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|title|xml'.(isAdmin()?'':'|s(?:cript|tyle)').')[^>]*+>#i', '', $html);
+		// script, style 관리자만 사용가능
+		$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|title|xml'.($admin?'':'|s(?:cript|tyle)').')[^>]*+>#i', '', $html);
 
 		// remove src hack // XE removeSrcHack https://www.xpressengine.com/
 		$html = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|data\-[a-z\-]+|class|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i',
-			function ($match) {
+			function ($match) use ($admin) {
 				$tag = strtolower($match[2]);
 				if($tag == 'xmp') return "<{$match[1]}xmp>";
 				if($match[1]) return $match[0];
@@ -653,13 +656,11 @@ if(!defined('__AFOX__')) exit();
 						$attrs[strtolower(trim($name))] = $val;
 					}
 				}
-
-				if(!isAdmin()){ // widget, class 관리자만 사용가능
+				if(!$admin){ // widget, class 관리자만 사용가능
 					if(isset($attrs['widget']) && $tag == 'img') return "";
 					if(isset($attrs['class'])) unset($attrs['class']);
 				}
 				if(isset($attrs['style']) && preg_match('@(?:/\*|\*/|\n|:\s*expression\s*\()@i', $attrs['style'])) unset($attrs['style']);
-
 				$attr = array();
 				foreach($attrs as $name => $val) {
 					if(stripos($name, 'data') === 0) { // ajax 못하게 처리
@@ -699,33 +700,35 @@ if(!defined('__AFOX__')) exit();
 		static $__parsedown = null;
 
 		if($type == 0) {
-			$text = nl2br(escapeHtml($text, '<img><a>'));
-		} else if($type == 1) {
-			if($__parsedown == null) {
-				$__parsedown = new Parsedown();
-				$__parsedown->setBreaksEnabled(true)->setMarkupEscaped(false);
+			$text = nl2br(escapeHtml($text));
+		} else {
+			if($type == 1) {
+				if($__parsedown == null) {
+					$__parsedown = new Parsedown();
+					$__parsedown->setBreaksEnabled(true)->setMarkupEscaped(false);
+				}
+				$text =$__parsedown->text($text);
+				// 비디오,오디오 처리
+				$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
+				$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
+				$text = preg_replace($patterns, $replacement, $text);
 			}
-			$text =$__parsedown->text($text);
-			// 비디오,오디오 처리
-			$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
-			$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
-			$text = preg_replace($patterns, $replacement, $text);
-		}
 
-		$text = preg_replace_callback('/<img([^>]*\s+widget\s*=[^>]*)>/is', function($m){
-			$attrs = [];
-			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)) {
-				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
+			$text = preg_replace_callback('/<img([^>]*\s+widget\s*=[^>]*)>/is', function($m){
+				$attrs = [];
+				if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)) {
+					foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
+				}
+				return empty($attrs['widget']) ? '' : displayWidget($attrs['widget'], $attrs);
+			}, $text);
+
+			// 다운로드 권한이 없으면 처리
+			$_md = __MID__;
+			if(!empty($_md) && !isGrant('download', $_md)) {
+				$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
+				$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES,false)."');return false\" \\3";
+				$text = preg_replace($patterns, $replacement, $text);
 			}
-			return empty($attrs['widget']) ? '' : displayWidget($attrs['widget'], $attrs);
-		}, $text);
-
-		// 다운로드 권한이 없으면 처리
-		$_md = __MID__;
-		if(!empty($_md) && !isGrant('download', $_md)) {
-			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
-			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES,false)."');return false\" \\3";
-			$text = preg_replace($patterns, $replacement, $text);
 		}
 
 		return '<div class="'.$class.'">'.$text.'</div>';
