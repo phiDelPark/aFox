@@ -29,7 +29,7 @@
 				</div>
 				<div class="form-group">
 					<label for="id_wr_content"><?php echo getLang('content')?></label>
-					<textarea class="form-control mh-20 vresize" id="id_wr_content" readonly="readonly"><?php echo $is?$DOC['wr_content']:''?></textarea>
+					<textarea class="form-control mh-20 vresize" id="id_wr_content" readonly="readonly"><?php echo $is?escapeHtml(preg_replace('#<br\s*/?>|\s*\r?\n\s*\r?\n#i', "\n", trim(str_replace('&nbsp;', ' ', strip_tags($DOC['wr_content'], '<br>')))), 0):''?></textarea>
 				</div>
 				<div class="area-button">
 					<button type="submit" class="btn btn-warning btn-block"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('delete')?></button>
