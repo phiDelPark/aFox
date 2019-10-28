@@ -35,7 +35,7 @@ if($type === 'gallery') {
 		<?php
 			$w = (100 / $count);
 			foreach ($_list as $val) {
-				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target']).'"'.(empty($target)?'':' target="'.$target.'"').'><img src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="display:inline-block;max-height:150px;margin:0;padding:8px"></a>';
+				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target'],'popup',$target=='_modal'||$target=='_popup'?'1':'').'"'.(empty($target)?'':' target="'.$target.'"').'><img src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="display:inline-block;max-height:150px;margin:0;padding:8px"></a>';
 			}
 		?>
 		</div>
@@ -43,7 +43,7 @@ if($type === 'gallery') {
 		<div class="list-group" role="list">
 		<?php
 			foreach ($_list as $val) {
-				echo '<a class="list-group-item text-ellipsis" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl']).'"'.(empty($target)?'':' target="'.$target.'"').'>'.$val['wr_title'].'</a>';
+				echo '<a class="list-group-item text-ellipsis" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl'],'popup',$target=='_modal'||$target=='_popup'?'1':'').'"'.(empty($target)?'':' target="'.$target.'"').'>'.$val['wr_title'].'</a>';
 			}
 		?>
 		</div >

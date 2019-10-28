@@ -99,6 +99,7 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 	<?php } ?>
 	</article>
 	<footer class="area-text-button clearfix">
+	<?php if(!__POPUP__) { ?>
 		<div class="pull-left">
 			<a class="btn btn-default btn-sm" href="<?php echo getUrl('disp','','srl','','cpage','','rp','') ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a>
 		</div>
@@ -109,10 +110,17 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$DOC['wr_srl'].'" data-param="srl,'.$DOC['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
 			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$DOC['wr_srl'].'" data-param="srl,'.$DOC['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 		</div>
+	<?php } else { ?>
+		<div class="pull-right">
+			<button type="button" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><i class="glyphicon glyphicon-chevron-down" aria-hidden="true"></i> <?php echo getLang('close') ?></button>
+		</div>
+	<?php } ?>
 	</footer>
 </section>
 
 <?php
-	include 'reply.php';
-	include 'list.php';
+	if(!__POPUP__) {
+		include 'reply.php';
+		include 'list.php';
+	}
 ?>
