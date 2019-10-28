@@ -1,6 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
-$pg_content = toHTML($PAGE['pg_content'], $PAGE['pg_type']);
+$pg_content = toHTML(preg_replace('@\[_(/?)(STYLE|SCRIPT)/?_\]@is', '<\\1\\2>', $PAGE['pg_content']), $PAGE['pg_type']);
 echo preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1data-scroll-src\\3', $pg_content);
 ?>
 

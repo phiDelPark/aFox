@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 $default_filter = '';
 $default_change_text = '♡,사랑해';
-$default_regex_text = '/(<[a-z][^>]*)\s(name|translation)=\"((?!(\"|\\\")).*?)\"([^>]*>)/mi,\1\5';
+$default_regex_text = '/(<[a-z][^>]*)\s(translation|class)=\"((?!(\"|\\\")).*?)\"([^>]*>)/mi,\1\5';
 ?>
 
 <div class="form-group">
