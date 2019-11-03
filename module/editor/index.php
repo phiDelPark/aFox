@@ -38,21 +38,25 @@ foreach ($options as $key => $v) {
 		<textarea name="<?php echo $name ?>" class="form-control vresize"<?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo escapeHtml($content) ?></textarea>
 	</div>
 <?php if(!empty($options['statebar'])) { ?>
-	<div class="af-statebar-area clearfix" style="margin-top:3px;height:24px;padding:0 0 0 225px">
-		<div class="btn-group btn-group-xs pull-left" role="toolbar" aria-label="Editor Controls" style="margin-left:-225px">
+	<div class="af-statebar-area clearfix" style="margin-top:3px;height:24px;padding:0 0 0 270px">
+		<div class="btn-group btn-group-xs pull-left" role="toolbar" aria-label="Editor Controls" style="margin-left:-270px">
+			<button type="button" class="btn btn-default" tabindex="-1" aria-label="highlight"><i class="glyphicon glyphicon-text-background" aria-hidden="true" style="text-decoration:underline"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="bold"><i class="glyphicon glyphicon-bold" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="italic"><i class="glyphicon glyphicon-italic" aria-hidden="true"></i></button>
+			<button type="button" class="btn btn-default" tabindex="-1" aria-label="underline"><strong style="font-family:serif;font-size:15px;width:12px;height:12px;line-height:1;text-decoration:underline">U</strong></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="strikeThrough"><strong style="font-family:serif;font-size:15px;width:12px;height:12px;line-height:1;text-decoration:line-through">S</strong></button>
+		</div>
+		<div class="btn-group btn-group-xs pull-left" role="toolbar" aria-label="Editor Controls" style="margin-left:-152px">
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="header"><i class="glyphicon glyphicon-header" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="insertorderedlist"><i class="glyphicon glyphicon-list" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="indent"><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i></button>
 			<button type="button" class="btn btn-default" tabindex="-1" aria-label="codeblock"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>
 		</div>
-		<div class="btn-group btn-group-xs pull-left" role="toolbar" aria-label="Editor Controls" style="margin-left:-55px">
-			<a type="button" class="btn btn-default" tabindex="-1" aria-label="link" data-toggle="popover"><i class="glyphicon glyphicon-link" aria-hidden="true"></i></a>
-			<a type="button" class="btn btn-default" tabindex="-1" aria-label="components" data-toggle="popover"><i class="glyphicon glyphicon-leaf" aria-hidden="true"></i></a>
+		<div class="btn-group btn-group-xs pull-left" role="toolbar" aria-label="Editor Controls" style="margin-left:-53px">
+			<a type="button" class="btn btn-default" tabindex="-1" aria-label="link" data-toggle="popover" data-original-title="" title=""><i class="glyphicon glyphicon-link" aria-hidden="true"></i></a>
+			<a type="button" class="btn btn-default" tabindex="-1" aria-label="components" data-toggle="popover" data-original-title="" title=""><i class="glyphicon glyphicon-leaf" aria-hidden="true"></i></a>
 		</div>
-		<div class="form-control" role="status" aria-label="Editor Status" style="cursor:help;overflow:hidden;white-space:nowrap;color:#aaa;font-size:12px;font-family:Arial;width:100%;height:22px;padding:2px 5px;text-align:right;margin:0 -150px 0 0">
+		<div class="form-control" role="status" aria-label="Editor Status" style="cursor:help;overflow:hidden;white-space:nowrap;color:#aaa;font-size:12px;font-family:Arial;width:100%;height:22px;padding:2px 5px;text-align:right;margin:0 -267px 0 0">
 			<strong>aFox.KR</strong>
 		</div>
 	</div>

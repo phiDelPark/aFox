@@ -425,7 +425,8 @@
 			range;
 
 		if (s.target[0].tagName == 'TEXTAREA') {
-			if (fm !== false) text = text.replace(/%s/, s.text ? s.text : (fm || ''));
+			if (fm !== false)
+				text = text.replace(/%s/, s.text ? s.text : (fm || ''));
 
 			var v = s.target.val(),
 				txtBefore = v.substring(0, s.start),
@@ -449,10 +450,18 @@
 			range = s.selection.getRangeAt(0);
 
 			if (range) {
-				var el = s.window.document.createElement("div");
+				var v = '', el = s.window.document.createElement("div");
 				el.appendChild(range.cloneContents());
 				range.deleteContents();
-				range.insertNode($(text.replace(/%s/, (fm === false ? '' : (el.innerText ? el.innerText : (fm || '')))))[0]);
+				if (fm !== false) {
+					if (el.innerText) {
+						v = el.innerHTML.replace(/(\n|\r)/g, '').replace(/<(br|hr|\/div|\/li|\/?ul|\/?ol|\/?dl|\/th|\/td|\/?tr|table|\/?blockquote|\/?pre|\/?p|\/?h[1-9])(\s[^>]*>|>)/gi, "\n<$1>");
+						v = $('<div>' + v + '</div>').text().replace(/</g, '&lt;').replace(/>/g, '&gt;');
+					} else {
+						v = fm || '';
+					}
+				}
+				range.insertNode($(text.replace(/%s/, v))[0]);
 				if (fm === false) {
 					range.setStart(s.selection.focusNode, s.selection.focusOffset);
 					range.setEnd(s.selection.anchorNode, s.selection.anchorOffset);
@@ -475,6 +484,7 @@
 		switch (cmd) {
 			case 'bold':
 			case 'italic':
+			case 'underline':
 			case 'strikeThrough':
 			case 'insertorderedlist':
 				if ($i[0].tagName == 'TEXTAREA') {
@@ -483,7 +493,10 @@
 							this.paste('**%s**');
 							break;
 						case 'italic':
-							this.paste('`%s`');
+							this.paste('*%s*');
+							break;
+						case 'underline':
+							this.paste('<u>%s</u>');
 							break;
 						case 'strikeThrough':
 							this.paste('~~%s~~');
@@ -497,8 +510,15 @@
 					doc.execCommand(cmd, false, value);
 				}
 				break;
+			case 'highlight':
+				if ($i[0].tagName == 'TEXTAREA') {
+					this.paste('`%s`');
+				} else {
+					this.paste('<code>%s</code>', '...');
+				}
+				break;
 			case 'header':
-				this.paste('<h3>%s</h3>', '...');
+				this.paste('<h2>%s</h2>', '...');
 				break;
 			case 'indent':
 				this.paste('<blockquote>%s</blockquote>', '...');
