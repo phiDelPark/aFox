@@ -267,6 +267,10 @@ blockquote {
 	border-top: 1px solid #eee;
 }
 
+#bdView>article>.wr_extra_vars {
+	margin-bottom: 30px;
+}
+
 #bdView>article>.wr_extra_vars>div {
 	margin: 0 3px 3px;
 	border-bottom: 1px solid #ddd;
@@ -284,8 +288,9 @@ blockquote {
 	padding: 3px 0 3px 8px;
 }
 
-#bdView>article>.wr_extra_vars+.current_content {
-	margin-top: 30px
+#bdView>article>.wr_extra_vars+.current_content>:first-child {
+	margin-top: 0;
+	padding-top: 0;
 }
 
 #bdList .item_area {
