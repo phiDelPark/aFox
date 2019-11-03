@@ -20,6 +20,7 @@
 * Bootstrap
 * Parsedown
 * simpleCAPTCHA
+* Font Awesome (수동)
 
 ### 라이선스
 
