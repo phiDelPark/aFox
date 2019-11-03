@@ -8,18 +8,18 @@ function proc($data) {
 	if(isset($data['new_mb_id'])) $data['mb_id'] = $data['new_mb_id'];
 	$data['mb_id'] = trim($data['mb_id']);
 
-	$mb_nick = cutstr(trim(strip_tags($data['mb_nick'])),11,'');
-	if(empty($data['mb_id'])||empty($mb_nick)) return set_error(getLang('error_request'),4303);
-
-	$data['mb_nick'] = $mb_nick;
-	$data['mb_email'] = trim(strip_tags($data['mb_email']));
-	$data['mb_homepage'] = trim(strip_tags($data['mb_homepage']));
-
-	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['mb_id'])) {
+	if(!preg_match('/^[a-zA-Z]{1}[\w_]{3,10}$/', $data['mb_id'])) {
 		return set_error(getLang('invalid_value', ['id']),2001);
 	}
 
-	if(!preg_match('/^[\w-]+((?:\.|\+|\~)[\w-]+)*@[\w-]+(\.[\w-]+)+$/', $data['mb_email'])) {
+	if(!preg_match('/^[a-zA-Z가-힣ぁ-んァ-ン一-龥]{2,5}$/u', $data['mb_nick'])) {
+		return set_error(getLang('invalid_value', ['nickname']),2001);
+	}
+
+	$data['mb_email'] = trim(strip_tags($data['mb_email']));
+	$data['mb_homepage'] = trim(strip_tags($data['mb_homepage']));
+
+	if(!preg_match('/^[\w]+[\w._%+-]+@[\w.-]+\.[\w]+$/', $data['mb_email'])) {
 		return set_error(getLang('invalid_value', ['email']),2001);
 	}
 
@@ -28,6 +28,9 @@ function proc($data) {
 	}
 
 	if(!empty($data['new_mb_password'])) {
+		if(strlen($data['new_mb_password']) < 4) {
+			return set_error(getLang('invalid_value', ['password']),2001);
+		}
 		if($data['new_mb_password'] !== $data['verify_mb_password']) {
 			return set_error(getLang('msg_diff_password'),503);
 		}

@@ -92,7 +92,7 @@
 				<div class="pull-left">
 					<label for="id_mb_id"><?php echo getLang('id')?></label>
 					<div class="form-inline">
-						<input type="text" name="new_mb_id" class="form-control" id="id_mb_id" required maxlength="11" pattern="^[a-zA-Z]+\w{2,}$">
+						<input type="text" name="new_mb_id" class="form-control" id="id_mb_id" required minlength="4" maxlength="11" pattern="^[a-zA-Z]{1}[\w_]{3,10}$">
 						<input type="hidden" name="mb_id" value="" />
 					</div>
 				</div>
@@ -106,7 +106,7 @@
 			<div class="form-group">
 				<label for="id_mb_password"><?php echo getLang('password')?></label>
 				<div class="form-inline">
-					<input type="password" name="new_mb_password" class="form-control" id="id_mb_password" placeholder="<?php echo getLang('password')?>" required>
+					<input type="password" name="new_mb_password" class="form-control" id="id_mb_password" placeholder="<?php echo getLang('password')?>" required minlength="4">
 					<input type="password" name="verify_mb_password" class="form-control" placeholder="<?php echo getLang('verify_password')?>" required>
 				</div>
 				<p class="help-block"><?php echo getLang('desc_mb_password')?></p>
@@ -139,11 +139,11 @@
 			</div>
 			<div class="form-group">
 				<label for="id_mb_nick"><?php echo getLang('nickname')?></label>
-				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" maxlength="11" required>
+				<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" minlength="2" maxlength="5" required pattern="^[a-zA-Z가-힣ぁ-んァ-ン一-龥]{2,5}$">
 			</div>
 			<div class="form-group">
 				<label for="id_mb_email"><?php echo getLang('email')?></label>
-				<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" required>
+				<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" required pattern="^[\w]+[\w._%+-]+@[\w.-]+\.[\w]+$">
 			</div>
 			<div class="form-group">
 				<label for="id_mb_homepage"><?php echo getLang('homepage')?></label>

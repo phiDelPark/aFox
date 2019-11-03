@@ -10,7 +10,7 @@
 		</div>
 		<div class="panel-body" style="padding:25px 20px 20px">
 			<div class="form-group">
-				<input type="text" class="form-control" name="mb_id" maxlength="20" placeholder="<?php echo getLang('id')?>" required>
+				<input type="text" class="form-control" name="mb_id" minlength="2" maxlength="20" placeholder="<?php echo getLang('id')?>" required>
 			</div>
 			<div class="form-group">
 				<input type="password" class="form-control" name="mb_password" placeholder="<?php echo getLang('password')?>" required>

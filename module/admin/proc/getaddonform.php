@@ -62,7 +62,7 @@ function proc($data) {
 
 		echo '<hr style="margin:25px 0 20px">
 			<a href="#" style="display:block;padding:5px" onclick="jQuery(this).next().removeClass(\'hide\').end().remove();return false">'.getLang('advanced_setup').'</a>
-			<div class="hide"><div><label>'.getLang('md_id').':</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="include"'.($_ADDON['access_mode']!='exclude'?' checked="checked"':'').'> '.getLang('include').'</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="exclude"'.($_ADDON['access_mode']=='exclude'?' checked="checked"':'').'> '.getLang('exclude').'</label></div><p class="help-block">'.getLang('desc_access_md_id').'</p><div>';
+			<div class="hide"><div><label>'.getLang('md_id').':</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="include"'.($_ADDON['access_mode']!='exclude'?' checked="checked"':'').'> '.getLang('include').'</label>&nbsp;&nbsp;<label><input name="access_mode" type="radio" value="exclude"'.($_ADDON['access_mode']=='exclude'?' checked="checked"':'').'> '.getLang('exclude').'</label></div><p class="help-block">'.getLang('desc_access_md_id').'</p><div style="word-break:break-word">';
 
 		$access_md_ids = [];
 		if(!empty($_ADDON['access_md_ids'])) {
