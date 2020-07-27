@@ -59,7 +59,7 @@ if(!defined('__AFOX__')) exit();
 	function getDocumentList($id, $page, $search = '', $category = '', $order = 'wr_regdate', $callback = null) {
 		$schs = [];
 		if(!empty($search)) {
-			$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tag'=>'wr_tags','date'=>'wr_regdate'];
+			$schkeys = [''=>'wr_title','title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tag'=>'wr_tags','date'=>'wr_regdate'];
 			$ss = explode(':', $search);
 			if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
 				$search = trim(implode(':', array_slice($ss,1)));
