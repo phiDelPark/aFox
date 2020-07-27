@@ -51,7 +51,7 @@
 			if(link_blank === true) {
 				$('.current_content a[href]').each(function(){
 					var target = $(this).attr('target') || '';
-					if(target == '')
+					if(target == '' && module == 'board')
 						$(this).attr('target', '_blank');
 					else if(target == '_modal')
 					{
