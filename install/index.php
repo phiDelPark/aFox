@@ -497,9 +497,9 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 if (empty($row['th_id'])) {
 	$tmp = [];
 	$tmp['carousel_item_1'] = '<h1>헤드라인</h1><br><p>이것은 에이폭스의 헤드라인 예제입니다.<br>이 헤드라인은 테마 설정에서 사용자가 원하는 대로 작성하시면 됩니다.<br>더 자세한 내용이 궁금하시면 프로젝트 페이지에 방문해주세요.</p><br><a class="btn btn-primary" href="#">오늘 가입</a>';
-	$tmp['carousel_item_2'] = '<h1>두번째 헤드라인</h1><br><p>에이폭스는 편하고 쉽게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS입니다.<br>afox에 의해 디자인되고 만들어 졌으며 코드 기여자의 도움과 코어 팀에 의해 유지보수 됩니다.</p><br><br><a class="btn btn-primary" href="#">자세히 알아보기</a>';
-	$tmp['carousel_item_3'] = '<h1>마지막 예제 하나 더</h1><br><p>에이폭스는 각각의 기능과 디자인이 구조적으로 연결되는 모듈형 구조로 개발 및 유지보수를 쉽게 하도록 도와주며 관리자는 손쉽게 설정과 디자인을 변경할 수 있으며 여러분만의 개성을 가진 웹 사이트를 만들 수 있습니다.</p><br><a class="btn btn-primary" href="#">갤러리 검색</a>';
-	$tmp['footer_html'] = '에이폭스는 <a href="http://afox.kr" target="_blank">@afox</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.';
+	$tmp['carousel_item_2'] = '<h1>두번째 헤드라인</h1><br><p>에이폭스는 편하고 쉽게 콘텐츠를 발행을 할 수 있도록 하기 위한 CMS입니다.<br>확장형 구조로 모듈, 애드온, 위젯, 에디터, 테마를 기반으로 결과물을 생성합니다.</p><br><br><a class="btn btn-primary" href="#">자세히 알아보기</a>';
+	$tmp['carousel_item_3'] = '<h1>마지막 헤드라인</h1><br><p>에이폭스는 각각의 기능과 디자인이 구조적으로 연결되는 모듈형 구조로 개발 및 유지보수를 쉽게 하도록 도와주며 관리자는 손쉽게 설정과 디자인을 변경할 수 있으며 여러분만의 개성을 가진 웹 사이트를 만들 수 있습니다.</p><br><a class="btn btn-primary" href="#">갤러리 검색</a>';
+	$tmp['footer_html'] = '에이폭스는 <a href="http://afox.kr" target="_blank">@aFox</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.';
 	$tmp = "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],serialize($tmp))."'";
 	$sql = 'INSERT INTO '._AF_THEME_TABLE_.' (`th_id`, `th_extra`) VALUES ("default", '.$tmp.')';
 	DB::query($sql);
