@@ -20,22 +20,33 @@ function proc($data) {
 		$_count = empty($_this['md_list_count'])?20:$_this['md_list_count'];
 	}
 
-	$schs = [];
+	$_wheres = ['md_id{IN}'=>implode(',', $_mids),'(_AND_)' =>[],'(_OR_)'=>[]];
+
 	if(!empty($search)) {
-		$schkeys = [''=>'wr_title','title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tag'=>'wr_tags','date'=>'wr_regdate'];
-		$ss = explode(':', $search);
-		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
-			$search = trim(implode(':', array_slice($ss,1)));
-			if(!empty($search)) $schs = [$schkeys[$ss[0]].'{LIKE}'=>($ss[0]==='date'?'':'%').$search.'%'];
-		} else {
-			$schs = ['wr_title{LIKE}'=>'%'.$search.'%', 'wr_content{LIKE}'=>'%'.$search.'%'];
+		$schkeys = [''=>'wr_title','title'=>'wr_title','content'=>'wr_content','tag'=>'wr_tags','nick'=>'mb_nick','date'=>'wr_regdate'];
+		$ss = explode(':', trim($search));
+		$schkey = count($ss)>1 ? $schkeys[strtolower($ss[0])] : '';
+		if($schkey != '') $search = implode(':', array_slice($ss,1));
+		if(!empty($search)) {
+			$search = trim($search);
+			$and_or = strpos($search, '&') === 0 ? '(_AND_)' : '(_OR_)';
+			if($and_or == '(_AND_)') $search = substr($search, 1);
+			$search = explode(' ', $search);
+			$index = 0;
+			foreach($search as $v) {
+				if(!empty($v)) {
+					if($schkey == '') {
+						$_wheres[$and_or]['wr_title{LIKE}['.$index.']'] = '%'.$v.'%';
+						$_wheres[$and_or]['wr_content{LIKE}['.$index.']'] = '%'.$v.'%';
+					} else {
+						$v = ($schkey=='mb_nick'||$schkey=='wr_regdate'?'':'%').$v.'%';
+						$_wheres[$and_or][$schkey.'{LIKE}['.$index.']'] = $v;
+					}
+					$index++;
+				}
+			}
 		}
 	}
-
-	$_wheres = [
-		'md_id{IN}'=>implode(',', $_mids),
-		'(_OR_)' =>$schs
-	];
 
 	//if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
 

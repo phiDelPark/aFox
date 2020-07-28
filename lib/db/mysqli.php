@@ -80,23 +80,23 @@ class DB {
 				if(count($tmp) > 0) $result[] = '('.implode(' '.$type.' ', $tmp).')';
 			} else {
 				$operator = '=';
-				//(=|<>|<=|>=|<|>|IN|LIKE|IS)
-				if(preg_match("/(.+){(=|<>|<=|>=|<|>|[A-Z]+)}$/", $field, $m)) {
-					$field = $m[1];
-					$operator = $m[2];
-					if($operator == 'IS') {
-						if(strpos($field, '^') !== 0) $field = '^'.$field;
-					} elseif($operator == 'IN') {
-						if(strpos($field, '^') !== 0) $field = '^'.$field;
-						$value = explode(',', $value);
-						if(count($value)===0 || empty($value[0])) continue;
-						foreach ($value as $k=>$v) $value[$k] = self::__quotes($v);
-						$value = '('.implode(',', $value).')';
+				$noquote = strpos($field, '^') === 0;
+				if($noquote) $field = substr($field, 1);
+				//인덱스... 일단 만들어둠
+				if(preg_match("/^(.+)\[([0-9]+)\]$/", $field, $m)) {
+					$field = $m[1]; $index = $m[2];
+				}
+				//(=|<>|<=|>=|<|>|IS|IN|LIKE|RLIKE)
+				if(preg_match("/^(.+){(=|<>|<=|>=|<|>|[A-Z]+)}$/", $field, $m)) {
+					$field = $m[1]; $operator = $m[2];
+					$noquote = $noquote || $operator == 'IS' || $operator == 'IN';
+					if($operator == 'IN') {
+						$tmp = []; $value = explode(',', $value);
+						foreach ($value as $v) { if(!empty($v)) $tmp[$v] = self::__quotes($v); }
+						if(count($tmp)===0) continue; $value = '('.implode(',', $tmp).')';
 					}
 				}
-				if(strpos($field, '^') === 0)
-					$field = substr($field, 1);
-				else $value = self::__quotes($value);
+				if(!$noquote) $value = self::__quotes($value);
 				if(empty($field) && !empty($value)) $result[] = $value;
 				else $result[] = sprintf("`%s`%s %s", $field, $operator, $value);
 			}
@@ -190,8 +190,7 @@ class DB {
 		if(self::$link === null) {self::connect();}
 		$data = [];
 		$sql = sprintf("SELECT %s FROM %s%s", $select, $table, self::__extra());
-		self::$info['last_query'] = $sql;
-
+		self::$info['last_query'] = $sql;		
 		$result = mysqli_query(self::$link, $sql);
 		if(mysqli_errno(self::$link)){
 			throw new Exception(mysqli_error(self::$link), mysqli_errno(self::$link));
