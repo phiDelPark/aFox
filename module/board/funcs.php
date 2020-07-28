@@ -60,7 +60,7 @@ if(!defined('__AFOX__')) exit();
 		$_wheres = ['md_id'=>$id,'(_AND_)' =>empty($category)?[]:['wr_category'=>$category],'(_OR_)'=>[]];
 
 		if(!empty($search)) {
-			$schkeys = [''=>'wr_title','title'=>'wr_title','content'=>'wr_content','tag'=>'wr_tags','nick'=>'mb_nick','date'=>'wr_regdate'];
+			$schkeys = [''=>'wr_title','title'=>'wr_title','text'=>'wr_content','content'=>'wr_content','tag'=>'wr_tags','nick'=>'mb_nick','date'=>'wr_regdate'];
 			$ss = explode(':', trim($search));
 			$schkey = count($ss)>1 ? $schkeys[strtolower($ss[0])] : '';
 			if($schkey != '') $search = implode(':', array_slice($ss,1));

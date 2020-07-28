@@ -134,7 +134,7 @@
 				<form class="navbar-form navbar-right" role="search" action="<?php echo getUrl('') ?>" method="get">
 					<div class="form-group">
 						<input type="hidden" name="id" value="search">
-						<input type="text" name="combine" class="form-control" placeholder="<?php echo getLang('Search_text')?>" required>
+						<input type="text" name="combine" class="form-control" placeholder="<?php echo getLang('search_word')?>" required>
 					</div>
 					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> <?php echo getLang('Search')?></button>
 				</form>
