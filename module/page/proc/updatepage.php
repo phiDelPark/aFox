@@ -136,7 +136,7 @@ function proc($data) {
 				// 실행 가능한 파일 못하게 처리
 				$fileext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', ('.'.$fileext));
 
-				$filename = md5($filename.time().$i) . '.' . $fileext;
+				$filename = md5($filename.time().$i) . $fileext;
 				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/1/' . $filename;
 
 				$ret = moveUpFile($file, $file_dests[$i], 0);

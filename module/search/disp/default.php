@@ -39,6 +39,7 @@ function proc($data) {
 						$_wheres[$and_or]['wr_title{LIKE}['.$index.']'] = '%'.$v.'%';
 						$_wheres[$and_or]['wr_content{LIKE}['.$index.']'] = '%'.$v.'%';
 					} else {
+						if($schkey=='wr_regdate') $v = str_replace('/', '-', $v);
 						$v = ($schkey=='mb_nick'||$schkey=='wr_regdate'?'':'%').$v.'%';
 						$_wheres[$and_or][$schkey.'{LIKE}['.$index.']'] = $v;
 					}
