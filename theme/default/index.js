@@ -6,7 +6,7 @@
 (function($) {
 	'use strict';
 
-	$(window).load(function() {
+	$(window).on('load', function() {
 		var loginformhtml = '<form action="%s" method="post" autocomplete="off"><div class="form-group"><input type="text" class="form-control" name="mb_id" minlength="2" maxlength="20" placeholder="%s" required></div><div class="form-group"><input type="password" class="form-control" name="mb_password" placeholder="%s" required></div><div class="captcha-group" style="display:none"></div><label class="checkbox" tabindex="0"><input type="checkbox" name="auto_login" value="1"><span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span> %s</label><p></p><button type="submit" style="display:none">button</button></form>';
 		var captchahtml = ('<div class="captcha-group clearfix"><div class="form-group pull-left"><img src="%s" alt="CAPTCHA code" width="162" height="77"></div><div class="form-group pull-right"><input type="text" class="form-control" placeholder="%s" name="captcha_code" required></div></div>').sprintf('./common/img/loader.gif', $_LANG['captcha_code']);
 

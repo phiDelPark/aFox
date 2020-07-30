@@ -210,11 +210,6 @@ jQuery(function($) {
 		}
 	}
 
-	$.siteMapItemSave = window.siteMapItemSave = function(i){
-		$('#siteMap form[data-type=' + i + ']').submit();
-		return false;
-	};
-
 	$.siteMapItemAdd = window.siteMapItemAdd = function(i){
 		$($('#siteMap_item_template').html())
 			.find('input._item_key').val(siteMap_tempKey--).end()

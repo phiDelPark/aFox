@@ -1,6 +1,6 @@
 @charset "utf-8";
 
-#siteMap form{margin-left:70px}
+#siteMap form{margin:0}
 #siteMap ul{margin:0;padding:0;list-style:none}
 #siteMap .lined ul{padding:0;margin:0;border-bottom:1px solid #eee;zoom:1}
 #siteMap .lined li{padding:0;margin:0;cursor:all-scroll;list-style:none;zoom:1}
@@ -34,6 +34,7 @@
 #siteMap .draggable .moveTo{background-color:#ddd}
 #siteMap .draggable .summary{border-left:1px solid #ccc;padding-left:10px;margin-left:10px;font-size:11px;color:#999}
 #siteMap .form-inline{cursor:move}
+#siteMap .form-data-set{margin:0 0 0 70px}
 #siteMapRoot1 .input-sm,#siteMapRoot2 .input-sm{max-width:180px;display:inline;margin:5px}
 #siteMapRoot1 .side input[type="image"],#siteMapRoot2 .side input[type="image"]{cursor:pointer}
 @media(max-width:992px) {
@@ -48,9 +49,8 @@
 		display: inline-block;
 		margin:0 10px 10px 0;
 	}
-	#siteMap form {
+	#siteMap .form-data-set {
 		margin-left: 0;
-		margin-top: 0;
 	}
 	#siteMap .sitemap-item{
 		white-space: nowrap;

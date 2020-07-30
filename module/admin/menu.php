@@ -9,19 +9,17 @@ if (!empty($menus['error'])) messageBox($menus['message'],$menus['error'], false
 <script src="<?php echo _AF_URL_ ?>module/admin/sitemap/sitemap.js"></script>
 
 <div id="siteMap">
-<div class="row menu">
-	<div class="col-lg-12">
+	<div class="row menu">
+		<div class="col-lg-12">
 
-		<h5><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i> <strong><?php echo getLang('main_menu')?></strong></h5>
-		<div class="panel panel-default">
-			<div class="panel-body clearfix">
-
-				<header class="pull-left">
-				<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(1);" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
-				<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return siteMapItemSave(1);" style="cursor:pointer"><br><?php echo getLang('save')?></div>
-				</header>
-
-				<form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off" data-type="1">
+			<h5><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i> <strong><?php echo getLang('main_menu')?></strong></h5>
+			<div class="panel panel-default">
+				<form class="panel-body clearfix" action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off">
+					<header class="pull-left">
+					<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(1);" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
+					<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return this.submit()" style="cursor:pointer"><br><?php echo getLang('save')?></div>
+					</header>
+					<div class="form-data-set">
 					<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
 					<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
 					<input type="hidden" name="act" value="updateMenu">
@@ -71,25 +69,21 @@ if (!empty($menus['error'])) messageBox($menus['message'],$menus['error'], false
 				?>
 
 					</ul>
+					</div>
 				</form>
-
 			</div>
 		</div>
 	</div>
-</div>
-
-<div class="row menu">
-	<div class="col-lg-12">
-		<h5><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i> <strong><?php echo getLang('foot_menu')?></strong></h5>
-		<div class="panel panel-default">
-			<div class="panel-body clearfix">
-
-				<header class="pull-left">
-				<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(2);" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
-				<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return siteMapItemSave(2);" style="cursor:pointer"><br><?php echo getLang('save')?></div>
-				</header>
-
-				<form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off" data-type="2">
+	<div class="row menu">
+		<div class="col-lg-12">
+			<h5><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i> <strong><?php echo getLang('foot_menu')?></strong></h5>
+			<div class="panel panel-default">
+				<form class="panel-body clearfix" action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off">
+					<header class="pull-left">
+					<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(2);" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
+					<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return this.submit()" style="cursor:pointer"><br><?php echo getLang('save')?></div>
+					</header>
+					<div class="form-data-set">
 					<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
 					<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
 					<input type="hidden" name="act" value="updateMenu">
@@ -140,12 +134,11 @@ if (!empty($menus['error'])) messageBox($menus['message'],$menus['error'], false
 				?>
 
 					</ul>
+					</div>
 				</form>
-
 			</div>
 		</div>
 	</div>
-</div>
 </div>
 
 
