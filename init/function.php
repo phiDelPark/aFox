@@ -748,6 +748,16 @@ if(!defined('__AFOX__')) exit();
 		global $_DATA;
 		global $_MEMBER;
 
+		function __module_call($tpl_path, $tpl_file, $_result) {
+			global $_CFG;
+			global $_DATA;
+			global $_MEMBER;
+			$_{__MODULE__} = $_result;
+			unset($_result);
+			@include_once $tpl_path . 'common.php';
+			include $tpl_path . $tpl_file;
+		};
+
 		$trigger = $_DATA['disp'] ? $_DATA['disp'] : 'Default';
 		$callproc = 'disp'.ucwords(__MODULE__).'Default';
 
@@ -762,24 +772,19 @@ if(!defined('__AFOX__')) exit();
 			$_result = set_error(getLang('error_request'),4303);
 		}
 
-		if(!empty($_result['error'])) {
+		if(empty($_result['error'])) {
+			// 테마에 스킨(tpl)이 있으면 사용
+			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
+			$tpl_file = (empty($_result['tpl']) ? 'default' : $_result['tpl']).'.php';
+			if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
+			__module_call($tpl_path, $tpl_file, $_result);
+		} else {
 			// 에러 번호가 4501 이면 로그인 폼 보여줌
 			if($_result['error'] == 4501 && empty($_MEMBER)) {
 				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
 			} else {
 				messageBox($_result['message'], $_result['error']);
 			}
-		} else {
-			unset($trigger);
-			unset($callproc);
-			// 테마에 스킨(tpl)이 있으면 사용
-			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
-			$tpl_file = (empty($_result['tpl']) ? 'default' : $_result['tpl']).'.php';
-			if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
-			$_{__MODULE__} = $_result;
-			unset($_result);
-			@include_once $tpl_path . 'common.php';
-			include $tpl_path . $tpl_file;
 		}
 	}
 
@@ -872,26 +877,21 @@ if(!defined('__AFOX__')) exit();
 			$msg .= 'panel panel-'. $a_type[$type] . '" role="alert"><div class="panel-heading"><h3 class="panel-title">';
 			$msg .= '<i class="glyphicon glyphicon-'.$a_icon[$type].'" aria-hidden="true"></i> '.$title.'</h3></div><div class="panel-body">';
 		}
-		$msg .= $message . '</div></div>';
-
-		echo $msg;
+		echo $msg .  $message . '</div></div>';
 	}
 
-	function addCSS($src, $media = '') {
-		global $_ADDELEMENTS;
-		if (isset($_ADDELEMENTS['CSS'][$src])) return;
-		$_ADDELEMENTS['CSS'][$src] = empty($media) ? 1 : $media;
+	function addJSLang($langs) {
+		global $_ADDELEMENTS; $_ADDELEMENTS['LANG'][] = $langs;
 	}
 
 	function addJS($src) {
 		global $_ADDELEMENTS;
-		if (isset($_ADDELEMENTS['JS'][$src])) return;
-		$_ADDELEMENTS['JS'][$src] = 1;
+		if (!isset($_ADDELEMENTS['JS'][$src])) $_ADDELEMENTS['JS'][$src] = 1;
 	}
 
-	function addJSLang($langs) {
+	function addCSS($src, $media = '') {
 		global $_ADDELEMENTS;
-		$_ADDELEMENTS['LANG'][] = $langs;
+		if (!isset($_ADDELEMENTS['CSS'][$src])) $_ADDELEMENTS['CSS'][$src] = empty($media) ? 1 : $media;
 	}
 
 /* End of file function.php */

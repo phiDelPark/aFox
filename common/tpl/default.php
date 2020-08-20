@@ -69,12 +69,12 @@ foreach ($_ADDELEMENTS['LANG'] as $val) {
 	}
 }
 echo '</script>'."\n";
-foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {
+foreach (array_reverse($_ADDELEMENTS['CSS']) as $key=>$val) {
 	if ($val === 1 || is_string($val)) {
 		echo '<link href="'.$key.'" rel="stylesheet"'.($val!==1?' media="'.$val.'"':'').'>';
 	}
 }
-foreach ($_ADDELEMENTS['JS'] as $key=>$val) {
+foreach (array_reverse($_ADDELEMENTS['JS']) as $key=>$val) {
 	if ($val === 1) echo '<script src="'.$key.'"></script>';
 }
 ?>

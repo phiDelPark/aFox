@@ -71,8 +71,8 @@ blockquote {
 	min-height: 300px;
 }
 
-#bdView>article>.current_content th,
-#bdView>article>.current_content td {
+#bdView>article>.current_content th:not([class]),
+#bdView>article>.current_content td:not([class]) {
 	padding: 2px;
 }
 
