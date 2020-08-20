@@ -27,11 +27,11 @@ blockquote {
 }
 
 h1, h2 {
-	font-size: 24px;
-	margin-top: 20px;
-	margin-bottom: 10px;
+	font-size: 26px;
+	margin-top: .85em;
+	margin-bottom: .5em;
 	font-family: inherit;
-	font-weight: 500;
+	font-weight: bold;
 	line-height: 1.1;
 	color: inherit;
 	padding-bottom: .2em;

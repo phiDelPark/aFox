@@ -71,6 +71,19 @@ blockquote {
 	min-height: 300px;
 }
 
+#bdView>article>.current_content th,
+#bdView>article>.current_content td {
+	padding: 2px;
+}
+
+#bdView>article>.current_content h1,
+#bdView>article>.current_content h2 {
+	font-weight: bold;
+	padding-bottom: .2em;
+	margin-bottom: .5em;
+	border-bottom: 2px dashed #eee;
+}
+
 #bdReply .reply-item .current_replies {
 	overflow-x: hidden;
 }
@@ -288,7 +301,8 @@ blockquote {
 	padding: 3px 0 3px 8px;
 }
 
-#bdView>article>.wr_extra_vars+.current_content>:first-child {
+#bdView>article>.wr_extra_vars+.current_content>:first-child,
+#bdView>article>.wr_extra_vars+.current_content>:first-child>:first-child {
 	margin-top: 0;
 	padding-top: 0;
 }
