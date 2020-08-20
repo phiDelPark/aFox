@@ -37,12 +37,12 @@ var request_uri     = "<?php echo getRequestUri() ?>";
 <?php
 	include _AF_ADMIN_PATH_ . 'admin.php';
 	echo '<script>';
-	$tmp = [];
-	foreach ($_ADDELEMENTS['LANG'] as $val) {
-		foreach ($val as $key){
-			if(empty($tmp[$key])){
-			$tmp[$key]=1;
-			echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';
+	foreach ($_ADDELEMENTS['LANG'] as $key) {
+		foreach ($key as $src=>$val){
+			if(!empty($val) && empty($_ADDELEMENTS['LANG'][$val][0])) {
+				$_ADDELEMENTS['LANG'][$key][$src] = '';
+				$_ADDELEMENTS['LANG'][$val][0] = getLang($val);
+				echo '$_LANG[\''.$val.'\']="'.$_ADDELEMENTS['LANG'][$val][0].'";';
 			}
 		}
 	}

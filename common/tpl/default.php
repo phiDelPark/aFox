@@ -42,41 +42,32 @@ var language        = "<?php echo _AF_LANG_ ?>";
 var current_url     = "<?php echo getUrl() ?>";
 var request_uri     = "<?php echo getRequestUri() ?>";
 </script>
-<?php
-	@include _AF_THEME_PATH_ . 'common.php';
-	foreach ($_ADDELEMENTS['CSS'] as $key=>$val) {
-		echo '<link href="'.$key.'" rel="stylesheet"'.($val!==1?' media="'.$val.'"':'').'>'."\n";
-		$_ADDELEMENTS['CSS'][$key] = 0;
-	}
-	foreach ($_ADDELEMENTS['JS'] as $key=>$val) {
-		echo '<script src="'.$key.'"></script>'."\n";
-		$_ADDELEMENTS['JS'][$key] = 0;
-	}
-?>
+<?php @include _AF_THEME_PATH_ . 'head.php'; ?>
 </head>
 <body>
 <?php
-include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'index')) . '.php';
-
-$tmp = [];
-echo '<script>';
-foreach ($_ADDELEMENTS['LANG'] as $val) {
-	foreach ($val as $key){
-		if(empty($tmp[$key])){
-			$tmp[$key]=1;
-			echo '$_LANG[\''.$key.'\']="'.getLang($key).'";';
+	include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'index')) . '.php';
+	echo '<script>';
+	foreach ($_ADDELEMENTS['LANG'] as $key) {
+		foreach ($key as $src=>$val){
+			if(!empty($val) && empty($_ADDELEMENTS['LANG'][$val][0])) {
+				$_ADDELEMENTS['LANG'][$key][$src] = '';
+				$_ADDELEMENTS['LANG'][$val][0] = getLang($val);
+				echo '$_LANG[\''.$val.'\']="'.$_ADDELEMENTS['LANG'][$val][0].'";';
+			}
 		}
 	}
-}
-echo '</script>'."\n";
-foreach (array_reverse($_ADDELEMENTS['CSS']) as $key=>$val) {
-	if ($val === 1 || is_string($val)) {
-		echo '<link href="'.$key.'" rel="stylesheet"'.($val!==1?' media="'.$val.'"':'').'>';
+	echo '</script>'."\n";
+	foreach (['M', 'A'] as $key) {
+		foreach ($_ADDELEMENTS[$key.'_CSS'] as $src=>$val) {
+			if ($val === 1 || is_string($val)) {
+				echo '<link href="'.$src.'" rel="stylesheet"'.($val!==1?' media="'.$val.'"':'').'>';
+			}
+		}
+		foreach ($_ADDELEMENTS[$key.'_JS'] as $src=>$val) {
+			if ($val === 1) echo '<script src="'.$src.'"></script>';
+		}
 	}
-}
-foreach (array_reverse($_ADDELEMENTS['JS']) as $key=>$val) {
-	if ($val === 1) echo '<script src="'.$key.'"></script>';
-}
 ?>
 </body>
 </html>

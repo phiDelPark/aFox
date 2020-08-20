@@ -742,6 +742,7 @@ if(!defined('__AFOX__')) exit();
 		return '<div class="'.$class.'">'.$text.'</div>';
 	}
 
+	static $__MODULE_DISPLAY_CALL = null;
 	function displayModule() {
 		if(!__MODULE__) return;
 		global $_CFG;
@@ -752,9 +753,12 @@ if(!defined('__AFOX__')) exit();
 			global $_CFG;
 			global $_DATA;
 			global $_MEMBER;
+			global $__MODULE_DISPLAY_CALL;
 			$_{__MODULE__} = $_result;
 			unset($_result);
+			$__MODULE_DISPLAY_CALL = true;
 			@include_once $tpl_path . 'common.php';
+			$__MODULE_DISPLAY_CALL = false;
 			include $tpl_path . $tpl_file;
 		};
 
@@ -884,15 +888,15 @@ if(!defined('__AFOX__')) exit();
 		global $_ADDELEMENTS; $_ADDELEMENTS['LANG'][] = $langs;
 	}
 
-	function addJS($src) {
+	function addELEMENT($key, $src, $option = '') {
 		global $_ADDELEMENTS;
-		if (!isset($_ADDELEMENTS['JS'][$src])) $_ADDELEMENTS['JS'][$src] = 1;
+		global $__MODULE_DISPLAY_CALL;
+		$key = ($__MODULE_DISPLAY_CALL === true ? 'M' : 'A') . $key;
+		if(!isset($_ADDELEMENTS[$key][$src])) $_ADDELEMENTS[$key][$src] = empty($option) ? 1 : $option;
 	}
 
-	function addCSS($src, $media = '') {
-		global $_ADDELEMENTS;
-		if (!isset($_ADDELEMENTS['CSS'][$src])) $_ADDELEMENTS['CSS'][$src] = empty($media) ? 1 : $media;
-	}
+	function addJS($src) { addELEMENT('_JS', $src); }
+	function addCSS($src, $media = '') { addELEMENT('_CSS', $src, $media); }
 
 /* End of file function.php */
 /* Location: ./init/function.php */
