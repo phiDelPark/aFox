@@ -1,8 +1,10 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
+if (!__MODAL__) {
 addCSS(_AF_URL_ . 'module/page/tpl/page'. (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css'));
 addJS(_AF_URL_ . 'module/page/tpl/page'. (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
+}
 
 $PAGE = &$_{'page'};
 

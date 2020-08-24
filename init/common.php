@@ -101,7 +101,8 @@ if(!empty($_DATA['id'])) {
 
 define('__MID__', $_DATA['id']);
 define('__MODULE__', $_DATA['module']);
-define('__POPUP__', !empty($_DATA['popup']) && $_DATA['popup'] === '1');
+define('__MODAL__', !empty($_DATA['modal']) && $_DATA['modal'] === '1');
+define('__POPUP__', __MODAL__ || (!empty($_DATA['popup']) && $_DATA['popup'] === '1'));
 // 전체 로그인 사용시 로그인 유저가 아니면
 define('__FULL_LOGIN__', $_CFG['use_full_login'] == 1 && empty($_MEMBER));
 

@@ -9,6 +9,7 @@ if(empty($_THEME)) {
 }
 addJSLang(['ok','cancel','yes','no','calling_server']);
 ?>
+<?php if (!__MODAL__) { ?>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -45,13 +46,13 @@ var request_uri     = "<?php echo getRequestUri() ?>";
 <?php @include _AF_THEME_PATH_ . 'head.php'; ?>
 </head>
 <body>
+<?php } ?>
 <?php
 	include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'index')) . '.php';
 	echo '<script>';
 	foreach ($_ADDELEMENTS['LANG'] as $key) {
 		foreach ($key as $src=>$val){
 			if(!empty($val) && empty($_ADDELEMENTS['LANG'][$val][0])) {
-				$_ADDELEMENTS['LANG'][$key][$src] = '';
 				$_ADDELEMENTS['LANG'][$val][0] = getLang($val);
 				echo '$_LANG[\''.$val.'\']="'.$_ADDELEMENTS['LANG'][$val][0].'";';
 			}
@@ -69,5 +70,7 @@ var request_uri     = "<?php echo getRequestUri() ?>";
 		}
 	}
 ?>
+<?php if (!__MODAL__) { ?>
 </body>
 </html>
+<?php } ?>

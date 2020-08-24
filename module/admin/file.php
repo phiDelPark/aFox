@@ -10,7 +10,7 @@
 	$dd = _AF_DOCUMENT_TABLE_;
 
 	if($duplicate){
-		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS a.*, d.wr_title FROM $fl as a INNER JOIN $dd as d ON d.wr_srl = a.mf_target, (select mf_target,mf_name,mf_size from $fl where mf_link<>1 and mf_size>0 group by mf_name,mf_size having count(*) > 1) as b WHERE a.mf_link<>1 and a.mf_size=b.mf_size AND a.mf_name=b.mf_name ORDER BY a.mf_name,a.mf_regdate LIMIT $start,$count" , true);
+		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS a.*, d.wr_title FROM $fl as a INNER JOIN $dd as d ON (d.md_id <> '_AFOXtRASH_' and d.wr_srl = a.mf_target), (select mf_target,mf_name,mf_size from $fl where mf_link<>1 and mf_size>0 group by mf_name,mf_size having count(*) > 1) as b WHERE a.mf_link<>1 and a.mf_size=b.mf_size AND a.mf_name=b.mf_name ORDER BY a.mf_name,a.mf_regdate LIMIT $start,$count" , true);
 	}else {
 		$search = '';
 		if(!empty($_DATA['search'])) {
@@ -79,17 +79,26 @@
 		$end_page = $file_list['end_page'];
 
 		foreach ($file_list['data'] as $key => $value) {
+			if($duplicate){
+				$dutmp1 = isset($file_list['data'][$key + 1]) ? $file_list['data'][$key + 1] : ['mf_size'=>0,'mf_name'=>''];
+				$dutmp2 = isset($file_list['data'][$key - 1]) ? $file_list['data'][$key - 1] : ['mf_size'=>0,'mf_name'=>''];
+				if(!(($value['mf_size']===$dutmp1['mf_size'] && $value['mf_name']===$dutmp1['mf_name'])
+					|| ($value['mf_size']===$dutmp2['mf_size'] && $value['mf_name']===$dutmp2['mf_name']))){
+					continue;
+				}
+			}
 			if($duplicate) {
-			$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
-			$filetype = explode('/', $value['mf_type']);
-			$filetype = strtolower(array_shift($filetype));
-			$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
-			$unfilename = _AF_URL_ .'data/attach/'. $filetype . '/' . $value['md_id'] . '/' . $value['mf_target'] . '/' . $value['mf_upload_name'];
-			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row" rowspan="2"><input type="radio" name="mf_standard" value="'.$value['mf_srl'].'" class="data_standard" style="margin-right:5px" data-except-ajax><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="margin-right:5px" data-except-ajax></th>';
-			echo '<td scope="row" rowspan="2" style="padding:2px"><img src="'.($unfilename).'" width="65" height="65"></td>';
-			echo '<td scope="row">'.$value['md_id'].'</td>';
-			echo '<td class="title">'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
-			echo '<td class="hidden-xs">'.shortFileSize($value['mf_size']).'</td>';
+				$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
+				$filetype = explode('/', $value['mf_type']);
+				$filetype = strtolower(array_shift($filetype));
+				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
+				$unfilename = _AF_URL_ .'data/attach/'. $filetype . '/' . $value['md_id'] . '/' . $value['mf_target'] . '/' . $value['mf_upload_name'];
+				echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row" rowspan="2"><input type="radio" name="mf_standard" value="'.$value['mf_srl'].'" class="data_standard" style="margin-right:5px" data-except-ajax><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="margin-right:5px" data-except-ajax></th>';
+				echo '<td scope="row" rowspan="2" style="padding:2px"><img src="'.($unfilename).'" width="65" height="65"></td>';
+				echo '<td scope="row">'.$value['md_id'].'</td>';
+				echo '<td class="title">'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
+				echo '<td class="hidden-xs">'.shortFileSize($value['mf_size']).'</td>';
+
 			} else {
 			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" data-except-ajax>'.$value['md_id'].'</a></th>';
 			echo '<td class="title"'.(empty($value['mf_size'])?' style="text-decoration:line-through"':'').'><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="display:none;margin-right:5px" data-except-ajax>'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';

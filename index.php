@@ -4,7 +4,7 @@ define('__AFOX__', TRUE);
 header('P3P: CP="ALL CURa ADMa DEVa TAIa OUR BUS IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE LOC OTC"');
 @set_time_limit(0);
 ob_start();
-
+//phpinfo();
 // IP 허용/차단
 $is_check_ip = __DIR__ . '/data/config/access_ip.php';
 if(file_exists($is_check_ip)) {

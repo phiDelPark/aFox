@@ -127,7 +127,7 @@ if(!defined('__AFOX__')) exit();
 		$n = func_num_args();
 		$a = func_get_args();
 		if($n == 1 && $a[0] == '') return $uri;
-		$url = $uri . ($_SERVER["QUERY_STRING"] ? '?' . $_SERVER["QUERY_STRING"] : '');
+		$url = $uri . (isset($_SERVER["QUERY_STRING"]) ? '?' . $_SERVER["QUERY_STRING"] : '');
 		return $n > 0 ? call_user_func_array('setUrlQuery', array_merge([$url], $a)) : $url;
 	}
 
@@ -517,7 +517,7 @@ if(!defined('__AFOX__')) exit();
 		// 관리자 모듈은 넘어감
 		if(__MODULE__ == 'admin') return true;
 		if($__triggers == null) {
-			$__triggers = ['A'=>[],'M'=>[]];
+			$__triggers = ['M'=>[], 'A'=>[]];
 			global $_MEMBER;
 			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 			DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
@@ -532,11 +532,11 @@ if(!defined('__AFOX__')) exit();
 				}
 			);
 		}
-		if(count($__triggers['A']) > 0){
-			$result = triggerAddonCall($__triggers['A'], $position, $trigger, $data);
-		}
 		if(count($__triggers['M']) > 0){
 			$result = triggerModuleCall($__triggers['M'], $position, $trigger, $data);
+		}
+		if(count($__triggers['A']) > 0){
+			$result = triggerAddonCall($__triggers['A'], $position, $trigger, $data);
 		}
 		return true;
 	}

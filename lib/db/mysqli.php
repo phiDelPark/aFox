@@ -190,7 +190,7 @@ class DB {
 		if(self::$link === null) {self::connect();}
 		$data = [];
 		$sql = sprintf("SELECT %s FROM %s%s", $select, $table, self::__extra());
-		self::$info['last_query'] = $sql;		
+		self::$info['last_query'] = $sql;
 		$result = mysqli_query(self::$link, $sql);
 		if(mysqli_errno(self::$link)){
 			throw new Exception(mysqli_error(self::$link), mysqli_errno(self::$link));
