@@ -7,7 +7,7 @@ function _get_afox_url(){
   $result = preg_replace('/^\/\~[^\/]+(.*)$/', '$1', $_SERVER['SCRIPT_NAME']);
   $http = 'http' . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on') ? 's' : '') . '://';
   $port=($_SERVER['SERVER_PORT']==80||$_SERVER['SERVER_PORT']==443)?'':':'.$_SERVER['SERVER_PORT'];
-  $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+  $host = str_replace($port,'',isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME']);
   return $http.$host.$port.preg_replace('/module\/editor\/component.php$/', '/', $result);
 }
 define('_AF_URL_', _get_afox_url());
