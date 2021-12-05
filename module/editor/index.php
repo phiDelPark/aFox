@@ -57,7 +57,7 @@ foreach ($options as $key => $v) {
 			<a type="button" class="btn btn-default" tabindex="-1" aria-label="components" data-toggle="popover" data-original-title="" title=""><i class="glyphicon glyphicon-leaf" aria-hidden="true"></i></a>
 		</div>
 		<div class="form-control" role="status" aria-label="Editor Status" style="cursor:help;overflow:hidden;white-space:nowrap;color:#aaa;font-size:12px;font-family:Arial;width:100%;height:22px;padding:2px 5px;text-align:right;margin:0 -267px 0 0">
-			<strong>aFox.KR</strong>
+			<strong>AFoX</strong>
 		</div>
 	</div>
 	<script>

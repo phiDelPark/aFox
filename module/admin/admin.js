@@ -1,7 +1,3 @@
-/*!
- * aFox (http://afox.kr)
- * Copyright 2016 afox, Inc.
- */
  var AF_EDITOR_WR_CONTENT;
  var AF_EDITOR_PG_CONTENT;
  var AF_EDITOR_RP_CONTENT;
