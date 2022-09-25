@@ -307,6 +307,17 @@ blockquote {
 	padding-top: 0;
 }
 
+#bdView.view-type-1>article>.wr_extra_vars+.current_content table {
+	border: 1px solid #eee;
+	width: 100%;
+}
+
+#bdView.view-type-1>article>.wr_extra_vars+.current_content th,
+#bdView.view-type-1>article>.wr_extra_vars+.current_content td {
+	border: 1px solid #eee;
+	padding: 5px;
+}
+
 #bdList .item_area {
 	vertical-align: top;
 	border-bottom: 1px solid #ddd;

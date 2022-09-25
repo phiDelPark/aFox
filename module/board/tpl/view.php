@@ -17,7 +17,7 @@ $is_btn_download = array_search('btn_download',$show_column)!==false;
 $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('wr_update',$show_column)!==false);
 ?>
 
-<section id="bdView">
+<section id="bdView" class="view-type-<?php echo $DOC['wr_type']?>">
 	<header>
 		<h3 class="clearfix"><?php echo ($wr_secret?'<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ':'').$DOC['wr_title']?></h3>
 		<hr class="divider">

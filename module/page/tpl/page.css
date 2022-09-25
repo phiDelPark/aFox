@@ -42,3 +42,14 @@ article>.current_content h2 {
 	padding-bottom: .3em;
 	border-bottom: 1px solid #eaecef;
 }
+
+#pgView.view-type-1 table {
+	border: 1px solid #eee;
+	width: 100%;
+}
+
+#pgView.view-type-1 th,
+#pgView.view-type-1 td {
+	border: 1px solid #eee;
+	padding: 5px;
+}
