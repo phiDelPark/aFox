@@ -12,6 +12,7 @@ $_LANG['modal_image_view'] = '클릭시 모달로 보기';
 $_LANG['common_option'] = '공통 옵션';
 $_LANG['show_good_button'] = '좋아요 버튼';
 $_LANG['show_hate_button'] = '싫어요 버튼';
+$_LANG['search_description'] = '제목 검색은 [:검색어]<br>AND 검색은 [&검색어]';
 
 
 /* End of file ko.php */

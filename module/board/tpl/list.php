@@ -40,7 +40,7 @@ $is_wr_grant = isGrant('write', __MID__);
 		<form class="search-form pull-left col-xs-6 col-sm-4" action="<?php echo getUrl('') ?>" method="get">
 			<div class="input-group">
 				<!-- 기본적으로 OR 검색이며 AND 검색은 [&검색어] 제목 검색은 [:검색어] 또는 [title:검색어] 이며 제목 AND 검색은 [:&검색어] -->
-				<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_word') ?>" required>
+				<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_word') ?>" data-toggle="tooltip" data-placement="top" data-html="true" title="<?php echo getLang('search_description') ?>" onfocus="$(this).tooltip({trigger:'manual'}).tooltip('show')" onblur="$(this).tooltip('hide')" required>
 				<span class="input-group-btn">
 				<?php if(empty($_DATA['search']) || !__MOBILE__) {?><button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button><?php }?>
 				<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
