@@ -720,7 +720,7 @@ if(!defined('__AFOX__')) exit();
 				$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
 				$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
 				// \/ = 줄바꿈
-				$text = str_replace('\\/', '<br />', preg_replace($patterns, $replacement, $text));
+				$text = str_replace('\\n', '<br />', preg_replace($patterns, $replacement, $text));
 			}
 
 			$text = preg_replace_callback('/<img([^>]*\s+widget\s*=[^>]*)>/is', function($m){
