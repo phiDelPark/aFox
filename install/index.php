@@ -89,7 +89,7 @@ if(empty($_POST['db_host'])||empty($_POST['db_port'])||empty($_POST['db_name'])|
 	exit("* 필수 값을 모두 채워 주세요.");
 }
 
-$charset = 'utf8';
+$charset = 'utf8mb4';
 $af_pass = $_POST['af_pass'];
 
 $db_host = $_POST['db_host'];
@@ -171,7 +171,7 @@ $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_CONFIG_TABLE_.' (
 	   lang           CHAR(5)      NOT NULL,
 	   start          CHAR(11)     NOT NULL,
-	   theme          VARCHAR(255) NOT NULL,
+	   theme          VARCHAR(124) NOT NULL,
 	   title          VARCHAR(255) NOT NULL,
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
@@ -187,10 +187,10 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 $_err_keys = _AF_THEME_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_THEME_TABLE_.' (
-	   th_id          VARCHAR(255) NOT NULL,
+	   th_id          VARCHAR(124) NOT NULL,
 	   th_extra       TEXT,
 
-	  UNIQUE KEY ID_UK (th_id))'.$_engine;
+	   UNIQUE KEY ID_UK (th_id))'.$_engine;
 
 DB::query($create_sql);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
@@ -242,7 +242,7 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 $_err_keys = _AF_ADDON_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_ADDON_TABLE_.' (
-	   ao_id          VARCHAR(255) NOT NULL,
+	   ao_id          VARCHAR(124) NOT NULL,
 	   ao_extra       TEXT,
 
 	  UNIQUE KEY ID_UK (ao_id))'.$_engine;
@@ -384,7 +384,7 @@ $create_sql = '
 	   mf_target       INT(11)      NOT NULL,
 	   mf_name         VARCHAR(255) NOT NULL,
 	   mf_upload_name  VARCHAR(255) NOT NULL,
-	   mf_type         VARCHAR(255) NOT NULL,
+	   mf_type         VARCHAR(128) NOT NULL,
 	   mf_size         INT(11)      NOT NULL,
 	   mf_link         CHAR(1)      NOT NULL DEFAULT 0,
 	   mf_download     INT(11)      NOT NULL DEFAULT 0,
@@ -453,7 +453,7 @@ $_err_keys = _AF_TRIGGER_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_TRIGGER_TABLE_.' (
 	   tg_key         CHAR(1)      NOT NULL,
-	   tg_id          VARCHAR(255) NOT NULL,
+	   tg_id          VARCHAR(124) NOT NULL,
 	   use_pc         CHAR(1)      NOT NULL DEFAULT 0,
 	   use_mobile     CHAR(1)      NOT NULL DEFAULT 0,
 	   grant_access   CHAR(1)      NOT NULL DEFAULT 0,
