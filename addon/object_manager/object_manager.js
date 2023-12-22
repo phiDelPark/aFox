@@ -1,5 +1,5 @@
 /*!
- * aFox (https://github.com/phiDelPark/aFox)
+ * aFox (http://afox.kr)
  * Copyright 2016 afox, Inc.
  * Licensed under the MIT license
  */

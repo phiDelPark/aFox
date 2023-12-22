@@ -84,8 +84,7 @@ foreach (['module','id','act','disp'] as $tmp) {
 	}
 }
 
-$_DATA['module'] = isset($_DATA['admin']) ? 'admin' : $_DATA['module'];
-// module, id 가 없으면 시작 페이지
+if(isset($_DATA['admin'])) $_DATA['module'] = 'admin'; // 관리자 모듈 이면
 if(empty($_DATA['module']) && empty($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
 if(!empty($_DATA['id'])) {
 	$tmp = getModule($_DATA['id']);

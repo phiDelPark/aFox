@@ -384,7 +384,8 @@ if(!defined('__AFOX__')) exit();
 		if(is_null($chk) || strlen($chk) !== 1) return false;
 		global $_MEMBER;
 		$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
-		return $rank < 116 && ord($chk) <= $rank; // 0 = 48, z = 122 // s = 115 초과시 에러
+		// [s = admin, m = manager] // 0 = 48, s = 115, 초과시 에러
+		return $rank < 116 && ord($chk) <= $rank;
 	}
 
 	function checkProtect($key) {
