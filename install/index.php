@@ -56,7 +56,7 @@ if(empty($_POST['db_name'])) {
 	echo '<strong style="display:inline-block;width:150px">DB 호스트*</strong> : <input type="text" name="db_host" value="localhost"><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 포트*</strong> : <input type="text" name="db_port" value="3306"><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 이름*</strong> : <input type="text" name="db_name" value=""><br>';
-	echo '<strong style="display:inline-block;width:150px">DB 종류*</strong> : <select name="db_type"><option value="myisam">MyISAM</option><option value="innodb" '.(version_compare(PHP_VERSION, '5.5.0', '>=')?'selected':'').'>InnoDB (COMPACT)</option><option value="innodb00">InnoDB (DYNAMIC)</option><option value="innodb08">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
+	echo '<strong style="display:inline-block;width:150px">DB 종류*</strong> : <select name="db_type"><option value="myisam">MyISAM</option><option value="innodb" '.(version_compare(PHP_VERSION, '5.5.0', '>=')?'selected':'').'>InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 아이디*</strong> : <input type="text" name="db_user" value=""><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 비밀번호*</strong> : <input type="text" name="db_pass" value=""><br><br>';
 	echo '<h3>에이폭스 계정 설정</h3>';
@@ -89,7 +89,7 @@ if(empty($_POST['db_host'])||empty($_POST['db_port'])||empty($_POST['db_name'])|
 	exit("* 필수 값을 모두 채워 주세요.");
 }
 
-$charset = 'utf8';
+$charset = 'utf8mb4';
 $af_pass = $_POST['af_pass'];
 
 $db_host = $_POST['db_host'];
@@ -104,8 +104,8 @@ $domain = empty($__tmp) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('
 $__tmp = trim($_POST['cookie_domain']);
 $cookie_domain = empty($__tmp) ? '' : preg_replace('/https?\:\/\//i', '', str_replace('\\', '/',$_POST['cookie_domain']));
 
-$is_innodb = $_POST['db_type'] == 'innodb16' || $_POST['db_type'] == 'innodb08' || $_POST['db_type'] == 'innodb00' || $_POST['db_type'] == 'innodb';
-$innodb_option = !$is_innodb || $_POST['db_type'] == 'innodb' ? '' : ($_POST['db_type'] == 'innodb00' ? 'dynamic' : ($_POST['db_type'] == 'innodb16' ? '16' : '8'));
+$is_innodb = $_POST['db_type'] == 'innodb16' || $_POST['db_type'] == 'innodb8' || $_POST['db_type'] == 'innodb';
+$innodb_option = !$is_innodb || $_POST['db_type'] == 'innodb' ? '' : ($_POST['db_type'] == 'innodb16' ? '16' : '8');
 
 $o = array(
 'host'=>$db_host,
@@ -154,8 +154,6 @@ if($is_innodb){
 	}
 	if($innodb_option==='') {
 	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPACT DEFAULT CHARSET='.$charset.';';
-	} else if($innodb_option==='dynamic') {
-	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=DYNAMIC DEFAULT CHARSET='.$charset.';';
 	} else {
 	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE='.$innodb_option.' DEFAULT CHARSET='.$charset.';';
 	}
@@ -173,7 +171,7 @@ $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_CONFIG_TABLE_.' (
 	   lang           CHAR(5)      NOT NULL,
 	   start          CHAR(11)     NOT NULL,
-	   theme          VARCHAR(255) NOT NULL,
+	   theme          VARCHAR(124) NOT NULL,
 	   title          VARCHAR(255) NOT NULL,
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
@@ -189,10 +187,10 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 $_err_keys = _AF_THEME_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_THEME_TABLE_.' (
-	   th_id          VARCHAR(255) NOT NULL,
+	   th_id          VARCHAR(124) NOT NULL,
 	   th_extra       TEXT,
 
-	  UNIQUE KEY ID_UK (th_id))'.$_engine;
+	   UNIQUE KEY ID_UK (th_id))'.$_engine;
 
 DB::query($create_sql);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
@@ -244,7 +242,7 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 $_err_keys = _AF_ADDON_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_ADDON_TABLE_.' (
-	   ao_id          VARCHAR(255) NOT NULL,
+	   ao_id          VARCHAR(124) NOT NULL,
 	   ao_extra       TEXT,
 
 	  UNIQUE KEY ID_UK (ao_id))'.$_engine;
@@ -386,7 +384,7 @@ $create_sql = '
 	   mf_target       INT(11)      NOT NULL,
 	   mf_name         VARCHAR(255) NOT NULL,
 	   mf_upload_name  VARCHAR(255) NOT NULL,
-	   mf_type         VARCHAR(255) NOT NULL,
+	   mf_type         VARCHAR(128) NOT NULL,
 	   mf_size         INT(11)      NOT NULL,
 	   mf_link         CHAR(1)      NOT NULL DEFAULT 0,
 	   mf_download     INT(11)      NOT NULL DEFAULT 0,
@@ -455,7 +453,7 @@ $_err_keys = _AF_TRIGGER_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_TRIGGER_TABLE_.' (
 	   tg_key         CHAR(1)      NOT NULL,
-	   tg_id          VARCHAR(255) NOT NULL,
+	   tg_id          VARCHAR(124) NOT NULL,
 	   use_pc         CHAR(1)      NOT NULL DEFAULT 0,
 	   use_mobile     CHAR(1)      NOT NULL DEFAULT 0,
 	   grant_access   CHAR(1)      NOT NULL DEFAULT 0,
