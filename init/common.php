@@ -60,7 +60,19 @@ if(__REQ_METHOD__ == 'JSON') {
 }
 
 // 넘어온 값을 하나로 합침
-$_DATA = is_null($_POST) ? $_GET : (is_null($_GET) ? $_POST : array_merge($_POST, $_GET));
+$_DATA = [];
+if(!empty($_GET)){
+	$_DATA = $_GET;
+	///*첫번째 키가 모듈인지 체크 (.htaccess 대신 사용할때)
+	if(!isset($_DATA['module'])){
+		$tmp = key($_GET);
+		if(file_exists(_AF_MODULES_PATH_ . $tmp . '/index.php')){
+			$_DATA['module'] = $tmp;
+			$_DATA['disp'] = $_DATA[$_DATA['module']];
+		}
+	}//*/
+}
+if(!empty($_POST)) $_DATA = array_merge($_POST, $_DATA);
 unset($_GET);
 unset($_POST);
 
@@ -77,6 +89,7 @@ if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))) {
 	setQuery('','id',empty($_DATA['id'])?'':$_DATA['id'],'srl',empty($_DATA['srl'])?'':$_DATA['srl'],'rp',empty($_DATA['rp'])?'':$_DATA['rp']);
 }
 
+
 // 유효성 검사
 foreach (['module','id','act','disp'] as $tmp) {
 	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp])) {
@@ -84,7 +97,7 @@ foreach (['module','id','act','disp'] as $tmp) {
 	}
 }
 
-if(isset($_DATA['admin'])) $_DATA['module'] = 'admin'; // 관리자 모듈 이면
+// module, id 가 없으면 시작 페이지
 if(empty($_DATA['module']) && empty($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
 if(!empty($_DATA['id'])) {
 	$tmp = getModule($_DATA['id']);

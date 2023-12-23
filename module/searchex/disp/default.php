@@ -2,17 +2,13 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	// 권한 체크
-	if(!isGrant('list', $data['id']) && !isManager($data['id'])) {
-		return set_error(getLang('error_permitted'),4501);
-	}
 
-	$search = empty($data['combine']) ? '' : $data['combine'];
+	$search = empty($data['searchex']) ? '' : $data['searchex'];
 	$page = empty($data['page']) ? 1 : $data['page'];
 
 	$_mids = [];
 	$_count = 20;
-	$_this = getModule('search');
+	$_this = getModule('.searchex');
 
 	if(!empty($_this)) {
 		$_mids = empty($_this['md_extra'])?[]:unserialize($_this['md_extra']);
@@ -56,4 +52,4 @@ function proc($data) {
 }
 
 /* End of file default.php */
-/* Location: ./module/search/disp/default.php */
+/* Location: ./module/searchex/disp/default.php */

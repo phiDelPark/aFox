@@ -64,7 +64,7 @@
 						}
 					?>
 					<li class="message-preview">
-						<a href="<?php echo getUrl('','module','member','disp','inbox','srl', $val['nt_srl']) ?>">
+						<a href="<?php echo getUrl('','member','inbox','srl', $val['nt_srl']) ?>">
 							<div class="media">
 								<span class="pull-left">
 									<img class="media-object" src="<?php echo $_icon ?>" width="45" height="45">
@@ -96,9 +96,9 @@
 					<li class="dropdown-header"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></li>
 					<?php } ?>
 					<li class="divider"></li>
-					<li><a href="<?php echo getUrl('','module','member','disp','inbox') ?>"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('Inbox')?></a></li>
-					<li><a href="<?php echo getUrl('','module','member','disp','trash') ?>"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('Recycle_bin')?></a></li>
-					<li><a href="<?php echo _AF_URL_ ?>?module=member&disp=signUp"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('Setup')?></a></li>
+					<li><a href="<?php echo getUrl('','member','inbox') ?>"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('Inbox')?></a></li>
+					<li><a href="<?php echo getUrl('','member','trash') ?>"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('Recycle_bin')?></a></li>
+					<li><a href="<?php echo getUrl('','member','signUp') ?>"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('Setup')?></a></li>
 					<li class="divider"></li>
 					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo urlencode(getUrl(''))?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('Logout')?></a></li>
 				</ul>
@@ -133,8 +133,7 @@
 				<div class="collapse nav navbar-nav nav-collapse slide-down" id="nav-collapse3">
 				<form class="navbar-form navbar-right" role="search" action="<?php echo getUrl('') ?>" method="get">
 					<div class="form-group">
-						<input type="hidden" name="id" value="search">
-						<input type="text" name="combine" class="form-control" placeholder="<?php echo getLang('search_word')?>" required>
+						<input type="text" name="searchex" class="form-control" placeholder="<?php echo getLang('search_word')?>" required>
 					</div>
 					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> <?php echo getLang('Search')?></button>
 				</form>

@@ -83,8 +83,9 @@ if(!defined('__AFOX__')) exit();
 			window.open(href, '_blank');
 		}
 	});
-	jQuery('[role="heading"][aria-labelledby="mdSearchTitle"]').each(function() {
-		jQuery(this).find('+[role="description"]').prepend('<span><?php echo getLang('desc_combine_search_finished', [$total_count]) ?></span>');
+	jQuery('[role="heading"]+[role="description"]').each(function() {
+		var $i = jQuery(this)[0];
+		$i.innerText = $i.innerText.replace('%s', '<?php echo $total_count ?>');
 	});
 </script>
 

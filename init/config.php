@@ -30,16 +30,17 @@ define('_AF_PATH_', substr(str_replace('\\', '/', dirname(__FILE__)), 0, -4) . '
 
 define('_AF_INIT_PATH_', _AF_PATH_ . 'init/');
 define('_AF_LIBS_PATH_', _AF_PATH_ . 'lib/');
-define('_AF_ADMIN_PATH_', _AF_PATH_ . 'module/admin/');
 define('_AF_MODULES_PATH_', _AF_PATH_ . 'module/');
 define('_AF_ADDONS_PATH_', _AF_PATH_ . 'addon/');
 define('_AF_WIDGETS_PATH_', _AF_PATH_ . 'widget/');
+define('_AF_THEMES_PATH_', _AF_PATH_ . 'theme/');
+define('_AF_ADMIN_PATH_', _AF_PATH_ . 'module/admin/');
 define('_AF_LANGS_PATH_', _AF_PATH_ . 'common/lang/');
 define('_AF_TPLS_PATH_', _AF_PATH_ . 'common/tpl/');
-define('_AF_THEMES_PATH_', _AF_PATH_ . 'theme/');
 
 define('_AF_CONFIG_DATA_', _AF_PATH_ . 'data/config/');
 define('_AF_MEMBER_DATA_', _AF_PATH_ . 'data/member/');
+define('_AF_MODULE_DATA_', _AF_PATH_ . 'data/module/');
 define('_AF_ATTACH_DATA_', _AF_PATH_ . 'data/attach/');
 define('_AF_CACHE_DATA_', _AF_PATH_ . 'data/cache/');
 
@@ -109,9 +110,9 @@ function get_cookie($key) {
 	return array_key_exists($cki = md5($key), $_COOKIE) ? base64_decode($_COOKIE[$cki]) : '';
 }
 
-// 만료시간이 0이면 직접 지우기까지 계속 유지, -값이면 제거
+// 만료시간이 0이면 직접 지우기까지 계속 유지
 function set_cache($key, $val, $exp = 0) {
-	$dir = _AF_CACHE_DATA_. md5($key);
+	$dir = _AF_CACHE_DATA_ . md5($key);
 	if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
 	$h = @opendir($dir); while($e=readdir($h)){if($e!='.' && $e!='..'){
 		@chmod($dir.'/'.$e, 0707); @unlink($dir.'/'.$e);
@@ -123,7 +124,7 @@ function set_cache($key, $val, $exp = 0) {
 function get_cache($key) {
 	static $__af_caches = null;
 	if(!empty($__af_caches[$key])) return $__af_caches[$key];
-	if(!is_dir($dir = _AF_CACHE_DATA_. md5($key))) return;
+	if(!is_dir($dir = _AF_CACHE_DATA_ . md5($key))) return;
 	if(!is_file($f = $dir.'/'.(@scandir($dir)[2]))) return;
 	if((@include $f)!==1||(!empty($_EXPIRE)&&$_EXPIRE<_AF_SERVER_TIME_)) {
 		@chmod($f, 0707); @unlink($f); @chmod($dir, 0707); @rmdir($dir); return;

@@ -2,9 +2,13 @@
 if(!defined('__AFOX__')) exit();
 @include_once dirname(__FILE__) . '/lang/' . _AF_LANG_ . '.php';
 
-function procSearchDefault($data) {
+// 모듈 설정이 없으므로 직접 기본정보 입력
+$_CFG['md_title'] = getLang('combine_search');
+$_CFG['md_description'] = getLang('desc_combine_search_finished');
+
+function procSearchexDefault($data) {
 	$act = strtolower($data['act']);
-	$dir = _AF_MODULES_PATH_ . 'search/proc/';
+	$dir = _AF_MODULES_PATH_ . 'searchex/proc/';
 	$inc_file = $dir . $act . '.php';
 
 	if (($is=file_exists($inc_file)) && checkProtect('proc.'.$act)) {
@@ -18,9 +22,9 @@ function procSearchDefault($data) {
 	}
 }
 
-function dispSearchDefault($data) {
-	$act = strtolower(empty($data['disp'])?'default':$data['disp']);
-	$dir = _AF_MODULES_PATH_ . 'search/disp/';
+function dispSearchexDefault($data) {
+	$act = 'default';
+	$dir = _AF_MODULES_PATH_ . 'searchex/disp/';
 	$inc_file = $dir . $act . '.php';
 
 	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$act)) {
@@ -35,4 +39,4 @@ function dispSearchDefault($data) {
 }
 
 /* End of file index.php */
-/* Location: ./module/search/index.php */
+/* Location: ./module/searchex/index.php */
