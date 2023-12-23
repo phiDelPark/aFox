@@ -8,12 +8,14 @@ function proc($data) {
 
 	$_mids = [];
 	$_count = 20;
-	$_this = getModule('.searchex');
+	$_MOUDLE_CONFIG = [];
 
-	if(!empty($_this)) {
-		$_mids = empty($_this['md_extra'])?[]:unserialize($_this['md_extra']);
-		if(!empty($_mids)) $_mids = $_mids['md_ids'];
-		$_count = empty($_this['md_list_count'])?20:$_this['md_list_count'];
+	$file = _AF_MODULE_DATA_ . 'searchex.php';
+	if(file_exists($file)) @include $file;
+
+	if(!empty($_MOUDLE_CONFIG)) {
+		$_mids = empty($_MOUDLE_CONFIG['ids'])?[]:unserialize($_MOUDLE_CONFIG['ids']);
+		$_count = empty($_MOUDLE_CONFIG['count'])?20:$_MOUDLE_CONFIG['count'];
 	}
 
 	$_wheres = ['md_id{IN}'=>implode(',', $_mids),'(_AND_)' =>[],'(_OR_)'=>[]];

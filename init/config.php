@@ -110,7 +110,7 @@ function get_cookie($key) {
 	return array_key_exists($cki = md5($key), $_COOKIE) ? base64_decode($_COOKIE[$cki]) : '';
 }
 
-// 만료시간이 0이면 직접 지우기까지 계속 유지
+// 만료시간이 0이면 직접 지우기까지 계속 유지, - 값이면 읽을때 삭제됨 (재생성 필요)
 function set_cache($key, $val, $exp = 0) {
 	$dir = _AF_CACHE_DATA_ . md5($key);
 	if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;

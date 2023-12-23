@@ -22,11 +22,11 @@ if(!defined('__AFOX__')) exit();
 	<tbody>
 
 	<?php
-		$current_page = $_{'search'}['current_page'];
-		$total_page = $_{'search'}['total_page'];
-		$start_page = $_{'search'}['start_page'];
-		$end_page = $_{'search'}['end_page'];
-		$total_count = $_{'search'}['total_count'];
+		$current_page = $_{'searchex'}['current_page'];
+		$total_page = $_{'searchex'}['total_page'];
+		$start_page = $_{'searchex'}['start_page'];
+		$end_page = $_{'searchex'}['end_page'];
+		$total_count = $_{'searchex'}['total_count'];
 		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 		$_tmp = '<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ';
 
@@ -34,7 +34,7 @@ if(!defined('__AFOX__')) exit();
 		$login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 
 		if(__MOBILE__) {
-			foreach ($_{'search'}['data'] as $key => $val) {
+			foreach ($_{'searchex'}['data'] as $key => $val) {
 				$wr_secret =  $val['wr_secret'] == '1';
 				$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
 				echo '<tr data-hot-track style="cursor:pointer"><td class="wr_title"><a href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
@@ -42,7 +42,7 @@ if(!defined('__AFOX__')) exit();
 				echo '<span class="pull-right">'.date('m/d', strtotime($val['wr_update'])).'</span></div></td></tr>';
 			}
 		} else {
-			foreach ($_{'search'}['data'] as $key => $val) {
+			foreach ($_{'searchex'}['data'] as $key => $val) {
 				$wr_secret =  $val['wr_secret'] == '1';
 				$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
 				echo '<tr data-hot-track style="cursor:pointer"><th class="hidden-xs" scope="row">'.$val['md_id'].'</th>';
@@ -91,4 +91,4 @@ if(!defined('__AFOX__')) exit();
 
 <?php
 /* End of file default.php */
-/* Location: ./module/search/tpl/default.php */
+/* Location: ./module/searchex/tpl/default.php */
