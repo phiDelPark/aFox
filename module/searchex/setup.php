@@ -1,18 +1,10 @@
 <?php
 if(!defined('__AFOX__')) exit();
-@include_once _AF_MODULES_PATH_ . $_DATA['mid'] . '/lang/' . _AF_LANG_ . '.php';
+@include_once dirname(__FILE__) . '/config.php';
 
-	$_mids = [];
-	$_count = 20;
-	$_MOUDLE_CONFIG = [];
-
-	$file = _AF_MODULE_DATA_ . 'searchex.php';
-	if(file_exists($file)) @include $file;
-
-	if(!empty($_MOUDLE_CONFIG)) {
-		$_mids = empty($_MOUDLE_CONFIG['ids'])?[]:unserialize($_MOUDLE_CONFIG['ids']);
-		$_count = empty($_MOUDLE_CONFIG['count'])?20:$_MOUDLE_CONFIG['count'];
-	}
+	$_MOUDLE_CONFIG = getCustomMoudleConfig();  // 설정값 읽어오기
+	$_mids = empty($_MOUDLE_CONFIG['ids'])?[]:unserialize($_MOUDLE_CONFIG['ids']);
+	$_count = empty($_MOUDLE_CONFIG['count'])?20:$_MOUDLE_CONFIG['count'];
 
 	$_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', ['md_key'=>'board']);
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
@@ -20,10 +12,10 @@ if(!defined('__AFOX__')) exit();
 ?>
 
 <form action="<?php echo _AF_URL_ ?>" method="post" autocomplete="off" enctype="multipart/form-data">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'module', 'mid', 'searchex') ?>">
-	<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'module', 'mid', 'searchex') ?>">
-	<input type="hidden" name="module" value="searchex">
-	<input type="hidden" name="act" value="setupSearch">
+	<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'module', 'mid', $_DATA['mid']) ?>">
+	<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'module', 'mid', $_DATA['mid']) ?>">
+	<input type="hidden" name="module" value="<?php echo $_DATA['mid'] ?>">
+	<input type="hidden" name="act" value="setupmodule">
 
 <div class="form-group">
 	<label><?php echo getLang('list_count')?></label>

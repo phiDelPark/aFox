@@ -2,21 +2,12 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
+	$_MOUDLE_CONFIG = getCustomMoudleConfig();  // 설정값 읽어오기
+	$_mids = empty($_MOUDLE_CONFIG['ids'])?[]:unserialize($_MOUDLE_CONFIG['ids']);
+	$_count = empty($_MOUDLE_CONFIG['count'])?20:$_MOUDLE_CONFIG['count'];
 
 	$search = empty($data['searchex']) ? '' : $data['searchex'];
 	$page = empty($data['page']) ? 1 : $data['page'];
-
-	$_mids = [];
-	$_count = 20;
-	$_MOUDLE_CONFIG = [];
-
-	$file = _AF_MODULE_DATA_ . 'searchex.php';
-	if(file_exists($file)) @include $file;
-
-	if(!empty($_MOUDLE_CONFIG)) {
-		$_mids = empty($_MOUDLE_CONFIG['ids'])?[]:unserialize($_MOUDLE_CONFIG['ids']);
-		$_count = empty($_MOUDLE_CONFIG['count'])?20:$_MOUDLE_CONFIG['count'];
-	}
 
 	$_wheres = ['md_id{IN}'=>implode(',', $_mids),'(_AND_)' =>[],'(_OR_)'=>[]];
 

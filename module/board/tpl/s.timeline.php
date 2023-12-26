@@ -45,10 +45,12 @@ if(!defined('__AFOX__')) exit();
 			<li>
 				<time datetime="<?php echo date('Y-m-d H:i', strtotime($val['wr_update'])) ?>"><span><?php echo date('y/m/d', strtotime($val['wr_update'])) ?></span> <span><?php echo date('H:i', strtotime($val['wr_update'])) ?></span></time>
 				<div class="tmicon<?php echo $val['wr_srl']==$srl?' active':'' ?>"></div>
+				<?php echo '<a href="'.(!$wr_permit&&$wr_secret?'#requirePassword" data-srl="'.$val['wr_srl'].'" data-param="srl,'.$val['wr_srl']:getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','')).'"'.($val['wr_srl']==$srl?' class="active"':'').'>' ?>
 				<div class="tmlabel">
-					<h3 class="text-ellipsis"><?php echo '<a href="'.(!$wr_permit&&$wr_secret?'#requirePassword" data-srl="'.$val['wr_srl'].'" data-param="srl,'.$val['wr_srl']:getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','')).'"'.($val['wr_srl']==$srl?' class="active"':'').'>'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>' ?></h3>
+					<h3 class="text-ellipsis"><?php echo ($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true) ?></h3>
 					<p><?php echo $wr_extra_vars.'<div class="wr_content">'.cutstr(!$wr_permit&&$wr_secret?getLang('msg_is_secret'):escapeHtml($val['wr_content'], true, ENT_QUOTES, false), __MOBILE__?100:300).($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</div>' ?></p>
 				</div>
+				<?php echo '</a>' ?>
 			</li>
 			<?php
 		}

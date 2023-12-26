@@ -523,6 +523,10 @@ blockquote {
 	position: relative;
 }
 
+#bdList .timeline>li a {
+	text-decoration-line: none;
+}
+
 #bdList .timeline>li>time {
 	display: block;
 	padding-right: 100px;
@@ -534,11 +538,15 @@ blockquote {
 	text-align: right;
 	font-size: 1em;
 	color: #bdd0db;
+	font-family:'Times New Roman', Times, serif;
+	margin-top: -10px;
+	padding-left: 10px;
 }
 
 #bdList .timeline>li>time span:last-child {
 	font-size: 2em;
 	color: #6cbfee;
+	font-family:Georgia, 'Times New Roman', Times, serif;
 }
 
 /* #bdList .timeline > li:nth-child(odd) time span:last-child */
@@ -553,6 +561,45 @@ blockquote {
 	position: relative;
 	border-radius: 5px;
 	border: 1px solid #ddd;
+	cursor: pointer;
+}
+
+#bdList .timeline>li .tmlabel:hover {
+	background:
+		repeating-linear-gradient(90deg, transparent, transparent 50px,
+		  rgba(0, 0, 0, 0.25) 50px, rgba(0, 0, 0, 0.25) 56px,
+		  transparent 56px, transparent 63px,
+		  rgba(0, 0, 0, 0.25) 63px, rgba(0, 0, 0, 0.25) 69px,
+		  transparent 69px, transparent 116px,
+		  rgba(0, 153, 255, 0.25) 116px, rgba(0, 153, 255, 0.25) 166px),
+		repeating-linear-gradient(0deg, transparent, transparent 50px,
+		  rgba(0, 0, 0, 0.25) 50px, rgba(0, 0, 0, 0.25) 56px,
+		  transparent 56px, transparent 63px,
+		  rgba(0, 0, 0, 0.25) 63px, rgba(0, 0, 0, 0.25) 69px,
+		  transparent 69px, transparent 116px,
+		  rgba(0, 153, 255, 0.25) 116px, rgba(0, 153, 255, 0.25) 166px),
+		repeating-linear-gradient(-45deg, transparent, transparent 5px,
+		  rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px),
+		repeating-linear-gradient(45deg, transparent, transparent 5px,
+		  rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px);
+
+	background:
+		repeating-linear-gradient(90deg, transparent 0 50px,
+		  rgba(0, 0, 0, 0.25) 50px 56px,
+		  transparent 56px 63px,
+		  rgba(0, 0, 0, 0.25) 63px 69px,
+		  transparent 69px 116px,
+		  rgba(0, 153, 255, 0.25) 116px 166px),
+		repeating-linear-gradient(0deg, transparent 0 50px,
+		  rgba(0, 0, 0, 0.25) 50px 56px,
+		  transparent 56px 63px,
+		  rgba(0, 0, 0, 0.25) 63px 69px,
+		  transparent 69px 116px,
+		  rgba(0, 153, 255, 0.25) 116px 166px),
+		repeating-linear-gradient(-45deg, transparent 0 5px,
+		  rgba(143, 77, 63, 0.25) 5px 10px),
+		repeating-linear-gradient(45deg, transparent 0 5px,
+		  rgba(143, 77, 63, 0.25) 5px 10px);
 }
 
 #bdList .timeline>li .tmlabel h3 {
