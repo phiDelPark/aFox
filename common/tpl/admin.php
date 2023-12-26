@@ -36,16 +36,7 @@ var request_uri     = "<?php echo getRequestUri() ?>";
 <body>
 <?php
 	include _AF_ADMIN_PATH_ . 'admin.php';
-	echo '<script>';
-	foreach ($_ADDELEMENTS['LANG'] as $key) {
-		foreach ($key as $src=>$val){
-			if(!empty($val) && empty($_ADDELEMENTS['LANG'][$val][0])) {
-				$_ADDELEMENTS['LANG'][$val][0] = getLang($val);
-				echo '$_LANG[\''.$val.'\']="'.$_ADDELEMENTS['LANG'][$val][0].'";';
-			}
-		}
-	}
-	echo '</script>'."\n";
+	echo'<script>';foreach($_ADDELEMENTS['LANG']as$k=>$v){echo'$_LANG[\''.$k.'\']="'.$v.'";';}echo'</script>'."\n";
 ?>
 <script src="<?php echo _AF_URL_ . 'module/admin/admin' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.js') ?>"></script>
 </body>

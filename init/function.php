@@ -456,99 +456,6 @@ if(!defined('__AFOX__')) exit();
 		]);
 	}
 
-	function triggerAddonCall($addons, $position, $trigger, &$data) {
-		static $__addon_call = null;
-		if($__addon_call == null) {
-			$__addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
-				include $include_file;
-				return $_DATA;
-			};
-		}
-		$position=strtolower($position);
-		$trigger=strtolower($trigger);
-		foreach ($addons as $key => $value) {
-			$_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
-			if(file_exists($_file)) {
-				$_ex = get_cache('_AF_ADDON_'.$key);
-				if(empty($_ex)) {
-					$_ex = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
-					$_ex = $_ex ? unserialize($_ex['ao_extra']) : [];
-					set_cache('_AF_ADDON_'.$key, $_ex);
-				}
-				if(!empty($_ex['access_md_ids'])) {
-					$_acc_md = $_ex['access_mode'];
-					$_md = __MID__;
-					$_is_acc = !empty($_md) && in_array($_md, $_ex['access_md_ids']);
-					if(($_acc_md == 'include' && !$_is_acc)||($_acc_md == 'exclude' && $_is_acc)) continue;
-				}
-				$data = $__addon_call($_file, $position, $trigger, $_ex, $data);
-			}
-		}
-		return true;
-	}
-
-	function triggerModuleCall($modules, $position, $trigger, &$data) {
-		static $__module_call = null;
-		if($__module_call == null) {
-			$__module_call = function($include_file, $called_position, $called_trigger, $_DATA) {
-				include $include_file;
-				$r = [];
-				if(function_exists($called_position)) {
-					$r = call_user_func($called_position, $_DATA);
-				}
-				return $r === true ? $_DATA : false;
-			};
-		}
-		$position=strtolower($position);
-		$trigger=strtolower($trigger);
-		foreach ($modules as $key => $value) {
-			$_file = _AF_MODULES_PATH_.'/'.$key.'/trigger/'.$trigger.'.php';
-			if(file_exists($_file)) {
-				$result = $__module_call($_file, $position, $trigger, $data);
-				if($result === false) return false;
-				$data = $result;
-			}
-		}
-		return true;
-	}
-
-	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
-	function triggerCall($position, $trigger, &$data) {
-		static $__triggers = null;
-		// 관리자 모듈은 넘어감
-		if(__MODULE__ == 'admin') return true;
-		if($__triggers == null) {
-			$__triggers = ['M'=>[], 'A'=>[]];
-			global $_MEMBER;
-			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
-			DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
-				[
-					(__MOBILE__?'use_mobile':'use_pc')=>1,
-					'^'=>'ASCII(grant_access)<='.$rank
-				], 'tg_key',
-				function($r)use(&$__triggers) {
-					while ($tmp = DB::fetch($r)) {
-						$__triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
-					}
-				}
-			);
-		}
-		if(count($__triggers['M']) > 0){
-			$result = triggerModuleCall($__triggers['M'], $position, $trigger, $data);
-		}
-		if(count($__triggers['A']) > 0){
-			$result = triggerAddonCall($__triggers['A'], $position, $trigger, $data);
-		}
-		return true;
-	}
-
-	function installModuleTrigger($id, $access) {
-		if(DB::count(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access])!==1){
-			DB::delete(_AF_TRIGGER_TABLE_,['tg_id'=>$id]);
-			DB::insert(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access]);
-		}
-	}
-
 	function unlinkFile($file) {
 		@chmod($file, 0707);
 		if(!@unlink($file)) {
@@ -744,7 +651,99 @@ if(!defined('__AFOX__')) exit();
 		return '<div class="'.$class.'">'.$text.'</div>';
 	}
 
-	static $__MODULE_DISPLAY_CALL = null;
+	function triggerAddonCall($addons, $position, $trigger, &$data) {
+		static $__addon_call = null;
+		if($__addon_call == null) {
+			$__addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA) {
+				include $include_file;
+				return $_DATA;
+			};
+		}
+		$position=strtolower($position);
+		$trigger=strtolower($trigger);
+		foreach ($addons as $key => $value) {
+			$_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
+			if(file_exists($_file)) {
+				$_ex = get_cache('_AF_ADDON_'.$key);
+				if(empty($_ex)) {
+					$_ex = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
+					$_ex = $_ex ? unserialize($_ex['ao_extra']) : [];
+					set_cache('_AF_ADDON_'.$key, $_ex);
+				}
+				if(!empty($_ex['access_md_ids'])) {
+					$_acc_md = $_ex['access_mode'];
+					$_md = __MID__;
+					$_is_acc = !empty($_md) && in_array($_md, $_ex['access_md_ids']);
+					if(($_acc_md == 'include' && !$_is_acc)||($_acc_md == 'exclude' && $_is_acc)) continue;
+				}
+				$data = $__addon_call($_file, $position, $trigger, $_ex, $data);
+			}
+		}
+		return true;
+	}
+
+	function triggerModuleCall($modules, $position, $trigger, &$data) {
+		static $__module_call = null;
+		if($__module_call == null) {
+			$__module_call = function($include_file, $called_position, $called_trigger, $_DATA) {
+				include $include_file;
+				$r = [];
+				if(function_exists($called_position)) {
+					$r = call_user_func($called_position, $_DATA);
+				}
+				return $r === true ? $_DATA : false;
+			};
+		}
+		$position=strtolower($position);
+		$trigger=strtolower($trigger);
+		foreach ($modules as $key => $value) {
+			$_file = _AF_MODULES_PATH_.'/'.$key.'/trigger/'.$trigger.'.php';
+			if(file_exists($_file)) {
+				$result = $__module_call($_file, $position, $trigger, $data);
+				if($result === false) return false;
+				$data = $result;
+			}
+		}
+		return true;
+	}
+
+	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
+	function triggerCall($position, $trigger, &$data) {
+		static $__triggers = null;
+		// 관리자 모듈은 넘어감
+		if(__MODULE__ == 'admin') return true;
+		if($__triggers == null) {
+			$__triggers = ['M'=>[], 'A'=>[]];
+			global $_MEMBER;
+			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
+			DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
+				[
+					(__MOBILE__?'use_mobile':'use_pc')=>1,
+					'^'=>'ASCII(grant_access)<='.$rank
+				], 'tg_key',
+				function($r)use(&$__triggers) {
+					while ($tmp = DB::fetch($r)) {
+						$__triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
+					}
+				}
+			);
+		}
+		if(count($__triggers['M']) > 0){
+			$result = triggerModuleCall($__triggers['M'], $position, $trigger, $data);
+		}
+		if(count($__triggers['A']) > 0){
+			$result = triggerAddonCall($__triggers['A'], $position, $trigger, $data);
+		}
+		return true;
+	}
+
+	function installModuleTrigger($id, $access) {
+		if(DB::count(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access])!==1){
+			DB::delete(_AF_TRIGGER_TABLE_,['tg_id'=>$id]);
+			DB::insert(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access]);
+		}
+	}
+
 	function displayModule() {
 		if(!__MODULE__) return;
 		global $_CFG;
@@ -755,12 +754,9 @@ if(!defined('__AFOX__')) exit();
 			global $_CFG;
 			global $_DATA;
 			global $_MEMBER;
-			global $__MODULE_DISPLAY_CALL;
 			$_{__MODULE__} = $_result;
 			unset($_result);
-			$__MODULE_DISPLAY_CALL = true;
 			@include_once $tpl_path . 'common.php';
-			$__MODULE_DISPLAY_CALL = false;
 			include $tpl_path . $tpl_file;
 		};
 
@@ -819,6 +815,15 @@ if(!defined('__AFOX__')) exit();
 		return substr($str, 0, $count) . $tail;
 	}
 
+	function shortSize($size) {
+		$tails = ['B','K','M','G','T'];
+		for ($i = 0; $i < 4; $i++) {
+			if($size <= 1024) break;
+			$size = $size / 1024;
+		}
+		return round($size, 1) . $tails[$i];
+	}
+
 	function timePassed($datetime) {
 		$t = time() - strtotime($datetime);
 		$vars1 = ['minute','hour','day', 'week', 'month','year',  ''];
@@ -827,15 +832,6 @@ if(!defined('__AFOX__')) exit();
 		if($key < 1) return 'just now'; //second
 		$value = floor($t/$vars2[$key-1]);
 		return $value.' '.$vars1[$key-1].($value > 1 ? 's' : '').' ago';
-	}
-
-	function shortFileSize($size) {
-		$tails = ['Byte','KB','MB','GB'];
-		for ($i = 0; $i < 4; $i++) {
-			if($size <= 1024) break;
-			$size = $size / 1024;
-		}
-		return round($size, 1) . $tails[$i];
 	}
 
 	function isCrawler() {
@@ -873,7 +869,6 @@ if(!defined('__AFOX__')) exit();
 		$a_title = ['success', 'alert', 'warning', 'error'];
 		$a_icon = ['ok-sign', 'exclamation-sign', 'warning-sign', 'ban-circle'];
 		$type = ($type>2000 && $type<6000) ? ($type<4000 ? 2 : 3) : ($type>3 ? 1 : $type);
-
 		$msg = '<div class="';
 		if($title === false) {
 			$msg .= 'alert alert-dismissable alert-'. $a_type[$type] . '" role="alert">';
@@ -886,19 +881,9 @@ if(!defined('__AFOX__')) exit();
 		echo $msg .  $message . '</div></div>';
 	}
 
-	function addJSLang($langs) {
-		global $_ADDELEMENTS; $_ADDELEMENTS['LANG'][] = $langs;
-	}
-
-	function addELEMENT($key, $src, $option = '') {
-		global $_ADDELEMENTS;
-		global $__MODULE_DISPLAY_CALL;
-		$key = ($__MODULE_DISPLAY_CALL === true ? 'M' : 'A') . $key;
-		if(!isset($_ADDELEMENTS[$key][$src])) $_ADDELEMENTS[$key][$src] = empty($option) ? 1 : $option;
-	}
-
-	function addJS($src) { addELEMENT('_JS', $src); }
-	function addCSS($src, $media = '') { addELEMENT('_CSS', $src, $media); }
+	function addJS($src, $opt = '') { global $_ADDELEMENTS;$_ADDELEMENTS['JS'][$src] = $opt; }
+	function addCSS($src, $opt = '') { global $_ADDELEMENTS;$_ADDELEMENTS['CSS'][$src] = $opt; }
+	function addJSLang($langs) { global $_ADDELEMENTS;foreach($langs as $k=>$v)$_ADDELEMENTS['LANG'][$v]=getLang($v); }
 
 /* End of file function.php */
 /* Location: ./init/function.php */

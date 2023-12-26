@@ -61,7 +61,7 @@ if(session_status() == PHP_SESSION_NONE) session_start();
 
 $_LANG = [];
 $_PROTECT = [];
-$_ADDELEMENTS = ['M_CSS'=>[],'M_JS'=>[],'A_CSS'=>[],'A_JS'=>[],'LANG'=>[]];
+$_ADDELEMENTS = ['LANG'=>[],'CSS'=>[],'JS'=>[]];
 unset($_MEMBER);
 
 // DB 라이브러리 미리 로드

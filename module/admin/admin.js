@@ -119,6 +119,26 @@
 				var ishtml = ((act=='page.getPage'&&data['pg_type']=='2')
 							||(act=='board.getDocument'&&data['wr_type']=='2')
 							||(act=='board.getComment'&&data['rp_type']=='2'));
+
+				$editor.find('.af-editor-toolbar input:hidden').each(function() {
+					var $i = $(this),
+						$p = $i.closest('.af-editor-toolbar'),
+						target = $i.attr('name'),
+						value = $i.val();
+					$p.find('[data-target="' + target + '"]').find('.glyphicon').addClass('glyphicon-unchecked').removeClass('glyphicon-check');
+					$p.find('[data-target="' + target + '"][data-value="' + value + '"]').find('.glyphicon').addClass('glyphicon-check').removeClass('glyphicon-unchecked');
+				});
+				//업로드된 파일
+				var $uploads = $editor.find('[name="upload_files[]"]');
+				if ($uploads.length > 0 && $.isArray(data['files']) && data['files'].length > 0) {
+					var tmp_html = '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded uploader-group file-list form-control" style="margin-top:10px">';
+					$.map(data['files'], function(v, i) {
+						tmp_html += '<i class="file-item" draggable="true" title="' + v.mf_name.escapeHtml() + ' (' + Number(v.mf_size).shortSize() + ')" data-type="' + v.mf_type + '" data-srl="' + v.mf_srl + '"></i>';
+					});
+					tmp_html += '</div><span class="glyphicon glyphicon-question-sign form-control-feedback" style="pointer-events:auto;cursor:pointer" tabindex="0"></span></div>';
+					$uploads.closest('.af-editor-uploader').prepend(tmp_html);
+				}
+
 				$m.offOn('shown.bs.modal', function(){$editor.data('af.editor').switch(ishtml);});
 			}
 

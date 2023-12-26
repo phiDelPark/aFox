@@ -49,26 +49,9 @@ var request_uri     = "<?php echo getRequestUri() ?>";
 <?php } ?>
 <?php
 	include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'index')) . '.php';
-	echo '<script>';
-	foreach ($_ADDELEMENTS['LANG'] as $key) {
-		foreach ($key as $src=>$val){
-			if(!empty($val) && empty($_ADDELEMENTS['LANG'][$val][0])) {
-				$_ADDELEMENTS['LANG'][$val][0] = getLang($val);
-				echo '$_LANG[\''.$val.'\']="'.$_ADDELEMENTS['LANG'][$val][0].'";';
-			}
-		}
-	}
-	echo '</script>'."\n";
-	foreach (['M', 'A'] as $key) {
-		foreach ($_ADDELEMENTS[$key.'_CSS'] as $src=>$val) {
-			if ($val === 1 || is_string($val)) {
-				echo '<link href="'.$src.'" rel="stylesheet"'.($val!==1?' media="'.$val.'"':'').'>';
-			}
-		}
-		foreach ($_ADDELEMENTS[$key.'_JS'] as $src=>$val) {
-			if ($val === 1) echo '<script src="'.$src.'"></script>';
-		}
-	}
+	echo'<script>';foreach($_ADDELEMENTS['LANG']as$k=>$v){echo'$_LANG[\''.$k.'\']="'.$v.'";';}echo'</script>'."\n";
+	foreach($_ADDELEMENTS['CSS']as$k=>$v){echo'<link href="'.$k.'" rel="stylesheet" '.$v.'>';}
+	foreach ($_ADDELEMENTS['JS']as$k=>$v){echo'<script src="'.$k.'" '.$v.'></script>';}
 ?>
 <?php if (!__MODAL__) { ?>
 </body>

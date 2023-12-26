@@ -120,9 +120,9 @@ var $_LANG = {};
 		return u + (r.length > 0 ? '?' + r.join('&') : '');
 	};
 
-	Number.prototype.shortFileSize = function() {
+	Number.prototype.shortSize = function() {
 		var s = this,
-			t = ['B', 'KB', 'MB', 'GB'],
+			t = ['B', 'K', 'M', 'G', 'T'],
 			i = 0;
 		for (var n = 4; i < n; i++) {
 			if (s <= 1024) break;
@@ -192,29 +192,6 @@ var $_LANG = {};
 				}
 			} else if ($item.is("select") || $item.is("textarea")) {
 				$item.val(data[key]);
-			}
-		}
-
-		//에디터가 있을시에
-		var $editor = $(this).find('.af-editor-group');
-		if ($editor.length > 0) {
-			$editor.find('.af-editor-toolbar input:hidden').each(function() {
-				var $i = $(this),
-					$p = $i.closest('.af-editor-toolbar'),
-					target = $i.attr('name'),
-					value = $i.val();
-				$p.find('[data-target="' + target + '"]').find('.glyphicon').addClass('glyphicon-unchecked').removeClass('glyphicon-check');
-				$p.find('[data-target="' + target + '"][data-value="' + value + '"]').find('.glyphicon').addClass('glyphicon-check').removeClass('glyphicon-unchecked');
-			});
-			//업로드된 파일
-			var $uploads = $editor.find('[name="upload_files[]"]');
-			if ($uploads.length > 0 && $.isArray(data['files']) && data['files'].length > 0) {
-				html = '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded uploader-group file-list form-control" style="margin-top:10px">';
-				$.map(data['files'], function(v, i) {
-					html += '<i class="file-item" draggable="true" title="' + v.mf_name.escapeHtml() + ' (' + Number(v.mf_size).shortFileSize() + ')" data-type="' + v.mf_type + '" data-srl="' + v.mf_srl + '"></i>';
-				});
-				html += '</div><span class="glyphicon glyphicon-question-sign form-control-feedback" style="pointer-events:auto;cursor:pointer" tabindex="0"></span></div>';
-				$uploads.closest('.af-editor-uploader').prepend(html);
 			}
 		}
 	};
@@ -518,7 +495,7 @@ var $_LANG = {};
 			$c.html('');
 			$.map($i.prop("files"), function(val, i) {
 				var type = (val.type.split('/')[0] || 'binary').escapeHtml(),
-					size = val.size.shortFileSize(),
+					size = val.size.shortSize(),
 					title = val.name.escapeHtml() + ' (' + size + ')';
 				$('<i class="file-item" title="' + (ismt ? title : '') + '" data-type="' + type + '" data-index="' + i + '">')
 					.html(ismt ? '' : title)

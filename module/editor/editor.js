@@ -77,7 +77,7 @@
 
 		if ($i.attr('data-type').substring(0, 5) === 'image') {
 			var url = $i.attr('data-srl') || false ? request_uri + '?file=' + $i.attr('data-srl') : $i.attr('data-path');
-			title = '<img src="' + url + '" style="width:100px;height:100px"><div style="width:100px;overflow:hidden;white-space:nowrap">' + title + '</div>';
+			title = '<img src="' + url + '" width="100"><div style="width:100px;overflow:hidden;white-space:nowrap">' + title + '</div>';
 		}
 
 		$i.tooltip({
@@ -205,7 +205,7 @@
 			$c.html('');
 			$.map(files, function(val, i) {
 				var type = val.type.escapeHtml(),
-					size = val.size.shortFileSize(),
+					size = val.size.shortSize(),
 					title = val.name.escapeHtml() + ' (' + size + ')',
 					path = (window.URL || window.webkitURL).createObjectURL(val);
 

@@ -97,7 +97,7 @@
 				echo '<td scope="row" rowspan="2" style="padding:2px"><img src="'.($unfilename).'" width="65" height="65"></td>';
 				echo '<td scope="row">'.$value['md_id'].'</td>';
 				echo '<td class="title">'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
-				echo '<td class="hidden-xs">'.shortFileSize($value['mf_size']).'</td>';
+				echo '<td class="hidden-xs">'.shortSize($value['mf_size']).'</td>';
 
 			} else {
 			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" data-except-ajax>'.$value['md_id'].'</a></th>';
