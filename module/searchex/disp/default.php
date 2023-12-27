@@ -2,9 +2,10 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	$_MOUDLE_CONFIG = getCustomMoudleConfig();  // 설정값 읽어오기
-	$_mids = empty($_MOUDLE_CONFIG['ids'])?[]:unserialize($_MOUDLE_CONFIG['ids']);
-	$_count = empty($_MOUDLE_CONFIG['count'])?20:$_MOUDLE_CONFIG['count'];
+
+	$_MD_CONFIG = getCustomMoudleConfig(_CUSTOM_MOUDLE_GUID_);  // 설정값 읽어오기
+	$_mids = empty($_MD_CONFIG['ids'])?[]:unserialize($_MD_CONFIG['ids']);
+	$_count = empty($_MD_CONFIG['count'])?20:$_MD_CONFIG['count'];
 
 	$search = empty($data['searchex']) ? '' : $data['searchex'];
 	$page = empty($data['page']) ? 1 : $data['page'];

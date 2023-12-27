@@ -1364,11 +1364,11 @@ class Parsedown
     {
         if ($this->breaksEnabled)
         {
-            $text = preg_replace('/[ ]*\n/', "<br />\n", $text);
+            $text = preg_replace('/[ ]*\n/', "<br>\n", $text);
         }
         else
         {
-            $text = preg_replace('/(?:[ ][ ]+|[ ]*\\\\)\n/', "<br />\n", $text);
+            $text = preg_replace('/(?:[ ][ ]+|[ ]*\\\\)\n/', "<br>\n", $text);
             $text = str_replace(" \n", "\n", $text);
         }
 

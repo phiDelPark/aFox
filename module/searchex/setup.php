@@ -2,9 +2,9 @@
 if(!defined('__AFOX__')) exit();
 @include_once dirname(__FILE__) . '/config.php';
 
-	$_MOUDLE_CONFIG = getCustomMoudleConfig();  // 설정값 읽어오기
-	$_mids = empty($_MOUDLE_CONFIG['ids'])?[]:unserialize($_MOUDLE_CONFIG['ids']);
-	$_count = empty($_MOUDLE_CONFIG['count'])?20:$_MOUDLE_CONFIG['count'];
+	$_MD_CONFIG = getCustomMoudleConfig(_CUSTOM_MOUDLE_GUID_);  // 설정값 읽어오기
+	$_mids = empty($_MD_CONFIG['ids'])?[]:unserialize($_MD_CONFIG['ids']);
+	$_count = empty($_MD_CONFIG['count'])?20:$_MD_CONFIG['count'];
 
 	$_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', ['md_key'=>'board']);
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());

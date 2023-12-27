@@ -628,7 +628,7 @@ if(!defined('__AFOX__')) exit();
 				$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
 				$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
 				// \/ = 줄바꿈
-				$text = str_replace('\\n', '<br />', preg_replace($patterns, $replacement, $text));
+				$text = str_replace('\\n', '<br>', preg_replace($patterns, $replacement, $text));
 			}
 
 			$text = preg_replace_callback('/<img([^>]*\s+widget\s*=[^>]*)>/is', function($m){
@@ -869,16 +869,32 @@ if(!defined('__AFOX__')) exit();
 		$a_title = ['success', 'alert', 'warning', 'error'];
 		$a_icon = ['ok-sign', 'exclamation-sign', 'warning-sign', 'ban-circle'];
 		$type = ($type>2000 && $type<6000) ? ($type<4000 ? 2 : 3) : ($type>3 ? 1 : $type);
-		$msg = '<div class="';
 		if($title === false) {
-			$msg .= 'alert alert-dismissable alert-'. $a_type[$type] . '" role="alert">';
+			$msg = 'alert alert-dismissable alert-'. $a_type[$type] . '" role="alert">';
 			$msg .= '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><div>';
 		} else {
 			if(empty($title)) $title = getLang($a_title[$type]);
-			$msg .= 'panel panel-'. $a_type[$type] . '" role="alert"><div class="panel-heading"><h3 class="panel-title">';
+			$msg = 'panel panel-'. $a_type[$type] . '" role="alert"><div class="panel-heading"><h3 class="panel-title">';
 			$msg .= '<i class="glyphicon glyphicon-'.$a_icon[$type].'" aria-hidden="true"></i> '.$title.'</h3></div><div class="panel-body">';
 		}
-		echo $msg .  $message . '</div></div>';
+		echo '<div class="' . $msg .  $message . '</div></div>';
+	}
+
+	function setCustomMoudleConfig($GUID, $data){
+		if(!is_dir(_AF_MODULE_DATA_) && !mkdir(_AF_MODULE_DATA_, _AF_DIR_PERMIT_, true))
+			return set_error(getLang('upload_err_code(7)', 10407));
+		$file = _AF_MODULE_DATA_ . 'GUID.' . $GUID . '.PHP';
+		if(file_exists($file)) { @chmod($file, 0707); @unlink($file); }
+		$f = @fopen($file, 'w');
+		fwrite($f, "<?php\nif(!defined('__AFOX__'))exit();\n\$_CUSTOM_MOUDLE_CONFIG=array(\n");
+		foreach($data as $key=>$val) fwrite($f, "'{$key}'=>'{$val}',\n");
+		fwrite($f, ");"); fclose($f); chmod($file, 0644);
+		return set_error(getLang('success_saved', 0), 0);
+	}
+
+	function getCustomMoudleConfig($GUID){
+		@include _AF_MODULE_DATA_ . 'GUID.' . $GUID . '.PHP';
+		return empty($_CUSTOM_MOUDLE_CONFIG) ? [] : $_CUSTOM_MOUDLE_CONFIG;
 	}
 
 	function addJS($src, $opt = '') { global $_ADDELEMENTS;$_ADDELEMENTS['JS'][$src] = $opt; }

@@ -14,6 +14,7 @@ if(!defined('__AFOX__')) exit();
 		$is_manager = isManager(__MID__);
 		$login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 
+		$edit = '';
 		$toggle = false;
 		$toggle2 = false;
 		$box_items = [false=>'',true=>''];

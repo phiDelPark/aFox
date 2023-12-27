@@ -439,14 +439,14 @@ class DB {
 		}
 	}
 
-	public static function status($table, $key) {
+	public static function status($table, $key = '') {
 		if(self::$link === NULL) {self::connect();}
 		$result = mysqli_query(self::$link, "SHOW TABLE STATUS WHERE Name = '{$table}'");
 		if(mysqli_errno(self::$link)){
 			throw new Exception(mysqli_error(self::$link), mysqli_errno(self::$link));
 		}
 		$row = mysqli_fetch_assoc($result);
-		return empty($key)?$row:strtolower($row[$key]);
+		return empty($key) ? $row : $row[$key];
 	}
 
 	public static function engine($table) {
