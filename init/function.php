@@ -198,9 +198,8 @@ if(!defined('__AFOX__')) exit();
 			$skey = is_numeric($id) ? 'mb_srl' : 'mb_id';
 			$out = DB::get(_AF_MEMBER_TABLE_, [$skey => $id]);
 			if(!empty($out['mb_srl'])) {
-				$out['mb_icon'] = '';
 				$_icon = $out['mb_srl'].'/profile_image.png';
-				if(file_exists(_AF_MEMBER_DATA_.$_icon)) $out['mb_icon'] = _AF_URL_.'data/member/'.$_icon;
+				$out['mb_icon'] = file_exists(_AF_MEMBER_DATA_.$_icon) ? _AF_URL_.'data/member/'.$_icon : '';
 			}
 			$__members[$id] = $out;
 		}
@@ -851,7 +850,7 @@ if(!defined('__AFOX__')) exit();
 		return false;
 	}
 
-	function goUrl($url, $msg='') {
+	function goUrl($url, $msg=NULL) {
 		$url = str_replace("&amp;", "&", $url);
 		if (headers_sent()) {
 			echo '<script>'.($msg?'alert("'.$msg.'");':'').' location.replace("'.$url.'");</script>'
@@ -861,7 +860,7 @@ if(!defined('__AFOX__')) exit();
 			if($msg) set_error($msg, 1);
 			header('Location: '.$url);
 		}
-		exit;
+		if(is_string($msg)) exit($msg); //메세지 있으면 중단
 	}
 
 	function messageBox($message, $type = 1, $title = '') {
@@ -879,7 +878,7 @@ if(!defined('__AFOX__')) exit();
 		}
 		echo '<div class="' . $msg .  $message . '</div></div>';
 	}
-
+/*
 	function setCustomMoudleConfig($GUID, $data){
 		if(!is_dir(_AF_MODULE_DATA_) && !mkdir(_AF_MODULE_DATA_, _AF_DIR_PERMIT_, true))
 			return set_error(getLang('upload_err_code(7)', 10407));
@@ -891,12 +890,11 @@ if(!defined('__AFOX__')) exit();
 		fwrite($f, ");"); fclose($f); chmod($file, 0644);
 		return set_error(getLang('success_saved', 0), 0);
 	}
-
 	function getCustomMoudleConfig($GUID){
 		@include _AF_MODULE_DATA_ . 'GUID.' . $GUID . '.PHP';
 		return empty($_CUSTOM_MOUDLE_CONFIG) ? [] : $_CUSTOM_MOUDLE_CONFIG;
 	}
-
+*/
 	function addJS($src, $opt = '') { global $_ADDELEMENTS;$_ADDELEMENTS['JS'][$src] = $opt; }
 	function addCSS($src, $opt = '') { global $_ADDELEMENTS;$_ADDELEMENTS['CSS'][$src] = $opt; }
 	function addJSLang($langs) { global $_ADDELEMENTS;foreach($langs as $k=>$v)$_ADDELEMENTS['LANG'][$v]=getLang($v); }

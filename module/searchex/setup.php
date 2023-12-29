@@ -2,13 +2,13 @@
 if(!defined('__AFOX__')) exit();
 @include_once dirname(__FILE__) . '/config.php';
 
-	$_MD_CONFIG = getCustomMoudleConfig(_CUSTOM_MOUDLE_GUID_);  // 설정값 읽어오기
-	$_mids = empty($_MD_CONFIG['ids'])?[]:unserialize($_MD_CONFIG['ids']);
-	$_count = empty($_MD_CONFIG['count'])?20:$_MD_CONFIG['count'];
+$_MD_CONFIG = getModule('@searchex');
+$_mids = empty($_MD_CONFIG['md_extra'])?[]:unserialize($_MD_CONFIG['md_extra']);
+$_count = empty($_MD_CONFIG['md_list_count'])?20:$_MD_CONFIG['md_list_count'];
 
-	$_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', ['md_key'=>'board']);
-	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	//$_list = setDataListInfo($_list, $_DATA['page'], 20, DB::foundRows());
+$_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', ['md_key'=>'board']);
+if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
+//$_list = setDataListInfo($_list, $_DATA['page'], 20, DB::foundRows());
 ?>
 
 <form action="<?php echo _AF_URL_ ?>" method="post" autocomplete="off" enctype="multipart/form-data">

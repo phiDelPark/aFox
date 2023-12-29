@@ -3,7 +3,6 @@ if(!defined('__AFOX__')) exit();
 
 if(empty($_MEMBER) || ($_MEMBER['mb_rank'] != 's' && $_MEMBER['mb_rank'] != 'm')) {
 	goUrl(_AF_URL_, getLang('error_permitted'));
-	exit(getLang('error_permitted'));
 }
 
 // 관리자의 아이피, 브라우저와 다르다면 세션을 끊고 관리자에게 메일을 보낸다.
@@ -12,7 +11,6 @@ if (get_session('AF_LOGIN_KEY') !== $admin_key) {
 	session_destroy();
 	// TODO 관리자에게 쪽지 보낸다.
 	goUrl(_AF_URL_, getLang('error_permitted'));
-	exit(getLang('error_permitted'));
 }
 
 @include_once _AF_LANGS_PATH_ . 'admin_' . _AF_LANG_ . '.php';
