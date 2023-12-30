@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-@include_once _AF_LANGS_PATH_ . 'default_' . _AF_LANG_ . '.php';
+@include_once _AF_PATH_ . 'common/lang/' . _AF_LANG_ . '.php';
 require_once _AF_INIT_PATH_ . 'function.php';
 
 // 방문 기록 사용시
@@ -91,9 +91,11 @@ define('__POPUP__', __MODAL__ || (!empty($_DATA['popup']) && $_DATA['popup'] ===
 // 전체 로그인 사용시 로그인 유저가 아니면 전체 로그인 화면 표시
 define('__FULL_LOGIN__', $_CFG['use_full_login'] == 1 && empty($_MEMBER));
 
+
 if(__MODULE__){
 	$tmp = _AF_MODULES_PATH_ . __MODULE__;
 	if(!file_exists($tmp . '/index.php')) goUrl(_AF_URL_, '');
+	@include_once _AF_MODULES_PATH_ . __MODULE__ . '/lang/' . _AF_LANG_ . '.php';
 	require_once $tmp . '/protect.php';
 	require_once $tmp . '/index.php';
 }

@@ -13,8 +13,9 @@ if (get_session('AF_LOGIN_KEY') !== $admin_key) {
 	goUrl(_AF_URL_, getLang('error_permitted'));
 }
 
-@include_once _AF_LANGS_PATH_ . 'admin_' . _AF_LANG_ . '.php';
-if(!empty($_DATA['admin']) && in_array($_DATA['admin'],['member','board'])) {
+if(!empty($_DATA['admin']) && !empty($_DATA['mid'])){
+	@include_once _AF_MODULES_PATH_ . $_DATA['mid'] . '/lang/' . _AF_LANG_ . '.php';
+}else{
 	@include_once _AF_MODULES_PATH_ . $_DATA['admin'] . '/lang/' . _AF_LANG_ . '.php';
 }
 addJSLang(['menu','addon','theme','board','page','document','comment','file','recycle_bin','confirm_empty','confirm_select_move','confirm_select_empty','confirm_select_delete','warning_selected','confirm_select_trash','confirm_select_combine','prompt_move_board_id','standard_point']);

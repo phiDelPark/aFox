@@ -1,6 +1,5 @@
 <?php
 if(!defined('__AFOX__')) exit();
-@include_once dirname(__FILE__) . '/lang/' . _AF_LANG_ . '.php';
 
 $use_style = ['list','review','gallery','timeline'];
 $current_style = $use_style[abs($_CFG['use_style'])];

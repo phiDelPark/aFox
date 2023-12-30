@@ -3,8 +3,6 @@ if(!defined('__AFOX__')) exit();
 
 // 트리거 확인및 설치
 installModuleTrigger('board', 0);
-
-@include_once dirname(__FILE__) . '/lang/' . _AF_LANG_ . '.php';
 @include_once dirname(__FILE__) . '/funcs.php';
 
 function procBoardDefault($data) {
