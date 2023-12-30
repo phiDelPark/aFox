@@ -1,4 +1,5 @@
 @charset "utf-8";
+
 blockquote {
 	font-size: inherit;
 }
@@ -538,7 +539,7 @@ blockquote {
 	text-align: right;
 	font-size: 1em;
 	color: #bdd0db;
-	font-family:'Times New Roman', Times, serif;
+	font-family: 'Times New Roman', Times, serif;
 	margin-top: -10px;
 	padding-left: 10px;
 }
@@ -546,7 +547,7 @@ blockquote {
 #bdList .timeline>li>time span:last-child {
 	font-size: 2em;
 	color: #6cbfee;
-	font-family:Georgia, 'Times New Roman', Times, serif;
+	font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 /* #bdList .timeline > li:nth-child(odd) time span:last-child */
@@ -567,39 +568,39 @@ blockquote {
 #bdList .timeline>li .tmlabel:hover {
 	background:
 		repeating-linear-gradient(90deg, transparent, transparent 50px,
-		  rgba(0, 0, 0, 0.25) 50px, rgba(0, 0, 0, 0.25) 56px,
-		  transparent 56px, transparent 63px,
-		  rgba(0, 0, 0, 0.25) 63px, rgba(0, 0, 0, 0.25) 69px,
-		  transparent 69px, transparent 116px,
-		  rgba(0, 153, 255, 0.25) 116px, rgba(0, 153, 255, 0.25) 166px),
+			rgba(0, 0, 0, 0.25) 50px, rgba(0, 0, 0, 0.25) 56px,
+			transparent 56px, transparent 63px,
+			rgba(0, 0, 0, 0.25) 63px, rgba(0, 0, 0, 0.25) 69px,
+			transparent 69px, transparent 116px,
+			rgba(0, 153, 255, 0.25) 116px, rgba(0, 153, 255, 0.25) 166px),
 		repeating-linear-gradient(0deg, transparent, transparent 50px,
-		  rgba(0, 0, 0, 0.25) 50px, rgba(0, 0, 0, 0.25) 56px,
-		  transparent 56px, transparent 63px,
-		  rgba(0, 0, 0, 0.25) 63px, rgba(0, 0, 0, 0.25) 69px,
-		  transparent 69px, transparent 116px,
-		  rgba(0, 153, 255, 0.25) 116px, rgba(0, 153, 255, 0.25) 166px),
+			rgba(0, 0, 0, 0.25) 50px, rgba(0, 0, 0, 0.25) 56px,
+			transparent 56px, transparent 63px,
+			rgba(0, 0, 0, 0.25) 63px, rgba(0, 0, 0, 0.25) 69px,
+			transparent 69px, transparent 116px,
+			rgba(0, 153, 255, 0.25) 116px, rgba(0, 153, 255, 0.25) 166px),
 		repeating-linear-gradient(-45deg, transparent, transparent 5px,
-		  rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px),
+			rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px),
 		repeating-linear-gradient(45deg, transparent, transparent 5px,
-		  rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px);
+			rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px);
 
 	background:
 		repeating-linear-gradient(90deg, transparent 0 50px,
-		  rgba(0, 0, 0, 0.25) 50px 56px,
-		  transparent 56px 63px,
-		  rgba(0, 0, 0, 0.25) 63px 69px,
-		  transparent 69px 116px,
-		  rgba(0, 153, 255, 0.25) 116px 166px),
+			rgba(0, 0, 0, 0.25) 50px 56px,
+			transparent 56px 63px,
+			rgba(0, 0, 0, 0.25) 63px 69px,
+			transparent 69px 116px,
+			rgba(0, 153, 255, 0.25) 116px 166px),
 		repeating-linear-gradient(0deg, transparent 0 50px,
-		  rgba(0, 0, 0, 0.25) 50px 56px,
-		  transparent 56px 63px,
-		  rgba(0, 0, 0, 0.25) 63px 69px,
-		  transparent 69px 116px,
-		  rgba(0, 153, 255, 0.25) 116px 166px),
+			rgba(0, 0, 0, 0.25) 50px 56px,
+			transparent 56px 63px,
+			rgba(0, 0, 0, 0.25) 63px 69px,
+			transparent 69px 116px,
+			rgba(0, 153, 255, 0.25) 116px 166px),
 		repeating-linear-gradient(-45deg, transparent 0 5px,
-		  rgba(143, 77, 63, 0.25) 5px 10px),
+			rgba(143, 77, 63, 0.25) 5px 10px),
 		repeating-linear-gradient(45deg, transparent 0 5px,
-		  rgba(143, 77, 63, 0.25) 5px 10px);
+			rgba(143, 77, 63, 0.25) 5px 10px);
 }
 
 #bdList .timeline>li .tmlabel h3 {
@@ -718,54 +719,67 @@ form .af_editor_rp_content>textarea+iframe {
 		width: 100%;
 		height: initial;
 	}
+
 	#bdReply>.reply-editer .area-button {
 		position: static;
 	}
+
 	#bdReply>.reply-editer .area-group .form-group {
 		margin-right: initial;
 	}
+
 	#bdView .profile-text>.left,
 	#bdReply .reply-item>.left {
 		position: static;
 		float: none;
 		width: initial;
 	}
+
 	#bdView .profile-text>.right,
 	#bdReply .reply-item>.right {
 		margin-left: 5px;
 		margin-top: 10px;
 	}
+
 	#bdView .profile-text>.left .profile,
 	#bdReply .reply-item>.left .profile {
 		float: none;
 	}
+
 	#bdReply .reply-item>.left>.area-author-info {
 		float: right;
 	}
+
 	#bdView>article>.current_content {
 		min-height: 200px;
 	}
+
 	#bdList .timeline:before {
 		display: none;
 	}
+
 	#bdList .timeline>li>time {
 		width: 100%;
 		position: relative;
 		padding: 0 0 20px 0;
 	}
+
 	#bdList .timeline>li>time span {
 		text-align: left;
 		display: inline-block;
 	}
+
 	#bdList .timeline>li>time span:last-child {
 		font-size: 1em;
 	}
+
 	#bdList .timeline>li .tmlabel {
 		margin: 0 0 30px 0;
 		padding: 1em;
 		font-weight: 400;
 		font-size: 95%;
 	}
+
 	#bdList .timeline>li .tmlabel:after {
 		right: auto;
 		left: 20px;
@@ -773,6 +787,7 @@ form .af_editor_rp_content>textarea+iframe {
 		border-bottom-color: #ddd;
 		top: -20px;
 	}
+
 	#bdList .timeline>li .tmicon {
 		position: relative;
 		float: right;

@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 
 define('_AF_VERSION_', '0.327');
-define('__DEBUG__', 1);
+define('__DEBUG__', 0);
 
 /*** SSL 설정 ***/
 define('_AF_USE_SSL_', 0); // 1 = always, 2 = optional
@@ -26,7 +26,7 @@ define('_AF_FILE_TABLE_', 'afox_files');
 define('_AF_TRIGGER_TABLE_', 'afox_triggers');
 define('_AF_REPORT_TABLE_', 'afox_reports');
 
-define('_AF_PATH_', substr(str_replace('\\', '/', dirname(__FILE__)), 0, -4) . '/');
+define('_AF_PATH_', substr(str_replace('\\', '/', dirname(__FILE__)), 0, -4));
 
 define('_AF_INIT_PATH_', _AF_PATH_ . 'init/');
 define('_AF_LIBS_PATH_', _AF_PATH_ . 'lib/');
