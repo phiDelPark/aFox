@@ -2,8 +2,8 @@
 if(!defined('__AFOX__')) exit();
 
 // 모듈 설정이 없으므로 직접 기본정보 입력
-$_CFG['md_title'] = getLang('md_title_' . strtolower($_DATA['disp']));
-$_CFG['md_description'] = getLang('md_description_' . strtolower($_DATA['disp']));
+$_CFG['md_title'] = getLang('md_title_' . strtolower($_DATA['member']));
+$_CFG['md_description'] = getLang('md_description_' . strtolower($_DATA['member']));
 
 function procMemberDefault($data) {
 	$act = strtolower($data['act']);
@@ -22,7 +22,7 @@ function procMemberDefault($data) {
 }
 
 function dispMemberDefault($data) {
-	$act = strtolower($data['disp']);
+	$act = strtolower($data['member']);
 	$dir = _AF_MODULES_PATH_ . 'member/disp/';
 	$inc_file = $dir . $act . '.php';
 

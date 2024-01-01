@@ -1,7 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
-// 테마 설정 저장
-$_THEME = get_cache('_AF_THEME_'._AF_THEME_);
+$_THEME = get_cache('_AF_THEME_'._AF_THEME_); // 테마 설정 저장
 if(empty($_THEME)) {
 	$_THEME = DB::get(_AF_THEME_TABLE_, 'th_extra', ['th_id'=>_AF_THEME_]);
 	if(!empty($_THEME)) $_THEME = unserialize($_THEME['th_extra']);
@@ -27,15 +26,11 @@ addJSLang(['ok','cancel','yes','no','calling_server']);
 <?php if (!empty($_CFG['md_description'])) { echo '<meta name="description" content="'.escapeHtml($_CFG['md_description']).'">'."\n"; } ?>
 <title><?php echo escapeHtml($_CFG['title'].(empty($_CFG['md_title']) ? '' : ' - '.$_CFG['md_title'])) ?></title>
 <?php if ($_CFG['favicon']) {echo '<link rel="shortcut icon" href="'.$_CFG['favicon'].'">'."\n";} ?>
-<!--[if IE]>
-<script type="text/javascript" src="<?php echo _AF_URL_ ?>common/js/html5shiv.min.js"></script>
-<![endif]-->
 <?php if (_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 <link href="<?php echo _AF_URL_ ?>common/css/bootstrap.min.css" rel="stylesheet">
 <script src="<?php echo _AF_URL_ ?>common/js/jquery.min.js" id="def-jQuery-JS"></script>
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.min.js" id="def-Bootstrap-JS"></script>
 <?php } ?>
-
 <link rel="stylesheet" href="<?php echo _AF_URL_ . 'common/css/common' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css') ?>">
 <script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
 <script>

@@ -561,6 +561,12 @@ blockquote {
 	border-radius: 5px;
 	border: 1px solid #ddd;
 	cursor: pointer;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-drag: none;
 }
 
 #bdList .timeline>li .tmlabel:hover {

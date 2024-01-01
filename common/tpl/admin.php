@@ -16,9 +16,6 @@ addJSLang(['ok','cancel','yes','no','calling_server']);
 <meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
 <?php } ?>
 <title><?php echo getLang('%s %s', ['afox', 'admin']) ?></title>
-<!--[if IE]>
-<script type="text/javascript" src="<?php echo _AF_URL_ ?>common/js/html5shiv.min.js"></script>
-<![endif]-->
 <?php if (_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 <link href="<?php echo _AF_URL_ ?>common/css/bootstrap.min.css" rel="stylesheet">
 <script src="<?php echo _AF_URL_ ?>common/js/jquery.min.js" id="def-jQuery-JS"></script>
