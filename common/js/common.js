@@ -32,11 +32,6 @@ var $_LANG = {};
 		return this.replace(/^\s+|\s+$/g, "");
 	};
 
-	String.prototype.toUcFirst = function() {
-		var s = this.toLowerCase();
-		return s.charAt(0).toUpperCase() + s.slice(1);
-	};
-
 	String.prototype.sprintf = function() {
 		var s = this,
 			a = arguments;
@@ -52,6 +47,15 @@ var $_LANG = {};
 			});
 		}
 		return s;
+	};
+
+	String.prototype.toUcFirst = function() {
+		var s = this.toLowerCase();
+		return s.charAt(0).toUpperCase() + s.slice(1);
+	};
+
+	String.prototype.nl2br = function(breakTag = '<br>') {
+		return this.replace(/\r\n|\n\r|\r|\n/g, breakTag);
 	};
 
 	// php.js
@@ -76,11 +80,25 @@ var $_LANG = {};
 			"&": "&amp;",
 			"<": "&lt;",
 			">": "&gt;",
-			'"': '&quot;',
-			"'": '&#39;',
-			"/": '&#x2F;'
+			'"': "&quot;",
+			"'": "&#39;",
+			"/": "&#x2F;"
 		};
 		return this.replace(/[&<>"'\/]/g, function(s) {
+			return es[s];
+		});
+	};
+
+	String.prototype.unescapeHtml = function() {
+		var es = {
+			"&amp;": "&",
+			"&lt;": "<",
+			"&gt;": ">",
+			"&quot;": '"',
+			"&#39;": "'",
+			"&#x2F;": "/"
+		};
+		return this.replace(/&[^;]+;/g, function(s) {
 			return es[s];
 		});
 	};
