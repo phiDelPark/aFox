@@ -54,8 +54,8 @@ var $_LANG = {};
 		return s.charAt(0).toUpperCase() + s.slice(1);
 	};
 
-	String.prototype.nl2br = function(breakTag = '<br>') {
-		return this.replace(/\r\n|\n\r|\r|\n/g, breakTag);
+	String.prototype.nl2br = function(breakTag) {
+		return this.replace(/\r\n|\n\r|\r|\n/g, (breakTag || "<br>"));
 	};
 
 	// php.js
