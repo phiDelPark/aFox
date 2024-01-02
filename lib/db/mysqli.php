@@ -255,17 +255,17 @@ class DB {
 	DB::gets(_TABLE_)
 	DB::gets(_TABLE_, 'select', ['where'=>'value'])
 	// operator : ['field{(=|<>|<=|>=|<|>|IN|LIKE|IS)}'=>'value']
-	DB::gets(_TABLE_, ['where'=>'value','field1{>}'=>1,'field2{LIKE}'=>'value%'])
+	DB::gets(_TABLE_, 'select', ['where'=>'value','field1{>}'=>1,'field2{LIKE}'=>'value%'])
 	// command : ['^field'=>'command()'] // first char = '^' // not __quotes
-	DB::gets(_TABLE_, ['where'=>'value','^field'=>'NOW()','^'=>'LOWER(field)=\'abc\''])
+	DB::gets(_TABLE_, 'select', ['where'=>'value','^field'=>'NOW()','^'=>'LOWER(field)=\'abc\''])
 	// order by and (limit = 'start,count')
-	DB::gets(_TABLE_, ['where'=>'value'], 'order', '5,20')
-	DB::gets(_TABLE_, ['where'=>'value'], 'order1,order2', '1,5')
-	DB::gets(_TABLE_, ['where'=>'value'], ['order'=>'ASC'], '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], 'order', '5,20')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], 'order1,order2', '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['order'=>'ASC'], '1,5')
 	// order by and group by
-	DB::gets(_TABLE_, ['where'=>'value'], ['order'=>'DESC','group'=>'GROUP'], '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['order'=>'DESC','group'=>'GROUP'], '1,5')
 	// command order by : ['^'=>'command()']
-	DB::gets(_TABLE_, ['where'=>'value'], ['^'=>'rand()'], '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['^'=>'rand()'], '1,5')
 	**/
 	public static function gets($table) {
 		$callback = null;

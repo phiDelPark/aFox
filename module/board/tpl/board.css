@@ -561,12 +561,10 @@ blockquote {
 	border-radius: 5px;
 	border: 1px solid #ddd;
 	cursor: pointer;
-    -webkit-user-drag: none;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
-    user-drag: none;
 }
 
 #bdList .timeline>li .tmlabel:hover {
@@ -709,9 +707,7 @@ form .af_editor_rp_content>textarea+iframe {
 	-moz-user-select: none;
 	-ms-user-select: none;
 	-webkit-user-select: none;
-	-webkit-user-drag: none;
 	user-select: none;
-	user-drag: none;
 }
 
 #af_gallery_modal .modal-content img {
