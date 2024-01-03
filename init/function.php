@@ -664,7 +664,7 @@ if(!defined('__AFOX__')) exit();
 			$_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
 			if(file_exists($_file)){
 				$_ex = get_cache('_AF_ADDON_'.$key);
-				if(empty($_ex)){
+				if(is_null($_ex)){
 					$_ex = DB::get(_AF_ADDON_TABLE_, 'ao_extra', ['ao_id'=>$key]);
 					$_ex = $_ex ? unserialize($_ex['ao_extra']) : [];
 					set_cache('_AF_ADDON_'.$key, $_ex);

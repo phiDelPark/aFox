@@ -13,6 +13,7 @@ function proc($data) {
 	if(DB::error()) return set_error($error->getMessage(),$error->getCode());
 
 	if(empty($_ADDON['access_mode'])) $_ADDON['access_mode'] = null;
+	$_ADDON['use_editor'] = empty($_ADDON['use_editor']) ? 0 : $_ADDON['use_editor'];
 
 	if(!empty($_ADDON['ao_extra'])) {
 		$extra = unserialize($_ADDON['ao_extra']);
@@ -31,28 +32,51 @@ function proc($data) {
 	ob_start();
 
 	$author = empty($_ADDON_INFO['link'])?escapeHtml($_ADDON_INFO['author']):('<a href="'.escapeHtml($_ADDON_INFO['link']).'" target="_blank">'.escapeHtml($_ADDON_INFO['author']).'</a>');
+?>
+	<div class="form-group">
+		<h3 style="margin-top:0"><?php echo escapeHtml($_ADDON_INFO['title']) ?></h3>
+		<div class="row">
+			<label class="col-md-2"><?php echo getLang('version') ?></label>
+			<?php echo escapeHtml($_ADDON_INFO['version']) ?>
+		</div>
+		<div class="row">
+			<label class="col-md-2"><?php echo getLang('date') ?></label>
+			<?php echo escapeHtml($_ADDON_INFO['date']) ?>
+		</div>
+		<div class="row">
+			<label class="col-md-2"><?php echo getLang('author') ?></label>
+			<?php echo $author . ' ('.escapeHtml($_ADDON_INFO['email']) . ')' ?>
+		</div>
+		<p class="help-block"><?php echo nl2br(escapeHtml($_ADDON_INFO['description'])) ?></p>
+	</div>
 
-	echo '<div class="form-group"><h3 style="margin-top:0">'.escapeHtml($_ADDON_INFO['title']).'</h3>'
-		.'<div class="row"><label class="col-md-2">'.getLang('version').'</label> '.escapeHtml($_ADDON_INFO['version']).'</div>'
-		.'<div class="row"><label class="col-md-2">'.getLang('date').'</label> '.escapeHtml($_ADDON_INFO['date']).'</div>'
-		.'<div class="row"><label class="col-md-2">'.getLang('author').'</label> '.$author.' ('.escapeHtml($_ADDON_INFO['email']).')</div>'
-		.'<p class="help-block">'.nl2br(escapeHtml($_ADDON_INFO['description'])).'</p></div>';
-
-	echo '<div><label class="checkbox inline" tabindex="0">'
-		.'<input type="checkbox" name="use_pc" value="1"'.($_ADDON['use_pc']=='1'?' checked':'').'>'
-		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>PC</strong></label>'
-		.'<label class="checkbox inline" tabindex="0">'
-		.'<input type="checkbox" name="use_mobile" value="1"'.($_ADDON['use_mobile']=='1'?' checked':'').'>'
-		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>Mobile</strong></label></div>'
-		.'<div class="form-group"><label class="radio btn mw-10" tabindex="0">'
-		.'<input type="radio" name="grant_access" value="0"'.($_ADDON['grant_access']=='0'?' checked':'').'>'
-		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>'
-		.'<span>'.getLang('all').'</span></label><label class="radio btn mw-10" tabindex="0">'
-		.'<input type="radio" name="grant_access" value="1"'.($_ADDON['grant_access']!='0'&&$_ADDON['grant_access']!='m'?' checked':'').'>'
-		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><span>'.getLang('member').'</span>'
-		.'</label><label class="radio btn mw-10" tabindex="0"><input type="radio" name="grant_access" value="m"'.($_ADDON['grant_access']=='m'?' checked':'').'>'
-		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><span>'.getLang('admin').'</span></label></div><hr style="margin:10px 0 25px">';
-
+	<div class="form-group">
+		<label class="checkbox inline" tabindex="0">
+		<input type="checkbox" name="use_pc" value="1"<?php echo $_ADDON['use_pc']=='1'?' checked':'' ?>>
+		<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>PC</strong></label>
+		<label class="checkbox inline" tabindex="0">
+		<input type="checkbox" name="use_mobile" value="1"<?php echo $_ADDON['use_mobile']=='1'?' checked':'' ?>>
+		<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>Mobile</strong></label>
+<?php
+	if(file_exists(_AF_ADDONS_PATH_ . $data['ao_id'] . '/editor.php')){
+		echo '<label class="checkbox inline" tabindex="0">'
+		.'<input type="checkbox" name="use_editor" value="1"'.($_ADDON['use_editor']=='1'?' checked':'').'>'
+		.'<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><strong>Editor</strong></label>';
+	}
+?>
+	</div>
+	<div class="form-group">
+		<label class="radio btn mw-10" tabindex="0">
+		<input type="radio" name="grant_access" value="0"<?php echo $_ADDON['grant_access']=='0'?' checked':'' ?>>
+		<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+		<span><?php echo getLang('all') ?></span></label><label class="radio btn mw-10" tabindex="0">
+		<input type="radio" name="grant_access" value="1"<?php echo $_ADDON['grant_access']!='0'&&$_ADDON['grant_access']!='m'?' checked':'' ?>>
+		<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><span><?php echo getLang('member') ?></span>
+		</label><label class="radio btn mw-10" tabindex="0"><input type="radio" name="grant_access" value="m"<?php echo $_ADDON['grant_access']=='m'?' checked':'' ?>>
+		<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span><span><?php echo getLang('admin') ?></span></label>
+	</div>
+	<hr style="margin:10px 0 25px">
+<?php
 	unset($data);
 
 	require($_template_file);

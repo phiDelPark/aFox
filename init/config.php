@@ -116,7 +116,7 @@ function set_cache($key, $val, $exp = 0){
 	$h = @opendir($dir); while($e=readdir($h)){if($e!='.' && $e!='..'){
 		@chmod($dir.'/'.$e, 0707); @unlink($dir.'/'.$e);
 	}} @closedir($h);
-	$s = '<?php if(!defined(\'__AFOX__\'))exit();$_EXPIRE=%s;$_DATA=%s; ?>';
+	$s = '<?php if(!defined(\'__AFOX__\'))exit();$_EXPIRE=%s;$_CACHE=%s; ?>';
 	$s = sprintf($s, empty($exp)?0:_AF_SERVER_TIME_+$exp, var_export($val,true));
 	file_put_contents($dir.'/'.md5(_AF_SERVER_TIME_).'.php', $s, LOCK_EX);
 }
@@ -127,7 +127,7 @@ function get_cache($key){
 	if(!is_file($f = $dir.'/'.(@scandir($dir)[2]))) return;
 	if((@include $f)!==1||(!empty($_EXPIRE)&&$_EXPIRE<_AF_SERVER_TIME_)){
 		@chmod($f, 0707); @unlink($f); @chmod($dir, 0707); @rmdir($dir); return;
-	} return $__af_caches[$key] = $_DATA;
+	} return $__af_caches[$key] = $_CACHE;
 }
 
 function debugPrint($o = null){

@@ -19,11 +19,11 @@ function procSearchexDefault($data) {
 }
 
 function dispSearchexDefault($data) {
-	$act = 'default';
+	$disp = 'default';
 	$dir = _AF_MODULES_PATH_ . 'searchex/disp/';
-	$inc_file = $dir . $act . '.php';
+	$inc_file = $dir . $disp . '.php';
 
-	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$act)) {
+	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$disp)) {
 		require_once $inc_file;
 		return proc($data);
 	} else {

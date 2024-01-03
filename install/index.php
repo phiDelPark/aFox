@@ -243,6 +243,7 @@ $_err_keys = _AF_ADDON_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_ADDON_TABLE_.' (
 	   ao_id          VARCHAR(124) NOT NULL,
+	   use_editor     CHAR(1)      NOT NULL DEFAULT 0,
 	   ao_extra       TEXT,
 
 	  UNIQUE KEY ID_UK (ao_id))'.$_engine;

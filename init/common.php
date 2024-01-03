@@ -44,7 +44,10 @@ if(__REQ_METHOD__ == 'JSON') $_POST = json_decode(file_get_contents('php://input
 $_DATA = $_GET;
 ///*첫번째 키가 모듈인지 체크 (.htaccess 대신 사용할때)
 if(!empty($_GET) && !isset($_GET['module'])){
-	if(file_exists(_AF_MODULES_PATH_ . ($tmp=key($_GET)) . '/setup.php'))$_DATA['module'] = $tmp;
+	if(file_exists(_AF_MODULES_PATH_ . ($tmp=key($_GET)) . '/setup.php')){
+		$_DATA['module'] = $tmp;
+		$_DATA['disp'] = empty($_GET[$tmp]) ? 'default' : $_GET[$tmp];
+	}
 }//*/
 
 // 넘어온 값을 하나로 합침

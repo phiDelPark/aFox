@@ -22,11 +22,11 @@ function procMemberDefault($data) {
 }
 
 function dispMemberDefault($data) {
-	$act = strtolower($data['member']);
+	$disp = strtolower($data['disp']);
 	$dir = _AF_MODULES_PATH_ . 'member/disp/';
-	$inc_file = $dir . $act . '.php';
+	$inc_file = $dir . $disp . '.php';
 
-	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$act)) {
+	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$disp)) {
 		require_once $inc_file;
 		return proc($data);
 	} else {

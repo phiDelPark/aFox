@@ -62,25 +62,24 @@ foreach ($options as $key => $v) {
 	</div>
 	<script>
 		<?php
-			$components = '';
-			$_COMPONENT_INFO = [];
-			$dir = _AF_PATH_ . 'module/editor/components/';
-			if(is_dir($dir)){
-				$handle = @opendir($dir); // 절대경로
-				while ($file = readdir($handle)) {
-					if($file != '.' && $file != '..') {
-						if(file_exists($dir.$file.'/info.php')) {
-							include $dir.$file.'/info.php';
-							$components .= '["'.$file.'","'.$_COMPONENT_INFO['title'].'"],';
+			echo 'var AF_EDITOR_COMPONENTS = [';
+			$components = get_cache('_AF_EDITOR_COMPONENTS');
+			if(is_null($components)){ //에디터 컴포넌트 목록 캐시 생성
+				$components = DB::gets(_AF_ADDON_TABLE_, ['use_editor'=>'1'], [],
+					function($r){
+						$rset = [];
+						$_ADDON_INFO = [];
+						while ($row = DB::fetch($r)){
+							include _AF_ADDONS_PATH_ . $row['ao_id'] . '/info.php';
+							$rset[] = [0=>$row['ao_id'],1=>$_ADDON_INFO['title']];
 						}
+						return $rset;
 					}
-				}
-				@closedir($handle);
-				if(!empty($components)) $components = rtrim($components,',');
+				); set_cache('_AF_EDITOR_COMPONENTS', $components);
 			}
-			unset($handle);
-			unset($_COMPONENT_INFO);
-			echo 'var AF_EDITOR_COMPONENTS = ['.$components.'];';
+			foreach($components as $v){
+				echo '["' . $v[0] . '","' . str_replace(['[',']','"'], ['{','}','`'], $v[1]) . '"]';
+			} echo '];';
 		?>
 	</script>
 <?php } ?>

@@ -27,9 +27,8 @@
 <tbody>
 
 <?php
-$addon_dir = _AF_ADDONS_PATH_;
-if(is_dir($addon_dir)) {
-	foreach(glob($addon_dir.'*', GLOB_ONLYDIR) as $dir) {
+if(is_dir(_AF_ADDONS_PATH_)) {
+	foreach(glob(_AF_ADDONS_PATH_ . '*', GLOB_ONLYDIR) as $dir) {
 		$opt = '--/--/--';
 		$name = basename($dir);
 		if(isset($ao_list[$name])) {
@@ -38,7 +37,7 @@ if(is_dir($addon_dir)) {
 		}
 
 		$_ADDON_INFO = [];
-		@include $addon_dir.$name.'/info.php';
+		@include _AF_ADDONS_PATH_ . $name . '/info.php';
 
 		echo '<tr><th scope="row">'.(escapeHtml(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title'])).'</th>';
 		echo '<td class="hidden-xs">'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
