@@ -70,8 +70,11 @@ foreach ($options as $key => $v) {
 						$rset = [];
 						$_ADDON_INFO = [];
 						while ($row = DB::fetch($r)){
-							include _AF_ADDONS_PATH_ . $row['ao_id'] . '/info.php';
-							$rset[] = [0=>$row['ao_id'],1=>$_ADDON_INFO['title']];
+							$tmp = _AF_ADDONS_PATH_ . $row['ao_id'] . '/info.php';
+							if(file_exists($tmp)){
+								include $tmp;
+								$rset[] = [0=>$row['ao_id'],1=>$_ADDON_INFO['title']];
+							}
 						}
 						return $rset;
 					}
