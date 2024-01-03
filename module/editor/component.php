@@ -32,7 +32,9 @@ require_once _AF_ADDONS_PATH_ . $_GET['n'] . '/info.php';
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.min.js"></script>
 <script src="<?php echo _AF_URL_ ?>common/js/common.min.js"></script>
 </head>
-<body>
+<body style="padding:10px">
+	<h4><?php echo $_ADDON_INFO['title'] ?></h4>
+	<hr style="margin:20px 0 10px">
 <?php
 require_once _AF_ADDONS_PATH_ . $_GET['n'] . '/editor.php';
 ?>

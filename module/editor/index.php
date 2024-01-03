@@ -77,8 +77,10 @@ foreach ($options as $key => $v) {
 					}
 				); set_cache('_AF_EDITOR_COMPONENTS', $components);
 			}
+			$comma = '';
 			foreach($components as $v){
-				echo '["' . $v[0] . '","' . str_replace(['[',']','"'], ['{','}','`'], $v[1]) . '"]';
+				echo $comma . '["' . $v[0] . '","' . str_replace(['[',']','"'], ['{','}','`'], $v[1]) . '"]';
+				$comma = ',';
 			} echo '];';
 		?>
 	</script>
