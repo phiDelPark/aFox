@@ -1,6 +1,6 @@
 <?php
 define('_AF_EDITOR_PATH_', str_replace('\\', '/', realpath(dirname(__FILE__))) . '/');
-define('_AF_EDITOR_NAME_', strtoupper($_GET['k']));
+define('_AF_EDITOR_NAME_', empty($_GET['k']) ? NULL : strtoupper($_GET['k']));
 
 define('__AFOX__', TRUE);
 define('_AF_PATH_', str_replace('module/editor/','', _AF_EDITOR_PATH_));
