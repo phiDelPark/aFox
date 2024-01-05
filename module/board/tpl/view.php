@@ -26,45 +26,39 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			<span class="pull-right"><?php echo date((__MOBILE__?'y':'Y').getLang('year').' m'.getLang('month').' d'.getLang('day').' A h:i', strtotime($DOC[$is_col_update?'wr_update':'wr_regdate']))?></span>
 		</div>
 	</header>
-	<article>
-
-	<?php
-		$md_extra_keys = empty($_CFG['md_extra']['keys']) ? [] : $_CFG['md_extra']['keys'];
-		if (!empty($md_extra_keys)) {
+<?php
+	$md_extra_keys = empty($_CFG['md_extra']['keys']) ? [] : $_CFG['md_extra']['keys'];
+	if (!empty($md_extra_keys)) {
+		echo '<div class="wr_extra_vars">';
+		foreach($md_extra_keys as $ex_key=>$ex_name) {
+			$tmp = @$DOC['wr_extra']['vars'][$ex_key];
+			if(preg_match('/^https?:\/\/.+/', $tmp)) $tmp = '<a href="'.escapeHtml($tmp).'" target="_blank">'.$tmp.'</a>';
+?>
+		<div class="text-ellipsis clearfix">
+			<strong class="col-sm-2"><?php echo $ex_name?></strong>
+			<span><?php echo $tmp?></span>
+		</div>
+<?php
+		}
+		echo '</div>';
+	}
+	if($is_btn_download) {
+		$_files = DB::gets(_AF_FILE_TABLE_, ['md_id'=>__MID__,'mf_target'=>$DOC['wr_srl'],'mf_type{LIKE}'=>'application%','(_OR_)'=>['^'=>'LOWER(`mf_name`)LIKE\'%.zip\'OR LOWER(`mf_name`)LIKE\'%.7z\'']]);
+		if (!empty($_files)) {
 			echo '<div class="wr_extra_vars">';
-			foreach($md_extra_keys as $ex_key=>$ex_name) {
-				$tmp = @$DOC['wr_extra']['vars'][$ex_key];
-				if(preg_match('/^https?:\/\/.+/', $tmp)) $tmp = '<a href="'.escapeHtml($tmp).'" target="_blank">'.$tmp.'</a>';
-	?>
-			<div class="text-ellipsis clearfix">
-				<strong class="col-sm-2"><?php echo $ex_name?></strong>
-				<span><?php echo $tmp?></span>
-			</div>
-	<?php
+			foreach($_files as $_file) {
+				echo '<div class="text-ellipsis clearfix"><strong class="col-sm-2">'.getLang('download').'</strong> <span><a href="./?file='.$_file['mf_srl'].'"><code>'.$_file['mf_name'].'</code></a></span></div>';
 			}
 			echo '</div>';
 		}
+	}
+	$wr_content = ($wr_grant_view || !$wr_secret) ? $DOC['wr_content'] : getLang('error_permitted');
+	$wr_content = toHTML($wr_content, $DOC['wr_type']);
+	$wr_content = preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1data-scroll-src\\3', $wr_content);
+	echo empty($_DATA['search']) ? $wr_content : highlightText($_DATA['search'], $wr_content);
 
-		if($is_btn_download) {
-			$_files = DB::gets(_AF_FILE_TABLE_, ['md_id'=>__MID__,'mf_target'=>$DOC['wr_srl'],'mf_type{LIKE}'=>'application%','(_OR_)'=>['^'=>'LOWER(`mf_name`)LIKE\'%.zip\'OR LOWER(`mf_name`)LIKE\'%.7z\'']]);
-			if (!empty($_files)) {
-				echo '<div class="wr_extra_vars">';
-				foreach($_files as $_file) {
-					echo '<div class="text-ellipsis clearfix"><strong class="col-sm-2">'.getLang('download').'</strong> <span><a href="./?file='.$_file['mf_srl'].'"><code>'.$_file['mf_name'].'</code></a></span></div>';
-				}
-				echo '</div>';
-			}
-		}
-	?>
-
-	<?php
-		$wr_content = ($wr_grant_view || !$wr_secret) ? $DOC['wr_content'] : getLang('error_permitted');
-		$wr_content = toHTML($wr_content, $DOC['wr_type']);
-		$wr_content = preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1data-scroll-src\\3', $wr_content);
-		echo empty($_DATA['search']) ? $wr_content : highlightText($_DATA['search'], $wr_content);
-	?>
-
-	<?php if(!empty($CONFIGS['show_button'])) { ?>
+	if(!empty($CONFIGS['show_button'])) {
+?>
 	<div class="show_buttons">
 		<?php
 			foreach ($CONFIGS['show_button'] as $val) {
@@ -73,8 +67,7 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			}
 		?>
 	</div>
-	<?php } ?>
-	<?php if(!empty($DOC['wr_tags'])) { ?>
+	<?php } if(!empty($DOC['wr_tags'])) { ?>
 	<div class="hashtags">
 		<?php
 			$hashtags = explode(',', $DOC['wr_tags']);
@@ -83,8 +76,7 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			}
 		?>
 	</div>
-	<?php } ?>
-	<?php if(!empty($doc_mb['mb_memo'])) {
+	<?php } if(!empty($doc_mb['mb_memo'])) {
 			$_icon = $doc_mb['mb_srl'].'/profile_image.png';
 			if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
 				$_icon = _AF_URL_ . 'data/member/' . $_icon;
@@ -97,7 +89,6 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			<div class="right"><?php echo toHTML($doc_mb['mb_memo'], 1, 'member_memo') ?></div>
 		</div>
 	<?php } ?>
-	</article>
 	<footer class="area-text-button clearfix">
 	<?php if(!__POPUP__) { ?>
 		<div class="pull-left">

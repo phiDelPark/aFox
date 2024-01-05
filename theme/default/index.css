@@ -13,7 +13,7 @@ body>.container {
 	min-height: 100%;
 }
 
-article>.current_content {
+.current_content {
 	margin: 0;
 	padding: 0;
 	overflow-x: hidden;
@@ -214,45 +214,50 @@ ul.message-dropdown>li>a {
 	white-space: normal;
 }
 
-.bs-docs-header {
+.container>header {
 	position: relative;
 }
 
-.bs-docs-header .right {
+.container>header .right {
 	position: absolute;
 	bottom: 0;
 	right: 0;
 }
 
-.bs-docs-header .right .glyphicon,
-.bs-docs-header .right .caret {
+.container>header .right .glyphicon,
+.container>header .right .caret {
 	color: #000 !important;
 }
 
-.bs-docs-header .right [aria-label="Search"],
-.bs-docs-header .right .caret {
+.container>header .right [aria-label="Search"],
+.container>header .right .caret {
 	margin-right: 5px;
 }
 
-.bs-docs-header .dropdown-header {
+.container>header .dropdown-header {
 	font-size: inherit;
 }
 
-.bs-docs-footer-links {
+[role=main] {
+	min-height: 100%;
+	margin-bottom: 185px;
+}
+
+[role=contentinfo] ul {
 	padding-left: 0;
 	margin-bottom: 20px;
 }
 
-.bs-docs-footer-links li {
+[role=contentinfo] ul li {
 	display: inline-block;
 }
 
-.bs-docs-footer-links li+li {
+[role=contentinfo] ul li+li {
 	margin-left: 15px;
 }
 
-.bs-docs-footer {
-	padding: 30px 30px;
+[role=contentinfo] {
+	padding: 15px;
 	margin-top: 48px;
 	color: #99979c;
 	text-align: right;
@@ -265,13 +270,20 @@ ul.message-dropdown>li>a {
 	overflow: hidden;
 }
 
-.bs-docs-footer a {
+[role=contentinfo] a {
 	color: #fff;
 }
 
-.bs-docs-body {
-	min-height: 100%;
-	margin-bottom: 185px;
+[role=contentinfo] ul {
+	margin-bottom: 8px;
+}
+
+[role=contentinfo] ul li {
+	margin: 0;
+}
+
+[role=contentinfo] ul li+li {
+	margin: 5px 15px 0 0;
 }
 
 .bs-popup-body {
@@ -291,7 +303,7 @@ ul.message-dropdown>li>a {
 	vertical-align: bottom;
 }
 
-[aria-labelledby="afPageLoader"] {
+#afPageLoading {
 	position: fixed;
 	left: 0px;
 	top: 0px;
@@ -301,17 +313,17 @@ ul.message-dropdown>li>a {
 	background: url(img/pre_loader.gif) center no-repeat #fff;
 }
 
-[aria-labelledby="afMsgBox"] .modal-dialog {
+#afMessageBox .modal-dialog {
 	margin: 150px auto 0;
 	max-width: 400px;
 }
 
-[aria-labelledby="afMsgBox"] .modal-header {
+#afMessageBox .modal-header {
 	font-weight: bold;
 	font-size: 16px;
 }
 
-[aria-labelledby="afMsgBox"] .modal-body {
+#afMessageBox .modal-body {
 	min-height: 70px;
 }
 
@@ -319,7 +331,7 @@ ul.message-dropdown>li>a {
 	margin-left: 5px;
 }
 
-#af_md_config {
+#afModuleconfig {
 	position: fixed;
 	z-index: 9980;
 	left: 0;
@@ -332,14 +344,14 @@ ul.message-dropdown>li>a {
 	font-weight: normal;
 }
 
-#af_md_config .config-area {
+#afModuleconfig .config-area {
 	overflow: hidden;
 	width: 0;
 	max-width: 300px !important;
 	min-height: 75px !important;
 }
 
-#af_md_config .btn-toggle {
+#afModuleconfig .btn-toggle {
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -352,15 +364,15 @@ ul.message-dropdown>li>a {
 	padding: 0 0 2px 0 !important;
 }
 
-#af_md_config .btn-toggle>.glyphicon {
+#afModuleconfig .btn-toggle>.glyphicon {
 	font-size: 22px !important;
 	padding: 5px !important;
 	margin: 0 0 0 1px !important;
 	cursor: pointer;
 }
 
-#af_md_config .config-header,
-#af_md_config #config_menus {
+#afModuleconfig .config-header,
+#afModuleconfig #config_menus {
 	display: block;
 	float: left;
 	width: 100%;
@@ -369,8 +381,8 @@ ul.message-dropdown>li>a {
 	padding: 0;
 }
 
-#af_md_config .config-header,
-#af_md_config #config_menus li>a {
+#afModuleconfig .config-header,
+#afModuleconfig #config_menus li>a {
 	color: #999;
 	display: block;
 	text-decoration: none;
@@ -385,53 +397,53 @@ ul.message-dropdown>li>a {
 	transition: background .5s;
 }
 
-#af_md_config .config-header,
-#af_md_config #config_menus li {
+#afModuleconfig .config-header,
+#afModuleconfig #config_menus li {
 	line-height: 35px;
 	text-indent: 20px;
 }
 
-#af_md_config #config_menus li:before,
-#af_md_config #config_menus li:after {
+#afModuleconfig #config_menus li:before,
+#afModuleconfig #config_menus li:after {
 	display: table;
 	content: " ";
 }
 
-#af_md_config #config_menus li:after {
+#afModuleconfig #config_menus li:after {
 	clear: both;
 }
 
-#af_md_config #config_menus li>a {
+#afModuleconfig #config_menus li>a {
 	color: #999999;
 	display: block;
 	text-decoration: none;
 }
 
-#af_md_config #config_menus li>a:hover {
+#afModuleconfig #config_menus li>a:hover {
 	color: #fff;
 	background: rgba(255, 255, 255, 0.2);
 	text-decoration: none;
 }
 
-#af_md_config #config_menus li>a:active,
-#af_md_config #config_menus li>a:focus {
+#afModuleconfig #config_menus li>a:active,
+#afModuleconfig #config_menus li>a:focus {
 	text-decoration: none;
 }
 
-#af_md_config #config_menus li>div {
+#afModuleconfig #config_menus li>div {
 	padding: 0 20px;
 	display: none;
 }
 
-#af_md_config #config_menus li:last-child>a {
+#afModuleconfig #config_menus li:last-child>a {
 	border-radius: 0 0 4px 0;
 }
 
-#af_md_config #config_menus li:first-child>div {
+#afModuleconfig #config_menus li:first-child>div {
 	display: block;
 }
 
-#af_md_config .config-header {
+#afModuleconfig .config-header {
 	height: 35px;
 	line-height: 35px;
 	font-size: 18px;
@@ -439,7 +451,7 @@ ul.message-dropdown>li>a {
 	white-space: nowrap;
 }
 
-#af_md_config .config-content {
+#afModuleconfig .config-content {
 	min-width: 150px;
 	width: auto;
 	white-space: nowrap;
@@ -501,20 +513,7 @@ ul.message-dropdown>li>a {
 		width: 330px;
 		margin: 0;
 	}
-	.bs-docs-footer {
-		padding: 10px;
-		text-align: left;
-	}
-	.bs-docs-footer-links {
-		margin-bottom: 8px;
-	}
-	.bs-docs-footer-links li {
-		margin: 0;
-	}
-	.bs-docs-footer-links li+li {
-		margin: 5px 15px 0 0;
-	}
-	[aria-labelledby="afMsgBox"] .modal-dialog {
+	#afMessageBox .modal-dialog {
 		width: 300px;
 	}
 	.form-inline input:not([type="hidden"])+input:not([type="hidden"]) {

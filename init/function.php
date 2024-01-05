@@ -647,7 +647,7 @@ if(!defined('__AFOX__')) exit();
 			}
 		}
 
-		return '<div class="'.$class.'">'.$text.'</div>';
+		return '<article class="'.$class.'">'.$text.'</article>';
 	}
 
 	function triggerAddonCall($addons, $position, $trigger, &$data){

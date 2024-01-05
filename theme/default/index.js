@@ -27,7 +27,7 @@
 			loginformhtml = loginformhtml.sprintf(current_url, $_LANG['id'], $_LANG['password'], $_LANG['auto_login']);
 			msg_box(loginformhtml, $_LANG['login'], ['question', ['cancel', 'OK']], function(key, $body) {
 				if (key == 'show') {
-					var $m = $body.closest('[aria-labelledby="afMsgBox"]');
+					var $m = $body.closest('#afMessageBox');
 					$m.find('.modal-header .glyphicon').removeClass().addClass('glyphicon glyphicon-user');
 					$m.find('.modal-footer [data-key="ok"]').text($_LANG['login']);
 					$m.find('.modal-footer').prepend('<div class="pull-left"><a href="' + request_uri + '?module=member&disp=signUp"><strong>' + $_LANG['member_signup'] + '</strong></a> / <a href="' + request_uri + '?module=member&disp=findAccount">' + $_LANG['member_find'] + '</a></div>');
@@ -100,7 +100,7 @@
 			});
 		});
 
-		$('#af_md_config').each(function() {
+		$('#afModuleconfig').each(function() {
 			var $this = $(this),
 				$btn = $this.find('.btn-toggle');
 			$btn.find('.glyphicon-ok').offOn('click', function() {
@@ -127,7 +127,7 @@
 			});
 		});
 
-		$('[aria-labelledby="afPageLoader"]').fadeOut("slow");
+		$('#afPageLoading').fadeOut("slow");
 	});
 
 })(jQuery);

@@ -33,21 +33,16 @@
 		}
 	}
 ?>
-
 <?php if(!empty($_THEME['use_loader'])) { ?>
-<div aria-labelledby="afPageLoader">
-	<span id="afPageLoader" class="sr-only">
-		Please Wait, Loading...
-	</span>
+<div id="afPageLoading">
+	<span class="sr-only">Please Wait, Loading...</span>
 </div>
 <?php } ?>
-
 <div class="container">
-
-	<header class="bs-docs-header">
+	<header>
 		<h1 class="logo-title" role="banner" aria-label="<?php echo escapeHtml($_CFG['title'])?>"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
 		<div class="right">
-			<span role="search" aria-label="Search"><a class="collapsed" data-toggle="collapse" href="#nav-collapse3" aria-expanded="false" aria-controls="nav-collapse3"><i class="glyphicon glyphicon-search" aria-hidden="true" style="font-weight:bold"></i></a></span>
+			<span><a class="collapsed" data-toggle="collapse" href="#searchBox" aria-controls="searchBox" aria-expanded="false" aria-label="Toggle search box"><i class="glyphicon glyphicon-search" aria-hidden="true" style="font-weight:bold"></i></a></span>
 <?php if (!empty($_MEMBER)) {
 	$notes = DB::gets(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], 'nt_send_date', '1,5');
 ?>
@@ -110,19 +105,17 @@
 <?php } ?>
 		</div>
 	</header>
-
 	<nav class="navbar navbar-inverse" role="navigation" aria-label="Site Navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#af-navbar-collapse-9" aria-expanded="false">
-					<span class="sr-only">Toggle navigation</span>
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation" aria-expanded="false">
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="<?php echo getUrl('')?>"><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a>
+				<a class="navbar-brand" href="<?php echo getUrl('')?>" aria-current="page"><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a>
 			</div>
-			<div class="collapse navbar-collapse" id="af-navbar-collapse-9">
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="nav navbar-nav right">
 <?php
 	foreach ($mainmenu as $key => $val) {
@@ -130,10 +123,10 @@
 	}
 ?>
 				</ul>
-				<div class="collapse nav navbar-nav nav-collapse slide-down" id="nav-collapse3">
+				<div class="collapse nav navbar-nav nav-collapse slide-down" id="searchBox">
 				<form class="navbar-form navbar-right" role="search" action="<?php echo getUrl('') ?>" method="get">
 					<div class="form-group">
-						<input type="text" name="searchex" class="form-control" placeholder="<?php echo getLang('search_word')?>" required>
+						<input type="text" name="searchex" class="form-control" role="searchbox" placeholder="<?php echo getLang('search_word')?>" required>
 					</div>
 					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> <?php echo getLang('Search')?></button>
 				</form>
@@ -141,9 +134,8 @@
 			</div>
 		</div>
 	</nav>
-
 <?php if (__MID__ == $_CFG['start']) { ?>
-	<section id="myCarousel" class="carousel slide" data-ride="carousel" role="complementary" aria-label="Site Carousel">
+	<aside id="myCarousel" class="carousel slide" data-ride="carousel" role="banner" aria-label="Site slide banner">
 	  <div class="carousel-inner">
 		<?php for ($i=1; $i < 4; $i++) {  ?>
 			<div class="item<?php echo $i===1 ? ' active':''?>">
@@ -158,9 +150,9 @@
 	  </div>
 	  <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
 	  <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
-	</section>
+	</aside>
 <?php } else { ?>
-<div class="header-image <?php echo __MODULE__ ?>">
+<aside class="header-image <?php echo __MODULE__ ?>">
 	<?php if(__MODULE__) {
 		$md_key = ucfirst(__MODULE__);
 	?>
@@ -169,37 +161,27 @@
 		</h3>
 		<p role="description"><?php echo $_CFG['md_description'] ?></p>
 	<?php } ?>
-</div>
-<?php }
-
-	// 테마에 모듈 스킨(tpl)이 있으면 사용
+</aside>
+<?php }	// 테마에 모듈 스킨(tpl)이 있으면 사용
 	$config_file = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/config.php';
 	if(!file_exists($config_file)) $config_file = _AF_MODULES_PATH_.__MODULE__.'/tpl/config.php';
 	if(file_exists($config_file) && isManager(__MODULE__)) {
 ?>
-<div id="af_md_config" class="clearfix" role="config">
+<aside id="afModuleconfig" class="clearfix" role="config">
 	<div class="btn-toggle">
 		<i class="glyphicon glyphicon-cog" aria-hidden="true"></i>
 		<i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
 	</div>
 	<div class="config-area">
-		<div class="config-header">
-			<strong><?php echo $_CFG['md_title'] ?></strong>
-		</div>
-		<div class="config-content clearfix">
-			<?php
-			@include  $config_file;
-			?>
-		</div>
+		<div class="config-header"><strong><?php echo $_CFG['md_title'] ?></strong></div>
+		<div class="config-content clearfix"><?php @include  $config_file; ?></div>
 	</div>
-</div>
-<?php }
-
-$tmp = 'col-md-9 ';
-if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) {
-	if(empty($submenuactivetitle)) $submenuactivetitle = $mainmenu['_ACTIVE_']['mu_title'];
+</aside>
+<?php } $tmp=!empty($submenu['_ACTIVE_'])&&count($submenu['_ACTIVE_'])>0?'col-md-9 ':'';?>
+<?php if(!empty($tmp)){
+	if(empty($submenuactivetitle))$submenuactivetitle=$mainmenu['_ACTIVE_']['mu_title'];
 ?>
-	<div class="bs-docs-body row">
+	<div class="row">
 		<aside class="col-md-3" role="menu" aria-label="Content Menu">
 			<div class="list-group">
 				<span class="list-group-item disabled">
@@ -219,22 +201,14 @@ if(!empty($submenu['_ACTIVE_']) && count($submenu['_ACTIVE_'])>0) {
 	?>
 			</div>
 		</aside>
-<?php } else {
-$tmp = '';
-?>
-	<div class="bs-docs-body">
 <?php } ?>
-		<section class="<?php echo $tmp.__MODULE__?>" role="main" aria-label="Site Contents">
-			<article>
-			<?php if($error = get_error()) { messageBox($error['message'], $error['error']); } ?>
-			<?php displayModule()?>
-			</article>
-		</section>
-	</div>
-
-	<footer class="bs-docs-footer" role="contentinfo" aria-label="About Site">
-		<ul class="bs-docs-footer-links">
-		<li style="visibility:hidden"></li>
+	<article class="<?php echo $tmp.__MODULE__?>" role="main" aria-label="Site Contents">
+		<?php if($error = get_error()) { messageBox($error['message'], $error['error']); } ?>
+		<?php displayModule()?>
+	</article>
+<?php if(!empty($tmp)) echo "</div>" ?>
+	<footer role="contentinfo" aria-label="About Site">
+		<ul><li style="visibility:hidden"></li>
 <?php
 
 	if(empty($menus['error'])){
@@ -247,5 +221,4 @@ $tmp = '';
 		</ul>
 		<p><?php if(!empty($_THEME['footer_html'])) echo $_THEME['footer_html']; ?></p>
 	</footer>
-
 </div>

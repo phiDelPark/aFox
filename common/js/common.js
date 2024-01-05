@@ -237,7 +237,7 @@ var $_LANG = {};
 	};
 
 	$.msg_box = window.msg_box = function(text, caption, type, callback) {
-		var html = '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="afMsgBox" aria-hidden="true" style="z-index:99999"><div class="modal-dialog"><div class="modal-content"><div class="modal-header" id="afMsgBox"><i class="glyphicon glyphicon-%s" aria-hidden="true"></i> %s</div><div class="modal-body"></div><div class="modal-footer">%s</div></div></div></div>',
+		var html = '<div class="modal fade" tabindex="-1" id="afMessageBox" role="alert" aria-hidden="true" style="z-index:99999"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><i class="glyphicon glyphicon-%s" aria-hidden="true"></i> %s</div><div class="modal-body"></div><div class="modal-footer">%s</div></div></div></div>',
 			icons = {
 				'info': 'info-sign',
 				'question': 'question-sign',
@@ -320,7 +320,7 @@ var $_LANG = {};
 			multipart = ($i.attr('enctype') || '') == 'multipart/form-data',
 			data = param || {};
 
-		var $waiting = $('<div class="af_waiting_message alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> ' + (($_LANG && $_LANG['calling_server']) ? $_LANG['calling_server'] : 'Please wait...') + '<div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:100%"></div></div></div>');
+		var $waiting = $('<div id="afWaitingMessage" class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> ' + (($_LANG && $_LANG['calling_server']) ? $_LANG['calling_server'] : 'Please wait...') + '<div class="progress"><div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:100%"></div></div></div>');
 		$waiting.hide().appendTo('body').fadeIn(1500);
 
 

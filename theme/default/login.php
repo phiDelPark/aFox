@@ -11,7 +11,7 @@
 ?>
 
 <div id="fullscreen_bg" class="fullscreen_bg"/>
-<div role="dialog" aria-labelledby="<?php echo $signUp?'afSignUpFormTitle':'afMsgBox'?>" style="z-index:99999;display:block">
+<div role="dialog" id="<?php echo $signUp?'afSignUpFormdialog':'afMessageBox'?>" style="z-index:99999;display:block">
 	<div class="modal-dialog<?php echo $signUp?' modal-lg':''?>">
 		<?php if($signUp) { ?>
 			<div class="modal-content">
@@ -23,7 +23,7 @@
 		<form action="/" method="post" autocomplete="off" data-exec-ajax="member.loginCheck" class="modal-content">
 			<input type="hidden" name="error_return_url" value="<?php echo getUrl('')?>" />
 			<input type="hidden" name="success_return_url" value="<?php echo getUrl('')?>" />
-			<div class="modal-header" id="<?php echo $signUp?'afSignUpFormTitle':'afMsgBox'?>">
+			<div class="modal-header">
 				<img src="theme/default/img/logo.png" width="100%" style="max-width:310px">
 				<span class="sr-only"><?php echo escapeHtml($_CFG['title']).' '.getLang('login')?></span>
 			</div>

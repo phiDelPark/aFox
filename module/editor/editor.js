@@ -514,17 +514,17 @@
 				if ($i[0].tagName == 'TEXTAREA') {
 					this.paste('`%s`');
 				} else {
-					this.paste('<code>%s</code>', '...');
+					this.paste('<code>%s</code>', '/* Insert content here */');
 				}
 				break;
 			case 'header':
-				this.paste('<h2>%s</h2>', '...');
+				this.paste('<h2>%s</h2>', '/* Insert title here */');
 				break;
 			case 'indent':
-				this.paste('<blockquote>%s</blockquote>', '...');
+				this.paste('<blockquote>%s</blockquote>', '/* Insert content here */');
 				break;
 			case 'codeblock':
-				this.paste('<pre><code>%s' + "\n" + '</code></pre>');
+				this.paste('<pre><code>%s</code></pre>', '/* Insert content here */');
 				break;
 			case 'link':
 				value = decodeURIComponent(value).replace(/&amp;/g, '&');

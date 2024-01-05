@@ -99,7 +99,7 @@ if(__MODULE__){
 }
 
 // CDN 에러면 브라우저 종료전까지 사용안함
-if(!empty($_DATA['cdnerr']) && !__DEBUG__){
+if(!empty($_DATA['cdnerr'])){
 	setQuery('cdnerr', '');
 	set_cookie('_CDN_ERROR_', $_DATA['cdnerr'], 0);
 }

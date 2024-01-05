@@ -1,12 +1,10 @@
 <?php if(!defined('__AFOX__')) exit(); ?>
 
 <section id="pgView" class="view-type-<?php echo $PAGE['pg_type']?>">
-<article>
 <?php
 $pg_content = toHTML(preg_replace('@\[_(/?)(STYLE|SCRIPT)/?_\]@is', '<\\1\\2>', $PAGE['pg_content']), $PAGE['pg_type']);
 echo preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1data-scroll-src\\3', $pg_content);
 ?>
-</article>
 <?php if(isAdmin(__MID__)) { ?>
 	<footer class="clearfix">
 		<div class="pull-right">

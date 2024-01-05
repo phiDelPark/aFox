@@ -300,12 +300,6 @@ blockquote {
 	padding: 3px 0 3px 8px;
 }
 
-#bdView>article>.wr_extra_vars+.current_content>:first-child,
-#bdView>article>.wr_extra_vars+.current_content>:first-child>:first-child {
-	margin-top: 0;
-	padding-top: 0;
-}
-
 #bdView.view-type-1>article>.wr_extra_vars+.current_content table {
 	border: 1px solid #eee;
 	width: 100%;

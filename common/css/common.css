@@ -405,14 +405,14 @@ label:not([class="radio"]):not([class="checkbox"])+.checkbox {
 	vertical-align: middle;
 }
 
-.af_waiting_message {
+#afWaitingMessage {
 	position: fixed !important;
 	top: 10px;
 	left: 10px;
 	z-index: 99998;
 }
 
-.af_waiting_message .progress {
+#afWaitingMessage .progress {
 	margin: 10px 0 0;
 }
 
