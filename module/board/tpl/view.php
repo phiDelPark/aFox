@@ -19,13 +19,12 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 
 <section id="bdView" class="view-type-<?php echo $DOC['wr_type']?>">
 	<header>
-		<h3 class="clearfix"><?php echo ($wr_secret?'<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ':'').$DOC['wr_title']?></h3>
+		<h3 class="clearfix"><i class="glyphicon glyphicon-<?php echo ($wr_secret?'lock':'link')?>" aria-hidden="true"></i> <?php echo $DOC['wr_title']?></h3>
 		<hr class="divider">
 		<div class="clearfix">
 			<span class="pull-left"><?php echo '<span class="mb_nick" data-srl="'.$wr_mb_srl.'" data-rank="'.(ord($DOC['mb_rank']) - 48).'">'.$DOC['mb_nick'].'</span>'?></span>
 			<span class="pull-right"><?php echo date((__MOBILE__?'y':'Y').getLang('year').' m'.getLang('month').' d'.getLang('day').' A h:i', strtotime($DOC[$is_col_update?'wr_update':'wr_regdate']))?></span>
 		</div>
-	</header>
 <?php
 	$md_extra_keys = empty($_CFG['md_extra']['keys']) ? [] : $_CFG['md_extra']['keys'];
 	if (!empty($md_extra_keys)) {
@@ -52,6 +51,9 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			echo '</div>';
 		}
 	}
+?>
+	</header>
+<?php
 	$wr_content = ($wr_grant_view || !$wr_secret) ? $DOC['wr_content'] : getLang('error_permitted');
 	$wr_content = toHTML($wr_content, $DOC['wr_type']);
 	$wr_content = preg_replace('/(<img[^>]*\s+)(src)(\s*=[^>]*>)/is', '\\1data-scroll-src\\3', $wr_content);
@@ -67,7 +69,7 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			}
 		?>
 	</div>
-	<?php } if(!empty($DOC['wr_tags'])) { ?>
+<?php } if(!empty($DOC['wr_tags'])) { ?>
 	<div class="hashtags">
 		<?php
 			$hashtags = explode(',', $DOC['wr_tags']);
@@ -76,7 +78,7 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			}
 		?>
 	</div>
-	<?php } if(!empty($doc_mb['mb_memo'])) {
+<?php } if(!empty($doc_mb['mb_memo'])) {
 			$_icon = $doc_mb['mb_srl'].'/profile_image.png';
 			if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
 				$_icon = _AF_URL_ . 'data/member/' . $_icon;
@@ -88,9 +90,9 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			<div class="left"><img src="<?php echo $_icon ?>" alt="Profile" class="profile"></div>
 			<div class="right"><?php echo toHTML($doc_mb['mb_memo'], 1, 'member_memo') ?></div>
 		</div>
-	<?php } ?>
+<?php } ?>
 	<footer class="area-text-button clearfix">
-	<?php if(!__POPUP__) { ?>
+<?php if(!__POPUP__) { ?>
 		<div class="pull-left">
 			<a class="btn btn-default btn-sm" href="<?php echo getUrl('disp','','srl','','cpage','','rp','') ?>" role="button"><i class="glyphicon glyphicon-list" aria-hidden="true"></i> <?php echo getLang('list') ?></a>
 		</div>
@@ -101,11 +103,11 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$DOC['wr_srl'].'" data-param="srl,'.$DOC['wr_srl'].',disp,writeDocument':getUrl('disp','writeDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i> <?php echo getLang('edit') ?></a>
 			<a class="btn btn-default btn-sm" href="<?php echo $wr_grant_write?(empty($wr_mb_srl)&&!$is_manager?'#requirePassword" data-srl="'.$DOC['wr_srl'].'" data-param="srl,'.$DOC['wr_srl'].',disp,deleteDocument':getUrl('disp','deleteDocument', 'srl', $_DATA['srl'])):$not_edit_str?>" role="button"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 		</div>
-	<?php } else { ?>
+<?php } else { ?>
 		<div class="pull-right">
 			<button type="button" class="btn btn-default btn-sm" data-dismiss="modal" aria-label="Close"><i class="glyphicon glyphicon-chevron-down" aria-hidden="true"></i> <?php echo getLang('close') ?></button>
 		</div>
-	<?php } ?>
+<?php } ?>
 	</footer>
 </section>
 

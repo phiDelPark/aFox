@@ -8,7 +8,7 @@
   'use strict';
 
 	$(window).on('load', function() {
-		var js = $('script[src^="'+request_uri+'addon/object_manager/object_manager.js?"]:eq(0)'),
+		var js = $('script[src^="'+request_uri+'addon/object_manager/object_manager."]:eq(0)'),
 			module = '',
 			link_blank = false,
 			autosize_image = false,
@@ -65,7 +65,7 @@
 			}
 			if(is_modal && $('#addon_object_manager_modal').length === 0)
 			{
-				var html = '<div id="addon_object_manager_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addonObjectManagerModalLabel" aria-hidden="true">'
+				var html = '<div id="addon_object_manager_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">'
 						+ '<div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-body" style="padding:5px;overflow:hidden!important"></div></div></div></div>';
 				$(html).appendTo('body')
 				.on('shown.bs.modal', function(e) {

@@ -10,6 +10,10 @@ blockquote {
 	margin-bottom: 20px;
 }
 
+.breadcrumb>.active {
+	font-weight: bold;
+}
+
 #bdList thead>tr>th {
 	padding-top: 0;
 	font-size: 16px;
@@ -17,10 +21,6 @@ blockquote {
 
 #bdList tbody>tr {
 	cursor: pointer;
-}
-
-#bdList .breadcrumb>.active {
-	font-weight: bold;
 }
 
 #bdList .search-form {
@@ -64,19 +64,16 @@ blockquote {
 #bdView>article {
 	padding: 0 5px;
 	margin: 0;
-}
-
-#bdView>article>.current_content {
 	min-height: 300px;
 }
 
-#bdView>article>.current_content th:not([class]),
-#bdView>article>.current_content td:not([class]) {
+#bdView>article th:not([class]),
+#bdView>article td:not([class]) {
 	padding: 2px;
 }
 
-#bdView>article>.current_content h1,
-#bdView>article>.current_content h2 {
+#bdView>article h1,
+#bdView>article h2 {
 	font-weight: bold;
 	padding-bottom: .2em;
 	margin-bottom: .5em;
@@ -258,9 +255,38 @@ blockquote {
 	height: 25px;
 }
 
+#bdView>header>.wr_extra_vars,
 #bdView>article>.hashtags,
 #bdView>article>.show_buttons {
 	margin-top: 20px;
+}
+
+#bdView>header>.wr_extra_vars>div {
+	margin: 0 3px 3px;
+	border-bottom: 1px solid #ddd;
+}
+
+#bdView>header>.wr_extra_vars>div>strong {
+	min-width: 55px;
+	max-width: 110px;
+	display: inline-block;
+	padding: 3px 5px 3px 0;
+}
+
+#bdView>header>.wr_extra_vars>div>strong+span {
+	border-left: 1px solid #ddd;
+	padding: 3px 0 3px 8px;
+}
+
+#bdView.view-type-1>header>.wr_extra_vars+.current_content table {
+	border: 1px solid #eee;
+	width: 100%;
+}
+
+#bdView.view-type-1>header>.wr_extra_vars+.current_content th,
+#bdView.view-type-1>header>.wr_extra_vars+.current_content td {
+	border: 1px solid #eee;
+	padding: 5px;
 }
 
 #bdView>article>.show_buttons {
@@ -277,38 +303,6 @@ blockquote {
 	margin-top: 2px;
 	padding-top: 2px;
 	border-top: 1px solid #eee;
-}
-
-#bdView>article>.wr_extra_vars {
-	margin-bottom: 30px;
-}
-
-#bdView>article>.wr_extra_vars>div {
-	margin: 0 3px 3px;
-	border-bottom: 1px solid #ddd;
-}
-
-#bdView>article>.wr_extra_vars>div>strong {
-	min-width: 55px;
-	max-width: 110px;
-	display: inline-block;
-	padding: 3px 5px 3px 0;
-}
-
-#bdView>article>.wr_extra_vars>div>strong+span {
-	border-left: 1px solid #ddd;
-	padding: 3px 0 3px 8px;
-}
-
-#bdView.view-type-1>article>.wr_extra_vars+.current_content table {
-	border: 1px solid #eee;
-	width: 100%;
-}
-
-#bdView.view-type-1>article>.wr_extra_vars+.current_content th,
-#bdView.view-type-1>article>.wr_extra_vars+.current_content td {
-	border: 1px solid #eee;
-	padding: 5px;
 }
 
 #bdList .item_area {
@@ -568,17 +562,17 @@ blockquote {
 			transparent 56px, transparent 63px,
 			rgba(0, 0, 0, 0.25) 63px, rgba(0, 0, 0, 0.25) 69px,
 			transparent 69px, transparent 116px,
-			rgba(0, 153, 255, 0.25) 116px, rgba(0, 153, 255, 0.25) 166px),
+			rgba(0, 153, 255, 0.2) 116px, rgba(0, 153, 255, 0.2) 166px),
 		repeating-linear-gradient(0deg, transparent, transparent 50px,
 			rgba(0, 0, 0, 0.25) 50px, rgba(0, 0, 0, 0.25) 56px,
 			transparent 56px, transparent 63px,
 			rgba(0, 0, 0, 0.25) 63px, rgba(0, 0, 0, 0.25) 69px,
 			transparent 69px, transparent 116px,
-			rgba(0, 153, 255, 0.25) 116px, rgba(0, 153, 255, 0.25) 166px),
+			rgba(0, 153, 255, 0.2) 116px, rgba(0, 153, 255, 0.2) 166px),
 		repeating-linear-gradient(-45deg, transparent, transparent 5px,
-			rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px),
+			rgba(112, 112, 112, 0.15) 5px, rgba(112, 112, 112, 0.15) 10px),
 		repeating-linear-gradient(45deg, transparent, transparent 5px,
-			rgba(143, 77, 63, 0.25) 5px, rgba(143, 77, 63, 0.25) 10px);
+			rgba(112, 112, 112, 0.15) 5px, rgba(112, 112, 112, 0.15) 10px);
 
 	background:
 		repeating-linear-gradient(90deg, transparent 0 50px,
@@ -586,17 +580,17 @@ blockquote {
 			transparent 56px 63px,
 			rgba(0, 0, 0, 0.25) 63px 69px,
 			transparent 69px 116px,
-			rgba(0, 153, 255, 0.25) 116px 166px),
+			rgba(0, 153, 255, 0.2) 116px 166px),
 		repeating-linear-gradient(0deg, transparent 0 50px,
 			rgba(0, 0, 0, 0.25) 50px 56px,
 			transparent 56px 63px,
 			rgba(0, 0, 0, 0.25) 63px 69px,
 			transparent 69px 116px,
-			rgba(0, 153, 255, 0.25) 116px 166px),
+			rgba(0, 153, 255, 0.2) 116px 166px),
 		repeating-linear-gradient(-45deg, transparent 0 5px,
-			rgba(143, 77, 63, 0.25) 5px 10px),
+			rgba(112, 112, 112, 0.15) 5px 10px),
 		repeating-linear-gradient(45deg, transparent 0 5px,
-			rgba(143, 77, 63, 0.25) 5px 10px);
+			rgba(112, 112, 112, 0.15) 5px 10px);
 }
 
 #bdList .timeline>li .tmlabel h3 {

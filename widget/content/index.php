@@ -25,8 +25,8 @@ if($type === 'gallery') {
 }
 ?>
 <div class="content_widget <?php echo $class?>" <?php echo $style?>>
-<div class="panel panel-default" role="group" aria-labelledby="afWidgetTitle">
-	<div class="panel-heading clearfix" id="afWidgetTitle">
+<div class="panel panel-default" role="group">
+	<div class="panel-heading clearfix">
 	<?php echo empty($title) ? (empty($md_title)?'':$md_title) : $title ?>
 	<a class="pull-right" href="<?php echo getUrl('','id',$_WIDGET['module'],'category',$category)?>"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>
 	</div>
