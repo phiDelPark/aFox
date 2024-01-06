@@ -2,8 +2,8 @@
 if(!defined('__AFOX__')) exit();
 
 // 모듈 설정이 없으므로 직접 기본정보 입력
-$_CFG['md_title'] = getLang('md_title_' . strtolower($_DATA['member']));
-$_CFG['md_description'] = getLang('md_description_' . strtolower($_DATA['member']));
+$_CFG['md_title'] = getLang('md_title_' . empty($_DATA['disp']) ? '' : strtolower($_DATA['disp']));
+$_CFG['md_description'] = getLang('md_description_' . empty($_DATA['disp']) ? '' : strtolower($_DATA['disp']));
 
 function procMemberDefault($data) {
 	$act = strtolower($data['act']);

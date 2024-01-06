@@ -9,10 +9,9 @@ if(__REQ_METHOD__ == 'GET'|| __REQ_METHOD__ == 'POST') {
 		$opt .= (empty($_ADDON['autosize_image']) ? 'i=0&' : 'i=1&');
 		$opt .= (empty($_ADDON['autosize_video']) ? 'v=0' : 'v=1');
 
-		addJS(_AF_URL_.'addon/object_manager/object_manager.js'.(empty($opt)?'':'?'.$opt));
+		addJS(_AF_URL_.'addon/object_manager/object_manager'. (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'.(empty($opt)?'':'?'.$opt)));
 	}
 }
 
 /* End of file index.php */
 /* Location: ./addon/object_manager/index.php */
-
