@@ -1,16 +1,8 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-
 ?>
-
 <div class="container">
-
-	<div class="bs-popup-body">
-		<section>
-			<article>
-			<?php displayModule()?>
-			</article>
-		</section>
-	</div>
-
+	<article aria-label="Dialog Contents">
+	<?php displayModule()?>
+	</article>
 </div>
