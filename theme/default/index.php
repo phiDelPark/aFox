@@ -152,14 +152,10 @@
 	  <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
 	</aside>
 <?php } else { ?>
-<aside class="header-image <?php echo __MODULE__ ?>">
-	<?php if(__MODULE__) {
-		$md_key = ucfirst(__MODULE__);
-	?>
-		<h3 role="heading" aria-labelledby="md<?php echo $md_key ?>Title">
-			<span id="md<?php echo $md_key ?>Title"><?php echo $_CFG['md_title'] ?></span>
-		</h3>
-		<p role="description"><?php echo $_CFG['md_description'] ?></p>
+<aside class="header-image <?php echo __MODULE__ ?>" aria-label="Page information">
+	<?php if(__MODULE__) { ?>
+		<h3 id="<?php echo __MODULE__ ?>ModuleTitle"><?php echo $_CFG['md_title'] ?></h3>
+		<p id="<?php echo __MODULE__ ?>ModuleDescription"><?php echo $_CFG['md_description'] ?></p>
 	<?php } ?>
 </aside>
 <?php }	// 테마에 모듈 스킨(tpl)이 있으면 사용

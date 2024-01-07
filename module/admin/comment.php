@@ -92,7 +92,7 @@
 	</ul>
 </nav>
 
-<div id="comment_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="adminCommentModalTitle">
+<div id="comment_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" method="post" autocomplete="off">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
@@ -101,7 +101,7 @@
 
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="adminCommentModalTitle"><?php echo getLang('comment')?></h4>
+		<h4 class="modal-title"><?php echo getLang('comment')?></h4>
 	  </div>
 	  <div class="modal-body">
 		<div class="form-group clearfix">

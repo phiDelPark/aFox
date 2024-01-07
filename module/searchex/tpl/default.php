@@ -82,7 +82,7 @@ if(!defined('__AFOX__')) exit();
 			window.open(href, '_blank');
 		}
 	});
-	jQuery('[role="heading"]+[role="description"]').each(function() {
+	jQuery('#searchexModuleDescription').each(function() {
 		var $i = jQuery(this)[0];
 		$i.innerText = $i.innerText.replace('%s', '<?php echo $total_count ?>');
 	});

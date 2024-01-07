@@ -1,6 +1,5 @@
 <?php
 if(!defined('__AFOX__')) exit();
-@include_once dirname(__FILE__) . '/config.php';
 
 $_MD_CONFIG = getModule('@searchex');
 $_mids = empty($_MD_CONFIG['md_extra'])?[]:unserialize($_MD_CONFIG['md_extra']);

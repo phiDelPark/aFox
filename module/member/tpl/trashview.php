@@ -16,9 +16,8 @@
 		echo toHTML($_item['wr_content'], $_item['wr_type']);
 	?>
 	</article>
-	<footer class="area-text-button clearfix" style="text-align:right;margin-bottom:50px">
+	<footer class="area-button clearfix" style="text-align:right;margin-bottom:50px">
 		<button type="button" class="btn btn-danger" data-exec-ajax="board.deleteDocument" data-ajax-param="wr_srl,<?php echo $_item['wr_srl']?>,is_empty,1,success_return_url,<?php echo urlencode(getUrl('srl',''))?>" data-ajax-confirm="<?php echo getLang('confirm_empty',['document'])?>"><?php echo getLang('delete')?></button>
 		<button type="button" class="btn btn-warning mw-10" data-exec-ajax="board.restoredocument" data-ajax-param="wr_srl,<?php echo $_item['wr_srl']?>,success_return_url,<?php echo urlencode(getUrl('srl',''))?>"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i> <?php echo getLang('restore')?></button>
 	</footer>
 </section>
-

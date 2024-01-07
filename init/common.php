@@ -47,6 +47,7 @@ if(!empty($_GET) && !isset($_GET['module'])){
 	if(file_exists(_AF_MODULES_PATH_ . ($tmp=key($_GET)) . '/setup.php')){
 		$_DATA['module'] = $tmp;
 		$_DATA['disp'] = empty($_GET[$tmp]) ? 'default' : $_GET[$tmp];
+		unset($_DATA[$tmp]);
 	}
 }//*/
 
@@ -98,6 +99,9 @@ if(__MODULE__){
 	require_once $tmp . '/index.php';
 }
 
+$_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
+$_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
+
 // CDN 에러면 브라우저 종료전까지 사용안함
 if(!empty($_DATA['cdnerr'])){
 	setQuery('cdnerr', '');
@@ -106,9 +110,6 @@ if(!empty($_DATA['cdnerr'])){
 
 $tmp = _AF_CONFIG_DATA_.'base_cdn_list.php';
 define('_AF_USE_BASE_CDN_', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp : FALSE);
-
-$_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
-$_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
 
 $tmp = __REQ_METHOD__=='JSON'||__REQ_METHOD__=='JSCALLBACK'?'application/json':'text/html';
 header('Content-Type: '.$tmp.'; charset=UTF-8');

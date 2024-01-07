@@ -22,7 +22,7 @@
 		echo toHTML($_item['nt_content'], 0);
 	?>
 	</article>
-	<footer class="area-text-button clearfix" style="text-align:right;margin-bottom:50px">
+	<footer class="area-button clearfix" style="text-align:right;margin-bottom:50px">
 		<button type="button" class="btn btn-danger" data-exec-ajax="member.deleteNote" data-ajax-param="nt_srl,<?php echo $_item['nt_srl']?>,success_return_url,<?php echo urlencode(getUrl('srl',''))?>" data-ajax-confirm="<?php echo getLang('confirm_delete',['message'])?>"><?php echo getLang('delete')?></button>
 		<button type="button" class="btn btn-success mw-10" onclick="return _popSendNoteBox(<?php echo $_item['nt_srl']?>)"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i> <?php echo getLang('reply')?></button>
 	</footer>

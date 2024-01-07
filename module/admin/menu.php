@@ -142,12 +142,12 @@ if (!empty($menus['error'])) messageBox($menus['message'],$menus['error'], false
 </div>
 
 
-<div id="admin_menu_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="adminMenuModalTitle">
+<div id="admin_menu_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
 	<div class="modal-content">
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="adminMenuModalTitle"><?php echo getLang('menu')?></h4>
+		<h4 class="modal-title"><?php echo getLang('menu')?></h4>
 	  </div>
 	  <div class="modal-body">
 		<div class="form-group" style="margin-top:20px">

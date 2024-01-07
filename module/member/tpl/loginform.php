@@ -2,10 +2,10 @@
 	if(!defined('__AFOX__')) exit();
 ?>
 
-<form class="login-content" method="post" autocomplete="off" role="form" aria-labelledby="afLoginFormTitle" data-exec-ajax="member.loginCheck">
+<form class="login-content" method="post" autocomplete="off" role="form" data-exec-ajax="member.loginCheck">
 <input type="hidden" name="success_return_url" value="<?php echo getUrl()?>">
 	<div class="panel panel-default" style="margin:auto;width:380px">
-		<div class="panel-heading" id="afLoginFormTitle">
+		<div class="panel-heading">
 			<strong class="panel-title"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo getLang('login')?></strong>
 		</div>
 		<div class="panel-body" style="padding:25px 20px 20px">

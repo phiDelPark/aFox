@@ -84,8 +84,4 @@
 		<button type="submit" class="btn btn-success mw-10"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang($ismb?'save':'agree_signup')?></button>
 	</div>
 </form>
-<script>
-	jQuery('[role="heading"][aria-labelledby="mdMemberTitle"]').each(function() {
-		jQuery('#afSignUpFormTitle').remove();
-	});
-</script>
+<script> if(jQuery('#memberModuleTitle').length > 0) jQuery('#afSignUpFormTitle').remove(); </script>

@@ -1,6 +1,5 @@
 <?php
 if(!defined('__AFOX__')) exit();
-@include_once dirname(__FILE__) . '/config.php';
 
 function procSearchexDefault($data) {
 	$act = strtolower($data['act']);

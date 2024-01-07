@@ -30,5 +30,10 @@ $_LANG['md_description_trash'] = '';
 $_LANG['md_title_signup'] = getLang(empty($_MEMBER)?'member_signup':'member');
 $_LANG['md_description_signup'] = '';
 
+
+// 모듈 설정이 없으므로 직접 기본정보 입력
+$_CFG['md_title'] = empty($_DATA['disp'])?'':getLang('md_title_'.strtolower($_DATA['disp']));
+$_CFG['md_description'] = empty($_DATA['disp'])?'':getLang('md_description_'.strtolower($_DATA['disp']));
+
 /* End of file ko.php */
 /* Location: ./module/member/lang/ko.php */

@@ -141,7 +141,7 @@
 </nav>
 
 <?php if($_DATA['trash'] == 'comment') {?>
-<div id="comment_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="adminTrashModalTitle">
+<div id="comment_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" method="post" autocomplete="off">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
@@ -150,7 +150,7 @@
 
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="adminTrashModalTitle"><?php echo getLang('comment')?></h4>
+		<h4 class="modal-title"><?php echo getLang('comment')?></h4>
 	  </div>
 	  <div class="modal-body">
 		<div class="form-group clearfix">
@@ -183,7 +183,7 @@
   </div>
 </div>
 <?php } else if($_DATA['trash'] == 'file') {?>
-<div id="file_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div id="file_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" method="post" autocomplete="off">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
@@ -192,7 +192,7 @@
 	<input type="hidden" name="mf_target" value="" />
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title" id="myModalLabel"><?php echo getLang('file')?></h4>
+			<h4 class="modal-title"><?php echo getLang('file')?></h4>
 		</div>
 		<div class="modal-body">
 			<div class="form-group clearfix">
@@ -245,7 +245,7 @@
   </div>
 </div>
 <?php } else {?>
-<div id="trash_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div id="trash_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" method="post" autocomplete="off">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
@@ -254,7 +254,7 @@
 
 	  <div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title" id="myModalLabel"><?php echo getLang('recycle_bin')?></h4>
+		<h4 class="modal-title"><?php echo getLang('recycle_bin')?></h4>
 	  </div>
 	  <div class="modal-body">
 		<div class="form-group clearfix">
