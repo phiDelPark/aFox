@@ -206,8 +206,9 @@ if(!defined('__AFOX__')) exit();
 		return $result;
 	}
 
-	function getHistoryAction($act){ global $_MEMBER;
-		if(!$_MEMBER) return null;
+	function getHistoryAction($act){
+		global $_MEMBER;
+		if(empty($_MEMBER)) return null;
 		return DB::gets(_AF_HISTORY_TABLE_, 'hs_action,hs_regdate',
 			['hs_action{LIKE}' => $act.'::%', 'mb_srl' => $_MEMBER['mb_srl']],
 			'hs_regdate', function($r){
@@ -223,7 +224,7 @@ if(!defined('__AFOX__')) exit();
 	// 활동 체크를 위해 기록
 	function setHistoryAction($act, $value, $allowdup = false, $callback = null){
 		global $_MEMBER;
-		if (!$_MEMBER){ // 비회원은 기록안함
+		if (empty($_MEMBER)){ // 비회원은 기록안함
 			if($callback != null){
 				$_r = $callback(['data'=>true,'mb_srl'=>0,'ipaddress'=>$_SERVER['REMOTE_ADDR']]);
 				if(!empty($_r['error'])) return set_error($_r['message'], $_r['error']);
@@ -260,7 +261,7 @@ if(!defined('__AFOX__')) exit();
 	function setPoint($point, $mb_srl = 0){
 		if(!$point) return; // 필요 포인트가 없으면 리턴
 		global $_MEMBER;
-		if(!$mb_srl && $_MEMBER) $mb_srl = $_MEMBER['mb_srl'];
+		if(!$mb_srl && !empty($_MEMBER)) $mb_srl = $_MEMBER['mb_srl'];
 		if(!($mb_srl = (int)$mb_srl)) return;
 		$mb = DB::get(_AF_MEMBER_TABLE_, 'mb_point,mb_rank', ['mb_srl'=>$mb_srl]);
 		$mb_rank = $mb ? ord($mb['mb_rank']) : 255;
@@ -280,7 +281,7 @@ if(!defined('__AFOX__')) exit();
 		}
 		DB::update(_AF_MEMBER_TABLE_, $_setvals, ['mb_srl'=>$mb_srl]);
 		// 현재 로그인 멤버와 같으면 만일을 대비 전역 변수 고침
-		if(!DB::error() && $_MEMBER && $mb_srl === $_MEMBER['mb_srl']){
+		if(!DB::error() && !empty($_MEMBER) && $mb_srl === $_MEMBER['mb_srl']){
 			$_MEMBER['mb_point'] = $mb['mb_point'] + $point;
 			if(isset($_setvals['mb_rank'])) $_MEMBER['mb_rank'] = $_setvals['mb_rank'];
 		}
@@ -330,12 +331,9 @@ if(!defined('__AFOX__')) exit();
 		$grade = empty($_MEMBER['mb_grade']) ? 'guest' : $_MEMBER['mb_grade'];
 		if(empty($data['mb_srl'])) $data['mb_srl'] = null;
 		//자기 자신 제외
-		if (!empty($_MEMBER['mb_srl']) && $_MEMBER['mb_srl'] = $data['mb_srl']){
-			$_PROTECT[$key][$grade] = '*';
-		}
-		if (!isset($_PROTECT[$key][$grade]) || $_PROTECT[$key][$grade] === '*'){
-			$result = $data;
-		} else {
+		if(!empty($_MEMBER['mb_srl']) && $_MEMBER['mb_srl']=$data['mb_srl']) $_PROTECT[$key][$grade] ='*';
+		if(!isset($_PROTECT[$key][$grade]) || $_PROTECT[$key][$grade] === '*') $result =$data;
+		else {
 			$a = explode(',', str_replace(' ', '', $_PROTECT[$key][$grade]));
 			foreach ($a as $val) $result[$val] = $data[$val];
 		}
@@ -345,13 +343,13 @@ if(!defined('__AFOX__')) exit();
 	function checkPassword($password, $hash){
 		try {
 			$password = trim($password);
-			if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT'){
+			if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT')
 				return password_verify($password, $hash);
-			} else {
+			else {
 				$password = createHash($password);
 				return $hash && $password === $hash;
 			}
-		} catch (Exception $ex){
+		} catch (Exception $ex) {
 			exit($ex->getMessage());
 		}
 	}
@@ -359,22 +357,22 @@ if(!defined('__AFOX__')) exit();
 	function createHash($password){
 		try {
 			$password = trim($password);
-			if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT'){
+			if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT')
 				return password_hash($password, PASSWORD_BCRYPT);
-			} else {
+			else {
 				$password =  DB::escape($password);
 				$result = DB::query("SELECT password('$password') as pass", true);
 				return $result[0]['pass'];
 			}
-		} catch (Exception $ex){
+		} catch (Exception $ex) {
 			exit($ex->getMessage());
 		}
 	}
 
 	function sendNote($srl, $msg, $nick = ''){
 		global $_MEMBER;
-		$sender = $_MEMBER ? $_MEMBER['mb_srl'] : 0;
-		$nick = $_MEMBER ? $_MEMBER['mb_nick'] : ($nick ? $nick : getLang('none'));
+		$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
+		$nick = empty($_MEMBER) ? ($nick?$nick:getLang('none')) : $_MEMBER['mb_nick'];
 		if(!$srl || $srl === $sender) return false;
 		DB::insert(_AF_NOTE_TABLE_, [
 			'mb_srl'=>$srl,
@@ -407,11 +405,9 @@ if(!defined('__AFOX__')) exit();
 			$handle = @opendir($dir); // 절대경로
 			while ($file = readdir($handle)){
 				if($file != '.' && $file != '..'){ // 하위 폴더면
-					if($subdir && is_dir($dir.$file.'/')){
+					if($subdir && is_dir($dir.$file.'/'))
 						unlinkAll($dir.$file.'/', $subdir);
-					} else {
-						unlinkFile($dir.$file);
-					}
+					else unlinkFile($dir.$file);
 				}
 			}
 			@closedir($handle);
@@ -424,28 +420,14 @@ if(!defined('__AFOX__')) exit();
 		if($file['error'] === UPLOAD_ERR_OK){
 			// HTTP post로 전송된 것인지 체크합니다.
 			if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('UPLOAD_ERR_CODE(-1)'),10489);
-			if($file['size'] <= 0){
-				return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
-			} if ($max_size > 0 && $max_size < $file['size']){
-				return set_error(getLang('UPLOAD_ERR_CODE(2)'),10402);
-			}
-			// 이동 경로가 없으면 이동 안함, 오류 체크는함
-			if(!$dest) return true;
-			$dir = dirname($dest); // 폴더 없으면 만듬
-			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)){
-				return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
-			}
-			if(file_exists($dest)){ // 파일이 있으면 지움
-				if(!unlinkFile($dest)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
-			}
-			if (move_uploaded_file($file['tmp_name'], $dest)){
-				@chmod($dest, _AF_FILE_PERMIT_);
-			} else {
-				return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
-			}
-		} else {
-			return set_error(getLang('UPLOAD_ERR_CODE('.$file['error'].')'),10400+$file['error']);
-		}
+			if($file['size'] <= 0) return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
+			if($max_size > 0 && $max_size < $file['size']) return set_error(getLang('UPLOAD_ERR_CODE(2)'),10402);
+			if(!$dest) return true; // 이동 경로가 없으면 이동 안함, 오류 체크는함
+			if(!is_dir($dir=dirname($dest)) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
+			if(file_exists($dest) && !unlinkFile($dest)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
+			if(move_uploaded_file($file['tmp_name'], $dest)) @chmod($dest, _AF_FILE_PERMIT_);
+			else return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
+		} else return set_error(getLang('UPLOAD_ERR_CODE('.$file['error'].')'),10400+$file['error']);
 	}
 
 	function escapeMKDW($str, $is_strip_tags = false){

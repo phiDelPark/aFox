@@ -1,10 +1,8 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 	if(!empty($_DATA['srl'])) include 'trashview.php';
-
 	$_list = &$_{'member'}['_DOCUMENT_LIST_'];
 ?>
-
 <form id="af_member_remove_trash_items" method="post">
 <input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 <table class="table table-hover table-nowrap" role="list">
@@ -15,8 +13,6 @@
 		<?php } else { ?>
 		<th class="col-xs-1">#</th>
 		<th><?php echo getLang('title')?></th>
-		<th class="col-xs-1 hidden-xs"><?php echo getLang('secret')?></th>
-		<th class="col-xs-2"><?php echo getLang('author')?></th>
 		<th class="col-xs-1 hidden-xs"><?php echo getLang('date')?></th>
 		<th class="col-xs-1"><?php echo getLang('delete')?></th>
 		<th style="width:30px"><input type="checkbox" onclick="_allCheckTrashItems(this)"></th>
@@ -24,11 +20,9 @@
 	</tr>
 </thead>
 <tbody>
-
 <?php
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
-
 	$current_page = $_list['current_page'];
 	$total_page = $_list['total_page'];
 	$start_page = $_list['start_page'];
@@ -43,16 +37,13 @@
 			echo '<span class="pull-right">Del:'.date('y/m/d', strtotime($value['wr_update'])).'</span></div></td>';
 		} else {
 			echo '<th scope="row">'.$value['wr_srl'].'</th>';
-			echo '<td><a href="#" onclick="return false">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
-			echo '<td class="hidden-xs">'.($value['wr_secret']?'Y':'N').'</td>';
-			echo '<td nowrap>'.escapeHtml($value['mb_nick'],true).'</td>';
+			echo '<td><a href="#" onclick="return false">'.($value['wr_secret']?'<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ':'').escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
 			echo '<td class="hidden-xs">'.date('y/m/d', strtotime($value['wr_regdate'])).'</td>';
 			echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td><td><input type="checkbox" name="wr_srl[]" value="'.$value['wr_srl'].'"></td>';
 		}
 		echo '</tr>';
 	}
 ?>
-
 </tbody>
 </table>
 </form>
@@ -70,7 +61,6 @@
 		<li class="next<?php echo $current_page >= $total_page?' disabled':''?>"><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
 	</ul>
 </nav>
-
 <footer class="clearfix">
 	<form class="search-form pull-left col-xs-5 col-sm-4 mw-20 xw-30" action="<?php echo getUrl('') ?>" method="get" style="padding:0">
 		<input type="hidden" name="module" value="member">
@@ -89,7 +79,6 @@
 		<a class="btn btn-default" href="#" onclick="_allRemoveTrashItems()" role="button"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('delete') ?></a>
 	</div>
 </footer>
-
 <script>
 	function _trashItemClick(e, href) {
 		if(e.target.tagName === 'INPUT') return true;

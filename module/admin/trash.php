@@ -130,7 +130,7 @@
 	</ul>
 	<ul class="pagination">
 	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
-		<input type="hidden" name="admin" value="<?php echo $_DATA['admin'] ?>">
+		<input type="hidden" name="admin" value="<?php echo $_DATA['disp'] ?>">
 		<input type="hidden" name="trash" value="<?php echo empty($_DATA['trash'])?'':$_DATA['trash'] ?>">
 		<?php if(!empty($_DATA['category'])) {?><input type="hidden" name="category" value="<?php echo $_DATA['category'] ?>"><?php }?>
 		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_word') ?>" required>

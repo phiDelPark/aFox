@@ -10,8 +10,8 @@
 	if(empty($menus['error'])) {
 		$url = getUrl();
 		foreach ($menus['header'] as $val) {
-			$is_active = !empty($val['md_id'])&&$val['md_id']==__MID__?'_ACTIVE_':$val['mu_srl'];
-			if($is_active!='_ACTIVE_' && !empty($val['mu_link']) && strpos($url, $val['mu_link'])!==false) {$is_active='_ACTIVE_';}
+			$is_active = (!empty($val['md_id'])&&$val['md_id']==__MID__)?'_ACTIVE_':$val['mu_srl'];
+			if($is_active!='_ACTIVE_' && $val['mu_link'] && strpos($url, $val['mu_link'])!==false) {$is_active='_ACTIVE_';}
 			if((int) $val['mu_parent'] > 0) {
 				if($is_active == '_ACTIVE_') {
 					// 활성화시 키값 교체
@@ -46,7 +46,7 @@
 <?php if (!empty($_MEMBER)) {
 	$notes = DB::gets(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], 'nt_send_date', '1,5');
 ?>
-			<?php if(!empty($notes)){ ?>
+			<?php if($notes){ ?>
 			<span>
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <strong class="caret"></strong></a>
 				<ul class="dropdown-menu message-dropdown dropdown-menu-right">
@@ -173,9 +173,9 @@
 		<div class="config-content clearfix"><?php @include  $config_file; ?></div>
 	</div>
 </aside>
-<?php } $tmp=!empty($submenu['_ACTIVE_'])&&count($submenu['_ACTIVE_'])>0?'col-md-9 ':'';?>
-<?php if(!empty($tmp)){
-	if(empty($submenuactivetitle))$submenuactivetitle=$mainmenu['_ACTIVE_']['mu_title'];
+<?php }
+	if($tmp=!empty($submenu['_ACTIVE_'])&&count($submenu['_ACTIVE_'])>0?'col-md-9 ':''){
+		if(!$submenuactivetitle) $submenuactivetitle=$mainmenu['_ACTIVE_']['mu_title'];
 ?>
 	<div class="row">
 		<aside class="col-md-3" role="menu" aria-label="Content Menu">
@@ -202,17 +202,15 @@
 		<?php if($error = get_error()) { messageBox($error['message'], $error['error']); } ?>
 		<?php displayModule()?>
 	</article>
-<?php if(!empty($tmp)) echo "</div>" ?>
+<?php if($tmp) echo "</div>" ?>
 	<footer role="contentinfo" aria-label="About Site">
 		<ul><li style="visibility:hidden"></li>
 <?php
-
 	if(empty($menus['error'])){
 		foreach ($menus['footer'] as $val) {
 			echo '<li><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').' title="'.escapeHtml($val['mu_description']).'">'. escapeHtml($val['mu_title']) .'</a></li>';
 		}
 	}
-
 ?>
 		</ul>
 		<p><?php if(!empty($_THEME['footer_html'])) echo $_THEME['footer_html']; ?></p>

@@ -3,7 +3,7 @@ if(!defined('__AFOX__')) exit();
 $_THEME = get_cache('_AF_THEME_'._AF_THEME_); // 테마 설정 저장
 if(is_null($_THEME)) {
 	$_THEME = DB::get(_AF_THEME_TABLE_, 'th_extra', ['th_id'=>_AF_THEME_]);
-	if(!empty($_THEME)) $_THEME = unserialize($_THEME['th_extra']);
+	if($_THEME) $_THEME = unserialize($_THEME['th_extra']);
 	set_cache('_AF_THEME_'._AF_THEME_,$_THEME);
 }
 addJSLang(['ok','cancel','yes','no','calling_server']);

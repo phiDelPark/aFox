@@ -88,52 +88,47 @@ define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
 // function.php 에 포함 안하는 이유는? load 안해도 사용하기 위해... //
 
 function set_error($msg, $err = 3){
-	return $_SESSION['AF_VALIDATOR_ERROR'] = ['error'=>$err, 'message'=>$msg];
+	return $_SESSION['AF_VALIDATOR_ERROR']=['error'=>$err,'message'=>$msg];
 }
 function get_error(){
-	return isset($_SESSION[($key = 'AF_VALIDATOR_ERROR')]) ? $_SESSION[$key] : '';
+	return isset($_SESSION[($key='AF_VALIDATOR_ERROR')])?$_SESSION[$key]:'';
 }
 
 function set_session($key, $val){
-	if($val === null){unset($_SESSION[$key]);} else {$_SESSION[$key]=$val;}
+	if($val===null){unset($_SESSION[$key]);}else{$_SESSION[$key]=$val;}
 }
 function get_session($key){
-	return isset($_SESSION[$key]) ? $_SESSION[$key] : '';
+	return isset($_SESSION[$key])?$_SESSION[$key]:'';
 }
 
 // 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료로 만듬 (제거)
 function set_cookie($key, $val, $exp = 0){
-	setcookie(md5($key), base64_encode($val), $exp?_AF_SERVER_TIME_+$exp:0, '/', _AF_COOKIE_DOMAIN_);
+	setcookie(md5($key),base64_encode($val),$exp?_AF_SERVER_TIME_+$exp:0,'/',_AF_COOKIE_DOMAIN_);
 }
 function get_cookie($key){
-	return array_key_exists($cki = md5($key), $_COOKIE) ? base64_decode($_COOKIE[$cki]) : '';
+	return array_key_exists($cki=md5($key),$_COOKIE)?base64_decode($_COOKIE[$cki]):'';
 }
 
 // 만료시간이 0이면 직접 지우기까지 계속 유지, - 값이면 읽을때 삭제됨 (재생성 필요)
 function set_cache($key, $val, $exp = 0){
-	$dir = _AF_CACHE_DATA_ . md5($key);
-	if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return;
+	if(!is_dir($dir=_AF_CACHE_DATA_.md5($key))&&!mkdir($dir,_AF_DIR_PERMIT_,true)) return;
 	$h = @opendir($dir); while($e=readdir($h)){if($e!='.' && $e!='..'){
-		@chmod($dir.'/'.$e, 0707); @unlink($dir.'/'.$e);
-	}} @closedir($h);
+		@chmod($dir.'/'.$e, 0707); @unlink($dir.'/'.$e); }} @closedir($h);
 	$s = '<?php if(!defined(\'__AFOX__\'))exit();$_EXPIRE=%s;$_CACHE=%s; ?>';
 	$s = sprintf($s, $exp?_AF_SERVER_TIME_+$exp:0, var_export($val,true));
 	file_put_contents($dir.'/'.md5(_AF_SERVER_TIME_).'.php', $s, LOCK_EX);
 }
-function get_cache($key){
-	static $__af_caches = null;
+function get_cache($key){ static $__af_caches = null;
 	if(!empty($__af_caches[$key])) return $__af_caches[$key];
-	if(!is_dir($dir = _AF_CACHE_DATA_ . md5($key))) return;
-	if(!is_file($f = $dir.'/'.(@scandir($dir)[2]))) return;
-	if((@include $f)!==1||($_EXPIRE&&$_EXPIRE<_AF_SERVER_TIME_)){
+	if(!is_dir($dir=_AF_CACHE_DATA_.md5($key))||!is_file($f=$dir.'/'.(@scandir($dir)[2]))) return;
+	if((@include $f)!==1||(!empty($_EXPIRE)&&$_EXPIRE<_AF_SERVER_TIME_)){
 		@chmod($f, 0707); @unlink($f); @chmod($dir, 0707); @rmdir($dir); return;
 	} return $__af_caches[$key] = $_CACHE;
 }
 
-function debugPrint($o = null){
-	if(!(__DEBUG__ & 1)) return;
+function debugPrint($o = null){ if(!(__DEBUG__ & 1)) return;
 	file_put_contents(_AF_PATH_.'_debug.php',implode(PHP_EOL,[date('== Y-m-d H:i:s =='),
-		in_array(($type = gettype($o)),['array','object','resource'])?print_r($o, true):$type.'('.var_export($o,true).')'
+	in_array(($type=gettype($o)),['array','object','resource'])?print_r($o,true):$type.'('.var_export($o,true).')'
 	]).PHP_EOL.PHP_EOL,FILE_APPEND|LOCK_EX);
 }
 
