@@ -13,7 +13,6 @@
 		messageBox($ex->getMessage(), $ex->getCode(), false);
 	}
 ?>
-
 <table class="table table-hover">
 <thead class="table-nowrap">
 	<tr>
@@ -25,7 +24,6 @@
 	</tr>
 </thead>
 <tbody>
-
 <?php
 if(is_dir(_AF_ADDONS_PATH_)) {
 	foreach(glob(_AF_ADDONS_PATH_ . '*', GLOB_ONLYDIR) as $dir) {
@@ -47,10 +45,8 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 	}
 }
 ?>
-
 </tbody>
 </table>
-
 <table class="table table-hover">
 <thead class="table-nowrap">
 	<tr>
@@ -66,7 +62,6 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 ?>
 </tbody>
 </table>
-
 <div id="admin_addon_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">
 	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.getAddonForm">
@@ -85,7 +80,6 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 	</form>
   </div>
 </div>
-
 <?php
 /* End of file addon.php */
 /* Location: ./module/admin/addon.php */

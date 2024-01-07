@@ -5,6 +5,9 @@ if(!defined('__AFOX__')) exit();
 installModuleTrigger('board', 0);
 @include_once dirname(__FILE__) . '/funcs.php';
 
+// 모듈 설정 확장변수 unserialize
+$_CFG['md_extra'] = empty($_CFG['md_extra']) ? [] : unserialize($_CFG['md_extra']);
+
 function procBoardDefault($data) {
 	$act = strtolower($data['act']);
 	$dir = _AF_MODULES_PATH_ . 'board/proc/';

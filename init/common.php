@@ -76,11 +76,8 @@ foreach (['module','id','act','disp'] as $tmp){
 // 위 유효성 검사에서 module, id 변수가 없으면 빈값을 넣기에 empty 안씀
 if(!$_DATA['module'] && !$_DATA['id']) $_DATA['id'] = $_CFG['start'];
 if($_DATA['id'] && ($tmp=getModule($_DATA['id']))){
+	$_CFG = array_merge($_CFG, $tmp); // 설정 하나로 합침
 	$_DATA['module'] = $tmp['md_key'];
-	// 모듈 정보에 확장 변수가 있으면 unserialize
-	if(($_CFG=array_merge($_CFG,$tmp)) && is_string($_CFG['md_extra'])){
-		$_CFG['md_extra'] = unserialize($_CFG['md_extra']);
-	}
 }
 
 define('__MID__', $_DATA['id']);

@@ -35,7 +35,7 @@ if(!defined('__AFOX__')) exit();
 		if(__MOBILE__) {
 			foreach ($_{'searchex'}['data'] as $key => $val) {
 				$wr_secret =  $val['wr_secret'] == '1';
-				$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
+				$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
 				echo '<tr data-hot-track style="cursor:pointer"><td class="wr_title"><a href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
 				echo '<div class="clearfix"><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span>';
 				echo '<span class="pull-right">'.date('m/d', strtotime($val['wr_update'])).'</span></div></td></tr>';
@@ -43,7 +43,7 @@ if(!defined('__AFOX__')) exit();
 		} else {
 			foreach ($_{'searchex'}['data'] as $key => $val) {
 				$wr_secret =  $val['wr_secret'] == '1';
-				$wr_permit = !$wr_secret || $is_manager || $login_srl === $value['mb_srl'];
+				$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
 				echo '<tr data-hot-track style="cursor:pointer"><th class="hidden-xs" scope="row">'.$val['md_id'].'</th>';
 				echo '<td class="wr_title"><a href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
 				echo '<td nowrap><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';

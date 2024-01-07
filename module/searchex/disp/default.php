@@ -3,8 +3,10 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	$_MD_CONFIG = getModule('@searchex');
-	$_mids = empty($_MD_CONFIG['md_extra'])?[]:unserialize($_MD_CONFIG['md_extra']);
+	$_extra = empty($_MD_CONFIG['md_extra'])?[]:unserialize($_MD_CONFIG['md_extra']);
 	$_count = empty($_MD_CONFIG['md_list_count'])?20:$_MD_CONFIG['md_list_count'];
+	$_mids = empty($_extra['keys']['selected_ids'])?[]:$_extra['keys']['selected_ids'];
+	if(empty($_mids)) $_mids[] = '@@@@@@@@@@'; // 검색할 모듈이 없으면 임시로 값을 줌
 
 	$search = empty($data['searchex']) ? '' : $data['searchex'];
 	$page = empty($data['page']) ? 1 : $data['page'];

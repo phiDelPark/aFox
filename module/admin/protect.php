@@ -11,6 +11,7 @@ $_PROTECT['proc.combinefiles']			= ['grant' => 's'];
 $_PROTECT['proc.deletethemeconfig']		= ['grant' => 's'];
 
 $_PROTECT['proc.updateaddonconfig']		= ['grant' => 's'];
+$_PROTECT['proc.updatemoduleconfig']	= ['grant' => 's'];
 $_PROTECT['proc.updatemenu']			= ['grant' => 's'];
 $_PROTECT['proc.updatesetup']			= ['grant' => 's'];
 $_PROTECT['proc.updatesetuptheme']		= ['grant' => 's'];
@@ -21,6 +22,7 @@ $_PROTECT['proc.emptyrecyclebin']		= ['grant' => 's'];
 $_PROTECT['proc.movedocuments']			= ['grant' => 's'];
 
 $_PROTECT['proc.getaddonform']			= ['grant' => 's'];
+$_PROTECT['proc.getmoduleform']			= ['grant' => 's'];
 $_PROTECT['proc.getthemeform']			= ['grant' => 's'];
 $_PROTECT['proc.getwidgetform']			= ['grant' => 's'];
 $_PROTECT['proc.getboard']				= ['grant' => 's'];

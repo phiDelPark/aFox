@@ -199,16 +199,16 @@
 	});
 
 	$('#ADM_DEFAULT_MODULE')
-	.on('show.bs.modal', '#admin_addon_modal,#admin_theme_modal,#admin_widget_modal', function(e) {
+	.on('show.bs.modal', '#admin_addon_modal,#admin_module_modal,#admin_theme_modal,#admin_widget_modal', function(e) {
 		var $i = $(this),
 			$f = $i.find('form'),
 			$p = $i.find('.modal-body'),
-			key = $i.attr('id') == 'admin_addon_modal' ? 'addon': ($i.attr('id') == 'admin_theme_modal' ? 'theme' : 'widget');
+			key = $i.attr('id').split('_')[1];
 
 		var id = $(e.relatedTarget).attr('data-'+key+'-id');
 
 		$f.attr('data-exec-ajax', 'admin.get'+key.toUcFirst()+'Form')
-			.find('input[name='+(key=='addon'?'ao':(key=='theme'?'th':'wg'))+'_id]').val(id).end()
+			.find('input[name='+(key=='addon'?'ao':(key=='module'?'md':(key=='theme'?'th':'wg')))+'_id]').val(id).end()
 			.offOn('error.exec.ajax', function(e, error, xhr){
 				e.preventDefault();
 				$p.html('<div class="alert alert-danger">' + error['message'] + '</div>');
@@ -228,7 +228,7 @@
 
 		$(document).trigger($.Event('submit', { target: $f[0] }));
 	})
-	.on('hidden.bs.modal', '#admin_addon_modal,#admin_theme_modal', function(){
+	.on('hidden.bs.modal', '#admin_addon_modal,#admin_module_modal,#admin_theme_modal,#admin_widget_modal', function(){
 		$(this).find('.modal-body').html('');
 	});
 
