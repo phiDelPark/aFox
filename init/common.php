@@ -33,7 +33,7 @@ if($tmp=(isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cookie
 	}
 }
 // 로그인 중이 아니면 로그인 정보 삭제
-if(empty($_MEMBER)){
+if(!$_MEMBER){
 	set_cookie('AF_LOGIN_ID', '', -1);
 	set_cookie('AF_AUTO_LOGIN', '', -1);
 	unset($_SESSION['AF_LOGIN_ID']);
@@ -43,21 +43,20 @@ if(__REQ_METHOD__ == 'JSON') $_POST = json_decode(file_get_contents('php://input
 
 $_DATA = $_GET;
 ///*첫번째 키가 모듈인지 체크 (.htaccess 대신 사용할때)
-if(!empty($_GET) && !isset($_GET['module'])){
+if($_GET && !isset($_GET['module'])){
 	if(file_exists(_AF_MODULES_PATH_ . ($tmp=key($_GET)) . '/setup.php')){
 		$_DATA['module'] = $tmp;
 		$_DATA['disp'] = empty($_GET[$tmp]) ? 'default' : $_GET[$tmp];
 		unset($_DATA[$tmp]);
 	}
 }//*/
-
 // 넘어온 값을 하나로 합침
-if(!empty($_POST)) $_DATA = array_merge($_POST, $_DATA);
+if($_POST) $_DATA = array_merge($_POST, $_DATA);
 //unset($_GET); unset($_POST);
 
 // 문서번호만 오면 id 가져옴
 if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))){
-	if(empty($_DATA['srl'])){
+	if(!empty($_DATA['rp'])){
 		$tmp = DB::get(_AF_COMMENT_TABLE_, 'wr_srl', ['rp_srl'=>(int)$_DATA['rp']]);
 		if(!empty($tmp['wr_srl'])) $_DATA['srl'] = $tmp['wr_srl'];
 	}
@@ -70,12 +69,13 @@ if(count($_DATA)===1 && (!empty($_DATA['srl']) || !empty($_DATA['rp']))){
 
 // 유효성 검사
 foreach (['module','id','act','disp'] as $tmp){
-	if(!isset($_DATA[$tmp]) || !preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp])) $_DATA[$tmp] = '';
+	if(!isset($_DATA[$tmp])||!preg_match('/^[a-zA-Z]+\w{2,}$/', $_DATA[$tmp]))$_DATA[$tmp] = '';
 }
 
 // module, id 가 없으면 시작 페이지
-if(empty($_DATA['module']) && empty($_DATA['id'])) $_DATA['id'] = $_CFG['start'];
-if(!empty($_DATA['id']) && ($tmp=getModule($_DATA['id']))){
+// 위 유효성 검사에서 module, id 변수가 없으면 빈값을 넣기에 empty 안씀
+if(!$_DATA['module'] && !$_DATA['id']) $_DATA['id'] = $_CFG['start'];
+if($_DATA['id'] && ($tmp=getModule($_DATA['id']))){
 	$_DATA['module'] = $tmp['md_key'];
 	// 모듈 정보에 확장 변수가 있으면 unserialize
 	if(($_CFG=array_merge($_CFG,$tmp)) && is_string($_CFG['md_extra'])){
@@ -88,7 +88,7 @@ define('__MODULE__', $_DATA['module']);
 define('__MODAL__', !empty($_DATA['modal']) && $_DATA['modal'] === '1');
 define('__POPUP__', __MODAL__ || (!empty($_DATA['popup']) && $_DATA['popup'] === '1'));
 // 전체 로그인 사용시 로그인 유저가 아니면 전체 로그인 화면 표시
-define('__FULL_LOGIN__', $_CFG['use_full_login'] == 1 && empty($_MEMBER));
+define('__FULL_LOGIN__', $_CFG['use_full_login'] == 1 && !$_MEMBER);
 
 
 if(__MODULE__){

@@ -23,21 +23,13 @@ if(!defined('__AFOX__')) exit();
 		$n = func_num_args();
 		$a = func_get_args();
 		$url = $a[0];
-		$_empty = $a[1] == '';
-
-		$a = array_slice($a, $_empty ? 2 : 1);
-		$q = $_empty ? [] : getUrlQuery($url);
+		$q = $a[1] == '' ? [] : getUrlQuery($url);
+		$a = array_slice($a, $a[1] == '' ? 2 : 1);
 		$n = count($a);
-
-		if(is_array($a[0])){
-			foreach ($a[0] as $k => $v){$q[$k] = $v;}
-		} else {
-			for($i=0; $i<$n; $i+=2){$q[$a[$i]] = $a[$i+1];}
-		}
-
+		if(is_array($a[0])) foreach($a[0] as $k => $v){$q[$k] = $v;}
+		else for($i=0; $i<$n; $i+=2){$q[$a[$i]] = $a[$i+1];}
 		$r = '';
 		foreach ($q as $k => $v){if(isset($v) && $v!='') $r.=$k.'='.$v.'&';}
-
 		$pos = strpos($url, '?');
 		$url = ($pos !== false) ? substr($url, 0, $pos) : $url;
 		return $url . ($n == 0 ? $r : substr('?'.$r, 0, -1));
@@ -58,39 +50,25 @@ if(!defined('__AFOX__')) exit();
 	// XE getRequestUri 참고 https://www.xpressengine.com/
 	function getRequestUri($ssl_mode = FOLLOW_REQUEST_SSL){
 		static $__url = [];
-
 		if(!isset($_SERVER['SERVER_PROTOCOL'])) return; // Check HTTP Request
-
 		if(_AF_USE_SSL_ === ENFORCE_SSL) $ssl_mode = ENFORCE_SSL; // always
-
 		$domain = _AF_DOMAIN_ ? _AF_DOMAIN_ : $_SERVER['HTTP_HOST'];
 		$domain_key = md5($domain);
-
 		if(isset($__url[$ssl_mode][$domain_key])) return $__url[$ssl_mode][$domain_key];
-
-		$current_use_ssl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on');
-
+		$current_use_ssl = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
 		switch($ssl_mode){
 			case FOLLOW_REQUEST_SSL: $use_ssl = $current_use_ssl; break;
 			case ENFORCE_SSL: $use_ssl = 1; break;
 			case RELEASE_SSL: $use_ssl = 0; break;
 		}
-
 		$target_url = 'http://' . $domain . getScriptPath();
 		if(substr_compare($target_url, '/', -1) !== 0) $target_url.= '/';
-
 		$_info = parse_url($target_url);
 		if($current_use_ssl != $use_ssl) unset($_info['port']);
-
 		$cfg_port = $use_ssl ? _AF_HTTPS_PORT_ : _AF_HTTP_PORT_;
 		$def_port = $use_ssl ? 443 : 80;
-
-		if($cfg_port != $def_port){
-			$_info['port'] = $cfg_port;
-		} elseif(isset($_info['port']) && $_info['port'] == $def_port){
-			unset($_info['port']);
-		}
-
+		if($cfg_port != $def_port) $_info['port'] = $cfg_port;
+		elseif(isset($_info['port'])&& $_info['port']==$def_port){unset($_info['port']);}
 		$__url[$ssl_mode][$domain_key] = sprintf(
 			'%s://%s%s%s',
 			$use_ssl ? 'https' : $_info['scheme'],
@@ -98,16 +76,13 @@ if(!defined('__AFOX__')) exit();
 			empty($_info['port']) ? '' : ':' . $_info['port'],
 			$_info['path']
 		);
-
 		return $__url[$ssl_mode][$domain_key];
 	}
 
 	function getRequestMethod(){
-		if(isset($_SERVER[($s='HTTP_X_REQUESTED_WITH')]) && $_SERVER[$s] == 'XMLHttpRequest'){
+		if(isset($_SERVER[($s='HTTP_X_REQUESTED_WITH')]) && $_SERVER[$s] == 'XMLHttpRequest')
 			return strpos($_SERVER['HTTP_ACCEPT'],'json')?'JSON':(strpos($_SERVER['HTTP_ACCEPT'],'xml')?'XMLRPC':'JSCALLBACK');
-		} else {
-			return $_SERVER['REQUEST_METHOD'];
-		}
+		else return $_SERVER['REQUEST_METHOD'];
 	}
 
 	function getScriptPath(){
@@ -117,13 +92,11 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getUrl(){
-		if(_AF_USE_SSL_ === ENFORCE_SSL || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on')){ // If using SSL always
-			$uri = getRequestUri(ENFORCE_SSL);
-		} elseif(_AF_USE_SSL_ === RELEASE_SSL){ // optional SSL use
+		if(_AF_USE_SSL_ === ENFORCE_SSL || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'))
+			$uri = getRequestUri(ENFORCE_SSL); // If using SSL always
+		elseif(_AF_USE_SSL_ === RELEASE_SSL) // optional SSL use
 			$uri = getRequestUri(__MODULE__ == 'admin' || __MODULE__ == 'member' ? ENFORCE_SSL : RELEASE_SSL);
-		} else { // no SSL
-			$uri = _AF_DOMAIN_ ? getRequestUri(FOLLOW_REQUEST_SSL) : getScriptPath();
-		}
+		else $uri = _AF_DOMAIN_ ? getRequestUri(FOLLOW_REQUEST_SSL) : getScriptPath(); // no SSL
 		$n = func_num_args();
 		$a = func_get_args();
 		if($n == 1 && $a[0] == '') return $uri;
@@ -135,10 +108,9 @@ if(!defined('__AFOX__')) exit();
 	// 이스케이프시 홑따옴표는 안되니 필요하면 escapeHtml 사용
 	// 홑따옴표 이스케이프시 escapeHtml(getLang('msg',false),false,ENT_QUOTES)
 	function getLang($key, $args1 = true, $args2 = true){
+		if(!($key = strtolower($key))) return '';
 		global $_LANG;
-		if(empty($key)) return '';
-		$lstr = strtolower($key);
-		$result = isset($_LANG[$lstr]) ? $_LANG[$lstr] : $key;
+		$result = isset($_LANG[$key]) ? $_LANG[$key] : $key;
 		if(is_array($args1)){
 			$escape = $args2;
 			$args = [$result];
@@ -152,6 +124,7 @@ if(!defined('__AFOX__')) exit();
 		}
 		return $escape ? nl2br(escapeHtml($result)) : $result;
 	}
+
 	function setLang($key, $value){
 		global $_LANG;
 		$_LANG[strtolower($key)] = $value;
@@ -161,10 +134,9 @@ if(!defined('__AFOX__')) exit();
 		static $__menus = [];
 		if(!isset($__menus['header']) || !isset($__menus['footer'])){
 			for ($i=0; $i < 2; $i++){
-				$out = DB::gets(_AF_MENU_TABLE_,
-					['mu_type'=>$i], ['mu_srl'=>'ASC'],
-					function($r){
-						$rset = [];
+				$out = DB::gets(
+					_AF_MENU_TABLE_, ['mu_type'=>$i], ['mu_srl'=>'ASC'],
+					function($r){ $rset = [];
 						while ($row = DB::fetch($r)){
 							if(preg_match('/^[a-zA-Z]+\w{2,}$/',$row['mu_link'])){
 								$row['md_id'] = $row['mu_link'];
@@ -178,7 +150,7 @@ if(!defined('__AFOX__')) exit();
 				$__menus[$i == 0 ? 'header' : 'footer'] = $out;
 			}
 		}
-		return empty($get) ? $__menus : $__menus[$get];
+		return $get ? $__menus[$get] : $__menus;
 	}
 
 	// 모듈 설정 가져오기
@@ -186,10 +158,9 @@ if(!defined('__AFOX__')) exit();
 		static $__md_cfg = [];
 		if(!isset($__md_cfg[$id])){
 			$out = DB::get(_AF_MODULE_TABLE_, ['md_id'=>$id]);
-			if(empty($out)||empty($out['md_id'])) $out = [];
-			$__md_cfg[$id] = $out;
+			$__md_cfg[$id] = empty($out['md_id']) ? [] : $out;
 		}
-		return empty($get) ? $__md_cfg[$id] : $__md_cfg[$id][$get];
+		return $get ? $__md_cfg[$id][$get] : $__md_cfg[$id];
 	}
 
 	function getMember($id, $get = ''){
@@ -203,7 +174,7 @@ if(!defined('__AFOX__')) exit();
 			}
 			$__members[$id] = $out;
 		}
-		return empty($get) ? $__members[$id] : $__members[$id][$get];
+		return $get ? $__members[$id][$get] : $__members[$id];
 	}
 
 	function getFileList($id, $target){
@@ -218,7 +189,7 @@ if(!defined('__AFOX__')) exit();
 
 	function setDataListInfo($data, $page, $count, $total){
 		$result = [];
-		$page = empty($page) ? 1 : $page;
+		$page = $page ? $page : 1;
 		if($count>0){
 			$cur_page = $page;
 			$tal_page = ceil($total / $count);
@@ -235,20 +206,13 @@ if(!defined('__AFOX__')) exit();
 		return $result;
 	}
 
-	function getHistoryAction($act){
-		global $_MEMBER;
-		if(empty($_MEMBER)) return null;
-
-		return DB::gets(_AF_HISTORY_TABLE_,
-			'hs_action,hs_regdate',
-			[
-				'hs_action{LIKE}' => $act.'::%',
-				'mb_srl' => $_MEMBER['mb_srl']
-			],
-			'hs_regdate',
-			function($r){
+	function getHistoryAction($act){ global $_MEMBER;
+		if(!$_MEMBER) return null;
+		return DB::gets(_AF_HISTORY_TABLE_, 'hs_action,hs_regdate',
+			['hs_action{LIKE}' => $act.'::%', 'mb_srl' => $_MEMBER['mb_srl']],
+			'hs_regdate', function($r){
 				$ret = [];
-				while ($tmp = DB::fetch($r)){
+				while ($tmp=DB::fetch($r)){
 					$ret[] = explode('::', $tmp['hs_regdate'].'::'.$tmp['hs_action']);
 				}
 				return $ret;
@@ -259,30 +223,17 @@ if(!defined('__AFOX__')) exit();
 	// 활동 체크를 위해 기록
 	function setHistoryAction($act, $value, $allowdup = false, $callback = null){
 		global $_MEMBER;
-
-		// 비회원은 기록안함
-		if (empty($_MEMBER)){
+		if (!$_MEMBER){ // 비회원은 기록안함
 			if($callback != null){
-				$_r = $callback([
-					'data'=>true,
-					'mb_srl'=>0,
-					'ipaddress'=>$_SERVER['REMOTE_ADDR']
-				]);
+				$_r = $callback(['data'=>true,'mb_srl'=>0,'ipaddress'=>$_SERVER['REMOTE_ADDR']]);
 				if(!empty($_r['error'])) return set_error($_r['message'], $_r['error']);
 			}
 			return true;
 		}
-
-		$uinfo = [
-			'mb_srl' => $_MEMBER['mb_srl'],
-			'ipaddress' => $_SERVER['REMOTE_ADDR']
-		];
-
+		$uinfo = ['mb_srl' => $_MEMBER['mb_srl'], 'ipaddress' => $_SERVER['REMOTE_ADDR']];
 		DB::transaction();
-
 		try {
 			$uinfo['data'] = getHistoryAction($act);
-
 			// 중복 허용일 경우가 아니면 한번만 입력
 			if($allowdup || empty($uinfo['data'])){
 				DB::insert(_AF_HISTORY_TABLE_,
@@ -302,37 +253,24 @@ if(!defined('__AFOX__')) exit();
 			DB::rollback();
 			return set_error($ex->getMessage(),$ex->getCode());
 		}
-
 		DB::commit();
 		return true;
 	}
 
 	function setPoint($point, $mb_srl = 0){
-		if(empty($point)) return; // 필요 포인트가 없으면 리턴
-
+		if(!$point) return; // 필요 포인트가 없으면 리턴
 		global $_MEMBER;
-		if(empty($mb_srl) && !empty($_MEMBER)) $mb_srl = $_MEMBER['mb_srl'];
-
-		$mb_srl = (int)$mb_srl;
-		// 비회원인데 - 값이면 에러
-		if(empty($mb_srl) && $point < 0){
-			return set_error(getLang('warning_shortage', ['point']), 3701);
-		}
-
-		if(empty($mb_srl)) return;
-
+		if(!$mb_srl && $_MEMBER) $mb_srl = $_MEMBER['mb_srl'];
+		if(!($mb_srl = (int)$mb_srl)) return;
 		$mb = DB::get(_AF_MEMBER_TABLE_, 'mb_point,mb_rank', ['mb_srl'=>$mb_srl]);
-		$mb_rank = empty($mb) ? 255 : ord($mb['mb_rank']);
+		$mb_rank = $mb ? ord($mb['mb_rank']) : 255;
 		// 115 초과시 에러... 115는 관리자. 109는 메니져
 		if($mb_rank > 115) return set_error(getLang('error_request'),4303);
-
 		// 포인트 모자르면 에러
 		if(($mb['mb_point'] + $point) < 0){
 			return set_error(getLang('warning_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 3701);
 		}
-
 		$_setvals = ['^mb_point'=>'mb_point'.($point>0?'+':'').$point];
-
 		// 99이하는 일반 회원, 포인트에 따라 계급 조정
 		if($mb_rank < 100){
 			$_sum_point = $mb['mb_point'] + $point;
@@ -340,14 +278,9 @@ if(!defined('__AFOX__')) exit();
 			//최대 50 레벨 // 주의, 50레벨 이상은 일반 회원이 아님
 			$_setvals['mb_rank'] = chr($_rank + 48);
 		}
-
-		DB::update(_AF_MEMBER_TABLE_,
-			$_setvals,
-			['mb_srl'=>$mb_srl]
-		);
-
+		DB::update(_AF_MEMBER_TABLE_, $_setvals, ['mb_srl'=>$mb_srl]);
 		// 현재 로그인 멤버와 같으면 만일을 대비 전역 변수 고침
-		if(!DB::error() && !empty($_MEMBER) && $mb_srl === $_MEMBER['mb_srl']){
+		if(!DB::error() && $_MEMBER && $mb_srl === $_MEMBER['mb_srl']){
 			$_MEMBER['mb_point'] = $mb['mb_point'] + $point;
 			if(isset($_setvals['mb_rank'])) $_MEMBER['mb_rank'] = $_setvals['mb_rank'];
 		}
@@ -360,20 +293,17 @@ if(!defined('__AFOX__')) exit();
 
 	function isManager($md_id){
 		global $_MEMBER;
-		if(empty($md_id) || empty($_MEMBER['mb_srl'])) return false;
+		if(!$md_id || empty($_MEMBER['mb_srl'])) return false;
 		if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
-		$module = getModule($md_id);
-		if(empty($module) || empty($module['md_manager'])) return false;
+		if(!($module = getModule($md_id)) || empty($module['md_manager'])) return false;
 		return $module['md_manager'] == $_MEMBER['mb_srl'];
 	}
 
 	function isGrant($chk, $md_id){
-		if(empty($md_id) || empty($chk)) return false;
-		if($md_id == '_AFOXtRASH_'){
-			$grant = 'm'; // 휴지통은 메니져 이상
-		} else {
-			$module = getModule($md_id);
-			if(empty($module)) return false;
+		if(!$md_id || !$chk) return false;
+		if($md_id == '_AFOXtRASH_') $grant = 'm'; // 휴지통은 메니져 이상
+		else {
+			if(!($module = getModule($md_id))) return false;
 			$grant =  $module['grant_'.$chk];
 		}
 		return checkGrant($grant);
@@ -394,8 +324,8 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function checkProtectData($key, $data){
-		global $_PROTECT;
 		global $_MEMBER;
+		global $_PROTECT;
 		$result = [];
 		$grade = empty($_MEMBER['mb_grade']) ? 'guest' : $_MEMBER['mb_grade'];
 		if(empty($data['mb_srl'])) $data['mb_srl'] = null;
@@ -419,7 +349,7 @@ if(!defined('__AFOX__')) exit();
 				return password_verify($password, $hash);
 			} else {
 				$password = createHash($password);
-				return !empty($hash) && $password === $hash;
+				return $hash && $password === $hash;
 			}
 		} catch (Exception $ex){
 			exit($ex->getMessage());
@@ -443,9 +373,9 @@ if(!defined('__AFOX__')) exit();
 
 	function sendNote($srl, $msg, $nick = ''){
 		global $_MEMBER;
-		$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
-		$nick = empty($_MEMBER) ? ($nick ? $nick : getLang('none')) : $_MEMBER['mb_nick'];
-		if(empty($srl) || $srl === $sender) return false;
+		$sender = $_MEMBER ? $_MEMBER['mb_srl'] : 0;
+		$nick = $_MEMBER ? $_MEMBER['mb_nick'] : ($nick ? $nick : getLang('none'));
+		if(!$srl || $srl === $sender) return false;
 		DB::insert(_AF_NOTE_TABLE_, [
 			'mb_srl'=>$srl,
 			'nt_sender'=>$sender,
@@ -460,9 +390,7 @@ if(!defined('__AFOX__')) exit();
 		if(!@unlink($file)){
 			@chmod($file, _AF_FILE_PERMIT_);
 			return false;
-		} else {
-			return true;
-		}
+		} else return true;
 	}
 
 	function unlinkDir($dir){
@@ -470,19 +398,15 @@ if(!defined('__AFOX__')) exit();
 		if(!@rmdir($dir)){
 			@chmod($dir, _AF_DIR_PERMIT_);
 			return false;
-		} else {
-			return true;
-		}
+		} else return true;
 	}
 
 	function unlinkAll($dir, $subdir = true){
-		// 폴더가 없어도 성공으로 간주
-		$ret = true;
+		$ret = true; // 폴더가 없어도 성공으로 간주
 		if(is_dir($dir)){
 			$handle = @opendir($dir); // 절대경로
 			while ($file = readdir($handle)){
-				if($file != '.' && $file != '..'){
-					// 하위 폴더이면...
+				if($file != '.' && $file != '..'){ // 하위 폴더면
 					if($subdir && is_dir($dir.$file.'/')){
 						unlinkAll($dir.$file.'/', $subdir);
 					} else {
@@ -500,21 +424,18 @@ if(!defined('__AFOX__')) exit();
 		if($file['error'] === UPLOAD_ERR_OK){
 			// HTTP post로 전송된 것인지 체크합니다.
 			if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('UPLOAD_ERR_CODE(-1)'),10489);
-
 			if($file['size'] <= 0){
 				return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
 			} if ($max_size > 0 && $max_size < $file['size']){
 				return set_error(getLang('UPLOAD_ERR_CODE(2)'),10402);
 			}
 			// 이동 경로가 없으면 이동 안함, 오류 체크는함
-			if(empty($dest)) return true;
-			// 폴더 없으면 만듬
-			$dir = dirname($dest);
+			if(!$dest) return true;
+			$dir = dirname($dest); // 폴더 없으면 만듬
 			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)){
 				return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
 			}
-			// 파일이 있으면 지움
-			if(file_exists($dest)){
+			if(file_exists($dest)){ // 파일이 있으면 지움
 				if(!unlinkFile($dest)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
 			}
 			if (move_uploaded_file($file['tmp_name'], $dest)){
@@ -540,11 +461,9 @@ if(!defined('__AFOX__')) exit();
 
 	function xssClean($html, $chkclosed = true){
 		$admin = isAdmin();
-
 		$html = preg_replace('#<!--.*?-->#i', '', $html);
 		$html = preg_replace('#</*\w+:\w[^>]*+>#i', '', $html);
 		$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|title|xml|s(?:cript|tyle))[^>]*+>#i', '', $html);
-
 		// XE removeSrcHack https://www.xpressengine.com/
 		$html = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|data\-[a-z\-]+|class|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i',
 			function ($match) use ($admin){
@@ -594,7 +513,6 @@ if(!defined('__AFOX__')) exit();
 				return "<{$match[1]}{$tag}{$attr}{$match[4]}>";
 			}
 		, $html);
-
 		if($chkclosed){ // close tags
 			preg_match_all('#</([a-z]+)>#iU', $html, $closeds);
 			preg_match_all('#<(?!meta|link|area|img|br|hr|input\b)([a-z]+)( .*)?(?!/)>#iU', $html, $openeds);
@@ -607,16 +525,13 @@ if(!defined('__AFOX__')) exit();
 				}
 			}
 		}
-
 		return $html;
 	}
 
 	function toHTML($text, $type = 2, $class = 'current_content'){
 		static $__parsedown = null;
-
-		if($type == 0){
-			$text = nl2br(escapeHtml($text));
-		} else {
+		if($type == 0) $text = nl2br(escapeHtml($text));
+		else {
 			if($type == 1){
 				if($__parsedown == null){
 					$__parsedown = new Parsedown();
@@ -629,7 +544,6 @@ if(!defined('__AFOX__')) exit();
 				// \/ = 줄바꿈
 				$text = str_replace('\\n', '<br>', preg_replace($patterns, $replacement, $text));
 			}
-
 			$text = preg_replace_callback('/<img([^>]*\s+widget\s*=[^>]*)>/is', function($m){
 				$attrs = [];
 				if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)){
@@ -637,10 +551,8 @@ if(!defined('__AFOX__')) exit();
 				}
 				return empty($attrs['widget']) ? '' : displayWidget($attrs['widget'], $attrs);
 			}, $text);
-
 			// 다운로드 권한이 없으면 처리
-			$_md = __MID__;
-			if(!empty($_md) && !isGrant('download', $_md)){
+			if(__MID__ && !isGrant('download', __MID__)){
 				$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
 				$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES,false)."');return false\" \\3";
 				$text = preg_replace($patterns, $replacement, $text);
@@ -671,8 +583,7 @@ if(!defined('__AFOX__')) exit();
 				}
 				if(!empty($_ex['access_md_ids'])){
 					$_acc_md = $_ex['access_mode'];
-					$_md = __MID__;
-					$_is_acc = !empty($_md) && in_array($_md, $_ex['access_md_ids']);
+					$_is_acc = __MID__ && in_array(__MID__, $_ex['access_md_ids']);
 					if(($_acc_md == 'include' && !$_is_acc)||($_acc_md == 'exclude' && $_is_acc)) continue;
 				}
 				$data = $__addon_call($_file, $position, $trigger, $_ex, $data);
@@ -685,11 +596,8 @@ if(!defined('__AFOX__')) exit();
 		static $__module_call = null;
 		if($__module_call == null){
 			$__module_call = function($include_file, $called_position, $called_trigger, $_DATA){
-				include $include_file;
-				$r = [];
-				if(function_exists($called_position)){
-					$r = call_user_func($called_position, $_DATA);
-				}
+				include $include_file; $r = [];
+				if(function_exists($called_position))$r=call_user_func($called_position,$_DATA);
 				return $r === true ? $_DATA : false;
 			};
 		}
@@ -708,38 +616,32 @@ if(!defined('__AFOX__')) exit();
 
 	// TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
 	function triggerCall($position, $trigger, &$data){
+		if(__MODULE__ == 'admin') return true; // 관리자 모듈은 넘어감
+		global $_MEMBER;
 		static $__triggers = null;
-		// 관리자 모듈은 넘어감
-		if(__MODULE__ == 'admin') return true;
 		if($__triggers == null){
 			$__triggers = ['M'=>[], 'A'=>[]];
-			global $_MEMBER;
 			$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 			DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
-				[
-					(__MOBILE__?'use_mobile':'use_pc')=>1,
-					'^'=>'ASCII(grant_access)<='.$rank
-				], 'tg_key',
+				[(__MOBILE__?'use_mobile':'use_pc')=>1,'^'=>'ASCII(grant_access)<='.$rank], 'tg_key',
 				function($r)use(&$__triggers){
-					while ($tmp = DB::fetch($r)){
-						$__triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
-					}
+					while($tmp = DB::fetch($r)) $__triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
 				}
 			);
 		}
-		if(count($__triggers['M']) > 0){
-			$result = triggerModuleCall($__triggers['M'], $position, $trigger, $data);
-		}
-		if(count($__triggers['A']) > 0){
-			$result = triggerAddonCall($__triggers['A'], $position, $trigger, $data);
-		}
+		if(count($__triggers['M']) > 0) triggerModuleCall($__triggers['M'], $position, $trigger, $data);
+		if(count($__triggers['A']) > 0) triggerAddonCall($__triggers['A'], $position, $trigger, $data);
 		return true;
 	}
 
 	function installModuleTrigger($id, $access){
-		if(DB::count(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access])!==1){
+		if(DB::count(_AF_TRIGGER_TABLE_,
+			['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access]
+		)!==1){
 			DB::delete(_AF_TRIGGER_TABLE_,['tg_id'=>$id]);
-			DB::insert(_AF_TRIGGER_TABLE_,['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access]);
+			DB::insert(_AF_TRIGGER_TABLE_,
+				['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access]
+			);
 		}
 	}
 
@@ -748,7 +650,6 @@ if(!defined('__AFOX__')) exit();
 		global $_CFG;
 		global $_DATA;
 		global $_MEMBER;
-
 		function __module_call($tpl_path, $tpl_file, $_result){
 			global $_CFG;
 			global $_DATA;
@@ -758,21 +659,16 @@ if(!defined('__AFOX__')) exit();
 			@include_once $tpl_path . 'common.php';
 			include $tpl_path . $tpl_file;
 		};
-
 		$trigger = $_DATA['disp'] ? $_DATA['disp'] : 'Default';
 		$callproc = 'disp'.ucwords(__MODULE__).'Default';
-
 		if(function_exists($callproc)){
 			if(triggerCall('before_disp', $trigger, $_DATA)){
 				$_result = call_user_func($callproc, $_DATA);
 				triggerCall('after_disp', $trigger, $_result);
-			} else {
-				$_result = get_error();
-			}
+			} else $_result = get_error();
 		} else {
 			$_result = set_error(getLang('error_request'),4303);
 		}
-
 		if(empty($_result['error'])){
 			// 테마에 스킨(tpl)이 있으면 사용
 			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
@@ -783,20 +679,15 @@ if(!defined('__AFOX__')) exit();
 			// 에러 번호가 4501 이면 로그인 폼 보여줌
 			if($_result['error'] == 4501 && empty($_MEMBER)){
 				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
-			} else {
-				messageBox($_result['message'], $_result['error']);
-			}
+			} else messageBox($_result['message'], $_result['error']);
 		}
 	}
 
 	function displayWidget($widget, $_WIDGET = []){
-		global $_MEMBER;
-		ob_start();
+		global $_MEMBER; ob_start();
 		if(file_exists(_AF_WIDGETS_PATH_ . $widget . '/index.php')){
 			include _AF_WIDGETS_PATH_ . $widget . '/index.php';
-		} else {
-			messageBox(getLang('error_founded'), 4201, getLang('Widget').': '.$widget);
-		}
+		} else messageBox(getLang('error_founded'), 4201, getLang('Widget').': '.$widget);
 		return ob_get_clean();
 	}
 
@@ -805,8 +696,8 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function cutstr($str, $length, $tail = '...'){
-		$count = 0;
 		if($length < 1) return $str;
+		$count = 0;
 		for ($i=$length; $i > 0; $i--){
 			if (strlen($str) <= $count) return $str;
 			$count+=($d=ord($str[$count]))<0x80?1:($d<0xE0?2:($d<0xF0?3:4));
@@ -839,8 +730,7 @@ if(!defined('__AFOX__')) exit();
 		if(preg_match("/iPad|Android|webOS|hp-tablet|PlayBook/", $agent)){
 			//if(strpos($agent, 'Android') !== FALSE && strpos($agent, 'Mobile') === FALSE) return 'TABLET';
 			if(!preg_match("/Opera Mini|Opera Mobi/", $agent)) return true;
-		}
-		// Detect mobile device by user agent
+		} // Detect mobile device by user agent
 		if(preg_match("/iPod|iPhone|Android|BlackBerry|SymbianOS|Bada|Tizen|Kindle|Wii|SCH-|SPH-|CANU-|Windows Phone|Windows CE|POLARIS|Palm|Dorothy Browser|Mobile|Opera Mobi|Opera Mini|Minimo|AvantGo|NetFront|Nokia|LGPlayer|SonyEricsson|HTC/i", $agent)) return true;
 		return false;
 	}
@@ -852,7 +742,7 @@ if(!defined('__AFOX__')) exit();
 
 	function insertVisitorHistory(){
 		$addr=strip_tags($_SERVER['REMOTE_ADDR']);
-		if(!empty($addr) && DB::count(_AF_VISITOR_TABLE_,['mb_ipaddress'=>$addr,'^'=>'TIMESTAMPDIFF(HOUR,`vs_regdate`,DATE_ADD(NOW(),INTERVAL -1 HOUR))<1'])===0){
+		if($addr && DB::count(_AF_VISITOR_TABLE_,['mb_ipaddress'=>$addr,'^'=>'TIMESTAMPDIFF(HOUR,`vs_regdate`,DATE_ADD(NOW(),INTERVAL -1 HOUR))<1'])===0){
 			DB::insert(_AF_VISITOR_TABLE_,[
 				'mb_ipaddress'=>$addr,'vs_agent'=>strip_tags($_SERVER['HTTP_USER_AGENT']), 'vs_referer'=>strip_tags($_SERVER['HTTP_REFERER']),'^vs_regdate'=>'NOW()'
 			]);
@@ -880,7 +770,7 @@ if(!defined('__AFOX__')) exit();
 			$msg = 'alert alert-dismissable alert-'. $a_type[$type] . '" role="alert">';
 			$msg .= '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><div>';
 		} else {
-			if(empty($title)){
+			if(!$title){
 				$a_title = ['success', 'alert', 'warning', 'error'];
 				$title = getLang($a_title[$type]);
 			}

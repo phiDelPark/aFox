@@ -79,8 +79,8 @@ if(file_exists(_AF_PATH_ . 'install/update.php')){
 $_CFG = DB::get(_AF_CONFIG_TABLE_);
 if(DB::error()) exit("Please reinstall afox.");
 
-define('_AF_LANG_', empty($_CFG['lang'])?'ko':$_CFG['lang']);
-define('_AF_THEME_', empty($_CFG['theme'])?'default':$_CFG['theme']);
+define('_AF_LANG_', $_CFG['lang']?$_CFG['lang']:'ko');
+define('_AF_THEME_', $_CFG['theme']?$_CFG['theme']:'default');
 define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
 
 
@@ -103,7 +103,7 @@ function get_session($key){
 
 // 만료시간이 0이면 브라우저 종료전까지 유지, -값이면 만료로 만듬 (제거)
 function set_cookie($key, $val, $exp = 0){
-	setcookie(md5($key), base64_encode($val), empty($exp)?0:_AF_SERVER_TIME_+$exp, '/', _AF_COOKIE_DOMAIN_);
+	setcookie(md5($key), base64_encode($val), $exp?_AF_SERVER_TIME_+$exp:0, '/', _AF_COOKIE_DOMAIN_);
 }
 function get_cookie($key){
 	return array_key_exists($cki = md5($key), $_COOKIE) ? base64_decode($_COOKIE[$cki]) : '';
@@ -117,7 +117,7 @@ function set_cache($key, $val, $exp = 0){
 		@chmod($dir.'/'.$e, 0707); @unlink($dir.'/'.$e);
 	}} @closedir($h);
 	$s = '<?php if(!defined(\'__AFOX__\'))exit();$_EXPIRE=%s;$_CACHE=%s; ?>';
-	$s = sprintf($s, empty($exp)?0:_AF_SERVER_TIME_+$exp, var_export($val,true));
+	$s = sprintf($s, $exp?_AF_SERVER_TIME_+$exp:0, var_export($val,true));
 	file_put_contents($dir.'/'.md5(_AF_SERVER_TIME_).'.php', $s, LOCK_EX);
 }
 function get_cache($key){
@@ -125,7 +125,7 @@ function get_cache($key){
 	if(!empty($__af_caches[$key])) return $__af_caches[$key];
 	if(!is_dir($dir = _AF_CACHE_DATA_ . md5($key))) return;
 	if(!is_file($f = $dir.'/'.(@scandir($dir)[2]))) return;
-	if((@include $f)!==1||(!empty($_EXPIRE)&&$_EXPIRE<_AF_SERVER_TIME_)){
+	if((@include $f)!==1||($_EXPIRE&&$_EXPIRE<_AF_SERVER_TIME_)){
 		@chmod($f, 0707); @unlink($f); @chmod($dir, 0707); @rmdir($dir); return;
 	} return $__af_caches[$key] = $_CACHE;
 }
