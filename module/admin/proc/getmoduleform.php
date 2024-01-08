@@ -9,9 +9,6 @@ function proc($data) {
 	$_template_file = _AF_MODULES_PATH_ . $data['md_id'] . '/setup.php';
 	if(!file_exists($_template_file)) return set_error(getLang('error_founded'),4201);
 
-	$_MODULE = DB::get(_AF_MODULE_TABLE_, ['md_id'=>'@'.$data['md_id']]);
-	if(DB::error()) return set_error($error->getMessage(),$error->getCode());
-
 	$_MODULE_INFO = [];
 	@require_once _AF_MODULES_PATH_ . $data['md_id'] . '/info.php';
 

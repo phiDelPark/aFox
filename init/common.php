@@ -47,7 +47,6 @@ if($_GET && !isset($_GET['module'])){
 	if(file_exists(_AF_MODULES_PATH_ . ($tmp=key($_GET)) . '/setup.php')){
 		$_DATA['module'] = $tmp;
 		$_DATA['disp'] = empty($_GET[$tmp]) ? 'default' : $_GET[$tmp];
-		unset($_DATA[$tmp]);
 	}
 }//*/
 // 넘어온 값을 하나로 합침

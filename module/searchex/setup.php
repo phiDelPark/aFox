@@ -1,8 +1,8 @@
 <?php
 if(!defined('__AFOX__')) exit();
-$_extra = empty($_MODULE['md_extra'])?[]:unserialize($_MODULE['md_extra']);
+$_MODULE = getModule('@searchex');
+$_mids = empty($_MODULE['md_extra'])?[]:unserialize($_MODULE['md_extra']);
 $_count = empty($_MODULE['md_list_count'])?20:$_MODULE['md_list_count'];
-$_mids = empty($_extra['keys']['selected_ids'])?[]:$_extra['keys']['selected_ids'];
 
 $_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', ['md_key'=>'board']);
 if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
@@ -46,7 +46,7 @@ if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode
 		//$end_page = $_list['end_page'];
 
 		foreach ($_list as $key => $value) {
-			echo '<tr><th scope="row"><label><input type="checkbox" name="key_selected_ids[]" value="'.$value['md_id'].'" class="data_selecter" style="margin-right:5px" data-except-ajax'.(empty($_mids)||array_search($value['md_id'], $_mids)===false?'':' checked').'>'.$value['md_id'].'</label></th>';
+			echo '<tr><th scope="row"><label><input type="checkbox" name="md_ids[]" value="'.$value['md_id'].'" class="data_selecter" style="margin-right:5px"'.(empty($_mids)||array_search($value['md_id'], $_mids)===false?'':' checked').'>'.$value['md_id'].'</label></th>';
 			echo '<td>'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td></tr>';
 		}
 	}

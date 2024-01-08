@@ -216,10 +216,10 @@
 			.offOn('success.exec.ajax', function(e, data, xhr){
 				e.preventDefault();
 				var act = $(e.target).attr('data-exec-ajax');
-				if(act == 'admin.update'+key.toUcFirst()+'Config' && data['redirect_url']) {
+				if(act != 'admin.get'+key.toUcFirst()+'Form' && data['redirect_url']) {
 					parent.location.replace(data['redirect_url']);
 				} else {
-					$(e.target).attr('data-exec-ajax', 'admin.update'+key.toUcFirst()+'Config');
+					$(e.target).attr('data-exec-ajax', key=='module'?id+'.setupModule':'admin.update'+key.toUcFirst()+'Config');
 					if(typeof(data['tpl']) != 'undefined') {
 						$p.html(data['tpl']);
 					}

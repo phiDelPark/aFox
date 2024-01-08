@@ -24,6 +24,7 @@ function dispSearchexDefault($data) {
 
 	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$disp)) {
 		require_once $inc_file;
+		$data = array_merge(getModule('@searchex'), $data);
 		return proc($data);
 	} else {
 		return set_error(

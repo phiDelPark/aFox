@@ -2,10 +2,8 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	$_MD_CONFIG = getModule('@searchex');
-	$_extra = empty($_MD_CONFIG['md_extra'])?[]:unserialize($_MD_CONFIG['md_extra']);
-	$_count = empty($_MD_CONFIG['md_list_count'])?20:$_MD_CONFIG['md_list_count'];
-	$_mids = empty($_extra['keys']['selected_ids'])?[]:$_extra['keys']['selected_ids'];
+	$_mids = empty($data['md_extra'])?[]:unserialize($data['md_extra']);
+	$_count = empty($data['md_list_count'])?20:$data['md_list_count'];
 	if(empty($_mids)) $_mids[] = '@@@@@@@@@@'; // 검색할 모듈이 없으면 임시로 값을 줌
 
 	$search = empty($data['searchex']) ? '' : $data['searchex'];
@@ -39,7 +37,6 @@ function proc($data) {
 			}
 		}
 	}
-
 	//if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
 
 	$_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres, 'md_id,wr_regdate', (($page-1)*$_count).','.$_count);
