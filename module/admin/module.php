@@ -11,28 +11,30 @@
 		messageBox($ex->getMessage(), $ex->getCode(), false);
 	}
 ?>
-<table class="table table-hover">
-<thead class="table-nowrap">
+
+<table class="table">
+<thead>
 	<tr>
-		<th>#<?php echo getLang('module')?></th>
-		<th class="hidden-xs"><?php echo getLang('version')?></th>
-		<th class="hidden-xs hidden-sm"><?php echo getLang('author')?></th>
-		<th class="col-xs-1"><?php echo getLang('setup')?></th>
+		<th scope="col" class="text-wrap">#<?php echo getLang('module')?></th>
+		<th scope="col" class="text-end d-none d-md-table-cell"><?php echo getLang('author')?></th>
+		<th scope="col"><?php echo getLang('version')?></th>
+		<th scope="col" class="text-end"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
 <tbody>
+
 <?php
 $skip_arr = ['admin'=>1,'member'=>1,'page'=>1,'board'=>1,'editor'=>1];
 $module_dir = _AF_MODULES_PATH_;
 $is_admin =isAdmin();
-if($is_admin) {
+if(false && $is_adminn) {
 	foreach ($skip_arr as $key => $value) {
 		@include $module_dir.$key.'/info.php';
 
-		echo '<tr><th scope="row">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
-		echo '<td class="hidden-xs">'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
-		echo '<td class="hidden-xs hidden-sm">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
-		echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" '.'disabled="disabled">'.getLang('none').'</button></td></tr>';
+		echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
+		echo '<td class="d-none d-md-table-cell">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
+		echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
+		echo '<td><a class="btn btn-primary btn-sm mw-10 disabled" href="#">'.getLang('none').'</a></td></tr>';
 	}
 }
 if(is_dir($module_dir)) {
@@ -51,13 +53,13 @@ if(is_dir($module_dir)) {
 		$_MODULE_INFO['_PROTECT_'] = $_PROTECT;
 
 		if ($is_admin || ($is_setup&&$_MODULE_INFO['_PROTECT_']['setup']['grant'] == 'm')) {
-			echo '<tr><th scope="row">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
-			echo '<td class="hidden-xs">'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
-			echo '<td class="hidden-xs hidden-sm">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
+			echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
+			echo '<td class="d-none d-md-table-cell">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
+			echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
 			if($is_setup) {
-			echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-toggle="modal" data-target="#admin_module_modal" data-module-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
+			echo '<td><a class="btn btn-primary btn-sm mw-10" href="'.getUrl('md_id', $name, 'act', 'getModuleForm').'">'.getLang('setup').'</a></td></tr>';
 			} else {
-			echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" '.'disabled="disabled">'.getLang('none').'</button></td></tr>';
+			echo '<td><a class="btn btn-primary btn-sm mw-10 disabled" href="#">'.getLang('none').'</a></td></tr>';
 			}
 		}
 	}
@@ -68,11 +70,12 @@ if(is_dir($module_dir)) {
 ?>
 </tbody>
 </table>
-<table class="table table-hover">
-<thead class="table-nowrap">
+
+<table class="table">
+<thead>
 	<tr>
 		<th>#<?php echo getLang('removed_module')?></th>
-		<th><?php echo getLang('empty_module')?></th>
+		<th class="text-end"><?php echo getLang('empty_module')?></th>
 	</tr>
 </thead>
 <tbody>

@@ -1,196 +1,152 @@
 <?php
 if(!defined('__AFOX__')) exit();
-
 $menus = getSiteMenu();
 if (!empty($menus['error'])) messageBox($menus['message'],$menus['error'], false);
+$placeholder = getLang('%s %s', ['category', 'title']);
 ?>
 
 <link rel="stylesheet" href="<?php echo _AF_URL_ ?>module/admin/sitemap/sitemap.css">
 <script src="<?php echo _AF_URL_ ?>module/admin/sitemap/sitemap.js"></script>
 
 <div id="siteMap">
-	<div class="row menu">
-		<div class="col-lg-12">
+	<h5 class="pb-2 mb-4 border-bottom"><?php echo getLang('main_menu')?></h5>
+	<div class="mb-5">
+		<form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off">
+			<header class="float-start">
+			<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(this, 1)" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
+			<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return this.submit()" style="cursor:pointer"><br><?php echo getLang('save')?></div>
+			</header>
+			<div>
+			<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="act" value="updateMenu">
+			<input type="hidden" name="mu_type" value="0">
+			<ul id="siteMapRoot1" class="ms-5 p-2 border rounded" style="min-height:300px">
 
-			<h5><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i> <strong><?php echo getLang('main_menu')?></strong></h5>
-			<div class="panel panel-default">
-				<form class="panel-body clearfix" action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off">
-					<header class="pull-left">
-					<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(1);" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
-					<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return this.submit()" style="cursor:pointer"><br><?php echo getLang('save')?></div>
-					</header>
-					<div class="form-data-set">
-					<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
-					<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
-					<input type="hidden" name="act" value="updateMenu">
-					<input type="hidden" name="mu_type" value="0">
-					<ul id="siteMapRoot1">
+		<?php
 
-				<?php
+		if(empty($menus['error'])){
+			$placeholder = getLang('%s %s', ['category', 'title']);
+			$is_parent = $depth = 0;
+			$deps = [0];
+			$li = '';
+			foreach ($menus['header'] as $key => $value) {
 
-				if(empty($menus['error'])){
-					$placeholder = getLang('%s %s', ['category', 'title']);
-					$is_parent = $depth = 0;
-					$deps = [0];
-					$li = '';
-					foreach ($menus['header'] as $key => $value) {
-
-						if($is_parent < $value['mu_parent']) {
-							$depth++;
-							echo "<ul>";
-							$is_parent = $value['mu_parent'];
-						}else if($is_parent > $value['mu_parent']) {
-							$tmp = $depth - isset($deps[$value['mu_parent']]) ? $deps[$value['mu_parent']] : 0;
-							echo "</li>" . str_repeat("</ul></li>", $depth - $tmp);
-							$depth = $tmp;
-							$is_parent = $value['mu_parent'];
-						} else {
-							echo $li;
-							$li = "</li>";
-						}
-
-						$deps[$value['mu_srl']] = $depth + 1;
-
-						echo '<li class="form-inline sitemap-item">'."\n";
-						echo '<input type="hidden" name="parent_key[]" value="'. $value['mu_parent'] .'" class="_parent_key">'."\n";
-						echo '<input type="hidden" name="item_key[]" value="'. $value['mu_srl'] .'" class="_item_key">'."\n";
-						echo '<input type="hidden" name="desc_key[]" value="'. escapeHtml($value['mu_description']) .'" class="_desc_key">'."\n";
-						echo '<input type="hidden" name="collapse_key[]" value="'. $value['mu_collapse'] .'" class="_collapse_key">'."\n";
-						echo '<input type="hidden" name="new_win_key[]" value="'. $value['mu_new_win'] .'" class="_new_win_key">'."\n";
-						echo '<input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHtml($value['mu_title']) .'" class="form-control input-sm">'."\n";
-						echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)',['id','link']) . '" value="'. (empty($value['md_id'])?escapeHtml($value['mu_link']):$value['md_id']) .'" class="form-control input-sm">'."\n";
-						echo '<span class="side"><input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_tool.png" onclick="return false" data-toggle="modal" data-target=".bs-admin-modal-lg"> <input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_delete.png" value="delete" onclick="return siteMapItemDelete(this);"></span>'."\n";
-
-					}
-
-					echo str_repeat("</li></ul>", $depth) . $li;
+				if($is_parent < $value['mu_parent']) {
+					$depth++;
+					echo "<ul>";
+					$is_parent = $value['mu_parent'];
+				}else if($is_parent > $value['mu_parent']) {
+					$tmp = $depth - isset($deps[$value['mu_parent']]) ? $deps[$value['mu_parent']] : 0;
+					echo "</li>" . str_repeat("</ul></li>", $depth - $tmp);
+					$depth = $tmp;
+					$is_parent = $value['mu_parent'];
+				} else {
+					echo $li;
+					$li = "</li>";
 				}
 
-				?>
+				$deps[$value['mu_srl']] = $depth + 1;
 
-					</ul>
-					</div>
-				</form>
+				echo '<li class="sitemap-item iii'.$key.'">'."\n";
+				echo '<span class="side"><input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_tool.png" value="setup">'."\n";
+				echo '<input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_delete.png" value="delete"></span>'."\n";
+				echo '<input type="hidden" name="parent_key[]" value="'. $value['mu_parent'] .'" class="_parent_key">'."\n";
+				echo '<input type="hidden" name="item_key[]" value="'. $value['mu_srl'] .'" class="_item_key">'."\n";
+				echo '<span class="indent setup d-none"><input type="checkbox" name="collapse_key[]" value="1" class="_collapse_key"'.(empty($value['mu_collapse'])?'':' checked').'><span>'.getLang('collapse').'</span>'."\n";
+				echo '<input type="checkbox" name="new_win_key[]" value="1" class="_new_win_key"'.(empty($value['mu_new_win'])?'':' checked').'><span>'.getLang('new_window').'</span>'."\n";
+				echo '<input type="text" name="desc_key[]" value="'. escapeHtml($value['mu_description']) .'" class="_desc_key form-control" placeholder="'.getLang('menu_desc').'"></span>'."\n";
+				echo '<span class="indent input"><input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHtml($value['mu_title']) .'" class="form-control">'."\n";
+				echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)',['id','link']) . '" value="'. (empty($value['md_id'])?escapeHtml($value['mu_link']):$value['md_id']) .'" class="form-control"></span>'."\n";
+
+			}
+
+			echo str_repeat("</li></ul>", $depth) . $li;
+		}
+
+		?>
+
+			</ul>
 			</div>
-		</div>
+		</form>
 	</div>
-	<div class="row menu">
-		<div class="col-lg-12">
-			<h5><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i> <strong><?php echo getLang('foot_menu')?></strong></h5>
-			<div class="panel panel-default">
-				<form class="panel-body clearfix" action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off">
-					<header class="pull-left">
-					<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(2);" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
-					<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return this.submit()" style="cursor:pointer"><br><?php echo getLang('save')?></div>
-					</header>
-					<div class="form-data-set">
-					<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
-					<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
-					<input type="hidden" name="act" value="updateMenu">
-					<input type="hidden" name="mu_type" value="1">
-					<ul id="siteMapRoot2">
 
-				<?php
+	<h5 class="pb-2 mb-4 border-bottom"><?php echo getLang('foot_menu')?></h5>
+	<div class="mb-5">
+		<form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off">
+			<header class="float-start">
+			<div class="text-center"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_add.png" value="+" onclick="return siteMapItemAdd(1);" style="cursor:pointer"><br><?php echo getLang('insert')?></div>
+			<div class="text-center" style="margin-top:20px"><input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_save.png" value="S" onclick="return this.submit()" style="cursor:pointer"><br><?php echo getLang('save')?></div>
+			</header>
+			<div>
+			<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="act" value="updateMenu">
+			<input type="hidden" name="mu_type" value="0">
+			<ul id="siteMapRoot2" class="ms-5 p-2 border rounded" style="min-height:300px">
 
-				if(empty($menus['error'])){
-					$placeholder = getLang('%s %s', ['category', 'title']);
-					$is_parent = $depth = 0;
-					$deps = [0];
-					$li = '';
+		<?php
 
-					foreach ($menus['footer'] as $key => $value) {
+		if(empty($menus['error'])){
+			$is_parent = $depth = 0;
+			$deps = [0];
+			$li = '';
+			foreach ($menus['footer'] as $key => $value) {
 
-						if($is_parent < $value['mu_parent']) {
-							$depth++;
-							echo "<ul>";
-							$is_parent = $value['mu_parent'];
-						}else if($is_parent > $value['mu_parent']) {
-							$tmp = $depth - isset($deps[$value['mu_parent']]) ? $deps[$value['mu_parent']] : 0;
-							echo "</li>" . str_repeat("</ul></li>", $depth - $tmp);
-							$depth = $tmp;
-							$is_parent = $value['mu_parent'];
-						} else {
-							echo $li;
-							$li = "</li>";
-						}
-
-						$deps[$value['mu_srl']] = $depth + 1;
-
-						echo '<li class="form-inline sitemap-item">'."\n";
-						echo '<input type="hidden" name="parent_key[]" value="'. $value['mu_parent'] .'" class="_parent_key">'."\n";
-						echo '<input type="hidden" name="item_key[]" value="'. $value['mu_srl'] .'" class="_item_key">'."\n";
-						echo '<input type="hidden" name="desc_key[]" value="'. escapeHtml($value['mu_description']) .'" class="_desc_key">'."\n";
-						echo '<input type="hidden" name="collapse_key[]" value="'. $value['mu_collapse'] .'" class="_collapse_key">'."\n";
-						echo '<input type="hidden" name="new_win_key[]" value="'. $value['mu_new_win'] .'" class="_new_win_key">'."\n";
-						echo '<input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHtml($value['mu_title']) .'" class="form-control input-sm">'."\n";
-						echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)',['id','link']) . '" value="'. (empty($value['md_id'])?escapeHtml($value['mu_link']):$value['md_id']) .'" class="form-control input-sm">'."\n";
-						echo '<span class="side"><input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_tool.png" onclick="return false" data-toggle="modal" data-target=".bs-admin-modal-lg"> <input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_delete.png" value="delete" onclick="return siteMapItemDelete(this);"></span>'."\n";
-
-					}
-
-					echo str_repeat("</li></ul>", $depth) . $li;
+				if($is_parent < $value['mu_parent']) {
+					$depth++;
+					echo "<ul>";
+					$is_parent = $value['mu_parent'];
+				}else if($is_parent > $value['mu_parent']) {
+					$tmp = $depth - isset($deps[$value['mu_parent']]) ? $deps[$value['mu_parent']] : 0;
+					echo "</li>" . str_repeat("</ul></li>", $depth - $tmp);
+					$depth = $tmp;
+					$is_parent = $value['mu_parent'];
+				} else {
+					echo $li;
+					$li = "</li>";
 				}
 
-				?>
+				$deps[$value['mu_srl']] = $depth + 1;
 
-					</ul>
-					</div>
-				</form>
+				echo '<li class="sitemap-item">'."\n";
+				echo '<span class="side"><input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_tool.png" value="setup">'."\n";
+				echo '<input type="image" src="'._AF_URL_.'module/admin/sitemap/icon_delete.png" value="delete"></span>'."\n";
+				echo '<input type="hidden" name="parent_key[]" value="'. $value['mu_parent'] .'" class="_parent_key">'."\n";
+				echo '<input type="hidden" name="item_key[]" value="'. $value['mu_srl'] .'" class="_item_key">'."\n";
+				echo '<span class="indent setup d-none"><input type="checkbox" name="collapse_key[]" value="1" class="_collapse_key"'.(empty($value['mu_collapse'])?'':' checked').'><span>'.getLang('collapse').'</span>'."\n";
+				echo '<input type="checkbox" name="new_win_key[]" value="1" class="_new_win_key"'.(empty($value['mu_new_win'])?'':' checked').'><span>'.getLang('new_window').'</span>'."\n";
+				echo '<input type="text" name="desc_key[]" value="'. escapeHtml($value['mu_description']) .'" class="_desc_key form-control" placeholder="'.getLang('menu_desc').'"></span>'."\n";
+				echo '<span class="indent input"><input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHtml($value['mu_title']) .'" class="form-control">'."\n";
+				echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)',['id','link']) . '" value="'. (empty($value['md_id'])?escapeHtml($value['mu_link']):$value['md_id']) .'" class="form-control"></span>'."\n";
+
+			}
+
+			echo str_repeat("</li></ul>", $depth) . $li;
+		}
+
+		?>
+
+			</ul>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>
 
-
-<div id="admin_menu_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-	<div class="modal-content">
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title"><?php echo getLang('menu')?></h4>
-	  </div>
-	  <div class="modal-body">
-		<div class="form-group" style="margin-top:20px">
-			<label style="display:block"><?php echo getLang('option')?></label>
-			<label class="checkbox inline" tabindex="0">
-				<input type="checkbox" value="1" id="sitemap_mu_collapse">
-				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-				<span><?php echo getLang('collapse')?></span>
-			</label>
-			<label class="checkbox inline" tabindex="0">
-				<input type="checkbox" value="1" id="sitemap_mu_new_window">
-				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-				<span><?php echo getLang('new_open_window')?></span>
-			</label>
-		</div>
-		<div class="form-group">
-			<label for="sitemap_mu_description"><?php echo getLang('menu_desc')?></label>
-			<input type="text" class="form-control" id="sitemap_mu_description" maxlength="255">
-			<p class="help-block"><?php echo getLang('desc_menu_desc')?></p>
-		</div>
-	  </div>
-	  <div class="modal-footer">
-		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="button" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
-	  </div>
-	</div>
-  </div>
-</div>
-
-
-<ul id="siteMap_item_template" class="hide">
-	<li class="form-inline sitemap-item">
-		<button type="button" class="moveTo">Move to</button>
-		<input type="hidden" name="parent_key[]" value="0" class="_parent_key">
-		<input type="hidden" name="item_key[]" value="0" class="_item_key">
-		<input type="hidden" name="desc_key[]" value="" class="_desc_key">
-		<input type="hidden" name="collapse_key[]" value="0" class="_collapse_key">
-		<input type="hidden" name="new_win_key[]" value="0" class="_new_win_key">
-		<input type="text" name="item_title[]" placeholder="<?php echo getLang('%s %s', ['category', 'title'])?>" value="" class="form-control input-sm">
-		<input type="text" name="item_link[]" placeholder="<?php echo getLang('%s (or %s)',['id','link'])?>" value="" class="form-control input-sm">
-		<span class="side">
-			<input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_tool.png" onclick="return false" data-toggle="modal" data-target=".bs-admin-modal-lg">
-			<input type="image" src="<?php echo _AF_URL_ ?>module/admin/sitemap/icon_delete.png" value="delete" onclick="return siteMapItemDelete(this);">
+<ul id="siteMap_item_template" class="d-none">
+	<li class="sitemap-item">
+		<span class="side"><input type="image" src="<?php echo _AF_URL_?>module/admin/sitemap/icon_tool.png" value="setup">
+			<input type="image" src="<?php echo _AF_URL_?>module/admin/sitemap/icon_delete.png" value="delete"></span>
+		<input type="hidden" name="parent_key[]" class="_parent_key">
+		<input type="hidden" name="item_key[]" class="_item_key">
+		<span class="indent setup d-none">
+			<input type="checkbox" name="collapse_key[]" value="1" class="_collapse_key"><span><?php echo getLang('collapse')?></span>
+			<input type="checkbox" name="new_win_key[]" value="1" class="_new_win_key"><span><?php echo getLang('new_window')?></span>
+			<input type="text" name="desc_key[]" class="_desc_key form-control" placeholder="<?php echo getLang('menu_desc')?>">
+		</span>
+		<span class="indent input">
+			<input type="text" name="item_title[]" placeholder="<?php echo $placeholder?>" class="form-control">
+			<input type="text" name="item_link[]" placeholder="<?php echo getLang('%s (or %s)',['id','link'])?>" class="form-control">
 		</span>
 	</li>
 </ul>

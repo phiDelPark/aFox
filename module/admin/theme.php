@@ -14,14 +14,14 @@
 	$theme_id = empty($_CFG['theme']) ? 'default' : $_CFG['theme'];
 ?>
 
-<table class="table table-hover">
-<thead class="table-nowrap">
+<table class="table">
+<thead>
 	<tr>
-		<th>#<?php echo getLang('theme')?></th>
-		<th class="hidden-xs"><?php echo getLang('version')?></th>
-		<th class="hidden-xs hidden-sm"><?php echo getLang('author')?></th>
-		<th class="col-xs-1"><?php echo getLang('use')?></th>
-		<th class="col-xs-1"><?php echo getLang('setup')?></th>
+		<th scope="col" class="text-wrap">#<?php echo getLang('theme')?></th>
+		<th scope="col" class="text-end d-none d-md-table-cell"><?php echo getLang('author')?></th>
+		<th scope="col"><?php echo getLang('version')?></th>
+		<th scope="col"><?php echo getLang('use')?></th>
+		<th scope="col" class="text-end"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -36,11 +36,11 @@ if(is_dir($theme_dir)) {
 		$_THEME_INFO = [];
 		@include $theme_dir.$name.'/info.php';
 
-		echo '<tr><th scope="row">'.(escapeHtml(empty($_THEME_INFO['title'])?$name:$_THEME_INFO['title'])).'</th>';
-		echo '<td class="hidden-xs">'.(empty($_THEME_INFO['version'])?'...':$_THEME_INFO['version']).'</td>';
-		echo '<td class="hidden-xs hidden-sm">'.(empty($_THEME_INFO['author'])?'...':'<a href="'.(empty($_THEME_INFO['link'])?'mailto:'.$_THEME_INFO['email'].'"':$_THEME_INFO['link'].'" target="_blank"').'>'.$_THEME_INFO['author'].'</a>').'</td>';
-		echo '<td><button type="button" class="btn btn-'.($theme_id == $name?'info':'primary').' btn-xs mw-10" data-exec-ajax="admin.updateSetupTheme" data-ajax-param="th_id,'.$name.',success_return_url,'.urlencode(getUrl()).'">'.getLang($theme_id == $name? 'using':'use').'</button></td>';
-		echo '<td><button type="button" class="btn btn-primary btn-xs mw-10" data-toggle="modal" data-target="#admin_theme_modal" data-theme-id="'.$name.'">'.getLang('setup').'</button></td></tr>';
+		echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_THEME_INFO['title'])?$name:$_THEME_INFO['title'])).'</th>';
+		echo '<td class="d-none d-md-table-cell">'.(empty($_THEME_INFO['author'])?'...':'<a href="'.(empty($_THEME_INFO['link'])?'mailto:'.$_THEME_INFO['email'].'"':$_THEME_INFO['link'].'" target="_blank"').'>'.$_THEME_INFO['author'].'</a>').'</td>';
+		echo '<td>'.(empty($_THEME_INFO['version'])?'...':$_THEME_INFO['version']).'</td>';
+		echo '<td><a class="btn btn-'.($theme_id == $name?'info':'primary').' btn-sm mw-10" style="width:100px" data-exec-ajax="admin.updateSetupTheme" data-ajax-param="th_id,'.$name.',success_return_url,'.urlencode(getUrl()).'">'.getLang($theme_id == $name? 'using':'use').'</a></td>';
+		echo '<td><a class="btn btn-primary btn-sm mw-10" href="'.getUrl('th_id', $name, 'act', 'getThemeForm').'">'.getLang('setup').'</a></td></tr>';
 	}
 }
 ?>
@@ -48,11 +48,11 @@ if(is_dir($theme_dir)) {
 </tbody>
 </table>
 
-<table class="table table-hover">
-<thead class="table-nowrap">
+<table class="table">
+<thead>
 	<tr>
 		<th>#<?php echo getLang('removed_theme')?></th>
-		<th class="col-xs-1"><?php echo getLang('empty_theme')?></th>
+		<th class="text-end"><?php echo getLang('empty_theme')?></th>
 	</tr>
 </thead>
 <tbody>

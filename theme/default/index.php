@@ -1,5 +1,6 @@
 <?php
 	if(!defined('__AFOX__')) exit();
+  addJSLang(['error']);
 
 	$menus = getSiteMenu();
 	$mainmenu = [];
@@ -7,13 +8,13 @@
 	$muroot = '';
 	$submenuactivetitle = '';
 
-	if(empty($menus['error'])) {
+	if(empty($menus['error'])){
 		$url = getUrl();
-		foreach ($menus['header'] as $val) {
-			$is_active = (!empty($val['md_id'])&&$val['md_id']==__MID__)?'_ACTIVE_':$val['mu_srl'];
-			if($is_active!='_ACTIVE_' && $val['mu_link'] && strpos($url, $val['mu_link'])!==false) {$is_active='_ACTIVE_';}
-			if((int) $val['mu_parent'] > 0) {
-				if($is_active == '_ACTIVE_') {
+		foreach($menus['header'] as $val){
+			$is_active = (!empty($val['md_id']) && $val['md_id'] == __MID__) ? '_ACTIVE_' : $val['mu_srl'];
+			if($is_active!='_ACTIVE_' && $val['mu_link'] && strpos($url, $val['mu_link'])!==false) $is_active='_ACTIVE_';
+			if((int) $val['mu_parent'] > 0){
+				if($is_active == '_ACTIVE_'){
 					// 활성화시 키값 교체
 					if(!empty($submenu[$muroot])){
 						$submenu['_ACTIVE_'] = $submenu[$muroot];
@@ -32,179 +33,254 @@
 			}
 		}
 	}
+  $is_submenu = !empty($submenu['_ACTIVE_'])&&count($submenu['_ACTIVE_'])>0;
 ?>
-<?php if(!empty($_THEME['use_loader'])) { ?>
-<div id="afPageLoading">
-	<span class="sr-only">Please Wait, Loading...</span>
+
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="bi-house-door-fill" viewBox="0 0 16 16">
+    <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5"/>
+  </symbol>
+  <symbol id="bi-check2" viewBox="0 0 16 16">
+    <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+  </symbol>
+  <symbol id="bi-circle-half" viewBox="0 0 16 16">
+    <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+  </symbol>
+  <symbol id="bi-moon-stars-fill" viewBox="0 0 16 16">
+    <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
+    <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
+  </symbol>
+  <symbol id="bi-sun-fill" viewBox="0 0 16 16">
+    <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+  </symbol>
+  <symbol id="bi-cart" viewBox="0 0 16 16">
+    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+  </symbol>
+  <symbol id="bi-aperture" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"/>
+  </symbol>
+  <symbol id="bi-person-bounding-box" viewBox="0 0 16 16">
+    <path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"/>
+    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+  </symbol>
+  <symbol id="bi-person-fill" viewBox="0 0 16 16">
+    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+  </symbol>
+  <symbol id="bi-search" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+    <circle cx="10.5" cy="10.5" r="7.5"/>
+    <path d="M21 21l-5.2-5.2"/>
+  </symbol>
+  <symbol id="bi-envelope" viewBox="0 0 16 16">
+    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
+  </symbol>
+  <symbol id="bi-power" viewBox="0 0 16 16">
+    <path d="M7.5 1v7h1V1z"/>
+    <path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812"/>
+  </symbol>
+  <symbol id="bi-trash" viewBox="0 0 16 16">
+    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+  </symbol>
+</svg>
+
+<div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+  <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
+          id="bd-theme"
+          type="button"
+          aria-expanded="false"
+          data-bs-toggle="dropdown"
+          aria-label="Toggle theme (auto)">
+    <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#bi-circle-half"></use></svg>
+    <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+    <li>
+      <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
+        <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#bi-sun-fill"></use></svg>
+        Light
+        <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#bi-check2"></use></svg>
+      </button>
+    </li>
+    <li>
+      <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
+        <svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#bi-moon-stars-fill"></use></svg>
+        Dark
+        <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#bi-check2"></use></svg>
+      </button>
+    </li>
+    <li>
+      <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
+        <svg class="bi me-2 opacity-50 theme-icon"><use href="#bi-circle-half"></use></svg>
+        Auto
+        <svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#bi-check2"></use></svg>
+      </button>
+    </li>
+  </ul>
 </div>
-<?php } ?>
+
 <div class="container">
-	<header>
-		<h1 class="logo-title" role="banner" aria-label="<?php echo escapeHtml($_CFG['title'])?>"><img src="<?php echo empty($_CFG['logo']) ? _AF_THEME_URL_.'img/logo.png' : $_CFG['logo']?>" alt="<?php echo escapeHtml($_CFG['title'])?>" height="50"></h1>
-		<div class="right">
-			<span><a class="collapsed" data-toggle="collapse" href="#searchBox" aria-controls="searchBox" aria-expanded="false" aria-label="Toggle search box"><i class="glyphicon glyphicon-search" aria-hidden="true" style="font-weight:bold"></i></a></span>
-<?php if (!empty($_MEMBER)) {
-	$notes = DB::gets(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_read_date'=>'0000-00-00 00:00:00'], 'nt_send_date', '1,5');
-?>
-			<?php if($notes){ ?>
-			<span>
-				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <strong class="caret"></strong></a>
-				<ul class="dropdown-menu message-dropdown dropdown-menu-right">
-					<?php foreach ($notes as $val) {
-						$_icon = $val['nt_sender'].'/profile_image.png';
-						if(file_exists(_AF_MEMBER_DATA_.$_icon)) {
-							$_icon = _AF_URL_ . 'data/member/' . $_icon;
-						} else {
-							$_icon = _AF_URL_ .'common/img/user_default.jpg';
-						}
-					?>
-					<li class="message-preview">
-						<a href="<?php echo getUrl('','member','inbox','srl', $val['nt_srl']) ?>">
-							<div class="media">
-								<span class="pull-left">
-									<img class="media-object" src="<?php echo $_icon ?>" width="45" height="45">
-								</span>
-								<div class="media-body">
-									<h5 class="media-heading"><strong><?php echo escapeHtml($val['nt_sender_nick']) ?></strong></h5>
-									<p class="small text-muted"><i class="glyphicon glyphicon-time" aria-hidden="true"></i> <?php echo date('Y/m/d', strtotime($val['nt_send_date'])) ?></p>
-									<p><?php echo cutstr(strip_tags($val['nt_content']),35) ?></p>
-								</div>
-							</div>
-						</a>
-					</li>
-					<?php } ?>
-					<li class="message-footer">
-						<a href="#" data-exec-ajax="member.readAllNotes" data-ajax-param="success_return_url,<?php echo urlencode(getUrl())?>">Mark all messages as read</a>
-					</li>
-				</ul>
-			</span>
-			<?php } ?>
-			<span>
-			<?php
-				$_icon = _AF_URL_ . (empty($_MEMBER['mb_icon']) ? 'common/img/user_default.jpg' : 'data/member/' . $_MEMBER['mb_srl'].'/profile_image.png');
-			?>
-				<a href="#" class="dropdown-toggle login-icon" data-toggle="dropdown"><img src="<?php echo $_icon ?>" alt="<?php echo escapeHtml($_MEMBER['mb_nick'])?>" /></a>
-				<ul class="dropdown-menu dropdown-menu-right">
+  <header class="border-bottom lh-1 py-2">
+    <div class="row flex-nowrap justify-content-between align-items-center">
+      <div class="col-4">
+        <a class="link-secondary" href="#">Subscribe</a>
+      </div>
+      <div class="col-4 text-center">
+        <h1 class="text-body-emphasis mb-0">Afox</h1>
+      </div>
+      <div class="col-4 d-flex justify-content-end align-items-center">
+        <a class="link-secondary me-1" href="#" aria-label="Search"><svg class="bi" aria-hidden="true" width="1.2em" height="1.2em"><title>Search</title><use xlink:href="#bi-search"/></svg></a>
+<?php if(empty($_MEMBER)){ ?>
+        <a class="btn p-0" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi" aria-hidden="true" width="1.6em" height="1.6em"><title>Sign In</title><use xlink:href="#bi-person-fill"/></svg></a>
+<?php }else{ ?>
+        <a class="btn p-0" href="#" aria-label="Member" data-bs-toggle="dropdown" aria-expanded="false"><svg class="bi" aria-hidden="true" width="1.6em" height="1.6em"><title><?php echo $_MEMBER['mb_nick']?></title><use xlink:href="#bi-person-bounding-box"/></svg></a>
+        <ul class="dropdown-menu">
 					<?php if(isManager(__MID__)) { ?>
-					<li><a href="<?php echo _AF_URL_?>?admin" target="_blank"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></a></li>
+					<li><a class="dropdown-item" href="<?php echo _AF_URL_?>?admin" target="_blank"><svg class="bi" aria-hidden="true"><title>Site setup</title><use xlink:href="#bi-person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } else { ?>
-					<li class="dropdown-header"><i class="glyphicon glyphicon-user" aria-hidden="true"></i> <?php echo $_MEMBER['mb_nick']?></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','signUp') ?>"><svg class="bi" aria-hidden="true"><title>Member info</title><use xlink:href="#bi-person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } ?>
-					<li class="divider"></li>
-					<li><a href="<?php echo getUrl('','member','inbox') ?>"><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i> <?php echo getLang('Inbox')?></a></li>
-					<li><a href="<?php echo getUrl('','member','trash') ?>"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i> <?php echo getLang('Recycle_bin')?></a></li>
-					<li><a href="<?php echo getUrl('','member','signUp') ?>"><i class="glyphicon glyphicon-cog" aria-hidden="true"></i> <?php echo getLang('Setup')?></a></li>
-					<li class="divider"></li>
-					<li><a href="#" data-exec-ajax="member.logOut" data-ajax-param="success_return_url,<?php echo urlencode(getUrl(''))?>"><i class="glyphicon glyphicon-off" aria-hidden="true"></i> <?php echo getLang('Logout')?></a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','inbox') ?>"><svg class="bi" aria-hidden="true"><use xlink:href="#bi-envelope"/></svg> <?php echo getLang('Inbox')?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','trash') ?>"><svg class="bi" aria-hidden="true"><use xlink:href="#bi-trash"/></svg> <?php echo getLang('Recycle_bin')?></a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('', 'module', 'member', 'act', 'signOut')?>"><svg class="bi" aria-hidden="true"><use xlink:href="#bi-power"/></svg> <?php echo getLang('Logout')?></a></li>
 				</ul>
-			</span>
-<?php } else {
-	$try_count = (int)get_session('af_login_try_' . $_SERVER['REMOTE_ADDR']);
-?>
-			<a href="#loginForm"<?php echo ($_CFG['use_captcha']=='1'||$try_count>2)?' captcha="1"':'' ?>><i class="glyphicon glyphicon-user fs-2x" aria-hidden="true"></i></a>
 <?php } ?>
-		</div>
-	</header>
-	<nav class="navbar navbar-inverse" role="navigation" aria-label="Site Navigation">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-label="Toggle navigation" aria-expanded="false">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="<?php echo getUrl('')?>" aria-current="page"><i class="glyphicon glyphicon-home" aria-hidden="true"></i></a>
-			</div>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="nav navbar-nav right">
+      </div>
+    </div>
+  </header>
+
+  <nav class="navbar navbar-expand-md py-0 mb-4 border-bottom">
+    <div class="container-fluid">
+			<a class="navbar-brand" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" aria-hidden="true"><use xlink:href="#bi-house-door-fill"/></svg></a>
+      <button class="navbar-toggler py-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
 <?php
-	foreach ($mainmenu as $key => $val) {
-		echo '<li'.($key==='_ACTIVE_'?' class="active"':'').'><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a></li>';
-	}
+    foreach($mainmenu as $key => $val){
+      echo '<li class="nav-item"><a class="nav-link'.($key==='_ACTIVE_'?' active':'').'" href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a></li>';
+    }
 ?>
-				</ul>
-				<div class="collapse nav navbar-nav nav-collapse slide-down" id="searchBox">
-				<form class="navbar-form navbar-right" role="search" action="<?php echo getUrl('') ?>" method="get">
-					<div class="form-group">
-						<input type="text" name="searchex" class="form-control" role="searchbox" placeholder="<?php echo getLang('search_word')?>" required>
-					</div>
-					<button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> <?php echo getLang('Search')?></button>
-				</form>
-				</div>
-			</div>
-		</div>
-	</nav>
-<?php if (__MID__ == $_CFG['start']) { ?>
-	<aside id="myCarousel" class="carousel slide" data-ride="carousel" role="banner" aria-label="Site slide banner">
-	  <div class="carousel-inner">
-		<?php for ($i=1; $i < 4; $i++) {  ?>
-			<div class="item<?php echo $i===1 ? ' active':''?>">
-			  <img src="<?php echo _AF_THEME_URL_ ?>img/slide-0<?php echo $i ?>.jpg" alt="">
-			  <div class="container">
-				<div class="carousel-caption">
-				  <?php if(!empty($_THEME['carousel_item_'.$i])) echo $_THEME['carousel_item_'.$i] ?>
-				</div>
-			  </div>
-			</div>
-		<?php } ?>
-	  </div>
-	  <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-	  <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
-	</aside>
-<?php } else { ?>
-<aside class="header-image <?php echo __MODULE__ ?>" aria-label="Page information">
-	<?php if(__MODULE__) { ?>
-		<h3 id="<?php echo __MODULE__ ?>ModuleTitle"><?php echo $_CFG['md_title'] ?></h3>
-		<p id="<?php echo __MODULE__ ?>ModuleDescription"><?php echo $_CFG['md_description'] ?></p>
-	<?php } ?>
-</aside>
-<?php }	// 테마에 모듈 스킨(tpl)이 있으면 사용
-	$config_file = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/config.php';
-	if(!file_exists($config_file)) $config_file = _AF_MODULES_PATH_.__MODULE__.'/tpl/config.php';
-	if(file_exists($config_file) && isManager(__MODULE__)) {
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<main class="container">
+
+  <div class="row mb-2">
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden mb-4 shadow-sm position-relative">
+        <div class="col p-4 position-static">
+          <strong class="d-inline-block mb-2 text-primary-emphasis">World</strong>
+          <h3 class="mb-0">Featured post</h3>
+          <div class="mb-1 text-body-secondary">Nov 12</div>
+          <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+            Continue reading
+            <svg class="bi"><use xlink:href="#bi-aperture"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row g-0 border rounded overflow-hidden mb-4 shadow-sm position-relative">
+        <div class="col p-4 position-static">
+          <strong class="d-inline-block mb-2 text-success-emphasis">Design</strong>
+          <h3 class="mb-0">Post title</h3>
+          <div class="mb-1 text-body-secondary">Nov 11</div>
+          <p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+          <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+            Continue reading
+            <svg class="bi"><use xlink:href="#bi-cart"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-5 mb-5">
+    <div<?php echo $is_submenu ? ' class="col-md-8"' : ''?>>
+      <article osaria-label="Site Contents">
+<?php
+  if($error = get_error()) { messageBox($error['message'], $error['error']); }
+  displayModule();
 ?>
-<aside id="afModuleconfig" class="clearfix" role="config">
-	<div class="btn-toggle">
-		<i class="glyphicon glyphicon-cog" aria-hidden="true"></i>
-		<i class="glyphicon glyphicon-ok" aria-hidden="true"></i>
-	</div>
-	<div class="config-area">
-		<div class="config-header"><strong><?php echo $_CFG['md_title'] ?></strong></div>
-		<div class="config-content clearfix"><?php @include  $config_file; ?></div>
-	</div>
-</aside>
-<?php }
-	if($tmp=!empty($submenu['_ACTIVE_'])&&count($submenu['_ACTIVE_'])>0?'col-md-9 ':''){
+      </article>
+    </div>
+
+<?php
+	if($is_submenu){
 		if(!$submenuactivetitle) $submenuactivetitle=$mainmenu['_ACTIVE_']['mu_title'];
 ?>
-	<div class="row">
-		<aside class="col-md-3" role="menu" aria-label="Content Menu">
-			<div class="list-group">
-				<span class="list-group-item disabled">
-					<span class="<?php echo __MODULE__ != 'page'?' hidden-xs hidden-sm':'' ?>"><?php echo $mainmenu['_ACTIVE_']['mu_title'] ?></span>
-					<?php if(__MODULE__ != 'page'){ ?>
-					<span class="hidden-md hidden-lg"><?php echo $submenuactivetitle ?></span>
-					<span class="pull-right glyphicon glyphicon-menu-hamburger hidden-md hidden-lg" aria-hidden="true"></span>
-					<a class="hidden-md hidden-lg" style="position:absolute;left:0;top:0;width:100%;height:100%;cursor:pointer"></a>
-					<?php } ?>
-				</span>
-			</div>
-			<div class="list-group<?php echo __MODULE__ != 'page'?' hidden-xs hidden-sm':'' ?>">
-	<?php
-		foreach ($submenu['_ACTIVE_'] as $key => $val) {
-			echo '<a href="'. escapeHtml($val['mu_link']) .'" class="list-group-item'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a>';
-		}
-	?>
-			</div>
-		</aside>
+
+    <div class="col-md-4">
+      <div class="position-sticky" style="top: 2rem;">
+        <div class="p-4 mb-3 bg-body-tertiary rounded">
+          <h4 class="fst-italic">About</h4>
+          <p class="mb-0">Customize this section to tell your visitors a little bit about your publication, writers, content, or something else entirely. Totally up to you.</p>
+        </div>
+
+        <div>
+          <h4 class="fst-italic">Recent posts</h4>
+          <ul class="list-unstyled">
+            <li>
+              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+                <div class="col-lg-8">
+                  <h6 class="mb-0">Example blog post title</h6>
+                  <small class="text-body-secondary">January 15, 2023</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+                <div class="col-lg-8">
+                  <h6 class="mb-0">This is another blog post title</h6>
+                  <small class="text-body-secondary">January 14, 2023</small>
+                </div>
+              </a>
+            </li>
+            <li>
+              <a class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top" href="#">
+                <svg class="bd-placeholder-img" width="100%" height="96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
+                <div class="col-lg-8">
+                  <h6 class="mb-0">Longer blog post title: This one has multiple lines!</h6>
+                  <small class="text-body-secondary">January 13, 2023</small>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="p-4">
+          <h4 class="fst-italic">Archives</h4>
+          <ol class="list-unstyled mb-0">
+            <li><a href="#">March 2021</a></li>
+          </ol>
+        </div>
+
+        <div class="p-4">
+          <h4 class="fst-italic">Elsewhere</h4>
+          <ol class="list-unstyled">
+            <li><a href="#">GitHub</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <?php } ?>
-	<article class="<?php echo $tmp.__MODULE__?>" role="main" aria-label="Site Contents">
-		<?php if($error = get_error()) { messageBox($error['message'], $error['error']); } ?>
-		<?php displayModule()?>
-	</article>
-<?php if($tmp) echo "</div>" ?>
-	<footer role="contentinfo" aria-label="About Site">
-		<ul><li style="visibility:hidden"></li>
+
+</main>
+
+<footer class="pt-2 pb-5 text-center text-body-secondary bg-body-tertiary" aria-label="About Site">
+  <ul><li style="visibility:hidden"></li>
 <?php
 	if(empty($menus['error'])){
 		foreach ($menus['footer'] as $val) {
@@ -213,6 +289,6 @@
 	}
 ?>
 		</ul>
-		<p><?php if(!empty($_THEME['footer_html'])) echo $_THEME['footer_html']; ?></p>
-	</footer>
-</div>
+		<p class="mb-0"><?php if(!empty($_THEME['footer_html'])) echo $_THEME['footer_html']; ?></p>
+</footer>
+<script src="<?php echo _AF_THEME_URL_ ?>colormodes.min.js"></script>

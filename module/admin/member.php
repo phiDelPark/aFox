@@ -10,19 +10,18 @@
 	$member_list = setDataListInfo($member_list, $_DATA['page'], 20, DB::foundRows());
 ?>
 
-<p class="navbar">
-  <button type="button" class="btn btn-primary mw-20" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"><?php echo getLang('new_member')?></button>
-</p>
+<button type="button" class="btn btn-primary mb-3" style="width:250px" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('new_member')?></button>
 
-<table class="table table-hover table-nowrap">
-<thead class="table-nowrap">
+<table class="table">
+<thead>
 	<tr>
-		<th class="col-xs-1">#<?php echo getLang('id')?></th>
-		<th><?php echo getLang('nickname')?></th>
-		<th class="col-xs-1"><?php echo getLang('rank')?></th>
-		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('point')?></th>
-		<th class="col-xs-1"><?php echo getLang('status')?></th>
-		<th class="col-xs-1"><?php echo getLang('login')?></th>
+		<th scope="col">#<?php echo getLang('id')?></th>
+		<th scope="col" style="width:4.5rem"><?php echo getLang('rank')?></th>
+		<th scope="col" class="text-wrap"><?php echo getLang('nickname')?></th>
+		<th scope="col"><?php echo getLang('point')?></th>
+		<th scope="col"><?php echo getLang('status')?></th>
+		<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('login')?></th>
+		<th scope="col" class="text-end"><?php echo getLang('setup')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -42,12 +41,13 @@
 
 		foreach ($member_list['data'] as $key => $value) {
 			$rank = ord($value['mb_rank']) - 48;
-			echo '<tr class="afox-list-item" data-exec-ajax="member.getMember" data-ajax-param="mb_id,'.$value['mb_id'].'" data-modal-target="#member_modal"><th scope="row">'.$value['mb_id'].'</th>';
-			echo '<td>'.$value['mb_nick'].'</td>';
+			echo '<tr><th scope="row">'.$value['mb_id'].'</th>';
 			echo '<td>'.(isset($rank_arr[$rank])?$rank_arr[$rank]:'LV. '.$rank).'</td>';
-			echo '<td class="hidden-xs hidden-sm">'.$value['mb_point'].'</td>';
-			echo '<td>'.$value['mb_status'].'</td>';
-			echo '<td>'.date('Y/m/d', strtotime($value['mb_login'])).'</td></tr>';
+			echo '<td class="text-wrap">'.$value['mb_nick'].'</td>';
+			echo '<td>'.$value['mb_point'].'</td>';
+			echo '<td>'.($value['mb_status']?$value['mb_status']:'--/--').'</td>';
+			echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['mb_login'])).'</td>';
+			echo '<td><a class="btn btn-primary btn-sm mw-10" href="'.getUrl('md_id', $value['mb_id'], 'act', 'getMember').'">'.getLang('setup').'</a></td></tr>';
 		}
 	}
 ?>
@@ -55,27 +55,23 @@
 </tbody>
 </table>
 
-<nav class="navbar clearfix">
-	<ul class="pager visible-xs-block visible-sm-block">
-		<li class="previous<?php echo $current_page <= 1?' disabled':''?>"><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
-		<li><span class="col-xs-5"><?php echo $current_page.' / '.$total_page?></span></li>
-		<li class="next<?php echo $current_page >= $total_page?' disabled':''?>"><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
-	</ul>
-	<ul class="pagination hidden-xs hidden-sm pull-right">
-		<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
-		<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
-		<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
-		<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
-		<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
-	</ul>
-	<ul class="pagination">
-	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
+<nav class="d-flex w-100 justify-content-between mt-4" aria-label="Page navigation of the list">
+	<form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['disp'] ?>">
-		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_word') ?>" required>
-		<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
-		<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
-	</form></li>
-	</ul>
+		<div class="input-group mb-3">
+		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" style="max-width:160px" placeholder="<?php echo getLang('search_word') ?>" required>
+		<button class="btn btn-default btn-outline-secondary" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
+		<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default btn-outline-secondary" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
+		</div>
+	</form>
+	<div id="pageNavigation">
+	<?php if($start_page>10) echo '<a class="btn btn-sm btn-outline-primary rounded-pill" href="'.getUrl('page',$start_page-10).'">&laquo;</a>' ?>
+	<a class="btn btn-sm rounded-pill btn-outline-<?php echo $current_page <= 1 ? 'secondary disabled" aria-disabled="true' : 'primary'?>" href="<?php echo  $current_page <= 1 ? '#' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a>
+	<a class="d-md-none btn btn-sm btn-outline-secondary rounded-pill disabled" aria-disabled="true"><?php echo $current_page.' / '.$total_page?></a>
+	<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<a class="d-none d-md-inline-block btn btn-sm btn-outline-primary rounded-pill'.($current_page == $i ? ' active" aria-current="page' : '').'" href="'.getUrl('page',$i).'">'.$i.'</a>' ?>
+	<a class="btn btn-sm rounded-pill btn-outline-<?php echo $current_page >= $total_page ? 'secondary disabled" aria-disabled="true' : 'primary'?>" href="<?php echo $current_page >= $total_page ? '#' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a>
+	<?php if(($total_page-$end_page)>0) echo '<a class="btn btn-sm btn-outline-primary rounded-pill" href="'.getUrl('page',$end_page+1).'">&raquo;</a>' ?>
+	</div>
 </nav>
 
 <div id="member_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">

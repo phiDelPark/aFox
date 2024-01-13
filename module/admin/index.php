@@ -12,8 +12,12 @@ if (get_session('AF_LOGIN_KEY') !== $admin_key) {
 	// TODO 관리자에게 쪽지 보낸다.
 	goUrl(_AF_URL_, getLang('error_permitted'));
 }
-if(!empty($_DATA['md_id'])){
+if($_DATA['disp'] == 'member'){
+	@include_once _AF_MODULES_PATH_ . 'member/lang/' . _AF_LANG_ . '.php';
+} else if(!empty($_DATA['md_id'])){
 	@include_once _AF_MODULES_PATH_ . $_DATA['md_id'] . '/lang/' . _AF_LANG_ . '.php';
+}else{
+	@include_once _AF_MODULES_PATH_ . 'admin/lang/' . _AF_LANG_ . '.php';
 }
 addJSLang(['menu','addon','theme','board','page','document','comment','file','recycle_bin','confirm_empty','confirm_select_move','confirm_select_empty','confirm_select_delete','warning_selected','confirm_select_trash','confirm_select_combine','prompt_move_board_id','standard_point']);
 

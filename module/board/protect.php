@@ -1,6 +1,9 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
+$_PROTECT['proc.deleteboard']		= ['grant' => 's'];
+$_PROTECT['proc.updateboard']		= ['grant' => 's'];
+
 $_PROTECT['disp.documentlist']		= ['grant' => '0'];
 $_PROTECT['disp.viewdocument']		= ['grant' => '0'];
 $_PROTECT['disp.writedocument']		= ['grant' => '0'];

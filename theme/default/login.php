@@ -10,7 +10,7 @@
 	}
 ?>
 
-<div id="fullscreen_bg" class="fullscreen_bg"/>
+<div id="fullscreen_bg" class="fullscreen_bg">
 <div role="dialog" id="<?php echo $signUp?'afSignUpFormdialog':'afMessageBox'?>" style="z-index:99999;display:block">
 	<div class="modal-dialog<?php echo $signUp?' modal-lg':''?>">
 		<?php if($signUp) { ?>

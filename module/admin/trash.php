@@ -55,26 +55,29 @@
 	$trash_list = setDataListInfo($trash_list, $page, $count, DB::foundRows());
 ?>
 
-<p class="navbar">
-  <button type="button" class="btn btn-primary mw-20" onclick="return empty_recycle_bin()"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('empty_recycle_bin')?></button>
-</p>
+<button type="button" class="btn btn-primary mb-3" style="width:250px" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('empty_recycle_bin')?></button>
 
-		<ol class="breadcrumb">
-			<li<?php echo ($_DATA['trash']!='comment'&&$_DATA['trash']!='file')?' class="active"':''?>><a href="<?php echo getUrl('trash','document')?>"><?php echo getLang('document')?></a></li>
-			<li<?php echo ($_DATA['trash']=='comment')?' class="active"':''?>><a href="<?php echo getUrl('trash','comment')?>"><?php echo getLang('comment')?></a></li>
-			<li<?php echo ($_DATA['trash']=='file')?' class="active"':''?>><a href="<?php echo getUrl('trash','file')?>"><?php echo getLang('file')?></a></li>
-		</ol>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link<?php echo ($_DATA['trash']!='comment'&&$_DATA['trash']!='file')?' active" aria-current="page':''?>" href="<?php echo getUrl('trash','document')?>"><?php echo getLang('document')?></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link<?php echo ($_DATA['trash']=='comment')?' active" aria-current="page':''?>" href="<?php echo getUrl('trash','comment')?>"><?php echo getLang('comment')?></a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link<?php echo ($_DATA['trash']=='file')?' active" aria-current="page"':''?>" href="<?php echo getUrl('trash','file')?>"><?php echo getLang('file')?></a>
+  </li>
+</ul>
 
-<table class="table table-hover table-nowrap">
+<table class="table">
 <thead>
 	<tr>
-		<th class="col-xs-1">#</th>
-		<th><?php echo getLang('title')?></th>
-		<th class="col-xs-1"><?php echo ($_DATA['trash'] == 'file'?getLang('download'):getLang('status'))?></th>
-		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo ($_DATA['trash'] == 'file'?'-':getLang('secret'))?></th>
-		<th class="col-xs-1"><?php echo ($_DATA['trash'] == 'file'?'-':getLang('author'))?></th>
-		<th class="col-xs-1 hidden-xs hidden-sm"><?php echo getLang('date')?></th>
-		<th class="col-xs-1"><?php echo getLang('removed_date')?></th>
+		<th scope="col">#</th>
+		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
+		<th scope="col"><?php echo ($_DATA['trash'] == 'file'?'-':getLang('author'))?></th>
+		<th scope="col"><?php echo ($_DATA['trash'] == 'file'?getLang('download'):getLang('status'))?></th>
+		<th scope="col"><?php echo getLang('date')?></th>
+		<th scope="col"><?php echo getLang('removed_date')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -101,12 +104,11 @@
 			} else {
 				$tmp = ' data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"';
 			}
-			echo '<tr class="afox-list-item" '.$tmp.'><th scope="row"><a href="'.getUrl('category',$value['wr_updater']).'" data-except-ajax>'.$value['wr_updater'].'</a></th>';
-			echo '<td class="title">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
-			echo '<td>'.($value['wr_status']?$value['wr_status']:'-').'</td>';
-			echo '<td class="hidden-xs hidden-sm">'.($_DATA['trash'] == 'file'?'-':($value['wr_secret']?'Y':'N')).'</td>';
+			echo '<tr><th scope="row">'.$value['wr_updater'].'</th>';
+			echo '<td class="text-wrap">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
 			echo '<td>'.($_DATA['trash'] == 'file'?'-':escapeHtml($value['mb_nick'],true)).'</td>';
-			echo '<td class="hidden-xs hidden-sm">'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td>';
+			echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
+			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_update'])).'</td></tr>';
 		}
 	}
@@ -115,29 +117,23 @@
 </tbody>
 </table>
 
-<nav class="navbar clearfix">
-	<ul class="pager visible-xs-block visible-sm-block">
-		<li class="previous<?php echo $current_page <= 1?' disabled':''?>"><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
-		<li><span class="col-xs-5"><?php echo $current_page.' / '.$total_page?></span></li>
-		<li class="next<?php echo $current_page >= $total_page?' disabled':''?>"><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
-	</ul>
-	<ul class="pagination hidden-xs hidden-sm pull-right">
-		<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
-		<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
-		<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
-		<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
-		<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
-	</ul>
-	<ul class="pagination">
-	<li><form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
+<nav class="d-flex w-100 justify-content-between mt-4" aria-label="Page navigation of the list">
+	<form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['disp'] ?>">
-		<input type="hidden" name="trash" value="<?php echo empty($_DATA['trash'])?'':$_DATA['trash'] ?>">
-		<?php if(!empty($_DATA['category'])) {?><input type="hidden" name="category" value="<?php echo $_DATA['category'] ?>"><?php }?>
-		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" placeholder="<?php echo getLang('search_word') ?>" required>
-		<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
-		<?php if(!empty($_DATA['search'])||!empty($_DATA['category'])) {?><button class="btn btn-default" type="button" onclick="location.replace('<?php echo getUrl('search','','category','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
-	</form></li>
-	</ul>
+		<div class="input-group mb-3">
+		<input type="text" name="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" style="max-width:160px" placeholder="<?php echo getLang('search_word') ?>" required>
+		<button class="btn btn-default btn-outline-secondary" type="submit"><i class="glyphicon glyphicon-search" aria-hidden="true"></i> <?php echo getLang('search') ?></button>
+		<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default btn-outline-secondary" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
+		</div>
+	</form>
+	<div id="pageNavigation">
+	<?php if($start_page>10) echo '<a class="btn btn-sm btn-outline-primary rounded-pill" href="'.getUrl('page',$start_page-10).'">&laquo;</a>' ?>
+	<a class="btn btn-sm rounded-pill btn-outline-<?php echo $current_page <= 1 ? 'secondary disabled" aria-disabled="true' : 'primary'?>" href="<?php echo  $current_page <= 1 ? '#' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a>
+	<a class="d-md-none btn btn-sm btn-outline-secondary rounded-pill disabled" aria-disabled="true"><?php echo $current_page.' / '.$total_page?></a>
+	<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<a class="d-none d-md-inline-block btn btn-sm btn-outline-primary rounded-pill'.($current_page == $i ? ' active" aria-current="page' : '').'" href="'.getUrl('page',$i).'">'.$i.'</a>' ?>
+	<a class="btn btn-sm rounded-pill btn-outline-<?php echo $current_page >= $total_page ? 'secondary disabled" aria-disabled="true' : 'primary'?>" href="<?php echo $current_page >= $total_page ? '#' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a>
+	<?php if(($total_page-$end_page)>0) echo '<a class="btn btn-sm btn-outline-primary rounded-pill" href="'.getUrl('page',$end_page+1).'">&raquo;</a>' ?>
+	</div>
 </nav>
 
 <?php if($_DATA['trash'] == 'comment') {?>

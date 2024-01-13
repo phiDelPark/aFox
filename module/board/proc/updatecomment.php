@@ -8,8 +8,6 @@ function proc($data) {
 
 	global $_MEMBER;
 
-	DB::transaction();
-
 	$sendsrl = 0;
 	$rp_root = 0;
 	$rp_depth = '';
@@ -17,91 +15,103 @@ function proc($data) {
 	$rp_srl = (int) (empty($rp_parent) ? abs(empty($data['rp_srl']) ? 0 : $data['rp_srl']) : $rp_parent);
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
 	$parent_secret = false;
+	if(!empty($rp_srl)) {
+		$cmt = DB::get(_AF_COMMENT_TABLE_, 'wr_srl, rp_parent, rp_secret, rp_depth, mb_srl, mb_password', ['rp_srl'=>$rp_srl]);
+		if(empty($cmt['wr_srl'])) return set_error(getLang('error_founded'), 4201);
+		$wr_srl = (int) abs(empty($cmt['wr_srl']) ? 0 : $cmt['wr_srl']);
+
+		$sendsrl = $cmt['mb_srl'];
+		$rp_root = $cmt['rp_parent'];
+
+		// true이면 하위 답변도 비밀글
+		$parent_secret = !empty($rp_parent) && $cmt['rp_secret'] == '1';
+
+		if(!empty($rp_parent)) {
+			$_len = strlen($cmt['rp_depth']) + 1;
+			if ($_len > 5) return set_error(getLang('msg_not_write_reply'), 571);
+
+			// 트리 구조 최대한 수를 늘여 사용하기로, 그누보드 참고 = 최대 수가 정해져 있지만 불러올때 쿼리가 짧아서 사용하기로
+			$_begin_char = chr(0x21);
+			$_end_char = chr(0x7E);
+			$rp_depth = $cmt['rp_depth'];
+
+			$_out1 = DB::get(_AF_COMMENT_TABLE_,
+				'MAX(SUBSTRING(rp_depth,'.$_len.',1)) as reply',
+				[
+					'wr_srl'=>$wr_srl,
+					'rp_parent'=>$rp_root,
+					'rp_depth{LIKE}'=>empty($cmt['rp_depth'])?null:$cmt['rp_depth'].'%',
+					'^'=>'SUBSTRING(`rp_depth`,'.$_len.',1)<>\'\''
+				]
+			);
+
+			if (empty($_out1['reply'])) {
+				$rp_depth .= $_begin_char;
+			} else if (ord($_out1['reply']) == ord($_end_char))
+				return set_error(getLang('msg_not_write_reply'), 571);
+			else $rp_depth .= chr(ord($_out1['reply']) + 1);
+		}
+	} else {
+		$_out1 = DB::get(_AF_COMMENT_TABLE_, 'max(rp_parent) as max', ['wr_srl'=>$wr_srl]);
+		$rp_root = $_out1['max'] + 1;
+	}
+
+	$doc = DB::get(_AF_DOCUMENT_TABLE_, 'wr_srl,md_id,mb_srl', ['wr_srl'=>$wr_srl]);
+	if(empty($doc['wr_srl'])) return set_error(getLang('error_founded'), 4201);
+
+	$module = getModule($doc['md_id']);
+	// 모듈이 없으면 에러
+	if(empty($module)) return set_error(getLang('error_founded'), 4201);
+	if($doc['md_id'] != $module['md_id']) return set_error(getLang('error_request'),4303);
+
+	// use_type 값이 1~6 사이이면 모듈에 설정된 값으로 강제 설정
+	if(!empty($module['use_type']) && $module['use_type'] < 7) $data['rp_type'] = ((int)$module['use_type'])-1;
+	if(!empty($module['use_secret'])) $data['rp_secret'] = ((int)$module['use_secret'])-1;
+	if($parent_secret) $data['rp_secret'] = 1;
+
+	$data['mb_ipaddress'] = $_SERVER['REMOTE_ADDR'];
+
+	if(empty($_MEMBER)) {
+		$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
+		if(empty($data['mb_nick']) || empty($data['mb_password'])) {
+			return set_error(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
+		}
+		$data['mb_srl'] = 0;
+		$data['mb_rank'] = 0;
+		$encrypt_password = createHash($data['mb_password']);
+	} else {
+		$data['mb_srl'] = $_MEMBER['mb_srl'];
+		$data['mb_rank'] = $_MEMBER['mb_rank'];
+		$data['mb_nick'] = $_MEMBER['mb_nick'];
+		$encrypt_password = null;
+	}
+
+	$data['rp_content'] = xssClean($data['rp_content']);
+
+	$ret_rp_srl = 0;
+	$new_insert = !empty($rp_parent) || empty($rp_srl);
+
+	// 권한 체크
+	if ($new_insert) {
+		if(!isGrant('reply', $module['md_id'])) {
+			return set_error(getLang('error_permitted'),4501);
+		}
+	}else{
+		if(empty($_MEMBER)) {
+			if(empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
+				return set_error(getLang('error_permitted'),4501);
+			}
+		} else if(!isManager($module['md_id'])) {
+			if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
+				return set_error(getLang('error_permitted'),4501);
+			}
+		}
+	}
+
+	DB::transaction();
 
 	try {
-
-		if(!empty($rp_srl)) {
-			$cmt = DB::get(_AF_COMMENT_TABLE_, 'wr_srl, rp_parent, rp_secret, rp_depth, mb_srl, mb_password', ['rp_srl'=>$rp_srl]);
-			if(empty($cmt['wr_srl'])) throw new Exception(getLang('error_founded'), 4201);
-			$wr_srl = (int) abs(empty($cmt['wr_srl']) ? 0 : $cmt['wr_srl']);
-
-			$sendsrl = $cmt['mb_srl'];
-			$rp_root = $cmt['rp_parent'];
-
-			// true이면 하위 답변도 비밀글
-			$parent_secret = !empty($rp_parent) && $cmt['rp_secret'] == '1';
-
-			if(!empty($rp_parent)) {
-				$_len = strlen($cmt['rp_depth']) + 1;
-				if ($_len > 5) throw new Exception(getLang('msg_not_write_reply'), 571);
-
-				// 트리 구조 최대한 수를 늘여 사용하기로, 그누보드 참고 = 최대 수가 정해져 있지만 불러올때 쿼리가 짧아서 사용하기로
-				$_begin_char = chr(0x21);
-				$_end_char = chr(0x7E);
-				$rp_depth = $cmt['rp_depth'];
-
-				$_out1 = DB::get(_AF_COMMENT_TABLE_,
-					'MAX(SUBSTRING(rp_depth,'.$_len.',1)) as reply',
-					[
-						'wr_srl'=>$wr_srl,
-						'rp_parent'=>$rp_root,
-						'rp_depth{LIKE}'=>empty($cmt['rp_depth'])?null:$cmt['rp_depth'].'%',
-						'^'=>'SUBSTRING(`rp_depth`,'.$_len.',1)<>\'\''
-					]
-				);
-
-				if (empty($_out1['reply'])) {
-					$rp_depth .= $_begin_char;
-				} else if (ord($_out1['reply']) == ord($_end_char))
-					throw new Exception(getLang('msg_not_write_reply'), 571);
-				else $rp_depth .= chr(ord($_out1['reply']) + 1);
-			}
-		} else {
-			$_out1 = DB::get(_AF_COMMENT_TABLE_, 'max(rp_parent) as max', ['wr_srl'=>$wr_srl]);
-			$rp_root = $_out1['max'] + 1;
-		}
-
-		$doc = DB::get(_AF_DOCUMENT_TABLE_, 'wr_srl,md_id,mb_srl', ['wr_srl'=>$wr_srl]);
-		if(empty($doc['wr_srl'])) throw new Exception(getLang('error_founded'), 4201);
-
-		$module = getModule($doc['md_id']);
-		// 모듈이 없으면 에러
-		if(empty($module)) throw new Exception(getLang('error_founded'), 4201);
-		if($doc['md_id'] != $module['md_id']) throw new Exception(getLang('error_request'),4303);
-
-		// use_type 값이 1~6 사이이면 모듈에 설정된 값으로 강제 설정
-		if(!empty($module['use_type']) && $module['use_type'] < 7) $data['rp_type'] = ((int)$module['use_type'])-1;
-		if(!empty($module['use_secret'])) $data['rp_secret'] = ((int)$module['use_secret'])-1;
-		if($parent_secret) $data['rp_secret'] = 1;
-
-		$data['mb_ipaddress'] = $_SERVER['REMOTE_ADDR'];
-
-		if(empty($_MEMBER)) {
-			$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
-			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
-				throw new Exception(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
-			}
-			$data['mb_srl'] = 0;
-			$data['mb_rank'] = 0;
-			$encrypt_password = createHash($data['mb_password']);
-		} else {
-			$data['mb_srl'] = $_MEMBER['mb_srl'];
-			$data['mb_rank'] = $_MEMBER['mb_rank'];
-			$data['mb_nick'] = $_MEMBER['mb_nick'];
-			$encrypt_password = null;
-		}
-
-		$data['rp_content'] = xssClean($data['rp_content']);
-
-		$ret_rp_srl = 0;
-		$new_insert = !empty($rp_parent) || empty($rp_srl);
-
 		if ($new_insert) {
-
-			// 권한 체크
-			if(!isGrant('reply', $module['md_id'])) {
-				throw new Exception(getLang('error_permitted'),4501);
-			}
 
 			DB::insert(_AF_COMMENT_TABLE_,
 				[
@@ -142,16 +152,6 @@ function proc($data) {
 				);
 
 		} else {
-			// 권한 체크
-			if(empty($_MEMBER)) {
-				if(empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
-					throw new Exception(getLang('error_permitted'),4501);
-				}
-			} else if(!isManager($module['md_id'])) {
-				if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
-					throw new Exception(getLang('error_permitted'),4501);
-				}
-			}
 
 			DB::update(_AF_COMMENT_TABLE_,
 				[

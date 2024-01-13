@@ -3,6 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
+	if(isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
 	if(!isset($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	$field = '*';

@@ -38,7 +38,7 @@ if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode
 	$start_page = $current_page = 1;
 
 	if($error) {
-		messageBox($error['message'], $error['error'], false);
+		messageBox($error['message'], $error['error']);
 	} else {
 		//$current_page = $_list['current_page'];
 		//$total_page = $_list['total_page'];

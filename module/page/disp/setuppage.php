@@ -2,10 +2,11 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
+	global $_MEMBER;
 	// 권한 체크
-	if(!isManager($data['id'])) {
-		return set_error(getLang($data['id']),901);
+	if(!isAdmin()){
+		return set_error(getLang('error_permitted'),4501);
 	}
 
 	$result = DB::get(_AF_PAGE_TABLE_, ['md_id'=>$data['id']]);

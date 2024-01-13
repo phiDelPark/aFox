@@ -163,6 +163,34 @@ if(!defined('__AFOX__')) exit();
 		return $get ? $__md_cfg[$id][$get] : $__md_cfg[$id];
 	}
 
+	function getLoginInfo(){
+		static $__login_member = [];
+		// 로그인 중인 회원 정보 가져오기
+		$login_id = isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cookie('AF_LOGIN_ID');
+		if($login_id && empty($__login_member) && preg_match('/^[a-zA-Z]+\w{2,}$/', $login_id)){
+			$__login_member = DB::get(_AF_MEMBER_TABLE_, ['mb_id'=>$login_id]);
+			if(!DB::error() && $__login_member['mb_id'] === $login_id){
+				$tmp = $__login_member['mb_srl'].'/profile_image.png';
+				$__login_member['mb_icon'] = file_exists(_AF_MEMBER_DATA_.$tmp) ? _AF_URL_.'data/member/'.$tmp : '';
+				$tmp = array('m'=>'manager','s'=>'admin');
+				if(!($__login_member['mb_grade'] = $tmp[$__login_member['mb_rank']])) $__login_member['mb_grade'] = 'member';
+				unset($__login_member['mb_password']); // 비번은 삭제
+				if(!isset($_SESSION['AF_LOGIN_ID'])){ // 쿠키 키검사, 최고 관리자는 쿠키 안함
+					$tmp = md5($_SERVER['SERVER_ADDR'].$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'].$__login_member['mb_password']);
+					if($tmp == ($__login_member['mb_rank']=='s'?'':get_cookie('AF_AUTO_LOGIN'))){
+						set_session('AF_LOGIN_ID', $__login_member['mb_id']);
+					}else $__login_member = [];
+				}
+			}
+		}
+		if(empty($__login_member)){ // 로그인이 아니면 삭제
+			set_cookie('AF_LOGIN_ID', '', -1);
+			set_cookie('AF_AUTO_LOGIN', '', -1);
+			unset($_SESSION['AF_LOGIN_ID']);
+		}
+		return $__login_member;
+	}
+
 	function getMember($id, $get = ''){
 		static $__members = [];
 		if(!isset($__members[$id])){
@@ -541,7 +569,7 @@ if(!defined('__AFOX__')) exit();
 			}
 		}
 
-		return '<article class="'.$class.'">'.$text.'</article>';
+		return '<div class="'.$class.'">'.$text.'</div>';
 	}
 
 	function triggerAddonCall($addons, $position, $trigger, &$data){
@@ -638,7 +666,6 @@ if(!defined('__AFOX__')) exit();
 			global $_MEMBER;
 			$_{__MODULE__} = $_result;
 			unset($_result);
-			@include_once $tpl_path . 'common.php';
 			include $tpl_path . $tpl_file;
 		};
 		$trigger = $_DATA['disp'] ? $_DATA['disp'] : 'Default';
@@ -660,7 +687,10 @@ if(!defined('__AFOX__')) exit();
 		} else {
 			// 에러 번호가 4501 이면 로그인 폼 보여줌
 			if($_result['error'] == 4501 && empty($_MEMBER)){
-				include _AF_MODULES_PATH_ . 'member/tpl/loginform.php';
+				$tpl_path = _AF_THEME_PATH_ . 'skin/member/';
+				$tpl_file = 'signin.php';
+				if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . 'member/tpl/';
+				include $tpl_path . $tpl_file;
 			} else messageBox($_result['message'], $_result['error']);
 		}
 	}
@@ -744,22 +774,10 @@ if(!defined('__AFOX__')) exit();
 		if(is_string($msg)) exit($msg); //메세지 있으면 중단
 	}
 
-	function messageBox($message, $type = 1, $title = ''){
+	function messageBox($message, $type = 1){
 		$a_type = ['success', 'info', 'warning', 'danger'];
-		$a_icon = ['ok-sign', 'exclamation-sign', 'warning-sign', 'ban-circle'];
 		$type = ($type>2000 && $type<6000) ? ($type<4000 ? 2 : 3) : ($type>3 ? 1 : $type);
-		if($title === false){
-			$msg = 'alert alert-dismissable alert-'. $a_type[$type] . '" role="alert">';
-			$msg .= '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><div>';
-		} else {
-			if(!$title){
-				$a_title = ['success', 'alert', 'warning', 'error'];
-				$title = getLang($a_title[$type]);
-			}
-			$msg = 'panel panel-'. $a_type[$type] . '" role="alert"><div class="panel-heading"><h3 class="panel-title">';
-			$msg .= '<i class="glyphicon glyphicon-'.$a_icon[$type].'" aria-hidden="true"></i> '.$title.'</h3></div><div class="panel-body">';
-		}
-		echo '<div class="' . $msg .  $message . '</div></div>';
+		echo '<div class="alert alert-'.$a_type[$type].'" role="alert">'.$message.'</div>';
 	}
 
 	function addJS($src, $opt = ''){ global $_ADDELEMENTS;$_ADDELEMENTS['JS'][$src] = $opt; }

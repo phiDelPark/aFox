@@ -33,8 +33,6 @@ function proc($data) {
 		}
 	}
 
-	DB::transaction();
-
 	// 관리자는 제한 없음
 	if($is_admin) {
 		$file_exts = '';
@@ -54,67 +52,82 @@ function proc($data) {
 	$wr_extra = [];
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
 
-	try {
-		$doc = DB::get(_AF_DOCUMENT_TABLE_, 'md_id, mb_srl, mb_password', ['wr_srl'=>$wr_srl]);
-		if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
-		if(!empty($wr_srl) && (empty($doc['md_id']) || $doc['md_id'] != $md_id)) {
-			throw new Exception(getLang('error_request'),4303);
-		}
+	$doc = DB::get(_AF_DOCUMENT_TABLE_, 'md_id, mb_srl, mb_password', ['wr_srl'=>$wr_srl]);
+	if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
+	if(!empty($wr_srl) && (empty($doc['md_id']) || $doc['md_id'] != $md_id)) {
+		return set_error(getLang('error_request'),4303);
+	}
 
-		if(!empty($module['md_category'])) {
-			if(empty($data['wr_category'])) {
-				throw new Exception(getLang('request_input',['category']), 1);
-			}
-			if(preg_match('/[\x{21}-\x{2b}\x{2d}\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['wr_category'])) {
-				throw new Exception(getLang('invalid_value', ['category']), 2001);
-			}
-		} else {
-			$data['wr_category'] = '';
+	if(!empty($module['md_category'])) {
+		if(empty($data['wr_category'])) {
+			return set_error(getLang('request_input',['category']), 1);
 		}
+		if(preg_match('/[\x{21}-\x{2b}\x{2d}\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['wr_category'])) {
+			return set_error(getLang('invalid_value', ['category']), 2001);
+		}
+	} else {
+		$data['wr_category'] = '';
+	}
 
-		if(!empty($module['md_extra']) && !is_array($module['md_extra'])) {
-			$module['md_extra'] = unserialize($module['md_extra']);
-			// 확장 변수 키값이 있으면 해당 값을 입력
-			if (!empty($module['md_extra']['keys'])) {
-				$wr_extra_vars = [];
-				foreach($module['md_extra']['keys'] as $ex_key=>$ex_caption){
-					$extra_val = trim($data['wr_extra_var_'.$ex_key]);
-					if(empty($extra_val) && substr($ex_caption,-1,1) === '*') {
-						throw new Exception(getLang('request_input',[substr($ex_caption,0,-1)]), 1);
-					}
-					$wr_extra_vars[$ex_key] = cutstr($extra_val,255,'');
+	if(!empty($module['md_extra']) && !is_array($module['md_extra'])) {
+		$module['md_extra'] = unserialize($module['md_extra']);
+		// 확장 변수 키값이 있으면 해당 값을 입력
+		if (!empty($module['md_extra']['keys'])) {
+			$wr_extra_vars = [];
+			foreach($module['md_extra']['keys'] as $ex_key=>$ex_caption){
+				$extra_val = trim($data['wr_extra_var_'.$ex_key]);
+				if(empty($extra_val) && substr($ex_caption,-1,1) === '*') {
+					return set_error(getLang('request_input',[substr($ex_caption,0,-1)]), 1);
 				}
-				if(!empty($wr_extra_vars)) $wr_extra['vars'] = $wr_extra_vars;
+				$wr_extra_vars[$ex_key] = cutstr($extra_val,255,'');
 			}
+			if(!empty($wr_extra_vars)) $wr_extra['vars'] = $wr_extra_vars;
 		}
+	}
 
-		$data['wr_content'] = xssClean($data['wr_content']);
-		$data['wr_tags'] = getHashtags($data['wr_content']);
-		$data['mb_ipaddress'] = $_SERVER['REMOTE_ADDR'];
+	$data['wr_content'] = xssClean($data['wr_content']);
+	$data['wr_tags'] = getHashtags($data['wr_content']);
+	$data['mb_ipaddress'] = $_SERVER['REMOTE_ADDR'];
 
+	if(empty($_MEMBER)) {
+		$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
+		if(empty($data['mb_nick']) || empty($data['mb_password'])) {
+			return set_error(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
+		}
+		$data['mb_srl'] = 0;
+		$data['mb_rank'] = 0;
+		$encrypt_password = createHash($data['mb_password']);
+	} else {
+		$data['mb_srl'] = $_MEMBER['mb_srl'];
+		$data['mb_rank'] = $_MEMBER['mb_rank'];
+		$data['mb_nick'] = $_MEMBER['mb_nick'];
+		$encrypt_password = null;
+	}
+
+	$new_insert = empty($wr_srl);
+	$new_files = [];
+
+	// 권한 체크
+	if ($new_insert) {
+		if(!isGrant('write', $md_id)) {
+			return set_error(getLang('error_permitted'),4501);
+		}
+	} else {
 		if(empty($_MEMBER)) {
-			$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
-			if(empty($data['mb_nick']) || empty($data['mb_password'])) {
-				throw new Exception(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
+			if(empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
+				return set_error(getLang('error_permitted'),4501);
 			}
-			$data['mb_srl'] = 0;
-			$data['mb_rank'] = 0;
-			$encrypt_password = createHash($data['mb_password']);
-		} else {
-			$data['mb_srl'] = $_MEMBER['mb_srl'];
-			$data['mb_rank'] = $_MEMBER['mb_rank'];
-			$data['mb_nick'] = $_MEMBER['mb_nick'];
-			$encrypt_password = null;
+		} else if(!isManager($md_id)) {
+			if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
+				return set_error(getLang('error_permitted'),4501);
+			}
 		}
+	}
 
-		$new_insert = empty($wr_srl);
-		$new_files = [];
+	DB::transaction();
 
-		// 권한 체크, 파일 첨부 때문에 먼저 함
+	try {
 		if ($new_insert) {
-			if(!isGrant('write', $md_id)) {
-				throw new Exception(getLang('error_permitted'),4501);
-			}
 
 			// 문서 번호를 얻기 위해 먼저 추가
 			if(true === DB::insert(
@@ -135,17 +148,6 @@ function proc($data) {
 			}
 			if (empty($wr_srl)) {
 				throw new Exception(getLang('error_occured'), 4001);
-			}
-
-		} else {
-			if(empty($_MEMBER)) {
-				if(empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
-					throw new Exception(getLang('error_permitted'),4501);
-				}
-			} else if(!isManager($md_id)) {
-				if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
-					throw new Exception(getLang('error_permitted'),4501);
-				}
 			}
 		}
 

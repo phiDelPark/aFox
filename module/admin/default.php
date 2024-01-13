@@ -6,161 +6,133 @@ $cmt_cnt = DB::count(_AF_COMMENT_TABLE_, ['rp_regdate{LIKE}'=>date('Y-m-d').'%']
 $vis_cnt = DB::count(_AF_VISITOR_TABLE_, ['vs_regdate{LIKE}'=>date('Y-m-d').'%']);
 
 ?>
-
-
-<div class="row">
-	<div class="col-lg-3 col-md-6">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-xs-3">
-						<i class="glyphicon glyphicon-pencil fs-5x"></i>
-					</div>
-					<div class="col-xs-9 text-right">
-						<div class="huge"><?php echo $doc_cnt?></div>
-						<div><?php echo getLang('new_document')?></div>
-					</div>
-				</div>
-			</div>
-			<a href="<?php echo getUrl('','admin','document')?>">
-				<div class="panel-footer">
-					<span class="pull-left"><?php echo getLang('view_details')?></span>
-					<span class="pull-right"><i class="glyphicon glyphicon-circle-arrow-right"></i></span>
-					<div class="clearfix"></div>
-				</div>
-			</a>
+	<div class="row">
+	  <div class="col-md-3 mb-3">
+		<div class="card bg-primary text-white h-100">
+		  <div class="card-body py-5">Primary Card</div>
+		  <div class="card-footer d-flex">
+			View Details
+			<span class="ms-auto">
+			  <i class="bi bi-chevron-right"></i>
+			</span>
+		  </div>
 		</div>
-	</div>
-	<div class="col-lg-3 col-md-6">
-		<div class="panel panel-green">
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-xs-3">
-						<i class="glyphicon glyphicon-comment fs-5x"></i>
-					</div>
-					<div class="col-xs-9 text-right">
-						<div class="huge"><?php echo $cmt_cnt?></div>
-						<div><?php echo getLang('new_comment')?></div>
-					</div>
-				</div>
-			</div>
-			<a href="<?php echo getUrl('','admin','comment')?>">
-				<div class="panel-footer">
-					<span class="pull-left"><?php echo getLang('view_details')?></span>
-					<span class="pull-right"><i class="glyphicon glyphicon-circle-arrow-right"></i></span>
-					<div class="clearfix"></div>
-				</div>
-			</a>
+	  </div>
+	  <div class="col-md-3 mb-3">
+		<div class="card bg-warning text-dark h-100">
+		  <div class="card-body py-5">Warning Card</div>
+		  <div class="card-footer d-flex">
+			View Details
+			<span class="ms-auto">
+			  <i class="bi bi-chevron-right"></i>
+			</span>
+		  </div>
 		</div>
-	</div>
-	<div class="col-lg-3 col-md-6">
-		<div class="panel panel-yellow">
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-xs-3">
-						<i class="glyphicon glyphicon-plane fs-5x"></i>
-					</div>
-					<div class="col-xs-9 text-right">
-						<div class="huge"><?php echo $vis_cnt?></div>
-						<div><?php echo getLang('new_visit')?></div>
-					</div>
-				</div>
-			</div>
-			<a href="<?php echo getUrl('','admin','visit')?>">
-				<div class="panel-footer">
-					<span class="pull-left"><?php echo getLang('view_details')?></span>
-					<span class="pull-right"><i class="glyphicon glyphicon-circle-arrow-right"></i></span>
-					<div class="clearfix"></div>
-				</div>
-			</a>
+	  </div>
+	  <div class="col-md-3 mb-3">
+		<div class="card bg-success text-white h-100">
+		  <div class="card-body py-5">Success Card</div>
+		  <div class="card-footer d-flex">
+			View Details
+			<span class="ms-auto">
+			  <i class="bi bi-chevron-right"></i>
+			</span>
+		  </div>
 		</div>
-	</div>
-	<div class="col-lg-3 col-md-6">
-		<div class="panel panel-red">
-			<div class="panel-heading">
-				<div class="row">
-					<div class="col-xs-3">
-						<i class="glyphicon glyphicon-question-sign fs-5x"></i>
-					</div>
-					<div class="col-xs-9 text-right">
-						<div class="huge">25</div>
-						<div>준비중...</div>
-					</div>
-				</div>
-			</div>
-			<a href="#">
-				<div class="panel-footer">
-					<span class="pull-left"><?php echo getLang('view_details')?></span>
-					<span class="pull-right"><i class="glyphicon glyphicon-circle-arrow-right"></i></span>
-					<div class="clearfix"></div>
-				</div>
-			</a>
+	  </div>
+	  <div class="col-md-3 mb-3">
+		<div class="card bg-danger text-white h-100">
+		  <div class="card-body py-5">Danger Card</div>
+		  <div class="card-footer d-flex">
+			View Details
+			<span class="ms-auto">
+			  <i class="bi bi-chevron-right"></i>
+			</span>
+		  </div>
 		</div>
+	  </div>
 	</div>
-</div>
-
-<div class="row">
-	<div class="col-lg-12">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title"><i class="glyphicon glyphicon-stats"></i> Chart 1</h3>
-			</div>
-			<div class="panel-body">
-				<div id="morris-area-chart">준비중...</div>
-			</div>
+	<div class="row">
+	  <div class="col-md-6 mb-3">
+		<div class="card h-100">
+		  <div class="card-header">
+			<span class="me-2"><i class="bi bi-bar-chart-fill"></i></span>
+			Area Chart Example
+		  </div>
+		  <div class="card-body">
+			<canvas class="chart" width="400" height="200"></canvas>
+		  </div>
 		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-lg-4">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title"><i class="glyphicon glyphicon-stats"></i> Chart 2</h3>
-			</div>
-			<div class="panel-body">
-				<div id="morris-donut-chart">준비중...</div>
-				<div class="text-right">
-					<a href="#"><?php echo getLang('view_details')?> <i class="glyphicon glyphicon-circle-arrow-right"></i></a>
-				</div>
-			</div>
+	  </div>
+	  <div class="col-md-6 mb-3">
+		<div class="card h-100">
+		  <div class="card-header">
+			<span class="me-2"><i class="bi bi-bar-chart-fill"></i></span>
+			Area Chart Example
+		  </div>
+		  <div class="card-body">
+			<canvas class="chart" width="400" height="200"></canvas>
+		  </div>
 		</div>
+	  </div>
 	</div>
-	<div class="col-lg-4">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title"><i class="glyphicon glyphicon-time"></i> <?php echo getLang('new_document')?></h3>
+	<div class="row">
+	  <div class="col-md-12 mb-3">
+		<div class="card">
+		  <div class="card-header">
+			<span><i class="bi bi-table me-2"></i></span> Data Table
+		  </div>
+		  <div class="card-body">
+			<div class="table-responsive">
+			  <table
+				id="example"
+				class="table table-striped data-table"
+				style="width: 100%"
+			  >
+				<thead>
+				  <tr>
+					<th>Name</th>
+					<th>Position</th>
+					<th>Office</th>
+					<th>Age</th>
+					<th>Start date</th>
+					<th>Salary</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<td>Tiger Nixon</td>
+					<td>System Architect</td>
+					<td>Edinburgh</td>
+					<td>61</td>
+					<td>2011/04/25</td>
+					<td>$320,800</td>
+				  </tr>
+				  <tr>
+					<td>Garrett Winters</td>
+					<td>Accountant</td>
+					<td>Tokyo</td>
+					<td>63</td>
+					<td>2011/07/25</td>
+					<td>$170,750</td>
+				  </tr>
+				</tbody>
+				<tfoot>
+				  <tr>
+					<th>Name</th>
+					<th>Position</th>
+					<th>Office</th>
+					<th>Age</th>
+					<th>Start date</th>
+					<th>Salary</th>
+				  </tr>
+				</tfoot>
+			  </table>
 			</div>
-			<div class="panel-body">
-				<div class="list-group" style="margin:0">
-					<?php
-						$_list = DB::gets(_AF_DOCUMENT_TABLE_, ['md_id{<>}'=>'_AFOXtRASH_'], 'wr_regdate', '1,10');
-						foreach ($_list as $val) {
-							echo '<a href="'.getUrl('','srl',$val['wr_srl']).'" class="list-group-item"><span class="badge">'.timePassed($val['wr_regdate']).'</span>'.cutstr(strip_tags($val['wr_title']),50).'</a>';
-						}
-					?>
-				</div>
-			</div>
+		  </div>
 		</div>
+	  </div>
 	</div>
-	<div class="col-lg-4">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title"><i class="glyphicon glyphicon-time"></i> <?php echo getLang('new_comment')?></h3>
-			</div>
-			<div class="panel-body">
-				<div class="list-group" style="margin:0">
-					<?php
-						$_list = DB::gets(_AF_COMMENT_TABLE_, [], 'rp_regdate', '1,10');
-						foreach ($_list as $val) {
-							echo '<a href="'.getUrl('','rp',$val['rp_srl']).'" class="list-group-item"><span class="badge">'.timePassed($val['rp_regdate']).'</span>'.cutstr(strip_tags($val['rp_content']),50).'</a>';
-						}
-					?>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 
 <?php
 /* End of file dashbd.php */

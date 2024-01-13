@@ -11,13 +11,23 @@ foreach ($options as $key => $v) {
 }
 ?>
 
-<div class="af-editor-group af_editor_<?php echo $name ?>">
+<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+	<symbol id="bi-check-square" viewBox="0 0 16 16">
+		<path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z"/>
+		<path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0"/>
+	</symbol>
+	<symbol id="bi-unchecked-square" viewBox="0 0 16 16">
+		<path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z"/>
+	</symbol>
+</svg>
+
+<div class="w-100 af-editor-group af_editor_<?php echo $name ?>">
 <?php if(!empty($options['toolbar'])) { ?>
-	<div class="af-editor-toolbar clearfix"<?php echo $options['readonly']?' readonly':''?> role="option" aria-label="Editor Options">
-		<strong class="pull-left" style="margin:0 0 5px"><?php echo $options['toolbar'][0]?></strong>
-		<div class="pull-right unselectable" style="cursor:pointer;color:#aaa;font-size:12px;font-family:Arial;padding:4px 0 0">
+	<div class="d-flex w-100 justify-content-between"<?php echo $options['readonly']?' readonly':''?> aria-label="Editor Options">
+		<b><?php echo $options['toolbar'][0]?></b>
+		<div class="user-select-none pt-1" style="cursor:pointer;font-size:12px;font-family:Arial">
 		<?php
-			$tool_item = '<span tabindex="0" style="margin:0 0 0 5px;padding:3px 2px 0" data-type="%s" data-target="%s" data-value="%s"><i class="glyphicon glyphicon-%s" aria-hidden="true"></i> %s</span>';
+			$tool_item = '<span class="ms-2" tabindex="0" data-type="%s" data-target="%s" data-value="%s"><svg class="bi" aria-hidden="true"><use xlink:href="#bi-%s-square"/></svg> %s</span>';
 			foreach ($options['toolbar'][1] as $key=>$val) {
 				$target = $key;
 				$default = $val[0];
@@ -35,7 +45,7 @@ foreach ($options as $key => $v) {
 	</div>
 <?php } ?>
 	<div class="af-editor-content" role="document" aria-label="Editor Content">
-		<textarea name="<?php echo $name ?>" class="form-control vresize"<?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo escapeHtml($content) ?></textarea>
+		<textarea name="<?php echo $name ?>" class="form-control"<?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo escapeHtml($content) ?></textarea>
 	</div>
 <?php if(!empty($options['statebar'])) { ?>
 	<div class="af-statebar-area clearfix" role="toolbar" aria-label="Editor Controls" style="margin-top:3px;height:24px;padding:0 0 0 270px">

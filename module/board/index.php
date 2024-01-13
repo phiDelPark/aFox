@@ -25,17 +25,14 @@ function procBoardDefault($data) {
 }
 
 function dispBoardDefault($data) {
-	$act = strtolower($data['disp']);
-
-	if (empty($act)) {
-		$act = empty($data['srl']) ? 'documentlist' : 'viewdocument';
-		if (empty($data['id']) && empty($data['srl'])) $act = '...error';
+	if (!($disp = strtolower($data['disp']))) {
+		$disp = empty($data['srl']) ? 'documentlist' : 'viewdocument';
 	}
 
 	$dir = _AF_MODULES_PATH_ . 'board/disp/';
-	$inc_file = $dir . $act . '.php';
+	$inc_file = $dir . $disp . '.php';
 
-	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$act)) {
+	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$disp)) {
 		require_once $inc_file;
 		$result = proc($data);
 		return $result;

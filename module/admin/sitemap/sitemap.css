@@ -1,58 +1,32 @@
-@charset "utf-8";
-
+/*
+ * sitemap.css
+ * @author phiDel (is4975@gmail.com)
+ */
 #siteMap form{margin:0}
-#siteMap ul{margin:0;padding:0;list-style:none}
-#siteMap .lined ul{padding:0;margin:0;border-bottom:1px solid #eee;zoom:1}
-#siteMap .lined li{padding:0;margin:0;cursor:all-scroll;list-style:none;zoom:1}
-#siteMap .lined li li{border-top:1px solid #eee}
-#siteMap li li{text-indent:18px}
-#siteMap li li li{text-indent:36px}
-#siteMap li li li li{text-indent:54px}
-#siteMap li li li li li{text-indent:72px}
-#siteMap li li li li li li{text-indent:90px}
-#siteMap li li li li li li li{text-indent:108px}
-#siteMap li li li li li li li li{text-indent:126px}
-#siteMap li li li li li li li li li{text-indent:144px}
-#siteMap li li li li li li li li li li{text-indent:162px}
-#siteMap li li li li li li li li li li li{text-indent:180px}
-#siteMap li li li li li li li li li li li li{text-indent:198px}
+#siteMap ul{position:relative!important;margin:0;padding:0;list-style:none;-webkit-user-select:none!important;-moz-user-select:none!important;user-select:none!important}
+#siteMap li li .indent{padding-left:18px}
+#siteMap li li li .indent{padding-left:36px}
+#siteMap li li li li .indent{padding-left:54px}
+#siteMap li li li li li .indent{padding-left:72px}
+#siteMap li li li li li li .indent{padding-left:90px}
+#siteMap li li li li li li li .indent{padding-left:108px}
+#siteMap li li li li li li li li .indent{padding-left:126px}
+#siteMap li li li li li li li li li .indent{padding-left:144px}
+#siteMap li li li li li li li li li li .indent{padding-left:162px}
+#siteMap li li li li li li li li li li li .indent{padding-left:180px}
+#siteMap li li li li li li li li li li li li .indent{padding-left:198px}
 #siteMap li *{vertical-align:middle;text-indent:0}
-#siteMap li .moveTo+input{width:200px;border:0;padding:0 .5em}
-#siteMap li .moveTo+input:hover,
-#siteMap li .moveTo+input:active,
-#siteMap li .moveTo+input:focus{border:1px dotted #ccc;overflow:visible}
-#siteMap .moveTo{position:relative;z-index:2;width:22px;height:32px;padding:32px 0 0 0;margin:0 0 0 3px;overflow:hidden;background:#fff url(icon_move_to.png) no-repeat center 0;border:0;cursor:move}
-#siteMap li.active,
-#siteMap li.active .moveTo{background-color:#f7f7f7}
-#siteMap li.active li,
-#siteMap li.active ul{border-top-color:#f7f7f7}
-#siteMap li.active .moveTo{background-position:center -32px}
-#siteMap .side{padding-left:5px !important;padding-top:0 !important;padding-bottom:0 !important;line-height:30px;background:transparent !important}
+#siteMap li:hover,
+#siteMap li:active,
+#siteMap li:focus{background-color:var(--bs-gray-200)}
+#siteMap li input[type=text]{display:inline;max-width:150px;margin:4px}
+#siteMap .side::after{content:url("icon_move_to.png");margin:5px;vertical-align:text-top}
+#siteMap .side{padding-left:5px!important;padding-top:0!important;padding-bottom:0!important;line-height:30px;background:transparent!important}
 #siteMap .side button{text-indent:0;line-height:1}
-#siteMap .placeholder{background:#bbb}
-#siteMap .draggable,
-#siteMap .draggable .moveTo{background-color:#ddd}
-#siteMap .draggable .summary{border-left:1px solid #ccc;padding-left:10px;margin-left:10px;font-size:11px;color:#999}
-#siteMap .form-inline{cursor:move}
-#siteMap .form-data-set{margin:0 0 0 70px}
-#siteMapRoot1 .input-sm,#siteMapRoot2 .input-sm{max-width:180px;display:inline;margin:5px}
-#siteMapRoot1 .side input[type="image"],#siteMapRoot2 .side input[type="image"]{cursor:pointer}
-@media(max-width:992px) {
-	#siteMap .panel-body {
-		padding-top: 0;
-		overflow-x:auto;
-	}
-	#siteMap .panel-body>.pull-left{
-		float: none!important;
-	}
-	#siteMap .panel-body>.pull-left>div{
-		display: inline-block;
-		margin:0 10px 10px 0;
-	}
-	#siteMap .form-data-set {
-		margin-left: 0;
-	}
-	#siteMap .sitemap-item{
-		white-space: nowrap;
-	}
-}
+#siteMap .sitemap-item{cursor:move}
+#siteMap .side input[type=image],#siteMapRoot2 .side input[type=image]{cursor:pointer}
+#siteMap .draggable{background-color:transparent!important}
+#siteMap .placeholder{background-color:var(--bs-gray-500)!important}
+#siteMap li input._collapse_key+span{display:inline-block;overflow:hidden;margin-left:2px;width:35px!important}
+#siteMap li input._new_win_key+span{display:inline-block;overflow:hidden;margin-left:2px;width:35px!important}
+#siteMap li input._desc_key{max-width:205px}
