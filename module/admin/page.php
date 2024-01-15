@@ -64,7 +64,7 @@
 	<form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_DATA['disp'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"><svg class="bi" aria-hidden="true"><use xlink:href="#bi-search"/></svg></label>
+			<label class="input-group-text bg-transparent" for="search"><svg class="bi" aria-hidden="true"><use xlink:href="<?php echo _AF_URL_?>module/admin/img/icons.svg#search"/></svg></label>
 			<input type="text" name="search" id="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
 			<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default btn-outline-control" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>

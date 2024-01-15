@@ -25,7 +25,7 @@ $_tmp = '<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ';
 		$wr_secret =  $val['wr_secret'] == '1';
 		$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
 		$href = !$wr_permit&&$wr_secret?'#requirePassword" data-srl="'.$val['wr_srl'].'" data-param="srl,'.$val['wr_srl']:getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','');
-		echo '<a class="list-group-item list-group-item-action'.($val['wr_srl']==$srl?' active" aria-current="true':'').'" href="'.$href.'">';
+		echo '<a class="list-group-item list-group-item-action px-2'.($val['wr_srl']==$srl?' active" aria-current="true':'').'" href="'.$href.'">';
 		echo '<div class="'.$class1.'"><h5 class="mb-1">'.escapeHtml($val['wr_title'], true).'</h5>'.($wr_secret?$_tmp:'').'</div>';
 		echo '<div class="'.$class1.' text-body-secondary"><small>'.date('Y/m/d', strtotime($val['wr_regdate'])).'</small><small>'.escapeHtml($val['mb_nick'], true).'</small></div></a>';
 	}

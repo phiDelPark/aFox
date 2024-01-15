@@ -35,7 +35,7 @@ if (_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 <script>var language="<?php echo _AF_LANG_ ?>",request_uri="<?php echo getRequestUri() ?>",current_url="<?php echo getUrl() ?>";</script>
 <link rel="stylesheet" href="<?php echo _AF_URL_ . 'common/css/common' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css') ?>">
 <script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
-<?php @include _AF_THEME_PATH_ . 'common.php'; ?>
+<?php @include _AF_THEME_PATH_ . '_head.php'; ?>
 </head><body>
 <?php } ?>
 <?php

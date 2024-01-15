@@ -5,16 +5,37 @@
 
 const $_LANG = {};
 
-const parentByTagName = (el, tagName) =>
-{
-	while (el && el.parentNode) {
-		el = el.parentNode;
-		if (el.tagName && el.tagName == tagName) {
-			return el;
+String.prototype.loadScript = function(afterEl, async = true, defer = true) {
+	let source = this;
+	return new Promise((resolve, reject) => {
+	  let script = document.createElement('script');
+	  const prior = afterEl || document.getElementsByTagName('script')[0];
+
+	  script.async = async;
+	  script.defer = defer;
+
+	  function onloadHander(_, isAbort) {
+		if (isAbort || !script.readyState || /loaded|complete/.test(script.readyState)) {
+		  script.onload = null;
+		  script.onreadystatechange = null;
+		  script = undefined;
+		  if (isAbort) { reject(); } else { resolve(); }
 		}
-	}
-	return null;
+	  }
+
+	  script.onload = onloadHander;
+	  script.onreadystatechange = onloadHander;
+	  script.src = source;
+	  prior.parentNode.insertBefore(script, prior.nextSibling);
+	});
 }
+
+Object.prototype.trigger = function(type, bubbles = true, cancelable = false) {
+	const event = document.createEvent('HTMLEvents');
+	event.initEvent(type, bubbles, cancelable);
+	event.eventName = type;
+	this.dispatchEvent(event);
+};
 
 String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g, "");
@@ -201,9 +222,4 @@ window.pop_win = function(url, w, h, id) {
 	var popwin = window.open(url, (id || 'af_popup'), 'width=' + (w || '700') + ',height=' + (h || '500') + ',top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no');
 	popwin.focus();
 	return popwin;
-};
-
-window.addEvent = function(type, listener, options) {
-	this.removeEventListener(type, listener, options);
-	this.addEventListener(type, listener, options);
 };

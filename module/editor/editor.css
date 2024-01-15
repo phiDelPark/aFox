@@ -1,3 +1,7 @@
+body {
+	line-height: 1.5;
+}
+
 pre {
 	display: block;
 	padding: 9.5px;
@@ -7,8 +11,8 @@ pre {
 	color: #333;
 	word-break: break-all;
 	word-wrap: break-word;
-	background-color: #f5f5f5;
-	border: 1px solid #ccc;
+	background-color: #eee;
+	border: 1px solid #bbb;
 	border-radius: 4px;
 	overflow: auto;
 }
@@ -18,7 +22,7 @@ blockquote {
 	margin: 0 0 20px;
 	font-size: 17.5px;
 	border: 0;
-	border-left: 5px solid #eee;
+	border-left: 5px solid #ddd;
 }
 
 h1, h2 {
@@ -34,11 +38,12 @@ h1, h2 {
 }
 
 code {
-	padding: 2px 4px;
-	font-size: 90%;
+	padding: 0 2px;
+	font-size: 80%;
 	color: #c7254e;
-	background-color: #f9f2f4;
+	background-color: #eee;
 	border-radius: 4px;
+	word-wrap: break-word;
 }
 
 code, kbd, pre, samp {
@@ -55,7 +60,7 @@ pre code {
 }
 
 img[widget] {
-	border: 1px dashed #e4e4e4;
+	border: 1px dashed #eee;
 }
 
 img[widget]:not([src]):not([width]) {

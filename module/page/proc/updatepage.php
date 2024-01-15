@@ -27,7 +27,6 @@ function proc($data) {
 		}
 	}
 
-	$data['md_title'] = trim(strip_tags($data['md_title']));
 	$data['pg_content'] = xssClean($data['pg_content']);
 
 	if (!isAdmin()) {
@@ -59,7 +58,7 @@ function proc($data) {
 				[
 					'md_id'=>$md_id,
 					'md_key'=>'page',
-					'md_title'=>$data['md_title'],
+					'md_title'=>trim(strip_tags($data['md_title'])),
 					'md_extra'=>'',
 					'^md_regdate'=>'NOW()'
 				]
@@ -72,6 +71,14 @@ function proc($data) {
 			if (isset($data['new_md_id'])) {
 				throw new Exception(getLang('warning_exists', ['id']), 3103);
 			}
+
+			// 수정시 페이지 정보 넘어왔는지 체크 (관리자 모드에서 수정 안하면 일부 항목이 없음)
+			if(!isset($data['md_title'])) $data['md_title'] = $module['md_title'];
+			else $data['md_title'] = trim(strip_tags($data['md_title']));
+			if(!isset($data['md_description'])) $data['md_description'] = $module['md_description'];
+			if(!isset($data['grant_view'])) $data['grant_view'] = $module['grant_view'];
+			if(!isset($data['grant_reply'])) $data['grant_reply'] = $module['grant_reply'];
+			if(!isset($data['grant_download'])) $data['grant_download'] = $module['grant_download'];
 		}
 
 		// 관리자만 권한 설정 가능
@@ -117,8 +124,10 @@ function proc($data) {
 				if (empty($files['tmp_name'][$i])) continue;
 
 				$file = [
-					'name' => $files['name'][$i],'type' => $files['type'][$i],
-					'tmp_name' => $files['tmp_name'][$i],'error' => $files['error'][$i],
+					'name' => $files['name'][$i],
+					'type' => $files['type'][$i],
+					'tmp_name' => $files['tmp_name'][$i],
+					'error' => $files['error'][$i],
 					'size' => $files['size'][$i]
 				];
 
@@ -156,18 +165,30 @@ function proc($data) {
 					'^mf_regdate'=>'NOW()'
 				]);
 
-				$new_files[] = $mf_srl = DB::insertId();
+				$file['mf_srl'] = $mf_srl = DB::insertId();
+				$new_files[] = $file;
 				$file_count++;
-
-				if ($data['pg_type'] == 2) {
-					$patterns = '/(<[a|img|source][^>]*)([src|href])(=[\"\']?[^>\"\']+[\"\']?)([^>]*afox-editor-tmpfile=[\"\']?'.$i.'[\"\']?)([^>]*>)/i';
-					$replacement = "\\1\\2=\""._AF_URL_."?file={$mf_srl}\"\\5";
-				} else {
-					$patterns = '/(\[.+\]\()(afox-editor-tmpfile='.$i.')(\s?"?[^\)"]*"?\))/i';
-					$replacement = "\\1"._AF_URL_."?file={$mf_srl}\\3";
-				}
-				$data['pg_content'] = preg_replace($patterns, $replacement, $data['pg_content']);
 			}
+
+			$patterns = '/<[img|a][^>]+[src|href]=[\\"\']+blob\:[^>\\"\']+[\\"\']?[^>]*alt=[\\"\']+([0-9])+[\\"\']?[^>]*>/i';
+
+			$data['pg_content'] = preg_replace_callback(
+				$patterns,
+				function ($matches) use($new_files) {
+					$file = $new_files[(int)$matches[2]];
+					$es_name = escapeHtml($file['name']);
+					return sprintf(
+						substr($file['type'], 0, 5) == 'image'
+						? '<img src="%s" class="%s" title="%s" alt="%s">'
+						: '<a href="%s" class="%s" title="%s" alt="%s" target="_blank">',
+						_AF_URL_.'?file='.$file['mf_srl'],
+						escapeHtml($file['type']),
+						$es_nam.' ('.shortSize($file['size']). ')',
+						$es_nam
+					);
+				},
+				$data['pg_content']
+			);
 		}
 
 		DB::update(_AF_MODULE_TABLE_,

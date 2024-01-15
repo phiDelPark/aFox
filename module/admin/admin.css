@@ -94,6 +94,8 @@ button {
   content: url('./img/file-earmark.svg');
   vertical-align:text-top;
   padding-right: 5px;
+  filter:invert(50%);
+  -webkit-filter:invert(50%);
 }
 .form-file-group label.file-type-image::before {
   content: url('./img/file-earmark-image.svg');

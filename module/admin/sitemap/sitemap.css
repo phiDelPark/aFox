@@ -20,13 +20,18 @@
 #siteMap li:active,
 #siteMap li:focus{background-color:var(--bs-gray-200)}
 #siteMap li input[type=text]{display:inline;max-width:150px;margin:4px}
-#siteMap .side::after{content:url("icon_move_to.png");margin:5px;vertical-align:text-top}
+#siteMap .side::after{content:url("icon_move_to.gif");margin:5px;vertical-align:text-top}
 #siteMap .side{padding-left:5px!important;padding-top:0!important;padding-bottom:0!important;line-height:30px;background:transparent!important}
 #siteMap .side button{text-indent:0;line-height:1}
+#siteMap .side input[type=image]{cursor:pointer}
 #siteMap .sitemap-item{cursor:move}
-#siteMap .side input[type=image],#siteMapRoot2 .side input[type=image]{cursor:pointer}
 #siteMap .draggable{background-color:transparent!important}
 #siteMap .placeholder{background-color:var(--bs-gray-500)!important}
-#siteMap li input._collapse_key+span{display:inline-block;overflow:hidden;margin-left:2px;width:35px!important}
-#siteMap li input._new_win_key+span{display:inline-block;overflow:hidden;margin-left:2px;width:35px!important}
-#siteMap li input._desc_key{max-width:205px}
+#siteMap li [name="collapse_key[]"]+span,
+#siteMap li [name="new_win_key[]"]+span{display:inline-block;overflow:hidden;margin-left:2px;width:35px!important}
+#siteMap li [name="desc_key[]"]{max-width:205px}
+#siteMap [type=submit],
+#siteMap [type=button]{width:24px;height:24px;border:0;background-color:transparent;color:transparent;background-image:url("icon_tool.png");background-repeat:no-repeat;background-position:0px 0px}
+#siteMap [type=submit]{background-position:0px -72px}
+#siteMap li [type=button]{background-position:0px -48px}
+#siteMap li [type=button]+[type=button]{background-position:0px -24px}

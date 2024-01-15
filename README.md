@@ -16,11 +16,9 @@
 * MYSQL version 5.1 이상
 
 ### 라이브러리
-* jQuery
 * Bootstrap
 * Parsedown
 * simpleCAPTCHA
-* Font Awesome (수동)
 
 ### 라이선스
 

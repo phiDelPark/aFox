@@ -5,8 +5,8 @@
 
 let siteMap_tempKey = -1;
 
-function SiteMap(id)
-{
+function SiteMap(id) {
+
 	const container = document.querySelector(id);
 
 	let dragging = false;
@@ -16,10 +16,10 @@ function SiteMap(id)
 	let dropzone = null;
 	let target = null;
 	let clone = null;
-	let pholder = document.createElement("li");
+	let pholder = null;
 
-	const getPidOffset = (el, offsetParent) =>
-	{
+	const getPidOffset = (el, offsetParent) => {
+
 		let top = 0,
 			left = 0;
 
@@ -35,8 +35,8 @@ function SiteMap(id)
 		};
 	}
 
-	const setPidHolder = (info, yPos) =>
-	{
+	const setPidHolder = (info, yPos) => {
+
 		if (Math.abs(info.top - yPos) <= 3) {
 			pholder.style.top = (info.top - 3) + 'px';
 			pholder.style.height = '2px';
@@ -52,10 +52,9 @@ function SiteMap(id)
 		}
 	}
 
-	const documentMouseMove = e =>
-	{
-		let el = e.target.tagName != 'LI'
-			? parentByTagName(e.target, 'LI') : e.target;
+	const documentMouseMove = e => {
+
+		let el = e.target.tagName != 'LI' ? e.target.closest('LI') : e.target;
 		if(!el || el.tagName != 'LI') return false;
 
 		let diff, nTop, i, c, o, t;
@@ -91,8 +90,8 @@ function SiteMap(id)
 		return false;
 	};
 
-	const documentMouseUp = e =>
-	{
+	const documentMouseUp = e => {
+
 		dragging = false;
 
 		document.removeEventListener('mousemove', documentMouseMove);
@@ -105,7 +104,7 @@ function SiteMap(id)
 		if (!dropzone) return false;
 
 		let el = dropzone.element.tagName != 'LI'
-			? parentByTagName(dropzone.element, 'LI') : dropzone.element;
+			? dropzone.element.closest('LI') : dropzone.element;
 
 		switch (dropzone.state) {
 			case 'after':
@@ -124,26 +123,26 @@ function SiteMap(id)
 				break;
 		}
 
-		let el_pkey = target.querySelector('input._parent_key'),
-			el_pli = parentByTagName(target, 'LI');
-		el_pkey.value = el_pli?.querySelector('input._item_key').value || '0';
+		let el_pkey = target.querySelector('input[name="parent_key[]"]'),
+			el_pli = target.parentNode.closest('LI');
+		el_pkey.value = el_pli?.querySelector('input[name="item_key[]"]').value || '0';
 		return false;
 	};
 
-	container.addEventListener('mousedown', e =>
-	{
+	container.addEventListener('mousedown', e => {
+
 		if (['UL','INPUT','TEXTAREA'].indexOf(e.target.tagName) > -1 || e.which != 1)
 			return;
 
 		dragging = true;
 
-		target = e.target.tagName != 'LI'
-			? parentByTagName(e.target, 'LI') : e.target;
+		target = e.target.tagName != 'LI' ? e.target.closest('LI') : e.target;
 
 		target.style.opacity = '.5';
 
 		clone = target.cloneNode(true);
 		clone.classList.add('draggable');
+		pholder = document.createElement("li");
 		pholder.classList.add('placeholder');
 
 		const li_childs = container.querySelectorAll('LI');
@@ -194,65 +193,76 @@ function SiteMap(id)
 		return false;
 	});
 
-	container.addEventListener('mouseover', e =>
-	{
+	container.addEventListener('mouseover', e => {
 		//if (!dragging) e.target.classList.add('active');
 		return false;
 	});
 
-	container.addEventListener('mouseout', e =>
-	{
+	container.addEventListener('mouseout', e => {
 		//if (!dragging) e.target.classList.remove('active');
 		return false;
 	});
 
 	const els_delete = container.querySelectorAll('li input[value=delete]');
 	els_delete.forEach(el => {
-		el.addEventListener('click', e =>
-		{
+		el.addEventListener('click', e => {
+
 			e.preventDefault();
 			if(!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['menu']]))) return;
-			const el2 = e.target.tagName != 'LI' ? parentByTagName(e.target, 'LI') : e.target;
+			const el2 = e.target.tagName != 'LI' ? e.target.closest('LI') : e.target;
 			el2.remove();
 		});
 	});
 
 	const els_setup = container.querySelectorAll('li input[value=setup]');
 	els_setup.forEach(el => {
-		el.addEventListener('click', e =>
-		{
+		el.addEventListener('click', e => {
+
 			e.preventDefault();
-			const el_pli = parentByTagName(el, 'LI'),
+			const el_pli = el.closest('LI'),
 				el_input = el_pli.querySelector('.input'),
 				el_setup = el_pli.querySelector('.setup');
 			el_input.classList.toggle('d-none');
 			el_setup.classList.toggle('d-none');
 		});
 	});
+
+	const el_form = container.closest('FORM');
+	el_form.addEventListener('submit', e => {
+		try {
+			const els_ck = e.target.querySelectorAll('input[type=checkbox]');
+			els_ck.forEach(el => {
+				if(el.checked) el.value = 1;
+				el.setAttribute('type', 'hidden');
+			});
+			return true;
+		} catch (error) {
+			e.preventDefault();
+			return false;
+		}
+	});
 }
 
-window.onload = function()
-{
-	window.siteMapItemAdd = (th, idx) =>
-	{
+window.onload = function() {
+	window.siteMapItemAdd = (th, idx) => {
 		try {
 			const container = document.querySelector('#siteMapRoot' + idx),
 				el = document.querySelector('#siteMap_item_template li').cloneNode(true),
 				el_del = el.querySelector('input[value=delete]'),
 				el_set = el.querySelector('input[value=setup]'),
-				el_key = el.querySelector('input._item_key');
+				el_key = el.querySelector('input[name="item_key[]"]');
 			el_key.value = siteMap_tempKey--;
 			el_del.addEventListener('click', e =>
 			{
 				e.preventDefault();
 				if(!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['menu']]))) return;
-				const el2 = e.target.tagName != 'LI' ? parentByTagName(e.target, 'LI') : e.target;
+				const el2 = e.target.tagName != 'LI' ? e.target.closest('LI') : e.target;
 				el2.remove();
 			});
 			el_set.addEventListener('click', e =>
 			{
 				e.preventDefault();
-				const el_pli = parentByTagName(e.target, 'LI'),
+				const el_pli = e.target.closest('LI'),
 					el_input = el_pli.querySelector('.input'),
 					el_setup = el_pli.querySelector('.setup');
 				el_input.classList.toggle('d-none');
@@ -264,5 +274,7 @@ window.onload = function()
 		}
 		return false;
 	};
-	var SiteMap1 = new SiteMap('#siteMapRoot1');
+
+	const SiteMap1 = new SiteMap('#siteMapRoot1');
+	const SiteMap2 = new SiteMap('#siteMapRoot2');
 }

@@ -4,70 +4,61 @@ if(!defined('__AFOX__')) exit();
 $file_options = (!empty($options['file']) && count($options['file'])==3) ? $options['file'] : false;
 
 $ops = 'name:"'. $name . '",';
-$skip_keys = ['file'=>1,'toolbar'=>1,'statebar'=>1];
+$skip_keys = ['file'=>1,'typebar'=>1,'toolbar'=>1,'statebar'=>1];
 foreach ($options as $key => $v) {
 	if(!empty($skip_keys[$key])) continue;
 	$ops .= $key . ':' . (($v === TRUE || $v === FALSE) ? (int)$v : (is_int($v) || is_float($v) ? $v : '"' . $v . '"')) . ',';
 }
 ?>
 
-<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-	<symbol id="bi-check-square" viewBox="0 0 16 16">
-		<path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z"/>
-		<path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0"/>
-	</symbol>
-	<symbol id="bi-unchecked-square" viewBox="0 0 16 16">
-		<path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z"/>
-	</symbol>
-</svg>
+<style>
+.shadow-ring{outline:0;box-shadow:var(--bs-focus-ring-x, 0) var(--bs-focus-ring-y, 0) var(--bs-focus-ring-blur, 0) var(--bs-focus-ring-width) var(--bs-focus-ring-color)}
+#editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);-webkit-filter:invert(50%);filter:invert(50%)}
+#editorTypebar .bi-unchecked.checked::before{content:url(./module/editor/bi-check.svg)}
+#editorTypebar,#editorToolbar{font-size:12px;font-family:Arial}
+#editorToolbar button{padding:2px;border-radius:2px;height:18px;width:18px}
+#editorToolbar button>.bi{position:relative;left:-2px;top:-5px;height:16px;width:16px}
+#uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px}
+#editorContent textarea{height:250px}
+</style>
 
-<div class="w-100 af-editor-group af_editor_<?php echo $name ?>">
-<?php if(!empty($options['toolbar'])) { ?>
+<div id="editor<?php echo ucfirst($name) ?>" class="w-100 editor-group">
+<?php if(!empty($options['typebar'])) { ?>
 	<div class="d-flex w-100 justify-content-between"<?php echo $options['readonly']?' readonly':''?> aria-label="Editor Options">
-		<b><?php echo $options['toolbar'][0]?></b>
-		<div class="user-select-none pt-1" style="cursor:pointer;font-size:12px;font-family:Arial">
+		<b><?php echo $options['typebar'][0]?></b>
+		<div id="editorTypebar" class="user-select-none pt-1">
 		<?php
-			$tool_item = '<span class="ms-2" tabindex="0" data-type="%s" data-target="%s" data-value="%s"><svg class="bi" aria-hidden="true"><use xlink:href="#bi-%s-square"/></svg> %s</span>';
-			foreach ($options['toolbar'][1] as $key=>$val) {
+			$tool_item = '<span style="cursor:pointer" class="bi-unchecked%s ms-2" tabindex="0" data-target="%s" data-value="%s">%s</span>';
+			foreach ($options['typebar'][1] as $key=>$val) {
 				$target = $key;
 				$default = $val[0];
-				$item = $val[1];
-				if(is_array($item)) {
-					foreach ($item as $k=>$v) echo sprintf($tool_item, $target, $target, $v, $v===$default?'check':'unchecked', $k);
-					echo '<input type="hidden" name="'.$target.'" value="'.$default.'">';
-				} else { // checkbox
-					echo sprintf($tool_item, 'checkbox', $target, '1', $default?'check':'unchecked', $item);
-					echo '<input type="hidden" name="'.$target.'" value="'.($default?'1':'').'">';
-				}
+				$item = is_array($val[1]) ? $val[1] : [$val[1]];
+				foreach ($item as $k=>$v) echo sprintf($tool_item, $v===$default?' checked':'', $target, $v, $k);
+				echo '<input type="hidden" name="'.$target.'" value="'.$default.'">';
 			}
 		?>
 		</div>
 	</div>
 <?php } ?>
-	<div class="af-editor-content" role="document" aria-label="Editor Content">
-		<textarea name="<?php echo $name ?>" class="form-control"<?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo escapeHtml($content) ?></textarea>
+	<div id="editorContent" role="document" aria-label="Editor Content">
+		<textarea name="<?php echo $name ?>" class="form-control" <?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo escapeHtml($content) ?></textarea>
 	</div>
-<?php if(!empty($options['statebar'])) { ?>
-	<div class="af-statebar-area clearfix" role="toolbar" aria-label="Editor Controls" style="margin-top:3px;height:24px;padding:0 0 0 270px">
-		<div class="btn-group btn-group-xs pull-left" style="margin-left:-270px">
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="highlight"><i class="glyphicon glyphicon-text-background" aria-hidden="true" style="text-decoration:underline"></i></button>
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="bold"><i class="glyphicon glyphicon-bold" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="italic"><i class="glyphicon glyphicon-italic" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="underline"><strong style="font-family:serif;font-size:15px;width:12px;height:12px;line-height:1;text-decoration:underline">U</strong></button>
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="strikeThrough"><strong style="font-family:serif;font-size:15px;width:12px;height:12px;line-height:1;text-decoration:line-through">S</strong></button>
+<?php if(!empty($options['toolbar'])) { ?>
+	<div id="editorToolbar" class="d-flex w-100 justify-content-between border-bottom py-1" role="toolbar" aria-label="Editor Controls">
+		<div>
+			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="highlight"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#stripe"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="bold"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-bold"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="italic"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-italic"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="underline"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-underline"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary me-2" tabindex="-1" aria-label="strikeThrough"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-strikethrough"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="header"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#head"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="insertorderedlist"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#list-ol"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="indent"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#blockquote-left"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary me-2" tabindex="-1" aria-label="codeblock"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#code-slash"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="components"><svg class="bi"><use xlink:href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#three-dots"/></svg></button>
 		</div>
-		<div class="btn-group btn-group-xs pull-left" style="margin-left:-152px">
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="header"><i class="glyphicon glyphicon-header" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="insertorderedlist"><i class="glyphicon glyphicon-list" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="indent"><i class="glyphicon glyphicon-indent-left" aria-hidden="true"></i></button>
-			<button type="button" class="btn btn-default" tabindex="-1" aria-label="codeblock"><i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i></button>
-		</div>
-		<div class="btn-group btn-group-xs pull-left" style="margin-left:-53px">
-			<a type="button" class="btn btn-default" tabindex="-1" aria-label="link" data-toggle="popover" data-original-title="" title=""><i class="glyphicon glyphicon-link" aria-hidden="true"></i></a>
-			<a type="button" class="btn btn-default" tabindex="-1" aria-label="components" data-toggle="popover" data-original-title="" title=""><i class="glyphicon glyphicon-leaf" aria-hidden="true"></i></a>
-		</div>
-		<div class="form-control" style="cursor:help;overflow:hidden;white-space:nowrap;color:#aaa;font-size:12px;font-family:Arial;width:100%;height:22px;padding:2px 5px;text-align:right;margin:0 -267px 0 0">
-			<strong>AFoX</strong>
+		<div>
+		<abbr class="initialism" title="attribute">AFoX</abbr>
 		</div>
 	</div>
 	<script>
@@ -98,41 +89,45 @@ foreach ($options as $key => $v) {
 		?>
 	</script>
 <?php } ?>
-	<?php
-		if($file_options && $file_options[0] > 0) {
-			$file_max = $file_options[0];
-			$file_id = $file_options[1];
-			$file_target = $file_options[2];
-			$fileList = empty($file_id) ? [] : getFileList($file_id, $file_target);
-
-			if(!empty($fileList) && count($fileList)>0) {
-				echo '<div class="form-group has-feedback" style="margin-bottom:5px"><div class="af-editor-uploaded uploader-group file-list form-control" style="margin-top:10px;height:auto;min-height:34px">';
-				foreach ($fileList as $val) {
-					echo '<i class="file-item" draggable="true" title="'.escapeHtml($val['mf_name']).' ('.shortSize( $val['mf_size']).')" data-type="'.$val['mf_type'].'" data-srl="'.$val['mf_srl'].'"></i>';
-				}
-				echo '</div><span class="glyphicon glyphicon-question-sign form-control-feedback" style="pointer-events:auto;cursor:pointer" tabindex="0"></span></div>';
-			}
-	?>
-		<div class="af-editor-uploader uploader-group" placeholder="<?php echo getLang('file')?>" style="margin-top:10px">
-			<div class="input-group">
-				<div class="file-caption form-control" tabindex="0"></div>
-				<div class="btn btn-primary btn-file" tabindex="0">
-					<i class="glyphicon glyphicon-folder-open"><?php echo getLang('browse')?>…</i>
-					<input name="upload_files[]" type="file" tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : '' ?>>
-				</div>
-			</div>
+<?php
+	if($file_options && $file_options[0] > 0) {
+		$file_max = $file_options[0];
+		$file_id = $file_options[1];
+		$file_target = $file_options[2];
+		$fileList = empty($file_id) ? [] : getFileList($file_id, $file_target);
+?>
+	<div class="mt-4 d-grid gap-2">
+		<div id="uploadedFiles" class="user-select-none input-group text-secondary border rounded p-2">
+<?php if(!empty($fileList) && count($fileList)>0) {
+	foreach ($fileList as $val) {
+		$es_name = escapeHtml($val['mf_name']);
+		echo sprintf(
+			substr($val['mf_type'], 0, 5) == 'image'
+			? '<img src="%s" class="%s" title="%s" alt="%s">'
+			: '<img src="%s" class="%s" title="%s" alt="%s" srcset="./module/editor/bi-binary.svg">',
+			_AF_URL_.'?file='.$val['mf_srl'],
+			escapeHtml($val['mf_type']),
+			$es_name.' ('.shortSize( $val['mf_size']). ')',
+			$es_name
+		);
+	}
+?>
 		</div>
-	<?php } ?>
+<?php } ?>
+		<div id="uploadFiles" class="user-select-none input-group text-secondary border rounded p-2">
+		<small class="ms-1">#### 본문 첨부는 아이콘을 잡고 끌어 옮기시면 됩니다.</small>
+		</div>
+		<input class="form-control" name="upload_files[]" type="file" tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : '' ?>>
+	</div>
+<?php } ?>
 </div>
 
 <script>
-	var AF_EDITOR_<?php echo strtoupper($name) ?>;
-	$.getScript(
-		"<?php echo _AF_URL_ ?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js') ?>",
-		function() {
-			var options = {<?php echo substr($ops, 0, -1) ?>}
-			AF_EDITOR_<?php echo strtoupper($name) ?> = $(".af_editor_<?php echo $name ?>").afEditor(options);
-		}
+	let AF_EDITOR_<?php echo strtoupper($name) ?>;
+	"<?php echo _AF_URL_ ?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js') ?>"
+	.loadScript().then(() => {
+			AF_EDITOR_<?php echo strtoupper($name) ?> =new afEditor("editor<?php echo ucfirst($name) ?>", {<?php echo substr($ops, 0, -1) ?>});
+		}, () => { console.log('fail to load script'); }
 	);
 </script>
 <?php
