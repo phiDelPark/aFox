@@ -29,7 +29,7 @@ if(!empty($_GET['file'])) {
 
 require_once __DIR__ . '/init/common.php';
 
-if(__MODULE__ && !empty($_DATA['act'])) {
+if(__MODULE__ && !empty($_POST['act'])) {
 	// 전체 로그인시엔 일부 함수만 실행가능
 	if(__FULL_LOGIN__ && __MODULE__ != 'member') {
 		exit();
@@ -37,16 +37,16 @@ if(__MODULE__ && !empty($_DATA['act'])) {
 
 	$callproc = 'proc'.ucwords(__MODULE__).'Default';
 	if(function_exists($callproc)) {
-		if(triggerCall('before_proc', $_DATA['act'], $_DATA)) {
-			$_result = call_user_func($callproc, $_DATA);
-			triggerCall('after_proc', $_DATA['act'], $_result);
+		if(triggerCall('before_proc', $_POST['act'], $_POST)) {
+			$_result = call_user_func($callproc, $_POST);
+			triggerCall('after_proc', $_POST['act'], $_result);
 		} else {
 			$_result = get_error();
 		}
 
 		$redirect_url = empty($_result['error'])?'success_return_url':'error_return_url';
-		if (!empty($_DATA[$redirect_url])) {
-			$_result['redirect_url'] = urldecode($_DATA[$redirect_url]);
+		if (!empty($_POST[$redirect_url])) {
+			$_result['redirect_url'] = urldecode($_POST[$redirect_url]);
 		}
 	} else {
 		$_result = set_error(getLang('error_request'),4303);

@@ -5,8 +5,8 @@ if (!empty($menus['error'])) messageBox($menus['message'],$menus['error'], false
 $placeholder = getLang('%s %s', ['category', 'title']);
 ?>
 
-<link rel="stylesheet" href="<?php echo _AF_URL_ ?>module/admin/sitemap/sitemap.css">
-<script src="<?php echo _AF_URL_ ?>module/admin/sitemap/sitemap.js"></script>
+<link rel="stylesheet" href="<?php echo _AF_URL_ ?>module/admin/sitemap/sitemap.min.css">
+<script src="<?php echo _AF_URL_ ?>module/admin/sitemap/sitemap.min.js"></script>
 
 <div id="siteMap">
 	<h5 class="pb-2 mb-4 border-bottom"><?php echo getLang('main_menu')?></h5>

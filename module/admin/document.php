@@ -1,10 +1,10 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 	$schs = [];
-	$_DATA['page'] = empty($_DATA['page'])?1:$_DATA['page'];
+	$_POST['page'] = empty($_POST['page'])?1:$_POST['page'];
 
-	if(!empty($_DATA['search'])) {
-		$search = $_DATA['search'];
+	if(!empty($_POST['search'])) {
+		$search = $_POST['search'];
 		$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tag'=>'wr_tags','date'=>'wr_regdate','cate'=>'wr_category'];
 		$ss = explode(':', $search);
 		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
@@ -15,13 +15,13 @@
 		}
 	}
 
-	$category = empty($_DATA['category'])?null:$_DATA['category'];
+	$category = empty($_POST['category'])?null:$_POST['category'];
 	$doc_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', [
 		'md_id'.(empty($category)?'{<>}':'')=>empty($category)?'_AFOXtRASH_':$category,
 		'(_OR_)' =>$schs
-	],'wr_regdate', (($_DATA['page']-1)*20).',20');
+	],'wr_regdate', (($_POST['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$doc_list = setDataListInfo($doc_list, $_DATA['page'], 20, DB::foundRows());
+	$doc_list = setDataListInfo($doc_list, $_POST['page'], 20, DB::foundRows());
 ?>
 
 <table class="table">
@@ -62,13 +62,13 @@
 </table>
 
 <div class="d-flex w-100 justify-content-between mt-4">
-	<form class="form-inline search-form" action="<?php echo getUrl('') ?>" method="get">
-		<input type="hidden" name="admin" value="<?php echo $_DATA['disp'] ?>">
+	<form action="<?php echo getUrl('') ?>" method="get">
+		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"><svg class="bi" aria-hidden="true"><use xlink:href="<?php echo _AF_URL_?>module/admin/img/icons.svg#search"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo empty($_DATA['search'])?'':$_DATA['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
+			<label class="input-group-text bg-transparent" for="search"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#search"/></svg></label>
+			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
-			<?php if(!empty($_DATA['search'])) {?><button class="btn btn-default btn-outline-control" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
+			<?php if(!empty($_POST['search'])) {?><button class="btn btn-default btn-outline-control" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 		</div>
 	</form>
 	<nav aria-label="Page navigation of the list">

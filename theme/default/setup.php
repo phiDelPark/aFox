@@ -7,7 +7,6 @@ if(!defined('__AFOX__')) exit();
 	<label for="id_filter">옵션</label>
 	<label class="checkbox" tabindex="0">
 		<input type="checkbox" name="use_loader" value="1" <?php echo !empty($_THEME['use_loader'])?'checked':''?>>
-		<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 		페이지 이동시 로딩 이미지 보여주기
 	</label>
 	<label for="id_filter">헤드라인</label>

@@ -8,13 +8,33 @@ function proc($data) {
 
 	global $_MEMBER;
 
+	if(empty($_MEMBER)) {
+		$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
+		if(empty($data['mb_nick']) || empty($data['mb_password'])) {
+			return set_error(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
+		}
+		$data['mb_srl'] = 0;
+		$data['mb_rank'] = 0;
+		$encrypt_password = createHash($data['mb_password']);
+	} else {
+		$data['mb_srl'] = $_MEMBER['mb_srl'];
+		$data['mb_rank'] = $_MEMBER['mb_rank'];
+		$data['mb_nick'] = $_MEMBER['mb_nick'];
+		$encrypt_password = null;
+	}
+
 	$sendsrl = 0;
 	$rp_root = 0;
 	$rp_depth = '';
 	$rp_parent = (int) abs(empty($data['rp_parent']) ? 0 : $data['rp_parent']);
+	$parent_secret = false;
+
 	$rp_srl = (int) (empty($rp_parent) ? abs(empty($data['rp_srl']) ? 0 : $data['rp_srl']) : $rp_parent);
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
-	$parent_secret = false;
+
+	$ret_rp_srl = 0;
+	$new_insert = !empty($rp_parent) || empty($rp_srl);
+
 	if(!empty($rp_srl)) {
 		$cmt = DB::get(_AF_COMMENT_TABLE_, 'wr_srl, rp_parent, rp_secret, rp_depth, mb_srl, mb_password', ['rp_srl'=>$rp_srl]);
 		if(empty($cmt['wr_srl'])) return set_error(getLang('error_founded'), 4201);
@@ -59,6 +79,23 @@ function proc($data) {
 	$doc = DB::get(_AF_DOCUMENT_TABLE_, 'wr_srl,md_id,mb_srl', ['wr_srl'=>$wr_srl]);
 	if(empty($doc['wr_srl'])) return set_error(getLang('error_founded'), 4201);
 
+	// 권한 체크
+	if ($new_insert) {
+		if(!isGrant('reply', $doc['md_id'])) {
+			return set_error(getLang('error_permitted'),4501);
+		}
+	}else{
+		if(empty($_MEMBER)) {
+			if(empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
+				return set_error(getLang('error_permitted'),4501);
+			}
+		} else if(!isManager($doc['md_id'])) {
+			if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
+				return set_error(getLang('error_permitted'),4501);
+			}
+		}
+	}
+
 	$module = getModule($doc['md_id']);
 	// 모듈이 없으면 에러
 	if(empty($module)) return set_error(getLang('error_founded'), 4201);
@@ -69,44 +106,7 @@ function proc($data) {
 	if(!empty($module['use_secret'])) $data['rp_secret'] = ((int)$module['use_secret'])-1;
 	if($parent_secret) $data['rp_secret'] = 1;
 
-	$data['mb_ipaddress'] = $_SERVER['REMOTE_ADDR'];
-
-	if(empty($_MEMBER)) {
-		$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
-		if(empty($data['mb_nick']) || empty($data['mb_password'])) {
-			return set_error(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
-		}
-		$data['mb_srl'] = 0;
-		$data['mb_rank'] = 0;
-		$encrypt_password = createHash($data['mb_password']);
-	} else {
-		$data['mb_srl'] = $_MEMBER['mb_srl'];
-		$data['mb_rank'] = $_MEMBER['mb_rank'];
-		$data['mb_nick'] = $_MEMBER['mb_nick'];
-		$encrypt_password = null;
-	}
-
 	$data['rp_content'] = xssClean($data['rp_content']);
-
-	$ret_rp_srl = 0;
-	$new_insert = !empty($rp_parent) || empty($rp_srl);
-
-	// 권한 체크
-	if ($new_insert) {
-		if(!isGrant('reply', $module['md_id'])) {
-			return set_error(getLang('error_permitted'),4501);
-		}
-	}else{
-		if(empty($_MEMBER)) {
-			if(empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
-				return set_error(getLang('error_permitted'),4501);
-			}
-		} else if(!isManager($module['md_id'])) {
-			if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
-				return set_error(getLang('error_permitted'),4501);
-			}
-		}
-	}
 
 	DB::transaction();
 
@@ -125,7 +125,7 @@ function proc($data) {
 					'mb_rank'=>$data['mb_rank'],
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
-					'mb_ipaddress'=>$data['mb_ipaddress'],
+					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
 					'^rp_regdate'=>'NOW()',
 					'^rp_update'=>'NOW()'
 				]

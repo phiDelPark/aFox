@@ -658,21 +658,19 @@ if(!defined('__AFOX__')) exit();
 	function displayModule(){
 		if(!__MODULE__) return;
 		global $_CFG;
-		global $_DATA;
+		global $_POST;
 		global $_MEMBER;
-		function __module_call($tpl_path, $tpl_file, $_result){
+		function __module_call($tpl_path, $tpl_file, $_DATA){
 			global $_CFG;
-			global $_DATA;
+			global $_POST;
 			global $_MEMBER;
-			$_{__MODULE__} = $_result;
-			unset($_result);
 			include $tpl_path . $tpl_file;
 		};
-		$trigger = $_DATA['disp'] ? $_DATA['disp'] : 'Default';
+		$trigger = $_POST['disp'] ? $_POST['disp'] : 'Default';
 		$callproc = 'disp'.ucwords(__MODULE__).'Default';
 		if(function_exists($callproc)){
-			if(triggerCall('before_disp', $trigger, $_DATA)){
-				$_result = call_user_func($callproc, $_DATA);
+			if(triggerCall('before_disp', $trigger, $_POST)){
+				$_result = call_user_func($callproc, $_POST);
 				triggerCall('after_disp', $trigger, $_result);
 			} else $_result = get_error();
 		} else {

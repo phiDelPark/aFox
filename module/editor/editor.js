@@ -4,8 +4,6 @@
  */
 
 function afEditor(ID, options) {
-	console.log(options);
-
 	this.html = options.html;
 	this.required = options.required;
 	this.readonly = options.readonly;
@@ -26,12 +24,12 @@ function afEditor(ID, options) {
 	const modeSwitch = (is_html) => {
 		this.isHtmlmode = textarea.classList.contains('d-none');
 		if (is_html && !this.isHtmlmode) {
-			iframe.style.height = textarea.clientHeight + "px";
+			iframe.style.height = textarea.offsetHeight + "px";
 			iframe.contentWindow.document.body.innerHTML = textarea.value;
 			textarea.classList.add('d-none');
 			iframe.classList.remove('d-none');
 		} else if (!is_html && this.isHtmlmode) {
-			textarea.style.height = iframe.clientHeight + "px";
+			textarea.style.height = iframe.offsetHeight + "px";
 			textarea.value = iframe.contentWindow.document.body.innerHTML;
 			iframe.classList.add('d-none');
 			textarea.classList.remove('d-none');
@@ -86,16 +84,95 @@ function afEditor(ID, options) {
 		}
 	}
 
-	const clickTypebar = (e) => {
-		const tid = e.target.getAttribute('data-target'),
-			elt = editor.querySelector('[name=' + tid + ']');
-		elt.value = e.target.getAttribute('data-value');
-		typebar.forEach(i => i.classList.remove('checked'));
-		e.target.classList.add('checked');
-		modeSwitch(e.target.innerText === 'HTML');
+	iframe.classList.add('form-control', 'resizable', 'p-0', 'd-none');
+	iframe.addEventListener('load', e => {
+		const s_head = `<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Cache-Control" content="no-cache">
+		<link rel="stylesheet" href="${request_uri}module/editor/editor.min.css">`;
+		iframe.style.resize = 'vertical';
+		iframe.contentWindow.document.head.innerHTML = s_head;
+		iframe.contentWindow.document.designMode = this.readonly ? 'off' : 'on';
+		iframe.contentWindow.document.body.innerHTML = textarea.value;
+		iframe.contentWindow.document.body.addEventListener('drop', ee => {
+			ee.preventDefault();
+			pasteHtml(ee.dataTransfer.getData('text') || '');
+		});
+	});
+
+	textarea.parentNode.insertBefore(iframe, textarea);
+	if(this.readonly) textarea.readOnly = true;
+
+	const clickRemoveFile = (e) => {
+		const srl = e.target.getAttribute('src').getQuery('file');
+		const el_del = editor.querySelector('[name="remove_files[]"][value="' + srl + '"]');
+		if (el_del) {
+			el_del.remove();
+			//e.target.style.filter = 'invert(0)';
+			//e.target.style.webkitFilter = 'invert(0)';
+		} else {
+			const input = document.createElement('input');
+			input.setAttribute('type', 'hidden');
+			input.setAttribute('name', 'remove_files[]');
+			input.setAttribute('value', srl);
+			e.target.parentNode.insertBefore(input, e.target);
+			//e.target.style.filter = 'invert(100%)';
+			//e.target.style.webkitFilter = 'invert(100%)';
+		}
 	}
 
+	const dragstartFile = (e) => {
+		const srl = e.target.getAttribute('src').getQuery('file');
+		if (editor.querySelector('[name="remove_files[]"][value="' + srl + '"]')) {
+			e.preventDefault();
+			return false;
+		}
+		if(/<[img][^>]+[class]=[\\"\']+image\//g.test(e.target.outerHTML)) {
+			e.dataTransfer.setData('text', e.target.outerHTML);
+		} else {
+			const html = e.target.outerHTML.replace(
+				/^(<[img]+\ssrc)([^>]+title=[\\"\']+)([^>\\"\']+)([^>]+)srcset=[\\"\']+[^>\\"\']+([^>]+>)$/g,
+				'<a href' + "$2$3$4" + 'target="_file' + "$5$3" + '</a>'
+			);
+			e.dataTransfer.setData('text', html);
+		}
+	}
+
+	updedFiles.forEach(el => {
+		el.addEventListener('click', clickRemoveFile);
+		el.addEventListener('dragstart', dragstartFile);
+	});
+
+	const changeUploadFile = (e) => {
+		window.trigger('beforeunload'); // trigger is in afox.common.js
+		while (updFiles.firstChild) updFiles.removeChild(updFiles.lastChild);
+		// todo 후에 files 를 새로 고침 안하고 계속 넣어 보내기 하자
+		const elURL = (window.URL || window.webkitURL);
+		Object.keys(e.target.files).map(key => {
+			let span = document.createElement('span'),
+				name = e.target.files[key].name.escapeHtml(),
+				size = e.target.files[key].size.shortSize(),
+				type = e.target.files[key].type.escapeHtml(),
+				url = elURL.createObjectURL(e.target.files[key]);
+			window.uploadFiles.push(url);
+			const index = window.uploadFiles.length - 1;
+			if(type.slice(0, 5) != 'image') type = type + '" srcset="./module/editor/bi-binary.svg'
+			let html = `="${url}" title="${name} (${size})" alt="${name}" target="${index}"`;
+			span.innerHTML = '<image class="' + type + '" src' + html + '>'
+				+ (e.target.files.length === 1 ? '<span>' + e.target.value + '</span>' : '');
+			html = type.slice(0, 5) == 'image'
+				? '<image src' + html + '>' : `<a href${html}>${name} (${size})</a>`;
+			span.addEventListener('dragstart', ee => {
+				ee.dataTransfer.setData('text', html);
+			});
+			updFiles.append(span);
+		});
+	}
+
+	files.forEach(el => el.addEventListener('change', changeUploadFile));
+
 	const clickToolbar = (e) => {
+		e.preventDefault();
+
 		const htmlToCmd = {
 				'bold':'**%s**',
 				'italic':'*%s*',
@@ -134,66 +211,30 @@ function afEditor(ID, options) {
 		this.isHtmlmode ? iframe.contentWindow.document.body.focus() : textarea.focus();
 	}
 
-	iframe.classList.add('form-control', 'shadow-ring', 'resizable', 'p-0', 'd-none');
-	iframe.addEventListener('load', e => {
-		const s_head = `<meta http-equiv="Pragma" content="no-cache">
-		<meta http-equiv="Cache-Control" content="no-cache">
-		<link rel="stylesheet" href="${request_uri}module/editor/editor.min.css">`;
-		iframe.style.resize = 'vertical';
-		iframe.contentWindow.document.head.innerHTML = s_head;
-		iframe.contentWindow.document.designMode = this.readonly ? 'off' : 'on';
-		iframe.contentWindow.document.body.innerHTML = textarea.value;
-		iframe.contentWindow.document.body.addEventListener('drop', ee => {
-			ee.preventDefault();
-			pasteHtml(ee.dataTransfer.getData('text') || '');
-		});
-	});
+	const clickTypebar = (e) => {
+		e.preventDefault();
 
-	textarea.parentNode.insertBefore(iframe, textarea);
-	if(this.readonly) textarea.readOnly = true;
+		const tid = e.target.getAttribute('data-target'),
+			elt = editor.querySelector('[name=' + tid + ']'),
+			val = e.target.getAttribute('data-value');
 
-	updedFiles.forEach(el => {
-		el.addEventListener('dragstart', e => {
-			if(/<[img][^>]+[class]=[\\"\']+image\//g.test(el.outerHTML)) {
-				e.dataTransfer.setData('text', el.outerHTML);
-			} else {
-				const html = el.outerHTML.replace(
-					/^(<[img]+\ssrc)([^>]+title=[\\"\']+)([^>\\"\']+)([^>]+)srcset=[\\"\']+[^>\\"\']+([^>]+>)$/g,
-					'<a href' + "$2$3$4" + 'target="_blank' + "$5$3" + '</a>'
-				);
-				console.log(html);
-				e.dataTransfer.setData('text', html);
-			}
-		});
-	});
-
-	files.forEach(el => {
-		el.addEventListener('change', (e) => {
-			window.trigger('beforeunload'); // trigger is in afox.common.js
-			while (updFiles.firstChild) updFiles.removeChild(updFiles.lastChild);
-			// todo 후에 files 를 새로 고침 안하고 계속 넣어 보내기 하자
-			const elURL = (window.URL || window.webkitURL);
-			Object.keys(e.target.files).map(key => {
-				let span = document.createElement('span'),
-					name = e.target.files[key].name.escapeHtml(),
-					size = e.target.files[key].size.shortSize(),
-					type = e.target.files[key].type.escapeHtml(),
-					url = elURL.createObjectURL(e.target.files[key]);
-				window.uploadFiles.push(url);
-				const index = window.uploadFiles.length - 1;
-				if(type.slice(0, 5) != 'image') type = type + '" srcset="./module/editor/bi-binary.svg'
-				let html = `="${url}" title="${name} (${size})" alt="${index}.${name}"`;
-				span.innerHTML = '<image class="' + type + '" src' + html + '>'
-					+ (e.target.files.length === 1 ? '<span>' + el.value + '</span>' : '');
-				html = type.slice(0, 5) == 'image'
-					? '<image src' + html + '>' : `<a href${html}>${name} (${size})</a>`;
-				span.addEventListener('dragstart', ee => {
-					ee.dataTransfer.setData('text', html);
-				});
-				updFiles.append(span);
+		if(val == 'true'){
+			elt.value = elt.value == val ? 'false' : 'true';
+			if(elt.value == 'true') e.target.classList.add('checked');
+			else  e.target.classList.remove('checked');
+		} else{
+			typebar.forEach(i =>{
+				if(i.getAttribute('data-value') != 'true')
+					i.classList.remove('checked');
 			});
-		});
-	});
+			elt.value = val;
+			e.target.classList.add('checked');
+
+			modeSwitch(e.target.innerText === 'HTML');
+		}
+
+		this.isHtmlmode ? iframe.contentWindow.document.body.focus() : textarea.focus();
+	}
 
 	toolbar.forEach(el => el.addEventListener('click', clickToolbar));
 	typebar.forEach(el => el.addEventListener('click', clickTypebar));
@@ -212,7 +253,7 @@ function afEditor(ID, options) {
 			if (this.required && !textarea.value) {
 				this.isHtmlmode
 					? iframe.contentWindow.document.body.focus() : textarea.focus();
-				throw new Error('Please enter the content.');
+				throw new Error(this.required);
 			}
 		} catch (error) {
 			e.stopPropagation();
@@ -228,7 +269,7 @@ function afEditor(ID, options) {
 }
 
 window.uploadFiles = [];
-window.onbeforeunload = e => {
+window.addEventListener('beforeunload', e => {
 	let url; // 파일 사용 후 메모리 제거
 	const elURL = (window.URL || window.webkitURL);
 	while (window.uploadFiles.length > 0) {
@@ -236,4 +277,4 @@ window.onbeforeunload = e => {
 		elURL.revokeObjectURL(url);
 		console.error(url);
 	}
-}
+});

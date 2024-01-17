@@ -7,11 +7,10 @@ function proc($data) {
 
 	global $_MEMBER;
 	if(empty($doc['md_id'])) $doc['md_id'] = __MID__;
-	if(empty($doc['wr_secret'])) $doc['wr_secret'] = null;
+	if(empty($doc['wr_srl'])) $doc['wr_srl'] = 0;
 	if(empty($doc['wr_extra'])) $doc['wr_extra'] = null;
 
 	$is_manager = isManager($doc['md_id']);
-	$is_secret = $doc['wr_secret'] == '1';
 	$PERMIT_KEY = md5($doc['md_id'] .'_'. $doc['wr_srl'] . '_' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 
 	// 권한 체크

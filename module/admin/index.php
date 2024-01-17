@@ -12,10 +12,10 @@ if (get_session('AF_LOGIN_KEY') !== $admin_key) {
 	// TODO 관리자에게 쪽지 보낸다.
 	goUrl(_AF_URL_, getLang('error_permitted'));
 }
-if($_DATA['disp'] == 'member'){
+if($_POST['disp'] == 'member'){
 	@include_once _AF_MODULES_PATH_ . 'member/lang/' . _AF_LANG_ . '.php';
-} else if(!empty($_DATA['md_id'])){
-	@include_once _AF_MODULES_PATH_ . $_DATA['md_id'] . '/lang/' . _AF_LANG_ . '.php';
+} else if(!empty($_POST['md_id'])){
+	@include_once _AF_MODULES_PATH_ . $_POST['md_id'] . '/lang/' . _AF_LANG_ . '.php';
 }else{
 	@include_once _AF_MODULES_PATH_ . 'admin/lang/' . _AF_LANG_ . '.php';
 }

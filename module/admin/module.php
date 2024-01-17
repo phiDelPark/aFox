@@ -34,7 +34,7 @@ if(false && $is_adminn) {
 		echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
 		echo '<td class="d-none d-md-table-cell">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
 		echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
-		echo '<td><a class="btn btn-primary btn-sm mw-10 disabled" href="#">'.getLang('none').'</a></td></tr>';
+		echo '<td><a class="btn btn-primary btn-sm disabled" href="#">'.getLang('none').'</a></td></tr>';
 	}
 }
 if(is_dir($module_dir)) {
@@ -57,9 +57,9 @@ if(is_dir($module_dir)) {
 			echo '<td class="d-none d-md-table-cell">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
 			echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
 			if($is_setup) {
-			echo '<td><a class="btn btn-primary btn-sm mw-10" href="'.getUrl('md_id', $name, 'act', 'getModuleForm').'">'.getLang('setup').'</a></td></tr>';
+			echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('md_id', $name).'">'.getLang('setup').'</a></td></tr>';
 			} else {
-			echo '<td><a class="btn btn-primary btn-sm mw-10 disabled" href="#">'.getLang('none').'</a></td></tr>';
+			echo '<td><a class="btn btn-primary btn-sm disabled" href="#">'.getLang('none').'</a></td></tr>';
 			}
 		}
 	}
@@ -86,24 +86,7 @@ if(is_dir($module_dir)) {
 ?>
 </tbody>
 </table>
-<div id="admin_module_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.getModuleForm">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="md_id" value="" />
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title"><?php echo getLang('module')?></h4>
-	  </div>
-	  <div class="modal-body">
-	  </div>
-	  <div class="modal-footer">
-		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
-	  </div>
-	</form>
-  </div>
-</div>
+
 <?php
 /* End of file module.ls.php */
 /* Location: ./module/admin/module.ls.php */

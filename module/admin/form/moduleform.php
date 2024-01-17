@@ -1,0 +1,47 @@
+<?php if(!defined('__AFOX__')) exit();
+$_MODULE_INFO = [];
+@include_once _AF_MODULES_PATH_ . $_POST['md_id'] . '/lang/' . _AF_LANG_ . '.php';
+@require_once _AF_MODULES_PATH_ . $_POST['md_id'] . '/info.php';
+$_MODULE_INFO['author'] = empty($_MODULE_INFO['link'])?escapeHtml($_MODULE_INFO['author']):('<a href="'.escapeHtml($_MODULE_INFO['link']).'" target="_blank">'.escapeHtml($_MODULE_INFO['author']).'</a>');
+?>
+
+<div>
+<h4><?php echo escapeHtml($_MODULE_INFO['title']) ?></h4>
+<div class="row">
+	<label class="col-md-2"><?php echo getLang('version') ?></label>
+	<span class="col-md-auto"><?php echo escapeHtml($_MODULE_INFO['version']) ?></span>
+</div>
+<div class="row">
+	<label class="col-md-2"><?php echo getLang('date') ?></label>
+	<span class="col-md-auto"><?php echo escapeHtml($_MODULE_INFO['date']) ?></span>
+</div>
+<div class="row">
+	<label class="col-md-2"><?php echo getLang('author') ?></label>
+	<span class="col-md-auto"><?php echo $_MODULE_INFO['author'] . ' ('.escapeHtml($_MODULE_INFO['email']) . ')' ?></span>
+</div>
+<p class="form-text"><?php echo nl2br(escapeHtml($_MODULE_INFO['description'])) ?></p>
+</div>
+
+<?php
+$_MODULE = DB::get(_AF_MODULE_TABLE_, ['md_id'=>$_POST['md_id']]);
+if(empty($_MODULE['md_id'])){
+	$_MODULE = DB::get(_AF_MODULE_TABLE_, ['md_key'=>$_POST['md_id']]);
+}
+?>
+<form method="post" autocomplete="off">
+<input type="hidden" name="error_return_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="module" value="<?php echo $_POST['md_id']?>" />
+<input type="hidden" name="md_id" value="<?php echo $_POST['md_id']?>" />
+<input type="hidden" name="act" value="updateSetup" />
+<hr>
+<?php
+require_once _AF_MODULES_PATH_ . $_POST['md_id'] . '/setup.php';
+?>
+<hr>
+<button type="submit" class="btn btn-success btn-lg w-100"><?php echo getLang('save')?></button>
+</form>
+
+<?php
+/* End of file moduleform.php */
+/* Location: ./module/admin/form/moduleform.php */

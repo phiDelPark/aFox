@@ -69,13 +69,13 @@ button {
   position: absolute;
   padding: 2px;
   bottom: 3px;
-  left: 118px;
+  left: 108px;
   width: calc(100% - 124px);
   color: var(--bs-gray);
   background-color: var(--bs-white);
 }
 .form-file-group [type=file]::file-selector-button {
-  width: 110px !important;
+  width: 100px !important;
   color: transparent;
 }
 .form-file-group [type=file]::before {
@@ -106,6 +106,12 @@ button {
 .form-file-group input:checked ~ label {
   display: none;
   /* text-decoration-line: line-through; */
+}
+.advanced_setup{
+  display: none;
+}
+#advanced_setup:checked ~ .advanced_setup{
+  display: block;
 }
 @media (min-width: 992px) {
   body {

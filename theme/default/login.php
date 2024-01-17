@@ -1,7 +1,7 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	$signUp =  __MODULE__ == 'member' && $_DATA['disp'] == 'signUp';
+	$signUp =  __MODULE__ == 'member' && $_POST['disp'] == 'signUp';
 	$try_count = get_session('af_login_try_' . $_SERVER['REMOTE_ADDR']);
 	if($_CFG['use_captcha'] == '1' || $try_count > 2) {
 		include(_AF_LIBS_PATH_.'simplecaptcha/simple-php-captcha.php');
@@ -46,7 +46,6 @@
 				<?php } ?>
 				<label class="checkbox" tabindex="0">
 					<input type="checkbox" name="auto_login" value="1">
-					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
 					<?php echo getLang('auto_login')?>
 				</label>
 				<?php if($error = get_error()) { ?><p style="color:red"><?php echo $error['message']?></p><?php } ?>

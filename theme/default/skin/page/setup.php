@@ -8,17 +8,17 @@
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl('disp', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="updatePage" />
-	<input type="hidden" name="md_id" value="<?php echo $_DATA['id']?>" />
+	<input type="hidden" name="md_id" value="<?php echo $_POST['id']?>" />
 
 	<div class="mb-4">
 		<?php displayEditor(
 				'pg_content',
-				$_{'page'}['pg_content'],
+				$_DATA['pg_content'],
 				[
-					'file'=>[99999, $_{'page'}['md_id'], 1],
-					'html'=>$_{'page'}['pg_type'] === '2',
+					'file'=>[99999, $_DATA['md_id'], 1],
+					'html'=>$_DATA['pg_type'] === '2',
 					'toolbar'=>true,
-					'typebar'=>array(getLang('content'), ['pg_type'=>[$_{'page'}['pg_type'], ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']]])
+					'typebar'=>array(getLang('content'), ['pg_type'=>[$_DATA['pg_type'], ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']]])
 				]
 			);
 		?>
@@ -26,7 +26,7 @@
 
 	<hr class="mb-4">
 	<div class="d-grid">
-		<button type="submit" class="btn btn-success btn-lg">저장</button>
+		<button type="submit" class="btn btn-success btn-lg"><?php echo getLang('save')?></button>
 	</div>
 </form>
 </section>

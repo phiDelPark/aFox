@@ -145,7 +145,7 @@ input[name=favicon]::before {
 
 	<hr class="mb-5">
 	<div class="text-end position-fixed bottom-0 end-0 p-3">
-		<button type="submit" class="btn btn-success btn-lg" style="min-width:220px"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
+		<button type="submit" class="btn btn-success btn-lg" style="min-width:220px"><?php echo getLang('save')?></button>
 	</div>
 </form>
 

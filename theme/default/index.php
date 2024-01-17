@@ -43,60 +43,60 @@
           aria-expanded="false"
           data-bs-toggle="dropdown"
           aria-label="Toggle theme (auto)">
-    <svg class="bi my-1 theme-icon-active"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#circle-half"></use></svg>
+    <svg class="bi my-1 theme-icon-active"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#circle-half"></use></svg>
     <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
   </button>
   <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
     <li>
       <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-        <svg class="bi me-2 opacity-50 theme-icon"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#sun-fill"></use></svg>
+        <svg class="bi me-2 opacity-50 theme-icon"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#sun-fill"></use></svg>
         Light
-        <svg class="bi ms-auto d-none"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#check2"></use></svg>
+        <svg class="bi ms-auto d-none"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#check2"></use></svg>
       </button>
     </li>
     <li>
       <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-        <svg class="bi me-2 opacity-50 theme-icon"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#moon-stars-fill"></use></svg>
+        <svg class="bi me-2 opacity-50 theme-icon"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#moon-stars-fill"></use></svg>
         Dark
-        <svg class="bi ms-auto d-none"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#check2"></use></svg>
+        <svg class="bi ms-auto d-none"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#check2"></use></svg>
       </button>
     </li>
     <li>
       <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
-        <svg class="bi me-2 opacity-50 theme-icon"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#circle-half"></use></svg>
+        <svg class="bi me-2 opacity-50 theme-icon"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#circle-half"></use></svg>
         Auto
-        <svg class="bi ms-auto d-none"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#check2"></use></svg>
+        <svg class="bi ms-auto d-none"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#check2"></use></svg>
       </button>
     </li>
   </ul>
 </div>
 
 <div class="container">
-  <header class="border-bottom lh-1 py-2">
-    <div class="row flex-nowrap justify-content-between align-items-center">
+  <header class="border-bottom lh-1 p-1">
+    <div class="row flex-nowrap justify-content-between align-items-end">
       <div class="col-4">
         <a class="link-secondary" href="#">Subscribe</a>
       </div>
       <div class="col-4 text-center">
-        <h1 class="text-body-emphasis mb-0">Afox</h1>
+        <h1 class="header-logo text-body-emphasis mb-0"><?php echo $_CFG['title']?></h1>
       </div>
-      <div class="col-4 d-flex justify-content-end align-items-center">
-        <a class="link-secondary me-1 mt-1" href="#" aria-label="Search"><svg class="bi" aria-hidden="true" style="width:1.4em;height:1.4em"><title>Search</title><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#search"/></svg></a>
+      <div class="col-4 d-flex justify-content-end align-items-end">
+        <a class="link-secondary me-1" href="#" aria-label="Search"><svg class="bi" aria-hidden="true" style="width:1.4em;height:1.4em"><title>Search</title><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#search"/></svg></a>
 <?php if(empty($_MEMBER)){ ?>
-        <a class="btn p-0" style="line-height:normal" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi bi-lg" aria-hidden="true"><title>Sign In</title><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#person-fill"/></svg></a>
+        <a class="btn p-0" style="line-height:normal" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi bi-lg" aria-hidden="true"><title>Sign In</title><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#person-fill"/></svg></a>
 <?php }else{ ?>
-        <a class="btn p-0" style="line-height:normal" href="#" aria-label="Member" data-bs-toggle="dropdown" aria-expanded="false"><svg class="bi bi-lg" aria-hidden="true"><title><?php echo $_MEMBER['mb_nick']?></title><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#person-bounding-box"/></svg></a>
+        <a class="btn p-0" style="line-height:normal" href="#" aria-label="Member" data-bs-toggle="dropdown" aria-expanded="false"><svg class="bi bi-lg" aria-hidden="true"><title><?php echo $_MEMBER['mb_nick']?></title><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#person-bounding-box"/></svg></a>
         <ul class="dropdown-menu">
 					<?php if(isManager(__MID__)) { ?>
-					<li><a class="dropdown-item" href="<?php echo _AF_URL_?>?admin" target="_blank"><svg class="bi" aria-hidden="true"><title>Site setup</title><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
+					<li><a class="dropdown-item" href="<?php echo _AF_URL_?>?admin" target="_blank"><svg class="bi" aria-hidden="true"><title>Site setup</title><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } else { ?>
-					<li><a class="dropdown-item" href="<?php echo getUrl('','member','signUp') ?>"><svg class="bi" aria-hidden="true"><title>Member info</title><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','signUp') ?>"><svg class="bi" aria-hidden="true"><title>Member info</title><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } ?>
 					<li><hr class="dropdown-divider"></li>
-					<li><a class="dropdown-item" href="<?php echo getUrl('','member','inbox') ?>"><svg class="bi" aria-hidden="true"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#envelope"/></svg> <?php echo getLang('Inbox')?></a></li>
-					<li><a class="dropdown-item" href="<?php echo getUrl('','member','trash') ?>"><svg class="bi" aria-hidden="true"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#trash"/></svg> <?php echo getLang('Recycle_bin')?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','inbox') ?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#envelope"/></svg> <?php echo getLang('Inbox')?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','trash') ?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#trash"/></svg> <?php echo getLang('Recycle_bin')?></a></li>
 					<li><hr class="dropdown-divider"></li>
-					<li><a class="dropdown-item" href="<?php echo getUrl('', 'module', 'member', 'act', 'signOut')?>"><svg class="bi" aria-hidden="true"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#power"/></svg> <?php echo getLang('Logout')?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('', 'module', 'member', 'act', 'signOut')?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#power"/></svg> <?php echo getLang('Logout')?></a></li>
 				</ul>
 <?php } ?>
       </div>
@@ -105,7 +105,7 @@
 
   <nav class="navbar navbar-expand-md py-0 mb-4 border-bottom">
     <div class="container-fluid">
-			<a class="navbar-brand" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi"><use xlink:href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#house-door-fill"/></svg></a>
+			<a class="navbar-brand" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" style="height:1.2em"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#house-door-fill"/></svg></a>
       <button class="navbar-toggler py-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -123,7 +123,7 @@
 
   <div id="carouselExampleCaptions" class="carousel slide mb-5">
 
-<?php if(!empty($_DATA['id']) && $_DATA['id'] == 'welcome'){ ?>
+<?php if(!empty($_POST['id']) && $_POST['id'] == 'welcome'){ ?>
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
       <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -165,7 +165,7 @@
 
     <div class="carousel-inner rounded">
       <div class="carousel-item active">
-        <img src="<?php echo _AF_THEME_URL_ ?>img/header_<?php echo !empty($_DATA['module'])&&$_DATA['module']=='board'?'board':'page' ?>.jpg" class="d-block w-100" alt="...">
+        <img src="<?php echo _AF_THEME_URL_ ?>img/header_<?php echo !empty($_POST['module'])&&$_POST['module']=='board'?'board':'page' ?>.jpg" class="d-block w-100" alt="...">
         <div class="carousel-caption d-none d-md-block">
           <h5 class="fw-bold"><?php echo $_CFG['md_title']?></h5>
           <p><?php echo $_CFG['md_description']?></p>
@@ -181,7 +181,7 @@
 <main class="container">
 
   <div class="row g-5 mb-5">
-    <div<?php echo $is_submenu ? ' class="col-md-10"' : ''?>>
+    <div<?php echo $is_submenu ? ' class="col-md-9"' : ''?>>
       <article aria-label="Site Contents">
 <?php
   if($error = get_error()) { messageBox($error['message'], $error['error']); }
@@ -194,23 +194,34 @@
 	if($is_submenu){
 		if(!$submenuactivetitle) $submenuactivetitle=$mainmenu['_ACTIVE_']['mu_title'];
 ?>
-
-    <div class="col-md-2">
+    <div class="col-md-3">
       <div class="position-sticky" style="top: 2rem;">
         <div>
-          <h3 class="pb-3 mb-2 fst-italic border-bottom"><?php echo $mainmenu['_ACTIVE_']['mu_title']?></h3>
+          <h3 class="pb-2 fst-italic"><?php echo $mainmenu['_ACTIVE_']['mu_title']?></h3>
           <ol class="list-unstyled">
-<?php
-		foreach ($submenu['_ACTIVE_'] as $key => $val) {
-			echo '<li class="p-2"><a href="'. escapeHtml($val['mu_link']) .'" class="icon-link gap-1 icon-link-hover d-block'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'><svg class="bi"><use xlink:href="'._AF_THEME_URL_.'bi-icons.svg#dot"/></svg> '. escapeHtml($val['mu_title']) .'</a></li>';
-		}
+<?php foreach ($submenu['_ACTIVE_'] as $key => $val) {
+          echo '<li><a href="'. escapeHtml($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
 ?>
+              <svg class="bd-placeholder-img" width="100%" height="41" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="gray"></rect></svg>
+              <div class="col-lg-8">
+                <h6 class="mb-0"><?php echo escapeHtml($val['mu_title'])?></h6>
+                <small class="text-body-secondary"><?php echo escapeHtml($val['mu_description'])?></small>
+              </div>
+            </a></li>
+<?php } ?>
+          </ol>
+        </div>
+        <div class="p-4">
+          <h4 class="fst-italic"><?php echo _AF_THEME_URL_ ? 'QuickLink' : 'Archives'?></h4>
+          <ol class="list-unstyled mb-0">
+            <li><a class="icon-link gap-1 icon-link-hover d-block" href="#"><svg class="bi me-1"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#hash"/></svg>March 2021</a></li>
+            <li><a class="icon-link gap-1 icon-link-hover d-block" href="#"><svg class="bi me-1"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#hash"/></svg>February 2021</a></li>
+            <li><a class="icon-link gap-1 icon-link-hover d-block" href="#"><svg class="bi me-1"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#hash"/></svg>January 2021</a></li>
           </ol>
         </div>
       </div>
     </div>
   </div>
-
 <?php } ?>
 
 </main>

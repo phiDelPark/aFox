@@ -510,7 +510,7 @@ $_err_keys = 'insert_config';
 $row = DB::get(_AF_CONFIG_TABLE_, 'theme', []);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 if (empty($row['theme'])) {
-	$sql = 'INSERT INTO '._AF_CONFIG_TABLE_.' (`lang`,`theme`, `start`, `title`, `use_signup`) VALUES ("ko", "default", "welcome", "에이폭스", "1")';
+	$sql = 'INSERT INTO '._AF_CONFIG_TABLE_.' (`lang`,`theme`, `start`, `title`, `use_signup`) VALUES ("ko", "default", "welcome", "AfoX", "1")';
 	DB::query($sql);
 }
 
@@ -554,9 +554,8 @@ $file = $datadir.'config/base_cdn_list.php';
 if(!file_exists($file)) {
 	$f = @fopen($file, 'w');
 	fwrite($f, "<?php if(!defined('__AFOX__')) exit();?>\n");
-	fwrite($f, '<script src="//ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.1.min.js"></script>'."\n");
-	fwrite($f, '<link href="//ajax.aspnetcdn.com/ajax/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">'."\n");
-	fwrite($f, '<script src="//ajax.aspnetcdn.com/ajax/bootstrap/3.4.1/bootstrap.min.js"></script>'."\n");
+	fwrite($f, '<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">'."\n");
+	fwrite($f, '<script src="//cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>'."\n");
 	fclose($f);
 	chmod($file, 0644);
 }

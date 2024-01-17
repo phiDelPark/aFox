@@ -1,13 +1,13 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 	$PAGE = [];
-	if($is_new = (empty($_DATA['md_id']) || $_DATA['md_id'] === '.')){
+	if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 		$r = DB::query('SHOW FULL COLUMNS FROM '._AF_PAGE_TABLE_, [], true);
 		foreach($r as $v) $PAGE[$v['Field']] = $v['Default'];
 		$r = DB::query('SHOW FULL COLUMNS FROM '._AF_MODULE_TABLE_, [], true);
 		foreach($r as $v) $PAGE[$v['Field']] = $v['Default'];
 	} else{
-		$PAGE = DB::get(_AF_PAGE_TABLE_, '*', ['md_id'=>$_DATA['md_id']]);
+		$PAGE = DB::get(_AF_PAGE_TABLE_, '*', ['md_id'=>$_POST['md_id']]);
 		if(empty($PAGE['md_id'])) {
 			messageBox(getLang('error_founded'), 4201);
 			return;

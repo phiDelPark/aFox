@@ -2,43 +2,31 @@
  * aFox (https://github.com/phiDelPark/aFox)
  * Copyright 2016 afox, Inc.
  */
+if (typeof bootstrap === 'undefined') {
+	if (!document.getElementById('defBootstrapJS'))
+		parent.location.replace(request_uri + '?cdnerr=bootstrap');
+	throw new Error('aFox\'s JavaScript requires Bootstrap 5');
+}
 
 const $_LANG = {};
 
-String.prototype.loadScript = function(afterEl, async = true, defer = true) {
-	let source = this;
-	return new Promise((resolve, reject) => {
-	  let script = document.createElement('script');
-	  const prior = afterEl || document.getElementsByTagName('script')[0];
-
-	  script.async = async;
-	  script.defer = defer;
-
-	  function onloadHander(_, isAbort) {
-		if (isAbort || !script.readyState || /loaded|complete/.test(script.readyState)) {
-		  script.onload = null;
-		  script.onreadystatechange = null;
-		  script = undefined;
-		  if (isAbort) { reject(); } else { resolve(); }
-		}
-	  }
-
-	  script.onload = onloadHander;
-	  script.onreadystatechange = onloadHander;
-	  script.src = source;
-	  prior.parentNode.insertBefore(script, prior.nextSibling);
-	});
-}
-
-Object.prototype.trigger = function(type, bubbles = true, cancelable = false) {
-	const event = document.createEvent('HTMLEvents');
-	event.initEvent(type, bubbles, cancelable);
-	event.eventName = type;
-	this.dispatchEvent(event);
+Number.prototype.shortSize = function() {
+	const t = ['B', 'K', 'M', 'G', 'T'];
+	let	s = this, i = 0;
+	for (let n = 4; i < n; i++) {
+		if (s <= 1024) break;
+		s = s / 1024;
+	}
+	return s.toFixed(1) + t[i];
 };
 
 String.prototype.trim = function() {
 	return this.replace(/^\s+|\s+$/g, "");
+};
+
+String.prototype.toUcFirst = function() {
+	let s = this.toLowerCase();
+	return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
 String.prototype.sprintf = function() {
@@ -56,11 +44,6 @@ String.prototype.sprintf = function() {
 		});
 	}
 	return s;
-};
-
-String.prototype.toUcFirst = function() {
-	let s = this.toLowerCase();
-	return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
 String.prototype.nl2br = function(breakTag) {
@@ -142,24 +125,6 @@ String.prototype.setQuery = function() {
 	return z + (r.length > 0 ? '?' + r.join('&') : '');
 };
 
-Number.prototype.shortSize = function() {
-	const t = ['B', 'K', 'M', 'G', 'T'];
-	let	s = this,
-		i = 0;
-	for (let n = 4; i < n; i++) {
-		if (s <= 1024) break;
-		s = s / 1024;
-	}
-	return s.toFixed(1) + t[i];
-};
-
-Number.prototype.withCommas = function() {
-	let n = String(this);
-	const minus = n.indexOf('-') === 0;
-	n = n.replace(/[^0-9]/g, '').split("").reverse().join("").replace(/(.{3})/g, "$1,").split("").reverse().join("");
-	return (minus ? '-' : '') + ((n.substring(0, 1) == ",") ? n.substring(1, n.length) : n);
-};
-
 HTMLFormElement.prototype.serializeArray = function() {
 	let arr = [];
 	Array.prototype.slice.call(this.elements).forEach(function($e) {
@@ -218,8 +183,45 @@ HTMLFormElement.prototype.dataImport = function(data) {
 	}
 };
 
-window.pop_win = function(url, w, h, id) {
-	var popwin = window.open(url, (id || 'af_popup'), 'width=' + (w || '700') + ',height=' + (h || '500') + ',top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no');
+Object.prototype.trigger = function(type, bubbles = true, cancelable = false) {
+	this.dispatchEvent(new Event(type, {bubbles: bubbles, cancelable: cancelable}));
+};
+
+window.exec_ajax = function(self, param, callback, responses) {
+	console.log(self);
+	console.log(param);
+};
+
+window.load_script = function(source, after, async, defer) {
+	return new Promise((resolve, reject) => {
+	  let script = document.createElement('script');
+	  const prior = after || document.getElementsByTagName('script')[0];
+
+	  script.async = async || true;
+	  script.defer = defer || true;
+
+	  function onloadHander(_, isAbort) {
+		if (isAbort || !script.readyState || /loaded|complete/.test(script.readyState)) {
+		  script.onload = null;
+		  script.onreadystatechange = null;
+		  script = undefined;
+		  if (isAbort) { reject(); } else { resolve(); }
+		}
+	  }
+
+	  script.onload = onloadHander;
+	  script.onreadystatechange = onloadHander;
+	  script.src = source;
+	  prior.parentNode.insertBefore(script, prior.nextSibling);
+	});
+}
+
+window.pop_win = function(url, width, height, id) {
+	const popwin = window.open(
+		url, (id || 'afoxPopup'),
+		'width=' + (width || '700') + ',height=' + (height || '500') +
+		',top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no'
+	);
 	popwin.focus();
 	return popwin;
 };

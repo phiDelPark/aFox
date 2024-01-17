@@ -1,11 +1,11 @@
 <?php
 if(!defined('__AFOX__')) exit();
 $BOARD = [];
-if($is_new = (empty($_DATA['md_id']) || $_DATA['md_id'] === '.')){
+if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 	$r = DB::query('SHOW FULL COLUMNS FROM '._AF_MODULE_TABLE_, [], true);
 	foreach($r as $v) $BOARD[$v['Field']] = $v['Default'];
 } else{
-	$BOARD = DB::get(_AF_MODULE_TABLE_, '*', ['md_id'=>$_DATA['md_id']]);
+	$BOARD = DB::get(_AF_MODULE_TABLE_, '*', ['md_id'=>$_POST['md_id']]);
 	if(empty($BOARD['md_id'])) {
 		messageBox(getLang('error_founded'), 4201);
 		return;
@@ -60,7 +60,7 @@ if($is_new = (empty($_DATA['md_id']) || $_DATA['md_id'] === '.')){
 	<div class="mb-4">
 		<label class="form-label" for="mdExtraKeys"><?php echo getLang('extra_keys')?></label>
 		<div class="input-group">
-		<input type="text" name="md_extra_keys" class="form-control" id="mdExtraKeys" maxlength="255" pattern="^[^\x21-\x29\x2b\x2d\x2f\x3a-\x40\x5b-\x60]+" value="">
+		<input type="text" name="md_extra_keys" class="form-control" id="mdExtraKeys" maxlength="255" pattern="^[^\x21-\x29\x2b\x2d\x2f\x3a-\x40\x5b-\x60]+" value="<?php echo empty($BOARD['md_extra']['keys'])?'':implode(',', $BOARD['md_extra']['keys']) ?>">
 		</div>
 		<div class="form-text"><?php echo getLang('desc_extra_keys')?></div>
 	</div>

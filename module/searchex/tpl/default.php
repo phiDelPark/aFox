@@ -26,7 +26,7 @@ if(!defined('__AFOX__')) exit();
 		$start_page = $_{'searchex'}['start_page'];
 		$end_page = $_{'searchex'}['end_page'];
 		$total_count = $_{'searchex'}['total_count'];
-		$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
+		$srl = empty($_POST['srl'])?0:$_POST['srl'];
 		$_tmp = '<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ';
 
 		$is_manager = isManager(__MID__);

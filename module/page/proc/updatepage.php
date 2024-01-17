@@ -7,23 +7,24 @@ function proc($data) {
 
 	if (isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
 	if (empty($data['md_id'])) return set_error(getLang('error_request'),4303);
+	if (!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
 
-	if (!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) {
-		return set_error(getLang('invalid_value', ['id']),2001);
+	$md_id = $data['md_id'];
+
+	if(!isGrant('write', $md_id)) {
+		return set_error(getLang('error_permitted'),4501);
 	}
 
 	$upload_count = 0;
 	$files = null;
 
 	// 파일이 업로드되면 최대 수 체크
-	if (!empty($_FILES['upload_files']['tmp_name'])) {
+	if(!empty($_FILES['upload_files']['tmp_name'])) {
 		$files = $_FILES['upload_files'];
 		$upload_count = count($files['tmp_name']);
 		// 빈파일만 넘어오면 변수 삭제
-		if ($upload_count > 0 && empty($files['tmp_name'][0])) {
+		if($upload_count > 0 && empty($files['tmp_name'][0])) {
 			$upload_count = 0;
-			$files = null;
-			unset($_FILES);
 		}
 	}
 
@@ -41,7 +42,6 @@ function proc($data) {
 
 	try {
 
-		$md_id = $data['md_id'];
 		$module = getModule($md_id);
 
 		$new_insert = empty($module['md_id']);
@@ -117,7 +117,6 @@ function proc($data) {
 		if ($upload_count>0) {
 
 			$chk_ext = '';
-			$mb_ipaddress = $_SERVER['REMOTE_ADDR'];
 
 			for ($i=0; $i < $upload_count; $i++) {
 				// 빈 파일 넘김
@@ -161,7 +160,7 @@ function proc($data) {
 					'mf_size'=>$file['size'],
 					'mf_type'=>$file['type'],
 					'mb_srl'=>0,
-					'mb_ipaddress'=>$mb_ipaddress,
+					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
 					'^mf_regdate'=>'NOW()'
 				]);
 
@@ -170,21 +169,21 @@ function proc($data) {
 				$file_count++;
 			}
 
-			$patterns = '/<[img|a][^>]+[src|href]=[\\"\']+blob\:[^>\\"\']+[\\"\']?[^>]*alt=[\\"\']+([0-9])+[\\"\']?[^>]*>/i';
+			$patterns = '/<[img|a][^>]+[src|href]=[\\"\']+blob\:[^>\\"\']+[\\"\']?[^>]*target=[\\"\']+([0-9])+[\\"\']?[^>]*>/i';
 
 			$data['pg_content'] = preg_replace_callback(
 				$patterns,
 				function ($matches) use($new_files) {
-					$file = $new_files[(int)$matches[2]];
+					$file = $new_files[(int)$matches[1]];
 					$es_name = escapeHtml($file['name']);
 					return sprintf(
 						substr($file['type'], 0, 5) == 'image'
 						? '<img src="%s" class="%s" title="%s" alt="%s">'
-						: '<a href="%s" class="%s" title="%s" alt="%s" target="_blank">',
+						: '<a href="%s" class="%s" title="%s" alt="%s" target="_file">',
 						_AF_URL_.'?file='.$file['mf_srl'],
 						escapeHtml($file['type']),
-						$es_nam.' ('.shortSize($file['size']). ')',
-						$es_nam
+						$es_name.' ('.shortSize($file['size']). ')',
+						$es_name
 					);
 				},
 				$data['pg_content']

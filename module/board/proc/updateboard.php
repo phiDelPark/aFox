@@ -6,10 +6,7 @@ function proc($data) {
 
 	if(isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
-
-	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) {
-		return set_error(getLang('invalid_value', ['id']),2001);
-	}
+	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
 
 	$data['md_title'] = trim($data['md_title']);
 	$data['md_list_count'] = empty($data['md_list_count']) ? 20 : abs($data['md_list_count']);
@@ -55,7 +52,6 @@ function proc($data) {
 			$ex_keys['keys'] = $md_extra_keys;
 		}
 	}
-
 
 	// 확장자는 사용하기 쉽게 | 로 구분함
 	$file_extension = str_replace(',', '|', $data['md_file_ext']);

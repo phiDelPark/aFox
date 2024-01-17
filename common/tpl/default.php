@@ -29,15 +29,18 @@ if (!empty($_CFG['md_description'])) { echo '<meta name="description" content="'
 if ($_CFG['favicon']) {echo '<link rel="shortcut icon" href="'.$_CFG['favicon'].'">'."\n";}
 if (_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 <link href="<?php echo _AF_URL_ ?>common/css/bootstrap.min.css" rel="stylesheet">
-<script src="<?php echo _AF_URL_ ?>common/js/bootstrap.min.js" id="defBootstrapJS"></script>
+<script src="<?php echo _AF_URL_ ?>common/js/bootstrap.bundle.min.js" id="defBootstrapJS"></script>
 <?php } ?>
 
 <script>var language="<?php echo _AF_LANG_ ?>",request_uri="<?php echo getRequestUri() ?>",current_url="<?php echo getUrl() ?>";</script>
-<link rel="stylesheet" href="<?php echo _AF_URL_ . 'common/css/common' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css') ?>">
 <script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
-<?php @include _AF_THEME_PATH_ . '_head.php'; ?>
+<?php if (file_exists(_AF_THEME_PATH_ . 'index' . (__DEBUG__ ? '' : '.min') . '.css')) { ?>
+<link href="<?php echo _AF_THEME_URL_ . 'index' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css') ?>" rel="stylesheet">
+<?php } if (file_exists(_AF_THEME_PATH_ . 'index' . (__DEBUG__ ? '' : '.min') . '.js')) { ?>
+<script src="<?php echo _AF_THEME_URL_ . 'index' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
+<?php }?>
 </head><body>
-<?php } ?>
+<?php }?>
 <?php
 	include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'index')) . '.php';
 	echo'<script>';foreach($_ADDELEMENTS['LANG']as$k=>$v){echo'$_LANG[\''.$k.'\']="'.$v.'";';}echo'</script>'."\n";

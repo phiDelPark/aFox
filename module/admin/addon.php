@@ -43,7 +43,7 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 		echo '<td class="d-none d-md-table-cell">'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
 		echo '<td>'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
 		echo '<td>'.$opt.'</td>';
-		echo '<td><a class="btn btn-primary btn-sm mw-10" href="'.getUrl('ao_id', $name, 'act', 'getAddonForm').'">'.getLang('setup').'</a></td></tr>';
+		echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('ao_id', $name).'">'.getLang('setup').'</a></td></tr>';
 	}
 }
 ?>
@@ -60,29 +60,12 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 <tbody>
 <?php
 	foreach($ao_list as $key => $value) {
-		if($value) echo '<tr><td>'.$key.'</td><td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs mw-10" data-empty-addon="'.$key.'">'.getLang('empty_addon').'</button></td></tr>';
+		if($value) echo '<tr><td>'.$key.'</td><td class="col-xs-1"><button type="button" class="btn btn-primary btn-sm" data-empty-addon="'.$key.'">'.getLang('empty_addon').'</button></td></tr>';
 	}
 ?>
 </tbody>
 </table>
-<div id="admin_addon_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.getAddonForm">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="ao_id" value="" />
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title"><?php echo getLang('addon')?></h4>
-	  </div>
-	  <div class="modal-body">
-	  </div>
-	  <div class="modal-footer">
-		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
-	  </div>
-	</form>
-  </div>
-</div>
+
 <?php
 /* End of file addon.php */
 /* Location: ./module/admin/addon.php */
