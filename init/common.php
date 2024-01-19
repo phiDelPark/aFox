@@ -55,21 +55,16 @@ foreach (['module','id','act','disp'] as $tmp){
 
 // module, id 가 없으면 시작 페이지
 // 위 유효성 검사에서 module, id 변수가 없으면 빈값을 넣기에 empty 안씀
-if(!$_POST['module']) {
-	if(empty($_POST['id'])) $_POST['id'] = $_CFG['start'];
-	if($_POST['id'] && ($tmp=getModule($_POST['id']))){
-		$_CFG = array_merge($_CFG, $tmp); // 설정 하나로 합침
-		$_POST['module'] = $tmp['md_key'];
-	}
+if(!$_POST['module'] && !$_POST['id']) $_POST['id'] = $_CFG['start'];
+if($_POST['id'] && ($tmp=getModule($_POST['id']))){
+	$_CFG = array_merge($_CFG, $tmp); // 설정 하나로 합침
+	$_POST['module'] = $tmp['md_key'];
 }
 
 define('__MID__', $_POST['id']);
 define('__MODULE__', $_POST['module']);
 define('__MODAL__', !empty($_POST['modal']) && $_POST['modal'] === '1');
 define('__POPUP__', __MODAL__ || (!empty($_POST['popup']) && $_POST['popup'] === '1'));
-
-// 전체 로그인 사용시 로그인 유저가 아니면 전체 로그인 화면 표시
-define('__FULL_LOGIN__', $_CFG['use_full_login'] == 1 && empty($_MEMBER));
 
 $_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
 $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;

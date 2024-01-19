@@ -95,5 +95,5 @@ function proc($data) {
 	return ['error'=>'0', 'message'=>getLang('success_login')];
 }
 
-/* End of file logincheck.php */
-/* Location: ./module/member/proc/logincheck.php */
+/* End of file checklogin.php */
+/* Location: ./module/member/proc/checklogin.php */

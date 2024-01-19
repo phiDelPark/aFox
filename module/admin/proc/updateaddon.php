@@ -76,5 +76,5 @@ function proc($data) {
 	return ['error'=>0, 'message'=>getLang('success_saved')];
 }
 
-/* End of file updateaddonconfig.php */
-/* Location: ./module/admin/proc/updateaddonconfig.php */
+/* End of file updateaddon.php */
+/* Location: ./module/admin/proc/updateaddon.php */

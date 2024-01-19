@@ -43,7 +43,6 @@ function proc($data) {
 				'use_visit'=>empty($data['use_visit'])?'0':'1',
 				'use_signup'=>empty($data['use_signup'])?'0':'1',
 				'use_protect'=>empty($data['use_protect'])?'0':'1',
-				'use_full_login'=>empty($data['use_full_login'])?'0':'1',
 				'point_login'=>(int)$data['point_login']
 			]
 		);

@@ -14,6 +14,11 @@
 	$theme_id = empty($_CFG['theme']) ? 'default' : $_CFG['theme'];
 ?>
 
+<form id="themeSelectForm" method="post" autocomplete="off">
+<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="module" value="admin" />
+<input type="hidden" name="act" value="selecttheme" />
+
 <table class="table">
 <thead>
 	<tr>
@@ -39,14 +44,16 @@ if(is_dir($theme_dir)) {
 		echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_THEME_INFO['title'])?$name:$_THEME_INFO['title'])).'</th>';
 		echo '<td class="d-none d-md-table-cell">'.(empty($_THEME_INFO['author'])?'...':'<a href="'.(empty($_THEME_INFO['link'])?'mailto:'.$_THEME_INFO['email'].'"':$_THEME_INFO['link'].'" target="_blank"').'>'.$_THEME_INFO['author'].'</a>').'</td>';
 		echo '<td>'.(empty($_THEME_INFO['version'])?'...':$_THEME_INFO['version']).'</td>';
-		echo '<td><a class="btn btn-'.($theme_id == $name?'info':'primary').' btn-sm mw-10" style="width:100px" data-exec-ajax="admin.updateSetupTheme" data-ajax-param="th_id,'.$name.',success_return_url,'.urlencode(getUrl()).'">'.getLang($theme_id == $name? 'using':'use').'</a></td>';
-		echo '<td><a class="btn btn-primary btn-sm mw-10" href="'.getUrl('th_id', $name, 'act', 'getThemeForm').'">'.getLang('setup').'</a></td></tr>';
+		echo '<td><input type="radio" name="th_id" id="th_id_'.$name.'" value="'.$name.'" style="display:none"><label class="btn btn-'.($theme_id == $name?'info':'primary').' btn-sm" style="width:100px" for="th_id_'.$name.'">'.getLang($theme_id == $name? 'using':'use').'</label></td>';
+		echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('th_id', $name).'">'.getLang('setup').'</a></td></tr>';
 	}
 }
 ?>
 
 </tbody>
 </table>
+
+</form>
 
 <table class="table">
 <thead>
@@ -64,24 +71,10 @@ if(is_dir($theme_dir)) {
 </tbody>
 </table>
 
-<div id="admin_theme_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off" data-exec-ajax="admin.getThemeForm">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="th_id" value="" />
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title"><?php echo getLang('theme')?></h4>
-	  </div>
-	  <div class="modal-body">
-	  </div>
-	  <div class="modal-footer">
-		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
-	  </div>
-	</form>
-  </div>
-</div>
+<script>
+	const select_form = document.querySelector('#themeSelectForm'), th_ids = select_form.querySelectorAll('[name="th_id"]');
+	th_ids.forEach(el => el.addEventListener('change', e => select_form.submit()));
+</script>
 
 <?php
 /* End of file theme.php */

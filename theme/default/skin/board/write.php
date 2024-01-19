@@ -64,7 +64,7 @@
 					displayEditor(
 						'wr_content', $is?$DOC['wr_content']:'',
 						[
-							'file'=>array($_CFG['md_file_max'], __MID__, $is?$DOC['wr_srl']:0),
+							'file'=>[__MID__, $is?$DOC['wr_srl']:0, $_CFG['md_file_max']],
 							'required'=>getLang('request_input',['content']),
 							'html'=>$ishtml,
 							'typebar'=>array(getLang('content'), $istool),

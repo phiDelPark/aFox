@@ -28,8 +28,7 @@ require_once _AF_ADDONS_PATH_ . $_GET['n'] . '/info.php';
 <meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
 <title><?php echo $_ADDON_INFO['title'] ?></title>
 <link href="<?php echo _AF_URL_ ?>common/css/bootstrap.min.css" rel="stylesheet">
-<script src="<?php echo _AF_URL_ ?>common/js/jquery.min.js"></script>
-<script src="<?php echo _AF_URL_ ?>common/js/bootstrap.min.js"></script>
+<script src="<?php echo _AF_URL_ ?>common/js/bootstrap.bundle.min.js"></script>
 <script src="<?php echo _AF_URL_ ?>common/js/common.min.js"></script>
 </head>
 <body style="padding:10px">

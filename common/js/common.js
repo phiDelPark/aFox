@@ -218,7 +218,7 @@ window.load_script = function(source, after, async, defer) {
 
 window.pop_win = function(url, width, height, id) {
 	const popwin = window.open(
-		url, (id || 'afoxPopup'),
+		url, (id || 'afox_popup'),
 		'width=' + (width || '700') + ',height=' + (height || '500') +
 		',top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no'
 	);

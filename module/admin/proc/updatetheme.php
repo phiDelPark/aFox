@@ -46,5 +46,5 @@ function proc($data) {
 	return ['error'=>0, 'message'=>getLang('success_saved')];
 }
 
-/* End of file updatethemeconfig.php */
-/* Location: ./module/admin/proc/updatethemeconfig.php */
+/* End of file updatetheme.php */
+/* Location: ./module/admin/proc/updatetheme.php */

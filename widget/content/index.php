@@ -25,17 +25,15 @@ if($type === 'gallery') {
 }
 ?>
 <div class="content_widget <?php echo $class?>" <?php echo $style?>>
-<div class="panel panel-default" role="group">
-	<div class="panel-heading clearfix">
 	<?php echo empty($title) ? (empty($md_title)?'':$md_title) : $title ?>
-	<a class="pull-right" href="<?php echo getUrl('','id',$_WIDGET['module'],'category',$category)?>"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></a>
-	</div>
+	<a class="float-end text-decoration-none" style="font-size:large" href="<?php echo getUrl('','id',$_WIDGET['module'],'category',$category)?>">&hellip;</a>
+	<div class="clearfix mt-1"></div>
 	<?php if($type === 'gallery') { ?>
-		<div class="panel-body" style="overflow:hidden;padding:8px" role="list">
+		<div class="p-2 border rounded" role="list">
 		<?php
 			$w = (100 / $count);
 			foreach ($_list as $val) {
-				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target'],'popup',$target=='_popup'?'1':'','modal',$target=='_modal'?'1':'').'"'.(empty($target)?'':' target="'.$target.'"').'><img src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="display:inline-block;max-height:150px;margin:0;padding:8px"></a>';
+				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target'],'popup',$target=='_popup'?'1':'','modal',$target=='_modal'?'1':'').'"'.(empty($target)?'':' target="'.$target.'"').'><img class="d-inline-block p-2" src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="max-height:150px;"></a>';
 			}
 		?>
 		</div>
@@ -43,12 +41,12 @@ if($type === 'gallery') {
 		<div class="list-group" role="list">
 		<?php
 			foreach ($_list as $val) {
-				echo '<a class="list-group-item text-ellipsis" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl'],'popup',$target=='_popup'?'1':'','modal',$target=='_modal'?'1':'').'"'.(empty($target)?'':' target="'.$target.'"').'>'.$val['wr_title'].'</a>';
+				echo '<a class="list-group-item d-inline-block text-truncate" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl'],'popup',$target=='_popup'?'1':'','modal',$target=='_modal'?'1':'').'"'.(empty($target)?'':' target="'.$target.'"').'>'.$val['wr_title'].'</a>';
 			}
 		?>
 		</div >
 	<?php } ?>
-</div></div>
+</div>
 
 <?php
 

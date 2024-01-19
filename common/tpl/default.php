@@ -42,7 +42,7 @@ if (_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 </head><body>
 <?php }?>
 <?php
-	include _AF_THEME_PATH_ . (__FULL_LOGIN__ ? 'login' : (__POPUP__ ? 'popup' : 'index')) . '.php';
+	include _AF_THEME_PATH_ . (__POPUP__ ? 'popup' : 'index') . '.php';
 	echo'<script>';foreach($_ADDELEMENTS['LANG']as$k=>$v){echo'$_LANG[\''.$k.'\']="'.$v.'";';}echo'</script>'."\n";
 	foreach($_ADDELEMENTS['CSS']as$k=>$v){echo'<link href="'.$k.'" rel="stylesheet" '.$v.'>';}
 	foreach ($_ADDELEMENTS['JS']as$k=>$v){echo'<script src="'.$k.'" '.$v.'></script>';}

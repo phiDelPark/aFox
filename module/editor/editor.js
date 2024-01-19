@@ -3,7 +3,7 @@
  * Copyright 2016 afox, Inc.
  */
 
-function afEditor(ID, options) {
+function afoxEditor(ID, options) {
 	this.html = options.html;
 	this.required = options.required;
 	this.readonly = options.readonly;
@@ -11,8 +11,8 @@ function afEditor(ID, options) {
 
 	const
 		editor = document.querySelector('#' + ID),
-		textarea = editor.querySelector('[name=' + options.name + ']'),
-		iframe = document.createElement('iframe');
+		iframe = document.createElement('iframe'),
+		textarea = editor.querySelector('[name=' + options.name + ']');
 
 	const
 		typebar = editor.querySelectorAll('#editorTypebar [data-target]'),
@@ -37,7 +37,21 @@ function afEditor(ID, options) {
 		this.isHtmlmode = textarea.classList.contains('d-none');
 	}
 
-	const getSelection = (html) => {
+	this.querySelector = (selectors) => {
+		if(!this.isHtmlmode) {
+			iframe.contentWindow.document.body.innerHTML = textarea.value;
+		}
+		return iframe.contentWindow.document.body.querySelector(selectors);
+	}
+
+	this.querySelectorAll = (selectors) => {
+		if(!this.isHtmlmode) {
+			iframe.contentWindow.document.body.innerHTML = textarea.value;
+		}
+		return iframe.contentWindow.document.body.querySelectorAll(selectors);
+	}
+
+	this.getSelection = () => {
 		const w = iframe.contentWindow;
 		this.isHtmlmode ? w.document.body.focus() : textarea.focus();
 
@@ -59,8 +73,8 @@ function afEditor(ID, options) {
 		}
 	};
 
-	const pasteHtml = (html) => {
-		const selection = getSelection();
+	this.pasteHtml = (html) => {
+		const selection = this.getSelection();
 
 		if (this.isHtmlmode) {
 			let range = selection.getRangeAt(0);
@@ -95,7 +109,7 @@ function afEditor(ID, options) {
 		iframe.contentWindow.document.body.innerHTML = textarea.value;
 		iframe.contentWindow.document.body.addEventListener('drop', ee => {
 			ee.preventDefault();
-			pasteHtml(ee.dataTransfer.getData('text') || '');
+			this.pasteHtml(ee.dataTransfer.getData('text') || '');
 		});
 	});
 
@@ -197,14 +211,16 @@ function afEditor(ID, options) {
 				if (this.isHtmlmode) {
 					iframe.contentWindow.document.execCommand(cmd, false, null);
 				} else {
-					pasteHtml(htmlToCmd[cmd]);
+					this.pasteHtml(htmlToCmd[cmd]);
 				}
 				break;
 			case 'highlight':
-				pasteHtml(this.isHtmlmode ? htmlToCmd[cmd] : '`%s`');
+				this.pasteHtml(this.isHtmlmode ? htmlToCmd[cmd] : '`%s`');
+				break;
+			case 'components':
 				break;
 			default:
-				pasteHtml(htmlToCmd[cmd]);
+				this.pasteHtml(htmlToCmd[cmd]);
 				break;
 		}
 

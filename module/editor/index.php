@@ -1,7 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-$file_options = (!empty($options['file']) && count($options['file'])==3) ? $options['file'] : false;
 $min_height = empty($options['height']) ? '250px' : $options['height'];
 $ops = 'name:"'. $name . '",';
 $skip_keys = ['height'=>1,'file'=>1,'typebar'=>1,'toolbar'=>1,'statebar'=>1];
@@ -44,7 +43,25 @@ foreach ($options as $key => $v) {
 	<div id="editorContent" role="document" aria-label="Editor Content">
 		<textarea name="<?php echo $name ?>" class="form-control" <?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo escapeHtml($content) ?></textarea>
 	</div>
-<?php if(!empty($options['toolbar'])) { ?>
+<?php if(!empty($options['toolbar'])) {
+	$components = get_cache('_AF_EDITOR_COMPONENTS');
+	if(is_null($components)){ //에디터 컴포넌트 목록 캐시 생성
+		$components = DB::gets(_AF_ADDON_TABLE_, ['use_editor'=>'1'], [],
+			function($r){
+				$rset = [];
+				$_ADDON_INFO = [];
+				while ($row = DB::fetch($r)){
+					$tmp = _AF_ADDONS_PATH_ . $row['ao_id'] . '/info.php';
+					if(file_exists($tmp)){
+						include $tmp;
+						$rset[] = [0=>$row['ao_id'],1=>$_ADDON_INFO['title']];
+					}
+				}
+				return $rset;
+			}
+		); set_cache('_AF_EDITOR_COMPONENTS', $components);
+	}
+?>
 	<div id="editorToolbar" class="d-flex w-100 justify-content-between border-bottom py-1" role="toolbar" aria-label="Editor Controls">
 		<div>
 			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="highlight"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#stripe"/></svg></button>
@@ -56,7 +73,14 @@ foreach ($options as $key => $v) {
 			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="insertorderedlist"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#list-ol"/></svg></button>
 			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="indent"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#blockquote-left"/></svg></button>
 			<button type="button" class="btn btn-outline-secondary me-2" tabindex="-1" aria-label="codeblock"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#code-slash"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="components"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#three-dots"/></svg></button>
+			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="components" aria-expanded="false"	data-bs-toggle="dropdown"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#three-dots"/></svg></button>
+			<ul class="dropdown-menu dropdown-menu-end shadow">
+<?php
+	foreach($components as $v){
+		echo '<li class="dropdown-item" style="cursor:pointer" onclick="pop_win(\''._AF_URL_.'module/editor/component.php?n='.$v[0].'&k='.$name.'\', null, null, \'afox_editor_components\')">'.$v[1].'</li>';
+	}
+?>
+			</ul>
 		</div>
 		<div>
 		<abbr class="initialism" title="attribute">AFoX</abbr>
@@ -91,10 +115,10 @@ foreach ($options as $key => $v) {
 	</script>
 <?php } ?>
 <?php
-	if($file_options && $file_options[0] > 0) {
-		$file_max = $file_options[0];
-		$file_id = $file_options[1];
-		$file_target = $file_options[2];
+	if(!empty($options['file']) && $options['file'][2] > 0) {
+		$file_id = $options['file'][0];
+		$file_target = $options['file'][1];
+		$file_max = $options['file'][2];
 		$fileList = empty($file_id) ? [] : getFileList($file_id, $file_target);
 ?>
 	<div class="mt-4 d-grid gap-2">
@@ -125,10 +149,9 @@ foreach ($options as $key => $v) {
 </div>
 
 <script>
-	let AF_EDITOR_<?php echo strtoupper($name) ?>;
 	load_script("<?php echo _AF_URL_ ?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js') ?>")
 	.then(() => {
-			AF_EDITOR_<?php echo strtoupper($name) ?> =new afEditor("editor<?php echo ucfirst($name) ?>", {<?php echo substr($ops, 0, -1) ?>});
+		window.AFOX_EDITOR_<?php echo strtoupper($name) ?> =new afoxEditor("editor<?php echo ucfirst($name) ?>", {<?php echo substr($ops, 0, -1) ?>});
 		}, () => { console.log('fail to load script'); }
 	);
 </script>

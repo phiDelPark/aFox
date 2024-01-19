@@ -20,24 +20,34 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 }
 ?>
 
+<?php if(!$is_new){?>
+<form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_delete',['board'])?>')">
+	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="module" value="board" />
+	<input type="hidden" name="act" value="deleteBoard" />
+	<input type="hidden" name="md_id" value="<?php echo $BOARD['md_id']?>" />
+	<button type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('permanent_delete')?></button>
+</form>
+<?php }?>
+
 <form id="setup" method="post" autocomplete="off">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('md_id', $is_new?'':$BOARD['md_id'])?>" />
+	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="updateBoard" />
+	<input type="hidden" name="md_id" value="<?php echo $is_new?'':$BOARD['md_id'] ?>" />
 
 	<div class="mb-4 float-start">
 		<div class="d-flex flex-row">
 			<div class="input-group">
-				<label class="input-group-text w-100p" for="mdId"><?php echo getLang('id')?></label>
-				<input type="text" name="<?php echo $is_new?'new_':'' ?>md_id" class="form-control mw-100p" id="mdId" required maxlength="11" pattern="^[a-zA-Z]+\w{2,}$" value="<?php echo $BOARD['md_id'] ?>"<?php echo $is_new?'':' disabled'?>>
+				<label class="input-group-text w-100p" for="id_new_md_id"><?php echo getLang('id')?></label>
+				<input type="text" value="<?php echo $is_new?'" name="new_md_id':$BOARD['md_id'] ?>" class="form-control mw-150p" id="id_new_md_id" required maxlength="11" pattern="^[a-zA-Z]+\w{2,}$"<?php echo $is_new?'':' disabled'?>>
 			</div>
-			<div class="input-group">
+			<div class="input-group ms-2">
 				<input type="text" name="md_manager" class="form-control mw-100p" id="id_md_manager" maxlength="11" pattern="^[a-zA-Z]+\w{2,}$" placeholder="<?php echo getLang('manager')?> ID">
 			</div>
 		</div>
 		<div class="form-text"><?php echo getLang('desc_mb_id')?></div>
 	</div>
-	<button type="button" class="btn btn-sm btn-danger float-end" data-act-change="page.deletePage"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
 
 	<div class="input-group mb-2 clearfix">
 		<label class="input-group-text w-100p" for="mdTitle"><?php echo getLang('title')?></label>

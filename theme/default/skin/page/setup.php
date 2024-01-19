@@ -15,7 +15,7 @@
 				'pg_content',
 				$_DATA['pg_content'],
 				[
-					'file'=>[99999, $_DATA['md_id'], 1],
+					'file'=>[$_DATA['md_id'], 1, 99999],
 					'html'=>$_DATA['pg_type'] === '2',
 					'toolbar'=>true,
 					'typebar'=>array(getLang('content'), ['pg_type'=>[$_DATA['pg_type'], ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']]])

@@ -19,19 +19,29 @@
 	}
 ?>
 
+<?php if(!$is_new){?>
+<form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_delete',['page'])?>')">
+	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="module" value="page" />
+	<input type="hidden" name="act" value="deletePage" />
+	<input type="hidden" name="md_id" value="<?php echo $PAGE['md_id']?>" />
+	<button type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('permanent_delete')?></button>
+</form>
+<?php }?>
+
 <form id="setup" method="post" autocomplete="off" enctype="multipart/form-data">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('md_id', $is_new?'':$PAGE['md_id'])?>" />
+	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '','md_id', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="updatePage" />
+	<input type="hidden" name="md_id" value="<?php echo $is_new?'':$PAGE['md_id'] ?>" />
 
 	<div class="mb-4 float-start">
 		<div class="input-group">
-			<label class="input-group-text w-100p" for="mdId"><?php echo getLang('id')?></label>
-			<input type="text" name="<?php echo $is_new?'new_':'' ?>md_id" class="form-control mw-150p" id="mdId" required maxlength="11" pattern="^[a-zA-Z]+\w{2,}$" value="<?php echo $PAGE['md_id'] ?>"<?php echo $is_new?'':' disabled'?>>
+			<label class="input-group-text w-100p" for="id_new_md_id"><?php echo getLang('id')?></label>
+			<input type="text" value="<?php echo $is_new?'" name="new_md_id':$PAGE['md_id'] ?>" class="form-control mw-150p" id="id_new_md_id" required maxlength="11" pattern="^[a-zA-Z]+\w{2,}$"<?php echo $is_new?'':' disabled'?>>
 		</div>
 		<div class="form-text"><?php echo getLang('desc_mb_id')?></div>
 	</div>
-	<button type="button" class="btn btn-sm btn-danger float-end" data-act-change="page.deletePage"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
 
 	<div class="input-group mb-2 clearfix">
 		<label class="input-group-text w-100p" for="mdTitle"><?php echo getLang('title')?></label>
@@ -82,11 +92,12 @@
 	<div class="editor-group mb-4">
 		<?php displayEditor(
 				'pg_content',
-				'',
+				$PAGE['pg_content'],
 				[
-					'file'=>[99999,'',0],
-					'statebar'=>true,
-					'toolbar'=>array(getLang('content'), ['pg_type'=>['1', ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']]])
+					'file'=>[$is_new?'':$PAGE['md_id'], 1, 99999],
+					'html'=>!$is_new&&$PAGE['pg_type'] === '2',
+					'toolbar'=>true,
+					'typebar'=>array(getLang('content'), ['pg_type'=>[$is_new?'1':$PAGE['pg_type'], ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']]])
 				]
 			);
 		?>

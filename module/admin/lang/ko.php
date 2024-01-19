@@ -119,7 +119,6 @@ $_LANG['desc_start_page'] = '사이트에서 사용할 시작 페이지를 선�
 $_LANG['desc_terms_of_use'] = '이용약관을 적어주시면 회원 가입시 약관을 출력해줍니다. (비워두면 출력안함)';
 $_LANG['desc_thumbnail'] = '갤러리, 리뷰 게시판에 목록 이미지를 썸네일로 사용하시려면 크기를 입력하세요.';
 $_LANG['desc_access_md_id'] = '선택된 모듈 아이디만 포함 혹은 제외 가능합니다. (선택된 항목이 없으면 모두 포함)';
-$_LANG['desc_use_full_login'] = '전체 로그인으로 설정합니다.';
 $_LANG['desc_use_signup'] = '회원가입을 허락할지 설정합니다.';
 $_LANG['desc_use_visit'] = '방문자 정보를 기록할지 설정합니다.';
 $_LANG['desc_use_protect'] = '다른 사이트에선 파일을 사용할 수 없게 설정합니다.';

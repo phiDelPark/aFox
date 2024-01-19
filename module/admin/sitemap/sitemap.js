@@ -145,7 +145,7 @@ function SiteMap(id) {
 		pholder = document.createElement("li");
 		pholder.classList.add('placeholder');
 
-		const li_childs = container.querySelectorAll('LI');
+		const li_children = container.querySelectorAll('LI');
 		const rect =  target.getBoundingClientRect();
 
 		container.append(clone);
@@ -154,7 +154,7 @@ function SiteMap(id) {
 		let h = target.querySelector('[type=text]')?.offsetHeight || 38;
 
 		offsets = [];
-		li_childs.forEach(el => {
+		li_children.forEach(el => {
 			let o = getPidOffset(el, container);
 			offsets.push({
 				top: o.top,

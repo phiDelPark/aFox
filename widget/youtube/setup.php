@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 ?>
 
-<h4>위젯 예제</h4>
+<h5>사용법 :</h5>
 <pre class="border rounded p-3">
 &lt;img widget="youtube" vid="아이디"&gt;
 
@@ -15,7 +15,7 @@ if(!defined('__AFOX__')) exit();
   showinfo  : 동영상 제목 및 플레이어 작업을 표시합니다.
 </pre>
 
-<h4>예제 1</h4>
+<h5>사용예: </h5>
 <pre class="border rounded p-3">
 &lt;img widget="youtube" vid="id" start="45" rel="0"&gt;
 </pre>

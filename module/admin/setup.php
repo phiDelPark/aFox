@@ -22,15 +22,15 @@ input[name=favicon]::before {
 
 	<div class="mb-4">
 		<div class="input-group">
-			<label class="input-group-text w-100p" for="startPage"><?php echo getLang('start')?></label>
-			<input type="text" name="start" class="form-control mw-150p" id="startPage" maxlength="11" value="<?php echo empty($config['start'])?'':$config['start']?>" placeholder="<?php echo getLang('page')?>" required>
+			<label class="input-group-text w-100p" for="id_start"><?php echo getLang('start')?></label>
+			<input type="text" name="start" class="form-control mw-150p" id="id_start" maxlength="11" value="<?php echo empty($config['start'])?'':$config['start']?>" placeholder="<?php echo getLang('page')?>" required>
 		</div>
 		<div class="form-text"><?php echo getLang('desc_start_page')?></div>
 	</div>
 
 	<div class="input-group mb-2">
-		<label class="input-group-text w-100p" for="title"><?php echo getLang('name')?></label>
-		<input type="text" name="title" class="form-control" id="title" maxlength="255" value="<?php echo empty($config['title'])?'':escapeHtml($config['title'])?>">
+		<label class="input-group-text w-100p" for="id_title"><?php echo getLang('name')?></label>
+		<input type="text" name="title" class="form-control" id="id_title" maxlength="255" value="<?php echo empty($config['title'])?'':escapeHtml($config['title'])?>">
 	</div>
 
 	<div class="form-file-group mb-2">
@@ -60,43 +60,36 @@ input[name=favicon]::before {
 	<div class="mb-4">
 		<label class="form-label"><?php echo getLang('option')?></label>
 		<div class="input-group">
-			<label class="input-group-text w-100p" for="pointLogin"><?php echo getLang('login')?></label>
-			<input type="number" class="form-control mw-150p" id="pointLogin" name="point_login" min="-9999" max="9999" maxlength="5" placeholder="<?php echo getLang('point')?>" value="<?php echo (!empty($config['point_login'])&&$config['point_login']>0)?$config['point_login']:''?>">
+			<label class="input-group-text w-100p" for="id_point_login"><?php echo getLang('login')?></label>
+			<input type="number" class="form-control mw-150p" id="id_point_login" name="point_login" min="-9999" max="9999" maxlength="5" placeholder="<?php echo getLang('point')?>" value="<?php echo (!empty($config['point_login'])&&$config['point_login']>0)?$config['point_login']:''?>">
 		</div>
 		<div class="form-text"><?php echo getLang('desc_point')?></div>
 	</div>
 
 	<div class="form-check">
-		<input class="form-check-input" type="checkbox" name="use_full_login" id="useFullLogin" value="1" <?php echo !empty($config['use_full_login'])?'checked':''?>>
-		<label class="form-check-label" for="useFullLogin">
-			<?php echo getLang('desc_use_full_login')?>
-		</label>
-	</div>
-
-	<div class="form-check">
-		<input class="form-check-input" type="checkbox" name="use_signup" id="useSignup" value="1" <?php echo !empty($config['use_signup'])?'checked':''?>>
-		<label class="form-check-label" for="useSignup">
+		<input class="form-check-input" type="checkbox" name="use_signup" id="id_use_signup" value="1" <?php echo !empty($config['use_signup'])?'checked':''?>>
+		<label class="form-check-label" for="id_use_signup">
 			<?php echo getLang('desc_use_signup')?>
 		</label>
 	</div>
 
 	<div class="form-check">
-		<input class="form-check-input" type="checkbox" name="use_visit" id="useVisit" value="1" <?php echo !empty($config['use_visit'])?'checked':''?>>
-		<label class="form-check-label" for="useVisit">
+		<input class="form-check-input" type="checkbox" name="use_visit" id="id_use_visit" value="1" <?php echo !empty($config['use_visit'])?'checked':''?>>
+		<label class="form-check-label" for="id_use_visit">
 			<?php echo getLang('desc_use_visit')?>
 		</label>
 	</div>
 
 	<div class="form-check">
-		<input class="form-check-input" type="checkbox" name="use_protect" id="useProtect" value="1" <?php echo !empty($config['use_protect'])?'checked':''?>>
-		<label class="form-check-label" for="useProtect">
+		<input class="form-check-input" type="checkbox" name="use_protect" id="id_use_protect" value="1" <?php echo !empty($config['use_protect'])?'checked':''?>>
+		<label class="form-check-label" for="id_use_protect">
 			<?php echo getLang('desc_use_protect')?>
 		</label>
 	</div>
 
 	<div class="form-check mb-4">
-		<input class="form-check-input" type="checkbox" name="use_captcha" id="useCaptcha" value="1" <?php echo !empty($config['use_captcha'])?'checked':''?>>
-		<label class="form-check-label" for="useCaptcha">
+		<input class="form-check-input" type="checkbox" name="use_captcha" id="id_use_captcha" value="1" <?php echo !empty($config['use_captcha'])?'checked':''?>>
+		<label class="form-check-label" for="id_use_captcha">
 			<?php echo getLang('desc_use_captcha')?>
 		</label>
 	</div>

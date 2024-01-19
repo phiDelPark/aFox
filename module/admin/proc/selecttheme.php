@@ -32,5 +32,5 @@ function proc($data) {
 	return ['error'=>0, 'message'=>getLang('success_saved')];
 }
 
-/* End of file updatethemeconfig.php */
-/* Location: ./module/admin/proc/updatethemeconfig.php */
+/* End of file selecttheme.php */
+/* Location: ./module/admin/proc/selecttheme.php */

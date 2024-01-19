@@ -15,19 +15,19 @@
 	<?php if(file_exists($tmp = _AF_CONFIG_DATA_.'terms_of_use.php')) { ?>
 		<div class="mb-3">
 			<label for="id_terms_of_use"><?php echo getLang('terms_of_use')?></label>
-			<textarea class="form-control mh-10 vresize" id="id_terms_of_use"><?php include $tmp; ?></textarea>
-			<p class="help-block"><?php echo getLang('desc_terms_of_use')?></p>
+			<textarea class="form-control"  rows="5" id="id_terms_of_use"><?php include $tmp; ?></textarea>
+			<div class="form-text"><?php echo getLang('desc_terms_of_use')?></div>
 		</div>
 	<?php } ?>
 		<div class="mb-3">
-			<label for="id_new_mb_id"><?php echo getLang('id')?></label>
-			<div class="form-inline">
+			<input type="hidden" name="mb_id" value="" />
+			<div class="input-group">
+				<label class="input-group-text w-100p" for="id_new_mb_id"><?php echo getLang('id')?></label>
 				<input type="text" name="new_mb_id" class="form-control" id="id_new_mb_id" required minlength="4" maxlength="11" pattern="^[a-zA-Z]{1}[\w_]{3,10}$">
-				<input type="hidden" name="mb_id" value="" />
-			<p class="help-block"><?php echo getLang('desc_mb_id')?></p>
+			</div>
+			<div class="form-text"><?php echo getLang('desc_mb_id')?></div>
 		</div>
-<?php
-	} else {
+<?php } else {
 	$mb_rank = ord($_MEMBER['mb_rank']);
 	$rank_nicks = ['109'=>getLang('manager'),'115'=>getLang('admin')];
 	$next_lv = $mb_rank > 99 ? '100' : explode('.',sprintf('%.2f',round(sqrt(floor($_MEMBER['mb_point'] / 10) / 10), 2)))[1];
@@ -75,7 +75,7 @@
 	</div>
 
 	<?php
-		$tmp = 'data/member/'.$_MEMBER['mb_srl'].'/profile_image.png';
+		$tmp = 'data/member/'.(empty($_MEMBER['mb_srl'])?'___':$_MEMBER['mb_srl']).'/profile_image.png';
 		$tmp = _AF_URL_ . ($ismb&&file_exists(_AF_PATH_ . $tmp) ? $tmp : 'common/img/user_default.jpg');
 	?>
 	<div class="position-relative mb-4">

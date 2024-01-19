@@ -10,11 +10,6 @@ function proc($data) {
 	if (!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
 
 	$md_id = $data['md_id'];
-
-	if(!isGrant('write', $md_id)) {
-		return set_error(getLang('error_permitted'),4501);
-	}
-
 	$upload_count = 0;
 	$files = null;
 

@@ -177,7 +177,6 @@ $create_sql = '
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
 	   use_captcha    CHAR(1)      NOT NULL DEFAULT 0,
 	   use_protect    CHAR(1)      NOT NULL DEFAULT 0,
-	   use_full_login CHAR(1)      NOT NULL DEFAULT 0,
 	   point_login    INT(11)      NOT NULL DEFAULT 0)'.$_engine;
 
 DB::query($create_sql);
@@ -554,8 +553,8 @@ $file = $datadir.'config/base_cdn_list.php';
 if(!file_exists($file)) {
 	$f = @fopen($file, 'w');
 	fwrite($f, "<?php if(!defined('__AFOX__')) exit();?>\n");
-	fwrite($f, '<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">'."\n");
-	fwrite($f, '<script src="//cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>'."\n");
+	fwrite($f, '<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">'."\n");
+	fwrite($f, '<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>'."\n");
 	fclose($f);
 	chmod($file, 0644);
 }

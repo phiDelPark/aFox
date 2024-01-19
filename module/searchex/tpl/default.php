@@ -1,31 +1,29 @@
 <?php
 if(!defined('__AFOX__')) exit();
 ?>
-<section id="bdList">
 
-<article class="clearfix">
+<section id="searchexList">
 	<table class="table table-hover list-table" role="list">
 	<thead>
 		<tr>
 			<?php if(__MOBILE__) { ?>
-			<th><?php echo getLang('title')?></th>
+			<th scope="col"><?php echo getLang('title')?></th>
 			<?php } else { ?>
-			<th class="col-xs-1 hidden-xs"><?php echo getLang('id')?></th>
-			<th><?php echo getLang('title')?></th>
-			<th class="col-xs-3 col-md-2"><?php echo getLang('name')?></th>
-			<th class="col-xs-1 hidden-xs"><?php echo getLang('view')?></th>
-			<th class="col-xs-1"><?php echo getLang('date')?></th>
+			<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('id')?></th>
+			<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
+			<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('name')?></th>
+			<th scope="col"><?php echo getLang('date')?></th>
 			<?php } ?>
 		</tr>
 	</thead>
 	<tbody>
 
 	<?php
-		$current_page = $_{'searchex'}['current_page'];
-		$total_page = $_{'searchex'}['total_page'];
-		$start_page = $_{'searchex'}['start_page'];
-		$end_page = $_{'searchex'}['end_page'];
-		$total_count = $_{'searchex'}['total_count'];
+		$current_page = $_DATA['current_page'];
+		$total_page = $_DATA['total_page'];
+		$start_page = $_DATA['start_page'];
+		$end_page = $_DATA['end_page'];
+		$total_count = $_DATA['total_count'];
 		$srl = empty($_POST['srl'])?0:$_POST['srl'];
 		$_tmp = '<i class="glyphicon glyphicon-lock" aria-hidden="true"></i> ';
 
@@ -33,21 +31,21 @@ if(!defined('__AFOX__')) exit();
 		$login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 
 		if(__MOBILE__) {
-			foreach ($_{'searchex'}['data'] as $key => $val) {
+			$class1 = 'd-flex w-100 justify-content-between';
+			foreach ($_DATA['data'] as $key => $val) {
 				$wr_secret =  $val['wr_secret'] == '1';
 				$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
-				echo '<tr data-hot-track style="cursor:pointer"><td class="wr_title"><a href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
-				echo '<div class="clearfix"><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span>';
-				echo '<span class="pull-right">'.date('m/d', strtotime($val['wr_update'])).'</span></div></td></tr>';
+				echo '<tr><td><a class="d-block text-decoration-none" href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
+				echo '<div class="'.$class1.' text-body-secondary"><span data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span>';
+				echo '<span>'.date('m/d', strtotime($val['wr_update'])).'</span></div></a></td></tr>';
 			}
 		} else {
-			foreach ($_{'searchex'}['data'] as $key => $val) {
+			foreach ($_DATA['data'] as $key => $val) {
 				$wr_secret =  $val['wr_secret'] == '1';
 				$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
-				echo '<tr data-hot-track style="cursor:pointer"><th class="hidden-xs" scope="row">'.$val['md_id'].'</th>';
-				echo '<td class="wr_title"><a href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank" onclick="return false">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
-				echo '<td nowrap><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';
-				echo '<td class="hidden-xs">'.$val['wr_hit'].'</td>';
+				echo '<tr><th scope="row" class="d-none d-md-table-cell">'.$val['md_id'].'</th>';
+				echo '<td class="text-wrap"><a class="d-block" href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank">'.($wr_secret?$_tmp:'').escapeHtml($val['wr_title'], true).'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
+				echo '<td class="d-none d-md-table-cell"><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';
 				echo '<td>'.date('Y/m/d', strtotime($val['wr_update'])).'</td></tr>';
 			}
 		}
@@ -55,38 +53,20 @@ if(!defined('__AFOX__')) exit();
 
 	</tbody>
 	</table>
-</article>
 
-	<nav class="text-center">
-		<ul class="pagination hidden-xs">
-			<?php if($start_page>10) echo '<li><a href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>'; ?>
-			<li<?php echo $current_page <= 1 ? ' class="disabled"' : ''?>><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span></a></li>
-			<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li'.($current_page == $i ? ' class="active"' : '').'><a href="'.getUrl('page',$i).'">'.$i.'</a></li>'; ?>
-			<li<?php echo $current_page >= $total_page ? ' class="disabled"' : ''?>><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><span aria-hidden="true">&rsaquo;</span></a></li>
-			<?php if(($total_page-$end_page)>0) echo '<li><a href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>'; ?>
+	<div class="w-100 text-end">
+		<nav aria-label="Page navigation of the list">
+		<ul class="pagination pagination-sm float-start">
+			<?php if($start_page>10) echo '<li class="page-item"><a class="page-link" href="'.getUrl('page',$start_page-10).'">&laquo;</a></li>' ?>
+			<li class="page-item"><a class="page-link <?php echo $current_page <= 1 ? ' disabled" aria-disabled="true' : ''?>" href="<?php echo  $current_page <= 1 ? '#' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
+			<li class="page-item d-md-none"><a class="page-link disabled" aria-disabled="true"><?php echo $current_page.' / '.$total_page?></a></li>
+			<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li class="page-item d-none d-md-inline-block"><a class="page-link'.($current_page == $i ? ' active" aria-current="page' : '').'" href="'.getUrl('page',$i).'">'.$i.'</a></li>' ?>
+			<li class="page-item"><a class="page-link<?php echo $current_page >= $total_page ? ' disabled" aria-disabled="true' : ''?>" href="<?php echo $current_page >= $total_page ? '#' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
+			<?php if(($total_page-$end_page)>0) echo '<li class="page-item"><a class="page-link" href="'.getUrl('page',$end_page+1).'">&raquo;</a></li>' ?>
 		</ul>
-		<ul class="pager visible-xs-block">
-			<li class="previous<?php echo $current_page <= 1?' disabled':''?>"><a href="<?php echo  $current_page <= 1 ? '#" onclick="return false' : getUrl('page',$current_page-1)?>" aria-label="Previous"><span aria-hidden="true">&lsaquo;</span> <?php echo getLang('previous') ?></a></li>
-			<li><span class="col-xs-5"><?php echo $current_page.' / '.$total_page?></span></li>
-			<li class="next<?php echo $current_page >= $total_page?' disabled':''?>"><a href="<?php echo $current_page >= $total_page ? '#" onclick="return false' : getUrl('page',$current_page+1)?>" aria-label="Next"><?php echo getLang('next') ?> <span aria-hidden="true">&rsaquo;</span></a></li>
-		</ul>
-	</nav>
-	<footer class="clearfix"></footer>
+		</nav>
+	</div>
 </section>
-
-<script>
-	jQuery('.list-table tr[data-hot-track]').click(function() {
-		var $i = jQuery(this);
-		if ($i[0].tagName == 'TR') {
-			var href = $i.find('.wr_title a').attr('href');
-			window.open(href, '_blank');
-		}
-	});
-	jQuery('#searchexModuleDescription').each(function() {
-		var $i = jQuery(this)[0];
-		$i.innerText = $i.innerText.replace('%s', '<?php echo $total_count ?>');
-	});
-</script>
 
 <?php
 /* End of file default.php */

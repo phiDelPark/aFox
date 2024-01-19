@@ -173,7 +173,6 @@ if(!defined('__AFOX__')) exit();
 				$tmp = $__login_member['mb_srl'].'/profile_image.png';
 				$__login_member['mb_icon'] = file_exists(_AF_MEMBER_DATA_.$tmp) ? _AF_URL_.'data/member/'.$tmp : '';
 				$tmp = array('m'=>'manager','s'=>'admin');
-				if(!($__login_member['mb_grade'] = $tmp[$__login_member['mb_rank']])) $__login_member['mb_grade'] = 'member';
 				unset($__login_member['mb_password']); // 비번은 삭제
 				if(!isset($_SESSION['AF_LOGIN_ID'])){ // 쿠키 키검사, 최고 관리자는 쿠키 안함
 					$tmp = md5($_SERVER['SERVER_ADDR'].$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'].$__login_member['mb_password']);
@@ -342,7 +341,7 @@ if(!defined('__AFOX__')) exit();
 		if(is_null($chk) || strlen($chk) !== 1) return false;
 		global $_MEMBER;
 		$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
-		// [s = admin, m = manager] // 0 = 48, s = 115, 초과시 에러
+		// [s = admin, m = manager] // 0 = 48, m = 109, s = 115, 초과시 에러
 		return $rank < 116 && ord($chk) <= $rank;
 	}
 
@@ -355,16 +354,15 @@ if(!defined('__AFOX__')) exit();
 	function checkProtectData($key, $data){
 		global $_MEMBER;
 		global $_PROTECT;
-		$result = [];
-		$grade = empty($_MEMBER['mb_grade']) ? 'guest' : $_MEMBER['mb_grade'];
-		if(empty($data['mb_srl'])) $data['mb_srl'] = null;
-		//자기 자신 제외
-		if(!empty($_MEMBER['mb_srl']) && $_MEMBER['mb_srl']=$data['mb_srl']) $_PROTECT[$key][$grade] ='*';
-		if(!isset($_PROTECT[$key][$grade]) || $_PROTECT[$key][$grade] === '*') $result =$data;
-		else {
-			$a = explode(',', str_replace(' ', '', $_PROTECT[$key][$grade]));
-			foreach ($a as $val) $result[$val] = $data[$val];
+		$grade = ['0'=>'guest','m'=>'manager','s'=>'admin'];
+		$grade = $grade[empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']];
+		$grade = empty($grade) ? 'member' : $grade;
+		if(!empty($_MEMBER['mb_srl']) && !empty($data['mb_srl']) && $_MEMBER['mb_srl'] === $data['mb_srl']){
+			$_PROTECT[$key][$grade] = '*'; //자기 자신 제외
 		}
+		if(!isset($_PROTECT[$key][$grade]) || $_PROTECT[$key][$grade] === '*') return $data;
+		$result = []; $a = explode(',', str_replace(' ', '', $_PROTECT[$key][$grade]));
+		foreach ($a as $val) $result[$val] = $data[$val];
 		return $result;
 	}
 

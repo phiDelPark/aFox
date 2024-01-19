@@ -6,7 +6,7 @@
 <input type="hidden" name="success_return_url" value="<?php echo getUrl('member','','act','')?>">
 <input type="hidden" name="error_return_url" value="<?php echo getUrl()?>">
 <input type="hidden" name="module" value="member">
-<input type="hidden" name="act" value="loginCheck">
+<input type="hidden" name="act" value="checklogin">
 	<h3 class="pb-3 mb-1 fst-italic border-bottom"><?php echo getLang('login')?></h3>
 	<div class="w-100 my-5 text-center">
 		<div class="d-inline-block" style="min-width:300px;width:35%">

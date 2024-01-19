@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 ?>
 
-<h4>위젯 예제</h4>
+<h5>사용법 :</h5>
 <pre class="border rounded p-3">
 &lt;img widget="content" module="아이디"&gt;
 
@@ -17,13 +17,13 @@ if(!defined('__AFOX__')) exit();
   mobile-style  : 모바일 화면에서의 스타일
 </pre>
 
-<h4>예제 1</h4>
+<h5>사용예 1</h5>
 <pre class="border rounded p-3">
 &lt;img widget="content" module="id_1" type="default" count="5"&gt;
 &lt;img widget="content" module="id_2" count="5" class="color-swatch gray"&gt;
 </pre>
 
-<h4>예제 2</h4>
+<h5>사용예 2</h5>
 <pre class="border rounded p-3">
 &lt;div style="text-align:justify"&gt;
 &lt;img widget="content" module="id_1" style="width:48.5%;display:inline-block" mobile-style="width:100%"&gt;

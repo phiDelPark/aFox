@@ -43,7 +43,7 @@ if(!empty($_ADDON['ao_extra'])) {
 <form method="post" autocomplete="off">
 <input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
 <input type="hidden" name="module" value="admin" />
-<input type="hidden" name="act" value="updateAddonConfig" />
+<input type="hidden" name="act" value="updateaddon" />
 <input type="hidden" name="ao_id" value="<?php echo $_POST['ao_id']?>" />
 
 <div class="mb-2">
@@ -90,9 +90,11 @@ if(!DB::error()) {
 	echo '</div></div>';
 }
 ?>
-<hr>
-<button type="submit" class="btn btn-success btn-lg w-100"><?php echo getLang('save')?></button>
-</form>
+
+<hr class="mb-5">
+<div class="text-end position-fixed bottom-0 end-0 p-3">
+	<button type="submit" class="btn btn-success btn-lg" style="min-width:220px"><?php echo getLang('save')?></button>
+</div></form>
 
 <?php
 /* End of file addonform.php */

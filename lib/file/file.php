@@ -9,7 +9,6 @@ if(file_exists($inf)) {$r=file_triggerModuleCall($inf,$data);if($r===false) retu
 } return true;}$mb_srl = 0; $mb_rank = '0';$tmp=isset($_SESSION['AF_LOGIN_ID'])?$_SESSION['AF_LOGIN_ID']:get_cookie('AF_LOGIN_ID');
 if(!empty($tmp)&&preg_match('/^[a-zA-Z]+\w{2,}$/',$tmp)){$out=DB::get(_AF_MEMBER_TABLE_,['mb_id'=>$tmp]);
 if(!DB::error()&&!empty($out['mb_srl'])){$mb_srl=$out['mb_srl']; $mb_rank=$out['mb_rank'];}}
-if($_CFG['use_full_login']==1&&empty($mb_srl)) setHttpError('401 Unauthorized');
 if($_CFG['use_protect']==1&&!empty($_SERVER['HTTP_REFERER'])&&!preg_match('/^https?:[\/]+[a-z0-9\-\.]*'.$_SERVER['SERVER_NAME'].'.+/i',$_SERVER['HTTP_REFERER'])) setHttpError('401 Unauthorized');
 static $_f = [];$srl = (int)$_GET['file'];$thumb = isset($_GET['thumb']);$key = $srl.($thumb?'_thumb'.$_GET['thumb']:'');
 if(!isset($_f[$key])){$out = DB::get(_AF_FILE_TABLE_,['mf_srl'=>$srl]);if(DB::error()) setHttpError('400 Bad Request');

@@ -9,6 +9,10 @@ $_LANG['not_use_signup'] = '지금은 회원 가입을 하실 수 없습니다.'
 $_LANG['terms_of_use'] = '이용약관';
 $_LANG['verify_password'] = '비밀번호 확인';
 
+$_LANG['auto_login'] = '자동 로그인';
+$_LANG['ban_login'] = '차단';
+$_LANG['confirm_ban_login'] = '로그인을 차단 하시겠습니까?';
+
 $_LANG['desc_mb_id'] = '아이디 첫 글자는 영문이여야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다.';
 $_LANG['desc_mb_password'] = '비밀번호와 비밀번호 확인을 입력하세요.';
 $_LANG['desc_change_password'] = '비밀번호를 변경하려면 비밀번호와 확인을 입력하세요.';
@@ -26,9 +30,12 @@ $_LANG['msg_login_overtry'] = '로그인 시도를 3회 실패하였습니다.'.
 $_LANG['md_title_inbox'] = '편지함';
 $_LANG['md_description_inbox'] = '';
 $_LANG['md_title_trash'] = '휴지통';
+$_LANG['md_title_trash'] = '휴지통';
 $_LANG['md_description_trash'] = '';
 $_LANG['md_title_signup'] = getLang(empty($_MEMBER)?'member_signup':'member');
-$_LANG['md_description_signup'] = '';
+$_LANG['md_description_signup'] = '회원 정보를 입력해주세요.';
+$_LANG['md_title_signin'] = '로그인';
+$_LANG['md_description_signin'] = '아이디와 비번을 입력해주세요.';
 
 // 모듈 설정이 없으므로 직접 기본정보 입력
 $_CFG['md_title'] = empty($_POST['disp'])?'':getLang('md_title_'.strtolower($_POST['disp']));

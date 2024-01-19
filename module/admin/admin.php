@@ -15,7 +15,7 @@ $is_admin = isAdmin();
 	<a
 	  class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold"
 	  href="#"
-	  >Frontendfunn</a
+	  >ADMINISTRATION</a
 	>
 	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavBar" aria-controls="topNavBar" aria-expanded="false" aria-label="Toggle navigation">
 	  <span class="navbar-toggler-icon"></span>
@@ -27,9 +27,9 @@ $is_admin = isAdmin();
 		  	<?php echo $_MEMBER['mb_nick']?>
 		  </a>
 		  <ul class="dropdown-menu dropdown-menu-end">
-			<li><a class="dropdown-item" href="<?php echo getUrl('','member','inbox', 'popup', '1') ?>" target="_blank"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#envelope"/></svg> <?php echo getLang('Inbox') ?></a></li>
+			<li><a class="dropdown-item" href="<?php echo getUrl('','member','inbox', 'popup', '1') ?>" target="_blank"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#envelope"/></svg> <?php echo getLang('Inbox') ?></a></li>
 			<li><hr class="dropdown-divider"></li>
-			<li><a class="dropdown-item" href="<?php echo getUrl('', 'module', 'member', 'act', 'signOut')?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#power"/></svg> <?php echo getLang('logout') ?></a></li>
+			<li><a class="dropdown-item" href="<?php echo getUrl('', 'module', 'member', 'act', 'signOut')?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#power"/></svg> <?php echo getLang('logout') ?></a></li>
 		  </ul>
 		</li>
 	  </ul>
@@ -49,7 +49,7 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 		  <a href="./?admin" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'default' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#speedometer2"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#speedometer2"></use></svg>
 			<span><?php echo getLang('menu_name_dashbd')?></a></span>
 		  </a>
 		</li>
@@ -61,13 +61,13 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 		  <a href="./?admin=theme" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'theme' ? ' active': '' ?>">
-		  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#house-door"></use></svg>
+		  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#house-door"></use></svg>
 			<span><?php echo getLang('menu_name_theme')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=menu" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'menu' ? ' active': '' ?>">
-		  	<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#menu-button"></use></svg>
+		  	<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#menu-button"></use></svg>
 			<span><?php echo getLang('menu_name_menu')?></span>
 		  </a>
 		</li>
@@ -79,24 +79,24 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 			<a href="./?admin=page" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'page' ? ' active': '' ?>">
-				<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#book"></use></svg>
+				<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#book"></use></svg>
 				<span><?php echo getLang('menu_name_page')?></span>
 			</a>
 		</li>
 		<li>
 			<a href="./?admin=board" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'board' ? ' active': '' ?>">
-				<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#collection"></use></svg>
+				<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#collection"></use></svg>
 				<span><?php echo getLang('menu_name_board')?></span>
 			</a>
 		</li>
 		<?php $tmp=(in_array($_POST['disp'], ['document','comment','file','trash']))?>
 		<li>
 		  <a class="nav-link px-3 pb-0 sidebar-link" data-bs-toggle="collapse" href="#layouts" aria-expanded="<?php echo $tmp?'true':'false'?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#box"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#box"></use></svg>
 			<span style="margin-left:4px"><?php echo getLang('menu_name_content')?></span>
 			<span class="ms-auto">
 			  <span class="right-icon">
-			  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#chevron-down"></use></svg>
+			  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#chevron-down"></use></svg>
 			  </span>
 			</span>
 		  </a>
@@ -104,25 +104,25 @@ $is_admin = isAdmin();
 			<ul class="navbar-nav ps-3">
 			  <li>
 				<a href="./?admin=document" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'document' ? ' active': '' ?>">
-					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#chat-right-text-fill"></use></svg>
+					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#chat-right-text-fill"></use></svg>
 					<span><?php echo getLang('menu_name_document')?></span>
 				</a>
 			  </li>
 			  <li>
 				<a href="./?admin=comment" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'comment' ? ' active': '' ?>">
-					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#chat-right-quote-fill"></use></svg>
+					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#chat-right-quote-fill"></use></svg>
 					<span><?php echo getLang('menu_name_comment')?></span>
 				</a>
 			  </li>
 			  <li>
 				<a href="./?admin=file" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'file' ? ' active': '' ?>">
-					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#floppy-fill"></use></svg>
+					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#floppy-fill"></use></svg>
 					<span><?php echo getLang('menu_name_file')?></span>
 				</a>
 			  </li>
 			  <li>
 				<a href="./?admin=trash" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'trash' ? ' active': '' ?>">
-					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#trash-fill"></use></svg>
+					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#trash-fill"></use></svg>
 					<span><?php echo getLang('menu_name_trash')?></span>
 				</a>
 			  </li>
@@ -137,25 +137,25 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 		  <a href="./?admin=module" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'module' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#grid"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#grid"></use></svg>
 			<span><?php echo getLang('menu_name_module')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=addon" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'addon' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#plugin"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#plugin"></use></svg>
 			<span><?php echo getLang('menu_name_addon')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=widget" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'widget' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#puzzle"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#puzzle"></use></svg>
 			<span><?php echo getLang('menu_name_widget')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=visit" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'visit' ? ' active': '' ?>">
-		  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#airplane"></use></svg>
+		  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#airplane"></use></svg>
 			<span><?php echo getLang('menu_name_visit')?></span>
 		  </a>
 		</li>
@@ -167,13 +167,13 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 		  <a href="./?admin=member" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'member' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#person"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#person"></use></svg>
 			<span><?php echo getLang('menu_name_member')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=setup" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'setup' ? ' active': '' ?>">
-		  	<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/img/icons.svg#gear"></use></svg>
+		  	<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#gear"></use></svg>
 			<span><?php echo getLang('menu_name_setup')?></span>
 		  </a>
 		</li>
@@ -200,10 +200,15 @@ $is_admin = isAdmin();
 		} else {
 			if (is_array($err = get_error())) messageBox($err['message'], $err['error'], false);
 			if(!empty($_POST['mid'])){
+				$_POST['md_id'] = $_POST['mid'];
 				@include_once _AF_MODULES_PATH_ . $admin . '/lang/' . _AF_LANG_ . '.php';
 				require_once _AF_MODULES_PATH_ . $admin . '/setup.php';
-			} else if(!empty($_POST['md_id']) || !empty($_POST['ao_id']) || !empty($_POST['wg_id'])){
-				require_once _AF_ADMIN_PATH_ . 'form/' . (!empty($_POST['md_id']) ? 'moduleform' : (empty($_POST['wg_id']) ? 'addonform' : 'widgetform')) . '.php';
+			} else if(!empty($_POST['th_id']) || !empty($_POST['md_id']) || !empty($_POST['ao_id']) || !empty($_POST['wg_id'])){
+				require_once _AF_ADMIN_PATH_ . 'form/' . (
+					!empty($_POST['th_id'])	? 'themeform'
+					: (!empty($_POST['md_id']) ? 'moduleform'
+						: (!empty($_POST['ao_id']) ? 'addonform'
+							: 'widgetform'))) . '.php';
 			} else {
 				require_once _AF_ADMIN_PATH_ . $admin . '.php';
 			}
