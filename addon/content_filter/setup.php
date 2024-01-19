@@ -5,18 +5,18 @@ if(!defined('__AFOX__')) exit();
 
 $default_filter = '';
 $default_change_text = '♡,사랑해';
-$default_regex_text = '/(name|style)=["]?((?:.(?!["]?\s+(?:\S+)=|\s*\/?[>"]))+.)["]?/mi,\1';
+$default_regex_text = '/(<\w+[^>]*)(name|style)=["]?((?:.(?!["]?\s+(?:\S+)=|\s*\/?[>"]))+.)["]?/mi,\1';
 ?>
 
 <div class="mb-3">
 <label for="id_regex">정규식</label>
-<textarea maxbyte="30000" maxlength="30000" class="form-control mh-10 vresize" name="regex" id="id_regex"><?php echo escapeHtml(empty($_ADDON['regex'])?$default_regex_text:$_ADDON['regex'])?></textarea>
+<textarea maxbyte="30000" maxlength="30000" class="form-control" rows="5" name="regex" id="id_regex"><?php echo escapeHtml(empty($_ADDON['regex'])?$default_regex_text:$_ADDON['regex'])?></textarea>
 <p class="form-text">작성 규칙: /정규식/옵션,치환자<br>정규식을 콘텐츠 내용에 적용합니다. (정규식과 정규식 사이는 엔터로 구분합니다)</p>
 </div>
 
 <div class="mb-3">
 <label for="id_filter">단어 필터</label>
-<textarea maxbyte="30000" maxlength="30000" class="form-control mh-10 vresize" name="filter" id="id_filter"><?php echo escapeHtml(empty($_ADDON['filter'])?$default_filter:$_ADDON['filter'])?></textarea>
+<textarea maxbyte="30000" maxlength="30000" class="form-control" rows="3" name="filter" id="id_filter"><?php echo escapeHtml(empty($_ADDON['filter'])?$default_filter:$_ADDON['filter'])?></textarea>
 </div>
 
 <div class="mb-3">

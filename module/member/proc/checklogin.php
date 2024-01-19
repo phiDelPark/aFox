@@ -21,11 +21,11 @@ function proc($data) {
 	$mb = DB::get(_AF_MEMBER_TABLE_, ['mb_id'=>$mb_id]);
 	if($ex = DB::error()) return set_error('error', 3);
 
-	$count_key = 'af_login_try_' . $_SERVER['REMOTE_ADDR'];
-	$captcha_key = 'af_captcha_' . $_SERVER['REMOTE_ADDR'];
+	$count_key = 'afox_login_try_' . $_SERVER['REMOTE_ADDR'];
+	$captcha_key = 'afox_captcha_' . $_SERVER['REMOTE_ADDR'];
 	$try_count = (int)get_session($count_key);
 
-	if($_CFG['use_captcha'] == '1' || $try_count > 2) {
+	if($_CFG['use_captcha'] == '1' && $try_count > 2) {
 		if(empty($data['captcha_code'])) {
 			return set_error(getLang('request_input',['captcha_code']), 4001);
 		}

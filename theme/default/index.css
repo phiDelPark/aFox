@@ -147,11 +147,6 @@ h1, h2, h3, h4 {
   background-color: var(--bs-tertiary-bg);
 }
 
-.current_content table:not([class=hljs-ln]) tr >:not(.text-wrap) {
-  text-wrap: nowrap;
-  width: 1px;
-}
-
 @media (min-width: 768px) {
   .h-md-250 { min-height: 250px; }
   .navbar-expand-md .navbar-collapse {

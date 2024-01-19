@@ -30,7 +30,6 @@ if(!empty($_GET['file'])) {
 require_once __DIR__ . '/init/common.php';
 
 if(__MODULE__ && !empty($_POST['act'])) {
-
 	$callproc = 'proc'.ucwords(__MODULE__).'Default';
 	if(function_exists($callproc)) {
 		if(triggerCall('before_proc', $_POST['act'], $_POST)) {

@@ -157,7 +157,7 @@ function afoxEditor(ID, options) {
 	});
 
 	const changeUploadFile = (e) => {
-		window.trigger('beforeunload'); // trigger is in afox.common.js
+		window.dispatchEvent(new Event('beforeunload', {bubbles: true, cancelable: false}));
 		while (updFiles.firstChild) updFiles.removeChild(updFiles.lastChild);
 		// todo 후에 files 를 새로 고침 안하고 계속 넣어 보내기 하자
 		const elURL = (window.URL || window.webkitURL);

@@ -183,10 +183,6 @@ HTMLFormElement.prototype.dataImport = function(data) {
 	}
 };
 
-Object.prototype.trigger = function(type, bubbles = true, cancelable = false) {
-	this.dispatchEvent(new Event(type, {bubbles: bubbles, cancelable: cancelable}));
-};
-
 window.exec_ajax = function(self, param, callback, responses) {
 	console.log(self);
 	console.log(param);

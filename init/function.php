@@ -676,16 +676,18 @@ if(!defined('__AFOX__')) exit();
 		}
 		if(empty($_result['error'])){
 			// 테마에 스킨(tpl)이 있으면 사용
-			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
 			$tpl_file = (empty($_result['tpl']) ? 'default' : $_result['tpl']).'.php';
+			$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
 			if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
 			__module_call($tpl_path, $tpl_file, $_result);
 		} else {
 			// 에러 번호가 4501 이면 로그인 폼 보여줌
 			if($_result['error'] == 4501 && empty($_MEMBER)){
-				$tpl_path = _AF_THEME_PATH_ . 'skin/member/';
+				global $_LANG;
 				$tpl_file = 'signin.php';
+				$tpl_path = _AF_THEME_PATH_ . 'skin/member/';
 				if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . 'member/tpl/';
+				@include_once _AF_MODULES_PATH_ . 'member/lang/' . _AF_LANG_ . '.php';
 				include $tpl_path . $tpl_file;
 			} else messageBox($_result['message'], $_result['error']);
 		}

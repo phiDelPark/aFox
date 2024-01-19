@@ -30,8 +30,22 @@ if(!isset($_POST['module'])){
 }//*/
 //unset($_GET); unset($_POST);
 
+// 유효성 검사
+foreach (['module','id','act','disp'] as $tmp){
+	if(!isset($_POST[$tmp])||!preg_match('/^[a-zA-Z]+\w{2,}$/', $_POST[$tmp]))
+		$_POST[$tmp] = '';
+}
+
+// module, id 가 없으면 시작 페이지
+// 위 유효성 검사에서 module, id 변수가 없으면 빈값을 넣기에 empty 안씀
+if(!$_POST['module'] && !$_POST['id']) $_POST['id'] = $_CFG['start'];
+if($_POST['id'] && ($tmp=getModule($_POST['id']))){
+	$_CFG = array_merge($_CFG, $tmp); // 설정 하나로 합침
+	$_POST['module'] = $tmp['md_key'];
+}
+
 // 문서번호만 오면 id 가져옴
-if(count($_POST)===1 && (!empty($_POST['srl']) || !empty($_POST['rp']))){
+if(!empty($_POST['srl']) || !empty($_POST['rp'])){
 	if(!empty($_POST['rp'])){
 		$tmp = DB::get(_AF_COMMENT_TABLE_, 'wr_srl', ['rp_srl'=>(int)$_POST['rp']]);
 		if(!empty($tmp['wr_srl'])) $_POST['srl'] = $tmp['wr_srl'];
@@ -45,20 +59,6 @@ if(count($_POST)===1 && (!empty($_POST['srl']) || !empty($_POST['rp']))){
 		'srl',empty($_POST['srl'])?'':$_POST['srl'],
 		'rp',empty($_POST['rp'])?'':$_POST['rp']
 	);
-}
-
-// 유효성 검사
-foreach (['module','id','act','disp'] as $tmp){
-	if(!isset($_POST[$tmp])||!preg_match('/^[a-zA-Z]+\w{2,}$/', $_POST[$tmp]))
-		$_POST[$tmp] = '';
-}
-
-// module, id 가 없으면 시작 페이지
-// 위 유효성 검사에서 module, id 변수가 없으면 빈값을 넣기에 empty 안씀
-if(!$_POST['module'] && !$_POST['id']) $_POST['id'] = $_CFG['start'];
-if($_POST['id'] && ($tmp=getModule($_POST['id']))){
-	$_CFG = array_merge($_CFG, $tmp); // 설정 하나로 합침
-	$_POST['module'] = $tmp['md_key'];
 }
 
 define('__MID__', $_POST['id']);
