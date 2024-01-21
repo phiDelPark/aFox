@@ -11,21 +11,23 @@ if(!defined('__AFOX__')) exit();
 		$rp_content = !$rp_permit || $rp_secret ? '<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>' : '';
 		$rp_content .= !$rp_permit ? getLang('error_permitted') : toHTML($val['rp_content'], $val['rp_type']);
 		echo sprintf(
-			'<div class="d-flex flex-lg-row gap-3 p-2 border-bottom" style="margin-left:%spx"><svg class="bi bi-lg mt-1"><use href="%s"></use></svg>
-			<div class="w-100"><div>%s</div><div class="d-flex justify-content-between text-body-secondary mt-1"><small><a href="#DELDTE" exec-ajax="board.deleteComment&rp_srl=%s" class="text-decoration-none">X</a>: %s</small><small>%s</small></div></div></div>',
+			'<div id="reply-%s" class="d-flex flex-lg-row gap-3 p-2 border-bottom" style="margin-left:%spx"><svg class="bi bi-lg mt-1"><use href="%s"></use></svg>
+			<div class="w-100"><div>%s</div><div class="d-flex justify-content-between text-body-secondary mt-1"><small>%s</small><small>%s: <a href="#DELDTE" exec-ajax="board.deleteComment&rp_srl=%s" success-url="%s" class="text-decoration-none">&Chi;</a></small></div></div></div>',
+			$val['rp_srl'],
 			($_len>5?5:$_len)*30,
 			_AF_THEME_URL_.'bi-icons.svg#person-bounding-box',
 			$rp_content,
-			$val['rp_srl'],
+			escapeHtml($val['mb_nick'], true),
 			date('Y/m/d', strtotime($val['rp_regdate'])),
-			escapeHtml($val['mb_nick'], true)
+			$val['rp_srl'],
+			getUrl().'#documentReply'
 		);
 	}
 ?>
 </section>
 
 <section id="replyEditer" class="mb-5" aria-label="Write a reply to this post">
-	<form method="post" autocomplete="off" exec-ajax="board.updateComment" needvalidate>
+	<form method="post" autocomplete="off" needvalidate>
 		<input type="hidden" name="success_return_url" value="<?php echo getUrl('rp','')?>">
 		<input type="hidden" name="module" value="board">
 		<input type="hidden" name="act" value="updateComment">

@@ -80,8 +80,8 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getRequestMethod(){
-		if(isset($_SERVER[($s='HTTP_X_REQUESTED_WITH')]) && $_SERVER[$s] == 'XMLHttpRequest')
-			return strpos($_SERVER['HTTP_ACCEPT'],'json')?'JSON':(strpos($_SERVER['HTTP_ACCEPT'],'xml')?'XMLRPC':'JSCALLBACK');
+		if(isset($_SERVER[($s='HTTP_CONTENT_TYPE')]) && strpos($_SERVER[$s],'/json'))
+			return 'JSON';
 		else return $_SERVER['REQUEST_METHOD'];
 	}
 
