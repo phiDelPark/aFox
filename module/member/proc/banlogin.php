@@ -14,6 +14,12 @@ function proc($data){
 		return set_error(getLang('error_request'),4303);
 	}
 
+	$is_admin = isAdmin();
+
+	if(!$is_admin || $member['mb_rank'] === 's'){
+		return set_error(getLang('error_permitted'),4501);
+	}
+
 	DB::transaction();
 
 	try{

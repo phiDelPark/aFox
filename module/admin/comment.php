@@ -52,7 +52,7 @@
 		$end_page = $cmt_list['end_page'];
 
 		foreach ($cmt_list['data'] as $key => $value) {
-			echo '<tr><th scope="row">'.$value['md_id'].'</th>';
+			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></th>';
 			echo '<td class="text-wrap">'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
 			echo '<td>'.($value['wr_secret']?'S/':'--/').($value['rp_status']?$value['rp_status']:'--').'</td>';

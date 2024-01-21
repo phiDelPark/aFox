@@ -17,7 +17,7 @@ $srl = empty($_POST['srl'])?0:$_POST['srl'];
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 ?>
 
-<div class="list-group list-group-flush mb-4" aria-label="Content list">
+<div class="list-group list-group-flush mb-4" aria-label="List of post">
 <?php
 	$class1 = 'd-flex w-100 justify-content-between';
 	foreach ($LIST['data'] as $key => $val) {

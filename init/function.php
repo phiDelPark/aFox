@@ -163,42 +163,16 @@ if(!defined('__AFOX__')) exit();
 		return $get ? $__md_cfg[$id][$get] : $__md_cfg[$id];
 	}
 
-	function getLoginInfo(){
-		static $__login_member = [];
-		// 로그인 중인 회원 정보 가져오기
-		$login_id = isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cookie('AF_LOGIN_ID');
-		if($login_id && empty($__login_member) && preg_match('/^[a-zA-Z]+\w{2,}$/', $login_id)){
-			$__login_member = DB::get(_AF_MEMBER_TABLE_, ['mb_id'=>$login_id]);
-			if(!DB::error() && $__login_member['mb_id'] === $login_id){
-				$tmp = $__login_member['mb_srl'].'/profile_image.png';
-				$__login_member['mb_icon'] = file_exists(_AF_MEMBER_DATA_.$tmp) ? _AF_URL_.'data/member/'.$tmp : '';
-				$tmp = array('m'=>'manager','s'=>'admin');
-				unset($__login_member['mb_password']); // 비번은 삭제
-				if(!isset($_SESSION['AF_LOGIN_ID'])){ // 쿠키 키검사, 최고 관리자는 쿠키 안함
-					$tmp = md5($_SERVER['SERVER_ADDR'].$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'].$__login_member['mb_password']);
-					if($tmp == ($__login_member['mb_rank']=='s'?'':get_cookie('AF_AUTO_LOGIN'))){
-						set_session('AF_LOGIN_ID', $__login_member['mb_id']);
-					}else $__login_member = [];
-				}
-			}
-		}
-		if(empty($__login_member)){ // 로그인이 아니면 삭제
-			set_cookie('AF_LOGIN_ID', '', -1);
-			set_cookie('AF_AUTO_LOGIN', '', -1);
-			unset($_SESSION['AF_LOGIN_ID']);
-		}
-		return $__login_member;
-	}
-
 	function getMember($id, $get = ''){
 		static $__members = [];
 		if(!isset($__members[$id])){
 			$skey = is_numeric($id) ? 'mb_srl' : 'mb_id';
 			$out = DB::get(_AF_MEMBER_TABLE_, [$skey => $id]);
-			if(!empty($out['mb_srl'])){
-				$_icon = $out['mb_srl'].'/profile_image.png';
-				$out['mb_icon'] = file_exists(_AF_MEMBER_DATA_.$_icon) ? _AF_URL_.'data/member/'.$_icon : '';
-			}
+			if(empty($out['mb_srl'])) return $get ? '' : [];
+			$_icon = $out['mb_srl'].'/profile_image.png';
+			$out['mb_icon'] = file_exists(_AF_MEMBER_DATA_.$_icon) ? _AF_URL_.'data/member/'.$_icon : '';
+			$grade = ['0'=>'guest','m'=>'manager','s'=>'admin'];
+			$out['mb_grade'] = array_key_exists($out['mb_rank'], $grade) ? $grade[$out['mb_rank']] : 'member';
 			$__members[$id] = $out;
 		}
 		return $get ? $__members[$id][$get] : $__members[$id];
@@ -354,9 +328,7 @@ if(!defined('__AFOX__')) exit();
 	function checkProtectData($key, $data){
 		global $_MEMBER;
 		global $_PROTECT;
-		$grade = ['0'=>'guest','m'=>'manager','s'=>'admin'];
-		$grade = $grade[empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']];
-		$grade = empty($grade) ? 'member' : $grade;
+		$grade = empty($_MEMBER) ? 'guest' : $_MEMBER['mb_grade'];
 		if(!empty($_MEMBER['mb_srl']) && !empty($data['mb_srl']) && $_MEMBER['mb_srl'] === $data['mb_srl']){
 			$_PROTECT[$key][$grade] = '*'; //자기 자신 제외
 		}

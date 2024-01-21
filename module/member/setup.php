@@ -1,9 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
 $mb = getMember($_POST['mid']);
-$mb_rank = $mb ? ord($mb['mb_rank']) : 0;
-$rank_nicks = ['109'=>'manager','115'=>'admin'];
-$new_mb_rank = empty($rank_nicks[$mb_rank]) ? 0 : $rank_nicks[$mb_rank];
 ?>
 
 <?php if($mb){?>
@@ -38,14 +35,16 @@ $new_mb_rank = empty($rank_nicks[$mb_rank]) ? 0 : $rank_nicks[$mb_rank];
 		<div class="form-text"><?php echo getLang('desc_mb_id')?></div>
 	</div>
 <?php } else {
-	$next_lv = $mb_rank > 99 ? '100' : explode('.',sprintf('%.2f',round(sqrt(floor($mb['mb_point'] / 10) / 10), 2)))[1];
+	$grade = $mb ? $mb['mb_grade'] : 'guest';
+	$next_lv = (($mb ? ord($mb['mb_rank']) : 48) - 48);
+	if ($next_lv > 50) $next_lv = 50;
 ?>
 	<input type="hidden" name="mb_id" value="<?php echo $mb['mb_id'] ?>" />
 	<div class="mb-4">
-		<label>LV. <?php echo !$new_mb_rank ? ($mb_rank - 48) : getLang($new_mb_rank) ?></label>
+		<label>LV. <?php echo ($grade == 'guest' || $grade == 'member') ? $next_lv : getLang($grade) ?></label>
 		<div class="progress">
-			<div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $next_lv?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $next_lv?>%;">
-			<?php echo $next_lv?>%
+			<div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $next_lv?>" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $next_lv * 2?>%;">
+			<?php echo $next_lv * 2?>%
 			</div>
 		</div>
 	</div>
@@ -62,7 +61,7 @@ $new_mb_rank = empty($rank_nicks[$mb_rank]) ? 0 : $rank_nicks[$mb_rank];
     <div class="mb-4">
         <div class="input-group">
             <label class="input-group-text w-100p" for="id_mb_point"><?php echo getLang('point')?></label>
-            <input type="number" class="form-control mw-150p" id="id_mb_point" name="mb_point" min="-9999" max="9999" maxlength="5" placeholder="<?php echo getLang('point')?>" value="<?php echo $mb?$mb['mb_point']:0?>">
+            <input type="number" class="form-control mw-150p" id="id_mb_point" name="mb_point" min="-2147483648" max="2147483647" maxlength="5" placeholder="<?php echo getLang('point')?>" value="<?php echo $mb?$mb['mb_point']:0?>">
         </div>
         <div class="form-text"><?php echo getLang('desc_mb_point')?></div>
     </div>
@@ -70,11 +69,11 @@ $new_mb_rank = empty($rank_nicks[$mb_rank]) ? 0 : $rank_nicks[$mb_rank];
     <div class="mb-4">
         <span class="form-label"><?php echo getLang('rank')?></span>
         <div>
-            <input type="radio" class="btn-check" name="new_mb_rank" id="id_mb_rank1" autocomplete="off" value="0"<?php echo !$new_mb_rank?' checked':'' ?>>
+            <input type="radio" class="btn-check" name="new_mb_rank" id="id_mb_rank1" autocomplete="off" value="0"<?php echo $grade!='manager'&&$grade!='admin'?' checked':'' ?>>
             <label class="btn btn-xs btn-outline-primary w-100p" for="id_mb_rank1"><?php echo getLang('member')?></label>
-            <input type="radio" class="btn-check" name="new_mb_rank" id="id_mb_rank2" autocomplete="off" value="1"<?php echo $new_mb_rank==='manager'?' checked':'' ?>>
+            <input type="radio" class="btn-check" name="new_mb_rank" id="id_mb_rank2" autocomplete="off" value="1"<?php echo $grade=='manager'?' checked':'' ?>>
             <label class="btn btn-xs btn-outline-primary w-100p" for="id_mb_rank2"><?php echo getLang('manager')?></label>
-            <input type="radio" class="btn-check" name="new_mb_rank" id="id_mb_rank3" autocomplete="off" value="2"<?php echo $new_mb_rank==='admin'?' checked':'' ?>>
+            <input type="radio" class="btn-check" name="new_mb_rank" id="id_mb_rank3" autocomplete="off" value="2"<?php echo $grade=='admin'?' checked':'' ?>>
             <label class="btn btn-xs btn-outline-primary w-100p" for="id_mb_rank3"><?php echo getLang('admin')?></label>
         </div>
     </div>

@@ -35,7 +35,9 @@
 	}
 	$is_submenu = !empty($submenu['_ACTIVE_'])&&count($submenu['_ACTIVE_'])>0;
 ?>
-
+<?php if(!empty($_THEME['use_loader'])) { ?>
+<div id="afoxPageLoading" aria-label="Please Wait, Loading..."></div>
+<?php } ?>
 <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
 	<button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
 					id="theme-color-modes"
@@ -81,7 +83,7 @@
 				<h1 class="header-logo text-body-emphasis mb-0"><?php echo $_CFG['title']?></h1>
 			</div>
 			<div class="col-4 d-flex justify-content-end align-items-end">
-				<label class="link-secondary me-2" href="#" for="searchExList" aria-label="Search"><svg class="bi" aria-hidden="true" style="height:1.4em"><title>Search</title><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#search"/></svg></label>
+				<label class="link-secondary me-2" style="cursor:pointer" href="#" for="searchExList" aria-label="Search"><svg class="bi" aria-hidden="true" style="height:1.4em"><title>Search</title><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#search"/></svg></label>
 <?php if(empty($_MEMBER)){ ?>
 				<a class="btn p-0" style="line-height:normal" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi bi-lg" aria-hidden="true"><title>Sign In</title><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#person-fill"/></svg></a>
 <?php }else{ ?>
@@ -153,22 +155,19 @@
 			<div class="carousel-item active">
 				<img src="<?php echo _AF_THEME_URL_ ?>img/slide-01.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
-					<h5 class="fw-bold">First slide label</h5>
-					<p>Some representative placeholder content for the first slide.</p>
+					<?php echo $_THEME['carousel_item_1'] ?>
 				</div>
 			</div>
 			<div class="carousel-item">
 				<img src="<?php echo _AF_THEME_URL_ ?>/img/slide-02.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
-					<h5 class="fw-bold">Second slide label</h5>
-					<p>Some representative placeholder content for the second slide.</p>
+					<?php echo $_THEME['carousel_item_2'] ?>
 				</div>
 			</div>
 			<div class="carousel-item">
 				<img src="<?php echo _AF_THEME_URL_ ?>/img/slide-03.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
-					<h5 class="fw-bold">Third slide label</h5>
-					<p>Some representative placeholder content for the third slide.</p>
+					<?php echo $_THEME['carousel_item_3'] ?>
 				</div>
 			</div>
 		</div>
@@ -220,7 +219,7 @@
 					<h3 class="pb-2 fst-italic"><?php echo $mainmenu['_ACTIVE_']['mu_title']?></h3>
 					<ol class="list-unstyled">
 <?php foreach ($submenu['_ACTIVE_'] as $key => $val) {
-					echo '<li><a href="'. escapeHtml($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
+					echo '<li><a href="'. escapeHtml($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
 ?>
 							<svg class="bd-placeholder-img" width="100%" height="41" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="gray"></rect></svg>
 							<div class="col-lg-8">

@@ -12,13 +12,12 @@ foreach ($options as $key => $v) {
 
 <style>
 [name="remove_files[]"]+img{outline:0;box-shadow:var(--bs-focus-ring-x,0) var(--bs-focus-ring-y,0) var(--bs-focus-ring-blur,0) var(--bs-focus-ring-width) var(--bs-danger)}
-#editorContent iframe{outline:0;box-shadow:var(--bs-focus-ring-x,0) var(--bs-focus-ring-y,0) var(--bs-focus-ring-blur,0) var(--bs-focus-ring-width) var(--bs-focus-ring-color)}
 #editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);-webkit-filter:invert(50%);filter:invert(50%)}
 #editorTypebar .bi-unchecked.checked::before{content:url(./module/editor/bi-check.svg)}
 #editorTypebar,#editorToolbar{font-size:12px;font-family:Arial}
 #editorToolbar button{padding:2px;border-radius:2px;height:18px;width:18px}
 #editorToolbar button>.bi{position:relative;left:-2px;top:-5px;height:16px;width:16px}
-#uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px}
+#uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px;background-color:var(--bs-border-color)!important}
 #editorContent textarea{min-height:<?php echo $min_height ?>}
 </style>
 
@@ -41,7 +40,7 @@ foreach ($options as $key => $v) {
 	</div>
 <?php } ?>
 	<div id="editorContent" role="document" aria-label="Editor Content">
-		<textarea name="<?php echo $name ?>" class="form-control" <?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'') ?>><?php echo escapeHtml($content) ?></textarea>
+		<textarea name="<?php echo $name ?>" class="form-control" <?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'').($options['required']?' required':'') ?>><?php echo escapeHtml($content) ?></textarea>
 	</div>
 <?php if(!empty($options['toolbar'])) {
 	$components = get_cache('_AF_EDITOR_COMPONENTS');
@@ -131,7 +130,7 @@ foreach ($options as $key => $v) {
 			substr($val['mf_type'], 0, 5) == 'image'
 			? '<img src="%s" class="%s" title="%s" alt="%s">'
 			: '<img src="%s" class="%s" title="%s" alt="%s" srcset="./module/editor/bi-binary.svg">',
-			_AF_URL_.'?file='.$val['mf_srl'],
+			'./?file='.$val['mf_srl'],
 			escapeHtml($val['mf_type']),
 			$es_name.' ('.shortSize( $val['mf_size']). ')',
 			$es_name

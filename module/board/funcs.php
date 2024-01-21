@@ -120,7 +120,7 @@ if(!defined('__AFOX__')) exit();
 		$content= preg_replace('/(<br\s?\/?>|\r|\n)/i', " ", preg_replace($pattern, ' ',$content));
 		$content= htmlspecialchars_decode(strip_tags($content), ENT_QUOTES);
 		$tags = [];
-		$pattern = '/#([\x{3131}-\x{314e}\x{314f}-\x{3163}\x{ac00}-\x{d7a3}\w\-\_]{2,})/u';
+		$pattern = '/\s#([\w]{3,})/u';
 
 		preg_replace_callback($pattern, function($matches)use(&$tags) {
 			$tags[md5(strtoupper($matches[1]))] = $matches[1];

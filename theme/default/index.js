@@ -76,5 +76,29 @@
 			showActiveTheme(theme, true)
 		  })
 		})
+
+		window.current_content = document.querySelector('.current_content');
+		window.current_content?.querySelectorAll('img[src]')
+			?.forEach(el => {
+				const src = el.getAttribute('src');
+				el.setAttribute('src', './common/img/blank.png');
+				el.setAttribute('scroll-src', src);
+			});
+	})
+
+	window.addEventListener('scroll', () => {
+		window.current_content?.querySelectorAll('img[scroll-src]')
+			?.forEach(el => {
+				if(el.offsetTop < (window.scrollY + window.innerHeight + 50)){
+					const src = el.getAttribute('scroll-src');
+					el.setAttribute('src', src);
+					el.removeAttribute('scroll-src');
+				}
+			});
+	})
+
+	window.addEventListener('load', () => {
+		window.dispatchEvent(new Event('scroll', {bubbles: true, cancelable: false}));
+		document.querySelector('#afoxPageLoading')?.fadeOut(el => el.remove());
 	})
   })()

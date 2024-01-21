@@ -3,9 +3,9 @@
 	$ao_list = DB::gets(_AF_TRIGGER_TABLE_,['tg_key'=>'A'], function ($r) {
 		$rset = [];
 		while ($row = DB::fetch($r)) {
-			$g = strtoupper($row['grant_access']);
-			if(empty($row['grant_access'])||$row['grant_access']=='0') $g = '--';
-			$rset[$row['tg_id']] = (empty($row['use_pc'])?'--/':'P/').(empty($row['use_mobile'])?'--/':'M/').$g;
+			$grade = ['0'=>'A','m'=>'S','s'=>'S'];
+			$grade = array_key_exists($row['grant_access'], $grade) ? $grade[$row['grant_access']] : 'M';
+			$rset[$row['tg_id']] = (empty($row['use_pc'])?'--/':'P/').(empty($row['use_mobile'])?'--/':'M/').$grade;
 		}
 		return $rset;
 	});

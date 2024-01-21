@@ -2,7 +2,7 @@
 if(!defined('__AFOX__')) exit();
 
 define('_AF_VERSION_', '0.374');
-define('__DEBUG__', 0);
+define('__DEBUG__', 1);
 
 /*** SSL 설정 ***/
 define('_AF_USE_SSL_', 0); // 1 = always, 2 = optional
@@ -61,7 +61,6 @@ if(session_status() == PHP_SESSION_NONE) session_start();
 $_LANG = [];
 $_PROTECT = [];
 $_ADDELEMENTS = ['LANG'=>[],'CSS'=>[],'JS'=>[]];
-unset($_MEMBER);
 
 // DB 라이브러리 미리 로드
 // SQL Injection 대비를 위해 DB 사용시 보통은 escape 되지만 직접 query를 사용할땐 escape를 직접하거나 parameter 사용

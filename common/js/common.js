@@ -183,6 +183,30 @@ HTMLFormElement.prototype.dataImport = function(data) {
 	}
 };
 
+HTMLElement.prototype.fadeOut = function(callback, speed = 50) {
+	let el = this, op = 1, increment = 0.1;
+	el.timer = setInterval(()=> {
+		op -= increment;
+		el.style.opacity = op;
+		if (op <= 0) {
+			clearInterval(el.timer);
+			callback(el);
+		}
+	}, speed);
+}
+
+HTMLElement.prototype.fadeIn = function(callback, speed = 50) {
+	let el = this, op = 0, increment = 0.1;
+	el.timer = setInterval(()=> {
+		op += increment;
+		el.style.opacity = op;
+		if (op >= 1) {
+			clearInterval(el.timer);
+			callback(el);
+		}
+	}, speed);
+}
+
 window.exec_ajax = function(self, param, callback, responses) {
 	console.log(self);
 	console.log(param);

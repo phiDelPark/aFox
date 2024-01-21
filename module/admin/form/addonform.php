@@ -41,7 +41,7 @@ if(!empty($_ADDON['ao_extra'])) {
 ?>
 
 <form method="post" autocomplete="off">
-<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="success_return_url" value="<?php echo getUrl('ao_id','')?>" />
 <input type="hidden" name="module" value="admin" />
 <input type="hidden" name="act" value="updateaddon" />
 <input type="hidden" name="ao_id" value="<?php echo $_POST['ao_id']?>" />

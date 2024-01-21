@@ -244,7 +244,7 @@ function proc($data) {
 						substr($file['type'], 0, 5) == 'image'
 						? '<img src="%s" class="%s" title="%s" alt="%s">'
 						: '<a href="%s" class="%s" title="%s" alt="%s" target="_file">',
-						_AF_URL_.'?file='.$file['mf_srl'],
+						'./?file='.$file['mf_srl'],
 						escapeHtml($file['type']),
 						$es_name.' ('.shortSize($file['size']). ')',
 						$es_name
@@ -253,6 +253,12 @@ function proc($data) {
 				$data['wr_content']
 			);
 		}
+
+		// 첨부 파일 도메인 주소 잘라내기
+		$data['wr_content'] = preg_replace(
+			'@(<(a|img)\s(src|href)=")(https?://.+)(/\?file)@is',
+			 '$1.$5', $data['wr_content']
+		);
 
 		DB::update(_AF_DOCUMENT_TABLE_,
 			[

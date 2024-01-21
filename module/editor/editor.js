@@ -28,11 +28,13 @@ function afoxEditor(ID, options) {
 			iframe.contentWindow.document.body.innerHTML = textarea.value;
 			textarea.classList.add('d-none');
 			iframe.classList.remove('d-none');
+			if(this.required) textarea.removeAttribute('required');
 		} else if (!is_html && this.isHtmlmode) {
 			textarea.style.height = iframe.offsetHeight + "px";
 			textarea.value = iframe.contentWindow.document.body.innerHTML;
 			iframe.classList.add('d-none');
 			textarea.classList.remove('d-none');
+			if(this.required) textarea.setAttribute('required','');
 		}
 		this.isHtmlmode = textarea.classList.contains('d-none');
 	}
@@ -81,7 +83,7 @@ function afoxEditor(ID, options) {
 			if (range) {
 				const el = iframe.contentWindow.document.createElement("div");
 				el.appendChild(range.cloneContents());
-				el.innerHTML = html.replace(/%s/, el.innerHTML);
+				el.innerHTML = html.replace(/%s/, el.innerHTML ? el.innerHTML : '...');
 				range.deleteContents();
 				range.insertNode(el.firstElementChild);
 				range.setStart(selection.focusNode, selection.focusOffset);
@@ -261,36 +263,51 @@ function afoxEditor(ID, options) {
 		}
 	}));
 
-	editor.closest('FORM').addEventListener('submit', e => {
+	const form = editor.closest('FORM');
+	if(form.hasAttribute('needvalidate')) form.setAttribute('novalidate', '');
+	form.addEventListener('submit', e => {
 		try {
 			if (this.isHtmlmode) {
 				textarea.value = iframe.contentWindow.document.body.innerHTML;
 			}
-			if (this.required && !textarea.value) {
-				this.isHtmlmode
-					? iframe.contentWindow.document.body.focus() : textarea.focus();
-				throw new Error(this.required);
+			content_validity = !this.required || textarea.value;
+			if(e.currentTarget.hasAttribute('needvalidate')){
+				if (!content_validity || !e.currentTarget.checkValidity()) {
+					e.preventDefault()
+					e.stopPropagation()
+				}
+				if(!content_validity){
+					iframe.contentWindow.document.body.classList.add('is-invalid');
+				}
+				e.currentTarget.classList.add('was-validated');
+			} else {
+				if (!content_validity) {
+					this.isHtmlmode
+						? iframe.contentWindow.document.body.focus() : textarea.focus();
+					throw new Error(this.required);
+				}
 			}
 		} catch (error) {
-			e.stopPropagation();
-			e.preventDefault();
+			e.preventDefault()
+			e.stopPropagation()
 			console.error(error);
 			alert(error);
-			return false;
 		}
-		return true;
-	});
+	}, false);
 
 	if(this.html) modeSwitch(true);
 }
 
-window.uploadFiles = [];
-window.addEventListener('beforeunload', e => {
-	let url; // 파일 사용 후 메모리 제거
-	const elURL = (window.URL || window.webkitURL);
-	while (window.uploadFiles.length > 0) {
-		url = window.uploadFiles.pop();
-		elURL.revokeObjectURL(url);
-		console.error(url);
-	}
-});
+(function() {
+	'use strict'
+	window.uploadFiles = [];
+	window.addEventListener('beforeunload', e => {
+		let url; // 파일 사용 후 메모리 제거
+		const elURL = (window.URL || window.webkitURL);
+		while (window.uploadFiles.length > 0) {
+			url = window.uploadFiles.pop();
+			elURL.revokeObjectURL(url);
+			console.error(url);
+		}
+	});
+})();

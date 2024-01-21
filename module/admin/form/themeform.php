@@ -26,7 +26,7 @@ if(!$ex = DB::error()) $_THEME = empty($_THEME['th_extra'])?[]:unserialize($_THE
 </div>
 
 <form method="post" autocomplete="off">
-<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="success_return_url" value="<?php echo getUrl('th_id','')?>" />
 <input type="hidden" name="module" value="admin" />
 <input type="hidden" name="act" value="updatetheme" />
 <input type="hidden" name="th_id" value="<?php echo $_POST['th_id']?>" />

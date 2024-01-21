@@ -90,14 +90,14 @@
 				$filetype = strtolower(array_shift($filetype));
 				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
 				$unfilename = _AF_URL_ .'data/attach/'. $filetype . '/' . $value['md_id'] . '/' . $value['mf_target'] . '/' . $value['mf_upload_name'];
-				echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row" rowspan="2"><input type="radio" name="mf_standard" value="'.$value['mf_srl'].'" class="data_standard" style="margin-right:5px" data-except-ajax><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="margin-right:5px" data-except-ajax></th>';
+				echo '<tr><th scope="row" rowspan="2"><input type="radio" name="mf_standard" value="'.$value['mf_srl'].'" class="data_standard" style="margin-right:5px" data-except-ajax><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="margin-right:5px" data-except-ajax></th>';
 				echo '<td scope="row" rowspan="2" style="padding:2px"><img src="'.($unfilename).'" width="65" height="65"></td>';
 				echo '<td scope="row">'.$value['md_id'].'</td>';
 				echo '<td class="title">'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
 				echo '<td class="hidden-xs">'.shortSize($value['mf_size']).'</td>';
 
 			} else {
-			echo '<tr class="afox-list-item" data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"><th scope="row"><a href="'.getUrl('category',$value['md_id']).'" data-except-ajax>'.$value['md_id'].'</a></th>';
+			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></th>';
 			echo '<td class="title"'.(empty($value['mf_size'])?' style="text-decoration:line-through"':'').'><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="display:none;margin-right:5px" data-except-ajax>'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
 			echo '<td class="hidden-xs">'.$value['mf_download'].'</td>';
 			}

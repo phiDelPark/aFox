@@ -15,7 +15,21 @@ define('__REQ_METHOD__', getRequestMethod());
 define('_AF_URL_', getRequestUri());
 define('_AF_THEME_URL_', _AF_URL_ . 'theme/' . _AF_THEME_ . '/');
 
-$_MEMBER = getLoginInfo();
+// 로그인 중인 회원 정보 가져오기
+$_MEMBER = isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cookie('AF_LOGIN_ID');
+if($_MEMBER && preg_match('/^[a-zA-Z]+\w{2,}$/', $_MEMBER) && $_MEMBER = getMember($_MEMBER)){
+		if($_MEMBER['mb_grade'] != 'admin' && !isset($_SESSION['AF_LOGIN_ID'])){ // 쿠키검사, 관리자는 안함
+$tmp=md5($_SERVER['SERVER_ADDR'].$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'].$_MEMBER['mb_password']);
+			if($tmp && get_cookie('AF_AUTO_LOGIN') === $tmp){
+				set_session('AF_LOGIN_ID', $_MEMBER['mb_id']);
+			} else $_MEMBER = [];
+		}
+} else $_MEMBER = [];
+if(empty($_MEMBER)){ // 로그인이 아니면 삭제
+	set_cookie('AF_LOGIN_ID', '', -1);
+	set_cookie('AF_AUTO_LOGIN', '', -1);
+	unset($_SESSION['AF_LOGIN_ID']);
+} else unset($_MEMBER['mb_password']); // 검사 후 비번 삭제
 
 if(__REQ_METHOD__ == 'JSON') $_POST = json_decode(file_get_contents('php://input'), TRUE);
 // 넘어온 값을 하나로 합침
