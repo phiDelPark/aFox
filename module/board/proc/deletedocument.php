@@ -14,7 +14,7 @@ function proc($data) {
 	// 권한 체크
 	if(!isManager($doc['md_id'])) {
 		if(empty($_MEMBER) || empty($doc['mb_srl'])) {
-			if(empty($data['mb_password'])) {
+			if(empty($doc['mb_srl']) && empty($data['mb_password'])) {
 				return set_error(getLang('request_input', ['password']), 1);
 			}
 			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {

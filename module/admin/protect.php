@@ -18,7 +18,7 @@ $_PROTECT['proc.selecttheme']	    	= ['grant' => 's'];
 
 $_PROTECT['proc.combinefiles']			= ['grant' => 's'];
 $_PROTECT['proc.movedocuments']			= ['grant' => 's'];
-$_PROTECT['proc.emptyrecyclebin']		= ['grant' => 's'];
+$_PROTECT['proc.emptytrashbin']		= ['grant' => 's'];
 
 $_PROTECT['proc.getfile']				= ['grant' => 'm'];
 $_PROTECT['proc.getfilelist']			= ['grant' => 'm'];

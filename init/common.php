@@ -50,29 +50,21 @@ foreach (['module','id','act','disp'] as $tmp){
 		$_POST[$tmp] = '';
 }
 
+// 문서번호만 오면 id 가져옴
+if(empty($_POST['act']) && (!empty($_POST['srl']) || !empty($_POST['rp']))){
+	if(!empty($_POST['rp'])&&$tmp=DB::get(_AF_COMMENT_TABLE_,'wr_srl',['rp_srl'=>(int)$_POST['rp']]))
+		$_POST['srl'] = $tmp['wr_srl'];
+	if(!empty($_POST['srl'])&&$tmp=DB::get(_AF_DOCUMENT_TABLE_,'md_id',['wr_srl'=>(int)$_POST['srl']]))
+		$_POST['id'] = $tmp['md_id'];
+	setQuery('','id',$_POST['id'],'srl',$_POST['srl'],'rp',empty($_POST['rp'])?'':$_POST['rp']);
+}
+
 // module, id 가 없으면 시작 페이지
 // 위 유효성 검사에서 module, id 변수가 없으면 빈값을 넣기에 empty 안씀
 if(!$_POST['module'] && !$_POST['id']) $_POST['id'] = $_CFG['start'];
 if($_POST['id'] && ($tmp=getModule($_POST['id']))){
 	$_CFG = array_merge($_CFG, $tmp); // 설정 하나로 합침
 	$_POST['module'] = $tmp['md_key'];
-}
-
-// 문서번호만 오면 id 가져옴
-if(!empty($_POST['srl']) || !empty($_POST['rp'])){
-	if(!empty($_POST['rp'])){
-		$tmp = DB::get(_AF_COMMENT_TABLE_, 'wr_srl', ['rp_srl'=>(int)$_POST['rp']]);
-		if(!empty($tmp['wr_srl'])) $_POST['srl'] = $tmp['wr_srl'];
-	}
-	if(!empty($_POST['srl'])){
-		$tmp = DB::get(_AF_DOCUMENT_TABLE_, 'md_id', ['wr_srl'=>(int)$_POST['srl']]);
-		if(!empty($tmp['md_id'])) $_POST['id'] = $tmp['md_id'];
-	}
-	setQuery('',
-		'id',empty($_POST['id'])?'':$_POST['id'],
-		'srl',empty($_POST['srl'])?'':$_POST['srl'],
-		'rp',empty($_POST['rp'])?'':$_POST['rp']
-	);
 }
 
 define('__MID__', $_POST['id']);
@@ -99,7 +91,7 @@ if(!empty($_POST['cdnerr'])){ // CDN 에러시 브라우저 종료전까지 사�
 $tmp = _AF_CONFIG_DATA_.'base_cdn_list.php';
 define('_AF_USE_BASE_CDN_', !get_cookie('_CDN_ERROR_')&&file_exists($tmp) ? $tmp : FALSE);
 
-$tmp = __REQ_METHOD__=='JSON'||__REQ_METHOD__=='JSCALLBACK'?'application/json':'text/html';
+$tmp = __REQ_METHOD__=='JSON'?'application/json':'text/html';
 header('Content-Type: '.$tmp.'; charset=UTF-8');
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');

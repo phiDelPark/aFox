@@ -55,7 +55,12 @@
 	$trash_list = setDataListInfo($trash_list, $page, $count, DB::foundRows());
 ?>
 
-<button type="button" class="btn btn-primary mb-3" style="width:250px" data-toggle="modal.clone" data-target=".bs-admin-modal-lg"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('empty_recycle_bin')?></button>
+<form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_empty',['trash_bin'])?>')">
+	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="module" value="admin" />
+	<input type="hidden" name="act" value="emptyTrashBin" />
+	<button type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('empty_trash_bin')?></button>
+</form>
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
@@ -69,13 +74,14 @@
   </li>
 </ul>
 
+<div class="clearfix"></div>
 <table class="table">
 <thead>
 	<tr>
 		<th scope="col">#</th>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
 		<th scope="col"><?php echo ($_POST['trash'] == 'file'?'-':getLang('author'))?></th>
-		<th scope="col"><?php echo ($_POST['trash'] == 'file'?getLang('download'):getLang('status'))?></th>
+		<th scope="col"><?php echo ($_POST['trash'] == 'file'?'&raquo;':getLang('status'))?></th>
 		<th scope="col"><?php echo getLang('date')?></th>
 		<th scope="col"><?php echo getLang('removed_date')?></th>
 	</tr>
@@ -98,16 +104,16 @@
 
 		foreach ($trash_list['data'] as $key => $value) {
 			if($_POST['trash'] == 'comment') {
-				$tmp = ' data-exec-ajax="board.getComment" data-ajax-param="rp_srl,'.$value['rp_srl'].'" data-modal-target="#comment_modal"';
+				$tmp = 'rp='.$value['rp_srl'];
 			} else if($_POST['trash'] == 'file') {
-				$tmp = ' data-exec-ajax="admin.getFile" data-ajax-param="mf_srl,'.$value['mf_srl'].'" data-modal-target="#file_modal"';
+				$tmp = 'srl='.$value['mf_target'];
 			} else {
-				$tmp = ' data-exec-ajax="board.getDocument" data-ajax-param="wr_srl,'.$value['wr_srl'].'" data-modal-target="#trash_modal"';
+				$tmp = 'srl='.$value['wr_srl'];
 			}
 			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['wr_updater']).'">'.$value['wr_updater'].'</a></th>';
-			echo '<td class="text-wrap">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
+			echo '<td class="text-wrap"><a href="#./?'.$tmp.'" onclick="return (alert(\'trash\')||false)">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</a></td>';
 			echo '<td>'.($_POST['trash'] == 'file'?'-':escapeHtml($value['mb_nick'],true)).'</td>';
-			echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
+			echo '<td>'.($_POST['trash'] != 'file'&&$value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_update'])).'</td></tr>';
 		}
@@ -138,206 +144,6 @@
 	</ul>
 	</nav>
 </div>
-
-<?php if($_POST['trash'] == 'comment') {?>
-<div id="comment_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="rp_srl" value="" />
-	<input type="hidden" name="wr_srl" value="" />
-
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title"><?php echo getLang('comment')?></h4>
-	  </div>
-	  <div class="modal-body">
-		<div class="form-group clearfix">
-			<div class="pull-left">
-				<label><?php echo getLang('nickname')?></label>
-				<div class="form-inline">
-					<input type="text" class="form-control" name="mb_nick" maxlength="20" disabled="disabled">
-				</div>
-			</div>
-			<div class="pull-right">
-				<label><?php echo getLang('regdate')?></label>
-				<div class="form-inline">
-					<input type="text" name="rp_regdate" class="form-control" style="width:160px" disabled="disabled">
-				</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="id_wr_title"><?php echo getLang('document')?></label>
-			<input type="text" class="form-control" name="wr_title" id="id_wr_title" maxlength="255" disabled>
-		</div>
-		<div class="form-group">
-			<textarea class="form-control mh-20 vresize" name="rp_content" id="id_rp_content" readonly="readonly"></textarea>
-		</div>
-	  </div>
-	  <div class="modal-footer clearfix">
-		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteComment"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
-		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-	  </div>
-	</form>
-  </div>
-</div>
-<?php } else if($_POST['trash'] == 'file') {?>
-<div id="file_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="md_id" value="" />
-	<input type="hidden" name="mf_srl" value="" />
-	<input type="hidden" name="mf_target" value="" />
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title"><?php echo getLang('file')?></h4>
-		</div>
-		<div class="modal-body">
-			<div class="form-group clearfix">
-				<div class="pull-left">
-					<label><?php echo getLang('%s %s',['module','id'])?></label>
-					<div class="form-inline">
-						<input type="text" class="form-control" name="md_id" maxlength="11" disabled="disabled">
-					</div>
-				</div>
-				<div class="pull-right">
-					<label><?php echo getLang('regdate')?></label>
-					<div class="form-inline">
-						<input type="text" name="mf_regdate" class="form-control" style="width:160px" disabled="disabled" title="<?php echo getLang('regdate')?>">
-					</div>
-				</div>
-			</div>
-			<div class="form-group clearfix">
-				<div class="pull-left">
-					<label><?php echo getLang('type')?></label>
-					<div class="form-inline">
-						<input type="text" class="form-control" name="mf_type" maxlength="11" disabled="disabled">
-					</div>
-				</div>
-				<div class="pull-right">
-					<label><?php echo getLang('size')?>(Byte)</label>
-					<div class="form-inline">
-						<input type="text" name="mf_size" class="form-control" style="width:160px" disabled="disabled" title="<?php echo getLang('regdate')?>">
-					</div>
-				</div>
-			</div>
-			<div class="form-group imagebox" style="display:none">
-				<label><?php echo getLang('preview')?></label>
-				<br>
-				<img style="height:100px;max-width:100%;width:auto">
-			</div>
-			<div class="form-group">
-				<label for="id_mf_name"><?php echo getLang('name')?></label>
-				<input type="text" name="mf_name" class="form-control" id="id_mf_name" maxlength="255" disabled="disabled">
-			</div>
-			<div class="form-group">
-				<label for="id_mf_description"><?php echo getLang('explain')?></label>
-				<input type="text" name="mf_description" class="form-control" id="id_mf_description" maxlength="255" disabled="disabled">
-			</div>
-		</div>
-		<div class="modal-footer clearfix">
-			<button type="button" class="btn btn-danger pull-left" data-act-change="admin.deleteFile" data-add-param="is_empty,1"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		</div>
-	</form>
-  </div>
-</div>
-<?php } else {?>
-<div id="trash_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="md_id" value="" />
-	<input type="hidden" name="wr_srl" value="" />
-
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title"><?php echo getLang('recycle_bin')?></h4>
-	  </div>
-	  <div class="modal-body">
-		<div class="form-group clearfix">
-			<div class="pull-left">
-				<label><?php echo getLang('nickname')?></label>
-				<div class="form-inline">
-					<input type="text" class="form-control" name="mb_nick" maxlength="20" disabled="disabled">
-				</div>
-			</div>
-			<div class="pull-right">
-				<label><?php echo getLang('regdate')?></label>
-				<div class="form-inline">
-					<input type="text" name="wr_regdate" class="form-control" style="width:160px" disabled="disabled">
-				</div>
-			</div>
-		</div>
-		<div class="form-group clearfix">
-			<div class="pull-left">
-				<label><?php echo getLang('%s %s',['module','id'])?></label>
-				<div class="form-inline">
-					<input type="text" class="form-control" name="wr_updater" maxlength="11" disabled="disabled">
-				</div>
-			</div>
-			<div class="pull-right">
-				<label><?php echo getLang('removed_date')?></label>
-				<div class="form-inline">
-					<input type="text" name="wr_update" class="form-control" style="width:160px" disabled="disabled">
-				</div>
-			</div>
-		</div>
-		<div class="form-group" style="display:none">
-			<label for="id_wr_category"><?php echo getLang('category')?></label>
-			<input type="text" name="wr_category" class="form-control" id="id_wr_category" maxlength="255" readonly="readonly">
-		</div>
-		<div class="form-group">
-			<label for="id_wr_title"><?php echo getLang('title')?></label>
-			<input type="text" name="wr_title" class="form-control" id="id_wr_title" maxlength="255" readonly="readonly">
-		</div>
-		<div class="form-group">
-			<label for="id_wr_content"><?php echo getLang('content')?></label>
-			<div class="pull-right">
-			<label class="radio inline" tabindex="0" style="margin-top:0;margin-bottom:5px">
-				<input type="radio" name="wr_type" value="0" disabled>
-				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-				TEXT
-			</label>
-			<label class="radio inline" tabindex="0" style="margin-top:0;margin-bottom:5px">
-				<input type="radio" name="wr_type" value="1" disabled>
-				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-				MKDW
-			</label>
-			<label class="radio inline" tabindex="0" style="margin-top:0;margin-bottom:5px">
-				<input type="radio" name="wr_type" value="2" disabled>
-				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-				HTML
-			</label>
-			<label class="checkbox inline" tabindex="0" style="margin-top:0;margin-bottom:5px;margin-left:.8em">
-				<input type="checkbox" name="wr_secret" value="1" disabled>
-				<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-				<?php echo getLang('secret')?>
-			</label>
-			</div>
-			<textarea class="form-control mh-20 vresize clearfix" name="wr_content" id="id_wr_content" readonly="readonly"></textarea>
-		</div>
-	  </div>
-	  <div class="modal-footer clearfix">
-		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteDocument" data-add-param="is_empty,1"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
-		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-refresh" aria-hidden="true"></i> <?php echo getLang('restore')?></button>
-	  </div>
-	</form>
-  </div>
-</div>
-<?php } ?>
-
-<script>
-	function empty_recycle_bin() {
-		if (confirm($_LANG['confirm_empty'].sprintf([$_LANG['recycle_bin']]))) {
-			var data = {};
-			data['success_return_url'] = current_url;
-			exec_ajax('admin.emptyRecyclebin', data);
-		}
-	}
-</script>
 
 <?php
 /* End of file trash.php */

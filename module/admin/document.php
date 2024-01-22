@@ -50,7 +50,7 @@
 
 		foreach ($doc_list['data'] as $key => $value) {
 			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></th>';
-			echo '<td class="text-wrap">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</td>';
+			echo '<td class="text-wrap"><a href="./?srl='.$value['wr_srl'].'" target="_blank">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</a></td>';
 			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
 			echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td></tr>';
@@ -83,108 +83,6 @@
 	</nav>
 </div>
 
-<div id="document_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" onsubmit="return false" method="post" autocomplete="off" enctype="multipart/form-data">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="md_id" value="" />
-	<input type="hidden" name="wr_srl" value="" />
-	  <div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title"><?php echo getLang('document')?></h4>
-	  </div>
-	  <div class="modal-body">
-		<div class="form-group clearfix">
-			<div class="pull-left">
-				<label><?php echo getLang('nickname')?></label>
-				<div class="form-inline">
-					<input type="text" class="form-control" name="mb_nick" maxlength="20" disabled="disabled">
-				</div>
-			</div>
-			<div class="pull-right">
-				<label><?php echo getLang('regdate')?></label>
-				<div class="form-inline">
-					<input type="text" name="wr_regdate" class="form-control" style="width:160px" disabled="disabled">
-				</div>
-			</div>
-		</div>
-		<div class="form-group" style="display:none">
-			<select name="wr_category" class="form-control">
-			<option value=""><?php echo getLang('category')?></option>
-			</select>
-		</div>
-		<div class="form-group">
-			<label for="id_wr_title"><?php echo getLang('title')?></label>
-			<div class="input-group">
-				<input type="text" name="wr_title" class="form-control" id="id_wr_title" maxlength="255">
-				<span class="input-group-btn">
-					<button class="btn btn-info document_goto" type="button" title="<?php echo getLang('goto')?>..."><i class="glyphicon glyphicon-share-alt" aria-hidden="true"></i></button>
-				</span>
-			</div>
-		</div>
-		<div class="form-group">
-			<?php displayEditor(
-					'wr_content',
-					'',
-					[
-						'file'=>[99999,'',0],
-						'statebar'=>true,
-						'toolbar'=>array(getLang('content'), ['wr_type'=>['1', ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']],'wr_secret'=>[false,'Secret']])
-					]
-				);
-			?>
-		</div>
-	  </div>
-	  <div class="modal-footer clearfix">
-		<button type="button" class="btn btn-warning pull-left" data-act-change="board.deleteDocument"><?php echo getLang('recycle_bin')?></button>
-		<button type="button" class="btn btn-danger pull-left" data-act-change="board.deleteDocument" data-add-param="is_empty,1"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
-		<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-		<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
-	  </div>
-	</form>
-  </div>
-</div>
-
-<script>
-	function data_selected_delete() {
-		if (confirm($_LANG['confirm_select_trash'].sprintf([$_LANG['document']]))) {
-		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
-			data = {};
-			srls = [];
-			$a.find('.data_selecter:checked').each(function(i) {
-				srls[i] = jQuery(this).val();
-			});
-			if (srls.length < 1) {
-				alert($_LANG['warning_selected'].sprintf([$_LANG['document']]));
-				return false;
-			}
-			data['wr_srls'] = srls;
-			data['success_return_url'] = current_url;
-			exec_ajax('admin.deleteDocuments', data);
-		}
-		return false;
-	}
-	function data_selected_move() {
-		var md_id = prompt($_LANG['prompt_move_board_id'], '');
-		if (md_id) {
-		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
-			data = {};
-			srls = [];
-			$a.find('.data_selecter:checked').each(function(i) {
-				srls[i] = jQuery(this).val();
-			});
-			if (srls.length < 1) {
-				alert($_LANG['warning_selected'].sprintf([$_LANG['document']]));
-				return false;
-			}
-			data['md_id'] = md_id;
-			data['wr_srls'] = srls;
-			data['success_return_url'] = current_url;
-			exec_ajax('admin.moveDocuments', data);
-		}
-		return false;
-	}
-</script>
 <?php
 /* End of file document.php */
 /* Location: ./module/admin/document.php */

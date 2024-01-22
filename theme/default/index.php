@@ -96,7 +96,7 @@
 					<?php } ?>
 					<li><hr class="dropdown-divider"></li>
 					<li><a class="dropdown-item" href="<?php echo getUrl('','member','inbox') ?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#envelope"/></svg> <?php echo getLang('Inbox')?></a></li>
-					<li><a class="dropdown-item" href="<?php echo getUrl('','member','trash') ?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#trash"/></svg> <?php echo getLang('Recycle_bin')?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','trash') ?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#trash"/></svg> <?php echo getLang('trash_bin')?></a></li>
 					<li><hr class="dropdown-divider"></li>
 					<li><a class="dropdown-item" href="<?php echo getUrl('', 'module', 'member', 'act', 'signOut')?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#power"/></svg> <?php echo getLang('Logout')?></a></li>
 				</ul>

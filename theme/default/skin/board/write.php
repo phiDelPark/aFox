@@ -11,6 +11,7 @@
 	<h3 class="pb-3 mb-4 fst-italic border-bottom"><?php echo getLang($is?'edit':'write')?></h3>
 
 	<form id="setup" method="post" autocomplete="off" enctype="multipart/form-data" needvalidate>
+	<input type="hidden" name="error_return_url" value="<?php echo getUrl()?>">
 	<input type="hidden" name="success_return_url" value="<?php echo $is?getUrl('disp','','cpage','','rp',''):getUrl('','id',__MID__)?>">
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="updateDocument" />

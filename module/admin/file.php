@@ -53,11 +53,11 @@
 		<?php } else { ?>
 		<th scope="col"><a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
 		<?php } ?>
-		<th scope="col"><?php echo getLang('name')?></th>
+		<th scope="col" class="text-wrap"><?php echo getLang('name')?></th>
 		<?php if($duplicate) { ?>
 		<th scope="col"><?php echo getLang('size')?></th>
 		<?php } else { ?>
-		<th scope="col"><?php echo getLang('download')?></th>
+		<th scope="col">&raquo;</th>
 		<?php } ?>
 		<th scope="col"><?php echo getLang('ip')?></th>
 		<th scope="col"><?php echo getLang('date')?></th>
@@ -98,10 +98,10 @@
 
 			} else {
 			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></th>';
-			echo '<td class="title"'.(empty($value['mf_size'])?' style="text-decoration:line-through"':'').'><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="display:none;margin-right:5px" data-except-ajax>'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
-			echo '<td class="hidden-xs">'.$value['mf_download'].'</td>';
+			echo '<td class="text-wrap"><a href="./?srl='.$value['mf_target'].'" target="_blank">'.escapeHtml(cutstr($value['mf_name'],50)).'</a></td>';
+			echo '<td>'.$value['mf_download'].'</td>';
 			}
-			echo '<td class="hidden-xs hidden-sm">'.$value['mb_ipaddress'].'</td>';
+			echo '<td>'.$value['mb_ipaddress'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mf_regdate'])).'</td></tr>';
 			if($duplicate) {
 				echo '<tr><td class="title" colspan="4" style="color:#555;text-decoration:underline"><a href="'.getUrl('','id',$value['md_id'],'srl',$value['mf_target']).'" target="_blank">'.escapeHtml(cutstr($value['wr_title'],50)).'</a></td></tr>';
@@ -134,122 +134,6 @@
 	</ul>
 	</nav>
 </div>
-
-<div id="file_modal" class="modal fade bs-admin-modal-lg" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-	<form class="modal-content" method="post" autocomplete="off">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="md_id" value="" />
-	<input type="hidden" name="mf_srl" value="" />
-	<input type="hidden" name="mf_target" value="" />
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title"><?php echo getLang('file')?></h4>
-		</div>
-		<div class="modal-body">
-			<div class="form-group clearfix">
-				<div class="pull-left">
-					<label><?php echo getLang('%s %s',['module','id'])?></label>
-					<div class="form-inline">
-						<input type="text" class="form-control" name="md_id" maxlength="11" disabled="disabled">
-					</div>
-				</div>
-				<div class="pull-right">
-					<label><?php echo getLang('regdate')?></label>
-					<div class="form-inline">
-						<input type="text" name="mf_regdate" class="form-control" style="width:160px" disabled="disabled" title="<?php echo getLang('regdate')?>">
-					</div>
-				</div>
-			</div>
-			<div class="form-group clearfix">
-				<div class="pull-left">
-					<label><?php echo getLang('type')?></label>
-					<div class="form-inline">
-						<input type="text" class="form-control" name="mf_type" maxlength="11" disabled="disabled">
-					</div>
-				</div>
-				<div class="pull-right">
-					<label><?php echo getLang('size')?>(Byte)</label>
-					<div class="form-inline">
-						<input type="text" name="mf_size" class="form-control" style="width:160px" disabled="disabled" title="<?php echo getLang('regdate')?>">
-					</div>
-				</div>
-			</div>
-			<div class="form-group imagebox" style="display:none">
-				<label><?php echo getLang('preview')?></label>
-				<br>
-				<img style="height:100px;max-width:100%;width:auto">
-			</div>
-			<div class="form-group">
-				<label for="id_mf_name"><?php echo getLang('name')?></label>
-				<div class="input-group">
-					<input type="text" name="mf_name" class="form-control" id="id_mf_name" maxlength="255">
-					<span class="input-group-btn">
-						<button class="btn btn-info document_goto" type="button" title="<?php echo getLang('goto')?>..."><i class="glyphicon glyphicon-share-alt" aria-hidden="true"></i></button>
-					</span>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="id_mf_description"><?php echo getLang('explain')?></label>
-				<input type="text" name="mf_description" class="form-control" id="id_mf_description" maxlength="255">
-			</div>
-		</div>
-		<div class="modal-footer clearfix">
-			<button type="button" class="btn btn-danger pull-left" data-act-change="admin.deleteFile" data-add-param="is_empty,1"<?php echo isAdmin()?'':' disabled'?>><?php echo getLang('permanent_delete')?></button>
-			<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo getLang('close')?></button>
-			<button type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok" aria-hidden="true"></i> <?php echo getLang('save')?></button>
-		</div>
-	</form>
-  </div>
-</div>
-
-<script>
-	function data_selected_delete() {
-		if (confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['file']]))) {
-		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
-			data = {},
-			srls = [];
-			$a.find('.data_selecter:checked').each(function(i) {
-				srls[i] = jQuery(this).val();
-			});
-			if (srls.length < 1) {
-				alert($_LANG['warning_selected'].sprintf([$_LANG['file']]));
-				return false;
-			}
-			data['mf_srls'] = srls;
-			data['success_return_url'] = current_url;
-			exec_ajax('admin.deleteFiles', data);
-		}
-		return false;
-	}
-	function data_selected_combine() {
-		if (confirm($_LANG['confirm_select_combine'].sprintf([$_LANG['file']]))) {
-		var $a = jQuery('#ADM_DEFAULT_MODULE .table'),
-			data = {},
-			srls = [],
-			standards = [];
-			$a.find('.data_standard:checked').each(function(i) {
-				standards[i] = jQuery(this).val();
-			});
-			if(standards.length < 1) {
-				alert($_LANG['warning_selected'].sprintf([$_LANG['standard_point']]));
-				return false;
-			}
-			$a.find('.data_selecter:checked').each(function(i) {
-				srls[i] = jQuery(this).val();
-			});
-			if (srls.length < 1) {
-				alert($_LANG['warning_selected'].sprintf([$_LANG['file']]));
-				return false;
-			}
-			data['mf_srls'] = srls;
-			data['mf_standard'] = standards[0];
-			data['success_return_url'] = current_url;
-			exec_ajax('admin.combineFiles', data);
-		}
-		return false;
-	}
-</script>
 
 <?php
 /* End of file file.php */

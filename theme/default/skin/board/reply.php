@@ -4,6 +4,8 @@ if(!defined('__AFOX__')) exit();
 
 <section id="documentReply" class="list-group list-group-flush mb-4" aria-label="Replies to post">
 <?php
+	$rp = empty($_POST['rp'])?0:$_POST['rp'];
+	$location_hash = $rp&&$REPLYS?'documentReply':'';
 	foreach ($REPLYS as $key => $val) {
 		$_len = strlen($val['rp_depth']);
 		$rp_secret =  $val['rp_secret'] == '1';
@@ -12,22 +14,30 @@ if(!defined('__AFOX__')) exit();
 		$rp_content .= !$rp_permit ? getLang('error_permitted') : toHTML($val['rp_content'], $val['rp_type']);
 		echo sprintf(
 			'<div id="reply-%s" class="d-flex flex-lg-row gap-3 p-2 border-bottom" style="margin-left:%spx"><svg class="bi bi-lg mt-1"><use href="%s"></use></svg>
-			<div class="w-100"><div>%s</div><div class="d-flex justify-content-between text-body-secondary mt-1"><small>%s</small><small>%s: <a href="#DELDTE" exec-ajax="board.deleteComment&rp_srl=%s" success-url="%s" class="text-decoration-none">&Chi;</a></small></div></div></div>',
+			<div class="w-100"><div>%s</div><div class="d-flex justify-content-between text-body-secondary mt-1"><small>%s</small><small>%s:
+			<a href="%s" onclick="return confirm(\'%s\')" class="text-decoration-none">&Chi;</a></small></div></div></div>',
 			$val['rp_srl'],
 			($_len>5?5:$_len)*30,
 			_AF_THEME_URL_.'bi-icons.svg#person-bounding-box',
 			$rp_content,
 			escapeHtml($val['mb_nick'], true),
 			date('Y/m/d', strtotime($val['rp_regdate'])),
-			$val['rp_srl'],
-			getUrl().'#documentReply'
+			getUrl(
+				'module','board','act','deleteComment','rp_srl',$val['rp_srl'],
+				'error_return_url',urlencode(getUrl()),
+				'success_return_url',urlencode(getUrl('srl',$val['wr_srl'],'rp',$val['rp_srl']))
+			),
+			getLang('confirm_delete',['reply'])
 		);
+		if($rp === $val['rp_srl']) $location_hash = 'reply-'.$val['rp_srl'];
 	}
+	if($location_hash) set_cookie('location.hash', $location_hash, 18000);
 ?>
 </section>
 
 <section id="replyEditer" class="mb-5" aria-label="Write a reply to this post">
 	<form method="post" autocomplete="off" needvalidate>
+		<input type="hidden" name="error_return_url" value="<?php echo getUrl()?>">
 		<input type="hidden" name="success_return_url" value="<?php echo getUrl('rp','')?>">
 		<input type="hidden" name="module" value="board">
 		<input type="hidden" name="act" value="updateComment">

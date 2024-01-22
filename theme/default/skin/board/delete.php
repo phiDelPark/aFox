@@ -6,6 +6,7 @@
 <section id="documentDelete" aria-label="Delete this post?">
 	<h3 class="pb-3 mb-4 fst-italic border-bottom"><?php echo getLang('delete')?></h3>
 	<form id="setup" method="post" autocomplete="off" enctype="multipart/form-data">
+	<input type="hidden" name="error_return_url" value="<?php echo getUrl()?>">
 	<input type="hidden" name="success_return_url" value="<?php echo getUrl('disp','','srl','','cpage','','rp','')?>" />
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="deleteDocument" />

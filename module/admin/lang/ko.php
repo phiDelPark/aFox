@@ -15,7 +15,7 @@ $_LANG['menu_name_menu'] = '사이트 메뉴';
 $_LANG['menu_name_module'] = '모듈';
 $_LANG['menu_name_page'] = $_LANG['page'];
 $_LANG['menu_name_theme'] = '사이트 테마';
-$_LANG['menu_name_trash'] = $_LANG['recycle_bin'];
+$_LANG['menu_name_trash'] = $_LANG['trash_bin'];
 $_LANG['menu_name_visit'] = '방문 기록';
 $_LANG['menu_name_widget'] = '위젯';
 $_LANG['menu_name_setup'] = '사이트 설정';
@@ -68,7 +68,7 @@ $_LANG['permanent_delete'] = '완전 삭제';
 $_LANG['possible'] = '허용';
 $_LANG['intercept'] = '차단';
 $_LANG['prohibit_id'] = '아이디 제한';
-$_LANG['recycle_bin'] = '휴지통';
+$_LANG['trash_bin'] = '휴지통';
 $_LANG['referer'] = '리퍼러';
 $_LANG['removed_addon'] = '삭제된 애드온';
 $_LANG['removed_date'] = '삭제 날짜';
@@ -92,7 +92,7 @@ $_LANG['data_delete'] = $_LANG['delete'];
 $_LANG['data_combine'] = '합치기';
 
 $_LANG['standard_point'] = '기준점';
-$_LANG['empty_recycle_bin'] = '휴지통 비우기';
+$_LANG['empty_trash_bin'] = '휴지통 비우기';
 
 $_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
 $_LANG['msg_count_overflow'] = '%s의 최대 수 (%s)를 벗어났습니다.';

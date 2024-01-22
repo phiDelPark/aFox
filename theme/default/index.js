@@ -5,8 +5,7 @@
  */
 
 (() => {
-	'use strict'
-
+'use strict'
 	const getStoredTheme = () => localStorage.getItem('theme')
 	const setStoredTheme = theme => localStorage.setItem('theme', theme)
 
@@ -122,7 +121,7 @@
 								if(usuccess) {
 									usuccess = usuccess.split('#')
 									location.href = usuccess[0]
-									if(usuccess[1]) setCookie('location_hash', usuccess[1], 1)
+									if(usuccess[1]) set_cookie('location.hash', usuccess[1], 1)
 								}
 							})
 							.catch((error) => {
@@ -132,8 +131,7 @@
 							})
 					})
 				});
-
-		const location_hash = getCookie('location_hash', true)
+		const location_hash = get_cookie('location.hash', true)
 		if(location_hash) location.hash = location_hash
 	})
   })()
