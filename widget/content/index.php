@@ -10,7 +10,7 @@ $type = isset($_WIDGET['type']) ? $_WIDGET['type'] : 'default';
 $count = isset($_WIDGET['count']) ? (int)$_WIDGET['count'] : 5;
 $class = isset($_WIDGET['class']) ? $_WIDGET['class'] : '';
 $style = isset($_WIDGET['style']) ? 'style="'.$_WIDGET['style'].'"' : '';
-$style = __MOBILE__ && isset($_WIDGET['mobile-style']) ? 'style="'.$_WIDGET['mobile-style'].'"' : $style;
+$style = __MOBILE__ && isset($_WIDGET['mstyle']) ? 'style="'.$_WIDGET['mstyle'].'"' : $style;
 
 
 $md_title = getModule($_WIDGET['module'], 'md_title');

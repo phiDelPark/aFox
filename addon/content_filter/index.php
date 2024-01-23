@@ -9,7 +9,7 @@ if($called_position == 'before_proc' && ($called_trigger == 'updatecomment' || $
 	$_DATA[$key] = preg_replace_callback('/(<[\w\-]+)(\s[^>]*)>/is',
 		function($m)use($exs) {
 			return $m[1].preg_replace(
-				'/\s\b(?!'.$exs.')[\w_-]+?\b=["]?(?:.(?!["]?\s+(?:\S+)=|\s*\/?[>"]))*.["]?/mi'
+				'/\s\b(?!'.$exs.')[\w_-]+\b=["]?(?:.(?!["]?\s+(?:\S+)=|\s*\/?[>"]))*.["]?/mi'
 				, '', $m[2]
 			).'>';
 		},

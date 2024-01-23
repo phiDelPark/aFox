@@ -205,8 +205,7 @@ function afoxEditor(ID, options) {
 				'highlight':'<code>%s</code>'
 			}
 
-		let	cmd = e.target.closest('button')
-		cmd = cmd.getAttribute('aria-label').toLowerCase()
+		const cmd = e.target.closest('button').getAttribute('aria-label').toLowerCase()
 
 		switch (cmd) {
 			case 'bold':

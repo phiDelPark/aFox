@@ -121,7 +121,7 @@ function proc($data) {
 				$file = [
 					'tmp_name' => $files['tmp_name'][$i],
 					'name' => $files['name'][$i],
-					'type' => empty($iinfo['mime'])?'image/none':$iinfo['mime'],
+					'type' => $files['type'][$i],
 					'bits' => $iinfo['bits'],
 					'width' => $iinfo[0],
 					'height' => $iinfo[1],
