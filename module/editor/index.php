@@ -11,7 +11,6 @@ foreach ($options as $key => $v) {
 ?>
 
 <style>
-[name="remove_files[]"]+img{outline:0;box-shadow:var(--bs-focus-ring-x,0) var(--bs-focus-ring-y,0) var(--bs-focus-ring-blur,0) var(--bs-focus-ring-width) var(--bs-danger)}
 #editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);-webkit-filter:invert(50%);filter:invert(50%)}
 #editorTypebar .bi-unchecked.checked::before{content:url(./module/editor/bi-check.svg)}
 #editorTypebar,#editorToolbar{font-size:12px;font-family:Arial}
@@ -19,6 +18,8 @@ foreach ($options as $key => $v) {
 #editorToolbar button>.bi{position:relative;left:-2px;top:-5px;height:16px;width:16px}
 #uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px;background-color:var(--bs-border-color)!important}
 #editorContent textarea{min-height:<?php echo $min_height ?>}
+#editorContent .focused{outline:0;box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.3)}
+#editorContent .is-invalid,[name="remove_files[]"]+img{outline:0;box-shadow:0 0 0 0.25rem rgba(253, 13, 13, 0.3)}
 </style>
 
 <div id="editor<?php echo ucfirst($name) ?>" class="w-100 editor-group">

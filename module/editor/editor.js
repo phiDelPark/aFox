@@ -101,7 +101,7 @@ function afoxEditor(ID, options) {
 	}
 
 	iframe.classList.add('form-control', 'resizable', 'p-0', 'd-none')
-	iframe.addEventListener('load', e => {
+	iframe.addEventListener('load', ee => {
 		const s_head = `<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Cache-Control" content="no-cache">
 		<link rel="stylesheet" href="${request_uri}module/editor/editor.min.css">`
@@ -109,10 +109,12 @@ function afoxEditor(ID, options) {
 		iframe.contentWindow.document.head.innerHTML = s_head
 		iframe.contentWindow.document.designMode = this.readonly ? 'off' : 'on'
 		iframe.contentWindow.document.body.innerHTML = textarea.value
-		iframe.contentWindow.document.body.addEventListener('drop', ee => {
-			ee.preventDefault()
-			this.pasteHtml(ee.dataTransfer.getData('text') || '')
+		iframe.contentWindow.document.body.addEventListener('drop', e => {
+			e.preventDefault()
+			this.pasteHtml(e.dataTransfer.getData('text') || '')
 		})
+		iframe.contentWindow.document.body.addEventListener('focus', e => iframe.classList.add('focused'))
+		iframe.contentWindow.document.body.addEventListener('blur', e => iframe.classList.remove('focused','is-invalid'))
 	})
 
 	textarea.parentNode.insertBefore(iframe, textarea)
@@ -235,9 +237,9 @@ function afoxEditor(ID, options) {
 		e.preventDefault()
 		e.stopPropagation()
 
-		const tid = e.target.getAttribute('data-target'),
-			elt = editor.querySelector('[name=' + tid + ']'),
-			val = e.target.getAttribute('data-value')
+		const
+			elt = editor.querySelector('[name=' + e.target.dataset.target + ']'),
+			val = e.target.dataset.value
 
 		if(val == 'true'){
 			elt.value = elt.value == val ? 'false' : 'true'
@@ -281,7 +283,7 @@ function afoxEditor(ID, options) {
 					e.stopPropagation()
 				}
 				if(!content_validity){
-					iframe.contentWindow.document.body.classList.add('is-invalid')
+					iframe.classList.add('is-invalid')
 				}
 				e.currentTarget.classList.add('was-validated')
 			} else {
@@ -306,7 +308,7 @@ function afoxEditor(ID, options) {
 	'use strict'
 	window.uploadFiles = []
 	window.addEventListener('beforeunload', e => {
-		let url // 파일 사용 후 메모리 제거
+		let url // remove files from spent memory
 		const elURL = (window.URL || window.webkitURL)
 		while (window.uploadFiles.length > 0) {
 			url = window.uploadFiles.pop()

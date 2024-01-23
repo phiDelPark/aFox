@@ -3,14 +3,6 @@ body {
 	margin: .25rem;
 	padding: .125rem .5rem;
 }
-body.is-invalid {
-	box-shadow: 0 0 0 0.25rem rgba(253, 13, 13, 0.35);
-}
-
-body:focus {
-	outline: 0;
-	box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.35);
-}
 
 h1, h2 {
 	font-size: 26px;

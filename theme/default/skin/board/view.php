@@ -18,7 +18,7 @@ $is_btn_download = array_search('btn_download',$show_column)!==false;
 $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('wr_update',$show_column)!==false);
 
 $wr_content = ($wr_grant_view || !$wr_secret) ? $DOC['wr_content'] : getLang('error_permitted');
-$wr_content = toHTML($wr_content, $DOC['wr_type']);
+$wr_content = preg_replace('/(<img)(((?!loading)[^>])+)>/is', '\1\2 loading="lazy">', toHTML($wr_content, $DOC['wr_type']));
 ?>
 
 <section id="documentView" aria-label="Contents of this post">

@@ -6,12 +6,12 @@ if($called_position == 'before_proc' && ($called_trigger == 'updatecomment' || $
 	$key = $called_trigger == 'updatecomment' ? 'rp_content' : 'wr_content' ;
 
 	$exs = str_replace(",", "|", trim($_ADDON['exclusion_attr']));
-	$_DATA[$key] = preg_replace_callback('/(<[\w]+\s)([^>]*)/is',
+	$_DATA[$key] = preg_replace_callback('/(<[\w\-]+)(\s[^>]*)>/is',
 		function($m)use($exs) {
 			return $m[1].preg_replace(
-				'/\s*\b(?!'.$exs.')[\w_-]+?\b=["\']?(?:.(?!["\']?\s+(?:\S+)=|\s*\/?[>"\']))+.["\']?/mi'
+				'/\s\b(?!'.$exs.')[\w_-]+?\b=["]?(?:.(?!["]?\s+(?:\S+)=|\s*\/?[>"]))*.["]?/mi'
 				, '', $m[2]
-			);
+			).'>';
 		},
 	$_DATA[$key]);
 

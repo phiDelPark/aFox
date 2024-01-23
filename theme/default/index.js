@@ -75,27 +75,27 @@
 			})
 
 		window.current_content = document.querySelector('.current_content');
+		/* lazy 지원으로 이제 불필요
 		window.current_content?.querySelectorAll('img[src]')
 			?.forEach(el => {
-				const src = el.getAttribute('src')
-				el.setAttribute('src', './common/img/blank.png');
-				el.setAttribute('scroll-src', src)
+				el.setAttribute('src', './common/img/blank.png')
+				el.setAttribute('data-scroll-src', el.src)
 			});
+		*/
 	})
-
+/*
 	window.addEventListener('scroll', () => {
-		window.current_content?.querySelectorAll('img[scroll-src]')
+		window.current_content?.querySelectorAll('img[data-scroll-src]')
 			?.forEach(el => {
 				if(el.offsetTop < (window.scrollY + window.innerHeight + 50)){
-					const src = el.getAttribute('scroll-src')
-					el.setAttribute('src', src)
-					el.removeAttribute('scroll-src')
+					el.setAttribute('src', el.dataset.scrollSrc)
+					el.removeAttribute('data-scroll-src')
 				}
 			});
 	})
-
+*/
 	window.addEventListener('load', () => {
-		window.dispatchEvent(new Event('scroll', {bubbles: true, cancelable: false}))
+		//window.dispatchEvent(new Event('scroll', {bubbles: true, cancelable: false}))
 		document.querySelector('#afoxPageLoading')?.fadeOut(el => el.remove())
 
 		document.querySelector('main.container')

@@ -117,33 +117,35 @@ function proc($data) {
 				// 빈 파일 넘김
 				if (empty($files['tmp_name'][$i])) continue;
 
+				$iinfo = getimagesize($files['tmp_name'][$i]);
 				$file = [
-					'name' => $files['name'][$i],
-					'type' => $files['type'][$i],
 					'tmp_name' => $files['tmp_name'][$i],
-					'error' => $files['error'][$i],
-					'size' => $files['size'][$i]
+					'name' => $files['name'][$i],
+					'type' => empty($iinfo['mime'])?'image/none':$iinfo['mime'],
+					'bits' => $iinfo['bits'],
+					'width' => $iinfo[0],
+					'height' => $iinfo[1],
+					'size' => $files['size'][$i],
+					'error' => $files['error'][$i]
 				];
 
-				$filetype = explode('/', $file['type']);
-				$filetype = strtolower(array_shift($filetype));
-				$filetype = empty($file_types[$filetype]) ? 'binary' : $filetype;
-				$filename = $file['name'];
-				$fileext = explode('.', $filename);
-				$fileext = count($fileext)===1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
+				$filetype = strtolower(array_shift(explode('/', $file['type'])));
+				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
+				$fileext = explode('.', $file['name']);
+				$fileext = count($fileext) === 1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
-				if ($chk_ext && !preg_match('/\.('.($chk_ext).')$/i', $filename)) {
-					throw new Exception(getLang('warning_allowable', [$chk_ext])."\n", 3503);
+				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
+					throw new Exception(getLang('warning_allowable', [$file_exts])."\n", 3503);
 				}
 
 				// 실행 가능한 파일 못하게 처리
 				$fileext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', ('.'.$fileext));
 
-				$filename = md5($filename.time().$i) . $fileext;
-				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/1/' . $filename;
+				$filename = md5($i.$file['name'].time()) .'.'. $file['bits'] .'.'. $file['width'] .'x'. $file['height'];
+				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/' . $wr_srl . '/' . $filename;
 
-				$ret = moveUpFile($file, $file_dests[$i], 0);
-				if (!empty($ret['error'])) {
+				$ret = moveUpFile($file, $file_dests[$i], $file_max_size);
+				if(!empty($ret['error'])) {
 					throw new Exception($ret['message'], $ret['error']);
 				}
 
@@ -171,14 +173,15 @@ function proc($data) {
 				function ($matches) use($new_files) {
 					$file = $new_files[(int)$matches[1]];
 					$es_name = escapeHtml($file['name']);
+					$isimg = substr($file['type'], 0, 5) == 'image';
 					return sprintf(
-						substr($file['type'], 0, 5) == 'image'
-						? '<img src="%s" class="%s" title="%s" alt="%s">'
-						: '<a href="%s" class="%s" title="%s" alt="%s" target="_file">',
+						$isimg ? '<img src="%s" class="%s" title="%s" alt="%s"%s>'
+							: '<a href="%s" class="%s" title="%s" alt="%s"%s>',
 						'./?file='.$file['mf_srl'],
 						escapeHtml($file['type']),
 						$es_name.' ('.shortSize($file['size']). ')',
-						$es_name
+						$es_name,
+						$isimg ? ' width="'.$file['width'].'" height="'.$file['height'].'"' : ' target="_file"'
 					);
 				},
 				$data['pg_content']

@@ -6,7 +6,7 @@ if(!defined('__AFOX__')) exit();
 $default_filter = '';
 $default_change_text = '♡,사랑해';
 $default_regex_text = '/<(svg)[^>]*>((?!<\/svg>).)*<\/svg>/is,\[\1\]';
-$default_exclusion = "id,class";
+$default_exclusion = "href,src,width,height,loading,target,webcode,class";
 ?>
 
 <div class="form-check">

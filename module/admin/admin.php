@@ -12,14 +12,7 @@ $is_admin = isAdmin();
 	<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasExample">
 	  <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
 	</button>
-	<a
-	  class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold"
-	  href="#"
-	  >ADMINISTRATION</a
-	>
-	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNavBar" aria-controls="topNavBar" aria-expanded="false" aria-label="Toggle navigation">
-	  <span class="navbar-toggler-icon"></span>
-	</button>
+	<a class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold" href="#">ADMINISTRATION</a>
 	<div class="collapse navbar-collapse" style="flex:none">
 	  <ul class="navbar-nav">
 		<li class="nav-item dropdown">

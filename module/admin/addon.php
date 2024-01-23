@@ -5,7 +5,7 @@
 		while ($row = DB::fetch($r)) {
 			$grade = ['0'=>'A','m'=>'S','s'=>'S'];
 			$grade = array_key_exists($row['grant_access'], $grade) ? $grade[$row['grant_access']] : 'M';
-			$rset[$row['tg_id']] = (empty($row['use_pc'])?'--/':'P/').(empty($row['use_mobile'])?'--/':'M/').$grade;
+			$rset[$row['tg_id']] = (empty($row['use_pc'])?'-':'P').(empty($row['use_mobile'])?'-/':'M/').$grade;
 		}
 		return $rset;
 	});
@@ -29,7 +29,7 @@
 <?php
 if(is_dir(_AF_ADDONS_PATH_)) {
 	foreach(glob(_AF_ADDONS_PATH_ . '*', GLOB_ONLYDIR) as $dir) {
-		$opt = '--/--/--';
+		$opt = '--/-';
 		$name = basename($dir);
 		if(isset($ao_list[$name])) {
 			$opt = $ao_list[$name];
@@ -42,7 +42,7 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 		echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title'])).'</th>';
 		echo '<td class="d-none d-md-table-cell">'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
 		echo '<td>'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
-		echo '<td>'.$opt.'</td>';
+		echo '<td class="fixed-width">'.$opt.'</td>';
 		echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('ao_id', $name).'">'.getLang('setup').'</a></td></tr>';
 	}
 }

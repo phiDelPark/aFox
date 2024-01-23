@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 :root {
-  --offcanvas-width: 270px;
+  --offcanvas-width: 220px;
   --topNavbarHeight: 56px;
 }
 .bi {
@@ -25,6 +25,10 @@
 }
 .text-muted {
   color: var(--bs-gray)!important;
+}
+.fixed-width {
+  font-family: "Consolas", monospace;
+  letter-spacing: 2px;
 }
 .btn-outline-control {
   border-color:var(--bs-border-color);
@@ -51,6 +55,8 @@ button {
 }
 .sidebar-nav {
   width: var(--offcanvas-width);
+  height: calc(100% - var(--topNavbarHeight));
+  top: var(--topNavbarHeight);
 }
 .sidebar-link {
   display: flex;
@@ -128,7 +134,5 @@ button {
     -webkit-transform: none;
     transform: none;
     visibility: visible !important;
-    height: calc(100% - var(--topNavbarHeight));
-    top: var(--topNavbarHeight);
   }
 }
