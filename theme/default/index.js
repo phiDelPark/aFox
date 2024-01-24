@@ -74,28 +74,23 @@
 				})
 			})
 
-		window.current_content = document.querySelector('.current_content');
-		/* lazy 지원으로 이제 불필요
-		window.current_content?.querySelectorAll('img[src]')
-			?.forEach(el => {
-				el.setAttribute('src', './common/img/blank.png')
-				el.setAttribute('data-scroll-src', el.src)
-			});
-		*/
+		window.current_content = document.querySelector('.current_content')
+		const qlink = document.querySelector('#quickLink li'),
+			eh1 = window.current_content.querySelectorAll('h1,h2')
+		for (let idx = eh1.length - 1; idx > -1 ; idx--) {
+			if(!eh1[idx].innerText || (eh1.length - idx) > 22) continue
+			const eli = document.createElement('LI')
+			eli.innerHTML = qlink.innerHTML
+			const elia = eli.querySelector('a'),
+				elisvg = elia.querySelector('svg')
+			eh1[idx].id = 'quickLink_' + idx
+			elia.href = '#' + eh1[idx].id
+			elia.innerHTML = elisvg.outerHTML + eh1[idx].innerText
+			qlink.after(eli)
+		}
 	})
-/*
-	window.addEventListener('scroll', () => {
-		window.current_content?.querySelectorAll('img[data-scroll-src]')
-			?.forEach(el => {
-				if(el.offsetTop < (window.scrollY + window.innerHeight + 50)){
-					el.setAttribute('src', el.dataset.scrollSrc)
-					el.removeAttribute('data-scroll-src')
-				}
-			});
-	})
-*/
+
 	window.addEventListener('load', () => {
-		//window.dispatchEvent(new Event('scroll', {bubbles: true, cancelable: false}))
 		document.querySelector('#afoxPageLoading')?.fadeOut(el => el.remove())
 
 		document.querySelector('main.container')

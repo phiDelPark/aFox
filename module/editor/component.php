@@ -1,10 +1,7 @@
-<?php
+<?php define('__AFOX__', TRUE);
 define('_AF_EDITOR_PATH_', str_replace('\\', '/', realpath(dirname(__FILE__))) . '/');
 define('_AF_EDITOR_NAME_', empty($_GET['k']) ? NULL : strtoupper($_GET['k']));
-
-define('__AFOX__', TRUE);
 define('_AF_PATH_', str_replace('module/editor/','', _AF_EDITOR_PATH_));
-
 function _get_afox_url(){
   $result = preg_replace('/^\/\~[^\/]+(.*)$/', '$1', $_SERVER['SCRIPT_NAME']);
   $http = 'http' . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']=='on') ? 's' : '') . '://';
@@ -14,31 +11,16 @@ function _get_afox_url(){
 }
 define('_AF_URL_', _get_afox_url());
 define('_AF_ADDONS_PATH_', _AF_PATH_ . 'addon/');
-
 $_ADDON_INFO = [];
 require_once _AF_ADDONS_PATH_ . $_GET['n'] . '/info.php';
 ?>
-
 <!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="imagetoolbar" content="no">
-<meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="imagetoolbar" content="no"><meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
 <title><?php echo $_ADDON_INFO['title'] ?></title>
-<link href="<?php echo _AF_URL_ ?>common/css/bootstrap.min.css" rel="stylesheet">
-<script src="<?php echo _AF_URL_ ?>common/js/bootstrap.bundle.min.js"></script>
-<script src="<?php echo _AF_URL_ ?>common/js/common.min.js"></script>
-</head>
-<body style="padding:10px">
-	<h4><?php echo $_ADDON_INFO['title'] ?></h4>
-	<hr style="margin:20px 0 10px">
-<?php
-require_once _AF_ADDONS_PATH_ . $_GET['n'] . '/editor.php';
-?>
-</body>
-</html>
+<style>body{margin:0;padding:15px;background-color:lightgray}body::before{content:"<?php echo str_replace('"','\"',$_ADDON_INFO['title']) ?>";font-size:1.3em;padding-bottom:5px;margin-bottom:15px;border:0 solid gray;border-bottom-width:2px;display:block;font-weight:bold}</style>
+</head><body>
+<?php require_once _AF_ADDONS_PATH_ . $_GET['n'] . '/editor.php';?>
+</body></html>
 <?php
 /* End of file component.php */
 /* Location: ./module/editor/component.php */

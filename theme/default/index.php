@@ -230,12 +230,10 @@
 <?php } ?>
 					</ol>
 				</div>
-				<div class="p-4">
-					<h4 class="fst-italic"><?php echo _AF_THEME_URL_ ? 'QuickLink' : 'Archives'?></h4>
-					<ol class="list-unstyled mb-0">
-						<li><a class="icon-link gap-1 icon-link-hover d-block" href="#"><svg class="bi me-1"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#hash"/></svg>March 2021</a></li>
-						<li><a class="icon-link gap-1 icon-link-hover d-block" href="#"><svg class="bi me-1"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#hash"/></svg>February 2021</a></li>
-						<li><a class="icon-link gap-1 icon-link-hover d-block" href="#"><svg class="bi me-1"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#hash"/></svg>January 2021</a></li>
+				<div class="p-3">
+					<h4 class="fst-italic">QuickLink</h4>
+					<ol id="quickLink" class="list-unstyled mb-0">
+						<li><a class="icon-link icon-link-hover d-block gap-1 text-truncate" href="#"><svg class="bi me-1"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#hash"/></svg>Scroll To Top</a></li>
 					</ol>
 				</div>
 			</div>

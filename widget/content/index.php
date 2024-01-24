@@ -8,7 +8,7 @@ $category = empty($_WIDGET['category']) ? '' : $_WIDGET['category'];
 $order = empty($_WIDGET['order']) ? 'wr_regdate' : $_WIDGET['order'];
 $type = isset($_WIDGET['type']) ? $_WIDGET['type'] : 'default';
 $count = isset($_WIDGET['count']) ? (int)$_WIDGET['count'] : 5;
-$class = isset($_WIDGET['class']) ? $_WIDGET['class'] : '';
+$class = isset($_WIDGET['class']) ? ' '.$_WIDGET['class'] : '';
 $style = isset($_WIDGET['style']) ? 'style="'.$_WIDGET['style'].'"' : '';
 $style = __MOBILE__ && isset($_WIDGET['mstyle']) ? 'style="'.$_WIDGET['mstyle'].'"' : $style;
 
@@ -24,7 +24,7 @@ if($type === 'gallery') {
 	$_list = DB::gets(_AF_DOCUMENT_TABLE_,$select,$order,$count);
 }
 ?>
-<div class="content_widget <?php echo $class?>" <?php echo $style?>>
+<div class="content_widget<?php echo $class?>" <?php echo $style?>>
 	<?php echo empty($title) ? (empty($md_title)?'':$md_title) : $title ?>
 	<a class="float-end text-decoration-none" style="font-size:large" href="<?php echo getUrl('','id',$_WIDGET['module'],'category',$category)?>">&hellip;</a>
 	<div class="clearfix mt-1"></div>
