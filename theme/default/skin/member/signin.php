@@ -10,8 +10,8 @@ if($_CFG['use_captcha'] == '1') {
 ?>
 
 <form id="loginForm" action="<?php echo getUrl('')?>" method="post" autocomplete="off" aria-label="Input form to sign in">
-<input type="hidden" name="success_return_url" value="<?php echo getUrl('member','','act','')?>">
-<input type="hidden" name="error_return_url" value="<?php echo getUrl()?>">
+<input type="hidden" name="success_url" value="<?php echo getUrl('member','','act','')?>">
+<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
 <input type="hidden" name="module" value="member">
 <input type="hidden" name="act" value="checklogin">
 	<h3 class="pb-3 mb-1 fst-italic border-bottom"><?php echo getLang('login')?></h3>

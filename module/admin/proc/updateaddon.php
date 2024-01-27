@@ -15,7 +15,7 @@ function proc($data) {
 		$use_editor = empty($data['use_editor'])?'0':$data['use_editor'];
 		$grant_access = empty($data['grant_access'])?'0':$data['grant_access'];
 
-		$remove_array = ['ao_id', 'use_pc', 'use_mobile', 'grant_access', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url','response_tags'];
+		$remove_array = ['ao_id', 'use_pc', 'use_mobile', 'grant_access', 'module', 'id', 'act', 'disp', 'success_url', 'error_url','response_tags'];
 		foreach ($remove_array as $value) {
 			if(isset($data[$value])) unset($data[$value]);
 		}

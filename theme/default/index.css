@@ -1,18 +1,4 @@
-.bi {
-  vertical-align: -.125em;
-  fill: currentColor;
-  width: 1em;
-  height: 1em;
-}
-
-.bi-lg {
-  width: 2em;
-  height: 2em;
-}
-
-.w-100p {
-  width: 100px!important;
-}
+@import url('https://fonts.googleapis.com/css?family=Gugi:400');
 
 [type="radio"]+label,
 [type="checkbox"]+label {
@@ -21,16 +7,32 @@
   user-select: none!important;
 }
 
-h1, h2, h3, h4 {
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+h1, h2, h3, h4, h5, h6,
+.font-gugi  {
+  font-family: Gugi;
+  letter-spacing: 1px;
+}
+
+.bi {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+.bi-lg {
+  width: 2em;
+  height: 2em;
 }
 
 .header-logo {
-  font-family: "Playfair Display", Georgia, "Times New Roman", serif/*rtl:Amiri, Georgia, "Times New Roman", serif*/;
   font-size: 2.4rem;
 }
 
-.btn-bd-primary {
+.icon-link-hover {
+  --bs-icon-link-transform: translate3d(0, -.125rem, 0);
+}
+
+.btn-violet {
   --bd-violet-bg: #712cf9;
   --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
   --bs-btn-font-weight: 600;
@@ -46,16 +48,8 @@ h1, h2, h3, h4 {
   --bs-btn-active-border-color: #5a23c8;
 }
 
-.icon-link-hover {
-  --bs-icon-link-transform: translate3d(0, -.125rem, 0);
-}
-
-.carousel-caption {
-  color: var(--bs-gray-200)!important;
-}
-
-.searchListForm,
-.searchExListForm {
+#searchList+form,
+#searchExList+form {
 	display: none;
   position: absolute;
   top: .33rem;
@@ -63,20 +57,20 @@ h1, h2, h3, h4 {
   background-color:var(--bs-body-bg);
 }
 
-.searchExListForm {
+#searchExList+form {
   top: .58rem;
   max-width: initial;
   width: calc(100% - 40px);
   margin-left: 40px;
   z-index: 1;
 }
-.searchExListForm div{
+#searchExList+form div{
   max-width: 250px;
   float: right;
 }
 
-#searchList:checked ~ .searchListForm,
-#searchExList:checked ~ .searchExListForm {
+#searchList:checked ~ form,
+#searchExList:checked ~ form {
 	display: block;
 }
 
@@ -136,6 +130,10 @@ h1, h2, h3, h4 {
 	background-color: transparent!important;
 }
 
+.current_content img {
+  max-width: 100%;
+}
+
 .current_content table:not([class=hljs-ln]){
   width: 100%;
 }
@@ -164,6 +162,9 @@ h1, h2, h3, h4 {
 
   }
   .navbar-expand-md .navbar-nav {
-    float: right;
+    text-align: right;
+  }
+  .navbar-expand-md .navbar-nav a {
+    display: inline-block;
   }
 }

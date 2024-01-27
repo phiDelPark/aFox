@@ -7,7 +7,7 @@
 
 <div style="position:relative">
 <input class="d-none" type="checkbox" id="searchList">
-<form class="searchListForm<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
+<form class="<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
 	<input type="hidden" name="module" value="member">
 	<input type="hidden" name="disp" value="inbox">
 	<input type="hidden" name="id" value="<?php echo __MID__ ?>">
@@ -20,18 +20,18 @@
 </div>
 
 <form id="af_member_remove_inbox_items" method="post">
-<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="success_url" value="<?php echo getUrl()?>" />
 <table class="table">
 <thead>
 	<tr>
 		<?php if(__MOBILE__) { ?>
 		<th scope="col" class="text-wrap"><?php echo getLang('content')?></th>
 		<?php } else { ?>
-		<th scope="col" style="padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchList"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label> <?php echo getLang('name')?></th>
+		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchList"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label> <?php echo getLang('name')?></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('content')?></th>
-		<th scope="col"><?php echo getLang('status')?></th>
-		<th scope="col"><?php echo getLang('date')?></th>
-		<th scope="col"><input type="checkbox" onclick="_allCheckInboxItems(this)"></th>
+		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('status')?></th>
+		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('date')?></th>
+		<th scope="col" class="text-nowrap" style="width:1px"><input type="checkbox" onclick="_allCheckInboxItems(this)"></th>
 		<?php } ?>
 	</tr>
 </thead>
@@ -54,9 +54,9 @@
 			echo '<div class="d-flex w-100 justify-content-between"><span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';
 			echo '<span>Send:'.date('y/m/d', strtotime($value['nt_send_date'])).'</span></div></td>';
 		} else {
-			echo '<th scope="row"'.($value['nt_sender']?'':' style="font-weight:normal"').' nowrap>'.$value['nt_sender_nick'].'</th>';
+			echo '<th scope="row" class="text-nowrap"'.($value['nt_sender']?'':' style="font-weight:normal"').'>'.$value['nt_sender_nick'].'</th>';
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),90).'</a></td>';
-			echo '<td>'.($value['nt_read_date'] === '0000-00-00 00:00:00'?$unread_str:date('y/m/d', strtotime($value['nt_read_date']))).'</td>';
+			echo '<td class="text-nowrap">'.($value['nt_read_date'] === '0000-00-00 00:00:00'?$unread_str:date('y/m/d', strtotime($value['nt_read_date']))).'</td>';
 			echo '<td>'.date('y/m/d', strtotime($value['nt_send_date'])).'</td><td><input type="checkbox" name="nt_srl[]" value="'.$value['nt_srl'].'"></td>';
 		}
 		echo '</tr>';

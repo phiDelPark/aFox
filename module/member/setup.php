@@ -5,7 +5,7 @@ $mb = getMember($_POST['mid']);
 
 <?php if($mb){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_ban_login')?>')">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="member" />
 	<input type="hidden" name="act" value="banlogin" />
 	<input type="hidden" name="mb_id" value="<?php echo $mb['mb_id']?>" />
@@ -21,7 +21,7 @@ $mb = getMember($_POST['mid']);
 <?php }?>
 
 <form id="memberSignup" method="post" autocomplete="off" enctype="multipart/form-data">
-<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid','')?>" />
+<input type="hidden" name="success_url" value="<?php echo getUrl('mid','')?>" />
 <input type="hidden" name="module" value="member" />
 <input type="hidden" name="act" value="updateMember" />
 

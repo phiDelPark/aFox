@@ -16,7 +16,7 @@ function proc($data) {
 		$md_extra = [];
 	}
 
-	$remove_array = ['md_id', 'module', 'id', 'act', 'disp', 'success_return_url', 'error_return_url','response_tags'];
+	$remove_array = ['md_id', 'module', 'id', 'act', 'disp', 'success_url', 'error_url','response_tags'];
 	foreach ($remove_array as $value) {
 		if(isset($data[$value])) unset($data[$value]);
 	}

@@ -17,8 +17,8 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 			<div class="text-center" style="margin-top:20px"><input type="submit" width="24" height="24"><br><?php echo getLang('save')?></div>
 			</header>
 			<div>
-			<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
-			<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="success_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="error_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
 			<input type="hidden" name="act" value="updateMenu">
 			<input type="hidden" name="mu_type" value="0">
 			<ul id="siteMapRoot1" class="ms-5 p-2 border rounded" style="min-height:300px">
@@ -75,8 +75,8 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 			<div class="text-center" style="margin-top:20px"><input type="submit" width="24" height="24"><br><?php echo getLang('save')?></div>
 			</header>
 			<div>
-			<input type="hidden" name="success_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
-			<input type="hidden" name="error_return_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="success_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="error_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
 			<input type="hidden" name="act" value="updateMenu">
 			<input type="hidden" name="mu_type" value="1">
 			<ul id="siteMapRoot2" class="ms-5 p-2 border rounded" style="min-height:300px">

@@ -3,11 +3,11 @@
 	$ismb = !empty($_MEMBER);
 ?>
 
-<section id="trashView" class="mb-4" aria-label="Contents of this post">
+<section id="memberView" class="mb-4" aria-label="Contents of this post">
 	<h3 class="pb-3 mb-3 border-bottom"><?php echo getLang($ismb?'member':'member_signup')?></h3>
 	<form id="memberSignup" method="post" autocomplete="off" enctype="multipart/form-data">
-	<input type="hidden" name="error_return_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="success_return_url" value="<?php echo $ismb?getUrl():getUrl('')?>" />
+	<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
+	<input type="hidden" name="success_url" value="<?php echo $ismb?getUrl():getUrl('')?>" />
 	<input type="hidden" name="module" value="member" />
 	<input type="hidden" name="act" value="updateMember" />
 
@@ -22,7 +22,7 @@
 		<div class="mb-3">
 			<input type="hidden" name="mb_id" value="" />
 			<div class="input-group">
-				<label class="input-group-text w-100p" for="id_new_mb_id"><?php echo getLang('id')?></label>
+				<label class="input-group-text" style="width:100px" for="id_new_mb_id"><?php echo getLang('id')?></label>
 				<input type="text" name="new_mb_id" class="form-control" id="id_new_mb_id" required minlength="4" maxlength="11" pattern="^[a-zA-Z]{1}[\w_]{3,10}$">
 			</div>
 			<div class="form-text"><?php echo getLang('desc_mb_id')?></div>
@@ -52,17 +52,17 @@
 	</div>
 
 	<div class="input-group mb-2">
-		<label class="input-group-text w-100p" for="id_mb_nick"><?php echo getLang('nickname')?></label>
+		<label class="input-group-text" style="width:100px" for="id_mb_nick"><?php echo getLang('nickname')?></label>
 		<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" minlength="2" maxlength="5" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_nick']):''?>" required pattern="^[a-zA-Z가-힣ぁ-んァ-ン一-龥]{2,5}$">
 	</div>
 
 	<div class="input-group mb-2">
-	<label class="input-group-text w-100p" for="id_mb_email"><?php echo getLang('email')?></label>
+	<label class="input-group-text" style="width:100px" for="id_mb_email"><?php echo getLang('email')?></label>
 		<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_email']):''?>" required pattern="^[\w]+[\w._%+-]+@[\w.-]+\.[\w]+$">
 	</div>
 
 	<div class="input-group mb-4">
-		<label class="input-group-text w-100p" for="id_mb_homepage"><?php echo getLang('homepage')?></label>
+		<label class="input-group-text" style="width:100px" for="id_mb_homepage"><?php echo getLang('homepage')?></label>
 		<input type="url" name="mb_homepage" class="form-control" id="id_mb_homepage" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_homepage']):''?>" maxlength="255">
 	</div>
 

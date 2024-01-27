@@ -13,7 +13,7 @@ if(!defined('__AFOX__')) exit();
 		$rp_content = !$rp_permit || $rp_secret ? '<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>' : '';
 		$rp_content .= !$rp_permit ? getLang('error_permitted') : toHTML($val['rp_content'], $val['rp_type']);
 		echo sprintf(
-			'<div id="reply-%s" class="d-flex flex-lg-row gap-3 p-2 border-bottom" style="margin-left:%spx"><svg class="bi bi-lg mt-1"><use href="%s"></use></svg>
+			'<div id="reply-%s" class="d-flex flex-lg-row gap-3 p-2 border-bottom" style="margin-left:%spx"><svg class="bi bi-lg mt-1"><use href="%s"/></svg>
 			<div class="w-100"><div>%s</div><div class="d-flex justify-content-between text-body-secondary mt-1"><small>%s</small><small>%s:
 			<a href="%s" onclick="return confirm(\'%s\')" class="text-decoration-none">&Chi;</a></small></div></div></div>',
 			$val['rp_srl'],
@@ -24,8 +24,8 @@ if(!defined('__AFOX__')) exit();
 			date('Y/m/d', strtotime($val['rp_regdate'])),
 			getUrl(
 				'module','board','act','deleteComment','rp_srl',$val['rp_srl'],
-				'error_return_url',urlencode(getUrl()),
-				'success_return_url',urlencode(getUrl('srl',$val['wr_srl'],'rp',$val['rp_srl']))
+				'error_url',urlencode(getUrl()),
+				'success_url',urlencode(getUrl('srl',$val['wr_srl'],'rp',$val['rp_srl']))
 			),
 			getLang('confirm_delete',['reply'])
 		);
@@ -37,8 +37,8 @@ if(!defined('__AFOX__')) exit();
 
 <section id="replyEditer" class="mb-5" aria-label="Write a reply to this post">
 	<form method="post" autocomplete="off" needvalidate>
-		<input type="hidden" name="error_return_url" value="<?php echo getUrl()?>">
-		<input type="hidden" name="success_return_url" value="<?php echo getUrl('rp','')?>">
+		<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
+		<input type="hidden" name="success_url" value="<?php echo getUrl('rp','')?>">
 		<input type="hidden" name="module" value="board">
 		<input type="hidden" name="act" value="updateComment">
 		<input type="hidden" name="wr_srl" value="<?php echo $_POST['srl'] ?>">

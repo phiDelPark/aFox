@@ -11,7 +11,7 @@ function proc($data) {
 	$default_field = 'md_id,wr_srl,wr_secret,mb_srl,mb_password';
 
 	// 요청값이 있으면 요청값만 보냄
-	$response_tags = $data['response_tags'];
+	$response_tags = empty($data['response_tags']) ? '' : $data['response_tags'];
 	if(!empty($response_tags) && count($response_tags) > 0) {
 		$field = $default_field.','.implode(',', $response_tags);
 	}
@@ -50,12 +50,6 @@ function proc($data) {
 		$doc['wr_extra'] = unserialize($doc['wr_extra']);
 	}
 
-	// 모듈 정보도 같이 보냄
-	if(empty($response_tags)) {
-		$doc = array_merge($doc, getModule(($doc['md_id']=='_AFOXtRASH_')?$doc['wr_updater']:$doc['md_id']));
-	}
-
-	// JSON 사용시 모듈설정이 필요할때를 위해 만든옵션
 	return $doc;
 }
 

@@ -29,11 +29,11 @@
 	setTheme(getPreferredTheme())
 
 	const showActiveTheme = (theme, focus = false) => {
-		const themeSwitcher = document.querySelector('#bd-theme')
+		const themeSwitcher = document.querySelector('#theme-color-modes')
 
 		if (!themeSwitcher) return
 
-		const themeSwitcherText = document.querySelector('#bd-theme-text')
+		const themeSwitcherText = document.querySelector('#theme-color-modes-text')
 		const activeThemeIcon = document.querySelector('.theme-icon-active use')
 		const btnToActive = document.querySelector(`[data-bs-theme-value="${theme}"]`)
 		const svgOfActiveBtn = btnToActive.querySelector('svg use').getAttribute('href')
@@ -74,58 +74,47 @@
 				})
 			})
 
-		window.current_content = document.querySelector('.current_content')
-		const qlink = document.querySelector('#quickLink li'),
-			eh1 = window.current_content.querySelectorAll('h1,h2')
-		for (let idx = eh1.length - 1; idx > -1 ; idx--) {
-			if(!eh1[idx].innerText || (eh1.length - idx) > 22) continue
-			const eli = document.createElement('LI')
-			eli.innerHTML = qlink.innerHTML
-			const elia = eli.querySelector('a'),
-				elisvg = elia.querySelector('svg')
-			eh1[idx].id = 'quickLink_' + idx
-			elia.href = '#' + eh1[idx].id
-			elia.innerHTML = elisvg.outerHTML + eh1[idx].innerText
-			qlink.after(eli)
+		const $qlink = document.querySelector('#quickLink li')
+		if($qlink){
+			const $h1 = document.querySelectorAll('.current_content h1,.current_content h2')
+			for (let idx = $h1.length - 1; idx > -1 ; idx--) {
+				if(!$h1[idx].innerText || ($h1.length - idx) > 22) continue
+				const $li = document.createElement('LI'); $li.innerHTML = $qlink.innerHTML
+				const $lia = $li.querySelector('a'), $lisvg = $lia.querySelector('svg')
+				$h1[idx].id = 'quickLink_' + idx; $lia.href = '#' + $h1[idx].id
+				$lia.innerHTML = $lisvg.outerHTML + $h1[idx].innerText; $qlink.after($li)
+			}
 		}
 	})
 
 	window.addEventListener('load', () => {
-		document.querySelector('#afoxPageLoading')?.fadeOut(el => el.remove())
+		document.querySelector('#afoxPageLoading')?.fadeOut($e => $e.remove())
+		const content_modal = document.querySelector('#themeContentModal')
+		content_modal.addEventListener('show.bs.modal', (e) => {
+			const title = e.target.querySelector('.modal-title'),
+				body = e.target.querySelector('.modal-body'),
+				action = e.relatedTarget.dataset.ajaxAction.split('.'),
+				responses = e.relatedTarget.dataset.ajaxResponses.split(',')
+			const data = {
+				module: action[0],
+				act: action[1],
+				response_tags: responses,
+				...e.relatedTarget.href.getQuery(),
+			}
+			exec_ajax(data)
+				.then((data) => {
+					title.innerHTML = data['wr_title']
+					body.innerHTML = data['wr_content']
+				}).catch((error) => {
+					console.log(error)
+					body.innerHTML = error.message
+				})
+		})
+		content_modal.addEventListener('hide.bs.modal', (e) => {
+			e.target.querySelector('.modal-title').innerHTML = ''
+			e.target.querySelector('.modal-body').innerHTML = ''
+		})
 
-		document.querySelector('main.container')
-			?.querySelectorAll('[exec-ajax]')
-				?.forEach(el => {
-					el.addEventListener('click', e => {
-						e.preventDefault()
-						e.stopPropagation()
-						const
-							ajax = el.getAttribute('exec-ajax'),
-							action = ajax.substring(0, ajax.indexOf('&')).split('.')
-						let
-							usuccess = el.getAttribute('success-url'),
-							uerror = el.getAttribute('error-url')
-
-						const data = {
-							module: action[0],
-							act: action[1],
-							...ajax.getQuery(),
-						}
-						exec_ajax(data)
-							.then((data) => {
-								if(usuccess) {
-									usuccess = usuccess.split('#')
-									location.href = usuccess[0]
-									if(usuccess[1]) set_cookie('location.hash', usuccess[1], 1)
-								}
-							})
-							.catch((error) => {
-								console.log(error)
-								alert(error.message)
-								if(uerror) location.href = uerror
-							})
-					})
-				});
 		const location_hash = get_cookie('location.hash', true)
 		if(location_hash) location.hash = location_hash
 	})

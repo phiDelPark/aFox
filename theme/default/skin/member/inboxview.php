@@ -15,7 +15,7 @@
 	</div>
 	<div class="text-end text-secondary"><span><?php echo date('F j, Y', strtotime($_DATA['nt_read_date']))?></span></p>
 	<div class="text-end mb-3">
-		<button type="button" class="btn btn-danger me-2" data-exec-ajax="member.deleteNote" data-ajax-param="nt_srl,<?php echo $_DATA['nt_srl']?>,success_return_url,<?php echo urlencode(getUrl('srl',''))?>" data-ajax-confirm="<?php echo getLang('confirm_delete',['message'])?>"><?php echo getLang('delete')?></button>
+		<button type="button" class="btn btn-danger me-2" data-exec-ajax="member.deleteNote" data-ajax-param="nt_srl,<?php echo $_DATA['nt_srl']?>,success_url,<?php echo urlencode(getUrl('srl',''))?>" data-ajax-confirm="<?php echo getLang('confirm_delete',['message'])?>"><?php echo getLang('delete')?></button>
 		<button type="button" class="btn btn-warning" onclick="return _popSendNoteBox(<?php echo $_DATA['nt_srl']?>)"><?php echo getLang('reply')?></button>
 	</div>
 </section>

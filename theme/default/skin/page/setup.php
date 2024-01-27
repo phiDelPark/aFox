@@ -5,8 +5,8 @@
 <section id="pageView">
 	<h3 class="pb-3 mb-3 fst-italic border-bottom"><?php echo getLang('write')?></h3>
 <form id="setup" method="post" autocomplete="off" enctype="multipart/form-data" needvalidate>
-	<input type="hidden" name="error_return_url" value="<?php echo getUrl()?>">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('disp', '')?>" />
+	<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
+	<input type="hidden" name="success_url" value="<?php echo getUrl('disp', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="updatePage" />
 	<input type="hidden" name="md_id" value="<?php echo $_POST['id']?>" />

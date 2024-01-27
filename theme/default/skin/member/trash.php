@@ -7,7 +7,7 @@
 
 <div style="position:relative">
 <input class="d-none" type="checkbox" id="searchList">
-<form class="searchListForm<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
+<form class="<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
 	<input type="hidden" name="module" value="member">
 	<input type="hidden" name="disp" value="trash">
 	<input type="hidden" name="id" value="<?php echo __MID__ ?>">
@@ -20,18 +20,18 @@
 </div>
 
 <form id="af_member_remove_trash_items" method="post">
-<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="success_url" value="<?php echo getUrl()?>" />
 <table class="table">
 <thead>
 	<tr>
 		<?php if(__MOBILE__) { ?>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
 		<?php } else { ?>
-		<th scope="col" style="padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchList"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label></th>
+		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchList"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
-		<th scope="col"><?php echo getLang('date')?></th>
-		<th scope="col"><?php echo getLang('delete')?></th>
-		<th scope="col"><input type="checkbox" onclick="_allCheckInboxItems(this)"></th>
+		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('date')?></th>
+		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('delete')?></th>
+		<th scope="col" class="text-nowrap" style="width:1px"><input type="checkbox" onclick="_allCheckInboxItems(this)"></th>
 		<?php } ?>
 	</tr>
 </thead>

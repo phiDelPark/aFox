@@ -496,9 +496,9 @@ $row = DB::get(_AF_THEME_TABLE_, 'th_id', ['th_id'=>'default']);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 if (empty($row['th_id'])) {
 	$tmp = [];
-	$tmp['carousel_item_1'] = '<h5 class="fw-bold">First slide label</h5><p>Some representative placeholder content for the first slide.</p>';
-	$tmp['carousel_item_2'] = '<h5 class="fw-bold">Second slide label</h5><p>Some representative placeholder content for the second slide.</p>';
-	$tmp['carousel_item_3'] = '<h5 class="fw-bold">Third slide label</h5><p>Some representative placeholder content for the third slide.</p>';
+	$tmp['carousel_item_1'] = '<h2 class="fw-bold">First slide label</h2><p>Some representative placeholder content for the first slide.</p>';
+	$tmp['carousel_item_2'] = '<h2 class="fw-bold">Second slide label</h2><p>Some representative placeholder content for the second slide.</p>';
+	$tmp['carousel_item_3'] = '<h2 class="fw-bold">Third slide label</h2><p>Some representative placeholder content for the third slide.</p>';
 	$tmp['footer_html'] = '에이폭스는 <a href="https://github.com/phiDelPark/aFox" target="_blank">@에이폭스</a>에 의해 디자인되고 만들어 졌으며 <a href="https://github.com/phiDelPark/aFox/graphs/contributors">코드 기여자</a>의 도움과 <a href="https://github.com/phiDelPark?tab=people">코어 팀</a>에 의해 유지보수 됩니다.<br>코드는 <a rel="license" href="https://github.com/phiDelPark/aFox/blob/master/LICENSE" target="_blank">MIT</a>, 문서는 <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>에 의거하여 허가합니다.';
 	$tmp = "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],serialize($tmp))."'";
 	$sql = 'INSERT INTO '._AF_THEME_TABLE_.' (`th_id`, `th_extra`) VALUES ("default", '.$tmp.')';

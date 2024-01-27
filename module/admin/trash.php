@@ -56,7 +56,7 @@
 ?>
 
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_empty',['trash_bin'])?>')">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="admin" />
 	<input type="hidden" name="act" value="emptyTrashBin" />
 	<button type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('empty_trash_bin')?></button>

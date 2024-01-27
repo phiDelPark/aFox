@@ -5,7 +5,7 @@ $is_wr_grant = isGrant('write', __MID__);
 ?>
 
 <section id="documentList">
-	<h3 class="pb-3 mb-2 fst-italic border-bottom">List of post</h3>
+	<h3 class="pb-3 mb-2 border-bottom"><?php echo $_CFG['md_title']?></h3>
 <?php if(empty($_POST['srl']) && !empty($_CFG['md_category'])){ ?>
 
 	<ol class="list-unstyled" aria-label="Category of the list">

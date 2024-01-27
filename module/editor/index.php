@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-$min_height = empty($options['height']) ? '250px' : $options['height'];
+$min_height = empty($options['height']) ? '350px' : $options['height'];
 $ops = 'name:"'. $name . '",';
 $skip_keys = ['height'=>1,'file'=>1,'typebar'=>1,'toolbar'=>1,'statebar'=>1];
 foreach ($options as $key => $v) {

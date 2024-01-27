@@ -15,7 +15,7 @@
 ?>
 
 <form id="themeSelectForm" method="post" autocomplete="off">
-<input type="hidden" name="success_return_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="success_url" value="<?php echo getUrl()?>" />
 <input type="hidden" name="module" value="admin" />
 <input type="hidden" name="act" value="selecttheme" />
 

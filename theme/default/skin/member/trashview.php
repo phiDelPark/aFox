@@ -9,7 +9,7 @@
 		<?php echo toHTML($_DATA['wr_content'], $_DATA['wr_type']) ?>
 	</div>
 	<div class="text-end mb-3">
-		<button type="button" class="btn btn-danger me-2" data-exec-ajax="board.deleteDocument" data-ajax-param="wr_srl,<?php echo $_DATA['wr_srl']?>,is_empty,1,success_return_url,<?php echo urlencode(getUrl('srl',''))?>" data-ajax-confirm="<?php echo getLang('confirm_empty',['document'])?>"><?php echo getLang('delete')?></button>
-		<button type="button" class="btn btn-warning" data-exec-ajax="board.restoredocument" data-ajax-param="wr_srl,<?php echo $_DATA['wr_srl']?>,success_return_url,<?php echo urlencode(getUrl('srl',''))?>"><?php echo getLang('restore')?></button>
+		<button type="button" class="btn btn-danger me-2" data-exec-ajax="board.deleteDocument" data-ajax-param="wr_srl,<?php echo $_DATA['wr_srl']?>,is_empty,1,success_url,<?php echo urlencode(getUrl('srl',''))?>" data-ajax-confirm="<?php echo getLang('confirm_empty',['document'])?>"><?php echo getLang('delete')?></button>
+		<button type="button" class="btn btn-warning" data-exec-ajax="board.restoredocument" data-ajax-param="wr_srl,<?php echo $_DATA['wr_srl']?>,success_url,<?php echo urlencode(getUrl('srl',''))?>"><?php echo getLang('restore')?></button>
 	</div>
 </section>

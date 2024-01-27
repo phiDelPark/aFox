@@ -1,5 +1,4 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
 
 	require_once _AF_LIBS_PATH_ . 'parsedown/Parsedown.php';
 	define('ENFORCE_SSL', 1);
@@ -80,9 +79,11 @@ if(!defined('__AFOX__')) exit();
 	}
 
 	function getRequestMethod(){
-		if(isset($_SERVER[($s='HTTP_CONTENT_TYPE')]) && strpos($_SERVER[$s],'/json'))
-			return 'JSON';
-		else return $_SERVER['REQUEST_METHOD'];
+		if(isset($_SERVER[($s='HTTP_X_REQUESTED_WITH')]) && $_SERVER[$s] == 'XMLHttpRequest'){
+			return strpos($_SERVER['HTTP_ACCEPT'],'json')?'JSON':(strpos($_SERVER['HTTP_ACCEPT'],'xml')?'XMLRPC':'JSCALLBACK');
+		} else {
+			return $_SERVER['REQUEST_METHOD'];
+		}
 	}
 
 	function getScriptPath(){

@@ -22,7 +22,7 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 
 <?php if(!$is_new){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_delete',['board'])?>')">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="deleteBoard" />
 	<input type="hidden" name="md_id" value="<?php echo $BOARD['md_id']?>" />
@@ -31,7 +31,7 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 <?php }?>
 
 <form id="setup" method="post" autocomplete="off">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="updateBoard" />
 	<input type="hidden" name="md_id" value="<?php echo $is_new?'':$BOARD['md_id'] ?>" />

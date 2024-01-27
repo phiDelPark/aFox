@@ -27,7 +27,7 @@ if(__MODULE__ && !empty($_POST['act'])) {
 			$_result = call_user_func($callproc, $_POST);
 			triggerCall('after_proc', $_POST['act'], $_result);
 		} else $_result = get_error();
-		$redirect_url = empty($_result['error'])?'success_return_url':'error_return_url';
+		$redirect_url = empty($_result['error'])?'success_url':'error_url';
 		if (!empty($_POST[$redirect_url])) {
 			$_result['redirect_url'] = urldecode($_POST[$redirect_url]);
 		}

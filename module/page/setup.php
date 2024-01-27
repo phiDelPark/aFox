@@ -21,7 +21,7 @@
 
 <?php if(!$is_new){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_delete',['page'])?>')">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="deletePage" />
 	<input type="hidden" name="md_id" value="<?php echo $PAGE['md_id']?>" />
@@ -30,7 +30,7 @@
 <?php }?>
 
 <form id="setup" method="post" autocomplete="off" enctype="multipart/form-data">
-	<input type="hidden" name="success_return_url" value="<?php echo getUrl('mid', '','md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '','md_id', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="updatePage" />
 	<input type="hidden" name="md_id" value="<?php echo $is_new?'':$PAGE['md_id'] ?>" />

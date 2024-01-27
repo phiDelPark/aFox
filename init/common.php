@@ -1,5 +1,4 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
 
 @include_once _AF_PATH_ . 'common/lang/' . _AF_LANG_ . '.php';
 require_once _AF_INIT_PATH_ . 'function.php';
@@ -31,9 +30,10 @@ if(empty($_MEMBER)){ // 로그인이 아니면 삭제
 	unset($_SESSION['AF_LOGIN_ID']);
 } else unset($_MEMBER['mb_password']); // 검사 후 비번 삭제
 
-if(__REQ_METHOD__ == 'JSON') $_POST = json_decode(file_get_contents('php://input'), TRUE);
-// 넘어온 값을 하나로 합침
-$_POST = array_merge($_GET, $_POST);
+$_POST = __REQ_METHOD__ == 'JSON' // JSON 은 POST 만 받음
+	? json_decode(file_get_contents('php://input'), TRUE)
+	: array_merge($_GET, $_POST); // 넘어온 값을 하나로 합침
+//unset($_GET);
 
 ///*첫번째 키가 모듈인지 체크 (.htaccess 대신 사용할때)
 if(!isset($_POST['module'])){
@@ -42,7 +42,6 @@ if(!isset($_POST['module'])){
 		if(empty($_POST['act'])) $_POST['disp'] = empty($_POST[$tmp]) ? 'default' : $_GET[$tmp];
 	}
 }//*/
-//unset($_GET); unset($_POST);
 
 // 유효성 검사
 foreach (['module','id','act','disp'] as $tmp){

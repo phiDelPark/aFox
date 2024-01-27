@@ -42,7 +42,7 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 		  <a href="./?admin" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'default' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#speedometer2"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#speedometer2"/></svg>
 			<span><?php echo getLang('menu_name_dashbd')?></a></span>
 		  </a>
 		</li>
@@ -54,13 +54,13 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 		  <a href="./?admin=theme" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'theme' ? ' active': '' ?>">
-		  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#house-door"></use></svg>
+		  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#house-door"/></svg>
 			<span><?php echo getLang('menu_name_theme')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=menu" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'menu' ? ' active': '' ?>">
-		  	<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#menu-button"></use></svg>
+		  	<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#menu-button"/></svg>
 			<span><?php echo getLang('menu_name_menu')?></span>
 		  </a>
 		</li>
@@ -72,24 +72,24 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 			<a href="./?admin=page" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'page' ? ' active': '' ?>">
-				<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#book"></use></svg>
+				<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#book"/></svg>
 				<span><?php echo getLang('menu_name_page')?></span>
 			</a>
 		</li>
 		<li>
 			<a href="./?admin=board" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'board' ? ' active': '' ?>">
-				<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#collection"></use></svg>
+				<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#collection"/></svg>
 				<span><?php echo getLang('menu_name_board')?></span>
 			</a>
 		</li>
 		<?php $tmp=(in_array($_POST['disp'], ['document','comment','file','trash']))?>
 		<li>
 		  <a class="nav-link px-3 pb-0 sidebar-link" data-bs-toggle="collapse" href="#layouts" aria-expanded="<?php echo $tmp?'true':'false'?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#box"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#box"/></svg>
 			<span style="margin-left:4px"><?php echo getLang('menu_name_content')?></span>
 			<span class="ms-auto">
 			  <span class="right-icon">
-			  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#chevron-down"></use></svg>
+			  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#chevron-down"/></svg>
 			  </span>
 			</span>
 		  </a>
@@ -97,25 +97,25 @@ $is_admin = isAdmin();
 			<ul class="navbar-nav ps-3">
 			  <li>
 				<a href="./?admin=document" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'document' ? ' active': '' ?>">
-					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#chat-right-text-fill"></use></svg>
+					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#chat-right-text-fill"/></svg>
 					<span><?php echo getLang('menu_name_document')?></span>
 				</a>
 			  </li>
 			  <li>
 				<a href="./?admin=comment" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'comment' ? ' active': '' ?>">
-					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#chat-right-quote-fill"></use></svg>
+					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#chat-right-quote-fill"/></svg>
 					<span><?php echo getLang('menu_name_comment')?></span>
 				</a>
 			  </li>
 			  <li>
 				<a href="./?admin=file" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'file' ? ' active': '' ?>">
-					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#floppy-fill"></use></svg>
+					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#floppy-fill"/></svg>
 					<span><?php echo getLang('menu_name_file')?></span>
 				</a>
 			  </li>
 			  <li>
 				<a href="./?admin=trash" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'trash' ? ' active': '' ?>">
-					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#trash-fill"></use></svg>
+					<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#trash-fill"/></svg>
 					<span><?php echo getLang('menu_name_trash')?></span>
 				</a>
 			  </li>
@@ -130,25 +130,25 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 		  <a href="./?admin=module" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'module' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#grid"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#grid"/></svg>
 			<span><?php echo getLang('menu_name_module')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=addon" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'addon' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#plugin"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#plugin"/></svg>
 			<span><?php echo getLang('menu_name_addon')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=widget" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'widget' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#puzzle"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#puzzle"/></svg>
 			<span><?php echo getLang('menu_name_widget')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=visit" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'visit' ? ' active': '' ?>">
-		  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#airplane"></use></svg>
+		  <svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#airplane"/></svg>
 			<span><?php echo getLang('menu_name_visit')?></span>
 		  </a>
 		</li>
@@ -160,13 +160,13 @@ $is_admin = isAdmin();
 		</li>
 		<li>
 		  <a href="./?admin=member" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'member' ? ' active': '' ?>">
-			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#person"></use></svg>
+			<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#person"/></svg>
 			<span><?php echo getLang('menu_name_member')?></span>
 		  </a>
 		</li>
 		<li>
 		  <a href="./?admin=setup" class="nav-link px-3 pb-0<?php echo $_POST['disp'] == 'setup' ? ' active': '' ?>">
-		  	<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#gear"></use></svg>
+		  	<svg class="bi me-2" width="1em" height="1em"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#gear"/></svg>
 			<span><?php echo getLang('menu_name_setup')?></span>
 		  </a>
 		</li>

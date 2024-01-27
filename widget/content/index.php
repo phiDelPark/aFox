@@ -25,8 +25,8 @@ if($type === 'gallery') {
 }
 ?>
 <div class="content_widget<?php echo $class?>" <?php echo $style?>>
-	<?php echo empty($title) ? (empty($md_title)?'':$md_title) : $title ?>
-	<a class="float-end text-decoration-none" style="font-size:large" href="<?php echo getUrl('','id',$_WIDGET['module'],'category',$category)?>">&hellip;</a>
+	<h6><?php echo empty($title) ? (empty($md_title)?'':$md_title) : $title ?>
+	<a class="float-end text-decoration-none" style="font-size:large" href="<?php echo getUrl('','id',$_WIDGET['module'],'category',$category)?>">&hellip;</a></h6>
 	<div class="clearfix mt-1"></div>
 	<?php if($type === 'gallery') { ?>
 		<div class="p-2 border rounded" role="list">
@@ -41,7 +41,8 @@ if($type === 'gallery') {
 		<div class="list-group" role="list">
 		<?php
 			foreach ($_list as $val) {
-				echo '<a class="list-group-item d-inline-block text-truncate" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl'],'popup',$target=='_popup'?'1':'','modal',$target=='_modal'?'1':'').'"'.(empty($target)?'':' target="'.$target.'"').'>'.$val['wr_title'].'</a>';
+				$tmp = $target=='_modal'?' data-bs-toggle="modal" data-bs-target="#themeContentModal" data-ajax-action="board.getDocument" data-ajax-responses="wr_title,wr_content,wr_extra"':' target="'.$target.'"';
+				echo '<a class="list-group-item d-inline-block text-truncate" href="'.getUrl('','id',$val['md_id'],$target=='_modal'?'wr_srl':'srl',$val['wr_srl']).'"'.$tmp.'>'.$val['wr_title'].'</a>';
 			}
 		?>
 		</div >

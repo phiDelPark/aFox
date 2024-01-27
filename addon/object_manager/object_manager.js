@@ -11,56 +11,65 @@ window.addonObjectManager = (content_id = '.current_content') => {
 		module = '',
 		link_blank = false,
 		autosize_image = false,
-		autosize_video = false;
+		autosize_video = false
 
 	if(js) {
-		js = js.getAttribute('src').getQuery();
-		module = js['m'] || '';
-		if((js['l'] || '0') == '1') link_blank = true;
-		if((js['i'] || '0') == '1') autosize_image = true;
-		if((js['v'] || '0') == '1') autosize_video = true;
+		js = js.getAttribute('src').getQuery()
+		module = js['m'] || ''
+		if((js['l'] || '0') == '1') link_blank = true
+		if((js['i'] || '0') == '1') autosize_image = true
+		if((js['v'] || '0') == '1') autosize_video = true
 	}
-
+/*
 	const reSizeElement = (el, width) => {
 		if(el.offsetWidth > width){
-			el.style.width = '100%';
-			el.style.height = 'auto';
-			el.removeAttribute('height');
-			//el.style.height = (width*0.5625) + 'px';
+			el.style.width = '100%'
+			el.style.height = 'auto'
+			el.removeAttribute('height')
+			//el.style.height = (width*0.5625) + 'px'
 		}
-	};
-
+	}
+*/
 	if(autosize_video === true) {
 		const
-			videos = document.querySelectorAll(content_id + ' video,' + content_id + ' iframe[src*="youtube.com"]'),
-			width = (videos[0]?.closest(content_id).clientWidth) || '200';
-		videos.forEach(el => {
-			el.addEventListener('load', e => reSizeElement(el, width));
-			reSizeElement(el, width);
-		});
+			$videos = document.querySelectorAll(content_id + ' video,' + content_id + ' a[href*="youtube.com"]'),
+			width = ($videos[0]?.closest(content_id).clientWidth) || '200'
+		$videos.forEach($e => {
+			if($e.tagName == 'A') {
+				const $iframe = document.createElement('iframe')
+				$iframe.setAttribute('frameborder', '0')
+				$iframe.setAttribute('allowfullscreen', '')
+				$iframe.setAttribute('title', 'YouTube video player')
+				$iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share')
+				$iframe.src = 'https://www.youtube.com/embed/' + $e.href.getQuery('v')
+				$iframe.style.width = width + 'px'
+				$iframe.style.height = (width*0.5625) + 'px'
+				$e.before($iframe)
+				$e.style.display = 'none'
+			}
+		})
 	}
 
 	if(autosize_image === true) {
 		const
-			images = document.querySelectorAll(content_id + ' img,' + content_id + ' input[type=image]'),
-			width = (images[0]?.closest(content_id).clientWidth) || '200';
+			$images = document.querySelectorAll(content_id + ' img,' + content_id + ' input[type=image]')
+			//width = (images[0]?.closest(content_id).clientWidth) || '200'
 
-		images.forEach(el => {
-			el.addEventListener('load', e => reSizeElement(el, width));
-			reSizeElement(el, width);
-		});
+		$images.forEach($e => {
+			//el.addEventListener('load', e => reSizeElement(el, width))
+			//reSizeElement(el, width)
+			$e.style.maxWidth = '100%'
+		})
 	}
 
 	if(link_blank === true && (module == 'board' || module == 'page')) {
-		let is_modal = false;
-		const
-			alinks = document.querySelectorAll(content_id + ' a[href]');
+		const $alinks = document.querySelectorAll(content_id + ' a[href]')
 
-		alinks.forEach(el => {
-			const target = el.getAttribute('target') || false;
-			if(!target) el.setAttribute('target', '_blank');
-		});
+		$alinks.forEach($e => {
+			const target = $e.getAttribute('target') || false
+			if(!target) $e.setAttribute('target', '_blank')
+		})
 	}
 }
 
-window.addEventListener('load', e => addonObjectManager());
+window.addEventListener('load', e => addonObjectManager())
