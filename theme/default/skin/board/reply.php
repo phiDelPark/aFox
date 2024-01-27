@@ -31,7 +31,7 @@ if(!defined('__AFOX__')) exit();
 		);
 		if($rp === $val['rp_srl']) $location_hash = 'reply-'.$val['rp_srl'];
 	}
-	if($location_hash) set_cookie('location.hash', $location_hash, 18000);
+	if($location_hash) echo '<script>location.hash="'.$location_hash.'"</script>'
 ?>
 </section>
 

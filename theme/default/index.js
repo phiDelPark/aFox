@@ -114,8 +114,5 @@
 			e.target.querySelector('.modal-title').innerHTML = ''
 			e.target.querySelector('.modal-body').innerHTML = ''
 		})
-
-		const location_hash = get_cookie('location.hash', true)
-		if(location_hash) location.hash = location_hash
 	})
   })()

@@ -54,7 +54,8 @@ define('_AF_CdOOKIE_DOMAIN_', 'cookie_domain');
 define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
 define('_AF_SERVER_TIME_', time());
 
-set_cookie('_AF_COOKIE_DOMAIN_', _AF_COOKIE_DOMAIN_, 18000);
+// javascript 에서 먼저 읽을 수 있게 set_cookie_params 전에 입력
+set_cookie('_AF_COOKIE_DOMAIN_', _AF_COOKIE_DOMAIN_, 0);
 date_default_timezone_set(_AF_TIME_ZONE_);
 session_set_cookie_params(0, '/', _AF_COOKIE_DOMAIN_);
 if(session_status() == PHP_SESSION_NONE) session_start();
@@ -95,32 +96,25 @@ function set_error($msg, $err = 3){
 function get_error(){
 	return isset($_SESSION[($key='AF_VALIDATOR_ERROR')])?$_SESSION[$key]:'';
 }
-function set_session($key, $val){
-	if($val===null){unset($_SESSION[$key]);}else{$_SESSION[$key]=$val;}
+function set_session($key, $val){$_SESSION[$key]=$val;}
+function get_session($key){return isset($_SESSION[$key])?$_SESSION[$key]:'';}
+function set_cookie($key, $val, $exp = 0){ //If 0, remove it when exit the browser //if -, remove
+	setcookie(encode64($key),encode64($val),($exp>0?_AF_SERVER_TIME_+$exp:$exp),'/',_AF_COOKIE_DOMAIN_);
 }
-function get_session($key, $remove = false){
-	$session=isset($_SESSION[$key])?$_SESSION[$key]:'';
-	if($remove&&$session) unset($_SESSION[$key]); return $session;
+function get_cookie($key){
+	return array_key_exists($cki=encode64($key),$_COOKIE)?decode64($_COOKIE[$cki]):'';
 }
-function set_cookie($key, $val, $exp = 0){ //if 0, 1 year //if -, remove
-	setcookie(encode64($key),encode64($val),_AF_SERVER_TIME_+($exp?$exp:31536000),'/',_AF_COOKIE_DOMAIN_);
-}
-function get_cookie($key, $remove = false){
-	$cookie = array_key_exists($cki=encode64($key),$_COOKIE)?decode64($_COOKIE[$cki]):'';
-	if($remove&&$cookie) unset($_COOKIE[$cki]); return $cookie;
-}
-function set_cache($key, $val, $exp = 0){
+function set_cache($key, $val, $exp = 0){ //If 0, keep //if -, remove
 	if(!is_dir(_AF_CACHE_DATA_)&&!mkdir(_AF_CACHE_DATA_,_AF_DIR_PERMIT_,true)) return;
-	$s = '<?php if(!defined(\'__AFOX__\'))exit();$_EXPIRE=%s;$_CACHE=%s; ?>';
-	$s = sprintf($s,_AF_SERVER_TIME_+($exp?$exp:31536000),var_export($val,true));
+	$s = '<?php if(!defined(\'__AFOX__\'))exit();$_EXPIRE=%s;$_CACHE=%s;?>';
+	$s = sprintf($s,($exp?_AF_SERVER_TIME_+$exp:$exp),var_export($val,true));
 	file_put_contents(_AF_CACHE_DATA_.encode64($key).'.php', $s, LOCK_EX);
 }
-function get_cache($key, $remove = false){ static $__af_caches = null;
+function get_cache($key){ static $__af_caches = null;
 	if(!empty($__af_caches[$key])) return $__af_caches[$key];
 	if(!file_exists($f=(_AF_CACHE_DATA_.encode64($key).'.php'))) return;
-	if((@include $f)!==1||(!empty($_EXPIRE)&&$_EXPIRE<_AF_SERVER_TIME_)||$remove){
-		@chmod($f, 0707); @unlink($f); if(!$remove) return;
-	} return $__af_caches[$key] = $_CACHE;
+	if((@include $f)!==1||(!empty($_EXPIRE)&&$_EXPIRE<_AF_SERVER_TIME_))
+	{@chmod($f,0707);@unlink($f);return;} return ($__af_caches[$key] = $_CACHE);
 }
 function debugPrint($o = null){ if(!(__DEBUG__ & 1)) return;
 	file_put_contents(_AF_PATH_.'_debug.php',implode(PHP_EOL,[date('== Y-m-d H:i:s =='),

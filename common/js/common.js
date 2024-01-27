@@ -139,22 +139,23 @@ const $_LANG = {};
 		}); return arr
 	}
 
-	window.set_cookie = function(name, value, exp = 0) { //if 0, 1 year //if -, remove
-		document.cookie = name.encode64() + '=' + value.encode64() + '; path=/; '
-		+ 'Domain=' + (_AF_COOKIE_DOMAIN_ || '') + '; max-age=' + (exp ? exp : 31536000)
+	//If 0, remove it when exit the browser //if -, remove
+	window.set_cookie = function(name, value, exp = 0) {
+		const d = new Date(); d.setTime(d.getTime() + exp)
+		const expires = exp ? ';expires='+ d.toUTCString() : '';
+		document.cookie =
+			name.encode64() + '=' + value.encode64() + expires + ';path=/;'
+			+ (_AF_COOKIE_DOMAIN_ || '') ? 'Domain=' + _AF_COOKIE_DOMAIN_ : ''
 	}
 
-	window.get_cookie = function(name, remove = false) {
+	window.get_cookie = function(name) {
 		let x, y, enname = name.encode64()
 		const cookies = document.cookie.split(';')
 		for(let i = 0; i < cookies.length; i++) {
 			x = cookies[i].slice(0, cookies[i].indexOf('='))
 			y = cookies[i].slice(cookies[i].indexOf('=') + 1)
 			x = x.replace(/^\s+|\s+$/g, '')
-			if(x == enname) {
-				if(remove) set_cookie(name, '', -1)
-				return y.rawurldecode().decode64()
-			}
+			if(x == enname) return y.rawurldecode().decode64()
 		}
 	}
 
