@@ -55,7 +55,7 @@ if(empty($_POST['act']) && (!empty($_POST['srl']) || !empty($_POST['rp']))){
 		$_POST['srl'] = $tmp['wr_srl'];
 	if(!empty($_POST['srl'])&&$tmp=DB::get(_AF_DOCUMENT_TABLE_,'md_id',['wr_srl'=>(int)$_POST['srl']]))
 		$_POST['id'] = $tmp['md_id'];
-	setQuery('','id',$_POST['id'],'srl',$_POST['srl'],'rp',empty($_POST['rp'])?'':$_POST['rp']);
+	setQuery('id',$_POST['id'],'srl',$_POST['srl'],'rp',empty($_POST['rp'])?'':$_POST['rp']);
 }
 
 // module, id 가 없으면 시작 페이지

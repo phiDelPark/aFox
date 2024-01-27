@@ -17,7 +17,7 @@ require_once _AF_ADDONS_PATH_ . $_GET['n'] . '/info.php';
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="imagetoolbar" content="no"><meta http-equiv="X-UA-Compatible" content="IE=10,chrome=1">
 <title><?php echo $_ADDON_INFO['title'] ?></title>
-<style>body{margin:0;padding:15px;background-color:lightgray}body::before{content:"<?php echo str_replace('"','\"',$_ADDON_INFO['title']) ?>";font-size:1.3em;padding-bottom:5px;margin-bottom:15px;border:0 solid gray;border-bottom-width:2px;display:block;font-weight:bold}</style>
+<style>body{background-color:lightgray}</style>
 <script>const bootstrap=[];/* Avoiding errors caused by bootstrap deactivation */</script>
 <script src="<?php echo _AF_URL_?>common/js/common.min.js"></script>
 </head><body>

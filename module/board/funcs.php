@@ -75,7 +75,7 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 	return $result;
 }
 
-function getDocumentList($id, $page, $search = "", $category = "", $order = "wr_regdate", $callback = null)
+function getDocumentList($id, $count, $page, $search = "", $category = "", $order = "wr_regdate", $callback = null)
 {
 	$_wheres = ["md_id" => $id, "(_AND_)" => empty($category) ? [] : ["wr_category" => $category], "(_OR_)" => []];
 
@@ -112,12 +112,6 @@ function getDocumentList($id, $page, $search = "", $category = "", $order = "wr_
 		}
 	}
 
-	$list_count = getModule($id, "md_list_count");
-	if (empty($list_count))
-	{
-		$list_count = 20;
-	}
-
 	if (empty($callback))
 	{
 		$callback = function ($r)
@@ -135,8 +129,8 @@ function getDocumentList($id, $page, $search = "", $category = "", $order = "wr_
 			return $rset;
 		};
 	}
-	$_list = DB::gets(_AF_DOCUMENT_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, $order, ((empty($page) ? 1 : $page) - 1) * $list_count . "," . $list_count, $callback);
-	return setDataListInfo($_list, $page, $list_count, DB::foundRows());
+	$_list = DB::gets(_AF_DOCUMENT_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, $order, ((empty($page) ? 1 : $page) - 1) * $count . "," . $count, $callback);
+	return setDataListInfo($_list, $page, $count, DB::foundRows());
 }
 
 function getComment($srl, $field = "*")

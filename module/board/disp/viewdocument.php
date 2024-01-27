@@ -7,7 +7,9 @@ function proc($data) {
 	if(!empty($doc['error'])) return set_error(getLang($doc['message']),$doc['error']);
 	if(empty($doc['wr_srl'])) return set_error(getLang('error_founded'),4201);
 
+	global $_CFG;
 	global $_MEMBER;
+
 	$is_manager = isManager($doc['md_id']);
 	$login_srl = empty($_MEMBER)?0:$_MEMBER['mb_srl'];
 
@@ -122,9 +124,11 @@ function proc($data) {
 	$page = empty($data['page']) ? '' : $data['page'];
 	//$cpage = empty($data['cpage']) ? '' : $data['cpage'];
 
+	$count = (empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count']) / 2;
+
 	$result = $doc;
 	$result['tpl'] = 'view';
-	$result['_DOCUMENT_LIST_'] = getDocumentList($doc['md_id'], $page, $search, $category);
+	$result['_DOCUMENT_LIST_'] = getDocumentList($doc['md_id'], $count, $page, $search, $category);
 	$result['_COMMENT_LIST_'] = getCommentList($doc['wr_srl'], $call);
 
 	return $result;
