@@ -22,13 +22,21 @@ function proc($data) {
 			$schs = ['nt_sender_nick{LIKE}'=>'%'.$search.'%'];
 		}
 	}
-	$_list = DB::gets(_AF_NOTE_TABLE_,'SQL_CALC_FOUND_ROWS *',['mb_srl'=>$_MEMBER['mb_srl'],'(_OR_)'=>$schs],'nt_send_date', (($data['page']-1)*20).',20');
+
+	$count = 20;
+	$page = empty($data["page"]) ? 1 : $data["page"];
+
+	$_list = DB::gets(_AF_NOTE_TABLE_,'SQL_CALC_FOUND_ROWS *',['mb_srl'=>$_MEMBER['mb_srl'],'(_OR_)'=>$schs],'nt_send_date', (($page-1)*$count).','.$count);
 	if($error = DB::error()) return set_error($error->getMessage(),$error->getCode());
-	$_list = setDataListInfo($_list, $data['page'], 20, DB::foundRows());
+
+	$_list = ['data' => $_list];
+	$_list['total_count'] = DB::foundRows();
+	$_list['total_page'] = $_list['end_page'] = ceil($_list['total_count'] / $count);
+	$_list['current_page'] = $page;
 
 	$result = $_item;
 	$result['tpl'] = 'inbox';
-	$result['_DOCUMENT_LIST_'] = $_list;
+	$result['_DOCUMENT_LIST_'] =  $_list;
 
 	return $result;
 }

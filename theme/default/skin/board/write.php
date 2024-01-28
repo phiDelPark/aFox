@@ -8,8 +8,8 @@
 ?>
 
 <section id="documentWrite" aria-label="Writing a post">
-	<h3 class="pb-3 mb-4 fst-italic border-bottom"><?php echo getLang($is?'edit':'write')?></h3>
-
+	<button type="button" class="btn-close float-end" aria-label="Back" onclick="window.history.go(-1);return false"></button>
+	<h2 class="pb-3 mb-4 fst-italic border-bottom"><?php echo getLang($is?'edit':'write')?></h2>
 	<form id="setup" method="post" autocomplete="off" enctype="multipart/form-data" needvalidate>
 	<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
 	<input type="hidden" name="success_url" value="<?php echo $is?getUrl('disp','','cpage','','rp',''):getUrl('','id',__MID__)?>">
@@ -18,7 +18,7 @@
 	<input type="hidden" name="md_id" value="<?php echo __MID__?>">
 	<input type="hidden" name="wr_srl" value="<?php echo $is?$DOC['wr_srl']:''?>">
 
-	<div>
+	<div class="clearfix">
 		<?php if (empty($_MEMBER) || (!empty($DOC['wr_srl']) && $_MEMBER['mb_srl'] !== $DOC['mb_srl'])) { ?>
 		<div class="mb-4">
 			<input type="text" name="mb_nick" class="form-control mb-1"<?php echo empty($_MEMBER)?' required':''?> maxlength="20" placeholder="<?php echo getLang('id')?>" value="<?php echo $is?escapeHtml($DOC['mb_nick']):''?>"<?php echo empty($DOC['wr_srl'])?'':' readonly'?>>

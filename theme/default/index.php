@@ -66,8 +66,8 @@
 	</ul>
 </div>
 
-<div class="container">
-	<header class="border-bottom lh-1 p-1">
+<header class="container">
+	<div class="border-bottom lh-1 p-1">
 		<div class="row flex-nowrap justify-content-between align-items-end">
 			<div class="col-4">
 				<a class="link-secondary" href="#">Subscribe</a>
@@ -116,15 +116,15 @@
 			</div>
 		</form>
 		</div>
-	</header>
+	</div>
 
 	<nav class="navbar navbar-expand-md border-bottom mb-4 p-0">
 		<div class="container-fluid p-0">
-			<a class="navbar-brand ms-2" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" style="vertical-align:-.1em"><use href="./theme/default/bi-icons.svg#house-door-fill"/></svg></a>
+			<a class="navbar-brand ms-2" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" style="vertical-align:-.25rem;width:1.25em;height:1.25em"><use href="./theme/default/bi-icons.svg#house-door-fill"/></svg></a>
 			<button class="navbar-toggler py-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
-			<div class="navbar-nav navbar-collapse font-gugi collapse" id="navbarNav">
+			<div class="navbar-nav navbar-collapse font-gugi fs-5 collapse" id="navbarNav">
 <?php
 		foreach($mainmenu as $key => $val){
 			echo '<a class="nav-link'.($key==='_ACTIVE_'?' active':'').'" href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a>';
@@ -177,46 +177,28 @@
 		<div class="carousel-inner rounded">
 			<div class="carousel-item active">
 				<img src="<?php echo _AF_THEME_URL_ ?>img/header_<?php echo !empty($_POST['module'])&&$_POST['module']=='board'?'board':'page' ?>.jpg" class="d-block w-100" alt="...">
-				<div class="carousel-caption d-none d-md-block">
-					<h2 class="fw-bold"><?php echo empty($mainmenu['_ACTIVE_'])?'':$mainmenu['_ACTIVE_']['mu_title']?></h2>
-					<p><?php echo empty($mainmenu['_ACTIVE_'])?'':$mainmenu['_ACTIVE_']['mu_description']?></p>
-				</div>
 			</div>
 		</div>
 
 <?php } ?>
 	</div>
 
-</div>
+</header>
 
 <main class="container">
-	<div class="row g-5 mb-5">
-	<article class="<?php echo $is_submenu ? 'col-md-9 ' : ''?>mt-4" aria-label="Site Contents">
+	<div class="row g-5 mb-4">
+	<article class="<?php echo $is_submenu ? 'col-lg-9 order-lg-1 ' : ''?>mt-4" aria-label="Site Contents">
 <?php
 	if($error = get_error()) { messageBox($error['message'], $error['error']); }
 	displayModule();
 ?>
-	<div class="modal fade" id="themeContentModal" tabindex="-1" aria-labelledby="themeContentModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="themeContentModalLabel"></h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-			</div>
-			<div class="modal-body current_content"></div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo getLang('close')?></button>
-			</div>
-			</div>
-		</div>
-	</div>
 	</article>
 <?php
 	if($is_submenu){
 ?>
-		<aside class="col-md-3 mt-4">
+		<aside class="col-lg-3 mt-4">
 			<div class="position-sticky" style="top:2rem">
-				<h3 class="pb-2 fst-italic">Categories</h3>
+				<h2 class="pb-2"><?php echo empty($mainmenu['_ACTIVE_'])?'Categories':$mainmenu['_ACTIVE_']['mu_title']?></h2>
 				<ol class="list-unstyled">
 <?php foreach ($submenu['_ACTIVE_'] as $key => $val) {
 				echo '<li><a href="'. escapeHtml($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
@@ -235,10 +217,9 @@
 						<li><a class="icon-link icon-link-hover d-block gap-1 text-truncate" href="#"><svg class="bi me-1"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#hash"/></svg>Scroll To Top</a></li>
 					</ol>
 				</div>
-			</div>
 		</aside>
-	</div>
 <?php } ?>
+	</div>
 </main>
 
 <footer class="p-4 text-center text-body-secondary bg-body-tertiary" aria-label="About Site">

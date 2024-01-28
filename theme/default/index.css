@@ -113,7 +113,7 @@ h1, h2, h3, h4, h5, h6,
 }
 
 .current_content blockquote {
-	padding: 10px 20px;
+	padding: 10px 0 10px 20px;
 	font-size: 17.5px;
 	border: 0;
 	border-left: 5px solid var(--bs-border-color);

@@ -21,6 +21,17 @@ if($_POST['disp'] == 'member'){
 }
 addJSLang(['menu','addon','theme','board','page','document','comment','file','trash_bin','confirm_empty','confirm_select_move','confirm_select_empty','confirm_select_delete','warning_selected','confirm_select_trash','confirm_select_combine','prompt_move_board_id','standard_point']);
 
+function setDataListInfo($data, $page, $count, $total) {
+	$r = [];
+	$r['data'] = $data;
+	$r['total_count'] = $total;
+	$r['total_page'] = $r['end_page'] = ceil($r['total_count'] / $count);
+	$r['start_page'] = ($page - 1 - (($page - 1) % 10)) + 1;
+	if ($r['end_page'] > ($r['start_page'] + 10)) $r['end_page'] = $r['start_page'] + 10;
+	$r['current_page'] = $page;
+	return $r;
+}
+
 function procAdminDefault($data) {
 	$act = strtolower($data['act']);
 	$dir = _AF_MODULES_PATH_ . 'admin/proc/';

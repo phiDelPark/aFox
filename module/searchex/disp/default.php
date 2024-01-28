@@ -2,13 +2,13 @@
 
 function proc($data)
 {
-	$_mids = empty($data["md_extra"]) ? [] : unserialize($data["md_extra"]);
-	$_count = empty($data["md_list_count"]) ? 20 : $data["md_list_count"];
+	$mids = empty($data["md_extra"]) ? [] : unserialize($data["md_extra"]);
+	$count = empty($data["md_list_count"]) ? 20 : $data["md_list_count"];
 	$search = empty($data["search"]) ? "" : $data["search"];
 	$page = empty($data["page"]) ? 1 : $data["page"];
 
-	if (empty($_mids)) $_mids[] = "@@@@@@@@@@"; // 검색할 모듈이 없으면 임시 값
-	$_wheres = ["md_id{IN}" => implode(",", $_mids) , "(_AND_)" => [], "(_OR_)" => []];
+	if (empty($mids)) $mids[] = "@@@@@@@@@@"; // 검색할 모듈이 없으면 임시 값
+	$_wheres = ["md_id{IN}" => implode(",", $mids) , "(_AND_)" => [], "(_OR_)" => []];
 
 	if (!empty($search))
 	{
@@ -41,10 +41,18 @@ function proc($data)
 			}
 		}
 	}
-	//if(count($wheres)) $_wheres = array_merge($_wheres, $wheres);
-	$_list = DB::gets(_AF_DOCUMENT_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, "md_id,wr_regdate", ($page - 1) * $_count . "," . $_count);
 
-	return setDataListInfo($_list, $page, $_count, DB::foundRows());
+	$_list = DB::gets(_AF_DOCUMENT_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, "md_id,wr_regdate", (($page - 1) * $count) . "," . $count);
+
+	$result = [];
+	$result['data'] = $_list;
+	$result['total_count'] = DB::foundRows();
+	$result['total_page'] = $result['end_page'] = ceil($result['total_count'] / $count);
+	$result['start_page'] = ($page - 1 - (($page - 1) % 10)) + 1;
+	if ($result['end_page'] > ($result['start_page'] + 10)) $result['end_page'] = $result['start_page'] + 10;
+	$result['current_page'] = $page;
+
+	return $result;
 }
 
 /* End of file default.php */

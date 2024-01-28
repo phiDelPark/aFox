@@ -189,25 +189,6 @@
 		return $__file_list[$key];
 	}
 
-	function setDataListInfo($data, $page, $count, $total){
-		$result = [];
-		$page = $page ? $page : 1;
-		if($count>0){
-			$cur_page = $page;
-			$tal_page = ceil($total / $count);
-			$result['current_page'] = $cur_page;
-			$result['total_page'] = $tal_page;
-			$cur_page--;
-			$str_page = $cur_page - ($cur_page % 10);
-			$end_page = ($tal_page > ($str_page + 10) ? $str_page + 10 : $tal_page);
-			$result['start_page'] = ++$str_page;
-			$result['end_page'] = $end_page;
-		}
-		$result['total_count'] = $total;
-		$result['data'] = $data;
-		return $result;
-	}
-
 	function getHistoryAction($act){
 		global $_MEMBER;
 		if(empty($_MEMBER)) return null;

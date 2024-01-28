@@ -22,9 +22,12 @@ $wr_content = preg_replace('/(<img)(((?!loading)[^>])+)>/is', '\1\2 loading="laz
 ?>
 
 <section id="documentView" aria-label="Contents of this post">
-	<h3 class="pb-3 mb-1 border-bottom"><?php echo $DOC['wr_title']?></h3>
-	<p class="d-flex w-100 justify-content-between text-secondary"><span><?php echo date('F j, Y', strtotime($DOC[$is_col_update?'wr_update':'wr_regdate'])).' by '.$DOC['mb_nick']?></span>
-	<?php echo $wr_secret ? '<svg class="bi"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>' : ''?></p>
+	<h2 class="pb-3 mb-1 border-bottom"><?php echo $DOC['wr_title']?></h2>
+	<p class="d-flex w-100 justify-content-between text-secondary">
+		<small><svg class="bi" style="vertical-align:-2px"><use href="./theme/default/bi-icons.svg#<?php echo $wr_secret ? 'shield-lock' : 'clock'?>"/></svg>
+		<?php echo date('l jS \of F Y', strtotime($DOC[$is_col_update?'wr_update':'wr_regdate']))?></small>
+		<small><?php echo $DOC['mb_nick']?></small>
+	</p>
 	<?php
 	$md_extra_keys = empty($_CFG['md_extra']['keys']) ? [] : $_CFG['md_extra']['keys'];
 	if (!empty($md_extra_keys)) {
@@ -51,9 +54,9 @@ $wr_content = preg_replace('/(<img)(((?!loading)[^>])+)>/is', '\1\2 loading="laz
 	echo '</div>';
 } ?>
 	<p class="d-flex w-100 justify-content-between p-1 border-bottom">
-		<span><a href="<?php echo getUrl('disp','','srl','','cpage','','rp','') ?>" class="icon-link-hover"><svg class="bi"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#list-square"/></svg></a></span>
-		<span><a href="<?php echo getUrl('disp','deleteDocument', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#x-square"/></svg></a>
-		<a href="<?php echo getUrl('disp','writeDocument', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#pencil-square"/></svg></a></span>
+		<span><a href="<?php echo getUrl('disp','','srl','','cpage','','rp','') ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#list-square"/></svg></a></span>
+		<span><a href="<?php echo getUrl('disp','deleteDocument', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#x-square"/></svg></a>
+		<a href="<?php echo getUrl('disp','writeDocument', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#pencil-square"/></svg></a></span>
 	</p>
 </section>
 

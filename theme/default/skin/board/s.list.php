@@ -8,11 +8,6 @@ setLang('hit', getLang('view'));
 setLang('nick', getLang('name'));
 $show_column = $CONFIGS['show_column'];
 
-$current_page = $LIST['current_page'];
-$total_page = $LIST['total_page'];
-$start_page = $LIST['start_page'];
-$end_page = $LIST['end_page'];
-
 $srl = empty($_POST['srl'])?0:$_POST['srl'];
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 ?>
@@ -28,7 +23,7 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		$href = $wr_secret&&!$wr_permit ? '#' : getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','');
 		echo '<a class="list-group-item list-group-item-action px-1'.($val['wr_srl']==$srl?' active" aria-current="true':'').'" href="'.$href.'">';
 		echo '<div class="'.$class1.'"><span class="fs-5 mb-1">'.$wr_title.'</span></div>';
-		echo '<div class="'.$class1.' text-body-secondary"><small>'.date('Y/m/d', strtotime($val['wr_regdate'])).'</small><small>'.escapeHtml($val['mb_nick'], true).'</small></div></a>';
+		echo '<div class="'.$class1.' text-body-secondary"><small>'.date('F j, Y', strtotime($val['wr_regdate'])).'</small><small>'.escapeHtml($val['mb_nick'], true).'</small></div></a>';
 	}
 ?>
 </div>

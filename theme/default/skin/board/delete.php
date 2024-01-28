@@ -4,7 +4,8 @@
 	$is_manager = isManager(__MID__);
 ?>
 <section id="documentDelete" aria-label="Delete this post?">
-	<h3 class="pb-3 mb-4 fst-italic border-bottom"><?php echo getLang('delete')?></h3>
+	<button type="button" class="btn-close float-end" aria-label="Back" onclick="window.history.go(-1);return false"></button>
+	<h2 class="pb-3 mb-4 fst-italic border-bottom"><?php echo getLang('delete')?></h2>
 	<form id="setup" method="post" autocomplete="off" enctype="multipart/form-data">
 	<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
 	<input type="hidden" name="success_url" value="<?php echo getUrl('disp','','srl','','cpage','','rp','')?>" />
@@ -26,7 +27,7 @@
 		</div>
 		<div class="mb-4">
 			<label><?php echo getLang('content')?></label>
-			<textarea class="form-control" style="height:150px" readonly><?php echo escapeHtml(preg_replace('#<br\s*/?>|\s*\r?\n\s*\r?\n#i', "\n", trim(str_replace('&nbsp;', ' ', strip_tags($DOC['wr_content'], '<br>')))), 0)?></textarea>
+			<textarea class="form-control" style="height:250px" readonly><?php echo escapeHtml(preg_replace('#<br\s*/?>|\s*\r?\n\s*\r?\n#i', "\n", trim(str_replace('&nbsp;', ' ', strip_tags($DOC['wr_content'], '<br>')))), 0)?></textarea>
 		</div>
 		<hr class="mb-4">
 		<div class="d-grid">

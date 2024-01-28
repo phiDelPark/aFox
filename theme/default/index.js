@@ -89,30 +89,5 @@
 
 	window.addEventListener('load', () => {
 		document.querySelector('#afoxPageLoading')?.fadeOut($e => $e.remove())
-		const content_modal = document.querySelector('#themeContentModal')
-		content_modal.addEventListener('show.bs.modal', (e) => {
-			const title = e.target.querySelector('.modal-title'),
-				body = e.target.querySelector('.modal-body'),
-				action = e.relatedTarget.dataset.ajaxAction.split('.'),
-				responses = e.relatedTarget.dataset.ajaxResponses.split(',')
-			const data = {
-				module: action[0],
-				act: action[1],
-				response_tags: responses,
-				...e.relatedTarget.href.getQuery(),
-			}
-			exec_ajax(data)
-				.then((data) => {
-					title.innerHTML = data['wr_title']
-					body.innerHTML = data['wr_content']
-				}).catch((error) => {
-					console.log(error)
-					body.innerHTML = error.message
-				})
-		})
-		content_modal.addEventListener('hide.bs.modal', (e) => {
-			e.target.querySelector('.modal-title').innerHTML = ''
-			e.target.querySelector('.modal-body').innerHTML = ''
-		})
 	})
-  })()
+})()
