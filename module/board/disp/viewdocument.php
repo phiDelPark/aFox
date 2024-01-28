@@ -124,7 +124,7 @@ function proc($data) {
 	$page = empty($data['page']) ? '' : $data['page'];
 	//$cpage = empty($data['cpage']) ? '' : $data['cpage'];
 
-	$count = (empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count']) / 2;
+	$count = empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count'];
 
 	$result = $doc;
 	$result['tpl'] = 'view';

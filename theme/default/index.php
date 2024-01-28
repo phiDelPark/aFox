@@ -36,34 +36,11 @@
 <?php if(!empty($_THEME['use_loader'])) { ?>
 <div id="afoxPageLoading" aria-label="Please Wait, Loading..."></div>
 <?php } ?>
-<div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
-	<button id="theme-color-modes" type="button" data-bs-toggle="dropdown" class="btn btn-violet py-2 dropdown-toggle d-flex align-items-center" aria-expanded="false" aria-label="Toggle theme (auto)">
-		<svg class="bi my-1 theme-icon-active"><use href="./theme/default/bi-icons.svg#circle-half"/></svg>
-		<span class="visually-hidden" id="theme-color-modes-text">Toggle theme</span>
-	</button>
-	<ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="theme-color-modes-text">
-		<li>
-			<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-				<svg class="bi me-2 opacity-50 theme-icon"><use href="./theme/default/bi-icons.svg#sun-fill"/></svg>
-				Light
-				<svg class="bi ms-auto d-none"><use href="./theme/default/bi-icons.svg#check2"/></svg>
-			</button>
-		</li>
-		<li>
-			<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false">
-				<svg class="bi me-2 opacity-50 theme-icon"><use href="./theme/default/bi-icons.svg#moon-stars-fill"/></svg>
-				Dark
-				<svg class="bi ms-auto d-none"><use href="./theme/default/bi-icons.svg#check2"/></svg>
-			</button>
-		</li>
-		<li>
-			<button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true">
-				<svg class="bi me-2 opacity-50 theme-icon"><use href="./theme/default/bi-icons.svg#circle-half"/></svg>
-				Auto
-				<svg class="bi ms-auto d-none"><use href="./theme/default/bi-icons.svg#check2"/></svg>
-			</button>
-		</li>
-	</ul>
+
+<div class="mode-toggle" onclick="this.classList.toggle('open')">
+  <div class="button" data-bs-theme-value="light"></div>
+  <div class="button" onclick="location.hash='locationMap'"></div>
+  <div class="button" onclick="location.href='#'"></div>
 </div>
 
 <header class="container">
@@ -121,7 +98,7 @@
 	<nav class="navbar navbar-expand-md border-bottom mb-4 p-0">
 		<div class="container-fluid p-0">
 			<a class="navbar-brand ms-2" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" style="vertical-align:-.25rem;width:1.25em;height:1.25em"><use href="./theme/default/bi-icons.svg#house-door-fill"/></svg></a>
-			<button class="navbar-toggler py-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<button class="navbar-toggler py-0 me-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="navbar-nav navbar-collapse font-gugi fs-5 collapse" id="navbarNav">
@@ -145,19 +122,19 @@
 		</div>
 		<div class="carousel-inner rounded">
 			<div class="carousel-item active">
-				<img src="<?php echo _AF_THEME_URL_ ?>img/slide-01.jpg" class="d-block w-100" alt="...">
+				<img src="./theme/default/img/slide-01.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
 					<?php echo $_THEME['carousel_item_1'] ?>
 				</div>
 			</div>
 			<div class="carousel-item">
-				<img src="<?php echo _AF_THEME_URL_ ?>/img/slide-02.jpg" class="d-block w-100" alt="...">
+				<img src="./theme/default/img/slide-02.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
 					<?php echo $_THEME['carousel_item_2'] ?>
 				</div>
 			</div>
 			<div class="carousel-item">
-				<img src="<?php echo _AF_THEME_URL_ ?>/img/slide-03.jpg" class="d-block w-100" alt="...">
+				<img src="./theme/default/img/slide-03.jpg" class="d-block w-100" alt="...">
 				<div class="carousel-caption d-none d-md-block">
 					<?php echo $_THEME['carousel_item_3'] ?>
 				</div>
@@ -176,7 +153,7 @@
 
 		<div class="carousel-inner rounded">
 			<div class="carousel-item active">
-				<img src="<?php echo _AF_THEME_URL_ ?>img/header_<?php echo !empty($_POST['module'])&&$_POST['module']=='board'?'board':'page' ?>.jpg" class="d-block w-100" alt="...">
+				<img src="./theme/default/img/header_<?php echo !empty($_POST['module'])&&$_POST['module']=='board'?'board':'page' ?>.jpg" class="d-block w-100" alt="...">
 			</div>
 		</div>
 
@@ -211,18 +188,15 @@
 				</a></li>
 <?php } ?>
 				</ol>
-				<div class="m-1">
-					<h4 class="fst-italic">Shortcuts</h4>
-					<ol id="quickLink" class="list-unstyled m-1">
-						<li><a class="icon-link icon-link-hover d-block gap-1 text-truncate" href="#"><svg class="bi me-1"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#hash"/></svg>Scroll To Top</a></li>
-					</ol>
-				</div>
+				<ol id="quickLink" class="list-unstyled">
+					<li class="d-none"><a class="d-block icon-link-hover text-truncate" href="#"><svg class="bi me-1"><use href="./theme/default/bi-icons.svg#hash"/></svg>Scroll To Top</a></li>
+				</ol>
 		</aside>
 <?php } ?>
 	</div>
 </main>
 
-<footer class="p-4 text-center text-body-secondary bg-body-tertiary" aria-label="About Site">
+<footer id="locationMap" class="p-4 text-center text-body-secondary bg-body-tertiary" aria-label="About Site">
 	<ul class="list-unstyled"><li style="visibility:hidden"></li>
 <?php
 	if(empty($menus['error'])){
