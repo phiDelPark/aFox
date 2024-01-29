@@ -37,8 +37,6 @@
 <div id="afoxPageLoading" aria-label="Please Wait, Loading..."></div>
 <?php } ?>
 
-<div id="calling_server" class="alert alert-warning d-none" role="alert"><?php echo getLang('calling_server')?></div>
-
 <div class="mode-toggle" onclick="this.classList.toggle('open')">
   <div class="button" data-bs-theme-value="light"></div>
   <div class="button" onclick="location.hash='locationMap'"></div>
@@ -88,7 +86,6 @@
           <option value="">ALL</option>
           <option value="<?php echo $_POST['id'] ?>" selected>MID</option>
         </select>
-        <input type="hidden" name="return" value="<?php echo $_POST['id'] ?>">
         <?php } ?>
 			<input type="text" name="search" id="searchEX" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" oninvalid="this.setCustomValidity('<?php echo getLang('search_help') ?>')" oninput="this.setCustomValidity('')" required>
 			<button class="btn btn-outline-secondary" type="submit"><?php echo getLang('search') ?></button>

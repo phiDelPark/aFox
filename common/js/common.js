@@ -178,9 +178,11 @@ const $_LANG = {};
 	window._AF_COOKIE_DOMAIN_ = get_cookie('_AF_COOKIE_DOMAIN_');
 
 	window.exec_ajax = async function(body, headers = {}) {
-		const calling = document.querySelector('#calling_server')
-		calling?.setAttribute('style', 'opacity:1')
-		calling?.classList.remove('d-none')
+		const calling = document.createElement('DIV')
+		calling.setAttribute('id', 'calling_server')
+		calling.setAttribute('class', 'alert alert-warning')
+		calling.innerText = $_LANG['calling_server'];
+		document.body.insertBefore(calling, document.body.firstChild)
 		const options = {
 			method: "POST",
 			headers: {
@@ -193,7 +195,7 @@ const $_LANG = {};
 		}
 		const res = await fetch(request_uri, options)
 		const data = await res.json()
-		calling?.fadeOut($e => $e.classList.add('d-none'))
+		calling?.fadeOut($e => $e.remove())
 		if(!res.ok || (data?.error || 0) !== 0) throw Error(data?.message || data)
 		return data
 	}
