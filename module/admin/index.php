@@ -19,7 +19,7 @@ if($_POST['disp'] == 'member'){
 }else{
 	@include_once _AF_MODULES_PATH_ . 'admin/lang/' . _AF_LANG_ . '.php';
 }
-addJSLang(['menu','addon','theme','board','page','document','comment','file','trash_bin','confirm_empty','confirm_select_move','confirm_select_empty','confirm_select_delete','warning_selected','confirm_select_trash','confirm_select_combine','prompt_move_board_id','standard_point']);
+addJSLang(['menu','addon','theme','board','page','document','comment','file','trash_bin','confirm_empty','confirm_delete','confirm_select_trash','confirm_select_combine','warning_selected','prompt_move_board_id','standard_point']);
 
 function setDataListInfo($data, $page, $count, $total) {
 	$r = [];

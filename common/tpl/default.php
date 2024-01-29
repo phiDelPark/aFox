@@ -28,7 +28,7 @@ if($_CFG['md_description']) { echo '<meta name="description" content="'.escapeHt
 ?>
 <title><?php echo escapeHtml($_CFG['title'].($_CFG['md_title'] ? ' - '.$_CFG['md_title'] : '')) ?></title>
 <?php
-if($_CFG['favicon']) {echo '<link rel="icon" href="'.$_CFG['favicon'].'">'."\n";}
+if($_CFG['favicon']) {echo '<link rel="shortcut icon" href="'.$_CFG['favicon'].'" type="image/x-icon">'."\n";}
 if(_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 <link href="<?php echo _AF_URL_ ?>common/css/bootstrap.min.css" rel="stylesheet">
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.bundle.min.js" id="defBootstrapJS"></script>

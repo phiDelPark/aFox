@@ -140,12 +140,9 @@ $_LANG['confirm_delete'] = '%s을(를) 삭제하시겠습니까?';
 $_LANG['confirm_empty'] = '%s을(를) 비우시겠습니까?';
 $_LANG['confirm_move'] = '%s을(를) 이동하시겠습니까?';
 $_LANG['confirm_register'] = '%s을(를) 등록하시겠습니까?';
+$_LANG['confirm_restore'] = '%s을(를) 복구하시겠습니까?';
 $_LANG['confirm_save'] = '%s을(를) 저장하시겠습니까?';
 $_LANG['confirm_send'] = '%s을(를) 발송하시겠습니까?';
-$_LANG['confirm_select_copy'] = '선택된 %s을(를) 복사하시겠습니까?';
-$_LANG['confirm_select_delete'] = '선택된 %s을(를) 삭제하시겠습니까?';
-$_LANG['confirm_select_empty'] = '선택된 %s을(를) 비우시겠습니까?';
-$_LANG['confirm_select_move'] = '선택된 %s을(를) 이동하시겠습니까?';
 
 $_LANG['request_input'] = '%s을(를) 입력하세요.';
 $_LANG['request_select'] = '%s을(를) 선택하세요.';

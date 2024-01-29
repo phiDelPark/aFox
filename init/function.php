@@ -109,9 +109,8 @@ function getUrl(){
 // 이스케이프시 홑따옴표는 안되니 필요하면 escapeHtml 사용
 // 홑따옴표 이스케이프시 escapeHtml(getLang('msg',false),false,ENT_QUOTES)
 function getLang($key, $args1 = true, $args2 = true){
-	if(!($key = strtolower($key))) return '';
 	global $_LANG;
-	$args = [isset($_LANG[$key]) ? $_LANG[$key] : $key];
+	$args = [isset($_LANG[$l = strtolower($key)]) ? $_LANG[$l] : $key];
 	$escape = is_array($args1) ? $args2 : $args1;
 	if(is_array($args1)){
 		foreach($args1 as $v) $args[]=isset($_LANG[$l=strtolower($v)])?$_LANG[$l]:$v;

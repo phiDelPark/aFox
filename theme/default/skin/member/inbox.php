@@ -1,7 +1,7 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 	if(!empty($_POST['srl'])) include 'inboxview.php';
-	addJSLang(['confirm_select_delete','message']);
+	addJSLang(['confirm_delete','message']);
 	$_list = &$_DATA['_DOCUMENT_LIST_'];
 ?>
 
@@ -91,8 +91,9 @@
 		els_chk.forEach(el => el.checked = el_chk.checked);
 	}
 	function _allRemoveInboxItems() {
-		if (confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['message']])) == true) {
-			exec_ajax('member.deleteNote', document.querySelector('#af_member_remove_inbox_items').dataExport());
+		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['message']])) == true) {
+			exec_ajax({module:'member',act:'deleteNote',...document.querySelector('#af_member_remove_inbox_items').serializeArray()})
+			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
 		}
 		return false;
 	}

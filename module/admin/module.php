@@ -74,14 +74,14 @@ if(is_dir($module_dir)) {
 <table class="table">
 <thead>
 	<tr>
-		<th>#<?php echo getLang('removed_module')?></th>
-		<th class="text-end"><?php echo getLang('empty_module')?></th>
+		<th scope="col" class="text-wrap">#<?php echo getLang('removed_module')?></th>
+		<th scope="col" class="text-end"><?php echo getLang('empty_module')?></th>
 	</tr>
 </thead>
 <tbody>
 <?php
 	foreach($md_list as $key => $value) {
-		if($value) echo '<tr><td>'.$key.'</td><td class="col-xs-1"><button type="button" class="btn btn-primary btn-xs mw-10" data-empty-module="'.$key.'">'.getLang('empty_module').'</button></td></tr>';
+		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><button type="button" class="btn btn-primary btn-xs mw-10" data-empty-module="'.$key.'">'.getLang('empty_module').'</button></td></tr>';
 	}
 ?>
 </tbody>

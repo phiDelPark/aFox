@@ -208,7 +208,7 @@ function SiteMap(id) {
 		el.addEventListener('click', e => {
 
 			e.preventDefault();
-			if(!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['menu']]))) return;
+			if(!confirm($_LANG['confirm_delete'].sprintf([$_LANG['menu']]))) return;
 			const el2 = e.target.tagName != 'LI' ? e.target.closest('LI') : e.target;
 			el2.remove();
 		});
@@ -255,7 +255,7 @@ window.onload = function() {
 			el_del.addEventListener('click', e =>
 			{
 				e.preventDefault();
-				if(!confirm($_LANG['confirm_select_delete'].sprintf([$_LANG['menu']]))) return;
+				if(!confirm($_LANG['confirm_delete'].sprintf([$_LANG['menu']]))) return;
 				const el2 = e.target.tagName != 'LI' ? e.target.closest('LI') : e.target;
 				el2.remove();
 			});

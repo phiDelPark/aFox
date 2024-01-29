@@ -109,6 +109,15 @@ const $_LANG = {};
 		return z+((z.slice(-1)=='/')?'':'/')+(r.length>0?'?'+r.join('&'):'')
 	}
 
+	HTMLElement.prototype.fadeIn = function(callback, speed = 50) {
+		let $e = this, op = 0, increment = 0.1
+		$e.style.opacity = op; callback($e)
+		$e.timer = setInterval(()=> {
+			op += increment; $e.style.opacity = op
+			if (op >= 1) { clearInterval($e.timer) }
+		}, speed)
+	}
+
 	HTMLElement.prototype.fadeOut = function(callback, speed = 50) {
 		let $e = this, op = 1, increment = 0.1
 		$e.timer = setInterval(()=> {
@@ -117,25 +126,32 @@ const $_LANG = {};
 		}, speed)
 	}
 
-	HTMLElement.prototype.fadeIn = function(callback, speed = 50) {
-		let $e = this, op = 0, increment = 0.1
-		$e.timer = setInterval(()=> {
-			op += increment; $e.style.opacity = op
-			if (op >= 1) { clearInterval($e.timer); callback($e) }
-		}, speed)
+	HTMLFormElement.prototype.serializeObject = function(arr = {}) {
+		Array.prototype.slice.call(this.elements).forEach(($e) => {
+			if (!$e.name || $e.disabled || ['file'].indexOf($e.type) > -1) return
+			if ($e.type === 'select-multiple') {
+				Array.prototype.slice.call($e.options).forEach((o) => {
+					if (!o.selected) return
+					arr.push({name: $e.name, value: o.value})
+				}); return
+			}
+			if (['checkbox', 'radio'].indexOf($e.type) >-1 && !$e.checked) return
+			arr.push({name: $e.name, value: $e.value})
+		}); return arr
 	}
 
 	HTMLFormElement.prototype.serializeArray = function(arr = []) {
 		Array.prototype.slice.call(this.elements).forEach(($e) => {
 			if (!$e.name || $e.disabled || ['file'].indexOf($e.type) > -1) return
+			if($e.name.slice(-2) == '[]') $e.name = $e.name.slice(0, -2)
 			if ($e.type === 'select-multiple') {
-				Array.prototype.slice.call($e.options).forEach((opt) => {
-					if (!opt.selected) return
-					arr.push({name: $e.name, value: opt.value})
+				Array.prototype.slice.call($e.options).forEach((o) => {
+					if (!o.selected) return
+					arr[$e.name] = (arr[$e.name] ? arr[$e.name] + ',' : '') + o.value
 				}); return
 			}
 			if (['checkbox', 'radio'].indexOf($e.type) >-1 && !$e.checked) return
-			arr.push({name: $e.name, value: $e.value})
+			arr[$e.name] = (arr[$e.name] ? arr[$e.name] + ',' : '') + $e.value
 		}); return arr
 	}
 
@@ -162,6 +178,8 @@ const $_LANG = {};
 	window._AF_COOKIE_DOMAIN_ = get_cookie('_AF_COOKIE_DOMAIN_');
 
 	window.exec_ajax = async function(body, headers = {}) {
+		const calling = document.querySelector('#calling_server')
+		calling?.fadeIn($e => $e.classList.remove('d-none'))
 		const options = {
 			method: "POST",
 			headers: {
@@ -174,6 +192,7 @@ const $_LANG = {};
 		}
 		const res = await fetch(request_uri, options)
 		const data = await res.json()
+		calling?.fadeOut($e => $e.classList.add('d-none'))
 		if(!res.ok || (data?.error || 0) !== 0) throw Error(data?.message || data)
 		return data
 	}

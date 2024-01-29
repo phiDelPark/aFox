@@ -53,14 +53,14 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 <table class="table">
 <thead>
 	<tr>
-		<th>#<?php echo getLang('removed_addon')?></th>
-		<th class="text-end"><?php echo getLang('empty_addon')?></th>
+		<th scope="col" class="text-wrap">#<?php echo getLang('removed_addon')?></th>
+		<th scope="col" class="text-end"><?php echo getLang('empty_addon')?></th>
 	</tr>
 </thead>
 <tbody>
 <?php
 	foreach($ao_list as $key => $value) {
-		if($value) echo '<tr><td>'.$key.'</td><td class="col-xs-1"><button type="button" class="btn btn-primary btn-sm" data-empty-addon="'.$key.'">'.getLang('empty_addon').'</button></td></tr>';
+		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><button type="button" class="btn btn-primary btn-sm" data-empty-addon="'.$key.'">'.getLang('empty_addon').'</button></td></tr>';
 	}
 ?>
 </tbody>
