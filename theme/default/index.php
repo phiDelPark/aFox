@@ -53,7 +53,7 @@
 				<h1 class="header-logo text-body-emphasis mb-0"><?php echo $_CFG['title']?></h1>
 			</div>
 			<div class="col-4 d-flex justify-content-end align-items-end">
-				<label class="link-secondary me-2" style="cursor:pointer" href="#" for="searchExList" aria-label="Search"><svg class="bi" aria-hidden="true" style="margin-bottom:.3em"><title>Search</title><use href="./theme/default/bi-icons.svg#search"/></svg></label>
+				<label class="link-secondary icon-link-hover me-2" style="cursor:pointer" href="#" for="searchExList" aria-label="Search"><svg class="bi" aria-hidden="true" style="margin-bottom:.3em"><title>Search</title><use href="./theme/default/bi-icons.svg#search"/></svg></label>
 <?php if(empty($_MEMBER)){ ?>
 				<a class="btn p-0" style="line-height:normal" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi bi-lg" aria-hidden="true"><title>Sign In</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg></a>
 <?php }else{ ?>
@@ -77,20 +77,20 @@
 		<input class="d-none" type="checkbox" id="searchExList">
 		<form class="<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
         <input type="hidden" name="module" value="searchex">
-			<div class="input-group input-group-sm">
-				<label class="input-group-text" for="searchEX"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('','id',(empty($_POST['return'])||$_POST['module']!='searchex'?$_POST['id']:$_POST['return'])).'\')"'?>>
-        <svg class="bi"><use href="./theme/default/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg>
+		<div class="input-group input-group-sm float-end" style="max-width:250px">
+		<label class="input-group-text" for="searchEX"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('','id',(empty($_POST['return'])||$_POST['module']!='searchex'?$_POST['id']:$_POST['return'])).'\')"'?>>
+        	<svg class="bi"><use href="./theme/default/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg>
         </label>
-				<?php if(!empty($_POST['module'])&&$_POST['module']=='board') { ?>
+		<?php if(!empty($_POST['module'])&&$_POST['module']=='board') { ?>
         <select class="form-control" style="max-width:50px" name="id">
           <option value="">ALL</option>
           <option value="<?php echo $_POST['id'] ?>" selected>MID</option>
         </select>
         <input type="hidden" name="return" value="<?php echo $_POST['id'] ?>">
         <?php } ?>
-				<input type="text" name="search" id="searchEX" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" required>
-				<button class="btn btn-outline-secondary" type="submit"><?php echo getLang('search') ?></button>
-			</div>
+			<input type="text" name="search" id="searchEX" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" oninvalid="this.setCustomValidity('<?php echo getLang('search_help') ?>')" oninput="this.setCustomValidity('')" required>
+			<button class="btn btn-outline-secondary" type="submit"><?php echo getLang('search') ?></button>
+		</div>
 		</form>
 		</div>
 	</div>
