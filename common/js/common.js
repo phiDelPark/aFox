@@ -110,7 +110,7 @@ const $_LANG = {};
 	}
 
 	HTMLElement.prototype.fadeIn = function(callback, speed = 50) {
-		let $e = this, op = 0, increment = 0.1
+		let $e = this, op = 0, increment = 0.1; clearInterval($e.timer)
 		$e.style.opacity = op; callback($e)
 		$e.timer = setInterval(()=> {
 			op += increment; $e.style.opacity = op
@@ -119,7 +119,7 @@ const $_LANG = {};
 	}
 
 	HTMLElement.prototype.fadeOut = function(callback, speed = 50) {
-		let $e = this, op = 1, increment = 0.1
+		let $e = this, op = 1, increment = 0.1; clearInterval($e.timer)
 		$e.timer = setInterval(()=> {
 			op -= increment; $e.style.opacity = op
 			if (op <= 0) { clearInterval($e.timer); callback($e) }
@@ -179,7 +179,8 @@ const $_LANG = {};
 
 	window.exec_ajax = async function(body, headers = {}) {
 		const calling = document.querySelector('#calling_server')
-		calling?.fadeIn($e => $e.classList.remove('d-none'))
+		calling?.setAttribute('style', 'opacity:1')
+		calling?.classList.remove('d-none')
 		const options = {
 			method: "POST",
 			headers: {

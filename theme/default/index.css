@@ -85,16 +85,6 @@ h1, h2, h3, h4, h5, h6,
 	background-color: var(--bs-tertiary-bg);
 }
 
-#afoxPageLoading {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	background: url(img/pre_loader.gif) center no-repeat #2b2b2b!important;
-}
-
 .mode-toggle {
 	position: fixed;
 	bottom: 1rem;
@@ -199,6 +189,27 @@ h1, h2, h3, h4, h5, h6,
 #searchList:checked ~ form,
 #searchExList:checked ~ form {
 	display: block;
+}
+
+#calling_server {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	margin: 1rem;
+	z-index: 9800;
+	background: url(img/pre_loader.gif) center no-repeat #2b2b2b!important;
+	background-size: 130%!important;
+	padding: 10px 50px;
+}
+
+#afoxPageLoading {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9900;
+	background: url(img/pre_loader.gif) center no-repeat #2b2b2b!important;
 }
 
 @media (min-width: 768px) {

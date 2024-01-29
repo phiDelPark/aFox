@@ -37,6 +37,8 @@
 <div id="afoxPageLoading" aria-label="Please Wait, Loading..."></div>
 <?php } ?>
 
+<div id="calling_server" class="alert alert-warning d-none" role="alert"><?php echo getLang('calling_server')?></div>
+
 <div class="mode-toggle" onclick="this.classList.toggle('open')">
   <div class="button" data-bs-theme-value="light"></div>
   <div class="button" onclick="location.hash='locationMap'"></div>
