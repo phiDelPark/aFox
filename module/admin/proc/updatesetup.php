@@ -63,7 +63,7 @@ function proc($data) {
 				}
 				fwrite($f, '$_'.strtoupper($val).'S=array(');
 				foreach ($prohibit_id as $v) {
-					$v = trim(escapeHtml($v, true));
+					$v = escapeHTML(trim(strip_tags($v)));
 					if(empty($v)) continue;
 					if($val=='access_ip'){
 						$v = str_replace(".", "\.", $v);

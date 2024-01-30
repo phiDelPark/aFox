@@ -53,8 +53,8 @@
 
 		foreach ($cmt_list['data'] as $key => $value) {
 			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></th>';
-			echo '<td class="text-wrap"><a href="./?rp='.$value['rp_srl'].'" target="_blank">'.escapeHtml(cutstr(strip_tags($value['rp_content']),50)).'</a></td>';
-			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
+			echo '<td class="text-wrap"><a href="./?rp='.$value['rp_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['rp_content']),50)).'</a></td>';
+			echo '<td>'.$value['mb_nick'].'</td>';
 			echo '<td>'.($value['rp_secret']?'S/':'--/').($value['rp_status']?$value['rp_status']:'--').'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['rp_regdate'])).'</td></tr>';
 		}

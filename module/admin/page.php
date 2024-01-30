@@ -49,7 +49,7 @@
 			foreach ($page_list['data'] as $key => $value) {
 				$pg_type = $_type[(int)$value['pg_type']];
 				echo '<tr><th scope="row"><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
-				echo '<td class="text-wrap">'.escapeHtml(cutstr(strip_tags($value['md_title']),50)).'</td>';
+				echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title']),50)).'</td>';
 				echo '<td class="fixed-width">'.$grants[$value['grant_view']].$grants[$value['grant_reply']].$grants[$value['grant_download']].'</td>';
 				echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['pg_update'])).'</td>';
 				echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('mid', $value['md_id']).'">'.getLang('setup').'</a></td></tr>';

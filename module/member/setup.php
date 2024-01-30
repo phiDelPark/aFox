@@ -5,6 +5,7 @@ $mb = getMember($_POST['mid']);
 
 <?php if($mb){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_ban_login')?>')">
+	<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="member" />
 	<input type="hidden" name="act" value="banlogin" />
@@ -21,6 +22,7 @@ $mb = getMember($_POST['mid']);
 <?php }?>
 
 <form id="memberSignup" method="post" autocomplete="off" enctype="multipart/form-data">
+<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 <input type="hidden" name="success_url" value="<?php echo getUrl('mid','')?>" />
 <input type="hidden" name="module" value="member" />
 <input type="hidden" name="act" value="updateMember" />
@@ -80,17 +82,17 @@ $mb = getMember($_POST['mid']);
 
 	<div class="input-group mb-2">
 		<label class="input-group-text w-100p" for="id_mb_nick"><?php echo getLang('nickname')?></label>
-		<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" minlength="2" maxlength="5" value="<?php echo $mb?escapeHtml($mb['mb_nick']):''?>" required pattern="^[a-zA-Z가-힣ぁ-んァ-ン一-龥]{2,5}$">
+		<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" minlength="2" maxlength="5" value="<?php echo $mb?$mb['mb_nick']:''?>" required pattern="^[가-힣ぁ-んァ-ン一-龥A-Za-z][가-힣ぁ-んァ-ン一-龥\w]{1,4}$">
 	</div>
 
 	<div class="input-group mb-2">
 	<label class="input-group-text w-100p" for="id_mb_email"><?php echo getLang('email')?></label>
-		<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" value="<?php echo $mb?escapeHtml($mb['mb_email']):''?>" required pattern="^[\w]+[\w._%+-]+@[\w.-]+\.[\w]+$">
+		<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" value="<?php echo $mb?escapeHTML($mb['mb_email']):''?>" required pattern="^[\w]+[\w._%+-]+@[\w.-]+\.[\w]+$">
 	</div>
 
 	<div class="input-group mb-4">
 		<label class="input-group-text w-100p" for="id_mb_homepage"><?php echo getLang('homepage')?></label>
-		<input type="url" name="mb_homepage" class="form-control" id="id_mb_homepage" value="<?php echo $mb?escapeHtml($mb['mb_homepage']):''?>" maxlength="255">
+		<input type="url" name="mb_homepage" class="form-control" id="id_mb_homepage" value="<?php echo $mb?escapeHTML($mb['mb_homepage']):''?>" maxlength="255">
 	</div>
 
 	<div class="mb-4">

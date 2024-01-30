@@ -1,10 +1,7 @@
-<?php
-	if(!defined('__AFOX__')) exit();
-	addJSLang(['error']);
+<?php if(!defined('__AFOX__')) exit();
 
 	$menus = getSiteMenu();
-	$mainmenu = [];
-	$submenu = [];
+	$mainmenu = $submenu = [];
 	$muroot = '';
 
 	if(empty($menus['error'])){
@@ -32,9 +29,11 @@
 		}
 	}
 	$is_submenu = !empty($submenu['_ACTIVE_'])&&count($submenu['_ACTIVE_'])>0;
-?>
-<?php if(!empty($_THEME['use_loader'])) { ?>
-<div id="afoxPageLoading" aria-label="Please Wait, Loading..."></div>
+
+	if(!empty($_THEME['use_loader'])) { ?>
+		<div id="afoxPageLoading" aria-label="Loading...">
+		<noscript><style>#afoxPageLoading{display:none}</style></noscript>
+		</div>
 <?php } ?>
 
 <div class="mode-toggle" onclick="this.classList.toggle('open')">
@@ -103,7 +102,7 @@
 			<div class="navbar-nav navbar-collapse font-gugi fs-5 collapse" id="navbarNav">
 <?php
 		foreach($mainmenu as $key => $val){
-			echo '<a class="nav-link'.($key==='_ACTIVE_'?' active':'').'" href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHtml($val['mu_title']) .'</a>';
+			echo '<a class="nav-link'.($key==='_ACTIVE_'?' active':'').'" href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHTML($val['mu_title']) .'</a>';
 		}
 ?>
 			</div>
@@ -177,12 +176,12 @@
 				<h2 class="pb-2"><?php echo empty($mainmenu['_ACTIVE_'])?'Categories':$mainmenu['_ACTIVE_']['mu_title']?></h2>
 				<ol class="list-unstyled">
 <?php foreach ($submenu['_ACTIVE_'] as $key => $val) {
-				echo '<li><a href="'. escapeHtml($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
+				echo '<li><a href="'. escapeHTML($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
 ?>
 					<svg class="bd-placeholder-img" width="100%" height="41" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="gray"></rect></svg>
 					<div class="col-lg-8">
-						<h6 class="mb-0"><?php echo escapeHtml($val['mu_title'])?></h6>
-						<small class="text-body-secondary"><?php echo escapeHtml($val['mu_description'])?></small>
+						<h6 class="mb-0"><?php echo escapeHTML($val['mu_title'])?></h6>
+						<small class="text-body-secondary"><?php echo escapeHTML($val['mu_description'])?></small>
 					</div>
 				</a></li>
 <?php } ?>
@@ -200,7 +199,7 @@
 <?php
 	if(empty($menus['error'])){
 		foreach ($menus['footer'] as $val) {
-			echo '<li class="d-inline mx-2"><a href="'. escapeHtml($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').' title="'.escapeHtml($val['mu_description']).'">'. escapeHtml($val['mu_title']) .'</a></li>';
+			echo '<li class="d-inline mx-2"><a href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').' title="'.escapeHTML($val['mu_description']).'">'. escapeHTML($val['mu_title']) .'</a></li>';
 		}
 	}
 ?>

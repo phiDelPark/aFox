@@ -39,7 +39,7 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 		$_ADDON_INFO = [];
 		@include _AF_ADDONS_PATH_ . $name . '/info.php';
 
-		echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title'])).'</th>';
+		echo '<tr><th scope="row" class="text-wrap">'.(escapeHTML(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title'])).'</th>';
 		echo '<td class="d-none d-md-table-cell">'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
 		echo '<td>'.(empty($_ADDON_INFO['version'])?'...':$_ADDON_INFO['version']).'</td>';
 		echo '<td class="fixed-width">'.$opt.'</td>';

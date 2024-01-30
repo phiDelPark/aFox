@@ -47,7 +47,7 @@
 	$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
 	foreach ($_list['data'] as $key => $value) {
-		echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _inboxItemClick(event,\''.escapeHtml(getUrl('srl',$value['nt_srl']),true,ENT_QUOTES).'\')">';
+		echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _inboxItemClick(event,\''.escapeHTML(getUrl('srl',$value['nt_srl']), ENT_QUOTES).'\')">';
 		if(__MOBILE__) {
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),255).'</a>';
 			echo '<div class="d-flex w-100 justify-content-between"><span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';

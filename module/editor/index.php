@@ -41,7 +41,7 @@ foreach ($options as $key => $v) {
 	</div>
 <?php } ?>
 	<div id="editorContent" role="document" aria-label="Editor Content">
-		<textarea name="<?php echo $name ?>" class="form-control" <?php echo ($options['placeholder']?' placeholder="'.escapeHtml($options['placeholder']).'"':'').($options['readonly']?' readonly':'').($options['required']?' required':'') ?>><?php echo escapeHtml($content) ?></textarea>
+		<textarea name="<?php echo $name ?>" class="form-control" <?php echo ($options['placeholder']?' placeholder="'.escapeHTML($options['placeholder']).'"':'').($options['readonly']?' readonly':'').($options['required']?' required':'') ?>><?php echo escapeHTML($content) ?></textarea>
 	</div>
 <?php if(!empty($options['toolbar'])) {
 	$components = get_cache('_AF_EDITOR_COMPONENTS');
@@ -126,14 +126,14 @@ foreach ($options as $key => $v) {
 		<div id="uploadedFiles" class="user-select-none input-group text-secondary border rounded p-2">
 <?php
 	foreach ($fileList as $val) {
-		$es_name = escapeHtml($val['mf_name']);
+		$es_name = escapeHTML($val['mf_name']);
 		echo sprintf(
 			substr($val['mf_type'], 0, 5) == 'image'
 			? '<img src="%s" class="%s" title="%s" alt="%s">'
 			: '<img src="%s" class="%s" title="%s" alt="%s" srcset="./module/editor/bi-binary.svg">',
 			'./?file='.$val['mf_srl'],
-			escapeHtml($val['mf_type']),
-			$es_name.' ('.shortSize( $val['mf_size']). ')',
+			escapeHTML($val['mf_type']),
+			$es_name.' ('.shortFileSize( $val['mf_size']). ')',
 			$es_name
 		);
 	}
@@ -143,17 +143,17 @@ foreach ($options as $key => $v) {
 		<div id="uploadFiles" class="user-select-none input-group text-secondary border rounded p-2">
 		<small class="ms-1">#### 본문 첨부는 아이콘을 잡고 끌어 옮기시면 됩니다.</small>
 		</div>
-		<input class="form-control" name="upload_files[]" type="file" tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : '' ?>>
+		<input class="form-control" name="upload_files[]" type="file" tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : ''?>>
 	</div>
 <?php } ?>
 </div>
 
 <script>
-	load_script("<?php echo _AF_URL_ ?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js') ?>")
-	.then(() => {
-		window.AFOX_EDITOR_<?php echo strtoupper($name) ?> =new afoxEditor("editor<?php echo ucfirst($name) ?>", {<?php echo substr($ops, 0, -1) ?>});
-		}, () => { console.log('fail to load script'); }
-	);
+	load_script("<?php echo _AF_URL_?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js')?>")
+		.then(
+			() => { window.AFOX_EDITOR_<?php echo strtoupper($name)?> =new afoxEditor("editor<?php echo ucfirst($name)?>", {<?php echo substr($ops, 0, -1)?>}) },
+			() => { console.log('fail to load script') }
+		);
 </script>
 <?php
 /* End of file index.php */

@@ -2,24 +2,24 @@
 $_ADDON_INFO = [];
 @include_once _AF_ADDONS_PATH_ . $_POST['ao_id'] . '/lang/' . _AF_LANG_ . '.php';
 @require_once _AF_ADDONS_PATH_ . $_POST['ao_id'] . '/info.php';
-$_ADDON_INFO['author'] = empty($_ADDON_INFO['link'])?escapeHtml($_ADDON_INFO['author']):('<a href="'.escapeHtml($_ADDON_INFO['link']).'" target="_blank">'.escapeHtml($_ADDON_INFO['author']).'</a>');
+$_ADDON_INFO['author'] = empty($_ADDON_INFO['link'])?escapeHTML($_ADDON_INFO['author']):('<a href="'.escapeHTML($_ADDON_INFO['link']).'" target="_blank">'.escapeHTML($_ADDON_INFO['author']).'</a>');
 ?>
 
 <div>
-<h4><?php echo escapeHtml($_ADDON_INFO['title']) ?></h4>
+<h4><?php echo escapeHTML($_ADDON_INFO['title']) ?></h4>
 <div class="row">
 	<label class="col-md-2"><?php echo getLang('version') ?></label>
-	<span class="col-md-auto"><?php echo escapeHtml($_ADDON_INFO['version']) ?></span>
+	<span class="col-md-auto"><?php echo escapeHTML($_ADDON_INFO['version']) ?></span>
 </div>
 <div class="row">
 	<label class="col-md-2"><?php echo getLang('date') ?></label>
-	<span class="col-md-auto"><?php echo escapeHtml($_ADDON_INFO['date']) ?></span>
+	<span class="col-md-auto"><?php echo escapeHTML($_ADDON_INFO['date']) ?></span>
 </div>
 <div class="row">
 	<label class="col-md-2"><?php echo getLang('author') ?></label>
-	<span class="col-md-auto"><?php echo $_ADDON_INFO['author'] . ' ('.escapeHtml($_ADDON_INFO['email']) . ')' ?></span>
+	<span class="col-md-auto"><?php echo $_ADDON_INFO['author'] . ' ('.escapeHTML($_ADDON_INFO['email']) . ')' ?></span>
 </div>
-<p class="form-text"><?php echo nl2br(escapeHtml($_ADDON_INFO['description'])) ?></p>
+<p class="form-text"><?php echo nl2br(escapeHTML($_ADDON_INFO['description'])) ?></p>
 </div>
 
 <?php
@@ -41,6 +41,7 @@ if(!empty($_ADDON['ao_extra'])) {
 ?>
 
 <form method="post" autocomplete="off">
+<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 <input type="hidden" name="success_url" value="<?php echo getUrl('ao_id','')?>" />
 <input type="hidden" name="module" value="admin" />
 <input type="hidden" name="act" value="updateaddon" />

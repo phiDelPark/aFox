@@ -2,24 +2,24 @@
 $_WIDGET_INFO = [];
 @include_once _AF_WIDGETS_PATH_ . $_POST['wg_id'] . '/lang/' . _AF_LANG_ . '.php';
 @require_once _AF_WIDGETS_PATH_ . $_POST['wg_id'] . '/info.php';
-$_WIDGET_INFO['author'] = empty($_WIDGET_INFO['link'])?escapeHtml($_WIDGET_INFO['author']):('<a href="'.escapeHtml($_WIDGET_INFO['link']).'" target="_blank">'.escapeHtml($_WIDGET_INFO['author']).'</a>');
+$_WIDGET_INFO['author'] = empty($_WIDGET_INFO['link'])?escapeHTML($_WIDGET_INFO['author']):('<a href="'.escapeHTML($_WIDGET_INFO['link']).'" target="_blank">'.escapeHTML($_WIDGET_INFO['author']).'</a>');
 ?>
 
 <div>
-<h4><?php echo escapeHtml($_WIDGET_INFO['title']) ?></h4>
+<h4><?php echo escapeHTML($_WIDGET_INFO['title']) ?></h4>
 <div class="row">
 	<label class="col-md-2"><?php echo getLang('version') ?></label>
-	<span class="col-md-auto"><?php echo escapeHtml($_WIDGET_INFO['version']) ?></span>
+	<span class="col-md-auto"><?php echo escapeHTML($_WIDGET_INFO['version']) ?></span>
 </div>
 <div class="row">
 	<label class="col-md-2"><?php echo getLang('date') ?></label>
-	<span class="col-md-auto"><?php echo escapeHtml($_WIDGET_INFO['date']) ?></span>
+	<span class="col-md-auto"><?php echo escapeHTML($_WIDGET_INFO['date']) ?></span>
 </div>
 <div class="row">
 	<label class="col-md-2"><?php echo getLang('author') ?></label>
-	<span class="col-md-auto"><?php echo $_WIDGET_INFO['author'] . ' ('.escapeHtml($_WIDGET_INFO['email']) . ')' ?></span>
+	<span class="col-md-auto"><?php echo $_WIDGET_INFO['author'] . ' ('.escapeHTML($_WIDGET_INFO['email']) . ')' ?></span>
 </div>
-<p class="form-text"><?php echo nl2br(escapeHtml($_WIDGET_INFO['description'])) ?></p>
+<p class="form-text"><?php echo nl2br(escapeHTML($_WIDGET_INFO['description'])) ?></p>
 </div>
 
 <hr>

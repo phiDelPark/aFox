@@ -15,7 +15,7 @@
 
 		<?php if (empty($_MEMBER) || ($_MEMBER['mb_srl'] !== $DOC['mb_srl'])) { ?>
 		<div class="mb-4">
-			<input type="text" name="mb_nick" class="form-control mb-1" maxlength="20" value="<?php echo escapeHtml($DOC['mb_nick'])?>" required readonly>
+			<input type="text" name="mb_nick" class="form-control mb-1" maxlength="20" value="<?php echo $DOC['mb_nick']?>" required readonly>
 			<?php if (!$is_manager) { ?>
 				<input type="password" name="mb_password" class="form-control" placeholder="<?php echo getLang('password')?>">
 			<?php } ?>
@@ -23,11 +23,11 @@
 		<?php } ?>
 		<div class="mb-2">
 			<label><?php echo getLang('title')?></label>
-			<input type="text" class="form-control" maxlength="255" value="<?php echo escapeHtml($DOC['wr_title'])?>" readonly>
+			<input type="text" class="form-control" maxlength="255" value="<?php echo escapeHTML($DOC['wr_title'])?>" readonly>
 		</div>
 		<div class="mb-4">
 			<label><?php echo getLang('content')?></label>
-			<textarea class="form-control" style="height:250px" readonly><?php echo escapeHtml(preg_replace('#<br\s*/?>|\s*\r?\n\s*\r?\n#i', "\n", trim(str_replace('&nbsp;', ' ', strip_tags($DOC['wr_content'], '<br>')))), 0)?></textarea>
+			<textarea class="form-control" style="height:250px" readonly><?php echo escapeHTML(preg_replace('#<br\s*/?>|\s*\r?\n\s*\r?\n#i', "\n", trim(str_replace('&nbsp;', ' ', strip_tags($DOC['wr_content'], '<br>')))), 0)?></textarea>
 		</div>
 		<hr class="mb-4">
 		<div class="d-grid">

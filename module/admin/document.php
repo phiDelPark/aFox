@@ -50,8 +50,8 @@
 
 		foreach ($doc_list['data'] as $key => $value) {
 			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></th>';
-			echo '<td class="text-wrap"><a href="./?srl='.$value['wr_srl'].'" target="_blank">'.escapeHtml(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</a></td>';
-			echo '<td>'.escapeHtml($value['mb_nick'],true).'</td>';
+			echo '<td class="text-wrap"><a href="./?srl='.$value['wr_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</a></td>';
+			echo '<td>'.$value['mb_nick'].'</td>';
 			echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td></tr>';
 		}

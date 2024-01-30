@@ -13,40 +13,8 @@ const $_LANG = {};
 (() => {
 'use strict'
 
-	Number.prototype.shortSize = function() {
-		let	s = this, i = 0; while(s > 1024){s = s / 1024; i++}
-		return s.toFixed(1) + (['B','K','M','G','T'].at(i) || '?')
-	}
-
-	String.prototype.trim = function() {
-		return this.replace(/^\s+|\s+$/g, "")
-	}
-
 	String.prototype.toUcFirst = function() {
 		return this.charAt(0).toUpperCase()+this.slice(1).toLowerCase()
-	}
-
-	String.prototype.nl2br = function(brTag) {
-		return this.replace(/\r\n|\n\r|\r|\n/g, (brTag || "<br>"))
-	}
-
-	String.prototype.sprintf = function() {
-		let	s = this, a = arguments; a = (typeof a[0]=='object' ? a[0] : a)
-		for (let i = 0; i < a.length; i++) {
-			s = s.replace(/%([0-9]?)(s|d)/, ($0, $1, $2) => {
-				return a[i].padStart(Number($1||0), $2=='d'?'0':'_')
-			})
-		} return s
-	}
-
-	String.prototype.stripTags = function(a) { // php.js
-		// making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
-		a=(((a||'')+'').toLowerCase().match(/<[a-z][a-z0-9]*>/g)||[]).join('')
-		const tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
-			pags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi
-		return this.replace(pags, '').replace(tags, ($0, $1) => {
-			return a.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : ''
-		})
 	}
 
 	String.prototype.escapeMKDW = function(f) {
@@ -54,12 +22,12 @@ const $_LANG = {};
 		return this.replace(rex, (s) => { return '\\' + s })
 	}
 
-	String.prototype.escapeHtml = function() {
+	String.prototype.escapeHTML = function() {
 		const a = {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;","/":"&#x2F;"}
 		return this.replace(/[&<>"'\/]/g, (s) => { return a[s] })
 	}
 
-	String.prototype.unescapeHtml = function() {
+	String.prototype.unescapeHTML = function() {
 		const a = {"&amp;":"&","&lt;":"<","&gt;":">","&quot;":'"',"&#39;":"'","&#x2F;":"/"}
 		return this.replace(/&[^;]+;/g, (s) => { return a[s] })
 	}
@@ -95,18 +63,31 @@ const $_LANG = {};
 	}
 
 	String.prototype.setQuery = function() {
-		let	a = arguments; a = (typeof a[0] == 'object')?a[0]:a
+		let	n, a = arguments; a = (typeof a[0] == 'object')?a[0]:a
 		const u = decodeURIComponent(this).replace(/&amp;/g, '&')
-		if (a.length === 0) return u
+		if ((n = a.length) === 0) return u
 		let	p = (a[0] != '') ? u.getQuery() : {}, r = [], v
-		for (var i = (a[0]==''?1:0); i < a.length; i += 2) p[a[i]]=a[i+1]
-		for (var k in p) {
-			if (!p.hasOwnProperty(k)) continue
-			if (!(v = String(p[k]).trim())) continue
-			r.push(k + '=' + v)
+		for (let i=(a[0]==''?1:0); i < n; i += 2) p[a[i]]=a[i+1]
+		for (let k in p) {
+			if (p.hasOwnProperty(k) && (v=String(p[k]).trim()))
+				r.push(k + '=' + v)
 		}
 		let x = u.indexOf('?'), z = (x == -1 ? u : u.slice(0, x))
 		return z+((z.slice(-1)=='/')?'':'/')+(r.length>0?'?'+r.join('&'):'')
+	}
+
+	String.prototype.sprintf = function() {
+		let	s = this, a = arguments; a = (typeof a[0]=='object' ? a[0] : a)
+		for (let i = 0, n = a.length; i < n; i++) {
+			s = s.replace(/%([0-9]?)(s|d)/, ($0, $1, $2) => {
+				return a[i].padStart(Number($1||0), $2=='d'?'0':'_')
+			})
+		} return s
+	}
+
+	Number.prototype.shortFileSize = function() {
+		let	s = this, i = 0; while(s > 1024){s = s / 1024; i++}
+		return s.toFixed(1) + (['B','K','M','G','T'].at(i) || '?')
 	}
 
 	HTMLElement.prototype.fadeIn = function(callback, speed = 50) {
@@ -155,6 +136,20 @@ const $_LANG = {};
 		}); return arr
 	}
 
+	window.nl2br = function(s, br) {
+		return s.replace(/\r\n|\n\r|\r|\n/g, (br || "<br>"))
+	}
+
+	window.strip_tags = function(s, a) { // php.js
+		// making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
+		a=(((a||'')+'').toLowerCase().match(/<[a-z][a-z0-9]*>/g)||[]).join('')
+		const tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+			pags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi
+		return s.replace(pags, '').replace(tags, ($0, $1) => {
+			return a.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : ''
+		})
+	}
+
 	//If 0, remove it when exit the browser //if -, remove
 	window.set_cookie = function(name, value, exp = 0) {
 		const d = new Date(); d.setTime(d.getTime() + exp)
@@ -165,13 +160,13 @@ const $_LANG = {};
 	}
 
 	window.get_cookie = function(name) {
-		let x, y, enname = name.encode64()
+		let x, y, encode = name.encode64()
 		const cookies = document.cookie.split(';')
-		for(let i = 0; i < cookies.length; i++) {
+		for (let i = 0, n = cookies.length; i < n; i++) {
 			x = cookies[i].slice(0, cookies[i].indexOf('='))
 			y = cookies[i].slice(cookies[i].indexOf('=') + 1)
 			x = x.replace(/^\s+|\s+$/g, '')
-			if(x == enname) return y.rawurldecode().decode64()
+			if(x == encode) return y.rawurldecode().decode64()
 		}
 	}
 
@@ -196,7 +191,7 @@ const $_LANG = {};
 		const res = await fetch(request_uri, options)
 		const data = await res.json()
 		calling?.fadeOut($e => $e.remove())
-		if(!res.ok || (data?.error || 0) !== 0) throw Error(data?.message || data)
+		if(!res.ok || (data?.error || 0) !== 0) throw Error(data?.message)
 		return data
 	}
 
@@ -210,9 +205,7 @@ const $_LANG = {};
 				sc.onload = null; sc.onreadystatechange = null; sc = undefined
 				if (isAbort) { reject() } else { resolve() }
 			}}
-			sc.onload = onloadHander
-			sc.onreadystatechange = onloadHander
-			sc.src = source
+			sc.onload = sc.onreadystatechange = onloadHander; sc.src = source
 			prior.parentNode.insertBefore(sc, prior.nextSibling)
 		})
 	}
@@ -221,7 +214,6 @@ const $_LANG = {};
 		const popwin = window.open( url, (id || 'afox_popup'),
 			'width=' + (width || '700') + ',height=' + (height || '500') +
 			',top=50,left=50,scrollbars=yes,toolbar=no,menubar=no,location=no'
-		); popwin.focus()
-		return popwin
+		); popwin.focus(); return popwin
 	}
 })()

@@ -21,7 +21,7 @@
 	<div class="clearfix">
 		<?php if (empty($_MEMBER) || (!empty($DOC['wr_srl']) && $_MEMBER['mb_srl'] !== $DOC['mb_srl'])) { ?>
 		<div class="mb-4">
-			<input type="text" name="mb_nick" class="form-control mb-1"<?php echo empty($_MEMBER)?' required':''?> maxlength="20" placeholder="<?php echo getLang('id')?>" value="<?php echo $is?escapeHtml($DOC['mb_nick']):''?>"<?php echo empty($DOC['wr_srl'])?'':' readonly'?>>
+			<input type="text" name="mb_nick" class="form-control mb-1"<?php echo empty($_MEMBER)?' required':''?> maxlength="20" placeholder="<?php echo getLang('id')?>" value="<?php echo $is?$DOC['mb_nick']:''?>"<?php echo empty($DOC['wr_srl'])?'':' readonly'?>>
 			<?php if (!$is_manager && empty($DOC['mb_srl'])) { ?>
 				<input type="password" name="mb_password" class="form-control"<?php echo empty($_MEMBER)?' required':''?> placeholder="<?php echo getLang('password')?>">
 			<?php } ?>
@@ -42,7 +42,7 @@
 		<?php } ?>
 			<div class="mb-2">
 				<label for="wrTitle"><?php echo getLang('title')?></label>
-				<input type="text" name="wr_title" class="form-control" id="wrTitle" required maxlength="255" value="<?php echo $is?escapeHtml($DOC['wr_title']):''?>">
+				<input type="text" name="wr_title" class="form-control" id="wrTitle" required maxlength="255" value="<?php echo $is?escapeHTML($DOC['wr_title']):''?>">
 			</div>
 		<?php
 			if (!empty($_CFG['md_extra']['keys'])) {
@@ -52,7 +52,7 @@
 		?>
 				<div class="mb-2">
 					<label for="wrExtraVar_<?php echo $ex_key?>"><?php echo $ex_caption?></label>
-					<input type="text" name="wr_extra_var_<?php echo $ex_key?>" class="form-control" id="wrExtraVar_<?php echo $ex_key?>"<?php echo $is_required?' required':''?> maxlength="255" value="<?php echo $is?(empty($wr_extra_var)?'':escapeHtml($wr_extra_var)):''?>">
+					<input type="text" name="wr_extra_var_<?php echo $ex_key?>" class="form-control" id="wrExtraVar_<?php echo $ex_key?>"<?php echo $is_required?' required':''?> maxlength="255" value="<?php echo $is?(empty($wr_extra_var)?'':escapeHTML($wr_extra_var)):''?>">
 				</div>
 		<?php }} ?>
 			<div class="mb-4">

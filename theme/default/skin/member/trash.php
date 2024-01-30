@@ -46,14 +46,14 @@
 	$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
 	foreach ($_list['data'] as $key => $value) {
-		echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _trashItemClick(event,\''.escapeHtml(getUrl('srl',$value['wr_srl']),true,ENT_QUOTES).'\')">';
+		echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _trashItemClick(event,\''.escapeHTML(getUrl('srl',$value['wr_srl']),ENT_QUOTES).'\')">';
 		if(__MOBILE__) {
-			echo '<td class="text-wrap"><a href="#" onclick="return false">'.escapeHtml($value['wr_title'], true).'</a>';
+			echo '<td class="text-wrap"><a href="#" onclick="return false">'.escapeHTML(strip_tags($value['wr_title'])).'</a>';
 			echo '<div class="d-flex w-100 justify-content-between"><span>'.date('y/m/d', strtotime($value['wr_regdate'])).'</span>';
 			echo '<span>Del:'.date('y/m/d', strtotime($value['wr_update'])).'</span></div></td>';
 		} else {
 			echo '<th scope="row">'.$value['wr_srl'].'</th>';
-			echo '<td class="text-wrap"><a href="#" onclick="return false">'.($value['wr_secret']?'<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>':'').escapeHtml(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
+			echo '<td class="text-wrap"><a href="#" onclick="return false">'.($value['wr_secret']?'<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>':'').escapeHTML(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
 			echo '<td>'.date('y/m/d', strtotime($value['wr_regdate'])).'</td>';
 			echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td><td><input type="checkbox" name="wr_srl[]" value="'.$value['wr_srl'].'"></td>';
 		}

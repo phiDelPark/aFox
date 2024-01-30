@@ -22,7 +22,7 @@ if(is_dir($widget_dir)) {
 		$_WIDGET_INFO = [];
 		@include $widget_dir.$name.'/info.php';
 
-		echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_WIDGET_INFO['title'])?$name:$_WIDGET_INFO['title'])).'</th>';
+		echo '<tr><th scope="row" class="text-wrap">'.(escapeHTML(empty($_WIDGET_INFO['title'])?$name:$_WIDGET_INFO['title'])).'</th>';
 		echo '<td class="d-none d-md-table-cell">'.(empty($_WIDGET_INFO['author'])?'...':'<a href="'.(empty($_WIDGET_INFO['link'])?'mailto:'.$_WIDGET_INFO['email'].'"':$_WIDGET_INFO['link'].'" target="_blank"').'>'.$_WIDGET_INFO['author'].'</a>').'</td>';
 		echo '<td>'.(empty($_WIDGET_INFO['version'])?'...':$_WIDGET_INFO['version']).'</td>';
 		echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('wg_id', $name).'">'.getLang('how_to_use').'</a></td></tr>';

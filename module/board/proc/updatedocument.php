@@ -9,7 +9,7 @@ function proc($data) {
 	global $_MEMBER;
 
 	if(empty($_MEMBER)) {
-		$data['mb_nick'] = trim(empty($data['mb_nick'])?'':strip_tags($data['mb_nick']));
+		$data['mb_nick'] = empty($data['mb_nick'])?'':$data['mb_nick'];
 		if(empty($data['mb_nick']) || empty($data['mb_password'])) {
 			return set_error(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
 		}
@@ -240,14 +240,14 @@ function proc($data) {
 				$patterns,
 				function ($matches) use($new_files) {
 					$file = $new_files[(int)$matches[1]];
-					$es_name = escapeHtml($file['name']);
+					$es_name = escapeHTML($file['name']);
 					$isimg = substr($file['type'], 0, 5) == 'image';
 					return sprintf(
 						$isimg ? '<img src="%s" class="%s" title="%s" alt="%s"%s>'
 							: '<a href="%s" class="%s" title="%s" alt="%s"%s>',
 						'./?file='.$file['mf_srl'],
-						escapeHtml($file['type']),
-						$es_name.' ('.shortSize($file['size']). ')',
+						escapeHTML($file['type']),
+						$es_name.' ('.shortFileSize($file['size']). ')',
 						$es_name,
 						$isimg ? ' width="'.$file['width'].'" height="'.$file['height'].'"' : ' target="_file"'
 					);

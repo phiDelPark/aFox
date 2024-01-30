@@ -30,7 +30,7 @@ input[name=favicon]::before {
 
 	<div class="input-group mb-2">
 		<label class="input-group-text w-100p" for="id_title"><?php echo getLang('name')?></label>
-		<input type="text" name="title" class="form-control" id="id_title" maxlength="255" value="<?php echo empty($config['title'])?'':escapeHtml($config['title'])?>">
+		<input type="text" name="title" class="form-control" id="id_title" maxlength="255" value="<?php echo empty($config['title'])?'':escapeHTML($config['title'])?>">
 	</div>
 
 	<div class="form-file-group mb-2">

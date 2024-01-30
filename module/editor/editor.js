@@ -168,9 +168,9 @@ function afoxEditor(ID, options) {
 		const elURL = (window.URL || window.webkitURL)
 		Object.keys(e.target.files).map(key => {
 			let span = document.createElement('span'),
-				name = e.target.files[key].name.escapeHtml(),
-				size = e.target.files[key].size.shortSize(),
-				type = e.target.files[key].type.escapeHtml(),
+				name = e.target.files[key].name.escapeHTML(),
+				type = e.target.files[key].type.escapeHTML(),
+				size = e.target.files[key].size.shortFileSize(),
 				url = elURL.createObjectURL(e.target.files[key])
 			window.uploadFiles.push(url)
 			const index = window.uploadFiles.length - 1

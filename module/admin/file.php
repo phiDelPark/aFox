@@ -93,18 +93,18 @@
 				echo '<tr><th scope="row" rowspan="2"><input type="radio" name="mf_standard" value="'.$value['mf_srl'].'" class="data_standard" style="margin-right:5px" data-except-ajax><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="margin-right:5px" data-except-ajax></th>';
 				echo '<td scope="row" rowspan="2" style="padding:2px"><img src="'.($unfilename).'" width="65" height="65"></td>';
 				echo '<td scope="row">'.$value['md_id'].'</td>';
-				echo '<td class="title">'.escapeHtml(cutstr($value['mf_name'],50)).'</td>';
-				echo '<td class="hidden-xs">'.shortSize($value['mf_size']).'</td>';
+				echo '<td class="title">'.escapeHTML(cutstr($value['mf_name'],50)).'</td>';
+				echo '<td class="hidden-xs">'.shortFileSize($value['mf_size']).'</td>';
 
 			} else {
 			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></th>';
-			echo '<td class="text-wrap"><a href="./?srl='.$value['mf_target'].'" target="_blank">'.escapeHtml(cutstr($value['mf_name'],50)).'</a></td>';
+			echo '<td class="text-wrap"><a href="./?srl='.$value['mf_target'].'" target="_blank">'.escapeHTML(cutstr($value['mf_name'],50)).'</a></td>';
 			echo '<td>'.$value['mf_download'].'</td>';
 			}
 			echo '<td>'.$value['mb_ipaddress'].'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mf_regdate'])).'</td></tr>';
 			if($duplicate) {
-				echo '<tr><td class="title" colspan="4" style="color:#555;text-decoration:underline"><a href="'.getUrl('','id',$value['md_id'],'srl',$value['mf_target']).'" target="_blank">'.escapeHtml(cutstr($value['wr_title'],50)).'</a></td></tr>';
+				echo '<tr><td class="title" colspan="4" style="color:#555;text-decoration:underline"><a href="'.getUrl('','id',$value['md_id'],'srl',$value['mf_target']).'" target="_blank">'.escapeHTML(cutstr($value['wr_title'],50)).'</a></td></tr>';
 			}
 		}
 	}

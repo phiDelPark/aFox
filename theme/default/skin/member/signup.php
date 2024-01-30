@@ -53,17 +53,17 @@
 
 	<div class="input-group mb-2">
 		<label class="input-group-text" style="width:100px" for="id_mb_nick"><?php echo getLang('nickname')?></label>
-		<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" minlength="2" maxlength="5" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_nick']):''?>" required pattern="^[a-zA-Z가-힣ぁ-んァ-ン一-龥]{2,5}$">
+		<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" minlength="2" maxlength="5" value="<?php echo $ismb?$_MEMBER['mb_nick']:''?>" required pattern="^[가-힣ぁ-んァ-ン一-龥A-Za-z][가-힣ぁ-んァ-ン一-龥\w]{1,4}$">
 	</div>
 
 	<div class="input-group mb-2">
 	<label class="input-group-text" style="width:100px" for="id_mb_email"><?php echo getLang('email')?></label>
-		<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_email']):''?>" required pattern="^[\w]+[\w._%+-]+@[\w.-]+\.[\w]+$">
+		<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" value="<?php echo $ismb?escapeHTML($_MEMBER['mb_email']):''?>" required pattern="^[\w]+[\w._%+-]+@[\w.-]+\.[\w]+$">
 	</div>
 
 	<div class="input-group mb-4">
 		<label class="input-group-text" style="width:100px" for="id_mb_homepage"><?php echo getLang('homepage')?></label>
-		<input type="url" name="mb_homepage" class="form-control" id="id_mb_homepage" value="<?php echo $ismb?escapeHtml($_MEMBER['mb_homepage']):''?>" maxlength="255">
+		<input type="url" name="mb_homepage" class="form-control" id="id_mb_homepage" value="<?php echo $ismb?escapeHTML($_MEMBER['mb_homepage']):''?>" maxlength="255">
 	</div>
 
 	<div class="mb-4">

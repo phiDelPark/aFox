@@ -19,24 +19,24 @@ $default_exclusion = "href,src=,target";
 <div class="mb-3">
 	<div class="input-group">
 		<label class="input-group-text w-100p" for="id_exclusion_attr">제외</label>
-		<input type="text" name="exclusion_attr" class="form-control" id="id_exclusion_attr" maxlength="255" value="<?php echo escapeHtml(empty($_ADDON['exclusion_attr'])?$default_exclusion:$_ADDON['exclusion_attr'])?>">
+		<input type="text" name="exclusion_attr" class="form-control" id="id_exclusion_attr" maxlength="255" value="<?php echo escapeHTML(empty($_ADDON['exclusion_attr'])?$default_exclusion:$_ADDON['exclusion_attr'])?>">
 	</div>
 	<p class="form-text">태그 속성 지우기 사용시 제외 할 속성 (예: id,class)</p>
 </div>
 
 <div class="mb-3">
 <label for="id_regex">정규식</label>
-<textarea maxbyte="30000" maxlength="30000" class="form-control" rows="5" name="regex" id="id_regex"><?php echo escapeHtml(empty($_ADDON['regex'])?$default_regex_text:$_ADDON['regex'])?></textarea>
+<textarea maxbyte="30000" maxlength="30000" class="form-control" rows="5" name="regex" id="id_regex"><?php echo escapeHTML(empty($_ADDON['regex'])?$default_regex_text:$_ADDON['regex'])?></textarea>
 <p class="form-text">작성 규칙: /(정규식)/옵션,치환자(\1)<br>정규식을 콘텐츠 내용에 적용합니다. (정규식과 정규식 사이는 엔터로 구분합니다)</p>
 </div>
 
 <div class="mb-3">
 <label for="id_filter">단어 필터</label>
-<textarea maxbyte="30000" maxlength="30000" class="form-control" rows="3" name="filter" id="id_filter"><?php echo escapeHtml(empty($_ADDON['filter'])?$default_filter:$_ADDON['filter'])?></textarea>
+<textarea maxbyte="30000" maxlength="30000" class="form-control" rows="3" name="filter" id="id_filter"><?php echo escapeHTML(empty($_ADDON['filter'])?$default_filter:$_ADDON['filter'])?></textarea>
 </div>
 
 <div class="mb-3">
 <label for="id_text">바꿀 단어</label>
-<input type="text" name="change_text" id="id_text" class="form-control" value="<?php echo escapeHtml(empty($_ADDON['change_text'])?$default_change_text:$_ADDON['change_text'])?>">
+<input type="text" name="change_text" id="id_text" class="form-control" value="<?php echo escapeHTML(empty($_ADDON['change_text'])?$default_change_text:$_ADDON['change_text'])?>">
 <p class="form-text">입력된 단어 필터가 있으면 바꿀 단어로 바꿔줍니다. (단어와 단어 사이는 ,로 구분합니다)</p>
 </div>

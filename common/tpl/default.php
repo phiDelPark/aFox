@@ -23,10 +23,10 @@ addJSLang(['calling_server','yes','no', 'ok','cancel','error']);
 <meta http-equiv="imagetoolbar" content="no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <?php }
-if($_CFG['md_title']) { echo '<meta name="title" content="'.escapeHtml($_CFG['md_title']).'">'."\n"; }
-if($_CFG['md_description']) { echo '<meta name="description" content="'.escapeHtml($_CFG['md_description']).'">'."\n"; }
+if($_CFG['md_title']) { echo '<meta name="title" content="'.escapeHTML($_CFG['md_title']).'">'."\n"; }
+if($_CFG['md_description']) { echo '<meta name="description" content="'.escapeHTML($_CFG['md_description']).'">'."\n"; }
 ?>
-<title><?php echo escapeHtml($_CFG['title'].($_CFG['md_title'] ? ' - '.$_CFG['md_title'] : '')) ?></title>
+<title><?php echo escapeHTML($_CFG['title'].($_CFG['md_title'] ? ' - '.$_CFG['md_title'] : '')) ?></title>
 <?php
 if($_CFG['favicon']) {echo '<link rel="shortcut icon" href="'.$_CFG['favicon'].'" type="image/x-icon">'."\n";}
 if(_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>

@@ -106,8 +106,8 @@ function getUrl(){
 }
 
 // 사용법: getLang(key), getLang(key,isescape), getLang(key,[sprintf],isescape)
-// 이스케이프시 홑따옴표는 안되니 필요하면 escapeHtml 사용
-// 홑따옴표 이스케이프시 escapeHtml(getLang('msg',false),false,ENT_QUOTES)
+// 이스케이프시 홑따옴표는 안되니 필요하면 escapeHTML 사용
+// 홑따옴표 이스케이프시 escapeHTML(getLang('msg',false),ENT_QUOTES)
 function getLang($key, $args1 = true, $args2 = true){
 	global $_LANG;
 	$args = [isset($_LANG[$l = strtolower($key)]) ? $_LANG[$l] : $key];
@@ -116,7 +116,7 @@ function getLang($key, $args1 = true, $args2 = true){
 		foreach($args1 as $v) $args[]=isset($_LANG[$l=strtolower($v)])?$_LANG[$l]:$v;
 		$args = [call_user_func_array('sprintf', $args)];
 	}
-	return $escape ? nl2br(escapeHtml($args[0])) : $args[0];
+	return $escape ? nl2br(escapeHTML($args[0])) : $args[0];
 }
 
 function setLang($key, $value){
@@ -403,13 +403,11 @@ function moveUpFile($file, $dest, $max_size = 0){
 	} else return set_error(getLang('UPLOAD_ERR_CODE('.$file['error'].')'),10400+$file['error']);
 }
 
-function escapeMKDW($str, $is_strip_tags = false){
-	if($is_strip_tags) $str = strip_tags($str, (is_string($strip_tags)?$strip_tags:''));
+function escapeMKDW($str){
 	return preg_replace('/([\\\`\*\_\{\}\[\]\(\)\>\#\+\-\.\!])/m', '\\\\$1', $str);
 }
 
-function escapeHtml($str, $strip_tags = false, $quote = ENT_COMPAT, $endouble = true){
-	if($strip_tags) $str = strip_tags($str, (is_string($strip_tags)?$strip_tags:''));
+function escapeHTML($str, $quote = ENT_COMPAT, $endouble = true){
 	//$str = str_replace('&', '&amp;', $str);  // double_encode = false
 	return htmlspecialchars($str, $quote | ENT_HTML401, 'UTF-8', $endouble);
 }
@@ -485,7 +483,7 @@ function xssClean($html, $chkclosed = true){
 
 function toHTML($text, $type = 2, $class = 'current_content'){
 	static $__parsedown = null;
-	if($type == 0) $text = nl2br(escapeHtml($text));
+	if($type == 0) $text = nl2br(escapeHTML($text));
 	else {
 		if($type == 1){
 			if($__parsedown == null){
@@ -509,7 +507,7 @@ function toHTML($text, $type = 2, $class = 'current_content'){
 		// 다운로드 권한이 없으면 처리
 		if(__MID__ && !isGrant('download', __MID__)){
 			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
-			$replacement = "\\1\\2 onclick=\"alert('".escapeHtml(getLang('error_permitted',false),true,ENT_QUOTES,false)."');return false\" \\3";
+			$replacement = "\\1\\2 onclick=\"alert('".escapeHTML(getLang('error_permitted',false),ENT_QUOTES,false)."');return false\" \\3";
 			$text = preg_replace($patterns, $replacement, $text);
 		}
 	}
@@ -662,7 +660,7 @@ function cutstr($str, $length, $tail = '...'){
 	return substr($str, 0, $count) . $tail;
 }
 
-function shortSize($size){
+function shortFileSize($size){
 	$tails = ['B','K','M','G','T'];
 	for ($i = 0; $i < 4; $i++){
 		if($size <= 1024) break;

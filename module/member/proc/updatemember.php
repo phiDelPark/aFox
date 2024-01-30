@@ -12,7 +12,8 @@ function proc($data) {
 		return set_error(getLang('invalid_value', ['id']),2001);
 	}
 
-	if(!preg_match('/^[a-zA-Z가-힣ぁ-んァ-ン一-龥]{2,5}$/u', $data['mb_nick'])) {
+	$data['mb_nick'] = trim($data['mb_nick']);
+	if(!preg_match('/^[가-힣ぁ-んァ-ン一-龥A-Za-z][가-힣ぁ-んァ-ン一-龥\w]{1,4}$/', $data['mb_nick'])) {
 		return set_error(getLang('invalid_value', ['nickname']),2001);
 	}
 

@@ -31,7 +31,7 @@ if(false && $is_adminn) {
 	foreach ($skip_arr as $key => $value) {
 		@include $module_dir.$key.'/info.php';
 
-		echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
+		echo '<tr><th scope="row" class="text-wrap">'.(escapeHTML(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
 		echo '<td class="d-none d-md-table-cell">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
 		echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
 		echo '<td><a class="btn btn-primary btn-sm disabled" href="#">'.getLang('none').'</a></td></tr>';
@@ -53,7 +53,7 @@ if(is_dir($module_dir)) {
 		$_MODULE_INFO['_PROTECT_'] = $_PROTECT;
 
 		if ($is_admin || ($is_setup&&$_MODULE_INFO['_PROTECT_']['setup']['grant'] == 'm')) {
-			echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
+			echo '<tr><th scope="row" class="text-wrap">'.(escapeHTML(empty($_MODULE_INFO['title'])?$name:$_MODULE_INFO['title'])).'</th>';
 			echo '<td class="d-none d-md-table-cell">'.(empty($_MODULE_INFO['author'])?'...':'<a href="'.(empty($_MODULE_INFO['link'])?'mailto:'.$_MODULE_INFO['email'].'"':$_MODULE_INFO['link'].'" target="_blank"').'>'.$_MODULE_INFO['author'].'</a>').'</td>';
 			echo '<td>'.(empty($_MODULE_INFO['version'])?'...':$_MODULE_INFO['version']).'</td>';
 			if($is_setup) {

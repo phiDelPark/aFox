@@ -20,7 +20,7 @@ if(!defined('__AFOX__')) exit();
 			($_len>5?5:$_len)*30,
 			_AF_THEME_URL_.'bi-icons.svg#person-bounding-box',
 			$rp_content,
-			escapeHtml($val['mb_nick'], true),
+			$val['mb_nick'],
 			date('Y/m/d', strtotime($val['rp_regdate'])),
 			getUrl(
 				'module','board','act','deleteComment','rp_srl',$val['rp_srl'],

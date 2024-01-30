@@ -33,17 +33,17 @@ if(!defined('__AFOX__')) exit();
 			$wr_secret =  $val['wr_secret'] == '1';
 			$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
 			$wr_title = !$wr_permit || $wr_secret ? '<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>' : '';
-			$wr_title .= !$wr_permit ? getLang('error_permitted') : escapeHtml($val['wr_title'], true);
+			$wr_title .= !$wr_permit ? getLang('error_permitted') : escapeHTML(strip_tags($val['wr_title']));
 
 			if(__MOBILE__) {
 				$class1 = 'd-flex w-100 justify-content-between';
 					echo '<tr><td><a class="d-block text-decoration-none" href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank">'.$wr_title.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
-					echo '<div class="'.$class1.' text-body-secondary"><span data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span>';
+					echo '<div class="'.$class1.' text-body-secondary"><span data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.$val['mb_nick'].'</span>';
 					echo '<span>'.date('m/d', strtotime($val['wr_update'])).'</span></div></a></td></tr>';
 			} else {
 					echo '<tr><th scope="row" class="d-none d-md-table-cell text-nowrap">'.$val['md_id'].'</th>';
 					echo '<td class="text-wrap"><a class="d-block" href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank">'.$wr_title.'</a>'.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'').'</td>';
-					echo '<td class="d-none d-md-table-cell text-nowrap"><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.escapeHtml($val['mb_nick'], true).'</span></td>';
+					echo '<td class="d-none d-md-table-cell text-nowrap"><span class="mb_nick" data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.$val['mb_nick'].'</span></td>';
 					echo '<td>'.date('Y/m/d', strtotime($val['wr_update'])).'</td></tr>';
 			}
 		}

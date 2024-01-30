@@ -39,7 +39,7 @@
 		$grants = ['0'=>'A','1'=>'M','m'=>'S'];
 		foreach ($board_list['data'] as $key => $value) {
 			echo '<tr><th scope="row" ><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
-			echo '<td class="text-wrap">'.escapeHtml(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td>';
+			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_description'])?'':' - '.$value['md_description'])),50)).'</td>';
 			echo '<td class="fixed-width">'.$grants[$value['grant_list']].$grants[$value['grant_view']].$grants[$value['grant_write']].$grants[$value['grant_reply']].$grants[$value['grant_upload']].$grants[$value['grant_download']].'</td>';
 			echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['md_regdate'])).'</td>';
 			echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('mid', $value['md_id']).'">'.getLang('setup').'</a></td></tr>';

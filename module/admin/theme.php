@@ -41,7 +41,7 @@ if(is_dir($theme_dir)) {
 		$_THEME_INFO = [];
 		@include $theme_dir.$name.'/info.php';
 
-		echo '<tr><th scope="row" class="text-wrap">'.(escapeHtml(empty($_THEME_INFO['title'])?$name:$_THEME_INFO['title'])).'</th>';
+		echo '<tr><th scope="row" class="text-wrap">'.(escapeHTML(empty($_THEME_INFO['title'])?$name:$_THEME_INFO['title'])).'</th>';
 		echo '<td class="d-none d-md-table-cell">'.(empty($_THEME_INFO['author'])?'...':'<a href="'.(empty($_THEME_INFO['link'])?'mailto:'.$_THEME_INFO['email'].'"':$_THEME_INFO['link'].'" target="_blank"').'>'.$_THEME_INFO['author'].'</a>').'</td>';
 		echo '<td>'.(empty($_THEME_INFO['version'])?'...':$_THEME_INFO['version']).'</td>';
 		echo '<td><input type="radio" name="th_id" id="th_id_'.$name.'" value="'.$name.'" style="display:none"><label class="btn btn-'.($theme_id == $name?'info':'primary').' btn-sm" style="width:100px" for="th_id_'.$name.'">'.getLang($theme_id == $name? 'using':'use').'</label></td>';
