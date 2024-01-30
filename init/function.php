@@ -128,20 +128,41 @@ function getSiteMenu($get = ''){
 	static $__menus = [];
 	if(!isset($__menus['header']) || !isset($__menus['footer'])){
 		for ($i=0; $i < 2; $i++){
+			$acts = [];
 			$out = DB::gets(
 				_AF_MENU_TABLE_, ['mu_type'=>$i], ['mu_srl'=>'ASC'],
-				function($r){ $rset = [];
+				function($r)use(&$acts){
+					$rows = [];
+					$rset = [];
+					$active = 0;
 					while ($row = DB::fetch($r)){
 						if(preg_match('/^[a-zA-Z]+\w{2,}$/',$row['mu_link'])){
 							$row['md_id'] = $row['mu_link'];
 							$row['mu_link'] = getUrl('','id',$row['md_id']);
 						}
-						$rset[] = $row;
+						$rows[$row['mu_srl']] = $row;
+						if(!$active && !empty($row['md_id']) && $row['md_id'] == __MID__){
+							$active = $row['mu_srl'] ;
+						}
+						if(empty($rset[$row['mu_parent']])){
+							$row['sub_menus'] = []; $rset[$row['mu_srl']] = $row;
+						} else{
+							$rset[$row['mu_parent']]['sub_menus'][$row['mu_srl']] = $row;
+						}
+					}
+					if($i == 0 && $active){
+						$i = count($rows);
+						do {
+							if(--$i < 0) break;
+							$acts[$rows[$active]['mu_srl']] = $rows[$active];
+							$active = $rows[$active]['mu_parent'];
+						} while ( !empty($rows[$active]) );
 					}
 					return $rset;
 				}
 			);
 			$__menus[$i == 0 ? 'header' : 'footer'] = $out;
+			if($i == 0) $__menus['active'] = $acts;
 		}
 	}
 	return $get ? $__menus[$get] : $__menus;

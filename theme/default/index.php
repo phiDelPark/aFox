@@ -1,39 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
-
-	$menus = getSiteMenu();
-	$mainmenu = $submenu = [];
-	$muroot = '';
-
-	if(empty($menus['error'])){
-		$url = getUrl();
-		foreach($menus['header'] as $val){
-			$is_active = (!empty($val['md_id']) && $val['md_id'] == __MID__) ? '_ACTIVE_' : $val['mu_srl'];
-			if($is_active!='_ACTIVE_' && $val['mu_link'] && strpos($url, $val['mu_link'])!==false) $is_active='_ACTIVE_';
-			if((int) $val['mu_parent'] > 0){
-				if($is_active == '_ACTIVE_'){
-					// 활성화시 키값 교체
-					if(!empty($submenu[$muroot])){
-						$submenu['_ACTIVE_'] = $submenu[$muroot];
-						unset($submenu[$muroot]);
-					}
-					$mainmenu['_ACTIVE_'] = $mainmenu[$muroot];
-					unset($mainmenu[$muroot]);
-					$muroot = '_ACTIVE_';
-					$val['_ACTIVE_'] = 1;
-				}
-				$submenu[$muroot][] = $val;
-			} else {
-				$muroot = $is_active;
-				$mainmenu[$muroot] = $val;
-			}
-		}
-	}
-	$is_submenu = !empty($submenu['_ACTIVE_'])&&count($submenu['_ACTIVE_'])>0;
-
-	if(!empty($_THEME['use_loader'])) { ?>
-		<div id="afoxPageLoading" aria-label="Loading...">
-		<noscript><style>#afoxPageLoading{display:none}</style></noscript>
-		</div>
+$menus = getSiteMenu();
+if(!empty($_THEME['use_loader'])) { ?>
+<div id="afoxPageLoading" aria-label="Loading..."><noscript><style>#afoxPageLoading{display:none}</style></noscript></div>
 <?php } ?>
 
 <div class="mode-toggle" onclick="this.classList.toggle('open')">
@@ -101,8 +69,15 @@
 			</button>
 			<div class="navbar-nav navbar-collapse font-gugi fs-5 collapse" id="navbarNav">
 <?php
-		foreach($mainmenu as $key => $val){
-			echo '<a class="nav-link'.($key==='_ACTIVE_'?' active':'').'" href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHTML($val['mu_title']) .'</a>';
+		$submenus = null;
+		$active_menu_title = '';
+		foreach($menus['header'] as $val){
+			$active = empty($menus['active'][$val['mu_srl']]) ? 0 : $val['mu_srl'];
+			if($active) {
+				$active_menu_title = $val['mu_title'];
+				if($submenus === null) $submenus = $val['sub_menus'];
+			}
+			echo '<a class="nav-link'.($active?' active':'').'" href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHTML($val['mu_title']) .'</a>';
 		}
 ?>
 			</div>
@@ -162,21 +137,22 @@
 
 <main class="container">
 	<div class="row g-5 mb-4">
-	<article class="<?php echo $is_submenu ? 'col-lg-9 order-lg-1 ' : ''?>mt-4" aria-label="Site Contents">
+	<article class="<?php echo $submenus ? 'col-lg-9 order-lg-1 ' : ''?>mt-4" aria-label="Site Contents">
 <?php
 	if($error = get_error()) { messageBox($error['message'], $error['error']); }
 	displayModule();
 ?>
 	</article>
 <?php
-	if($is_submenu){
+	if($submenus){
 ?>
 		<aside class="col-lg-3 mt-4">
 			<div class="position-sticky" style="top:2rem">
-				<h2 class="pb-2"><?php echo empty($mainmenu['_ACTIVE_'])?'Categories':$mainmenu['_ACTIVE_']['mu_title']?></h2>
+				<h2 class="pb-2"><?php echo empty($active_menu_title)?'Categories':$active_menu_title?></h2>
 				<ol class="list-unstyled">
-<?php foreach ($submenu['_ACTIVE_'] as $key => $val) {
-				echo '<li><a href="'. escapeHTML($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center py-3 link-body-emphasis text-decoration-none border-top'.(empty($val['_ACTIVE_'])?'':' active').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
+<?php foreach ($submenus as $val) {
+		$active = empty($menus['active'][$val['mu_srl']]) ? 0 : $val['mu_srl'];
+		echo '<li><a href="'. escapeHTML($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 py-3 link-body-emphasis text-decoration-none border-top'.($active?' active':'').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
 ?>
 					<svg class="bd-placeholder-img" width="100%" height="41" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="gray"></rect></svg>
 					<div class="col-lg-8">
