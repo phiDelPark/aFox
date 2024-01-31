@@ -69,16 +69,14 @@ if(!empty($_THEME['use_loader'])) { ?>
 			</button>
 			<div class="navbar-nav navbar-collapse font-gugi fs-5 collapse" id="navbarNav">
 <?php
-		$submenus = null;
-		$active_menu_title = '';
-		foreach($menus['header'] as $val){
-			$active = empty($menus['active'][$val['mu_srl']]) ? 0 : $val['mu_srl'];
-			if($active) {
-				$active_menu_title = $val['mu_title'];
-				if($submenus === null) $submenus = $val['sub_menus'];
+		$active_menu = -1;
+		foreach($menus['header'] as $key => $val){
+			if(!$val['mu_parent']){
+				if($active_menu < 0 && $val['active']) $active_menu = $key;
+				echo '<a class="nav-link'.($val['active']?' active':'').'" href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHTML($val['mu_title']) .'</a>';
 			}
-			echo '<a class="nav-link'.($active?' active':'').'" href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>'. escapeHTML($val['mu_title']) .'</a>';
 		}
+		$sub_menus = $active_menu>-1&&!empty($menus['header'][$active_menu+1])&&$menus['header'][$active_menu+1]['mu_parent'];
 ?>
 			</div>
 		</div>
@@ -137,36 +135,35 @@ if(!empty($_THEME['use_loader'])) { ?>
 
 <main class="container">
 	<div class="row g-5 mb-4">
-	<article class="<?php echo $submenus ? 'col-lg-9 order-lg-1 ' : ''?>mt-4" aria-label="Site Contents">
+	<article class="<?php echo $sub_menus ? 'col-lg-9 order-lg-1 ' : ''?>mt-4" aria-label="Site Contents">
 <?php
 	if($error = get_error()) { messageBox($error['message'], $error['error']); }
 	displayModule();
 ?>
 	</article>
-<?php
-	if($submenus){
-?>
-		<aside class="col-lg-3 mt-4">
-			<div class="position-sticky" style="top:2rem">
-				<h2 class="pb-2"><?php echo empty($active_menu_title)?'Categories':$active_menu_title?></h2>
-				<ol class="list-unstyled">
-<?php foreach ($submenus as $val) {
-		$active = empty($menus['active'][$val['mu_srl']]) ? 0 : $val['mu_srl'];
-		echo '<li><a href="'. escapeHTML($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 py-3 link-body-emphasis text-decoration-none border-top'.($active?' active':'').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
-?>
+
+<?php if($sub_menus){ ?>
+	<aside class="col-lg-3 mt-4">
+		<div class="position-sticky" style="top:2rem">
+			<h2 class="pb-2"><?php echo empty($menus['header'][$active_menu]['mu_title'])?'Categories':$menus['header'][$active_menu]['mu_title']?></h2>
+			<ol class="list-unstyled">
+	<?php for ($i=$active_menu+1,$n=count($menus['header']); $i < $n; $i++) { $val = $menus['header'][$i]; if(!$val['mu_parent']) break;
+		echo '<li><a href="'. escapeHTML($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 py-3 link-body-emphasis text-decoration-none border-top'.($val['active']?' active':'').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
+	?>
 					<svg class="bd-placeholder-img" width="100%" height="41" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="gray"></rect></svg>
 					<div class="col-lg-8">
 						<h6 class="mb-0"><?php echo escapeHTML($val['mu_title'])?></h6>
 						<small class="text-body-secondary"><?php echo escapeHTML($val['mu_description'])?></small>
 					</div>
 				</a></li>
+	<?php } ?>
+			</ol>
+			<ol id="quickLink" class="list-unstyled">
+				<li class="d-none"><a class="d-block icon-link-hover text-truncate" href="#"><svg class="bi me-1"><use href="./theme/default/bi-icons.svg#hash"/></svg>Scroll To Top</a></li>
+			</ol>
+	</aside>
 <?php } ?>
-				</ol>
-				<ol id="quickLink" class="list-unstyled">
-					<li class="d-none"><a class="d-block icon-link-hover text-truncate" href="#"><svg class="bi me-1"><use href="./theme/default/bi-icons.svg#hash"/></svg>Scroll To Top</a></li>
-				</ol>
-		</aside>
-<?php } ?>
+
 	</div>
 </main>
 

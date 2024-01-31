@@ -127,42 +127,31 @@ function setLang($key, $value){
 function getSiteMenu($get = ''){
 	static $__menus = [];
 	if(!isset($__menus['header']) || !isset($__menus['footer'])){
+		$i_act = -1;
 		for ($i=0; $i < 2; $i++){
-			$acts = [];
 			$out = DB::gets(
 				_AF_MENU_TABLE_, ['mu_type'=>$i], ['mu_srl'=>'ASC'],
-				function($r)use(&$acts){
-					$rows = [];
-					$rset = [];
-					$active = 0;
-					while ($row = DB::fetch($r)){
-						if(preg_match('/^[a-zA-Z]+\w{2,}$/',$row['mu_link'])){
-							$row['md_id'] = $row['mu_link'];
-							$row['mu_link'] = getUrl('','id',$row['md_id']);
+				function($rs)use(&$i_act){ $rset = []; $u = getUrl();
+					while ($r = DB::fetch($rs)){
+						if(preg_match('/^[a-zA-Z]+\w{2,}$/',$r['mu_link'])){
+							$r['md_id'] = $r['mu_link'];
+							$r['mu_link'] = getUrl('','id',$r['md_id']);
 						}
-						$rows[$row['mu_srl']] = $row;
-						if(!$active && !empty($row['md_id']) && $row['md_id'] == __MID__){
-							$active = $row['mu_srl'] ;
-						}
-						if(empty($rset[$row['mu_parent']])){
-							$row['sub_menus'] = []; $rset[$row['mu_srl']] = $row;
-						} else{
-							$rset[$row['mu_parent']]['sub_menus'][$row['mu_srl']] = $row;
-						}
-					}
-					if($i == 0 && $active){
-						$i = count($rows);
-						do {
-							if(--$i < 0) break;
-							$acts[$rows[$active]['mu_srl']] = $rows[$active];
-							$active = $rows[$active]['mu_parent'];
-						} while ( !empty($rows[$active]) );
+						$r['active'] = (!empty($r['md_id']) && $r['md_id'] == __MID__)
+						|| (empty($r['md_id'])&&$r['mu_link']&&strpos($u,$r['mu_link'])===0);
+						if($i_act < 0 && $r['active']) $i_act = count($rset);
+						$rset[] = $r;
 					}
 					return $rset;
 				}
 			);
-			$__menus[$i == 0 ? 'header' : 'footer'] = $out;
-			if($i == 0) $__menus['active'] = $acts;
+			$__menus[$i === 0 ? 'header' : 'footer'] = $out;
+			if($i === 0 && $i_act > -1){
+				for($i = $i_act; $i > -1; $i--){
+					$__menus['header'][$i]['active'] = true;
+					if(!$__menus['header'][$i]['mu_parent']) break;
+				}
+			}
 		}
 	}
 	return $get ? $__menus[$get] : $__menus;
