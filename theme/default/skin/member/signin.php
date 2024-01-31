@@ -15,7 +15,7 @@ if($_CFG['use_captcha'] == '1') {
 <input type="hidden" name="module" value="member">
 <input type="hidden" name="act" value="checklogin">
 	<h3 class="pb-3 mb-1 fst-italic border-bottom"><?php echo getLang('login')?></h3>
-	<div class="w-100 my-5 text-center">
+	<div class="w-100 my-5 py-5 text-center">
 		<div class="d-inline-block" style="min-width:300px;width:35%">
 			<input type="text" class="form-control" name="mb_id" minlength="2" maxlength="20" placeholder="<?php echo getLang('id')?>" required>
 			<input type="password" class="form-control mt-2" name="mb_password" placeholder="<?php echo getLang('password')?>" required>

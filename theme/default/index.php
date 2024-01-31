@@ -3,6 +3,7 @@ $menus = getSiteMenu();
 if(!empty($_THEME['use_loader'])) { ?>
 <div id="afoxPageLoading" aria-label="Loading..."><noscript><style>#afoxPageLoading{display:none}</style></noscript></div>
 <?php } ?>
+<ul class="circles"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
 
 <div class="mode-toggle" onclick="this.classList.toggle('open')">
   <div class="button" data-bs-theme-value="light"></div>
