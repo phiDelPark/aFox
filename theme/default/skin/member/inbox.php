@@ -6,7 +6,7 @@
 ?>
 
 <div style="position:relative">
-<input class="d-none" type="checkbox" id="searchList">
+<input class="d-none" type="checkbox" id="searchForm">
 <form class="<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
 	<input type="hidden" name="module" value="member">
 	<input type="hidden" name="disp" value="inbox">
@@ -27,7 +27,7 @@
 		<?php if(__MOBILE__) { ?>
 		<th scope="col" class="text-wrap"><?php echo getLang('content')?></th>
 		<?php } else { ?>
-		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchList"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label> <?php echo getLang('name')?></th>
+		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchForm"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label> <?php echo getLang('name')?></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('content')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('status')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('date')?></th>

@@ -17,9 +17,9 @@ foreach ($options as $key => $v) {
 #editorToolbar button{padding:2px;border-radius:2px;height:18px;width:18px}
 #editorToolbar button>.bi{position:relative;left:-2px;top:-5px;height:16px;width:16px}
 #uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px;background-color:var(--bs-border-color)!important}
-#editorContent textarea{min-height:<?php echo $min_height ?>}
 #editorContent .focused{outline:0;box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.3)}
 #editorContent .is-invalid,[name="remove_files[]"]+img{outline:0;box-shadow:0 0 0 0.25rem rgba(253, 13, 13, 0.3)}
+#editorContent textarea,#editorContent iframe{min-height:<?php echo $min_height ?>}
 </style>
 
 <div id="editor<?php echo ucfirst($name) ?>" class="w-100 editor-group">

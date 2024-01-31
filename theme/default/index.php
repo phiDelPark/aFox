@@ -13,14 +13,14 @@ if(!empty($_THEME['use_loader'])) { ?>
 <header class="container">
 	<div class="border-bottom lh-1 p-1">
 		<div class="row flex-nowrap justify-content-between align-items-end">
-			<div class="col-4">
+			<div class="col-4 mb-1">
 				<a class="link-secondary" href="#">Subscribe</a>
 			</div>
 			<div class="col-4 text-center">
 				<h1 class="header-logo text-body-emphasis mb-0"><?php echo $_CFG['title']?></h1>
 			</div>
 			<div class="col-4 d-flex justify-content-end align-items-end">
-				<label class="link-secondary icon-link-hover me-2" style="cursor:pointer" href="#" for="searchExList" aria-label="Search"><svg class="bi" aria-hidden="true" style="margin-bottom:.3em"><title>Search</title><use href="./theme/default/bi-icons.svg#search"/></svg></label>
+				<label class="link-secondary icon-link-hover me-2" style="cursor:pointer" href="#" for="searchExForm" aria-label="Search"><svg class="bi m-1" aria-hidden="true"><title>Search</title><use href="./theme/default/bi-icons.svg#search"/></svg></label>
 <?php if(empty($_MEMBER)){ ?>
 				<a class="btn p-0" style="line-height:normal" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi bi-lg" aria-hidden="true"><title>Sign In</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg></a>
 <?php }else{ ?>
@@ -41,11 +41,11 @@ if(!empty($_THEME['use_loader'])) { ?>
 			</div>
 		</div>
 		<div style="position:relative">
-		<input class="d-none" type="checkbox" id="searchExList">
+		<input class="d-none" type="checkbox" id="searchExForm">
 		<form class="<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
         <input type="hidden" name="module" value="searchex">
-		<div class="input-group input-group-sm float-end" style="max-width:250px">
-		<label class="input-group-text" for="searchEX"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('','id',(empty($_POST['return'])||$_POST['module']!='searchex'?$_POST['id']:$_POST['return'])).'\')"'?>>
+		<div class="input-group input-group-sm float-end">
+		<label class="input-group-text" for="searchExForm"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('','id',(empty($_POST['return'])||$_POST['module']!='searchex'?$_POST['id']:$_POST['return'])).'\')"'?>>
         	<svg class="bi"><use href="./theme/default/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg>
         </label>
 		<?php if(!empty($_POST['module'])&&$_POST['module']=='board') { ?>
