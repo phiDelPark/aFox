@@ -1,16 +1,15 @@
 <?php if(!defined('__AFOX__')) exit();
 $menus = getSiteMenu();
-if(!empty($_THEME['use_loader'])) { ?>
+?>
+<ul class="bd-circles"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
+<?php if(!empty($_THEME['use_loader'])) { ?>
 <div id="afoxPageLoading" aria-label="Loading..."><noscript><style>#afoxPageLoading{display:none}</style></noscript></div>
 <?php } ?>
-<ul class="circles"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
-
 <div class="mode-toggle" onclick="this.classList.toggle('open')">
   <div class="button" data-bs-theme-value="light"></div>
   <div class="button" onclick="location.hash='locationMap'"></div>
   <div class="button" onclick="location.href='#'"></div>
 </div>
-
 <header class="container">
 	<div class="border-bottom lh-1 p-1">
 		<div class="row flex-nowrap justify-content-between align-items-end">
@@ -61,7 +60,6 @@ if(!empty($_THEME['use_loader'])) { ?>
 		</form>
 		</div>
 	</div>
-
 	<nav class="navbar navbar-expand-md border-bottom mb-4 p-0">
 		<div class="container-fluid p-0">
 			<a class="navbar-brand ms-2" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" style="vertical-align:-.25rem;width:1.25em;height:1.25em"><use href="./theme/default/bi-icons.svg#house-door-fill"/></svg></a>
@@ -82,11 +80,8 @@ if(!empty($_THEME['use_loader'])) { ?>
 			</div>
 		</div>
 	</nav>
-
 	<div id="carouselExampleCaptions" class="carousel slide mb-5">
-
 <?php if(!empty($_POST['id']) && $_POST['id'] == 'welcome'){ ?>
-
 		<div class="carousel-indicators">
 			<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
 			<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -120,20 +115,15 @@ if(!empty($_THEME['use_loader'])) { ?>
 			<span class="carousel-control-next-icon" aria-hidden="true"></span>
 			<span class="visually-hidden">Next</span>
 		</button>
-
 <?php }else{ ?>
-
 		<div class="carousel-inner rounded">
 			<div class="carousel-item active">
 				<img src="./theme/default/img/header_<?php echo !empty($_POST['module'])&&$_POST['module']=='board'?'board':'page' ?>.jpg" class="d-block w-100" alt="...">
 			</div>
 		</div>
-
 <?php } ?>
 	</div>
-
 </header>
-
 <main class="container">
 	<div class="row g-5 mb-4">
 	<article class="<?php echo $sub_menus ? 'col-lg-9 order-lg-1 ' : ''?>mt-4" aria-label="Site Contents">
@@ -142,7 +132,6 @@ if(!empty($_THEME['use_loader'])) { ?>
 	displayModule();
 ?>
 	</article>
-
 <?php if($sub_menus){ ?>
 	<aside class="col-lg-3 mt-4">
 		<div class="position-sticky" style="top:2rem">
@@ -164,10 +153,8 @@ if(!empty($_THEME['use_loader'])) { ?>
 			</ol>
 	</aside>
 <?php } ?>
-
 	</div>
 </main>
-
 <footer id="locationMap" class="p-4 text-center text-body-secondary bg-body-tertiary" aria-label="About Site">
 	<ul class="list-unstyled"><li style="visibility:hidden"></li>
 <?php
