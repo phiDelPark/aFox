@@ -47,7 +47,7 @@ function proc($data) {
 		if(!empty($md_extra_keys)) {
 			//확장 변수 갯수 제한 99개
 			if(count($md_extra_keys) > 99) {
-				return set_error(getLang('msg_count_overflow', ['extra_keys','99']));
+				return set_error(getLang('overflow_count', ['extra_keys',99]));
 			}
 			$ex_keys['keys'] = $md_extra_keys;
 		}
@@ -79,7 +79,7 @@ function proc($data) {
 			}
 			// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 			$_extras = serialize($ex_keys);
-			if(strlen($_extras) > 65535) throw new Exception(getLang('msg_max_overflow', [65535]), 1401);
+			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_max', ['extra_keys',65535]), 1401);
 
 			DB::insert(_AF_MODULE_TABLE_,
 				[
@@ -123,7 +123,7 @@ function proc($data) {
 				if (count($diff)>0 && !empty($diff[0])) {
 					$diff = implode(',', $diff);
 					$out = DB::get(_AF_DOCUMENT_TABLE_, 'wr_category', ['md_id'=>$data['md_id'], 'wr_category{IN}'=>$diff]);
-					if(!empty($out)) throw new Exception(getLang('msg_not_change_category', [$out['wr_category']]), 3);
+					if(!empty($out)) throw new Exception(getLang('cant_change_category', [$out['wr_category']]), 3);
 				}
 			}
 
@@ -134,7 +134,7 @@ function proc($data) {
 			else $_extras['keys'] = $ex_keys['keys'];
 			// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 			$_extras = serialize($_extras);
-			if(strlen($_extras) > 65535) throw new Exception(getLang('msg_max_overflow', [65535]), 1401);
+			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_max', ['extra_keys',65535]), 1401);
 
 			DB::update(_AF_MODULE_TABLE_,
 				[

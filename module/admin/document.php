@@ -13,7 +13,7 @@
 			":" => "wr_title", //:title
 			"@" => "mb_nick", //@nick
 			"#" => "wr_tags", //#tag
-			"d" => "wr_regdate", //d202010
+			"?" => "wr_regdate", //?202010
 		];
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
@@ -40,14 +40,17 @@
 	$doc_list = setDataListInfo($doc_list, $_POST['page'], 20, DB::foundRows());
 ?>
 
+<form id="af_check_items" method="post">
+<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="success_url" value="<?php echo getUrl()?>" />
 <table class="table">
 <thead>
 	<tr>
-		<th scope="col"><a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
-		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
-		<th scope="col"><?php echo getLang('author')?></th>
+		<th scope="col"><a href="#" onclick="return _showCheckItems(this)"><?php echo getLang('data_manage')?></a></th>
+		<th scope="col" class="text-wrap"><input class="me-3 d-none" type="checkbox" onchange="_allCheckItems(this)"><small class="d-none">[ <a href="#" onclick="return _moveCheckItems(this)">MOVE</a> ] [ <a href="#" onclick="return _deleteCheckItems(this)">DELETE</a> ]</small><span>:<?php echo getLang('title')?></span></th>
+		<th scope="col">@<?php echo getLang('author')?></th>
 		<th scope="col"><?php echo getLang('status')?></th>
-		<th scope="col" class="text-end"><?php echo getLang('date')?></th>
+		<th scope="col" class="text-end">?<?php echo getLang('date')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -66,7 +69,7 @@
 
 		foreach ($doc_list['data'] as $key => $value) {
 			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></td>';
-			echo '<td class="text-wrap"><a href="./?srl='.$value['wr_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).'</a>'.(empty($value['wr_reply'])?'':' <small>('.$value['wr_reply'].')</small>').'</td>';
+			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="wr_srls[]" value="'.$value['wr_srl'].'"><a href="./?srl='.$value['wr_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).'</a>'.(empty($value['wr_reply'])?'':' <small>('.$value['wr_reply'].')</small>').'</td>';
 			echo '<td>'.$value['mb_nick'].'</td>';
 			echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td></tr>';
@@ -76,13 +79,14 @@
 
 </tbody>
 </table>
+</form>
 
 <div class="d-flex w-100 justify-content-between mt-4">
 	<form action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
 		<div class="input-group mb-3">
 			<label class="input-group-text bg-transparent" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
+			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" placeholder="<?php echo getLang('content') ?>" oninvalid="this.setCustomValidity(':TITLE, @NICK, ?202201')" oninput="this.setCustomValidity('')" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
 		</div>
 	</form>
@@ -97,6 +101,34 @@
 	</ul>
 	</nav>
 </div>
+
+<script>
+	function _showCheckItems(el_chk) {
+		const tb = el_chk.closest('table'), first_chk = tb.querySelector('[type=checkbox]')
+		tb.querySelectorAll('[type=checkbox]')?.forEach(el => el.classList.remove('d-none'))
+		first_chk.parentNode?.lastChild.classList.add('d-none')
+		first_chk.parentNode?.childNodes[1].classList.remove('d-none')
+		return false
+	}
+	function _allCheckItems(el_chk) {
+		el_chk.closest('table').querySelectorAll('tbody [type=checkbox]')?.forEach(el => el.checked = el_chk.checked)
+	}
+	function _moveCheckItems() {
+		const id = prompt($_LANG['prompt_move_board'], '').trim()
+		if (id) {
+			exec_ajax({module:'admin',act:'moveDocuments',md_id:id,...document.querySelector('#af_check_items').serializeArray()})
+			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
+		}
+		return false;
+	}
+	function _deleteCheckItems() {
+		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['document']])) === true) {
+			exec_ajax({module:'admin',act:'deleteDocuments',...document.querySelector('#af_check_items').serializeArray()})
+			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
+		}
+		return false;
+	}
+</script>
 
 <?php
 /* End of file document.php */

@@ -1,6 +1,4 @@
-<?php
-
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(empty($data['wr_srl'])) return set_error(getLang('error_request'),4303);

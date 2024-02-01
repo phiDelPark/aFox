@@ -116,6 +116,14 @@ button {
 #advanced_setup:checked ~ .advanced_setup{
   display: block;
 }
+#calling_server {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	margin: 1rem;
+	padding: 10px 50px;
+	z-index: 9900;
+}
 @media (min-width: 992px) {
   body {
     overflow: auto !important;

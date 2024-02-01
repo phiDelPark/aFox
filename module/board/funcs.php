@@ -55,7 +55,7 @@ function getDocumentList($id, $count, $page, $search = "", $category = "", $orde
 			":" => "wr_title", //:title
 			"@" => "mb_nick", //@nick
 			"#" => "wr_tags", //#tag
-			"d" => "wr_regdate", //d202010
+			"?" => "wr_regdate", //?202010
 		];
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));

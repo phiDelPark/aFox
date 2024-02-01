@@ -43,7 +43,6 @@ $_LANG['base_cdn_list'] = '기본 CDN';
 $_LANG['clear_cache'] = '캐시 재생성';
 $_LANG['duplicate_files'] = '중복 파일';
 $_LANG['document_count'] = '문서 수';
-$_LANG['empty_addon'] = $_LANG['empty_module'] = $_LANG['empty_theme'] = '비우기';
 $_LANG['extra_keys'] = '확장변수';
 $_LANG['file_extension'] = '확장자';
 $_LANG['foot_menu'] = '하단 메뉴';
@@ -82,27 +81,20 @@ $_LANG['option'] = '옵션';
 
 $_LANG['include'] = '포함';
 $_LANG['exclude'] = '제외';
-$_LANG['advanced_setup'] = '고급 설정 표시';
-$_LANG['use_member'] = '사용 유저';
+$_LANG['advanced_setup'] = '고급 설정';
 
 $_LANG['data_manage'] = '관리';
-$_LANG['data_move'] = $_LANG['move'];
-$_LANG['data_copy'] = $_LANG['copy'];
-$_LANG['data_delete'] = $_LANG['delete'];
 $_LANG['data_combine'] = '합치기';
 
-$_LANG['standard_point'] = '기준점';
-$_LANG['empty_trash_bin'] = '휴지통 비우기';
+$_LANG['empty_%s'] = '%s 비우기';
 
-$_LANG['msg_max_overflow'] = '최대 크기 (%s)를 벗어났습니다.';
-$_LANG['msg_count_overflow'] = '%s의 최대 수 (%s)를 벗어났습니다.';
-$_LANG['msg_not_welcome_page'] = 'welcome 페이지는 삭제할 수 없습니다.';
-$_LANG['msg_not_change_category'] = '분류 %s에 문서가 존재하여 변경할 수 없습니다.';
+$_LANG['overflow_max'] = '%s의 최대 크기 (%s)를 벗어났습니다.';
+$_LANG['overflow_count'] = '%s의 최대 수 (%s)를 벗어났습니다.';
 
-$_LANG['confirm_select_combine'] = '선택된 %s을(를) 하나로 합치겠습니까?';
-$_LANG['confirm_select_trash'] = '선택된 %s을(를) 휴지통으로 보내겠습니까?';
+$_LANG['cant_delete_welcome'] = 'welcome 페이지는 삭제할 수 없습니다.';
+$_LANG['cant_change_category'] = '분류 %s에 문서가 존재하여 변경할 수 없습니다.';
 
-$_LANG['prompt_move_board_id'] = '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n분류를 선택하시려면 뒤에 :분류명을 입력하세요.\n예) module_id:해당분류';
+$_LANG['prompt_move_board'] = '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n카테고리를 선택하시려면 뒤에 :카테고리를 입력하세요.\n예) 모듈ID : 카테고리';
 
 $_LANG['desc_mb_id'] = '첫 글자는 영문이여야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다.';
 $_LANG['desc_base_cdn_list'] = '사용할 bootstrap 5.x 등의 CDN 서버를 적어주세요. (비워두면 기본값)';
@@ -123,6 +115,6 @@ $_LANG['desc_use_signup'] = '회원가입을 허락할지 설정합니다.';
 $_LANG['desc_use_visit'] = '방문자 정보를 기록할지 설정합니다.';
 $_LANG['desc_use_protect'] = '다른 사이트에선 파일을 사용할 수 없게 설정합니다.';
 $_LANG['desc_use_captcha'] = '사람과 컴퓨터를 판별하는 캡차를 보여줄지 설정합니다.';
-$_LANG['desc_data_combine'] = '중복된 파일을 보고 문서에 연결된 파일을 하나로 합칠 수 있습니다.'."\n".'연결된 파일을 하나로 합치면 불필요한 파일을 줄여 저장공간을 절약할 수 있습니다.'."\n\n".'합치기 버튼을 누르면 첫번째 라디오박스를 기준점으로 잡고 체크된 모든 항목을 합칩니다.'."\n".'* 주의 * 합친 후에는 연결된 파일 정보를 되돌릴 수 없으니 주의하세요 !!!';
+
 /* End of file admin_ko.php */
 /* Location: ./common/lang/admin_ko.php */

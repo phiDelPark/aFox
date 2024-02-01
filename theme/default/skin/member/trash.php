@@ -32,7 +32,7 @@
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('date')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('delete')?></th>
-		<th scope="col" class="text-nowrap" style="width:1px"><input type="checkbox" onclick="_allCheckInboxItems(this)"></th>
+		<th scope="col" class="text-nowrap" style="width:1px"><input type="checkbox" onchange="_allCheckInboxItems(this)"></th>
 		<?php } ?>
 	</tr>
 </thead>
@@ -89,7 +89,7 @@
 		els_chk.forEach(el => el.checked = el_chk.checked);
 	}
 	function _allRemoveInboxItems() {
-		if (confirm($_LANG['confirm_empty'].sprintf([$_LANG['document']])) == true) {
+		if (confirm($_LANG['confirm_empty'].sprintf([$_LANG['document']])) === true) {
 			exec_ajax({module:'member',act:'deleteTrash',...document.querySelector('#af_member_remove_trash_items').serializeArray()})
 			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
 		}

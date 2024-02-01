@@ -27,11 +27,11 @@
 		<?php if(__MOBILE__) { ?>
 		<th scope="col" class="text-wrap"><?php echo getLang('content')?></th>
 		<?php } else { ?>
-		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchForm"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label> <?php echo getLang('name')?></th>
+		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchForm"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('content')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('status')?></th>
-		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('date')?></th>
-		<th scope="col" class="text-nowrap" style="width:1px"><input type="checkbox" onclick="_allCheckInboxItems(this)"></th>
+		<th scope="col" class="text-nowrap" style="width:1px">?<?php echo getLang('date')?></th>
+		<th scope="col" class="text-nowrap" style="width:1px"><input type="checkbox" onchange="_allCheckInboxItems(this)"></th>
 		<?php } ?>
 	</tr>
 </thead>
@@ -91,7 +91,7 @@
 		els_chk.forEach(el => el.checked = el_chk.checked);
 	}
 	function _allRemoveInboxItems() {
-		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['message']])) == true) {
+		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['message']])) === true) {
 			exec_ajax({module:'member',act:'deleteNote',...document.querySelector('#af_member_remove_inbox_items').serializeArray()})
 			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
 		}

@@ -24,7 +24,7 @@ function proc($data) {
 		// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 		$extra = serialize($data);
 		if(strlen($extra) > 65535) {
-			throw new Exception(getLang('msg_max_overflow', [65535]), 1401);
+			throw new Exception(getLang('overflow_max', ['extra_keys',65535]), 1401);
 		}
 
 		if($theme_exists) {

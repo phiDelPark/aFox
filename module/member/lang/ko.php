@@ -3,6 +3,12 @@ if(!defined('__AFOX__')) exit();
 // 에러가 발생할 가능성이 있으니 언어에 ' (홑따옴표)는 쓰지마세요.
 // 필요하면 ` (악센트) 이걸 사용하세요.
 
+$_LANG['member_find'] = '회원조회';
+$_LANG['member_signup'] = '회원가입';
+$_LANG['mail_address'] = '메일주소';
+$_LANG['authenticode'] = '인증코드';
+$_LANG['captcha_code'] = '보안문자';
+
 $_LANG['agree_signup'] = '가입을 동의합니다';
 $_LANG['not_use_signup'] = '지금은 회원 가입을 하실 수 없습니다.';
 
@@ -29,7 +35,6 @@ $_LANG['msg_login_overtry'] = '로그인 시도를 3회 실패하였습니다.'.
 
 $_LANG['md_title_inbox'] = '편지함';
 $_LANG['md_description_inbox'] = '';
-$_LANG['md_title_trash'] = '휴지통';
 $_LANG['md_title_trash'] = '휴지통';
 $_LANG['md_description_trash'] = '';
 $_LANG['md_title_signup'] = getLang(empty($_MEMBER)?'member_signup':'member');

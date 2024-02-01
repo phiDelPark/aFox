@@ -25,7 +25,7 @@ function proc($data) {
 	$md_extra['configs'] = $data;
 	$md_extra = serialize($md_extra);
 	if(strlen($md_extra) > 65535) {
-		return set_error(getLang('msg_max_overflow', [65535]), 1401);
+		return set_error(getLang('overflow_max', ['extra_keys',65535]), 1401);
 	}
 
 	DB::update(_AF_MODULE_TABLE_, ['md_extra'=>$md_extra], ['md_id'=>$module['md_id']]);

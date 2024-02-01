@@ -5,14 +5,14 @@
 	$dd = _AF_DOCUMENT_TABLE_;
 	$cd = _AF_DOCUMENT_TABLE_;
 	$search = empty($_POST['search']) ? '' : trim($_POST['search']);
-	$keys = [ ":" => "wr_title", "@" => "mb_nick", "#" => "wr_tags", "d" => "wr_regdate" ];
+	$keys = [ ":" => "wr_title", "@" => "mb_nick", "#" => "wr_tags", "?" => "wr_regdate" ];
 
 	if($_POST['trash'] == 'comment') {
 		$cd = _AF_COMMENT_TABLE_;
-		$keys = [ "@" => "mb_nick", "d" => "rp_regdate" ];
+		$keys = [ "@" => "mb_nick", "?" => "rp_regdate" ];
 	} else if($_POST['trash'] == 'file') {
 		$cd = _AF_FILE_TABLE_;
-		$keys = [ ":" => "mf_name", "@" => "mb_nick", "d" => "mf_regdate" ];
+		$keys = [ ":" => "mf_name", "@" => "mb_nick", "?" => "mf_regdate" ];
 	}
 
 	if(!empty($search)) {
@@ -67,7 +67,7 @@
 	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="admin" />
 	<input type="hidden" name="act" value="emptyTrashBin" />
-	<button disabled="disabled" type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('empty_trash_bin')?></button>
+	<button disabled="disabled" type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('empty_%s', ['trash_bin'])?></button>
 </form>
 
 <ul class="nav nav-tabs">
@@ -88,11 +88,11 @@
 	<tr>
 		<th scope="col">#</th>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
-		<th scope="col"><?php echo ($_POST['trash'] == 'file'?getLang('type'):getLang('author'))?></th>
+		<th scope="col"><?php echo ($_POST['trash'] == 'file'?getLang('type'):'@'.getLang('author'))?></th>
 		<?php if ($_POST['trash'] != 'file') {?>
 		<th scope="col"><?php echo getLang('status')?></th>
 		<?php }?>
-		<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('date')?></th>
+		<th scope="col" class="d-none d-md-table-cell">?<?php echo getLang('date')?></th>
 		<th scope="col"><?php echo getLang('removed_date')?></th>
 	</tr>
 </thead>
