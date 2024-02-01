@@ -1,10 +1,10 @@
-<?php
-	if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
+
+	$_POST['page'] = empty($_POST['page'])?1:$_POST['page'];
 
 	$duplicate = !empty($_POST['duplicate']);
-	$page = (int)isset($_POST['page']) ? (($_POST['page'] < 1) ? 1 : $_POST['page']) : 1;
 	$count = $duplicate ? 30 : 20;
-	$start = (($page - 1) * $count);
+	$start = (($_POST['page'] - 1) * $count);
 
 	$fl = _AF_FILE_TABLE_;
 	$dd = _AF_DOCUMENT_TABLE_;
@@ -12,32 +12,41 @@
 	if($duplicate){
 		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS a.*, d.wr_title FROM $fl as a INNER JOIN $dd as d ON (d.md_id <> '_AFOXtRASH_' and d.wr_srl = a.mf_target), (select mf_target,mf_name,mf_size from $fl where mf_link<>1 and mf_size>0 group by mf_name,mf_size having count(*) > 1) as b WHERE a.mf_link<>1 and a.mf_size=b.mf_size AND a.mf_name=b.mf_name ORDER BY a.mf_name,a.mf_regdate LIMIT $start,$count" , true);
 	}else {
-		$search = '';
-		if(!empty($_POST['search'])) {
-			$tmp = $_POST['search'];
-			$schkeys = ['name'=>'mf_name','desc'=>'mf_description','type'=>'mf_type','date'=>'mf_regdate'];
-			$ss = explode(':', $tmp);
-			if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
-				$tmp = trim(implode(':', array_slice($ss,1)));
-				if(!empty($tmp)) $search = 'f.'.$schkeys[$ss[0]].' LIKE \''.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%').'\'';
-			} else {
-				$search = '(f.mf_name LIKE \''.DB::escape('%'.$_POST['search'].'%').'\' OR f.mf_description LIKE \''.DB::escape('%'.$_POST['search'].'%').'\')';
+		$search = empty($_POST['search']) ? '' : trim($_POST['search']);
+		if(!empty($search)) {
+			$keys = [
+				":" => "mf_name", //:name
+				"@" => "mb_nick", //@nick
+				"d" => "mf_regdate", //d202010
+			];
+			$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
+			empty($key) ? ($key = "mf_type") : ($search = substr($search, 1));
+			if ($search = explode(" ", $search)) {
+				$index = 0;
+				$tmp = '';
+				foreach ($search as $value) {
+					$value = explode("&", trim($value));
+					$and_or = count($value) > 1 ? ' AND ' : ' OR  ';
+					foreach ($value as $v) {
+						if ($key == "mf_regdate") {
+							$v = str_split($v, 4);
+							$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
+							$tmp .= $and_or.'f.'.$key.' LIKE \''.DB::escape($v.'%').'\'';
+						} else {
+							$tmp .= $and_or.'f.'.$key.' LIKE \''.DB::escape('%'.$v.'%').'\'';
+						}
+					}
+				}
+				$search = '('.substr($tmp, 5).')';
 			}
 		}
-
 		$category = 'd'.(empty($_POST['category'])?'.md_id <> \'_AFOXtRASH_\'':'.md_id = \''.DB::escape($_POST['category']).'\'');
-		$where = empty($search)&&empty($category) ? '1' : '('.$category.(empty($search)||empty($category) ? '' : ' AND ').$search.')';
+		$where = $search||$category ? '('.$category.($search&&$category ? ' AND ' : '').$search.')' : '1';
 		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS f.*, d.md_id FROM $fl as f INNER JOIN $dd as d ON d.wr_srl = f.mf_target WHERE $where ORDER BY f.mf_regdate DESC LIMIT $start,$count", true);
+		$file_list = setDataListInfo($file_list, $_POST['page'], $count, DB::foundRows());
 	}
-	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$file_list = setDataListInfo($file_list, $page, $count, DB::foundRows());
-
-	if($duplicate) {
-		messageBox(getLang('desc_data_combine'), 2, false);
-	}
-	if($error) {
-		messageBox($error['message'], $error['error'], false);
-	}
+	if($error = DB::error()) messageBox($error->getMessage(), $error->getCode(), false);
+	if($duplicate) messageBox(getLang('desc_data_combine'), 2, false);
 ?>
 <?php if($duplicate) { ?>
 <a class="btn btn-success" href="#" onclick="return data_selected_combine()"><?php echo getLang('data_combine')?></a>
@@ -53,12 +62,12 @@
 		<?php } else { ?>
 		<th scope="col"><a href="#DataManageAction"><?php echo getLang('data_manage')?></a></th>
 		<?php } ?>
+		<th scope="col">&raquo;</th>
 		<th scope="col" class="text-wrap"><?php echo getLang('name')?></th>
 		<?php if($duplicate) { ?>
 		<th scope="col"><?php echo getLang('size')?></th>
-		<?php } else { ?>
-		<th scope="col">&raquo;</th>
 		<?php } ?>
+		<th scope="col"><?php echo getLang('type')?></th>
 		<th scope="col"><?php echo getLang('ip')?></th>
 		<th scope="col"><?php echo getLang('date')?></th>
 	</tr>
@@ -97,11 +106,12 @@
 				echo '<td class="hidden-xs">'.shortFileSize($value['mf_size']).'</td>';
 
 			} else {
-			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></th>';
+			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></td>';
+			echo '<td><small>'.$value['mf_download'].'</small></td>';
 			echo '<td class="text-wrap"><a href="./?srl='.$value['mf_target'].'" target="_blank">'.escapeHTML(cutstr($value['mf_name'],50)).'</a></td>';
-			echo '<td>'.$value['mf_download'].'</td>';
 			}
-			echo '<td>'.$value['mb_ipaddress'].'</td>';
+			echo '<td><small>'.$value['mf_type'].'</small></td>';
+			echo '<td><small>'.$value['mb_ipaddress'].'</small></td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mf_regdate'])).'</td></tr>';
 			if($duplicate) {
 				echo '<tr><td class="title" colspan="4" style="color:#555;text-decoration:underline"><a href="'.getUrl('','id',$value['md_id'],'srl',$value['mf_target']).'" target="_blank">'.escapeHTML(cutstr($value['wr_title'],50)).'</a></td></tr>';
@@ -117,10 +127,9 @@
 	<form action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#search"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
+			<label class="input-group-text bg-transparent" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
+			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" placeholder="<?php echo getLang('type') ?>" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
-			<?php if(!empty($_POST['search'])) {?><button class="btn btn-default btn-outline-control" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 		</div>
 	</form>
 	<nav aria-label="Page navigation of the list">

@@ -304,7 +304,7 @@ h1, h2, h3, h4, h5, h6,
 #searchExForm:checked ~ form {
 	display: block;
     animation-name: widthAnimation;
-    animation-duration: 2s;
+    animation-duration: 1.5s;
 }
 
 #calling_server,

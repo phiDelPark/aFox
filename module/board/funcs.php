@@ -7,64 +7,34 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 
 	$field = $field . "," . implode(",", ["md_id", "mb_srl"]);
 	$result = DB::get(_AF_DOCUMENT_TABLE_, $field, ["wr_srl" => $srl]);
-	if ($ex = DB::error())
-	{
-		return set_error($ex->getMessage() , $ex->getCode());
-	}
-	if (empty($result["md_id"]))
-	{
-		return set_error(getLang("error_request") , 4303);
-	}
-	elseif ($result["md_id"] == "_AFOXtRASH_")
-	{
-		//휴지통은 관리자 혹은 자신만 가능
-		if (empty($_MEMBER) || empty($_MEMBER["mb_srl"]) || (!isManager($result["wr_updater"]) && $_MEMBER["mb_srl"] != $result["mb_srl"]))
-		{
-			return set_error(getLang("error_permitted") , 4501);
-		}
+	if ($ex = DB::error()) return set_error($ex->getMessage() , $ex->getCode());
+	if (empty($result["md_id"])) return set_error(getLang("error_request") , 4303);
+	elseif ($result["md_id"] == "_AFOXtRASH_" && !isManager($result["wr_updater"])) {
+		return set_error(getLang("error_permitted") , 4501); // only manager
 	}
 
-	if ($inc_hit && !empty($result))
-	{
-		$wr_mb = $result["mb_srl"];
-		$point = (int)getModule($result["md_id"], "point_view");
-
-		if ($point !== 0)
-		{
-			$_out = setHistoryAction("wr_hit::" . $srl, $point, false, function ($v) use ($srl, $wr_mb, $point)
-			{
-				// 처음에만 포인트 사용
-				if (!empty($v["data"]))
-				{
-					return;
-				}
-				// 자신은 포인트 사용 안함
-				if (empty($wr_mb) || $wr_mb !== $v["mb_srl"])
-				{
-					$_r = setPoint($point);
-					if (!empty($_r["error"]))
-					{
-						return set_error($_r["message"], $_r["error"]);
+	$wr_mb = $result["mb_srl"];
+	if ($inc_hit && $_MEMBER && $wr_mb != $_MEMBER["mb_srl"])
+	{ // exclude yourself
+		if (($point = (int)getModule($result["md_id"], "point_view")) !== 0) {
+			$_out = setHistoryAction("wr_hit::" . $srl, $point, false,
+				function ($v) use ($srl, $wr_mb, $point) {
+					// 처음에만 포인트 사용
+					if (!empty($v["data"])) return;
+					// 자신은 포인트 사용 안함
+					if (empty($wr_mb) || $wr_mb !== $v["mb_srl"]) {
+						$_r = setPoint($point);
+						if (!empty($_r["error"])) return set_error($_r["message"], $_r["error"]);
 					}
 				}
-			});
-			if (!empty($_out["error"]))
-			{
-				return set_error($_out["message"], $_out["error"]);
-			}
+			);
+			if (!empty($_out["error"])) return set_error($_out["message"], $_out["error"]);
 		}
-
-		$uinfo = ["mb_srl" => empty($_MEMBER) ? 0 : $_MEMBER["mb_srl"], "ipaddress" => $_SERVER["REMOTE_ADDR"], ];
 
 		$hit_key = "afox_wr_hit::" . $srl;
-		$hit_chk = get_session($hit_key);
-		if (empty($hit_chk))
-		{
-			$hit_chk = get_cookie($hit_key);
-		}
-		if (empty($hit_chk))
-		{
-			// 자신은 카운터 안올림
+		$uinfo = ["mb_srl" => $_MEMBER ? $_MEMBER["mb_srl"] : 0, "ipaddress" => $_SERVER["REMOTE_ADDR"], ];
+
+		if (!get_session($hit_key) && !get_cookie($hit_key)) {
 			$ukey = ($uinfo["mb_srl"] > 0 ? "mb_srl" : "mb_ipaddress") . "{<>}";
 			$uval = $uinfo["mb_srl"] > 0 ? $uinfo["mb_srl"] : $uinfo["ipaddress"];
 			DB::update(_AF_DOCUMENT_TABLE_, ["^wr_hit" => "wr_hit+1"], ["wr_srl" => $srl, $ukey => $uval]);
@@ -72,6 +42,7 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 		set_session($hit_key, true);
 		set_cookie($hit_key, true, 86400 * 31);
 	}
+
 	return $result;
 }
 
@@ -79,49 +50,41 @@ function getDocumentList($id, $count, $page, $search = "", $category = "", $orde
 {
 	$_wheres = ["md_id" => $id, "(_AND_)" => empty($category) ? [] : ["wr_category" => $category], "(_OR_)" => []];
 
-	if (!empty($search))
-	{
+	if (!empty($search)) {
 		$keys = [
 			":" => "wr_title", //:title
 			"@" => "mb_nick", //@nick
 			"#" => "wr_tags", //#tag
 			"d" => "wr_regdate", //d202010
 		];
-
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
 		$search = explode(" ", trim($search));
 
-		if (!empty($search))
-		{
+		if (!empty($search)) {
 			$index = 0;
-			foreach ($search as $value)
-			{
+			foreach ($search as $value) {
 				$value = explode("&", trim($value));
 				$and_or = count($value) > 1 ? "(_AND_)" : "(_OR_)";
-				foreach ($value as $v)
-				{
-					if ($key == "wr_regdate")
-					{
+				foreach ($value as $v) {
+					if ($key == "wr_regdate") {
 						$v = str_split($v, 4);
 						$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
+					} else {
+						$v = "%" . $v;
 					}
-					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = "%" . $v . "%";
+					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = DB::escape($v . "%");
 				}
 			}
 		}
 	}
 
-	if (empty($callback))
-	{
-		$callback = function ($r)
-		{
+	if (empty($callback)) {
+		$callback = function ($r) {
 			$rset = [];
-			while ($row = DB::fetch($r))
-			{
+			while ($row = DB::fetch($r)) {
 				// 확장 변수가 있으면 unserialize
-				if (!empty($row["wr_extra"]) && !is_array($row["wr_extra"]))
-				{
+				if (!empty($row["wr_extra"]) && !is_array($row["wr_extra"])) {
 					$row["wr_extra"] = unserialize($row["wr_extra"]);
 				}
 				$rset[] = $row;
@@ -160,14 +123,12 @@ function getHashtags($content)
 	$content = htmlspecialchars_decode(strip_tags($content) , ENT_QUOTES);
 	$tags = [];
 	$pattern = "/\s#([\w]{3,})/u";
-
 	preg_replace_callback($pattern, function ($matches) use (&$tags)
 		{
 			$tags[md5(strtoupper($matches[1])) ] = $matches[1];
 			return "";
 		}
 	, $content);
-
 	return implode(",", $tags);
 }
 

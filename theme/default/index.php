@@ -45,7 +45,7 @@ $menus = getSiteMenu();
 		<form class="<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
         <input type="hidden" name="module" value="searchex">
 		<div class="input-group input-group-sm float-end">
-		<label class="input-group-text" for="searchExForm"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('','id',(empty($_POST['return'])||$_POST['module']!='searchex'?$_POST['id']:$_POST['return'])).'\')"'?>>
+		<label class="input-group-text"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('','id',(empty($_POST['return'])||$_POST['module']!='searchex'?$_POST['id']:$_POST['return'])).'\')"'?>>
         	<svg class="bi"><use href="./theme/default/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg>
         </label>
 		<?php if(!empty($_POST['module'])&&$_POST['module']=='board') { ?>

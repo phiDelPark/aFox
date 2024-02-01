@@ -2,10 +2,38 @@
 	if(!defined('__AFOX__')) exit();
 
 	$_POST['page'] = empty($_POST['page'])?1:$_POST['page'];
-	$search = empty($_POST['search'])?null:'%'.$_POST['search'].'%';
-	$vs_list = DB::gets(_AF_VISITOR_TABLE_, 'SQL_CALC_FOUND_ROWS *', [
-		'(_OR_)' =>empty($search)?[]:['vs_agent{LIKE}'=>$search, 'vs_referer{LIKE}'=>$search]
-	],'vs_regdate', (($_POST['page']-1)*20).',20');
+	$search = empty($_POST['search']) ? '' : trim($_POST['search']);
+	$_wheres = [
+		"(_AND_)" => [], "(_OR_)" => []
+	];
+
+	if (!empty($search)) {
+		$keys = [
+			":" => "vs_referer", //:referer
+			"@" => "mb_ipaddress", //@ip
+			"d" => "vs_regdate", //d202010
+		];
+		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
+		empty($key) ? ($key = "vs_agent") : ($search = substr($search, 1));
+		if ($search = explode(" ", $search)) {
+			$index = 0;
+			foreach ($search as $value) {
+				$value = explode("&", trim($value));
+				$and_or = count($value) > 1 ? "(_AND_)" : "(_OR_)";
+				foreach ($value as $v) {
+					if ($key == "vs_regdate") {
+						$v = str_split($v, 4);
+						$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
+					} else {
+						$v = "%" . $v;
+					}
+					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = DB::escape($v . "%");
+				}
+			}
+		}
+	}
+
+	$vs_list = DB::gets(_AF_VISITOR_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres,'vs_regdate', (($_POST['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 	$vs_list = setDataListInfo($vs_list, $_POST['page'], 20, DB::foundRows());
 ?>
@@ -13,7 +41,7 @@
 <table class="table">
 <thead>
 	<tr>
-		<th scope="col">#<?php echo getLang('ip')?></th>
+		<th scope="col">@<?php echo getLang('ip')?></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('agent')?></th>
 		<th scope="col" class="text-end"><?php echo getLang('date')?></th>
 	</tr>
@@ -47,10 +75,9 @@
 	<form action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#search"/></svg></label>
+			<label class="input-group-text bg-transparent" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
 			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
-			<?php if(!empty($_POST['search'])) {?><button class="btn btn-default btn-outline-control" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 		</div>
 	</form>
 	<nav aria-label="Page navigation of the list">

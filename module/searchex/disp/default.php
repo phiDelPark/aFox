@@ -11,7 +11,8 @@ function proc($data)
 	$_wheres = ["md_id{IN}" => implode(",", $mids) , "(_AND_)" => [], "(_OR_)" => []];
 
 	if (!empty($search)) {
-		$keys = [":" => "wr_title", //:title
+		$keys = [
+			":" => "wr_title", //:title
 			"@" => "mb_nick", //@nick
 			"#" => "wr_tags", //#tag
 			"d" => "wr_regdate", //d202010
@@ -35,7 +36,7 @@ function proc($data)
 					} else {
 						$v = "%" . $v;
 					}
-					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = $v . "%";
+					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = DB::escape($v . "%");
 				}
 			}
 		}

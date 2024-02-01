@@ -1,43 +1,51 @@
-<?php
-	if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
 
-	$search = '';
 	$_POST['trash'] = empty($_POST['trash']) ? null : $_POST['trash'];
+
+	$dd = _AF_DOCUMENT_TABLE_;
+	$cd = _AF_DOCUMENT_TABLE_;
+	$search = empty($_POST['search']) ? '' : trim($_POST['search']);
+	$keys = [ ":" => "wr_title", "@" => "mb_nick", "#" => "wr_tags", "d" => "wr_regdate" ];
 
 	if($_POST['trash'] == 'comment') {
 		$cd = _AF_COMMENT_TABLE_;
-		$dd = _AF_DOCUMENT_TABLE_;
-		if(!empty($_POST['search'])) {
-			$schkeys = ['content'=>'rp_content','nick'=>'mb_nick','date'=>'rp_regdate'];
-			$search = $cd.'.rp_content LIKE \''.DB::escape('%'.$_POST['search'].'%').'\'';
-		}
+		$keys = [ "@" => "mb_nick", "d" => "rp_regdate" ];
 	} else if($_POST['trash'] == 'file') {
 		$cd = _AF_FILE_TABLE_;
-		$dd = _AF_DOCUMENT_TABLE_;
-		if(!empty($_POST['search'])) {
-			$schkeys = ['name'=>'mf_name','desc'=>'mf_description','type'=>'mf_type','date'=>'mf_regdate'];
-			$search = '('.$cd.'.mf_name LIKE \''.DB::escape('%'.$_POST['search'].'%').'\' OR '.$cd.'.mf_description LIKE \''.DB::escape('%'.$_POST['search'].'%').'\')';
-		}
-	} else {
-		$cd = _AF_DOCUMENT_TABLE_;
-		$dd = _AF_DOCUMENT_TABLE_;
-		if(!empty($_POST['search'])) {
-			$schkeys = ['title'=>'wr_title','content'=>'wr_content','nick'=>'mb_nick','tags'=>'wr_tags','date'=>'wr_regdate'];
-			$search = '(wr_title LIKE \''.DB::escape('%'.$_POST['search'].'%').'\' OR wr_content LIKE \''.DB::escape('%'.$_POST['search'].'%').'\')';
-		}
+		$keys = [ ":" => "mf_name", "@" => "mb_nick", "d" => "mf_regdate" ];
 	}
 
-	if(!empty($_POST['search'])) {
-		$tmp = $_POST['search'];
-		$ss = explode(':', $tmp);
-		if(count($ss)>1 && !empty($schkeys[$ss[0]])) {
-			$tmp = trim(implode(':', array_slice($ss,1)));
-			if(!empty($tmp)) $search = $cd.'.'.$schkeys[$ss[0]].' LIKE \''.DB::escape(($ss[0]==='date'?'':'%').$tmp.'%').'\'';
+	if(!empty($search)) {
+		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
+		if($_POST['trash'] == 'comment') {
+			empty($key) ? ($key = "rp_content") : ($search = substr($search, 1));
+		} else if($_POST['trash'] == 'file') {
+			empty($key) ? ($key = "mf_type") : ($search = substr($search, 1));
+		} else {
+			empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
+		}
+		if ($search = explode(" ", $search)) {
+			$index = 0;
+			$tmp = '';
+			foreach ($search as $value) {
+				$value = explode("&", trim($value));
+				$and_or = count($value) > 1 ? ' AND ' : ' OR  ';
+				foreach ($value as $v) {
+					if (substr($key, 2) == "_regdate") {
+						$v = str_split($v, 4);
+						$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
+						$tmp .= $and_or.$cd.'.'.$key.' LIKE \''.DB::escape($v.'%').'\'';
+					} else {
+						$tmp .= $and_or.$cd.'.'.$key.' LIKE \''.DB::escape('%'.$v.'%').'\'';
+					}
+				}
+			}
+			$search = '('.substr($tmp, 5).')';
 		}
 	}
 
 	$category = $dd.'.md_id = \'_AFOXtRASH_\''.(empty($_POST['category'])?'':' AND wr_updater = \''.DB::escape($_POST['category']).'\'');
-	$where = empty($search)&&empty($category) ? '1' : '('.$category.(empty($search)||empty($category) ? '' : ' AND ').$search.')';
+	$where = $search||$category ? '('.$category.($search&&$category ? ' AND ' : '').$search.')' : '1';
 	$page = (int)isset($_POST['page']) ? (($_POST['page'] < 1) ? 1 : $_POST['page']) : 1;
 	$count = 20;
 	$start = (($page - 1) * $count);
@@ -55,22 +63,22 @@
 	$trash_list = setDataListInfo($trash_list, $page, $count, DB::foundRows());
 ?>
 
-<form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_empty',['trash_bin'])?>')">
+<form style="display:none" method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_empty',['trash_bin'])?>')">
 	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="admin" />
 	<input type="hidden" name="act" value="emptyTrashBin" />
-	<button type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('empty_trash_bin')?></button>
+	<button disabled="disabled" type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('empty_trash_bin')?></button>
 </form>
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link<?php echo ($_POST['trash']!='comment'&&$_POST['trash']!='file')?' active" aria-current="page':''?>" href="<?php echo getUrl('trash','document')?>"><?php echo getLang('document')?></a>
+    <a class="nav-link<?php echo ($_POST['trash']!='comment'&&$_POST['trash']!='file')?' active" aria-current="page':''?>" href="<?php echo getUrl('', 'admin', 'trash', 'trash','document')?>"><?php echo getLang('document')?></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link<?php echo ($_POST['trash']=='comment')?' active" aria-current="page':''?>" href="<?php echo getUrl('trash','comment')?>"><?php echo getLang('comment')?></a>
+    <a class="nav-link<?php echo ($_POST['trash']=='comment')?' active" aria-current="page':''?>" href="<?php echo getUrl('', 'admin', 'trash', 'trash','comment')?>"><?php echo getLang('comment')?></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link<?php echo ($_POST['trash']=='file')?' active" aria-current="page"':''?>" href="<?php echo getUrl('trash','file')?>"><?php echo getLang('file')?></a>
+    <a class="nav-link<?php echo ($_POST['trash']=='file')?' active" aria-current="page"':''?>" href="<?php echo getUrl('', 'admin', 'trash', 'trash','file')?>"><?php echo getLang('file')?></a>
   </li>
 </ul>
 
@@ -80,8 +88,10 @@
 	<tr>
 		<th scope="col">#</th>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
-		<th scope="col"><?php echo ($_POST['trash'] == 'file'?'-':getLang('author'))?></th>
-		<th scope="col"><?php echo ($_POST['trash'] == 'file'?'&raquo;':getLang('status'))?></th>
+		<th scope="col"><?php echo ($_POST['trash'] == 'file'?getLang('type'):getLang('author'))?></th>
+		<?php if ($_POST['trash'] != 'file') {?>
+		<th scope="col"><?php echo getLang('status')?></th>
+		<?php }?>
 		<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('date')?></th>
 		<th scope="col"><?php echo getLang('removed_date')?></th>
 	</tr>
@@ -110,11 +120,11 @@
 			} else {
 				$tmp = 'srl='.$value['wr_srl'];
 			}
-			echo '<tr><th scope="row"><a href="'.getUrl('category',$value['wr_updater']).'">'.$value['wr_updater'].'</a></th>';
-			echo '<td class="text-wrap"><a href="#./?'.$tmp.'" onclick="return (alert(\'trash\')||false)">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' (<small>'.$value['wr_reply'].'</small>)').'</a></td>';
-			echo '<td>'.($_POST['trash'] == 'file'?'-':$value['mb_nick']).'</td>';
-			echo '<td>'.($_POST['trash'] != 'file'&&$value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
-			echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td>';
+			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['wr_updater']).'">'.$value['wr_updater'].'</a></td>';
+			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' <small>('.$value['wr_reply'].')</small>').'</td>';
+			echo '<td>'.($_POST['trash'] == 'file'?'<small>'.$value['mf_type'].'</small>':$value['mb_nick']).'</td>';
+			if($_POST['trash'] != 'file') echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
+			echo '<td class="d-none d-md-table-cell"><small>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</small></td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_update'])).'</td></tr>';
 		}
 	}
@@ -126,11 +136,11 @@
 <div class="d-flex w-100 justify-content-between mt-4">
 	<form action="<?php echo getUrl('') ?>" method="get">
 		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
+		<input type="hidden" name="trash" value="<?php echo $_POST['trash'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#search"/></svg></label>
+			<label class="input-group-text bg-transparent" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
 			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
-			<?php if(!empty($_POST['search'])) {?><button class="btn btn-default btn-outline-control" type="button" onclick="location.replace('<?php echo getUrl('search','') ?>')"><?php echo getLang('cancel') ?></button><?php }?>
 		</div>
 	</form>
 	<nav aria-label="Page navigation of the list">

@@ -27,7 +27,7 @@ function setDataListInfo($data, $page, $count, $total) {
 	$r['total_count'] = $total;
 	$r['total_page'] = $r['end_page'] = ceil($r['total_count'] / $count);
 	$r['start_page'] = ($page - 1 - (($page - 1) % 10)) + 1;
-	if ($r['end_page'] > ($r['start_page'] + 10)) $r['end_page'] = $r['start_page'] + 10;
+	if ($r['end_page'] > ($r['start_page'] + 9)) $r['end_page'] = $r['start_page'] + 9;
 	$r['current_page'] = $page;
 	return $r;
 }
