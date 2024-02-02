@@ -67,6 +67,6 @@
 	})
 
 	window.addEventListener('load', () => {
-		document.querySelector('#afoxPageLoading')?.fadeOut($e => $e.remove())
+		document.querySelector('#loading_page')?.fadeOut($e => $e.remove())
 	})
 })()

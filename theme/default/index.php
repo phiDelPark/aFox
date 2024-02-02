@@ -3,7 +3,7 @@ $menus = getSiteMenu();
 ?>
 <ul class="bd-circles"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
 <?php if(!empty($_THEME['use_loader'])) { ?>
-<div id="afoxPageLoading" aria-label="Loading..."><noscript><style>#afoxPageLoading{display:none}</style></noscript></div>
+<div id="loading_page" aria-label="Loading..."><noscript><style>#loading_page{display:none}</style></noscript></div>
 <?php } ?>
 <div class="mode-toggle" onclick="this.classList.toggle('open')">
   <div class="button" data-bs-theme-value="light"></div>

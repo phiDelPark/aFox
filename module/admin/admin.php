@@ -180,7 +180,7 @@ $is_admin = isAdmin();
 <?php if($_POST['disp'] != 'default') { ?>
 
 	<div class="mx-2 mb-4">
-		<h3 class="fst-italic"><?php echo getLang('menu_name_'.$admin)?></h3>
+		<h3><?php echo getLang('menu_name_'.$admin)?></h3>
 		<hr class="navbar-divider" />
 		<small class="d-inline-flex w-100 px-2 py-1 fw-semibold text-secondary-emphasis bg-secondary-subtle border border-secondary-subtle rounded-1"><?php echo getLang('menu_desc_'.$admin)?></small>
 	</div>

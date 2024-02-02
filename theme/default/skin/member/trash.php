@@ -29,9 +29,9 @@
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
 		<?php } else { ?>
 		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchForm"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label></th>
-		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
-		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('date')?></th>
+		<th scope="col" class="text-wrap">:<?php echo getLang('title')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('delete')?></th>
+		<th scope="col" class="text-nowrap" style="width:1px">?<?php echo getLang('date')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><input type="checkbox" onchange="_allCheckInboxItems(this)"></th>
 		<?php } ?>
 	</tr>
@@ -54,8 +54,8 @@
 		} else {
 			echo '<th scope="row">'.$value['wr_srl'].'</th>';
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.($value['wr_secret']?'<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>':'').escapeHTML(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
-			echo '<td>'.date('y/m/d', strtotime($value['wr_regdate'])).'</td>';
-			echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td><td><input type="checkbox" name="wr_srl[]" value="'.$value['wr_srl'].'"></td>';
+			echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td>';
+			echo '<td>'.date('y/m/d', strtotime($value['wr_regdate'])).'</td><td><input type="checkbox" name="wr_srl[]" value="'.$value['wr_srl'].'"></td>';
 		}
 		echo '</tr>';
 	}
