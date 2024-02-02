@@ -173,7 +173,7 @@ function SiteMap(id) {
 		})
 
 		offset = getPidOffset(target, container)
-		position = {x: e.pageX, y: rect.top}
+		position = {x: e.pageX, y: e.pageY}
 
 		clone.style.cssText = `
 			display: none;

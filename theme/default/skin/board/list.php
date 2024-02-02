@@ -6,7 +6,7 @@ $current_page = $LIST['current_page'];
 $total_page = $LIST['total_page'];
 ?>
 
-<section id="documentList">
+<section id="documentList" class="<?php echo $use_style?>">
 	<h2 class="pb-3 mb-2 border-bottom"><?php echo $_CFG['md_title']?></h2>
 <?php if(empty($_POST['srl']) && !empty($_CFG['md_category'])){ ?>
 

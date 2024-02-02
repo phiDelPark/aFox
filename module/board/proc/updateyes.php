@@ -9,7 +9,7 @@ function proc($data) {
 	global $_MEMBER;
 	if(empty($_MEMBER) || empty($_MEMBER['mb_srl'])) return set_error(getLang('error_permitted'),4501);
 
-	$doc = DB::get(_AF_DOCUMENT_TABLE_, 'md_id, mb_srl, wr_srl, wr_hate', ['wr_srl'=>$wr_srl]);
+	$doc = DB::get(_AF_DOCUMENT_TABLE_, 'md_id, mb_srl, wr_srl, wr_yes', ['wr_srl'=>$wr_srl]);
 	if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
 	if(empty($doc['wr_srl'])) return set_error(getLang('error_request'),4303);
 
@@ -17,32 +17,32 @@ function proc($data) {
 
 	if($_MEMBER['mb_srl'] == $d_mb_srl) return set_error(getLang('warning_not_allowable', ['author']),3505);
 
-	$_out = getHistoryAction('wr_good::'.$wr_srl);
-	if(!empty($_out)) return set_error(getLang('warning_actioned', ['good']), 3303);
+	$_out = getHistoryAction('wr_no::'.$wr_srl);
+	if(!empty($_out)) return set_error(getLang('warning_actioned', ['no']), 3303);
 
 	DB::transaction();
 
 	try {
 
-		$_out = setHistoryAction('wr_hate::'.$wr_srl, 1, false, function($v)use($wr_srl,$d_mb_srl){
+		$_out = setHistoryAction('wr_yes::'.$wr_srl, 1, false, function($v)use($wr_srl,$d_mb_srl){
 			// 처음에만 포인트 사용
 			if(!empty($v['data'])) {
-				return set_error(getLang('warning_actioned', ['hate']), 3303);
+				return set_error(getLang('warning_actioned', ['yes']), 3303);
 			}
 
 			DB::update(_AF_DOCUMENT_TABLE_,
 				[
-					'^wr_hate'=>'wr_hate+1'
+					'^wr_yes'=>'wr_yes+1'
 				], [
 					'wr_srl'=>$wr_srl
 				]
 			);
 
-			if(!empty($d_mb_srl)) setPoint(-1, $d_mb_srl);
+			if(!empty($d_mb_srl)) setPoint(2, $d_mb_srl);
 		});
 		if(!empty($_out['error'])) throw new Exception($_out['message'], $_out['error']);
 
-		$wr_hate = $doc['wr_hate'] + 1;
+		$wr_yes = $doc['wr_yes'] + 1;
 
 	} catch (Exception $ex) {
 		DB::rollback();
@@ -51,8 +51,8 @@ function proc($data) {
 
 	DB::commit();
 
-	return ['error'=>0, 'message'=>getLang('success_finished'), 'wr_srl'=>$wr_srl, 'mb_srl'=>$_MEMBER['mb_srl'], 'wr_hate'=>$wr_hate];
+	return ['error'=>0, 'message'=>getLang('success_finished'), 'wr_srl'=>$wr_srl, 'mb_srl'=>$_MEMBER['mb_srl'], 'wr_yes'=>$wr_yes];
 }
 
-/* End of file updatehate.php */
-/* Location: ./module/board/proc/updatehate.php */
+/* End of file updateyes.php */
+/* Location: ./module/board/proc/updateyes.php */

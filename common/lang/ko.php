@@ -124,8 +124,6 @@ $_LANG['cancel']			= '취소';
 $_LANG['use']				= '사용';
 $_LANG['using']				= '사용중';
 $_LANG['notuse']			= '미사용';
-$_LANG['good']				= '좋아';
-$_LANG['hate']				= '싫어';
 $_LANG['agree']				= '동의';
 $_LANG['disagree']			= '동의안함';
 
