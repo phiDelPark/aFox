@@ -49,8 +49,8 @@
 	</div>
 
 	<div class="input-group mb-4">
-		<label class="input-group-text w-100p" for="mdDescription"><?php echo getLang('explain')?></label>
-		<input type="text" name="md_description" class="form-control" id="mdDescription" maxlength="255" value="<?php echo $PAGE['md_description'] ?>">
+		<label class="input-group-text w-100p" for="mdAbout"><?php echo getLang('info')?></label>
+		<input type="text" name="md_about" class="form-control" id="mdAbout" maxlength="255" value="<?php echo $PAGE['md_about'] ?>">
 	</div>
 
 	<div class="mb-2">

@@ -19,8 +19,7 @@ function proc($data) {
 
 		DB::update(_AF_FILE_TABLE_,
 			[
-				'mf_name'=>$name . $ext,
-				'mf_description'=>$data['mf_description']
+				'mf_name'=>$name . $ext
 			], [
 				'mf_srl'=>$data['mf_srl']
 			]

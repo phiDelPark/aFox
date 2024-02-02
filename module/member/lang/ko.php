@@ -3,6 +3,9 @@ if(!defined('__AFOX__')) exit();
 // 에러가 발생할 가능성이 있으니 언어에 ' (홑따옴표)는 쓰지마세요.
 // 필요하면 ` (악센트) 이걸 사용하세요.
 
+$_LANG['restore']			= '복구';
+$_LANG['unread']			= '읽지않음';
+
 $_LANG['member_find'] = '회원조회';
 $_LANG['member_signup'] = '회원가입';
 $_LANG['mail_address'] = '메일주소';
@@ -34,17 +37,17 @@ $_LANG['msg_wrong_password'] = '가입된 회원아이디가 아니거나 비밀
 $_LANG['msg_login_overtry'] = '로그인 시도를 3회 실패하였습니다.'."\n".'이제 보안코드를 출력하니 같이 적어주십시요.';
 
 $_LANG['md_title_inbox'] = '편지함';
-$_LANG['md_description_inbox'] = '';
+$_LANG['md_about_inbox'] = '';
 $_LANG['md_title_trash'] = '휴지통';
-$_LANG['md_description_trash'] = '';
+$_LANG['md_about_trash'] = '';
 $_LANG['md_title_signup'] = getLang(empty($_MEMBER)?'member_signup':'member');
-$_LANG['md_description_signup'] = '회원 정보를 입력해주세요.';
+$_LANG['md_about_signup'] = '회원 정보를 입력해주세요.';
 $_LANG['md_title_signin'] = '로그인';
-$_LANG['md_description_signin'] = '아이디와 비번을 입력해주세요.';
+$_LANG['md_about_signin'] = '아이디와 비번을 입력해주세요.';
 
 // 모듈 설정이 없으므로 직접 기본정보 입력
 $_CFG['md_title'] = empty($_POST['disp'])?'':getLang('md_title_'.strtolower($_POST['disp']));
-$_CFG['md_description'] = empty($_POST['disp'])?'':getLang('md_description_'.strtolower($_POST['disp']));
+$_CFG['md_about'] = empty($_POST['disp'])?'':getLang('md_about_'.strtolower($_POST['disp']));
 
 /* End of file ko.php */
 /* Location: ./module/member/lang/ko.php */

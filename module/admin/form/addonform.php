@@ -19,7 +19,7 @@ $_ADDON_INFO['author'] = empty($_ADDON_INFO['link'])?escapeHTML($_ADDON_INFO['au
 	<label class="col-md-2"><?php echo getLang('author') ?></label>
 	<span class="col-md-auto"><?php echo $_ADDON_INFO['author'] . ' ('.escapeHTML($_ADDON_INFO['email']) . ')' ?></span>
 </div>
-<p class="form-text"><?php echo nl2br(escapeHTML($_ADDON_INFO['description'])) ?></p>
+<p class="form-text"><?php echo nl2br(escapeHTML($_ADDON_INFO['about'])) ?></p>
 </div>
 
 <?php

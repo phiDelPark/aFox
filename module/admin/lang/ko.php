@@ -3,6 +3,13 @@ if(!defined('__AFOX__')) exit();
 // 에러가 발생할 가능성이 있으니 언어에 ' (홑따옴표)는 쓰지마세요.
 // 필요하면 ` (악센트) 이걸 사용하세요.
 
+$_LANG['afox']				= '에이폭스';
+$_LANG['version']			= '버전';
+$_LANG['menu']				= '메뉴';
+$_LANG['grant']				= '승인';
+$_LANG['insert']			= '추가';
+$_LANG['thumbnail']			= '썸네일';
+
 $_LANG['menu_name_addon'] = '애드온';
 $_LANG['menu_name_board'] = $_LANG['board'];
 $_LANG['menu_name_comment'] = $_LANG['comment'];

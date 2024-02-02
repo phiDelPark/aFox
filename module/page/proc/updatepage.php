@@ -70,7 +70,7 @@ function proc($data) {
 			// 수정시 페이지 정보 넘어왔는지 체크 (관리자 모드에서 수정 안하면 일부 항목이 없음)
 			if(!isset($data['md_title'])) $data['md_title'] = $module['md_title'];
 			else $data['md_title'] = trim(strip_tags($data['md_title']));
-			if(!isset($data['md_description'])) $data['md_description'] = $module['md_description'];
+			if(!isset($data['md_about'])) $data['md_about'] = $module['md_about'];
 			if(!isset($data['grant_view'])) $data['grant_view'] = $module['grant_view'];
 			if(!isset($data['grant_reply'])) $data['grant_reply'] = $module['grant_reply'];
 			if(!isset($data['grant_download'])) $data['grant_download'] = $module['grant_download'];
@@ -198,7 +198,7 @@ function proc($data) {
 			[
 				'md_key'=>'page',
 				'md_title'=>$data['md_title'],
-				'md_description'=>$data['md_description'],
+				'md_about'=>$data['md_about'],
 				'md_manager'=>0,
 				'md_file_max'=>9999,
 				'md_file_size'=>0,

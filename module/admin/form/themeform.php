@@ -22,7 +22,7 @@ if(!$ex = DB::error()) $_THEME = empty($_THEME['th_extra'])?[]:unserialize($_THE
 	<label class="col-md-2"><?php echo getLang('author') ?></label>
 	<span class="col-md-auto"><?php echo $_THEME_INFO['author'] . ' ('.escapeHTML($_THEME_INFO['email']) . ')' ?></span>
 </div>
-<p class="form-text"><?php echo nl2br(escapeHTML($_THEME_INFO['description'])) ?></p>
+<p class="form-text"><?php echo nl2br(escapeHTML($_THEME_INFO['about'])) ?></p>
 </div>
 
 <form method="post" autocomplete="off">

@@ -143,7 +143,7 @@ $menus = getSiteMenu();
 					<svg class="bd-placeholder-img" width="100%" height="41" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="gray"></rect></svg>
 					<div class="col-lg-8">
 						<h6 class="mb-0"><?php echo escapeHTML($val['mu_title'])?></h6>
-						<small class="text-body-secondary"><?php echo escapeHTML($val['mu_description'])?></small>
+						<small class="text-body-secondary"><?php echo escapeHTML($val['mu_about'])?></small>
 					</div>
 				</a></li>
 	<?php } ?>
@@ -160,7 +160,7 @@ $menus = getSiteMenu();
 <?php
 	if(empty($menus['error'])){
 		foreach ($menus['footer'] as $val) {
-			echo '<li class="d-inline mx-2"><a href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').' title="'.escapeHTML($val['mu_description']).'">'. escapeHTML($val['mu_title']) .'</a></li>';
+			echo '<li class="d-inline mx-2"><a href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').' title="'.escapeHTML($val['mu_about']).'">'. escapeHTML($val['mu_title']) .'</a></li>';
 		}
 	}
 ?>

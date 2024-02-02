@@ -19,7 +19,7 @@ $_WIDGET_INFO['author'] = empty($_WIDGET_INFO['link'])?escapeHTML($_WIDGET_INFO[
 	<label class="col-md-2"><?php echo getLang('author') ?></label>
 	<span class="col-md-auto"><?php echo $_WIDGET_INFO['author'] . ' ('.escapeHTML($_WIDGET_INFO['email']) . ')' ?></span>
 </div>
-<p class="form-text"><?php echo nl2br(escapeHTML($_WIDGET_INFO['description'])) ?></p>
+<p class="form-text"><?php echo nl2br(escapeHTML($_WIDGET_INFO['about'])) ?></p>
 </div>
 
 <hr>

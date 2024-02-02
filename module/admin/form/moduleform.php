@@ -19,7 +19,7 @@ $_MODULE_INFO['author'] = empty($_MODULE_INFO['link'])?escapeHTML($_MODULE_INFO[
 	<label class="col-md-2"><?php echo getLang('author') ?></label>
 	<span class="col-md-auto"><?php echo $_MODULE_INFO['author'] . ' ('.escapeHTML($_MODULE_INFO['email']) . ')' ?></span>
 </div>
-<p class="form-text"><?php echo nl2br(escapeHTML($_MODULE_INFO['description'])) ?></p>
+<p class="form-text"><?php echo nl2br(escapeHTML($_MODULE_INFO['about'])) ?></p>
 </div>
 
 <?php

@@ -7,7 +7,7 @@ if(is_null($_THEME)) {
 	set_cache('_AF_THEME_'._AF_THEME_,$_THEME);
 }
 if(empty($_CFG['md_title'])) $_CFG['md_title'] = '';
-if(empty($_CFG['md_description'])) $_CFG['md_description'] = '';
+if(empty($_CFG['md_about'])) $_CFG['md_about'] = '';
 addJSLang(['calling_server','yes','no', 'ok','cancel','error']);
 ?>
 <?php if(!__MODAL__) { ?>
@@ -24,7 +24,7 @@ addJSLang(['calling_server','yes','no', 'ok','cancel','error']);
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <?php }
 if($_CFG['md_title']) { echo '<meta name="title" content="'.escapeHTML($_CFG['md_title']).'">'."\n"; }
-if($_CFG['md_description']) { echo '<meta name="description" content="'.escapeHTML($_CFG['md_description']).'">'."\n"; }
+if($_CFG['md_about']) { echo '<meta name="about" content="'.escapeHTML($_CFG['md_about']).'">'."\n"; }
 ?>
 <title><?php echo escapeHTML($_CFG['title'].($_CFG['md_title'] ? ' - '.$_CFG['md_title'] : '')) ?></title>
 <?php

@@ -3,21 +3,6 @@ if(!defined('__AFOX__')) exit();
 // 에러가 발생할 가능성이 있으니 언어에 ' (홑따옴표)는 쓰지마세요.
 // 필요하면 ` (악센트) 이걸 사용하세요.
 
-$_LANG['afox']				= '에이폭스';
-$_LANG['version']			= '버전';
-$_LANG['style']				= '스타일';
-$_LANG['system']			= '시스템';
-$_LANG['logo']				= '로고';
-$_LANG['setup']				= '설정';
-
-$_LANG['theme']				= '테마';
-$_LANG['board']				= '게시판';
-$_LANG['page']				= '페이지';
-$_LANG['module']			= '모듈';
-$_LANG['addon']				= '애드온';
-$_LANG['widget']			= '위젯';
-$_LANG['trash_bin']			= '휴지통';
-
 $_LANG['id']				= '아이디';
 $_LANG['password']			= '비밀번호';
 $_LANG['member']			= '회원';
@@ -41,53 +26,48 @@ $_LANG['target']			= '대상';
 $_LANG['count']				= '개수';
 $_LANG['none']				= '없음';
 
-$_LANG['status']			= '상태';
 $_LANG['default']			= '기본';
-$_LANG['secret']			= '비밀';
+$_LANG['status']			= '상태';
 $_LANG['select']			= '선택';
+$_LANG['secret']			= '비밀';
+$_LANG['question']			= '질문';
 
-$_LANG['new']				= '새로운';
+$_LANG['notice']			= '공지';
+$_LANG['document']			= '문서';
+$_LANG['comment']			= '댓글';
+$_LANG['reply']				= '답변';
+
 $_LANG['category']			= '분류';
-$_LANG['menu']				= '메뉴';
 $_LANG['type']				= '타입';
-$_LANG['list']				= '목록';
 $_LANG['number']			= '번호';
 $_LANG['title']				= '제목';
 $_LANG['content']			= '내용';
 $_LANG['memo']				= '메모';
 $_LANG['info']				= '정보';
 $_LANG['help']				= '도움';
-$_LANG['question']			= '질문';
-$_LANG['link']				= '링크';
-$_LANG['file']				= '파일';
-
-$_LANG['register']			= '등록';
-$_LANG['regdate']			= '등록일';
-$_LANG['search']			= '검색';
-$_LANG['search_word']		= '검색어';
 
 $_LANG['next']				= '다음';
 $_LANG['previous']			= '이전';
 
-$_LANG['grant']				= '승인';
-$_LANG['read']				= '읽기';
+$_LANG['search']			= '검색';
+$_LANG['list']				= '목록';
 $_LANG['view']				= '열람';
-$_LANG['inquiry']			= '조회';
-$_LANG['publish']			= '발행';
 $_LANG['write']				= '글쓰기';
 $_LANG['send']				= '보내기';
-$_LANG['declare']			= '신고';
 
-$_LANG['open']				= '열기';
-$_LANG['restore']			= '복구';
-$_LANG['insert']			= '추가';
 $_LANG['save']				= '저장';
-$_LANG['modify']			= '수정';
 $_LANG['edit']				= '편집';
 $_LANG['find']				= '찾기';
-$_LANG['apply']				= '적용';
-$_LANG['completion']		= '완료';
 $_LANG['close']				= '닫기';
+
+$_LANG['copy']				= '복사';
+$_LANG['move']				= '이동';
+$_LANG['delete']			= '삭제';
+
+$_LANG['link']				= '링크';
+$_LANG['file']				= '파일';
+$_LANG['upload']			= '업로드';
+$_LANG['download']			= '다운로드';
 
 $_LANG['alert']				= '알림';
 $_LANG['danger']			= '위험';
@@ -95,26 +75,15 @@ $_LANG['error']				= '에러';
 $_LANG['success']			= '성공';
 $_LANG['warning']			= '경고';
 
-$_LANG['notice']			= '공지';
-$_LANG['document']			= '문서';
-$_LANG['comment']			= '댓글';
-$_LANG['reply']				= '답변';
-$_LANG['explain']			= '설명';
-$_LANG['message']			= '메세지';
-
 $_LANG['collapse']			= '접기';
-$_LANG['detail']			= '자세히';
 $_LANG['expand']			= '펼치기';
-$_LANG['refresh']			= '새로고침';
-$_LANG['unread']			= '읽지않음';
+$_LANG['detail']			= '자세히';
 
 $_LANG['size']				= '크기';
 $_LANG['min']				= '최소';
 $_LANG['max']				= '최대';
 $_LANG['height']			= '세로';
 $_LANG['width']				= '가로';
-$_LANG['thumbnail']			= '썸네일';
-$_LANG['preview']			= '미리보기';
 
 $_LANG['yes']				= '예';
 $_LANG['no']				= '아니오';
@@ -126,15 +95,6 @@ $_LANG['using']				= '사용중';
 $_LANG['notuse']			= '미사용';
 $_LANG['agree']				= '동의';
 $_LANG['disagree']			= '동의안함';
-
-$_LANG['copy']				= '복사';
-$_LANG['move']				= '이동';
-$_LANG['delete']			= '삭제';
-
-$_LANG['upload']			= '업로드';
-$_LANG['download']			= '다운로드';
-$_LANG['update']			= '업데이트';
-$_LANG['browse']			= '찾아보기';
 
 $_LANG['time']				= '시간';
 $_LANG['date']				= '날짜';
