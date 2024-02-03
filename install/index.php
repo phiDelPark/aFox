@@ -298,7 +298,7 @@ $create_sql = '
 	   wr_status       CHAR(1)      NOT NULL DEFAULT 0,
 	   wr_secret       CHAR(1)      NOT NULL DEFAULT 0,
 	   wr_type         CHAR(1)      NOT NULL DEFAULT 0,
-	   wr_category     VARCHAR(255) NOT NULL DEFAULT \'\',
+	   wr_category     VARCHAR(20)  NOT NULL DEFAULT \'\',
 	   wr_title        VARCHAR(255) NOT NULL,
 	   wr_content      LONGTEXT,
 	   wr_tags         TEXT,
