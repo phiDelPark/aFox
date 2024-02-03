@@ -19,7 +19,7 @@ function getUrlQuery(){
 }
 
 function setUrlQuery(){
-	$n = func_num_args();
+	//$n = func_num_args();
 	$a = func_get_args();
 	$url = $a[0];
 	$q = $a[1] == '' ? [] : getUrlQuery($url);
@@ -31,7 +31,7 @@ function setUrlQuery(){
 	foreach ($q as $k => $v){if(isset($v) && $v!='') $r.=$k.'='.$v.'&';}
 	$pos = strpos($url, '?');
 	$url = ($pos !== false) ? substr($url, 0, $pos) : $url;
-	return $url . ($n == 0 ? $r : substr('?'.$r, 0, -1));
+	return $url . ($n === 0 ? $r : substr('?'.$r, 0, -1));
 }
 
 function getQuery($val){
@@ -100,7 +100,7 @@ function getUrl(){
 	else $uri = _AF_DOMAIN_ ? getRequestUri(FOLLOW_REQUEST_SSL) : getScriptPath(); // no SSL
 	$n = func_num_args();
 	$a = func_get_args();
-	if($n == 1 && $a[0] == '') return $uri;
+	if($n === 1 && $a[0] == '') return $uri;
 	$url = $uri . (isset($_SERVER["QUERY_STRING"]) ? '?' . $_SERVER["QUERY_STRING"] : '');
 	return $n > 0 ? call_user_func_array('setUrlQuery', array_merge([$url], $a)) : $url;
 }
@@ -473,11 +473,11 @@ function xssClean($html, $chkclosed = true){
 	return $html;
 }
 
-function toHTML($text, $type = 2, $class = 'current_content'){
+function toHTML($text, $type = '2', $class = 'current_content'){
 	static $__parsedown = null;
-	if($type == 0) $text = nl2br(escapeHTML($text));
+	if($type == '0') $text = nl2br(escapeHTML($text));
 	else {
-		if($type == 1){
+		if($type == '1'){
 			if($__parsedown == null){
 				$__parsedown = new Parsedown();
 				$__parsedown->setBreaksEnabled(true)->setMarkupEscaped(false);

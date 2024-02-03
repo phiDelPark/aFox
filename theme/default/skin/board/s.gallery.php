@@ -22,7 +22,7 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		$wr_title .= !$wr_permit ? getLang('error_permitted') : escapeHTML(strip_tags($val['wr_title']));
 		$href = $wr_secret&&!$wr_permit ? '#' : getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','');
 		echo '<div class="w-100 d-flex flex-wrap">';
-		if(count($_image)==0) $_image = ['mf_srl'=>0];
+		if(count($_image)===0) $_image = ['mf_srl'=>0];
 		foreach ($_image as $v){
 		echo '<a class="'.($val['wr_srl']==$srl?' active" aria-current="true':'').'" href="'.$href.'">';
 		echo '<img src="./?file='.$v['mf_srl'].'&thumb=x"><div class="details"><span class="title">'.$wr_title.'</span>';

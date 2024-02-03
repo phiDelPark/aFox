@@ -105,10 +105,10 @@ function proc($data) {
 			// 비밀글 해제 (더이상 하위 댓글이 없으면...)
 			if($_prlen > $_len) $_prlen = 0;
 			// 하위 댓글에 비밀글 설정
-			if($_prlen == 0 && $row['rp_secret'] == '1') $_prlen = $_len + 1;
+			if($_prlen === 0 && $row['rp_secret'] == '1') $_prlen = $_len + 1;
 
 			$row['rp_secret'] = $_prlen > 0;
-			$row['grant_view'] = $is_manager || $rp_permit || $_prlen == 0 || ($wr_permit && $_len == 0);
+			$row['grant_view'] = $is_manager || $rp_permit || $_prlen === 0 || ($wr_permit && $_len === 0);
 			$row['grant_write'] = $row['rp_status']!='4' && ($is_manager || empty($row['mb_srl']) || $login_srl == $row['mb_srl']);
 			//unset($row['mb_password']);
 

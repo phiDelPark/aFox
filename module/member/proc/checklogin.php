@@ -14,7 +14,7 @@ function proc($data) {
 		return set_error(getLang('invalid_value',['id']),2001);
 	}
 
-	$auto_login = isset($data['auto_login']) && $data['auto_login'] == 1;
+	$auto_login = !empty($data['auto_login']);
 
 	global $_CFG;
 

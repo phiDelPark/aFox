@@ -20,7 +20,7 @@ if($called_position == 'before_proc' && ($called_trigger == 'updatecomment' || $
 
 	for ($i=0; $i < $length; $i++) {
 		if(preg_match('/^(\/.*[^\/]\/[a-zA-Z]*),(.*)$/s', trim($regexs[$i]), $m)) {
-			if(count($m) == 3) {
+			if(count($m) === 3) {
 				$_DATA[$key] = preg_replace($m[1], $m[2], $_DATA[$key]);
 			}
 		}

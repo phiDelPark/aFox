@@ -402,7 +402,7 @@ $_err_keys = _AF_HISTORY_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_HISTORY_TABLE_.' (
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
-	   hs_action       VARCHAR(128) NOT NULL,
+	   hs_action       VARCHAR(100) NOT NULL,
 	   hs_value        VARCHAR(128) NOT NULL DEFAULT \'\',
 	   hs_regdate      datetime     NOT NULL,
 

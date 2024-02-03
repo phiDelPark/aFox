@@ -144,7 +144,7 @@ function proc($data) {
 					$_rank = ($_sum_point > 250000) ? 50 : floor(sqrt(floor($_sum_point / 10) / 10));
 					$in_data['mb_rank'] = chr($_rank + 48);
 				} else {
-					$in_data['mb_rank'] = ($data['new_mb_rank'] == 2 ? 's' : 'm');
+					$in_data['mb_rank'] = ($data['new_mb_rank'] == '2' ? 's' : 'm');
 				}
 				// 관리자는 지정 못하게
 				if ($in_data['mb_rank'] == 's') unset($in_data['mb_rank']);

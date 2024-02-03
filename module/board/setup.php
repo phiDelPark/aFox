@@ -17,6 +17,10 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 	// 확장 변수가 있으면 unserialize
 	if(!empty($BOARD['md_extra']) && !is_array($BOARD['md_extra'])) {
 		$BOARD['md_extra'] = unserialize($BOARD['md_extra']);
+		$md_extra_keys = empty($BOARD['md_extra']['keys'])?'':$BOARD['md_extra']['keys'];
+		if($md_extra_keys){
+			//$md_extra_keys
+		}
 	}
 }
 ?>

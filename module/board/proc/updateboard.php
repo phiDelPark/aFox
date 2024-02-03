@@ -33,14 +33,11 @@ function proc($data) {
 		$tmpa = explode(',', $data['md_extra_keys']);
 		$md_extra_keys = [];
 		foreach ($tmpa as $ex_caption) {
-			$ex_caption = trim($ex_caption);
-			if(!empty($ex_caption)) {
-				$is_required = substr($ex_caption,-1,1) === '*';
-				if($is_required) $ex_caption = trim(substr($ex_caption,0,-1));
-				if(!empty($ex_caption)){
-					$ex_caption = cutstr($ex_caption,20,'');
-					$md_extra_keys[md5($ex_caption)] = $ex_caption . ($is_required?'*':'');
-				}
+			$_boxs = explode('|', $ex_caption);
+			if($ex_caption = cutstr(trim($_boxs[0]), 20)){
+				unset($_boxs[0]);
+				$md_extra_keys[md5($ex_caption)] = $ex_caption
+				. (count($_boxs)>0 ? '|'.implode('|', $_boxs) : '');
 			}
 		}
 		if(!empty($md_extra_keys)) {
