@@ -3,25 +3,9 @@ if(!defined('__AFOX__')) exit();
 // 에러가 발생할 가능성이 있으니 언어에 ' (홑따옴표)는 쓰지마세요.
 // 필요하면 ` (악센트) 이걸 사용하세요.
 
-$_LANG['id']				= '아이디';
-$_LANG['password']			= '비밀번호';
-$_LANG['member']			= '회원';
-$_LANG['manager']			= '매니저';
-$_LANG['admin']				= '관리자';
-$_LANG['author']			= '작성자';
-$_LANG['name']				= '이름';
-$_LANG['nickname']			= '별명';
-$_LANG['rank']				= '계급';
-$_LANG['point']				= '포인트';
-$_LANG['email']				= '메일';
-$_LANG['inbox']				= '편지함';
-$_LANG['homepage']			= '홈페이지';
-$_LANG['ip']				= '아이피';
-$_LANG['login']				= '로그인';
-$_LANG['logout']			= '로그아웃';
-
 $_LANG['all']				= '모두';
 $_LANG['target']			= '대상';
+$_LANG['setup']			    = '설정';
 
 $_LANG['count']				= '개수';
 $_LANG['none']				= '없음';
@@ -104,6 +88,24 @@ $_LANG['day']				= '일';
 $_LANG['today']				= '오늘';
 $_LANG['tomorrow']			= '내일';
 $_LANG['yesterday']			= '어제';
+
+$_LANG['admin']				= '관리자';
+$_LANG['manager']			= '매니저';
+$_LANG['member']			= '회원';
+$_LANG['id']				= '아이디';
+$_LANG['password']			= '비밀번호';
+
+$_LANG['name']				= '이름';
+$_LANG['nickname']			= '별명';
+$_LANG['rank']				= '계급';
+$_LANG['point']				= '포인트';
+$_LANG['email']				= '메일';
+$_LANG['inbox']				= '편지함';
+$_LANG['homepage']			= '홈페이지';
+$_LANG['ip']				= '아이피';
+$_LANG['login']				= '로그인';
+$_LANG['logout']			= '로그아웃';
+$_LANG['trash_bin']         = '휴지통';
 
 $_LANG['calling_server']	= '서버에 요청 중입니다.';
 

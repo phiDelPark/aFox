@@ -116,9 +116,11 @@ $mb = getMember($_POST['mid']);
 			<div class="form-text"><?php echo getLang('desc_member_icon')?></div>
 		</div>
 	</div>
-	<hr>
-	<button type="submit" class="btn btn-success btn-lg w-100"><?php echo getLang($mb?'save':'agree_signup')?></button>
 
+	<hr class="mb-5">
+	<div class="text-end position-fixed bottom-0 end-0 p-3">
+		<button type="submit" class="btn btn-success btn-lg" style="min-width:220px"><?php echo getLang('save')?></button>
+	</div>
 </form>
 <?php
 /* End of file setup.php */

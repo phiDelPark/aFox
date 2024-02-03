@@ -10,7 +10,7 @@ if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode
 <div class="input-group mb-4">
 	<div class="input-group">
 	<label class="input-group-text w-100p" for="id_md_list_count"><?php echo getLang('list_count')?></label>
-		<input type="number" class="form-control mw-100p" id="id_md_list_count" name="md_list_count" min="1" max="9999" maxlength="5" value="<?php echo $_MODULE['md_list_count'] ?>">
+		<input type="number" class="form-control mw-100p" id="id_md_list_count" name="md_list_count" min="1" max="9999" maxlength="5" value="<?php echo $_count ?>">
 	</div>
 	<div class="form-text"><?php echo getLang('desc_list_count')?></div>
 </div>

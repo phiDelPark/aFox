@@ -1,5 +1,6 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
+include_once dirname(__FILE__) . '/patterns.php';
+
 $BOARD = [];
 if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 	$r = DB::query('SHOW FULL COLUMNS FROM '._AF_MODULE_TABLE_, [], true);
@@ -40,10 +41,10 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 		<div class="d-flex flex-row">
 			<div class="input-group">
 				<label class="input-group-text w-100p" for="id_new_md_id"><?php echo getLang('id')?></label>
-				<input type="text" value="<?php echo $is_new?'" name="new_md_id':$BOARD['md_id'] ?>" class="form-control mw-150p" id="id_new_md_id" required maxlength="11" pattern="^[a-zA-Z]+\w{2,}$"<?php echo $is_new?'':' disabled'?>>
+				<input type="text" value="<?php echo $is_new?'" name="new_md_id':$BOARD['md_id'] ?>" class="form-control mw-150p" id="id_new_md_id" required maxlength="11" pattern="<?php echo _AF_PATTERN_ID_?>"<?php echo $is_new?'':' disabled'?>>
 			</div>
 			<div class="input-group ms-2">
-				<input type="text" name="md_manager" class="form-control mw-100p" id="id_md_manager" maxlength="11" pattern="^[a-zA-Z]+\w{2,}$" placeholder="<?php echo getLang('manager')?> ID">
+				<input type="text" name="md_manager" class="form-control mw-100p" id="id_md_manager" maxlength="11" pattern="<?php echo _AF_PATTERN_ID_?>" placeholder="<?php echo getLang('manager')?> ID">
 			</div>
 		</div>
 		<div class="form-text"><?php echo getLang('desc_mb_id')?></div>
@@ -62,7 +63,7 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 	<div class="mb-4">
 		<label class="form-label" for="mdCategory"><?php echo getLang('category')?></label>
 		<div class="input-group">
-			<input type="text" name="md_category" class="form-control" id="mdCategory" maxlength="255" pattern="^[^\x21-\x2b\x2d\x2f\x3a-\x40\x5b-\x60]+" value="<?php echo $BOARD['md_category'] ?>">
+			<input type="text" name="md_category" class="form-control" id="mdCategory" maxlength="255" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_CATEGORY_)?>" value="<?php echo $BOARD['md_category'] ?>">
 		</div>
 		<div class="form-text"><?php echo getLang('desc_category')?></div>
 	</div>
@@ -70,7 +71,7 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 	<div class="mb-4">
 		<label class="form-label" for="mdExtraKeys"><?php echo getLang('extra_keys')?></label>
 		<div class="input-group">
-		<input type="text" name="md_extra_keys" class="form-control" id="mdExtraKeys" maxlength="255" pattern="^[^\x21-\x29\x2b\x2d\x2f\x3a-\x40\x5b-\x60]+" value="<?php echo empty($BOARD['md_extra']['keys'])?'':implode(',', $BOARD['md_extra']['keys']) ?>">
+		<input type="text" name="md_extra_keys" class="form-control" id="mdExtraKeys" maxlength="255" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_EXTRAKEY_)?>" value="<?php echo empty($BOARD['md_extra']['keys'])?'':implode(',', $BOARD['md_extra']['keys']) ?>">
 		</div>
 		<div class="form-text"><?php echo getLang('desc_extra_keys')?></div>
 	</div>

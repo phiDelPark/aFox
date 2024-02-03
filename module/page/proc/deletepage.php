@@ -15,8 +15,8 @@ function proc($data) {
 		$md_id = $page['md_id'];
 
 		// 파일 삭제
-		$variable = ['binary','image','video','audio','thumbnail'];
-		foreach ($variable as $val) {
+		$types = ['binary','image','video','audio','thumbnail'];
+		foreach ($types as $val) {
 			unlinkAll(_AF_ATTACH_DATA_ . $val . '/' . $md_id . '/1/');
 		}
 

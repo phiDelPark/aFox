@@ -38,8 +38,8 @@ function proc($data) {
 			$source_md_id = $result['md_id'];
 
 			// 파일 이동
-			$variable = ['binary','image','video','audio','thumbnail'];
-			foreach ($variable as $val) {
+			$types = ['binary','image','video','audio','thumbnail'];
+			foreach ($types as $val) {
 				$s = _AF_ATTACH_DATA_ . $val . '/' . $source_md_id . '/' . $wr_srl . '/';
 				$t = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/';
 
@@ -87,8 +87,8 @@ function proc($data) {
 		// 에러난 문서의 이동된 파일 다시 돌리기
 		if (!empty($md_id) && !empty($source_wr_srl))
 		{
-			$variable = ['binary','image','video','audio','thumbnail'];
-			foreach ($variable as $val) {
+			$types = ['binary','image','video','audio','thumbnail'];
+			foreach ($types as $val) {
 				$s = _AF_ATTACH_DATA_ . $val . '/' . $source_md_id . '/' . $source_wr_srl . '/';
 				$t = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $source_wr_srl . '/';
 

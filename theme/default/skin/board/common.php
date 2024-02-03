@@ -12,7 +12,7 @@ $_POST['category'] = empty($_POST['category']) ? null : $_POST['category'];
 if(!isset($_CFG['md_extra']['configs'])) {
 	$_CFG['md_extra']['configs'] = [
 		'show_column'=>['wr_srl','wr_title','mb_nick','wr_hit','wr_regdate'],
-		'show_rv_column'=>['mb_nick','extra_vars','wr_update']
+		'show_rv_column'=>['mb_nick','extra_values','wr_update']
 	];
 }
 $CONFIGS = &$_CFG['md_extra']['configs'];

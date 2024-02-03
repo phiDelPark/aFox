@@ -681,12 +681,12 @@ function shortFileSize($size){
 
 function timePassed($datetime){
 	$t = time() - strtotime($datetime);
-	$vars1 = ['minute','hour','day', 'week', 'month','year',  ''];
-	$vars2 = [60,      3600,  86400, 604800, 2592000,31536000,1];
-	foreach ($vars2 as $key => $value){ if($t < $value) break; }
+	$vs1 = ['minute','hour','day', 'week', 'month','year',  ''];
+	$vs2 = [60,      3600,  86400, 604800, 2592000,31536000,1];
+	foreach ($vs2 as $key => $value){ if($t < $value) break; }
 	if($key < 1) return 'just now'; //second
-	$value = floor($t/$vars2[$key-1]);
-	return $value.' '.$vars1[$key-1].($value > 1 ? 's' : '').' ago';
+	$value = floor($t/$vs2[$key-1]);
+	return $value.' '.$vs1[$key-1].($value > 1 ? 's' : '').' ago';
 }
 
 function isMobilePhone(){

@@ -33,11 +33,14 @@ $wr_content = preg_replace('/(<img)(((?!loading)[^>])+)>/is', '\1\2 loading="laz
 	if (!empty($md_extra_keys)) {
 		echo '<div class="border-bottom mb-3">';
 		foreach($md_extra_keys as $ex_key=>$ex_name) {
-			$tmp = @$DOC['wr_extra']['vars'][$ex_key];
+			$tmp = $DOC['wr_extra']['values'][$ex_key];
+			$check_boxs = explode('&', $ex_name);
+			$radio_boxs = explode('|', $ex_name);
+			$ex_name = count($check_boxs)>1 ? $check_boxs[0] : $radio_boxs[0];
 			if(preg_match('/^https?:\/\/.+/', $tmp)) $tmp = '<a href="'.escapeHTML($tmp).'" target="_blank">'.$tmp.'</a>';
 ?>
 		<div class="text-truncate mb-2">
-			<strong class="col-sm-2 d-inline-block"><?php echo $ex_name?></strong>
+			<strong class="col-md-1 d-inline-block" style="max-width:100px"><?php echo $ex_name?></strong>
 			<span><?php echo $tmp?></span>
 		</div>
 <?php } echo '</div>'; } ?>

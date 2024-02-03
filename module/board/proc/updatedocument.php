@@ -1,10 +1,9 @@
-<?php
-
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
+include_once dirname(__FILE__) . '/../patterns.php';
 
 function proc($data) {
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
-	if (!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
+	if(!preg_match('/'._AF_PATTERN_ID_.'/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
 
 	global $_MEMBER;
 
@@ -64,7 +63,7 @@ function proc($data) {
 
 	if(!empty($module['md_category'])) {
 		if(empty($data['wr_category'])) return set_error(getLang('request_input',['category']), 1);
-		if(preg_match('/[\x{21}-\x{2b}\x{2d}\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['wr_category'])) {
+		if(!in_array($data['wr_category'], explode(',', $module['md_category']))) {
 			return set_error(getLang('invalid_value', ['category']), 2001);
 		}
 	} else {
@@ -106,15 +105,16 @@ function proc($data) {
 		$module['md_extra'] = unserialize($module['md_extra']);
 		// 확장 변수 키값이 있으면 해당 값을 입력
 		if (!empty($module['md_extra']['keys'])) {
-			$wr_extra_vars = [];
+			$values = [];
 			foreach($module['md_extra']['keys'] as $ex_key=>$ex_caption){
-				$extra_val = trim($data['wr_extra_var_'.$ex_key]);
-				if(empty($extra_val) && substr($ex_caption,-1,1) === '*') {
+				$value = $data['wr_extra_'.$ex_key];
+				$value = trim(is_array($value) ? implode(',', $value) : $value);
+				if(empty($value) && substr($ex_caption,-1,1) === '*') {
 					return set_error(getLang('request_input',[substr($ex_caption,0,-1)]), 1);
 				}
-				$wr_extra_vars[$ex_key] = cutstr($extra_val,255,'');
+				$values[$ex_key] = cutstr($value,255,'');
 			}
-			if(!empty($wr_extra_vars)) $wr_extra['vars'] = $wr_extra_vars;
+			if(!empty($values)) $wr_extra['values'] = $values;
 		}
 	}
 

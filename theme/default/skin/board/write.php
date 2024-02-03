@@ -28,9 +28,9 @@
 		</div>
 		<?php } ?>
 		<?php if (!empty($_CFG['md_category'])) { ?>
-			<div class="mb-2">
-				<select name="wr_category" class="form-control" required>
-				<option value=""><?php echo getLang('category')?></option>
+			<div class="form-floating mb-2">
+				<select name="wr_category" class="form-control" id="wrCategory" required>
+				<option value=""></option>
 				<?php
 					$tmp = explode(',', $_CFG['md_category']);
 					foreach ($tmp as $val) {
@@ -38,23 +38,38 @@
 					}
 				?>
 				</select>
+				<label for="wrCategory"><?php echo getLang('category')?></label>
 			</div>
 		<?php } ?>
-			<div class="mb-2">
-				<label for="wrTitle"><?php echo getLang('title')?></label>
+			<div class="form-floating mb-2">
 				<input type="text" name="wr_title" class="form-control" id="wrTitle" required maxlength="255" value="<?php echo $is?escapeHTML($DOC['wr_title']):''?>">
+				<label for="wrTitle"><?php echo getLang('title')?></label>
 			</div>
 		<?php
 			if (!empty($_CFG['md_extra']['keys'])) {
 				foreach($_CFG['md_extra']['keys'] as $ex_key=>$ex_caption) {
-				$is_required = substr($ex_caption,-1,1) === '*';
-				$wr_extra_var = $DOC['wr_extra']['vars'][$ex_key];
+				$is_required = substr($ex_caption,-1,1) == '*';
+				if($is_required) $ex_caption = substr($ex_caption,0,-1);
+				$check_boxs = explode('&', $ex_caption);
+				$radio_boxs = explode('|', $ex_caption);
+				$ex_caption = count($check_boxs)>1 ? $check_boxs[0] : $radio_boxs[0];
+				$ex_value = $DOC['wr_extra']['values'][$ex_key];
 		?>
-				<div class="mb-2">
-					<label for="wrExtraVar_<?php echo $ex_key?>"><?php echo $ex_caption?></label>
-					<input type="text" name="wr_extra_var_<?php echo $ex_key?>" class="form-control" id="wrExtraVar_<?php echo $ex_key?>"<?php echo $is_required?' required':''?> maxlength="255" value="<?php echo $is?(empty($wr_extra_var)?'':escapeHTML($wr_extra_var)):''?>">
+		<?php if(count($check_boxs)>1||count($radio_boxs)>1){
+					echo '<div class="form-floating mb-2"><div class="form-control">';
+					for($i=1, $n=count($check_boxs); $i < $n; $i++){
+		?>
+					<input type="checkbox" name="wr_extra_<?php echo $ex_key?>[]" value="<?php echo $check_boxs[$i]?>" class="form-check-input" id="wrExtra_<?php echo $ex_key.$i?>"<?php echo $is_required?' required':''?>>
+					<label class="me-2" for="wrExtra_<?php echo $ex_key.$i?>"><?php echo $check_boxs[$i]?></label>
+		<?php } for($i=1, $n=count($radio_boxs); $i < $n; $i++){?>
+					<input type="radio" name="wr_extra_<?php echo $ex_key?>" value="<?php echo $radio_boxs[$i]?>" class="form-check-input" id="wrExtra_<?php echo $ex_key.$i?>"<?php echo $is_required?' required':''?>>
+					<label class="me-2" for="wrExtra_<?php echo $ex_key.$i?>"><?php echo $radio_boxs[$i]?></label>
+		<?php } echo '</div><label>'.$ex_caption.'</label></div>';} else { ?>
+				<div class="form-floating mb-2">
+					<input type="text" name="wr_extra_<?php echo $ex_key?>" class="form-control" id="wrExtra_<?php echo $ex_key?>"<?php echo $is_required?' required':''?> maxlength="255" value="<?php echo $is?(empty($ex_value)?'':escapeHTML($ex_value)):''?>">
+					<label for="wrExtra_<?php echo $ex_key?>"><?php echo $ex_caption?></label>
 				</div>
-		<?php }} ?>
+		<?php }}} ?>
 			<div class="mb-4">
 				<?php
 					$issecret = ($is&&$DOC['wr_secret']=='1')?'true':'false';
@@ -68,7 +83,7 @@
 							'file'=>[__MID__, $is?$DOC['wr_srl']:0, $_CFG['md_file_max']],
 							'required'=>getLang('request_input',['content']),
 							'html'=>$ishtml,
-							'typebar'=>array(getLang('content'), $istool),
+							'typebar'=>array('<span class="border-start" style="color:rgba(var(--bs-body-color-rgb),.65);font-size:.85rem;padding-left:.75rem">'.getLang('content').'</span>', $istool),
 							'toolbar'=>true
 						]
 					);

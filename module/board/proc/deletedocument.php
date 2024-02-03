@@ -67,8 +67,8 @@ function proc($data) {
 		}
 
 		// 파일 삭제 // 휴지통 이동이면 썸네일만 제거
-		$variable = empty($data['is_empty']) ? ['thumbnail'] : ['binary','image','video','audio','thumbnail'];
-		foreach ($variable as $val) {
+		$types = empty($data['is_empty']) ? ['thumbnail'] : ['binary','image','video','audio','thumbnail'];
+		foreach ($types as $val) {
 			unlinkAll(_AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/');
 		}
 

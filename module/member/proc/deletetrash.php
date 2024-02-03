@@ -27,8 +27,8 @@ function proc($data) {
 			DB::delete(_AF_FILE_TABLE_,['md_id'=>$md_id,'mf_target'=>$wr_srl]);
 			DB::delete(_AF_DOCUMENT_TABLE_,['wr_srl'=>$wr_srl]);
 			// 파일 삭제
-			$variable = ['binary','image','video','audio','thumbnail'];
-			foreach ($variable as $val) {
+			$types = ['binary','image','video','audio','thumbnail'];
+			foreach ($types as $val) {
 				unlinkAll(_AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/');
 			}
 		}

@@ -17,8 +17,8 @@ function proc($data) {
 		$md_id = $module['md_id'];
 
 		// 폴더 삭제
-		$variable = ['binary','image','video','audio','thumbnail'];
-		foreach ($variable as $val) {
+		$types = ['binary','image','video','audio','thumbnail'];
+		foreach ($types as $val) {
 			unlinkAll(_AF_ATTACH_DATA_ . $val . '/' . $md_id . '/');
 		}
 

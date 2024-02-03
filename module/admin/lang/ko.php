@@ -5,13 +5,9 @@ if(!defined('__AFOX__')) exit();
 
 $_LANG['afox']				= '에이폭스';
 $_LANG['version']			= '버전';
-$_LANG['menu']				= '메뉴';
-$_LANG['grant']				= '승인';
-$_LANG['insert']			= '추가';
-$_LANG['thumbnail']			= '썸네일';
 
 $_LANG['menu_name_addon'] = '애드온';
-$_LANG['menu_name_board'] = $_LANG['board'];
+$_LANG['menu_name_board'] = '게시판';
 $_LANG['menu_name_comment'] = $_LANG['comment'];
 $_LANG['menu_name_content'] = '콘텐츠 보기';
 $_LANG['menu_name_dashbd'] = '대시보드';
@@ -20,7 +16,7 @@ $_LANG['menu_name_file'] = $_LANG['file'];
 $_LANG['menu_name_member'] = '회원 설정';
 $_LANG['menu_name_menu'] = '사이트 메뉴';
 $_LANG['menu_name_module'] = '모듈';
-$_LANG['menu_name_page'] = $_LANG['page'];
+$_LANG['menu_name_page'] = '페이지';
 $_LANG['menu_name_theme'] = '사이트 테마';
 $_LANG['menu_name_trash'] = $_LANG['trash_bin'];
 $_LANG['menu_name_visit'] = '방문 기록';
@@ -74,7 +70,6 @@ $_LANG['permanent_delete'] = '완전 삭제';
 $_LANG['possible'] = '허용';
 $_LANG['intercept'] = '차단';
 $_LANG['prohibit_id'] = '아이디 제한';
-$_LANG['trash_bin'] = '휴지통';
 $_LANG['referer'] = '리퍼러';
 $_LANG['removed_addon'] = '삭제된 애드온';
 $_LANG['removed_date'] = '삭제 날짜';
@@ -85,6 +80,13 @@ $_LANG['terms_of_use'] = '이용약관';
 $_LANG['thumb_fit'] = '크기맞춤';
 $_LANG['view_details'] = '자세히 보기';
 $_LANG['option'] = '옵션';
+$_LANG['logo'] = '로고';
+
+$_LANG['menu']				= '메뉴';
+$_LANG['grant']				= '승인';
+$_LANG['insert']			= '추가';
+$_LANG['thumbnail']			= '썸네일';
+$_LANG['author']			= '작성자';
 
 $_LANG['include'] = '포함';
 $_LANG['exclude'] = '제외';

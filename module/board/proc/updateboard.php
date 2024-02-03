@@ -1,19 +1,18 @@
-<?php
-
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
+include_once dirname(__FILE__) . '/../patterns.php';
 
 function proc($data) {
 
 	if(isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
-	if(!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
+	if(!preg_match('/'._AF_PATTERN_ID_.'/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
 
 	$data['md_title'] = trim($data['md_title']);
 	$data['md_list_count'] = empty($data['md_list_count']) ? 20 : abs($data['md_list_count']);
 
 	// 분류값 정리
 	if(!empty($data['md_category'])) {
-		if(preg_match('/[\x{21}-\x{2b}\x{2d}\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_category'])) {
+		if(!preg_match('/'._AF_PATTERN_CATEGORY_.'/u', $data['md_category'])) {
 			return set_error(getLang('invalid_value', ['category']),2001);
 		}
 		$tmpa = explode(',', $data['md_category']);
@@ -27,7 +26,7 @@ function proc($data) {
 
 	$ex_keys = []; // 확장 변수 키값
 	if(!empty($data['md_extra_keys'])) {
-		if(preg_match('/[\x{21}-\x{29}\x{2b}\x{2d}\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}]+/', $data['md_extra_keys'])) {
+		if(!preg_match('/'._AF_PATTERN_EXTRAKEY_.'/u', $data['md_extra_keys'])) {
 			return set_error(getLang('invalid_value', ['extra_keys']),2001);
 		}
 
