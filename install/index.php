@@ -171,7 +171,7 @@ $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_CONFIG_TABLE_.' (
 	   lang           CHAR(5)      NOT NULL,
 	   start          CHAR(11)     NOT NULL,
-	   theme          VARCHAR(124) NOT NULL,
+	   theme          VARCHAR(128) NOT NULL,
 	   title          VARCHAR(255) NOT NULL,
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
 	   use_visit      CHAR(1)      NOT NULL DEFAULT 0,
@@ -186,7 +186,7 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 $_err_keys = _AF_THEME_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_THEME_TABLE_.' (
-	   th_id          VARCHAR(124) NOT NULL,
+	   th_id          VARCHAR(128) NOT NULL,
 	   th_extra       TEXT,
 
 	   UNIQUE KEY ID_UK (th_id))'.$_engine;
@@ -233,7 +233,7 @@ $create_sql = '
 
 	  CONSTRAINT SRL_PK PRIMARY KEY (mb_srl),
 	  UNIQUE KEY ID_UK (mb_id),
-	  INDEX RANK_IX (mb_rank))'.$_engine;
+	  INDEX NICK_IX (mb_nick))'.$_engine;
 
 DB::query($create_sql);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
@@ -241,7 +241,7 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 $_err_keys = _AF_ADDON_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_ADDON_TABLE_.' (
-	   ao_id          VARCHAR(124) NOT NULL,
+	   ao_id          VARCHAR(128) NOT NULL,
 	   use_editor     CHAR(1)      NOT NULL DEFAULT 0,
 	   ao_extra       TEXT,
 
@@ -298,7 +298,7 @@ $create_sql = '
 	   wr_status       CHAR(1)      NOT NULL DEFAULT 0,
 	   wr_secret       CHAR(1)      NOT NULL DEFAULT 0,
 	   wr_type         CHAR(1)      NOT NULL DEFAULT 0,
-	   wr_category     VARCHAR(20)  NOT NULL DEFAULT \'\',
+	   wr_category     VARCHAR(255) NOT NULL DEFAULT \'\',
 	   wr_title        VARCHAR(255) NOT NULL,
 	   wr_content      LONGTEXT,
 	   wr_tags         TEXT,
@@ -402,14 +402,11 @@ $_err_keys = _AF_HISTORY_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_HISTORY_TABLE_.' (
 	   mb_srl          INT(11)      NOT NULL DEFAULT 0,
-	   mb_ipaddress    VARCHAR(128) NOT NULL,
-	   hs_action       VARCHAR(255) NOT NULL,
+	   hs_action       VARCHAR(128) NOT NULL,
+	   hs_value        VARCHAR(128) NOT NULL DEFAULT \'\',
 	   hs_regdate      datetime     NOT NULL,
 
-	  INDEX MEMBER_IX (mb_srl),
-	  INDEX IP_IX (mb_ipaddress),
-	  INDEX ACTION_IX (hs_action),
-	  INDEX REGDATE_IX (hs_regdate))'.$_engine;
+	  INDEX ACTION_IX (hs_action, mb_srl))'.$_engine;
 
 DB::query($create_sql);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
@@ -450,7 +447,7 @@ $_err_keys = _AF_TRIGGER_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_TRIGGER_TABLE_.' (
 	   tg_key         CHAR(1)      NOT NULL,
-	   tg_id          VARCHAR(124) NOT NULL,
+	   tg_id          VARCHAR(128) NOT NULL,
 	   use_pc         CHAR(1)      NOT NULL DEFAULT 0,
 	   use_mobile     CHAR(1)      NOT NULL DEFAULT 0,
 	   grant_access   CHAR(1)      NOT NULL DEFAULT 0,

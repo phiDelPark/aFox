@@ -140,7 +140,7 @@ function proc($data) {
 				if(!empty($_r['error'])) {
 					//TODO 에러시 메세지 보냄
 				}
-				setHistoryAction('wr_comment::'.$ret_rp_srl.'::'.$wr_srl, $point);
+				setHistory('wr_comment::'.$ret_rp_srl.'::'.$wr_srl, $point);
 			}
 
 			DB::update(_AF_DOCUMENT_TABLE_, ['^wr_reply'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);

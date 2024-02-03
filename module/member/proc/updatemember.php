@@ -203,7 +203,7 @@ function proc($data) {
 		}
 
 		// TODO 나중에 닉네임 바꿀때 시간 제한 둘때 사용하기 위해서 기록
-		setHistoryAction('mb_nick', $data['mb_id']);
+		setHistory('mb_nick', $data['mb_id']);
 
 	} catch (Exception $ex) {
 		DB::rollback();

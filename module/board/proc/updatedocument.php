@@ -280,7 +280,7 @@ function proc($data) {
 			if(!empty($_r['error'])) {
 				//TODO 에러시 메세지 보냄
 			}
-			setHistoryAction('wr_document::'.$wr_srl, $point);
+			setHistory('wr_document::'.$wr_srl, $point);
 		}
 
 		// 모두 완료 되면 지워진 파일 완전 삭제

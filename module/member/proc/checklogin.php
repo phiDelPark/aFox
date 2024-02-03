@@ -78,12 +78,12 @@ function proc($data) {
 		if($point !== 0) {
 			$setvalues['^mb_point'] = 'mb_point'.($point>0?'+':'').$point;
 			// 아직 $_MEMBER 에 정보가 없기에 직접 입력 필요
-			// setHistoryAction('mb_login', $point, true);
+			// setHistory('mb_login', $point, true);
 			DB::insert(_AF_HISTORY_TABLE_,
 				[
 					'mb_srl'=>$mb['mb_srl'],
-					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
-					'hs_action'=>'mb_login::'.$point,
+					'hs_action'=>'mb_login',
+					'hs_value'=>$point,
 					'^hs_regdate'=>'NOW()'
 				]
 			);

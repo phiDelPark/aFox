@@ -24,8 +24,8 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		echo '<div class="w-100 d-flex flex-wrap">';
 		if(count($_image)==0) $_image = ['mf_srl'=>0];
 		foreach ($_image as $v){
-		echo '<a style="min-width:'.$_CFG['thumb_width'].'px;min-height:'.$_CFG['thumb_width'].'px" class="'.($val['wr_srl']==$srl?' active" aria-current="true':'').'" href="'.$href.'">';
-		echo '<img src="./file='.$v['mf_srl'].'"><div class="details"><span class="title">'.$wr_title.'</span>';
+		echo '<a class="'.($val['wr_srl']==$srl?' active" aria-current="true':'').'" href="'.$href.'">';
+		echo '<img src="./?file='.$v['mf_srl'].'&thumb=x"><div class="details"><span class="title">'.$wr_title.'</span>';
 		echo '<span class="info">'.date('F j, Y', strtotime($val['wr_regdate'])).' by '.$val['mb_nick'].'</span></div></a>';
 		}
 		echo '</div>';

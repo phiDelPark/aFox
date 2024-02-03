@@ -192,42 +192,24 @@ function getFileList($id, $target){
 	return $__file_list[$key];
 }
 
-function getHistoryAction($act){
-	global $_MEMBER;
-	if(empty($_MEMBER)) return null;
-	return DB::gets(_AF_HISTORY_TABLE_, 'hs_action,hs_regdate',
-		['hs_action{LIKE}' => $act.'::%', 'mb_srl' => $_MEMBER['mb_srl']],
-		'hs_regdate', function($r){
-			$ret = [];
-			while ($tmp=DB::fetch($r)){
-				$ret[] = explode('::', $tmp['hs_regdate'].'::'.$tmp['hs_action']);
-			}
-			return $ret;
-		}
-	);
-}
-
 // 활동 체크를 위해 기록
-function setHistoryAction($act, $value, $allowdup = false, $callback = null){
+function getHistory($act){
+	global $_MEMBER; if(empty($_MEMBER)) return [];
+	return DB::gets(_AF_HISTORY_TABLE_, '*', ['hs_action' => $act, 'mb_srl' => $_MEMBER['mb_srl']], 'hs_regdate');
+}
+function setHistory($act, $value, $allowdup = false, $callback = null){
 	global $_MEMBER;
-	if (empty($_MEMBER)){ // 비회원은 기록안함
-		if($callback != null){
-			$_r = $callback(['data'=>true,'mb_srl'=>0,'ipaddress'=>$_SERVER['REMOTE_ADDR']]);
-			if(!empty($_r['error'])) return set_error($_r['message'], $_r['error']);
-		}
-		return true;
-	}
-	$uinfo = ['mb_srl' => $_MEMBER['mb_srl'], 'ipaddress' => $_SERVER['REMOTE_ADDR']];
+	if (empty($_MEMBER)) return false;
 	DB::transaction();
 	try {
-		$uinfo['data'] = getHistoryAction($act);
+		$uinfo = getHistory($act);
 		// 중복 허용일 경우가 아니면 한번만 입력
-		if($allowdup || empty($uinfo['data'])){
+		if($allowdup || empty($uinfo)){
 			DB::insert(_AF_HISTORY_TABLE_,
 				[
-					'mb_srl'=>$uinfo['mb_srl'],
-					'mb_ipaddress'=>$uinfo['ipaddress'],
-					'hs_action'=>$act.'::'.$value,
+					'mb_srl'=>$_MEMBER['mb_srl'],
+					'hs_action'=>$act,
+					'hs_value'=>$value,
 					'^hs_regdate'=>'NOW()'
 				]
 			);

@@ -17,18 +17,16 @@ function proc($data) {
 
 	if($_MEMBER['mb_srl'] == $d_mb_srl) return set_error(getLang('warning_not_allowable', ['author']),3505);
 
-	$_out = getHistoryAction('wr_no::'.$wr_srl);
+	$_out = getHistory('wr_no::'.$wr_srl);
 	if(!empty($_out)) return set_error(getLang('warning_actioned', ['no']), 3303);
 
 	DB::transaction();
 
 	try {
 
-		$_out = setHistoryAction('wr_yes::'.$wr_srl, 1, false, function($v)use($wr_srl,$d_mb_srl){
+		$_out = setHistory('wr_yes::'.$wr_srl, 1, false, function($v)use($wr_srl,$d_mb_srl){
 			// 처음에만 포인트 사용
-			if(!empty($v['data'])) {
-				return set_error(getLang('warning_actioned', ['yes']), 3303);
-			}
+			if(!empty($v)) return set_error(getLang('warning_actioned', ['yes']), 3303);
 
 			DB::update(_AF_DOCUMENT_TABLE_,
 				[

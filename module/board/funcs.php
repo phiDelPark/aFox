@@ -17,10 +17,10 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 	if ($inc_hit && $_MEMBER && $wr_mb != $_MEMBER["mb_srl"])
 	{ // exclude yourself
 		if (($point = (int)getModule($result["md_id"], "point_view")) !== 0) {
-			$_out = setHistoryAction("wr_hit::" . $srl, $point, false,
+			$_out = setHistory("wr_hit::" . $srl, $point, false,
 				function ($v) use ($srl, $wr_mb, $point) {
 					// 처음에만 포인트 사용
-					if (!empty($v["data"])) return;
+					if (!empty($v)) return;
 					// 자신은 포인트 사용 안함
 					if (empty($wr_mb) || $wr_mb !== $v["mb_srl"]) {
 						$_r = setPoint($point);

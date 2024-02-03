@@ -24,11 +24,9 @@ function proc($data) {
 
 	try {
 
-		$_out = setHistoryAction('wr_no::'.$wr_srl, 1, false, function($v)use($wr_srl,$d_mb_srl){
+		$_out = setHistory('wr_no::'.$wr_srl, 1, false, function($v)use($wr_srl,$d_mb_srl){
 			// 처음에만 포인트 사용
-			if(!empty($v['data'])) {
-				return set_error(getLang('warning_actioned', ['no']), 3303);
-			}
+			if(!empty($v)) return set_error(getLang('warning_actioned', ['no']), 3303);
 
 			DB::update(_AF_DOCUMENT_TABLE_,
 				[
