@@ -98,9 +98,8 @@ function proc($data) {
 					'mf_target'=>1,
 					'mf_srl'=>$val])
 				) {
-					$filetype = explode('/', $file['mf_type']);
-					$filetype = strtolower(array_shift($filetype));
-					$filetype = empty($file_types[$filetype]) ? 'binary' : $filetype;
+					$filetype = explode('/', strtolower($file['mf_type']));
+					$filetype = empty($_file_types[$filetype[0]]) ? 'binary' : $filetype[0];
 					$unlink_files[] = _AF_ATTACH_DATA_.$filetype.'/'.$md_id.'/1/'.$file['mf_upload_name'];
 				}
 			}

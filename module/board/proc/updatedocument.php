@@ -161,8 +161,8 @@ function proc($data) {
 					'mf_target'=>$wr_srl,
 					'mf_srl'=>$val])
 				) {
-					$filetype = strtolower(array_shift(explode('/', $file['mf_type'])));
-					$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
+					$filetype = explode('/', strtolower($file['mf_type']));
+					$filetype = empty($_file_types[$filetype[0]]) ? 'binary' : $filetype[0];
 					$unlink_files[] = _AF_ATTACH_DATA_.$filetype.'/'.$md_id.'/'.$wr_srl.'/'.$file['mf_upload_name'];
 				}
 			}
@@ -171,15 +171,10 @@ function proc($data) {
 		// 첨부 파일 수 계산을 위해 미리 가져 오기
 		$file_count = DB::count(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>$wr_srl]);
 
-		// 이전 수 + 업로드 수 체크
-		if($upload_count > 0 && (($upload_count+$file_count) > $file_max)) {
-			throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
-		}
-
-		if($upload_count>0) {
+		if($upload_count > 0) {
 			// 권한 체크
 			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warning_not_allowable', ['upload']), 3505);
-			if($file_max < $upload_count) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
+			if($file_max < ($upload_count+$file_count)) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
 
 			for ($i=0; $i < $upload_count; $i++) {
 				// 빈 파일 넘김

@@ -17,9 +17,8 @@ function proc($data) {
 		$callback = function($r) {
 			while ($row = DB::fetch($r)) {
 				$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
-				$filetype = explode('/', $row['mf_type']);
-				$filetype = strtolower(array_shift($filetype));
-				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
+				$filetype = explode('/', strtolower($row['mf_type']));
+				$filetype = empty($_file_types[$filetype[0]]) ? 'binary' : $filetype[0];
 				$unfilename = _AF_ATTACH_DATA_ . $filetype . '/' . $row['md_id'] . '/' . $row['mf_target'] . '/' . $row['mf_upload_name'];
 
 				if(!file_exists($unfilename) || unlinkFile($unfilename)) {
