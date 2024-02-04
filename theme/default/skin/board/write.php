@@ -29,7 +29,7 @@
 		<?php } ?>
 		<?php if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category']);?>
 			<div class="form-floating mb-2">
-			<?php if ($use_style == 'gallery') { echo '<div class="form-control">'; $tags = $is?explode(',',$DOC['wr_tags']):[]; foreach($tmp as $val){?>
+			<?php if ($use_style == 'gallery') { echo '<div class="form-control checkbox-group required">'; $tags = $is?explode(',',$DOC['wr_tags']):[]; foreach($tmp as $val){?>
 					<input type="checkbox" name="wr_tags[]" value="<?php echo $val?>"<?php echo in_array($val, $tags)?' checked':''?> class="form-check-input" id="wrExtra_<?php echo $val?>">
 					<label class="me-2" for="wrExtra_<?php echo $val?>"><?php echo $val?></label>
 			<?php } echo '<input type="hidden" name="wr_category" value="'.$tmp[0].'"></div>';} else { ?>
@@ -61,7 +61,7 @@
 				}
 				$ex_value = $is ? $DOC['wr_extra']['values'][$ex_key] : $ex_value;
 		?>
-		<?php if($is_radio){ echo '<div class="form-floating mb-2"><div class="form-control">';
+		<?php if($is_radio){ echo '<div class="form-floating mb-2"><div class="form-control'.($is_radio===2&&$is_required?' checkbox-group required':'').'">';
 				if($is_radio===2) $is_required = false; $ex_value = $is ? explode(',', $ex_value) : [];
 				for($i=($is_radio===2?0:1), $n=count($_boxs); $i < $n; $i++){?>
 					<input type="<?php echo $is_radio===2?'checkbox':'radio'?>" name="wr_extra_<?php echo $ex_key.($is_radio===2?'[]':'')?>" value="<?php echo $_boxs[$i]?>"<?php echo in_array($_boxs[$i], $ex_value)?' checked':''?> class="form-check-input" id="wrExtra_<?php echo $ex_key.$i?>"<?php echo $is_required?' required':''?>>

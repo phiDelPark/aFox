@@ -269,20 +269,33 @@ function afoxEditor(ID, options) {
 	}))
 
 	const form = editor.closest('FORM')
+
+	const check_groups = form.querySelectorAll('.checkbox-group.required');
+	check_groups.forEach(el => {
+		el.querySelectorAll('[type=checkbox]')?.forEach(el2 => {
+			el2.addEventListener('change', _ => el.classList.remove('is-invalid'))
+		})
+	})
+
 	if(form.hasAttribute('needvalidate')) form.setAttribute('novalidate', '')
 	form.addEventListener('submit', e => {
 		try {
 			if (this.isHtmlmode) {
 				textarea.value = iframe.contentWindow.document.body.innerHTML
 			}
+			check_groups.forEach(el => {
+				if(el.querySelectorAll('[type=checkbox]:checked')?.length === 0){
+					el.classList.add('is-invalid')
+					e.preventDefault()
+					e.stopPropagation()
+				}
+			})
 			content_validity = !this.required || textarea.value
 			if(e.currentTarget.hasAttribute('needvalidate')){
 				if (!content_validity || !e.currentTarget.checkValidity()) {
 					e.preventDefault()
 					e.stopPropagation()
-				}
-				if(!content_validity){
-					iframe.classList.add('is-invalid')
+					if(!content_validity) iframe.classList.add('is-invalid')
 				}
 				e.currentTarget.classList.add('was-validated')
 			} else {
@@ -295,7 +308,7 @@ function afoxEditor(ID, options) {
 		} catch (error) {
 			e.preventDefault()
 			e.stopPropagation()
-			console.error(error)
+			console.log(error)
 			alert(error)
 		}
 	}, false)
