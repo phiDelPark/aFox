@@ -349,7 +349,7 @@ function sendNote($srl, $msg, $nick = ''){
 }
 
 function unlinkFile($file){
-	@chmod($file, 0707);
+	@chmod($file, 0777);
 	if(!@unlink($file)){
 		@chmod($file, _AF_FILE_PERMIT_);
 		return false;
@@ -357,7 +357,7 @@ function unlinkFile($file){
 }
 
 function unlinkDir($dir){
-	@chmod($dir, 0707);
+	@chmod($dir, 0777);
 	if(!@rmdir($dir)){
 		@chmod($dir, _AF_DIR_PERMIT_);
 		return false;
@@ -390,7 +390,7 @@ function moveUpFile($file, $dest, $max_size = 0){
 		if(!$dest) return true; // 이동 경로가 없으면 이동 안함, 오류 체크는함
 		if(!is_dir($dir=dirname($dest)) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
 		if(file_exists($dest) && !unlinkFile($dest)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
-		if(move_uploaded_file($file['tmp_name'], $dest)) @chmod($dest, _AF_FILE_PERMIT_);
+		if(move_uploaded_file($file['tmp_name'], $dest)) @chmod($dest, _AF_ATTACH_PERMIT_);
 		else return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
 	} else return set_error(getLang('UPLOAD_ERR_CODE('.$file['error'].')'),10400+$file['error']);
 }

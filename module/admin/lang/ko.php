@@ -22,6 +22,7 @@ $_LANG['menu_name_trash'] = $_LANG['trash_bin'];
 $_LANG['menu_name_visit'] = '방문 기록';
 $_LANG['menu_name_widget'] = '위젯';
 $_LANG['menu_name_setup'] = '사이트 설정';
+$_LANG['menu_name_clearcache'] = '캐시 청소';
 
 $_LANG['menu_desc_addon'] = '애드온을 관리하고 설정합니다.';
 $_LANG['menu_desc_board'] = '게시판을 관리하고 설정합니다.';
@@ -39,11 +40,12 @@ $_LANG['menu_desc_trash'] = '삭제된 문서를 보고 관리합니다.';
 $_LANG['menu_desc_visit'] = '이 사이트의 방문 기록입니다.';
 $_LANG['menu_desc_widget'] = '사용 가능한 위젯과 사용 코드를 봅니다.';
 $_LANG['menu_desc_setup'] = '사이트 관리에 필요한 설정을 합니다.';
+$_LANG['menu_desc_clearcache'] = '캐시 파일을 청소하고 재생성 합니다.';
 
 $_LANG['agent'] = '에이전트';
 $_LANG['md_id'] = '모듈 아이디';
 $_LANG['base_cdn_list'] = '기본 CDN';
-$_LANG['clear_cache'] = '캐시 재생성';
+$_LANG['clear_cache'] = '캐시청소';
 $_LANG['duplicate_files'] = '중복 파일';
 $_LANG['document_count'] = '문서 수';
 $_LANG['extra_keys'] = '확장변수';

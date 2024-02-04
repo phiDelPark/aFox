@@ -62,7 +62,7 @@ $menus = getSiteMenu();
 	</div>
 	<nav class="navbar navbar-expand-md border-bottom mb-4 p-0">
 		<div class="container-fluid p-0">
-			<a class="navbar-brand ms-2" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" style="vertical-align:-.25rem;width:1.25em;height:1.25em"><use href="./theme/default/bi-icons.svg#house-door-fill"/></svg></a>
+			<a class="navbar-brand ms-2" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" style="vertical-align:-.2em;width:1.25em;height:1.25em"><use href="./theme/default/bi-icons.svg#house-door-fill"/></svg></a>
 			<button class="navbar-toggler py-0 me-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>

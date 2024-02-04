@@ -5,7 +5,7 @@
 ?>
 <section id="documentDelete" aria-label="Delete this post?">
 	<button type="button" class="btn-close float-end" aria-label="Back" onclick="window.history.go(-1);return false"></button>
-	<h2 class="pb-3 mb-4 fst-italic border-bottom"><?php echo getLang('delete')?></h2>
+	<h2 class="pb-3 mb-4 border-bottom"><?php echo getLang('delete')?></h2>
 	<form id="setup" method="post" autocomplete="off" enctype="multipart/form-data">
 	<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
 	<input type="hidden" name="success_url" value="<?php echo getUrl('disp','','srl','','cpage','','rp','')?>" />

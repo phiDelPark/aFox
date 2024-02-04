@@ -119,7 +119,7 @@ function proc($data) {
 	}
 
 	$data['wr_content'] = xssClean($data['wr_content']);
-	$data['wr_tags'] = getHashtags($data['wr_content']);
+	$data['wr_tags'] = empty($data['wr_tags'])?getHashtags($data['wr_content']):implode(',',$data['wr_tags']);
 
 	DB::transaction();
 

@@ -9,10 +9,10 @@
 
 <section id="documentWrite" aria-label="Writing a post">
 	<button type="button" class="btn-close float-end" aria-label="Back" onclick="window.history.go(-1);return false"></button>
-	<h2 class="pb-3 mb-4 fst-italic border-bottom"><?php echo getLang($is?'edit':'write')?></h2>
+	<h2 class="pb-3 mb-4 border-bottom"><?php echo getLang($is?'edit':'write')?></h2>
 	<form id="setup" method="post" autocomplete="off" enctype="multipart/form-data" needvalidate>
 	<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
-	<input type="hidden" name="success_url" value="<?php echo $is?getUrl('disp','','cpage','','rp',''):getUrl('','id',__MID__)?>">
+	<input type="hidden" name="success_url" value="<?php echo $is?getUrl('disp','','cpage','','rp','','srl',$use_style == 'gallery' ? '': $DOC['mb_srl']):getUrl('','id',__MID__)?>">
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="updateDocument" />
 	<input type="hidden" name="md_id" value="<?php echo __MID__?>">
@@ -27,17 +27,21 @@
 			<?php } ?>
 		</div>
 		<?php } ?>
-		<?php if (!empty($_CFG['md_category'])) { ?>
+		<?php if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category']);?>
 			<div class="form-floating mb-2">
-				<select name="wr_category" class="form-control" id="wrCategory" required>
-				<option value=""></option>
-				<?php
-					$tmp = explode(',', $_CFG['md_category']);
-					foreach ($tmp as $val) {
-						echo '<option value="'.$val.'"'.(($is&&$val==$DOC['wr_category'])?' selected="selected"':'').'>'.$val.'</option>';
-					}
-				?>
-				</select>
+			<?php if ($use_style == 'gallery') { echo '<div class="form-control">'; $tags = $is?explode(',',$DOC['wr_tags']):[]; foreach($tmp as $val){?>
+					<input type="checkbox" name="wr_tags[]" value="<?php echo $val?>"<?php echo in_array($val, $tags)?' checked':''?> class="form-check-input" id="wrExtra_<?php echo $val?>">
+					<label class="me-2" for="wrExtra_<?php echo $val?>"><?php echo $val?></label>
+			<?php } echo '<input type="hidden" name="wr_category" value="'.$tmp[0].'"></div>';} else { ?>
+					<select name="wr_category" class="form-control" id="wrCategory" required>
+					<option value=""></option>
+					<?php
+						foreach ($tmp as $val) {
+							echo '<option value="'.$val.'"'.(($is&&$val==$DOC['wr_category'])?' selected="selected"':'').'>'.$val.'</option>';
+						}
+					?>
+					</select>
+			<?php } ?>
 				<label for="wrCategory"><?php echo getLang('category')?></label>
 			</div>
 		<?php } ?>
@@ -69,23 +73,25 @@
 				</div>
 		<?php }}} ?>
 			<div class="mb-4">
-				<?php
-					$issecret = ($is&&$DOC['wr_secret']=='1')?'true':'false';
-					$ishtml = ($is&&$DOC['wr_type']=='2')||(!$is&&($_CFG['use_type']=='3'||$_CFG['use_type']=='9'))?1:0;
-					$istool = [];
-					if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
-					if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [$issecret, ['Secret'=>'true']];
-					displayEditor(
-						'wr_content', $is?$DOC['wr_content']:'',
-						[
-							'file'=>[__MID__, $is?$DOC['wr_srl']:0, $_CFG['md_file_max']],
-							'required'=>getLang('request_input',['content']),
-							'html'=>$ishtml,
-							'typebar'=>array('<span class="border-start" style="color:rgba(var(--bs-body-color-rgb),.65);font-size:.85rem;padding-left:.75rem">'.getLang('content').'</span>', $istool),
-							'toolbar'=>true
-						]
-					);
-				?>
+		<?php
+			$issecret = ($is&&$DOC['wr_secret']=='1')?'true':'false';
+			$ishtml = ($is&&$DOC['wr_type']=='2')||(!$is&&($_CFG['use_type']=='3'||$_CFG['use_type']=='9'))?1:0;
+			$istool = [];
+			if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = $use_style == 'gallery'?[0,['TEXT'=>'0']]:[$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
+			if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [$issecret, ['Secret'=>'true']];
+			displayEditor(
+				'wr_content', $is?$DOC['wr_content']:'',
+				[
+					'file'=>[__MID__, $is?$DOC['wr_srl']:0, $_CFG['md_file_max']],
+					'html'=>$use_style != 'gallery' && $ishtml,
+					'height'=>$use_style == 'gallery' ? '35px' : '350px',
+					'readonly'=>$use_style == 'gallery',
+					'required'=>$use_style == 'gallery'?'':getLang('request_input',['content']),
+					'typebar'=>array('<span class="border-start" style="color:rgba(var(--bs-body-color-rgb),.65);font-size:.85rem;padding-left:.75rem">'.getLang($use_style == 'gallery' ? 'gallery_content' : 'content').'</span>', $istool),
+					'toolbar'=>$use_style != 'gallery'
+				]
+			);
+		?>
 			</div>
 
 			<hr class="mb-4">

@@ -34,7 +34,7 @@ function thumbnail($source, $destination, $width, $height, $fit = false) {
 			ImageCopyResampled($idst, $isrc, $_x, $_y, 0, 0, $width, $height, $iifo[0], $iifo[1]);
 			imageInterlace($idst);
 			imagePNG($idst, $destination, 9);
-			@chmod($destination, _AF_FILE_PERMIT_);
+			@chmod($destination, _AF_ATTACH_PERMIT_);
 			imageDestroy($idst);
 			imageDestroy($isrc);
 			$ret = $destination;

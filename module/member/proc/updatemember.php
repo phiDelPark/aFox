@@ -195,11 +195,8 @@ function proc($data) {
 				throw new Exception(getLang('upload_err_code(7)'), 10407);
 			}
 			@chmod($destination, 0707);
-			if (@move_uploaded_file($mb_icon_tmp, $destination)) {
-				@chmod($destination, _AF_FILE_PERMIT_);
-			} else {
-				@chmod($destination, _AF_FILE_PERMIT_);
-			}
+			@move_uploaded_file($mb_icon_tmp, $destination);
+			@chmod($destination, _AF_FILE_PERMIT_);
 		}
 
 		// TODO 나중에 닉네임 바꿀때 시간 제한 둘때 사용하기 위해서 기록

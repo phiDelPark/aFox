@@ -20,7 +20,7 @@ $is_admin = isAdmin();
 		  	<?php echo $_MEMBER['mb_nick']?>
 		  </a>
 		  <ul class="dropdown-menu dropdown-menu-end">
-			<li><a class="dropdown-item" href="<?php echo getUrl('','member','inbox', 'popup', '1') ?>" target="_blank"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#envelope"/></svg> <?php echo getLang('Inbox') ?></a></li>
+		 	<li><a class="dropdown-item" href="./?admin=clearcache"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#recycle"/></svg> <?php echo getLang('clear_cache') ?></a></li>
 			<li><hr class="dropdown-divider"></li>
 			<li><a class="dropdown-item" href="<?php echo getUrl('', 'module', 'member', 'act', 'signOut')?>"><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#power"/></svg> <?php echo getLang('logout') ?></a></li>
 		  </ul>

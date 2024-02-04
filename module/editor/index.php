@@ -141,7 +141,7 @@ foreach ($options as $key => $v) {
 		</div>
 <?php } ?>
 		<div id="uploadFiles" class="user-select-none input-group text-secondary border rounded p-2">
-		<small class="ms-1">#### 본문 첨부는 아이콘을 잡고 끌어 옮기시면 됩니다.</small>
+		<small class="ms-1"><?php echo $options['readonly']?'# 첨부된 파일이 없습니다.':'# 본문 첨부는 아이콘을 잡고 끌어 옮기시면 됩니다.' ?></small>
 		</div>
 		<input class="form-control" name="upload_files[]" type="file" tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : ''?>>
 	</div>
