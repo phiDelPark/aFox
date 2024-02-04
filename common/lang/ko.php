@@ -80,6 +80,9 @@ $_LANG['notuse']			= '미사용';
 $_LANG['agree']				= '동의';
 $_LANG['disagree']			= '동의안함';
 
+$_LANG['include']			= '포함';
+$_LANG['exclude']			= '제외';
+
 $_LANG['time']				= '시간';
 $_LANG['date']				= '날짜';
 $_LANG['year']				= '년';

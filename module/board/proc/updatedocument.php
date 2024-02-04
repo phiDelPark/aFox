@@ -197,8 +197,8 @@ function proc($data) {
 					'error' => $files['error'][$i]
 				];
 
-				$filetype = strtolower(array_shift(explode('/', $file['type'])));
-				$filetype = empty($_file_types[$filetype]) ? 'binary' : $filetype;
+				$filetype = explode('/', strtolower($file['type']));
+				$filetype = empty($_file_types[$filetype[0]]) ? 'binary' : $filetype[0];
 				$fileext = explode('.', $file['name']);
 				$fileext = count($fileext) === 1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
 
@@ -209,7 +209,7 @@ function proc($data) {
 				// 실행 가능한 파일 못하게 처리
 				$fileext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', ('.'.$fileext));
 
-				$filename = md5($i.$file['name'].time()) .'.'. $file['bits'] .'.'. $file['width'] .'x'. $file['height'];
+				$filename = md5($i.$file['name'].time());
 				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/' . $wr_srl . '/' . $filename;
 
 				$ret = moveUpFile($file, $file_dests[$i], $file_max_size);
