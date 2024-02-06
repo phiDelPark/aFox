@@ -73,7 +73,7 @@
 				e.preventDefault()
 				e.stopPropagation()
 				const a = e.target.closest('a') || e.target
-				location.href = a.href
+				if(a?.href) location.href = a.href
 			})
 
 		document.querySelector('#galleryContentModal')

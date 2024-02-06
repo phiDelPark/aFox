@@ -38,7 +38,7 @@ if(!empty($_POST['flush'])) {
 	}
 
 	if(!empty($_POST['danger'])) {
-/*//
+/*// 쓰이는 파일만 data/attach_move 로 이동 (이동 후 폴더명 변경 필요)
 		$out = DB::gets(_AF_FILE_TABLE_);
 		$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
@@ -70,6 +70,52 @@ if(!empty($_POST['flush'])) {
 						chmod($full_name, _AF_ATTACH_PERMIT_);
 						echo '<b style="color:red">ERROR:</b> '.$full_name.'<br />';
 					}
+				}
+				ob_flush();
+				flush();
+			}
+		}
+//*/
+	}
+
+	if(!empty($_POST['danger'])) {
+/*// 사진 정보 입력 (모델, 찍은날짜)
+		$out = DB::gets(_AF_FILE_TABLE_, ['md_id' => $_POST['danger']]);
+		$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
+
+		foreach ($out as $key => $value) {
+			$type = explode('/', strtolower($value['mf_type']));
+			$ext = '.'.strtoupper(empty($type[1]) ? 'none' : $type[1]);
+			$type = empty($_file_types[$type[0]]) ? 'binary' : $type[0];
+			$md_id = $value['md_id'];
+			$wr_srl = $value['mf_target'];
+			$upload_name = $value['mf_upload_name'];
+			$full_name = _AF_PATH_ . 'data/attach/' . $type . '/' . $md_id . '/' . $wr_srl . '/' . $upload_name;
+
+			if($type == 'image' && file_exists($full_name)){
+				if(function_exists('exif_read_data')){
+					if($ifd0 = @exif_read_data($full_name)){
+						$Make = trim(empty($ifd0['Make']) ? 'Unavailable' : $ifd0['Make']);
+						$Model = trim(empty($ifd0['Model']) ? 'Unavailable' : $ifd0['Model']);
+						$DateTime = trim(empty($ifd0['DateTimeOriginal']) ? '' : $ifd0['DateTimeOriginal']);
+
+						$Model = ($Make ? $Make:'Unavailable').' - '.($Model ? $Model:'Unavailable');
+						$DateTime = $DateTime ? $DateTime : '';
+
+						$data = ['mf_name' => str_replace(array('\\','/',':','*','?','"','<','>','|'),' ',$Model)];
+						if($DateTime) $data['mf_regdate'] = date('Y-m-d H:i:s', strtotime($DateTime));
+
+						DB::update(_AF_FILE_TABLE_,
+							$data, [
+								'mf_srl'=>$value['mf_srl']
+							]
+						);
+						echo '<b style="color:blue">FILE:</b> '.$full_name.'<br />';
+					}else{
+						echo '<b style="color:red">ERROR No header:</b> '.$full_name.'<br />';
+					}
+				}else{
+					echo '<b style="color:red">ERROR function:</b> exif_read_data<br />';
 				}
 				ob_flush();
 				flush();
