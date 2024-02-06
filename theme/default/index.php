@@ -158,7 +158,7 @@ $menus = getSiteMenu();
 <footer id="locationMap" class="p-4 text-center text-body-secondary bg-body-tertiary" aria-label="About Site">
 	<ul class="list-unstyled"><li style="visibility:hidden"></li>
 <?php
-	if(empty($menus['error'])){
+	if(!empty($menus['footer'])){
 		foreach ($menus['footer'] as $val) {
 			echo '<li class="d-inline mx-2"><a href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').' title="'.escapeHTML($val['mu_about']).'">'. escapeHTML($val['mu_title']) .'</a></li>';
 		}

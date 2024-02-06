@@ -271,11 +271,7 @@ function afoxEditor(ID, options) {
 	const form = editor.closest('FORM')
 
 	const check_groups = form.querySelectorAll('.checkbox-group.required');
-	check_groups.forEach(el => {
-		el.querySelectorAll('[type=checkbox]')?.forEach(el2 => {
-			el2.addEventListener('change', _ => el.classList.remove('is-invalid'))
-		})
-	})
+	check_groups.forEach(el => el.addEventListener('change', _=> el.classList.remove('is-invalid')))
 
 	if(form.hasAttribute('needvalidate')) form.setAttribute('novalidate', '')
 	form.addEventListener('submit', e => {

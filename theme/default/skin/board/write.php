@@ -12,7 +12,7 @@
 	<h2 class="pb-3 mb-4 border-bottom"><?php echo getLang($is?'edit':'write')?></h2>
 	<form id="setup" method="post" autocomplete="off" enctype="multipart/form-data" needvalidate>
 	<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
-	<input type="hidden" name="success_url" value="<?php echo $is?getUrl('disp','','cpage','','rp','','srl',$use_style == 'gallery' ? '': $DOC['mb_srl']):getUrl('','id',__MID__)?>">
+	<input type="hidden" name="success_url" value="<?php echo $is?getUrl('disp','','cpage','','rp','','srl',$use_style=='gallery'?'':$DOC['wr_srl']):getUrl('','id',__MID__)?>">
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="updateDocument" />
 	<input type="hidden" name="md_id" value="<?php echo __MID__?>">
@@ -59,7 +59,7 @@
 					$_boxs = explode('&', $_boxs[1]);
 					$is_radio = count($_boxs) > 1 ? 2 : 0;
 				}
-				$ex_value = $is ? $DOC['wr_extra']['values'][$ex_key] : $ex_value;
+				$ex_value = $is ? @$DOC['wr_extra']['values'][$ex_key] : $ex_value;
 		?>
 		<?php if($is_radio){ echo '<div class="form-floating mb-2"><div class="form-control'.($is_radio===2&&$is_required?' checkbox-group required':'').'">';
 				if($is_radio===2) $is_required = false; $ex_value = $is ? explode(',', $ex_value) : [];
@@ -77,18 +77,19 @@
 			$issecret = ($is&&$DOC['wr_secret']=='1')?'true':'false';
 			$ishtml = ($is&&$DOC['wr_type']=='2')||(!$is&&($_CFG['use_type']=='3'||$_CFG['use_type']=='9'))?1:0;
 			$istool = [];
-			if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = $use_style == 'gallery'?[0,['TEXT'=>'0']]:[$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
+			if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = $use_style == 'gallery'?[0,[]]:[$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
 			if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [$issecret, ['Secret'=>'true']];
 			displayEditor(
 				'wr_content', $is?$DOC['wr_content']:'',
 				[
 					'file'=>[__MID__, $is?$DOC['wr_srl']:0, $_CFG['md_file_max']],
 					'html'=>$use_style != 'gallery' && $ishtml,
-					'height'=>$use_style == 'gallery' ? '35px' : '350px',
-					'readonly'=>$use_style == 'gallery',
+					'placeholder'=>$use_style != 'gallery' ?0:getLang('gallery_content'),
+					'height'=>$use_style == 'gallery' ? '38px' : '350px',
 					'required'=>$use_style == 'gallery'?'':getLang('request_input',['content']),
-					'typebar'=>array('<span class="border-start" style="color:rgba(var(--bs-body-color-rgb),.65);font-size:.85rem;padding-left:.75rem">'.getLang($use_style == 'gallery' ? 'gallery_content' : 'content').'</span>', $istool),
-					'toolbar'=>$use_style != 'gallery'
+					'readonly'=>$use_style == 'gallery',
+					'toolbar'=>$use_style != 'gallery',
+					'typebar'=>$use_style == 'gallery' ?0:array(getLang('content'), $istool)
 				]
 			);
 		?>

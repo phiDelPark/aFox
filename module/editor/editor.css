@@ -1,6 +1,7 @@
 :root{
 	--bs-code-color: #e685b5;
 	--bs-border-color: #495057;
+	--bs-tertiary-bg: #2b3035;
 }
 
 body {
@@ -19,14 +20,14 @@ h1, h2 {
 	line-height: 1.1;
 	color: inherit;
 	padding-bottom: .2em;
-	border-bottom: 2px dashed var(--bd-border-color);
+	border-bottom: 2px dashed var(--bs-tertiary-bg);
 }
 
 code {
 	padding: 0 2px;
 	font-size: 80%;
 	color: var(--bs-code-color);
-	background-color: var(--bd-border-color);
+	background-color: var(--bs-tertiary-bg);
 	border-radius: 4px;
 	word-wrap: break-word;
 }
@@ -45,7 +46,7 @@ pre {
 	word-break: break-all;
 	word-wrap: break-word;
 	background-color: transparent;
-	border: 1px solid var(--bd-border-color);
+	border: 1px solid var(--bs-tertiary-bg);
 	border-radius: 4px;
 	overflow: auto;
 }
@@ -57,7 +58,7 @@ pre code {
 	font-size: inherit;
 	white-space: pre-wrap;
 	border-radius: 0;
-	background-color: var(--bd-border-color);
+	background-color: var(--bs-tertiary-bg);
 }
 
 pre:has(> code) {
@@ -69,11 +70,11 @@ blockquote {
 	margin: 0 0 20px;
 	font-size: 17.5px;
 	border: 0;
-	border-left: 5px solid var(--bd-border-color);
+	border-left: 5px solid var(--bs-tertiary-bg);
 }
 
 img[widget] {
-	border: 1px dashed var(--bd-border-color);
+	border: 1px dashed var(--bs-tertiary-bg);
 }
 
 img[widget]:not([src]):not([width]) {

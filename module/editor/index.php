@@ -41,7 +41,7 @@ foreach ($options as $key => $v) {
 	</div>
 <?php } ?>
 	<div id="editorContent" role="document" aria-label="Editor Content">
-		<textarea name="<?php echo $name ?>" class="form-control" <?php echo ($options['placeholder']?' placeholder="'.escapeHTML($options['placeholder']).'"':'').($options['readonly']?' readonly':'').($options['required']?' required':'') ?>><?php echo escapeHTML($content) ?></textarea>
+		<textarea name="<?php echo $name ?>" class="form-control" style="height:<?php echo $min_height ?>" <?php echo ($options['placeholder']?' placeholder="'.escapeHTML($options['placeholder']).'"':'').($options['readonly']?' readonly':'').($options['required']?' required':'') ?>><?php echo escapeHTML($content) ?></textarea>
 	</div>
 <?php if(!empty($options['toolbar'])) {
 	$components = get_cache('_AF_EDITOR_COMPONENTS');
