@@ -35,3 +35,7 @@
 		</div>
 	</form>
 </section>
+
+<?php
+/* End of file delete.php */
+/* Location: ./theme/default/skin/board/delete.php */

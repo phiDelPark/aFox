@@ -104,5 +104,5 @@
 </section>
 
 <?php
-/* End of file bo_write.php */
-/* Location: ./theme/default/bo_write.php */
+/* End of file write.php */
+/* Location: ./theme/default/skin/board/write.php */

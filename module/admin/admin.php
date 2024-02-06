@@ -192,16 +192,16 @@ $is_admin = isAdmin();
 			messageBox(getLang('error_permitted'), 4501, false);
 		} else {
 			if (is_array($err = get_error())) messageBox($err['message'], $err['error'], false);
-			if(!empty($_POST['mid'])){
-				$_POST['md_id'] = $_POST['mid'];
-				@include_once _AF_MODULES_PATH_ . $admin . '/lang/' . _AF_LANG_ . '.php';
-				require_once _AF_MODULES_PATH_ . $admin . '/setup.php';
-			} else if(!empty($_POST['th_id']) || !empty($_POST['md_id']) || !empty($_POST['ao_id']) || !empty($_POST['wg_id'])){
+			if(!empty($_POST['th_id']) || !empty($_POST['md_id']) || !empty($_POST['ao_id']) || !empty($_POST['wg_id'])) {
 				require_once _AF_ADMIN_PATH_ . 'form/' . (
 					!empty($_POST['th_id'])	? 'themeform'
 					: (!empty($_POST['md_id']) ? 'moduleform'
 						: (!empty($_POST['ao_id']) ? 'addonform'
 							: 'widgetform'))) . '.php';
+			} else if(!empty($_POST['mid'])) {
+				$_POST['md_id'] = $_POST['mid'];
+				@include_once _AF_MODULES_PATH_ . $admin . '/lang/' . _AF_LANG_ . '.php';
+				require_once _AF_MODULES_PATH_ . $admin . '/setup.php';
 			} else {
 				require_once _AF_ADMIN_PATH_ . $admin . '.php';
 			}

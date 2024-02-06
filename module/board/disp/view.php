@@ -134,5 +134,5 @@ function proc($data) {
 	return $result;
 }
 
-/* End of file viewdocument.php */
-/* Location: ./module/board/disp/viewdocument.php */
+/* End of file view.php */
+/* Location: ./module/board/disp/view.php */

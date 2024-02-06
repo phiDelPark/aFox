@@ -118,7 +118,8 @@ foreach ($options as $key => $v) {
 	if(!empty($options['file']) && $options['file'][2] > 0) {
 		$file_id = $options['file'][0];
 		$file_target = $options['file'][1];
-		$file_max = $options['file'][2];
+		$file_max = empty($options['file'][2]) ? 0 : $options['file'][2];
+		$file_accept = empty($options['file'][3]) ? '' : $options['file'][3];
 		$fileList = empty($file_id) ? [] : getFileList($file_id, $file_target);
 ?>
 	<div class="mt-4 d-grid gap-2">
@@ -143,7 +144,7 @@ foreach ($options as $key => $v) {
 		<div id="uploadFiles" class="user-select-none input-group text-secondary border rounded p-2">
 		<small class="ms-1"><?php echo $options['readonly']?'# 첨부된 파일이 없습니다.':'# 본문 첨부는 아이콘을 잡고 끌어 옮기시면 됩니다.' ?></small>
 		</div>
-		<input class="form-control" name="upload_files[]" type="file" tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : ''?>>
+		<input class="form-control" name="upload_files[]" type="file"<?php echo $file_accept ? ' accept="'.$file_accept.'"' : ''?> tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : ''?>>
 	</div>
 <?php } ?>
 </div>

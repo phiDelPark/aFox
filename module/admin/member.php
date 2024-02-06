@@ -15,7 +15,7 @@
 <table class="table">
 <thead>
 	<tr>
-		<th scope="col">#<?php echo getLang('id')?></th>
+		<th scope="col"><?php echo getLang('id')?></th>
 		<th scope="col" style="width:4.5rem"><?php echo getLang('rank')?></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('nickname')?></th>
 		<th scope="col"><?php echo getLang('point')?></th>

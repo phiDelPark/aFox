@@ -211,6 +211,14 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 	opacity: 1;
 	background-color: rgba(var(--bs-tertiary-bg-rgb), .65);
 }
+.gallery .carousel-inner h6{
+	position: absolute;
+	writing-mode: vertical-rl;
+	margin: 0;
+}
+.gallery .carousel-inner img{
+	margin-left: 2.3rem;
+}
 
 .editor-group label:nth-of-type(1) {
 	font-size: .85rem;

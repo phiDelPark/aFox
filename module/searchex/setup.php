@@ -6,6 +6,12 @@ $_count = empty($_MODULE['md_list_count'])?20:$_MODULE['md_list_count'];
 $_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', ['md_key'=>'board']);
 if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 ?>
+<form method="post" autocomplete="off">
+<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
+<input type="hidden" name="success_url" value="<?php echo getUrl('md_id','')?>" />
+<input type="hidden" name="module" value="<?php echo $_POST['md_id']?>" />
+<input type="hidden" name="act" value="updateSetup" />
+<input type="hidden" name="md_id" value="searchex" />
 
 <div class="input-group mb-4">
 	<div class="input-group">
@@ -41,6 +47,12 @@ if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode
 ?>
 </tbody>
 </table>
+
+<hr class="mb-5">
+<div class="text-end position-fixed bottom-0 end-0 p-3">
+	<button type="submit" class="btn btn-success btn-lg" style="min-width:220px"><?php echo getLang('save')?></button>
+</div>
+</form>
 
 <script>
 	function _allCheckTableItems(el_chk) {

@@ -15,7 +15,7 @@
 <table class="table">
 <thead>
 	<tr>
-		<th scope="col">#<?php echo getLang('id')?></th>
+		<th scope="col"><?php echo getLang('id')?></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
 		<th scope="col"><?php echo getLang('grant')?></th>
 		<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('date')?></th>

@@ -159,11 +159,11 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 			</div>
 			<div class="input-group me-2" style="width:auto">
 				<label class="input-group-text w-100p" for="mdFileSize"><?php echo getLang('max_file_size')?></label>
-				<input type="number" class="form-control mw-100p" id="mdFileSize" name="md_file_size" min="0" placeholder="KB" value="<?php echo empty($BOARD['md_file_size'])?'':$BOARD['md_file_size'] ?>">
+				<input type="number" class="form-control mw-100p" id="mdFileSize" name="md_file_size" min="0" placeholder="KB" value="<?php echo empty($BOARD['md_file_size'])?'':($BOARD['md_file_size']/1024) ?>">
 			</div>
             <div class="input-group" style="width:auto">
                 <label class="input-group-text w-100p" for="mdFileExt"><?php echo getLang('file_extension')?></label>
-                <input type="text" class="form-control mw-100p" id="mdFileExt" name="md_file_ext" maxlength="255" value="<?php echo $BOARD['md_file_ext'] ?>">
+                <input type="text" class="form-control mw-100p" id="mdFileExt" name="md_file_accept" maxlength="255" value="<?php echo str_replace('.', '', $BOARD['md_file_accept']) ?>">
             </div>
 		</div>
 		<div class="form-text"><?php echo getLang('desc_board_file')?></div>
@@ -266,7 +266,7 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 
 	<hr class="mb-5">
 	<div class="text-end position-fixed bottom-0 end-0 p-3">
-		<button type="submit" class="btn btn-success btn-lg" style="min-width:220px">저장</button>
+		<button type="submit" class="btn btn-success btn-lg" style="min-width:220px"><?php echo getLang('save')?></button>
 	</div>
 </form>
 

@@ -94,7 +94,7 @@
 						const tag_img = '<div class="carousel-item%s">%s<img src="%s" class="d-block w-100" alt="%s"></div>'
 						html += tag_img.sprintf(
 							active==el.mf_srl?' active':'',
-							el.EXIF ? '<h6>'+(el.EXIF.ImageDescription?.trim() || '')+', '+(el.EXIF.DateTimeOriginal || '')+'</h6>' : '',
+							'<h6>'+(el.mf_name || '')+', '+(el.mf_regdate || '')+'</h6>',
 							'./?file='+el.mf_srl, el.mf_name
 						)
 					});

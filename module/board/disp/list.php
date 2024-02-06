@@ -24,5 +24,5 @@ function proc($data) {
 	return $result;
 }
 
-/* End of file documentlist.php */
-/* Location: ./module/board/disp/documentlist.php */
+/* End of file list.php */
+/* Location: ./module/board/disp/list.php */

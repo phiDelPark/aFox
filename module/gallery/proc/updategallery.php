@@ -56,6 +56,10 @@ function proc($data) {
 	$module = getModule($md_id);
 	if(empty($module)) return set_error(getLang('error_founded'), 4201);
 
+	$module['use_style'] = abs($module['use_style']);
+	$use_style = ['list','review','gallery','timeline'];
+	$use_style = $use_style[$module['use_style']>3?0:$module['use_style']];
+
 	// use_type 값이 1~6 사이이면 모듈에 설정된 값으로 강제 설정
 	if(!empty($module['use_type']) && $module['use_type'] < 7) $data['wr_type'] = ((int)$module['use_type'])-1;
 	$wr_secret = empty($data['wr_secret']) ? 0 : ($data['wr_secret'] == 'true' ||  $data['wr_secret'] === 1);
@@ -174,6 +178,7 @@ function proc($data) {
 			// 권한 체크
 			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warning_not_allowable', ['upload']), 3505);
 			if($file_max < ($upload_count+$file_count)) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
+			$exif = $use_style == 'gallery' && function_exists('exif_read_data');
 
 			for ($i=0; $i < $upload_count; $i++) {
 				// 빈 파일 넘김
@@ -211,6 +216,17 @@ function proc($data) {
 				$ret = moveUpFile($file, $to_files[$i], $file_max_size);
 				if(!empty($ret['error'])) throw new Exception($ret['message'], $ret['error']);
 
+				if($exif && $ftype == 'image' && ($ifd0=@exif_read_data($to_files[$i]))){
+					$DateTime = trim(empty($ifd0['DateTimeOriginal']) ? '' : $ifd0['DateTimeOriginal']);
+					if($DateTime) $file['date'] = date('Y-m-d H:i:s', strtotime($DateTime));
+					if($Model = (trim(empty($ifd0['Make']) ? 'Unavailable' : $ifd0['Make']))) {
+						$Model .= ' - '.trim(empty($ifd0['Model']) ? 'Unavailable' : $ifd0['Model']);
+						$file['name'] = str_replace(array('\\','/',':','*','?','"','<','>','|'),' ',$Model);
+					}
+				}else{
+					$file['date'] = 'NOW()';
+				}
+
 				DB::insert(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>$wr_srl,
@@ -220,7 +236,7 @@ function proc($data) {
 					'mf_type'=>$file['type'],
 					'mb_srl'=>$data['mb_srl'],
 					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
-					'^mf_regdate'=>'NOW()'
+					($file['date']=='NOW()'?'^':'').'mf_regdate'=>$file['date']
 				]);
 
 				$file['mf_srl'] = $mf_srl = DB::insertId();
@@ -313,5 +329,5 @@ function proc($data) {
 	return ['error'=>0, 'message'=>getLang('success_saved'), 'wr_srl'=>$wr_srl];
 }
 
-/* End of file updatedocument.php */
-/* Location: ./module/board/proc/updatedocument.php */
+/* End of file updategallery.php */
+/* Location: ./module/board/proc/updategallery.php */

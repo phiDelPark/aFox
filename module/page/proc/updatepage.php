@@ -63,7 +63,7 @@ function proc($data) {
 
 			$module = getModule($md_id);
 		} else {
-			if (isset($data['new_md_id'])) {
+			if (isset($data['new_md_id']) || $module['md_key'] != 'page') {
 				throw new Exception(getLang('warning_exists', ['id']), 3103);
 			}
 

@@ -261,7 +261,7 @@ $create_sql = '
 	   md_about        VARCHAR(255) NOT NULL DEFAULT \'\',
 	   md_file_max     INT(11)      NOT NULL DEFAULT 0,
 	   md_file_size    INT(11)      NOT NULL DEFAULT 0,
-	   md_file_ext     VARCHAR(255) NOT NULL DEFAULT \'\',
+	   md_file_accept  VARCHAR(255) NOT NULL DEFAULT \'\',
 	   md_list_count   INT(11)      NOT NULL DEFAULT 20,
 	   md_regdate      datetime     NOT NULL,
 	   md_manager      INT(11)      NOT NULL DEFAULT 0,

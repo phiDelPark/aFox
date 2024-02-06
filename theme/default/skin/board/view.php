@@ -57,8 +57,8 @@ $wr_content = preg_replace('/(<img)(((?!loading)[^>])+)>/is', '\1\2 loading="laz
 } ?>
 	<p class="d-flex w-100 justify-content-between p-1 border-bottom">
 		<span><a href="<?php echo getUrl('disp','','srl','','cpage','','rp','') ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#list-square"/></svg></a></span>
-		<span><a href="<?php echo getUrl('disp','deleteDocument', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#x-square"/></svg></a>
-		<a href="<?php echo getUrl('disp','writeDocument', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#pencil-square"/></svg></a></span>
+		<span><a href="<?php echo getUrl('disp','delete', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#x-square"/></svg></a>
+		<a href="<?php echo getUrl('disp','write', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#pencil-square"/></svg></a></span>
 	</p>
 </section>
 

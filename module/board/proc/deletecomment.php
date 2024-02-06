@@ -78,5 +78,5 @@ function proc($data) {
 	return ['error'=>0, 'message'=>getLang('success_deleted'), 'wr_srl'=>$wr_srl];
 }
 
-/* End of file deletedocument.php */
-/* Location: ./module/board/proc/deletedocument.php */
+/* End of file deletecomment.php */
+/* Location: ./module/board/proc/deletecomment.php */

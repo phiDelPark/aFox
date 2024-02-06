@@ -17,7 +17,7 @@
 <table class="table">
 <thead>
 	<tr>
-		<th scope="col" class="text-wrap">#<?php echo getLang('addon')?></th>
+		<th scope="col" class="text-wrap"><?php echo getLang('addon')?></th>
 		<th scope="col" class="text-end d-none d-md-table-cell"><?php echo getLang('author')?></th>
 		<th scope="col"><?php echo getLang('version')?></th>
 		<th scope="col"><?php echo getLang('using')?></th>
