@@ -1,37 +1,29 @@
-<?php
+<?php if(!defined('__AFOX__')) exit();
 
-if(!defined('__AFOX__')) exit();
-
-function proc($data) {
-	global $_MEMBER;
-
+function proc($data)
+{
 	if (isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
-	if (empty($data['md_id'])) return set_error(getLang('error_request'),4303);
-	if (!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
+	if(empty($data['md_id'])||!preg_match('/^[a-zA-Z]+\w{2,}$/', $data['md_id'])){
+		return set_error(getLang('invalid_value', ['id']), 2001);
+	}
 
+	global $_MEMBER;
 	$md_id = $data['md_id'];
-	$upload_count = 0;
-	$files = null;
 
 	// 파일이 업로드되면 최대 수 체크
-	if(!empty($_FILES['upload_files']['tmp_name'])) {
-		$files = $_FILES['upload_files'];
-		$upload_count = count($files['tmp_name']);
-		// 빈파일만 넘어오면 변수 삭제
-		if($upload_count > 0 && empty($files['tmp_name'][0])) {
-			$upload_count = 0;
-		}
-	}
+	$files = empty($_FILES['upload_files']['tmp_name'])?null:$_FILES['upload_files'];
+	$upload_count = $files&&!empty($files['tmp_name'][0])?count($files['tmp_name']):0;
+
+	$to_files = [];
+	$new_files = [];
+	$unlink_files = [];
+	$file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
 	$data['pg_content'] = empty($data['pg_content']) ? '' : xssClean($data['pg_content']);
 
 	if (!isAdmin()) {
 		$data['pg_content'] = preg_replace('@\[_/?(STYLE|SCRIPT)/?_\]@is', '', $data['pg_content']);
 	}
-
-	$unlink_files = [];
-	$file_dests = [];
-	$file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
 	DB::transaction();
 
@@ -98,9 +90,9 @@ function proc($data) {
 					'mf_target'=>1,
 					'mf_srl'=>$val])
 				) {
-					$filetype = explode('/', strtolower($file['mf_type']));
-					$filetype = empty($_file_types[$filetype[0]]) ? 'binary' : $filetype[0];
-					$unlink_files[] = _AF_ATTACH_DATA_.$filetype.'/'.$md_id.'/1/'.$file['mf_upload_name'];
+					$ftype = explode('/', strtolower($file['mf_type']));
+					$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
+					$unlink_files[] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/1/'.$file['mf_upload_name'];
 				}
 			}
 		}
@@ -109,53 +101,39 @@ function proc($data) {
 		$file_count = DB::count(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>1]);
 
 		if ($upload_count>0) {
-
-			$chk_ext = '';
-
 			for ($i=0; $i < $upload_count; $i++) {
 				// 빈 파일 넘김
-				if (empty($files['tmp_name'][$i])) continue;
+				if(empty($files['tmp_name'][$i])) continue;
 
-				$iinfo = getimagesize($files['tmp_name'][$i]);
 				$file = [
 					'tmp_name' => $files['tmp_name'][$i],
 					'name' => $files['name'][$i],
 					'type' => $files['type'][$i],
-					'bits' => $iinfo['bits'],
-					'width' => $iinfo[0],
-					'height' => $iinfo[1],
 					'size' => $files['size'][$i],
 					'error' => $files['error'][$i]
 				];
 
-				$filetype = explode('/', strtolower($file['type']));
-				$filetype = empty($_file_types[$filetype[0]]) ? 'binary' : $filetype[0];
-				$fileext = explode('.', $file['name']);
-				$fileext = count($fileext) === 1 ? 'none' : $fileext[count($fileext)-1]; //array_pop
-
-				if($file_exts && !preg_match('/\.('.($file_exts).')$/i', $filename)) {
-					throw new Exception(getLang('warning_allowable', [$file_exts])."\n", 3503);
-				}
-
 				// 실행 가능한 파일 못하게 처리
-				$fileext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', ('.'.$fileext));
+				$file['name'] = preg_replace('/([^\x20-~]+)|([\\/:?"<>|]+)/g', '_', $file['name']);
+				$file['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)$/i', '$0-x', $file['name']);
 
-				$filename = md5($i.$file['name'].time());
-				$file_dests[$i] = _AF_ATTACH_DATA_ . $filetype . '/' . $md_id . '/' . $wr_srl . '/' . $filename;
+				$fname = md5($i.$file['name'].time());
+				$ftype = explode('/', strtolower($file['type']));
+				$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
 
-				$ret = moveUpFile($file, $file_dests[$i], 0);
-				if(!empty($ret['error'])) {
-					throw new Exception($ret['message'], $ret['error']);
-				}
+				$to_files[$i] = _AF_ATTACH_DATA_ . $ftype . '/' . $md_id . '/1/' . $fname;
+
+				$ret = moveUploadedFile($file, $to_files[$i], 0);
+				if(!empty($ret['error'])) throw new Exception($ret['message'], $ret['error']);
 
 				DB::insert(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>1,
 					'mf_name'=>$file['name'],
-					'mf_upload_name'=>$filename,
+					'mf_upload_name'=>$fname,
 					'mf_size'=>$file['size'],
 					'mf_type'=>$file['type'],
-					'mb_srl'=>0,
+					'mb_srl'=>$data['mb_srl'],
 					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
 					'^mf_regdate'=>'NOW()'
 				]);
@@ -234,7 +212,7 @@ function proc($data) {
 
 		// Engine == MyISAM 트랜잭션을 지원 안한다.
 		if (DB::engine(_AF_PAGE_TABLE_) == 'myisam') {
-			if ($new_insert && !empty($wr_srl)) {
+			if ($new_insert) {
 				@DB::delete(_AF_PAGE_TABLE_, ['md_id'=>$md_id]);
 				@DB::delete(_AF_MODULE_TABLE_, ['md_id'=>$md_id]);
 				@DB::delete(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>1]);
@@ -246,7 +224,7 @@ function proc($data) {
 		}
 
 		// 실패시 업로드 된 파일 삭제
-		foreach ($file_dests as $val) @unlinkFile($val);
+		foreach ($to_files as $val) @unlinkFile($val);
 
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

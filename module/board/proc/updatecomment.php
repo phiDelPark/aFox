@@ -133,14 +133,13 @@ function proc($data) {
 
 			$ret_rp_srl = DB::insertId();
 
-			// 포인트 사용중이면
-			$point = (int)$module['point_reply'];
-			if($point !== 0) {
-				$_r = setPoint($point);
-				if(!empty($_r['error'])) {
-					//TODO 에러시 메세지 보냄
+			// 포인트 사용중이면 // 한번만
+			if(($point = (int)$module['point_reply']) !== 0){
+				if(!getHistory('wr_comment::'.$wr_srl) && setHistory('wr_comment::'.$wr_srl, $point)){
+					if(($_r=setPoint($point)) && !empty($_r['error'])){
+						// TODO 포인트 에러시...
+					}
 				}
-				setHistory('wr_comment::'.$ret_rp_srl.'::'.$wr_srl, $point);
 			}
 
 			DB::update(_AF_DOCUMENT_TABLE_, ['^wr_reply'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);

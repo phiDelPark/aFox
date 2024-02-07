@@ -21,9 +21,9 @@
 	<div class="clearfix">
 		<?php if (empty($_MEMBER) || (!empty($DOC['wr_srl']) && $_MEMBER['mb_srl'] !== $DOC['mb_srl'])) { ?>
 		<div class="mb-4">
-			<input type="text" name="mb_nick" class="form-control mb-1"<?php echo empty($_MEMBER)?' required':''?> maxlength="20" placeholder="<?php echo getLang('id')?>" value="<?php echo $is?$DOC['mb_nick']:''?>"<?php echo empty($DOC['wr_srl'])?'':' readonly'?>>
+			<input type="text" name="mb_nick" value="<?php echo $is?$DOC['mb_nick']:''?>" class="form-control mb-1" maxlength="20" placeholder="<?php echo getLang('id')?>"<?php echo empty($_MEMBER)?' required':''?><?php echo empty($DOC['wr_srl'])?'':' readonly'?>>
 			<?php if (!$is_manager && empty($DOC['mb_srl'])) { ?>
-				<input type="password" name="mb_password" class="form-control"<?php echo empty($_MEMBER)?' required':''?> placeholder="<?php echo getLang('password')?>">
+				<input type="password" name="mb_password" class="form-control" placeholder="<?php echo getLang('password')?>"<?php echo empty($_MEMBER)?' required':''?>>
 			<?php } ?>
 		</div>
 		<?php } ?>
@@ -82,7 +82,7 @@
 			displayEditor(
 				'wr_content', $is?$DOC['wr_content']:'',
 				[
-					'file'=>[__MID__, $is?$DOC['wr_srl']:0, $_CFG['md_file_max']],
+					'file'=>[__MID__, $is?$DOC['wr_srl']:0, $_CFG['md_file_max'], $_CFG['md_file_accept']],
 					'html'=>$use_style != 'gallery' && $ishtml,
 					'placeholder'=>$use_style != 'gallery' ?0:getLang('gallery_content'),
 					'height'=>$use_style == 'gallery' ? '38px' : '350px',

@@ -1,11 +1,12 @@
 <?php if(!defined('__AFOX__')) exit();
 include_once dirname(__FILE__) . '/../patterns.php';
 
-function proc($data) {
-
+function proc($data)
+{
 	if(isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
-	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
-	if(!preg_match('/'._AF_PATTERN_ID_.'/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
+	if(empty($data['md_id'])||!preg_match('/'._AF_PATTERN_ID_.'/', $data['md_id'])){
+		return set_error(getLang('invalid_value', ['id']), 2001);
+	}
 
 	$category = ''; // 분류 정리
 	if(!empty($data['md_category'])) {

@@ -17,7 +17,7 @@ function proc($data) {
 
 	if($_MEMBER['mb_srl'] == $d_mb_srl) return set_error(getLang('warning_not_allowable', ['author']),3505);
 
-	$_out = getHistoryAction('wr_yes::'.$wr_srl);
+	$_out = getHistory('wr_yes::'.$wr_srl);
 	if(!empty($_out)) return set_error(getLang('warning_actioned', ['yes']), 3303);
 
 	DB::transaction();

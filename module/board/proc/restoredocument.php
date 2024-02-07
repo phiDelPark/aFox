@@ -44,6 +44,12 @@ function proc($data) {
 				'wr_srl'=>$wr_srl
 			]
 		);
+
+		// 포인트 복구
+		if(($point=(int)getHistory('wr_document::'.$wr_srl)) && ($_r=setPoint($point)) && !empty($_r['error'])){
+			// TODO 에러 발생시...
+		}
+
 	} catch (Exception $ex) {
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());

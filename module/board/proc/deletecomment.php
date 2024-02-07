@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(empty($data['rp_srl'])) return set_error(getLang('error_request'),4303);
-	$rp_srl = (int) abs(empty($data['rp_srl']) ? 0 : $data['rp_srl']);
+	$rp_srl = (int) abs($data['rp_srl']);
 
 	global $_MEMBER;
 
@@ -57,15 +57,13 @@ function proc($data) {
 				]
 			);
 		} else {
-			DB::delete(_AF_COMMENT_TABLE_,
-				[
-					'rp_srl'=>$rp_srl
-				]
-			);
-
-			//TODO History를 검색해서 포인트 있으면 회수 코드 작성하기
-
+			DB::delete(_AF_COMMENT_TABLE_ , ['rp_srl'=>$rp_srl]);
 			DB::update(_AF_DOCUMENT_TABLE_, ['^wr_reply'=>'wr_reply-1'], ['wr_srl'=>$wr_srl]);
+		}
+
+		// 포인트 삭제
+		if(($point=(int)getHistory('wr_comment::'.$wr_srl)) && ($_r=setPoint($point*-1)) && !empty($_r['error'])){
+			// TODO 에러 발생시...
 		}
 
 	} catch (Exception $ex) {

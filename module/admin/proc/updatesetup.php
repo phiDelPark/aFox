@@ -18,7 +18,7 @@ function proc($data) {
 			}
 
 			$destination = _AF_CONFIG_DATA_.$val.'.'.$_lsext[$key];
-			$ret = moveUpFile($_FILES[$val], $destination);
+			$ret = moveUploadedFile($_FILES[$val], $destination);
 			if(!empty($ret['error'])) return $ret;
 			chmod($destination, _AF_FILE_PERMIT_);
 		}

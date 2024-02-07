@@ -16,19 +16,13 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 	$wr_mb = $result["mb_srl"];
 	if ($inc_hit && $_MEMBER && $wr_mb != $_MEMBER["mb_srl"])
 	{ // exclude yourself
-		if (($point = (int)getModule($result["md_id"], "point_view")) !== 0) {
-			$_out = setHistory("wr_hit::" . $srl, $point, false,
-				function ($v) use ($srl, $wr_mb, $point) {
-					// 처음에만 포인트 사용
-					if (!empty($v)) return;
-					// 자신은 포인트 사용 안함
-					if (empty($wr_mb) || $wr_mb !== $v["mb_srl"]) {
-						$_r = setPoint($point);
-						if (!empty($_r["error"])) return set_error($_r["message"], $_r["error"]);
-					}
+		if (($point = (int)getModule($result["md_id"], "point_view"))) {
+			// 처음에만 포인트 사용
+			if(!getHistory("wr_hit::" . $srl) && setHistory("wr_hit::" . $srl, $point)){
+				if(($_r=setPoint($point)) && !empty($_r["error"])){
+					return set_error($_r["message"], $_r["error"]);
 				}
-			);
-			if (!empty($_out["error"])) return set_error($_out["message"], $_out["error"]);
+			}
 		}
 
 		$hit_key = "afox_wr_hit::" . $srl;

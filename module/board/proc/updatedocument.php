@@ -1,9 +1,11 @@
 <?php if(!defined('__AFOX__')) exit();
 include_once dirname(__FILE__) . '/../patterns.php';
 
-function proc($data) {
-	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
-	if(!preg_match('/'._AF_PATTERN_ID_.'/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
+function proc($data)
+{
+	if(empty($data['md_id'])||!preg_match('/'._AF_PATTERN_ID_.'/', $data['md_id'])){
+		return set_error(getLang('invalid_value', ['id']), 2001);
+	}
 
 	$data['wr_title'] = trim(strip_tags($data['wr_title']));
 	if(empty($data['wr_title'])) return set_error(getLang('request_input', ['title']),1);
@@ -70,32 +72,16 @@ function proc($data) {
 		$data['wr_category'] = '';
 	}
 
-	$files = null;
-	$upload_count = 0;
-	$new_files = [];
-
 	// 파일이 업로드되면 최대 수 체크
-	if(!empty($_FILES['upload_files']['tmp_name'])) {
-		$files = $_FILES['upload_files'];
-		$upload_count = count($files['tmp_name']);
-		// 빈파일만 넘어오면 변수 삭제
-		if($upload_count > 0 && empty($files['tmp_name'][0])) {
-			$upload_count = 0;
-		}
-	}
+	$files = empty($_FILES['upload_files']['tmp_name'])?null:$_FILES['upload_files'];
+	$upload_count = $files&&!empty($files['tmp_name'][0])?count($files['tmp_name']):0;
 
-	// 관리자는 제한 없음
-	if($is_admin) {
-		$file_max = 99999999;
-		$file_max_size = 0;
-		$file_accept = '';
-	} else {
-		$file_max = (int) empty($module['md_file_max']) ? 0 : $module['md_file_max'];
-		$file_max_size = (int) $module['md_file_size'];
-		$file_accept = str_replace(',', '|', $module['md_file_accept']);
-	}
+	$file_max = $is_admin ? 999999 : (int) $module['md_file_max'];
+	$file_max_size = $is_admin ? 0 : (int) $module['md_file_size'];
+	$file_accept = $is_admin ? '' : str_replace(',', '|', $module['md_file_accept']);
 
 	$to_files = [];
+	$new_files = [];
 	$unlink_files = [];
 	$file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
@@ -191,31 +177,28 @@ function proc($data) {
 					'error' => $files['error'][$i]
 				];
 
+				$file['name'] = preg_replace('/([^\x20-~]+)|([\\/:?"<>|]+)/g', '_', $file['name']);
+				if($file_accept && !preg_match('/('.($file_accept).')$/i', $file['name'])) {
+					throw new Exception(getLang('warning_allowable', [
+						str_replace('.', '', $module['md_file_accept']) ]), 3503);
+				}
+				// 실행 가능한 파일 못하게 처리
+				$file['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)$/i', '$0-x', $file['name']);
+
+				$fname = md5($i.$file['name'].time());
 				$ftype = explode('/', strtolower($file['type']));
 				$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
-				$f_ext = explode('.', $file['name']);
-				$f_ext = count($f_ext) === 1 ? 'none' : $f_ext[count($f_ext)-1]; //array_pop
 
-				if($file_accept && !preg_match('/('.($file_accept).')$/i', $filename)) {
-					throw new Exception(getLang('warning_allowable', [
-						str_replace('.', '', $module['md_file_accept'])
-					]), 3503);
-				}
+				$to_files[$i] = _AF_ATTACH_DATA_ . $ftype . '/' . $md_id . '/' . $wr_srl . '/' . $fname;
 
-				// 실행 가능한 파일 못하게 처리
-				$f_ext = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', ('.'.$f_ext));
-
-				$filename = md5($i.$file['name'].time());
-				$to_files[$i] = _AF_ATTACH_DATA_ . $ftype . '/' . $md_id . '/' . $wr_srl . '/' . $filename;
-
-				$ret = moveUpFile($file, $to_files[$i], $file_max_size);
+				$ret = moveUploadedFile($file, $to_files[$i], $file_max_size);
 				if(!empty($ret['error'])) throw new Exception($ret['message'], $ret['error']);
 
 				DB::insert(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>$wr_srl,
 					'mf_name'=>$file['name'],
-					'mf_upload_name'=>$filename,
+					'mf_upload_name'=>$fname,
 					'mf_size'=>$file['size'],
 					'mf_type'=>$file['type'],
 					'mb_srl'=>$data['mb_srl'],
@@ -266,13 +249,12 @@ function proc($data) {
 		);
 
 		// 포인트 사용중이고 새글이면
-		$point = (int)$module['point_write'];
-		if($new_insert && $point !== 0){
-			$_r = setPoint($point);
-			if(!empty($_r['error'])) {
-				//TODO 에러시 메세지 보냄
+		if($new_insert && ($point=(int)$module['point_write'])){
+			if(setHistory('wr_document::'.$wr_srl, $point)){
+				if(($_r=setPoint($point)) && !empty($_r['error'])){
+					// TODO 포인트 에러시...
+				}
 			}
-			setHistory('wr_document::'.$wr_srl, $point);
 		}
 
 		// 모두 완료 되면 지워진 파일 완전 삭제

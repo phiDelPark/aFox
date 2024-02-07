@@ -110,7 +110,7 @@ function proc($data) {
 		}
 
 		// 디비에 등록된 후 옮기기 위해 임시폴더에 유지
-		$ret = moveUpFile($_FILES['mb_icon'], '', 500000);
+		$ret = moveUploadedFile($_FILES['mb_icon'], '', 500000);
 		if(!empty($ret['error'])) return set_error($ret['message'],$ret['error']);
 		$remove_mb_icon = 1;
 	}

@@ -193,11 +193,7 @@ function getFileList($id, $target){
 }
 
 // 활동 체크를 위해 기록
-function getHistory($act){
-	global $_MEMBER; if(empty($_MEMBER)) return [];
-	return DB::gets(_AF_HISTORY_TABLE_, '*', ['hs_action' => $act, 'mb_srl' => $_MEMBER['mb_srl']], 'hs_regdate');
-}
-function setHistory($act, $value, $allowdup = false, $callback = null){
+function setHistory($act, $value, $allowdup = false){
 	global $_MEMBER;
 	if (empty($_MEMBER)) return false;
 	DB::transaction();
@@ -208,22 +204,28 @@ function setHistory($act, $value, $allowdup = false, $callback = null){
 			DB::insert(_AF_HISTORY_TABLE_,
 				[
 					'mb_srl'=>$_MEMBER['mb_srl'],
-					'hs_action'=>$act,
+					'hs_action'=>'::'.$act.'::',
 					'hs_value'=>$value,
 					'^hs_regdate'=>'NOW()'
 				]
 			);
 		}
-		if($callback != null){
-			$_r = $callback($uinfo);
-			if(!empty($_r['error'])) throw new Exception($_r['message'], $_r['error']);
-		}
 	} catch (Exception $ex){
 		DB::rollback();
-		return set_error($ex->getMessage(),$ex->getCode());
+		return false;
 	}
 	DB::commit();
 	return true;
+}
+function getHistory($act){
+	$his = getHistorys($act);
+	return count($his) ? $his[0]['hs_value'] : null;
+}
+function getHistorys($act, $select = 'hs_value'){
+	global $_MEMBER; if(empty($_MEMBER)) return [];
+	return DB::gets(_AF_HISTORY_TABLE_, $select,
+		['hs_action{LIKE}'=>'%::'.$act.'::%', 'mb_srl'=>$_MEMBER['mb_srl']],
+		'hs_regdate');
 }
 
 function setPoint($point, $mb_srl = 0){
@@ -381,7 +383,7 @@ function unlinkAll($dir, $subdir = true){
 	return $ret;
 }
 
-function moveUpFile($file, $dest, $max_size = 0){
+function moveUploadedFile($file, $dest, $max_size = 0){
 	if($file['error'] === UPLOAD_ERR_OK){
 		// HTTP post로 전송된 것인지 체크합니다.
 		if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('UPLOAD_ERR_CODE(-1)'),10489);

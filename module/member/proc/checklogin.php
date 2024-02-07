@@ -82,7 +82,7 @@ function proc($data) {
 			DB::insert(_AF_HISTORY_TABLE_,
 				[
 					'mb_srl'=>$mb['mb_srl'],
-					'hs_action'=>'mb_login',
+					'hs_action'=>'::mb_login::',
 					'hs_value'=>$point,
 					'^hs_regdate'=>'NOW()'
 				]
