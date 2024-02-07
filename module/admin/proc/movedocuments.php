@@ -61,7 +61,7 @@ function proc($data) {
 							continue;
 						copy($s.$filename, $t.$filename);
 					}
-					unlinkAll(_AF_ATTACH_DATA_ . $val . '/' . $source_md_id . '/');
+					unlinkAll($s);
 				}
 			}
 
@@ -102,7 +102,7 @@ function proc($data) {
 							continue;
 						copy($t.$filename, $s.$filename);
 					}
-					unlinkAll(_AF_ATTACH_DATA_ . $val . '/' . $md_id . '/');
+					unlinkAll($t);
 				}
 			}
 		}

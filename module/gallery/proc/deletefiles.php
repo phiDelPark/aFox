@@ -13,7 +13,7 @@ function proc($data) {
 	foreach ($mf_srls as $value) {
 		if($value = trim($value)) $srls[] = $value;
 	}
-	if(!count($srl)) return set_error(getLang('error_request'),4303);
+	if(!count($srls)) return set_error(getLang('error_request'),4303);
 
 	DB::transaction();
 
@@ -26,6 +26,7 @@ function proc($data) {
 				$unfilename = _AF_ATTACH_DATA_.$ftype.'/'.$row['md_id'].'/'.$row['mf_target'].'/'.$row['mf_upload_name'];
 				if(!file_exists($unfilename) || unlinkFile($unfilename)) {
 					DB::delete(_AF_FILE_TABLE_,['mf_srl'=>$row['mf_srl']]);
+					@unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$row['md_id'].'/'.$row['mf_target'].'/'.$row['mf_srl'].'/');
 				}
 			}
 			return [];
