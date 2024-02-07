@@ -18,17 +18,16 @@
 			<input type="text" name="mb_nick" class="form-control mb-1" maxlength="20" placeholder="<?php echo getLang('id')?>" required>
 			<input type="password" name="mb_password" class="form-control" placeholder="<?php echo getLang('password')?>" required>
 		</div>
-		<?php } ?>
-		<?php if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category']);?>
-			<div class="form-floating mb-2"><div class="form-control checkbox-group required">
+		<?php } if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category']);?>
+		<div class="form-floating mb-2"><div class="form-control checkbox-group required">
 			<?php $tags = [];
 				foreach($tmp as $val){?>
 					<input type="checkbox" name="wr_tags[]" value="<?php echo $val?>"<?php echo in_array($val, $tags)?' checked':''?> class="form-check-input" id="wrExtra_<?php echo $val?>">
 					<label class="me-2" for="wrExtra_<?php echo $val?>"><?php echo $val?></label>
 			<?php } ?>
-			</div><label for="wrCategory"><?php echo getLang('category')?></label></div>
+		</div><label for="wrCategory"><?php echo getLang('category')?></label></div>
 		<?php } ?>
-			<div class="mb-4">
+		<div class="mb-4">
 		<?php
 			displayEditor(
 				'wr_content', '',
@@ -40,13 +39,12 @@
 				]
 			);
 		?>
-			</div>
-
-			<hr class="mb-4">
-			<div class="d-grid">
-				<button type="submit" class="btn btn-success btn-lg"><?php echo getLang('save')?></button>
-			</div>
 		</div>
+		<hr class="mb-4">
+		<div class="d-grid">
+			<button type="submit" class="btn btn-success btn-lg"><?php echo getLang('save')?></button>
+		</div>
+	</div>
 	</form>
 </section>
 <style>#uploadFiles{min-height:114px}</style>

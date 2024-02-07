@@ -177,13 +177,12 @@ function proc($data)
 					'error' => $files['error'][$i]
 				];
 
-				$file['name'] = preg_replace('/([^\x20-~]+)|([\\/:?"<>|]+)/g', '_', $file['name']);
 				if($file_accept && !preg_match('/('.($file_accept).')$/i', $file['name'])) {
 					throw new Exception(getLang('warning_allowable', [
 						str_replace('.', '', $module['md_file_accept']) ]), 3503);
 				}
 				// 실행 가능한 파일 못하게 처리
-				$file['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)$/i', '$0-x', $file['name']);
+				$file['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', $file['name']);
 
 				$fname = md5($i.$file['name'].time());
 				$ftype = explode('/', strtolower($file['type']));

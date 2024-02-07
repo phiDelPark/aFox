@@ -196,20 +196,18 @@ function getFileList($id, $target){
 function setHistory($act, $value, $allowdup = false){
 	global $_MEMBER;
 	if (empty($_MEMBER)) return false;
+	$uinfo = getHistorys($act); // 중복 허용 아니면 한번만
+	if(!$allowdup && count($uinfo)) return false;
 	DB::transaction();
 	try {
-		$uinfo = getHistory($act);
-		// 중복 허용일 경우가 아니면 한번만 입력
-		if($allowdup || empty($uinfo)){
-			DB::insert(_AF_HISTORY_TABLE_,
-				[
-					'mb_srl'=>$_MEMBER['mb_srl'],
-					'hs_action'=>'::'.$act.'::',
-					'hs_value'=>$value,
-					'^hs_regdate'=>'NOW()'
-				]
-			);
-		}
+		DB::insert(_AF_HISTORY_TABLE_,
+			[
+				'mb_srl'=>$_MEMBER['mb_srl'],
+				'hs_action'=>'::'.$act.'::',
+				'hs_value'=>$value,
+				'^hs_regdate'=>'NOW()'
+			]
+		);
 	} catch (Exception $ex){
 		DB::rollback();
 		return false;
@@ -267,7 +265,7 @@ function isManager($md_id){
 	if(!$md_id || empty($_MEMBER['mb_srl'])) return false;
 	if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
 	if(!($module = getModule($md_id)) || empty($module['md_manager'])) return false;
-	return $module['md_manager'] == $_MEMBER['mb_srl'];
+	return $module['md_manager'] === $_MEMBER['mb_srl'];
 }
 
 function isGrant($chk, $md_id){

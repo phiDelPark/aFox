@@ -68,39 +68,5 @@
 
 	window.addEventListener('load', () => {
 		document.querySelector('#loading_page')?.fadeOut($e => $e.remove())
-		document.querySelector('#documentList.gallery .list-group')
-			?.addEventListener('contextmenu', e => {
-				e.preventDefault()
-				e.stopPropagation()
-				const a = e.target.closest('a') || e.target
-				if(a?.href) location.href = a.href
-			})
-
-		document.querySelector('#galleryContentModal')
-			?.addEventListener('show.bs.modal', e => {
-				const body = e.target.querySelector('.carousel-inner'),
-					querys = e.relatedTarget.href.getQuery(),
-					active = e.relatedTarget.querySelector('img')?.src.getQuery('file')
-				exec_ajax({
-					module:'board',
-					act:'getFileList',
-					md_id:querys['id'],
-					mf_target:querys['srl']
-				})
-				.then((data)=>{
-					let html ='';
-					data.forEach(el => {
-						console.log(el);
-						const tag_img = '<div class="carousel-item%s">%s<img src="%s" class="d-block w-100" alt="%s"></div>'
-						html += tag_img.sprintf(
-							active==el.mf_srl?' active':'',
-							'<h6>'+(el.mf_name || '')+', '+(el.mf_regdate || '')+'</h6>',
-							'./?file='+el.mf_srl, el.mf_name
-						)
-					});
-					body.innerHTML = html
-				})
-				.catch(error => console.log(error))
-			})
 	})
 })()

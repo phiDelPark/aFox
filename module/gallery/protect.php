@@ -3,6 +3,10 @@ if(!defined('__AFOX__')) exit();
 
 $_PROTECT['setup']				= ['grant' => 's'];
 $_PROTECT['proc.updatesetup']	= ['grant' => 's'];
+$_PROTECT['proc.deletefiles']	= ['grant' => 'm'];
+
+$_PROTECT['proc.getfile']	    = ['grant' => '0'];
+$_PROTECT['proc.updategallery']	= ['grant' => '0'];
 
 $_PROTECT['disp.list']			= ['grant' => '0'];
 $_PROTECT['disp.view']			= ['grant' => '0'];

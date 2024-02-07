@@ -30,14 +30,17 @@ function proc($data)
 	$module = getModule($md_id);
 	if(empty($module)) return set_error(getLang('error_founded'), 4201);
 
+	$data['wr_category'] = '';
 	if(!empty($module['md_category'])) {
-		if(empty($data['wr_category'])) return set_error(getLang('request_input',['category']), 1);
-		if(!in_array($data['wr_category'], explode(',', $module['md_category']))) {
-			return set_error(getLang('invalid_value', ['category']), 2001);
+		if(empty($data['wr_tags'])) return set_error(getLang('request_input',['category']), 1);
+		$md_categorys = explode(',', $module['md_category']);
+		foreach ($data['wr_tags'] as $value) {
+			if(!in_array($value, $md_categorys)) {
+				return set_error(getLang('invalid_value', ['category']), 2001);
+			}
 		}
-	} else {
-		$data['wr_category'] = '';
 	}
+	$data['wr_tags'] = empty($data['wr_tags'])?'':implode(',',$data['wr_tags']);
 
 	// 파일이 업로드되면 최대 수 체크
 	$files = empty($_FILES['upload_files']['tmp_name'])?null:$_FILES['upload_files'];
@@ -52,8 +55,6 @@ function proc($data)
 	$unlink_files = [];
 	$file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
-	$data['wr_tags'] = empty($data['wr_tags'])?'':implode(',',$data['wr_tags']);
-
 	DB::transaction();
 
 	try {
@@ -62,17 +63,15 @@ function proc($data)
 			foreach ($data['remove_files'] as $val) {
 				$file = DB::get(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
-					'mf_target'=>$wr_srl,
 					'mf_srl'=>$val
 				]);
 				if(!empty($file) && true === DB::delete(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
-					'mf_target'=>$wr_srl,
 					'mf_srl'=>$val])
 				) {
 					$ftype = explode('/', strtolower($file['mf_type']));
 					$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
-					$unlink_files[] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/'.$wr_srl.'/'.$file['mf_upload_name'];
+					$unlink_files[] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/'.$file['mf_target'].'/'.$file['mf_upload_name'];
 				}
 			}
 		}
@@ -92,24 +91,22 @@ function proc($data)
 					'name' => $files['name'][$i],
 					'type' => $files['type'][$i],
 					'size' => $files['size'][$i],
-					'date' => date('Y-m-d H:i:s', time());
+					'date' => date('Y-m-d H:i:s', time()),
 					'error' => $files['error'][$i]
 				];
 
-				$file['name'] = preg_replace('/([^\x20-~]+)|([\\/:?"<>|]+)/g', '_', $file['name']);
 				if($file_accept && !preg_match('/('.($file_accept).')$/i', $file['name'])) {
 					throw new Exception(getLang('warning_allowable', [
 						str_replace('.', '', $module['md_file_accept'])
 					]), 3503);
 				}
 				// 실행 가능한 파일 못하게 처리
-				$file['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)$/i', '$0-x', $file['name']);
-
+				$file['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', $file['name']);
 				$fname = md5($i.$file['name'].time());
 				$ftype = explode('/', strtolower($file['type']));
 				$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
 
-				$to_files[$i] = _AF_ATTACH_DATA_ . $ftype . '/' . $md_id . '/' . $wr_srl . '/' . $fname;
+				$to_files[$i] = _AF_ATTACH_DATA_ . $ftype . '/' . $md_id . '/1/' . $fname;
 
 				$ret = moveUploadedFile($file, $to_files[$i], $file_max_size);
 				if(!empty($ret['error'])) throw new Exception($ret['message'], $ret['error']);
@@ -119,17 +116,18 @@ function proc($data)
 					if($DateTime) $file['date'] = date('Y-m-d H:i:s', strtotime($DateTime));
 					if($Model = (trim(empty($ifd0['Make']) ? 'Unavailable' : $ifd0['Make']))) {
 						$Model .= ' - '.trim(empty($ifd0['Model']) ? 'Unavailable' : $ifd0['Model']);
-						$file['name'] = preg_replace('/([^\x20-~]+)|([\\/:?"<>|]+)/g', ' ', $Model);
+						$file['name'] = $Model;
 					}
 				}
 
 				DB::insert(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
-					'mf_target'=>$wr_srl,
+					'mf_target'=>1,
 					'mf_name'=>$file['name'],
 					'mf_upload_name'=>$fname,
-					'mf_size'=>$file['size'],
 					'mf_type'=>$file['type'],
+					'mf_memo'=>$data['wr_tags'],
+					'mf_size'=>$file['size'],
 					'mb_srl'=>$data['mb_srl'],
 					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
 					'mf_regdate'=>$file['date']
@@ -139,30 +137,11 @@ function proc($data)
 				$new_files[] = $file;
 				$file_count++;
 			}
-
-			$patterns = '/<[img|a][^>]+[src|href]=[\\"\']+blob\:[^>\\"\']+[\\"\']?[^>]*target=[\\"\']+([0-9])+[\\"\']?[^>]*>/is';
-
-			$data['wr_content'] = preg_replace_callback(
-				$patterns,
-				function ($matches) use($new_files) {
-					$file = $new_files[(int)$matches[1]];
-					$es_name = escapeHTML($file['name']);
-					$isimg = substr($file['type'], 0, 5) == 'image';
-					return sprintf(
-						$isimg ? '<img src="%s" class="%s" alt="%s">'
-							: '<a href="%s" class="%s" title="%s" target="_file">',
-						'./?file='.$file['mf_srl'],
-						escapeHTML($file['type']),
-						$es_name.' ('.shortFileSize($file['size']). ')'
-					);
-				},
-				$data['wr_content']
-			);
 		}
 
 		/*// 포인트 사용중이고 새글이면
 		if($new_insert && ($point=(int)$module['point_write'])){
-			if(setHistory('wr_document::'.$wr_srl, $point)){
+			if(setHistory('mf_upload::'.$md_id, $point)){
 				if(($_r=setPoint($point)) && !empty($_r['error'])){
 					// TODO 포인트 에러시...
 				}

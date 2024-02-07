@@ -199,6 +199,12 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 .gallery .list-group a:hover .info {
 	transition-delay: 0.25s;
 }
+.gallery .list-group [type=checkbox]{
+	position: absolute;
+	left: 4px;
+	width: 1.5rem;
+	height: 1.5rem;
+}
 .gallery .carousel-inner{
 	min-height: 90vh;
 }

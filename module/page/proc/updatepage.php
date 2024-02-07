@@ -82,17 +82,15 @@ function proc($data)
 			foreach ($data['remove_files'] as $val) {
 				$file = DB::get(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
-					'mf_target'=>1,
 					'mf_srl'=>$val
 				]);
 				if (!empty($file) && true === DB::delete(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
-					'mf_target'=>1,
 					'mf_srl'=>$val])
 				) {
 					$ftype = explode('/', strtolower($file['mf_type']));
 					$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
-					$unlink_files[] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/1/'.$file['mf_upload_name'];
+					$unlink_files[] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/'.$file['mf_target'].'/'.$file['mf_upload_name'];
 				}
 			}
 		}
@@ -114,8 +112,7 @@ function proc($data)
 				];
 
 				// 실행 가능한 파일 못하게 처리
-				$file['name'] = preg_replace('/([^\x20-~]+)|([\\/:?"<>|]+)/g', '_', $file['name']);
-				$file['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)$/i', '$0-x', $file['name']);
+				$file['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', $file['name']);
 
 				$fname = md5($i.$file['name'].time());
 				$ftype = explode('/', strtolower($file['type']));

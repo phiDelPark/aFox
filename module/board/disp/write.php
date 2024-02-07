@@ -13,6 +13,10 @@ function proc($data) {
 	$is_manager = isManager($doc['md_id']);
 	$PERMIT_KEY = md5($doc['md_id'] .'_'. $doc['wr_srl'] . '_' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 
+	if(!isGrant('write', $doc['md_id'])) {
+		return set_error(getLang('error_permitted'),4501);
+	}
+
 	// 권한 체크
 	if(!empty($doc) && !$is_manager && !get_session('_AF_SECRET_DOCUMENT_'.$PERMIT_KEY)) {
 
