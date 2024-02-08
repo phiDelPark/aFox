@@ -237,7 +237,7 @@ function setPoint($point, $mb_srl = 0){
 	if($mb_rank > 115) return set_error(getLang('error_request'),4303);
 	// 포인트 모자르면 에러
 	if(($mb['mb_point'] + $point) < 0){
-		return set_error(getLang('warning_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 3701);
+		return set_error(getLang('warn_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 3701);
 	}
 	$_setvals = ['^mb_point'=>'mb_point'.($point>0?'+':'').$point];
 	// 99이하는 일반 회원, 포인트에 따라 계급 조정

@@ -14,7 +14,7 @@ function proc($data) {
 			if (empty($_FILES[$val]['name'])) continue;
 
 			if(!preg_match('/\.('.$_lsext[$key].')$/i', $_FILES[$val]['name'])) {
-				return set_error(getLang('warning_allowable',[$_lsext[$key]]),3503);
+				return set_error(getLang('warn_allowable',[$_lsext[$key]]),3503);
 			}
 
 			$destination = _AF_CONFIG_DATA_.$val.'.'.$_lsext[$key];

@@ -77,7 +77,7 @@ function proc($data)
 
 		if($upload_count > 0) {
 			// 권한 체크
-			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warning_not_allowable', ['upload']), 3505);
+			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warn_not_allowable', ['upload']), 3505);
 			if($file_max < ($upload_count+$file_count)) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
 			$exif = function_exists('exif_read_data');
 
@@ -95,7 +95,7 @@ function proc($data)
 				];
 
 				if($file_accept && !preg_match('/('.($file_accept).')$/i', $file['name'])) {
-					throw new Exception(getLang('warning_allowable', [
+					throw new Exception(getLang('warn_allowable', [
 						str_replace('.', '', $module['md_file_accept'])
 					]), 3503);
 				}

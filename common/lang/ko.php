@@ -137,16 +137,16 @@ $_LANG['success_finished']	= '작업을 마쳤습니다.';
 // invalid_... 올바르지 않은 값 오류번호 2001~2999
 $_LANG['invalid_value']		= '%s의 값이 올바르지 않습니다.'; //2001
 
-// warning_... 경고 오류번호 3001~3999
-$_LANG['warning_exists']	= '같은 %s이(가) 존재합니다.'; // 3103
-$_LANG['warning_not_exists']= '%s이(가) 존재하지 않습니다.'; // 3105
-$_LANG['warning_selected']	= '선택된 %s이(가) 없습니다.'; // 3203
-$_LANG['warning_not_select']= '%s은(는) 선택할 수 없습니다.'; // 3205
-$_LANG['warning_actioned']	= '이미 %s을(를) 하였습니다.'; // 3303
-$_LANG['warning_not_action']= '%s을(를) 할 수 없습니다.'; // 3305
-$_LANG['warning_allowable']	= '%s만 허용됩니다.'; // 3503
-$_LANG['warning_not_allowable'] = '%s는(은) 허용되지 않습니다.'; // 3505
-$_LANG['warning_shortage']	= '%s이(가) 부족합니다.'; // 3701
+// warn_... 경고 오류번호 3001~3999
+$_LANG['warn_exists']	= '같은 %s이(가) 존재합니다.'; // 3103
+$_LANG['warn_not_exists']= '%s이(가) 존재하지 않습니다.'; // 3105
+$_LANG['warn_selected']	= '선택된 %s이(가) 없습니다.'; // 3203
+$_LANG['warn_not_select']= '%s은(는) 선택할 수 없습니다.'; // 3205
+$_LANG['warn_actioned']	= '이미 %s을(를) 하였습니다.'; // 3303
+$_LANG['warn_not_action']= '%s을(를) 할 수 없습니다.'; // 3305
+$_LANG['warn_allowable']	= '%s만 허용됩니다.'; // 3503
+$_LANG['warn_not_allowable'] = '%s는(은) 허용되지 않습니다.'; // 3505
+$_LANG['warn_shortage']	= '%s이(가) 부족합니다.'; // 3701
 
 // error_... 에러시 오류번호 4001~4999
 $_LANG['error_occured']		= '오류가 발생했습니다.'; // 4001

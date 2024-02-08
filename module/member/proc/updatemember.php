@@ -99,7 +99,7 @@ function proc($data) {
 		}
 
 		if(!preg_match('/\.(png)$/i', $_FILES['mb_icon']['name'])) {
-			return set_error(getLang('warning_allowable', ['png']),3503);
+			return set_error(getLang('warn_allowable', ['png']),3503);
 		}
 
 		$mb_icon_tmp = $_FILES['mb_icon']['tmp_name'];
@@ -170,7 +170,7 @@ function proc($data) {
 		} else {
 
 			if(isset($data['new_mb_id'])) {
-				throw new Exception(getLang('warning_exists', ['id']), 3103);
+				throw new Exception(getLang('warn_exists', ['id']), 3103);
 			}
 
 			if($remove_mb_icon) {

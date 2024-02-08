@@ -7,7 +7,11 @@ function proc($data)
 	$page = empty($data["page"]) ? 1 : $data["page"];
 
 	$_wheres = ["md_id" => $data['id'], "(_AND_)" => [], "(_OR_)" => []];
+	if($search){
+		$_wheres['(_AND_)']['^mf_about{REGEXP}'] = "('(^|,)".DB::escape($search)."($|,)')";
+	}
 
+	//$_list = DB::query('SELECT * FROM '._AF_FILE_TABLE_.' WHERE mf_about REGEXP (\'분류\')');
 	$_list = DB::gets(_AF_FILE_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, "mf_regdate", (($page - 1) * $count) . "," . $count);
 
 	$result = ['tpl' => 'list', 'data' => $_list];

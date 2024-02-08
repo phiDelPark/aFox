@@ -70,7 +70,7 @@ function proc($data) {
 			);
 		} else {
 			if(isset($data['new_md_id']) || $module['md_key'] != 'gallery') {
-				throw new Exception(getLang('warning_exists', ['id']), 3103);
+				throw new Exception(getLang('warn_exists', ['id']), 3103);
 			}
 
 			if ($category != $module['md_category']) {

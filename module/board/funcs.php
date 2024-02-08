@@ -61,13 +61,17 @@ function getDocumentList($id, $count, $page, $search = "", $category = "", $orde
 				$value = explode("&", trim($value));
 				$and_or = count($value) > 1 ? "(_AND_)" : "(_OR_)";
 				foreach ($value as $v) {
+					$cmd = '{LIKE}';
 					if ($key == "wr_regdate") {
 						$v = str_split($v, 4);
-						$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
+						$v = $v[0].(empty($v[1])?"":"-".implode("-",str_split($v[1],2)))."%";
+					} else if ($key == "wr_tags") {
+						$cmd = '{REGEXP}'; $key = '^'.$key;
+						$v = "('(^|,)".DB::escape($v)."($|,)')";
 					} else {
-						$v = "%" . $v;
+						$v = DB::escape("%" . $v. "%");
 					}
-					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = DB::escape($v . "%");
+					$_wheres[$and_or][$key . $cmd . '[' . $index++ . ']'] = $v;
 				}
 			}
 		}
@@ -114,12 +118,12 @@ function getHashtags($content)
 	$tags = ["pre", "code", "xml", "textarea", "input", "select", "option", "script", "style", "iframe", "button", "img", "embed", "object", "ins"];
 	$pattern = "/<(" . implode("|", $tags) . ')[^>]*>.*?<\/\1>/si';
 	$content = preg_replace('/(<br\s?\/?>|\r|\n)/i', " ", preg_replace($pattern, " ", $content));
-	$content = htmlspecialchars_decode(strip_tags($content) , ENT_QUOTES);
+	$content = htmlspecialchars_decode(preg_replace('/<\/?[^>]*>/', ' ', $content) , ENT_QUOTES); //strip_tags
 	$tags = [];
-	$pattern = "/\s#([\w]{3,})/u";
+	$pattern = "/\s#([^\x{00}-\x{2f}\x{3a}-\x{40}\x{5b}-\x{60}\x{7b}-\x{a0}]{3,})/u";
 	preg_replace_callback($pattern, function ($matches) use (&$tags)
 		{
-			$tags[md5(strtoupper($matches[1])) ] = $matches[1];
+			$tags[strtoupper($matches[1])] = $matches[1];
 			return "";
 		}
 	, $content);

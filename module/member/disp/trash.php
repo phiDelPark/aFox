@@ -32,13 +32,17 @@ function proc($data) {
 				$value = explode("&", trim($value));
 				$and_or = count($value) > 1 ? "(_AND_)" : "(_OR_)";
 				foreach ($value as $v) {
+					$cmd = '{LIKE}';
 					if ($key == "wr_regdate") {
 						$v = str_split($v, 4);
-						$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
+						$v = $v[0].(empty($v[1])?"":"-".implode("-",str_split($v[1],2)))."%";
+					} else if ($key == "wr_tags") {
+						$cmd = '{REGEXP}'; $key = '^'.$key;
+						$v = "('(^|,)".DB::escape($v)."($|,)')";
 					} else {
-						$v = "%" . $v;
+						$v = DB::escape("%" . $v. "%");
 					}
-					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = DB::escape($v . "%");
+					$_wheres[$and_or][$key . $cmd . '[' . $index++ . ']'] = $v;
 				}
 			}
 		}

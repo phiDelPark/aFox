@@ -56,7 +56,7 @@ function proc($data)
 			$module = getModule($md_id);
 		} else {
 			if (isset($data['new_md_id']) || $module['md_key'] != 'page') {
-				throw new Exception(getLang('warning_exists', ['id']), 3103);
+				throw new Exception(getLang('warn_exists', ['id']), 3103);
 			}
 
 			// 수정시 페이지 정보 넘어왔는지 체크 (관리자 모드에서 수정 안하면 일부 항목이 없음)

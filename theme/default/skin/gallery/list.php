@@ -1,5 +1,5 @@
 <?php if(!defined('__AFOX__')) exit();
-addJSLang(['confirm_delete', 'file']);
+addJSLang(['confirm_delete', 'prompt_modify_file', 'file']);
 addJS(_AF_THEME_URL_ . 'skin/gallery/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
 // 구버전 sql 용 초기화
 $_POST['category'] = empty($_POST['category']) ? null : $_POST['category'];
@@ -24,7 +24,7 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		$tmp = explode(',', $_CFG['md_category']);
 		foreach ($tmp as $val) {
 			$isEqual = $val == $_POST['category'];
-			$cateurl = getUrl('','id',__MID__,'search', urlencode('#'.$val));
+			$cateurl = getUrl('','id',__MID__,'search', urlencode($val));
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary'.($isEqual?' text-decoration-underline active" aria-current="page':' text-decoration-none').'" href="'.$cateurl.'">'.$val.'</a></li>';
 		}
 	?>
@@ -89,17 +89,27 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 </section>
 <script>
 	function _showCheckItems(t) {
+		const id = '<?php echo __MID__?>'
 		const ckboxs = document.querySelectorAll('.gallery .list-group [type=checkbox]')
 		ckboxs?.forEach(el => el.classList.remove('d-none'))
 		t.onclick = function(e) {
-			if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['file']])) === true) {
-				srls = ''; ckboxs.forEach(el => {if(el.checked) srls += el.value + ','})
-				exec_ajax({module:'gallery',act:'deleteFiles',mf_srls:srls})
-				.then((data)=>{location.reload()}).catch((error)=>{console.log(error);alert(error)})
+			if(e.target.innerText == 'DELETE'){
+				if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['file']])) === true) {
+					srls = ''; ckboxs.forEach(el => {if(el.checked) srls += el.value + ','})
+					exec_ajax({module:'gallery',act:'deleteFiles',md_id:id,mf_srls:srls})
+					.then((data)=>{location.reload()}).catch((error)=>{console.log(error);alert(error)})
+				}
+			}else{
+				const s = prompt($_LANG['prompt_modify_file'], '').trim()
+				if (s) {
+					srls = ''; ckboxs.forEach(el => {if(el.checked) srls += el.value + ','})
+					exec_ajax({module:'gallery',act:'modifyFiles',md_id:id,mf_about:s,mf_srls:srls})
+					.then((data)=>{location.reload()}).catch((error)=>{console.log(error);alert(error)})
+				}
 			}
 			return false
 		}
-		t.innerHTML = 'DELETE';
+		t.innerHTML = '<span>DELETE</span>, <span>MODIFY</span>';
 		return false
 	}
 </script>

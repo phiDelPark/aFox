@@ -3,10 +3,13 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['mf_srls'])) return set_error(getLang('error_request'),4303);
+	if(empty($data['md_id']) || empty($data['mf_srls'])) return set_error(getLang('error_request'),4303);
 
 	// 권한 체크 // 관리자만
 	if(!isAdmin()) return set_error(getLang('error_permitted'), 4501);
+
+	$module = getModule($data['md_id']);
+	if(empty($module)) return set_error(getLang('error_founded'), 4201);
 
 	$srls = [];
 	$mf_srls = explode(',', $data['mf_srls']);
@@ -32,7 +35,7 @@ function proc($data) {
 			return [];
 		};
 
-		DB::query('SELECT * FROM '._AF_FILE_TABLE_.' WHERE mf_srl IN ('.implode(',', $srls).')', $callback);
+		DB::query('SELECT * FROM '._AF_FILE_TABLE_.' WHERE md_id=\''.$data['md_id'].'\' AND mf_srl IN ('.implode(',', $srls).')', $callback);
 
 	} catch (Exception $ex) {
 		DB::rollback();

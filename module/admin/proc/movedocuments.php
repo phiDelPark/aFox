@@ -21,7 +21,7 @@ function proc($data) {
 			if (empty($md_cate)) throw new Exception(getLang('request_input', ['category']), 1);
 			$md_categorys = explode(',', $module['md_category']);
 			if (!in_array($md_cate, $md_categorys)) {
-				throw new Exception(getLang('warning_not_exists', [$md_cate]), 3105);
+				throw new Exception(getLang('warn_not_exists', [$md_cate]), 3105);
 			}
 		}
 
