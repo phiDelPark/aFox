@@ -67,9 +67,9 @@
 	</div>
 
 	<div class="mb-4">
-		<label for="id_mb_memo"><?php echo getLang('memo')?></label>
+		<label for="id_mb_about"><?php echo getLang('memo')?></label>
 		<div>
-		<textarea class="form-control" name="mb_memo" id="id_mb_memo"><?php echo $ismb?$_MEMBER['mb_memo']:''?></textarea>
+		<textarea class="form-control" name="mb_about" id="id_mb_about"><?php echo $ismb?$_MEMBER['mb_about']:''?></textarea>
 		</div>
 		<div class="form-text"><?php echo getLang('desc_member_memo')?></div>
 	</div>

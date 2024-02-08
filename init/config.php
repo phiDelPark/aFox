@@ -1,59 +1,11 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
 
-define('_AF_VERSION_', '0.393');
-define('__DEBUG__', 0);
+require_once __DIR__ . '/constant.php';
+(@include_once(_AF_CONFIG_DATA_.'_db_config.php')) OR exit('Please <a href="./install/">install</a> afox.');
 
-/*** SSL ***/
-define('_AF_USE_SSL_', 0); // 1 = always, 2 = optional
-define('_AF_HTTP_PORT_', 80);
-define('_AF_HTTPS_PORT_', 443);
-/***********/
-
-define('_AF_CONFIG_TABLE_', 'afox_config');
-define('_AF_MEMBER_TABLE_', 'afox_members');
-define('_AF_MODULE_TABLE_', 'afox_modules');
-define('_AF_THEME_TABLE_', 'afox_themes');
-define('_AF_MENU_TABLE_', 'afox_menus');
-define('_AF_ADDON_TABLE_', 'afox_addons');
-define('_AF_PAGE_TABLE_', 'afox_pages');
-define('_AF_DOCUMENT_TABLE_', 'afox_documents');
-define('_AF_COMMENT_TABLE_', 'afox_comments');
-define('_AF_HISTORY_TABLE_', 'afox_histories');
-define('_AF_VISITOR_TABLE_', 'afox_visitors');
-define('_AF_NOTE_TABLE_', 'afox_notes');
-define('_AF_FILE_TABLE_', 'afox_files');
-define('_AF_TRIGGER_TABLE_', 'afox_triggers');
-define('_AF_REPORT_TABLE_', 'afox_reports');
-
-define('_AF_PATH_', substr(str_replace('\\', '/', dirname(__FILE__)), 0, -4));
-
-define('_AF_INIT_PATH_', _AF_PATH_ . 'init/');
-define('_AF_LIBS_PATH_', _AF_PATH_ . 'lib/');
-define('_AF_MODULES_PATH_', _AF_PATH_ . 'module/');
-define('_AF_ADDONS_PATH_', _AF_PATH_ . 'addon/');
-define('_AF_WIDGETS_PATH_', _AF_PATH_ . 'widget/');
-define('_AF_THEMES_PATH_', _AF_PATH_ . 'theme/');
-define('_AF_ADMIN_PATH_', _AF_PATH_ . 'module/admin/');
-define('_AF_TPLS_PATH_', _AF_PATH_ . 'common/tpl/');
-
-define('_AF_CONFIG_DATA_', _AF_PATH_ . 'data/config/');
-define('_AF_MEMBER_DATA_', _AF_PATH_ . 'data/member/');
-define('_AF_MODULE_DATA_', _AF_PATH_ . 'data/module/');
-define('_AF_ATTACH_DATA_', _AF_PATH_ . 'data/attach/');
-define('_AF_CACHE_DATA_', _AF_PATH_ . 'data/cache/');
-
-define('_AF_DIR_PERMIT_', 0755);
-define('_AF_FILE_PERMIT_', 0644);
-define('_AF_ATTACH_PERMIT_', 0600);
-define('_AF_PASSWORD_ALGORITHM_', function_exists('password_hash')?'BCRYPT':'MYSQL');
-
-(@include_once(_AF_CONFIG_DATA_ . '_db_config.php')) OR die("Please <a href=\"./install/\">install</a> afox.");
+define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
 define('_AF_DOMAIN_', $_DBINFO['domain']);
 define('_AF_COOKIE_DOMAIN_', $_DBINFO['cookie_domain']);
-define('_AF_CdOOKIE_DOMAIN_', 'cookie_domain');
-define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
-define('_AF_SERVER_TIME_', time());
 
 // javascript 에서 먼저 읽을 수 있게 set_cookie_params 전에 입력
 set_cookie('_AF_COOKIE_DOMAIN_', _AF_COOKIE_DOMAIN_, 0);
@@ -67,18 +19,11 @@ $_ADDELEMENTS = ['LANG'=>[],'CSS'=>[],'JS'=>[]];
 
 //load DB // When using a query, you must perform the escape yourself, or use parameters
 require_once _AF_PATH_ . 'lib/db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
-DB::init($_DBINFO);
-unset($_DBINFO);
-
-//if update
-if(file_exists(_AF_PATH_ . 'install/update.php')){
-	require_once _AF_PATH_ . 'install/update.php';
-	exit();
-}
+DB::init($_DBINFO); unset($_DBINFO);
 
 //site default info
-$_CFG = DB::get(_AF_CONFIG_TABLE_);
-if(DB::error()) exit("Please reinstall afox.");
+($_CFG = @DB::get(_AF_CONFIG_TABLE_)) OR exit("Please reinstall afox.");
+(_AF_VERSION_ == @$_CFG['version']) OR exit('Please <a href="./install/update.php">update</a> afox.');
 
 define('_AF_LANG_', $_CFG['lang']?$_CFG['lang']:'ko');
 define('_AF_THEME_', $_CFG['theme']?$_CFG['theme']:'default');

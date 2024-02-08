@@ -126,7 +126,7 @@ function proc($data)
 					'mf_name'=>$file['name'],
 					'mf_upload_name'=>$fname,
 					'mf_type'=>$file['type'],
-					'mf_memo'=>$data['wr_tags'],
+					'mf_about'=>$data['wr_tags'],
 					'mf_size'=>$file['size'],
 					'mb_srl'=>$data['mb_srl'],
 					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],

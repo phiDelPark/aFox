@@ -1,5 +1,5 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
+/* folder name can't exceed 100 char */
 
 $_THEME_INFO['version'] = "1.0";
 $_THEME_INFO['author'] = "aFox";
