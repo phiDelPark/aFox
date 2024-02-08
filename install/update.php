@@ -27,7 +27,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_CONFIG_TABLE_."</b><br>\n";
@@ -48,7 +48,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_THEME_TABLE_."</b><br>\n";
@@ -76,7 +76,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_MENU_TABLE_."</b><br>\n";
@@ -109,7 +109,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_MEMBER_TABLE_."</b><br>\n";
@@ -131,7 +131,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_ADDON_TABLE_."</b><br>\n";
@@ -179,7 +179,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_MODULE_TABLE_."</b><br>\n";
@@ -222,7 +222,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_DOCUMENT_TABLE_."</b><br>\n";
@@ -257,7 +257,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_COMMENT_TABLE_."</b><br>\n";
@@ -284,7 +284,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_PAGE_TABLE_."</b><br>\n";
@@ -316,7 +316,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_FILE_TABLE_."</b><br>\n";
@@ -339,7 +339,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_HISTORY_TABLE_."</b><br>\n";
@@ -365,7 +365,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_NOTE_TABLE_."</b><br>\n";
@@ -388,7 +388,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_VISITOR_TABLE_."</b><br>\n";
@@ -412,7 +412,7 @@ $success = true;
 	];
 	$t = [];
 	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_TRIGGER_TABLE_."</b><br>\n";
