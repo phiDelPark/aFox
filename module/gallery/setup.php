@@ -1,5 +1,4 @@
 <?php if(!defined('__AFOX__')) exit();
-include_once dirname(__FILE__) . '/patterns.php';
 
 $GALLERY = [];
 if($is_new = (empty($_POST['mid']) || $_POST['mid'] === '.')){

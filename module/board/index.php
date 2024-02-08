@@ -1,5 +1,5 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
+include_once _AF_INIT_PATH_ . 'patterns.php';
 
 // 트리거 확인및 설치
 installModuleTrigger('board', 0);

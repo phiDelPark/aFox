@@ -1,5 +1,4 @@
 <?php if(!defined('__AFOX__')) exit();
-include_once dirname(__FILE__) . '/../patterns.php';
 
 function proc($data)
 {

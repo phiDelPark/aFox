@@ -484,10 +484,10 @@ function toHTML($text, $type = '2', $class = 'current_content'){
 			}
 			$text =$__parsedown->text($text);
 			// 비디오,오디오 처리
-			$patterns = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
+			$pattern = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
 			$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
 			// \/ = 줄바꿈
-			$text = str_replace('\\n', '<br>', preg_replace($patterns, $replacement, $text));
+			$text = str_replace('\\n', '<br>', preg_replace($pattern, $replacement, $text));
 		}
 		$text = preg_replace_callback('/<img([^>]*\s+widget\s*=[^>]*)>/is', function($m){
 			$attrs = [];
@@ -498,9 +498,9 @@ function toHTML($text, $type = '2', $class = 'current_content'){
 		}, $text);
 		// 다운로드 권한이 없으면 처리
 		if(__MID__ && !isGrant('download', __MID__)){
-			$patterns = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
+			$pattern = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
 			$replacement = "\\1\\2 onclick=\"alert('".escapeHTML(getLang('error_permitted',false),ENT_QUOTES,false)."');return false\" \\3";
-			$text = preg_replace($patterns, $replacement, $text);
+			$text = preg_replace($pattern, $replacement, $text);
 		}
 	}
 
@@ -718,6 +718,45 @@ function messageBox($message, $type = 1){
 function addJS($src, $opt = ''){ global $_ADDELEMENTS;$_ADDELEMENTS['JS'][$src] = $opt; }
 function addCSS($src, $opt = ''){ global $_ADDELEMENTS;$_ADDELEMENTS['CSS'][$src] = $opt; }
 function addJSLang($langs){ global $_ADDELEMENTS;foreach($langs as $k=>$v)$_ADDELEMENTS['LANG'][$v]=getLang($v); }
+
+// Essential function common to data management //
+function encode64($v){ //Because of js without encryption library
+	return str_replace(array('=','/'),array('%3d','%2f'),base64_encode(rawurlencode($v)));
+}
+function decode64($v){
+	return rawurldecode(base64_decode(str_replace(array('%3d','%2f'),array('=','/'),$v)));
+}
+function set_session($key, $val){$_SESSION[$key]=$val;}
+function get_session($key){return isset($_SESSION[$key])?$_SESSION[$key]:'';}
+function set_cookie($key, $val, $exp = 0){ //If 0, remove it when exit the browser //if -, remove
+	setcookie(encode64($key),encode64($val),($exp>0?_AF_SERVER_TIME_+$exp:$exp),'/',_AF_COOKIE_DOMAIN_);
+}
+function get_cookie($key){
+	return array_key_exists($cki=encode64($key),$_COOKIE)?decode64($_COOKIE[$cki]):'';
+}
+function set_cache($key, $val, $exp = 0){ //If 0, keep //if -, remove
+	if(!is_dir(_AF_CACHE_DATA_)&&!mkdir(_AF_CACHE_DATA_,_AF_DIR_PERMIT_,true)) return;
+	$s = '<?php if(!defined(\'__AFOX__\'))exit();$_EXPIRE=%s;$_CACHE=%s;?>';
+	$s = sprintf($s,($exp?_AF_SERVER_TIME_+$exp:$exp),var_export($val,true));
+	file_put_contents(_AF_CACHE_DATA_.encode64($key).'.php', $s, LOCK_EX);
+}
+function get_cache($key){ static $__af_caches = null;
+	if(!empty($__af_caches[$key])) return $__af_caches[$key];
+	if(!file_exists($f=(_AF_CACHE_DATA_.encode64($key).'.php'))) return;
+	if((@include $f)!==1||(!empty($_EXPIRE)&&$_EXPIRE<_AF_SERVER_TIME_))
+	{@chmod($f,0707);@unlink($f);return;} return ($__af_caches[$key] = $_CACHE);
+}
+function set_error($msg, $err = 3){
+	return $_SESSION['AF_VALIDATOR_ERROR']=['error'=>$err,'message'=>$msg];
+}
+function get_error(){
+	return isset($_SESSION[($key='AF_VALIDATOR_ERROR')])?$_SESSION[$key]:'';
+}
+function debugPrint($o = null){ if(!(__DEBUG__ & 1)) return;
+	file_put_contents(_AF_PATH_.'_debug.php',implode(PHP_EOL,[date('== Y-m-d H:i:s =='),
+	in_array(($type=gettype($o)),['array','object','resource'])?print_r($o,true):$type.'('.var_export($o,true).')'
+	]).PHP_EOL.PHP_EOL,FILE_APPEND|LOCK_EX);
+}
 
 /* End of file function.php */
 /* Location: ./init/function.php */

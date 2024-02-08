@@ -1,4 +1,27 @@
 <?php if(!defined('__AFOX__')) exit();
+(@include_once(_AF_CONFIG_DATA_.'_db_config.php')) OR exit('Please <a href="./install/">install</a> afox.');
+//load DB // When using a query, you must perform the escape yourself, or use parameters
+require_once _AF_PATH_ . 'lib/db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
+define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
+define('_AF_DOMAIN_', $_DBINFO['domain']);
+define('_AF_COOKIE_DOMAIN_', $_DBINFO['cookie_domain']);
+DB::init($_DBINFO); unset($_DBINFO);
+
+date_default_timezone_set(_AF_TIME_ZONE_);
+session_set_cookie_params(0, '/', _AF_COOKIE_DOMAIN_);
+if(session_status() == PHP_SESSION_NONE) session_start();
+
+$_LANG = [];
+$_PROTECT = [];
+$_ADDELEMENTS = ['LANG'=>[],'CSS'=>[],'JS'=>[]];
+
+//site default info
+($_CFG = @DB::get(_AF_CONFIG_TABLE_)) OR exit("Please reinstall afox.");
+(_AF_VERSION_ == @$_CFG['version']) OR exit('Please <a href="./install/update.php">update</a> afox.');
+
+define('_AF_LANG_', $_CFG['lang']?$_CFG['lang']:'ko');
+define('_AF_THEME_', $_CFG['theme']?$_CFG['theme']:'default');
+define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
 
 @include_once _AF_PATH_ . 'common/lang/' . _AF_LANG_ . '.php';
 require_once _AF_INIT_PATH_ . 'function.php';
@@ -86,8 +109,8 @@ if(!file_exists($tmp) || !empty($_POST['cdnerr'])){
 define('_AF_USE_BASE_CDN_', get_cookie('_CDN_ERROR_') ? FALSE : $tmp);
 
 header('Content-Type: '.(__REQ_METHOD__=='JSON'?'application/json':'text/html').'; charset=UTF-8');
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache"); unset($tmp);

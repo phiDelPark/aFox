@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../init/constant.php';
 include_once _AF_CONFIG_DATA_.'_db_config.php';
 //load DB // When using a query, you must perform the escape yourself, or use parameters
-require_once _AF_PATH_ . 'lib/db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
+require_once _AF_LIBS_PATH_ . 'db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
 DB::init($_DBINFO);
 $success = true;
 ?>

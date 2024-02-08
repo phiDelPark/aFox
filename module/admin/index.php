@@ -1,5 +1,5 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
+include_once _AF_INIT_PATH_ . 'patterns.php';
 
 if(empty($_MEMBER) || ($_MEMBER['mb_rank'] != 's' && $_MEMBER['mb_rank'] != 'm')) {
 	goUrl(_AF_URL_, getLang('error_permitted'));

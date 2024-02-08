@@ -1,5 +1,4 @@
 <?php if(!defined('__AFOX__')) exit();
-include_once dirname(__FILE__) . '/patterns.php';
 
 $BOARD = [];
 if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){

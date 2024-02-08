@@ -1,5 +1,5 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
+include_once _AF_INIT_PATH_ . 'patterns.php';
 
 function procGalleryDefault($data) {
 	$act = strtolower($data['act']);
