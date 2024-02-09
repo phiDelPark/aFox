@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 
-	if(!isGrant('write', __MID__)) {
+	if(!isGrant('upload', __MID__)) {
 		return set_error(getLang('error_permitted'),4501);
 	}
 

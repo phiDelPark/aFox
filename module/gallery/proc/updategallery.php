@@ -138,8 +138,8 @@ function proc($data)
 			}
 		}
 
-		/*// 포인트 사용중이고 새글이면
-		if($new_insert && ($point=(int)$module['point_write'])){
+		/*// 포인트 사용중이면
+		if($point=(int)$module['point_write']){
 			if(setHistory('mf_upload::'.$md_id, $point)){
 				if(($_r=setPoint($point)) && !empty($_r['error'])){
 					// TODO 포인트 에러시...
@@ -159,10 +159,10 @@ function proc($data)
 
 		// Engine == MyISAM 트랜잭션을 지원 안한다.
 		if (DB::engine(_AF_FILE_TABLE_) == 'myisam') {
-			if($new_insert) {
-				@DB::delete(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>1]);
-			} else if(count($new_files)>0) {
-				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $new_files)]);
+			if(count($new_files)>0) {
+				$nfile_srls = [];
+				foreach ($new_files as $file) $nfile_srls[] = $file['mf_srl'];
+				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $nfile_srls)]);
 			}
 			// 트랜잭션을 지원 안하면 삭제된 파일은 그냥 지움
 			foreach ($unlink_files as $val) @unlinkFile($val);
@@ -170,7 +170,6 @@ function proc($data)
 
 		// 실패시 업로드 된 파일 삭제
 		foreach ($to_files as $val) @unlinkFile($val);
-
 		return set_error($ex->getMessage(),$ex->getCode());
 	}
 

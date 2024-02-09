@@ -214,7 +214,9 @@ function proc($data)
 				@DB::delete(_AF_MODULE_TABLE_, ['md_id'=>$md_id]);
 				@DB::delete(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>1]);
 			} else if (count($new_files)>0) {
-				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $new_files)]);
+				$nfile_srls = [];
+				foreach ($new_files as $file) $nfile_srls[] = $file['mf_srl'];
+				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $nfile_srls)]);
 			}
 			// 트랜잭션을 지원 안하면 삭제된 파일은 그냥 지움
 			foreach ($unlink_files as $val) @unlinkFile($val);
@@ -222,7 +224,6 @@ function proc($data)
 
 		// 실패시 업로드 된 파일 삭제
 		foreach ($to_files as $val) @unlinkFile($val);
-
 		return set_error($ex->getMessage(),$ex->getCode());
 	}
 

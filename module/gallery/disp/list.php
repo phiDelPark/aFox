@@ -12,7 +12,7 @@ function proc($data)
 	}
 
 	//$_list = DB::query('SELECT * FROM '._AF_FILE_TABLE_.' WHERE mf_about REGEXP (\'분류\')');
-	$_list = DB::gets(_AF_FILE_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, "mf_regdate", (($page - 1) * $count) . "," . $count);
+	$_list = DB::gets(_AF_FILE_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, "mf_srl", (($page - 1) * $count) . "," . $count);
 
 	$result = ['tpl' => 'list', 'data' => $_list];
 	$result['total_count'] = DB::foundRows();
