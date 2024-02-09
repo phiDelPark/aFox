@@ -3,16 +3,15 @@
  * Copyright 2016 afox, Inc.
  */
 
-function afoxEditor(ID, options) {
-	this.html = options.html
-	this.required = options.required
-	this.readonly = options.readonly
-	this.isHtmlmode = false
+function afoxEditor(ID, OPTIONS) {
+	this.htmlMode = false
+	this.required = OPTIONS.required
+	this.readonly = OPTIONS.readonly
 
 	const
-		editor = document.querySelector('#' + ID),
+		editor = document.querySelector('#editor' + ID.toUcFirst()),
 		iframe = document.createElement('iframe'),
-		textarea = editor.querySelector('[name=' + options.name + ']')
+		textarea = editor.querySelector('[name=' + ID + ']')
 
 	const
 		typebar = editor.querySelectorAll('#editorTypebar [data-target]'),
@@ -22,32 +21,32 @@ function afoxEditor(ID, options) {
 		updedFiles = editor.querySelectorAll('#uploadedFiles img')
 
 	const modeSwitch = (is_html) => {
-		this.isHtmlmode = textarea.classList.contains('d-none')
-		if (is_html && !this.isHtmlmode) {
+		this.htmlMode = textarea.classList.contains('d-none')
+		if (is_html && !this.htmlMode) {
 			iframe.style.height = textarea.offsetHeight + "px"
 			iframe.contentWindow.document.body.innerHTML = textarea.value
 			textarea.classList.add('d-none')
 			iframe.classList.remove('d-none')
 			if(this.required) textarea.removeAttribute('required')
-		} else if (!is_html && this.isHtmlmode) {
+		} else if (!is_html && this.htmlMode) {
 			textarea.style.height = iframe.offsetHeight + "px"
 			textarea.value = iframe.contentWindow.document.body.innerHTML
 			iframe.classList.add('d-none')
 			textarea.classList.remove('d-none')
 			if(this.required) textarea.setAttribute('required','')
 		}
-		this.isHtmlmode = textarea.classList.contains('d-none')
+		this.htmlMode = textarea.classList.contains('d-none')
 	}
 
 	this.querySelector = (selectors) => {
-		if(!this.isHtmlmode) {
+		if(!this.htmlMode) {
 			iframe.contentWindow.document.body.innerHTML = textarea.value
 		}
 		return iframe.contentWindow.document.body.querySelector(selectors)
 	}
 
 	this.querySelectorAll = (selectors) => {
-		if(!this.isHtmlmode) {
+		if(!this.htmlMode) {
 			iframe.contentWindow.document.body.innerHTML = textarea.value
 		}
 		return iframe.contentWindow.document.body.querySelectorAll(selectors)
@@ -55,9 +54,9 @@ function afoxEditor(ID, options) {
 
 	this.getSelection = () => {
 		const w = iframe.contentWindow
-		this.isHtmlmode ? w.document.body.focus() : textarea.focus()
+		this.htmlMode ? w.document.body.focus() : textarea.focus()
 
-		if (this.isHtmlmode) {
+		if (this.htmlMode) {
 			if (w.getSelection) {
 				return w.getSelection()
 			} else if (w.document.getSelection) {
@@ -78,7 +77,7 @@ function afoxEditor(ID, options) {
 	this.pasteHtml = (html) => {
 		const selection = this.getSelection()
 
-		if (this.isHtmlmode) {
+		if (this.htmlMode) {
 			let range = selection.getRangeAt(0)
 			if (range) {
 				const el = iframe.contentWindow.document.createElement("div")
@@ -213,14 +212,14 @@ function afoxEditor(ID, options) {
 			case 'underline':
 			case 'strikethrough':
 			case 'insertorderedlist':
-				if (this.isHtmlmode) {
+				if (this.htmlMode) {
 					iframe.contentWindow.document.execCommand(cmd, false, null)
 				} else {
 					this.pasteHtml(htmlToCmd[cmd])
 				}
 				break
 			case 'highlight':
-				this.pasteHtml(this.isHtmlmode ? htmlToCmd[cmd] : '`%s`')
+				this.pasteHtml(this.htmlMode ? htmlToCmd[cmd] : '`%s`')
 				break
 			case 'components':
 				break
@@ -229,7 +228,7 @@ function afoxEditor(ID, options) {
 				break
 		}
 
-		this.isHtmlmode ? iframe.contentWindow.document.body.focus() : textarea.focus()
+		this.htmlMode ? iframe.contentWindow.document.body.focus() : textarea.focus()
 	}
 
 	const clickTypebar = (e) => {
@@ -255,7 +254,7 @@ function afoxEditor(ID, options) {
 			modeSwitch(e.target.innerText === 'HTML')
 		}
 
-		this.isHtmlmode ? iframe.contentWindow.document.body.focus() : textarea.focus()
+		this.htmlMode ? iframe.contentWindow.document.body.focus() : textarea.focus()
 	}
 
 	toolbar.forEach(el => el.addEventListener('click', clickToolbar))
@@ -276,7 +275,7 @@ function afoxEditor(ID, options) {
 	if(form.hasAttribute('needvalidate')) form.setAttribute('novalidate', '')
 	form.addEventListener('submit', e => {
 		try {
-			if (this.isHtmlmode) {
+			if (this.htmlMode) {
 				textarea.value = iframe.contentWindow.document.body.innerHTML
 			}
 			check_groups.forEach(el => {
@@ -296,7 +295,7 @@ function afoxEditor(ID, options) {
 				e.currentTarget.classList.add('was-validated')
 			} else {
 				if (!content_validity) {
-					this.isHtmlmode
+					this.htmlMode
 						? iframe.contentWindow.document.body.focus() : textarea.focus()
 					throw new Error(this.required)
 				}
@@ -309,7 +308,7 @@ function afoxEditor(ID, options) {
 		}
 	}, false)
 
-	if(this.html) modeSwitch(true)
+	if(OPTIONS.html) modeSwitch(true)
 }
 
 (function() {

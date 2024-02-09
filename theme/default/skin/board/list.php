@@ -15,7 +15,7 @@ $total_page = $LIST['total_page'];
 		$tmp = explode(',', $_CFG['md_category']);
 		foreach ($tmp as $val) {
 			$isEqual = $val == $_POST['category'];
-			$cateurl = $use_style == 'gallery' ? getUrl('','id',__MID__,'search', urlencode('#'.$val)) : getUrl('','id',__MID__,'category', urlencode($val));
+			$cateurl = getUrl('','id',__MID__,'category', urlencode($val));
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary'.($isEqual?' text-decoration-underline active" aria-current="page':' text-decoration-none').'" href="'.$cateurl.'">'.$val.'</a></li>';
 		}
 	?>

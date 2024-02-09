@@ -4,7 +4,6 @@
 
 	$is_manager = isManager(__MID__);
 	$is = !empty($DOC)&&!empty($DOC['wr_srl']);
-	$modal_image_view = $use_style=='gallery'&&!empty($CONFIGS['modal_image_view']);
 ?>
 
 <section id="documentWrite" aria-label="Writing a post">
@@ -29,10 +28,6 @@
 		<?php } ?>
 		<?php if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category']);?>
 			<div class="form-floating mb-2">
-			<?php if ($use_style == 'gallery') { echo '<div class="form-control checkbox-group required">'; $tags = $is?explode(',',$DOC['wr_tags']):[]; foreach($tmp as $val){?>
-					<input type="checkbox" name="wr_tags[]" value="<?php echo $val?>"<?php echo in_array($val, $tags)?' checked':''?> class="form-check-input" id="wrExtra_<?php echo $val?>">
-					<label class="me-2" for="wrExtra_<?php echo $val?>"><?php echo $val?></label>
-			<?php } echo '<input type="hidden" name="wr_category" value="'.$tmp[0].'"></div>';} else { ?>
 					<select name="wr_category" class="form-control" id="wrCategory" required>
 					<option value=""></option>
 					<?php
@@ -41,7 +36,6 @@
 						}
 					?>
 					</select>
-			<?php } ?>
 				<label for="wrCategory"><?php echo getLang('category')?></label>
 			</div>
 		<?php } ?>
@@ -77,19 +71,15 @@
 			$issecret = ($is&&$DOC['wr_secret']=='1')?'true':'false';
 			$ishtml = ($is&&$DOC['wr_type']=='2')||(!$is&&($_CFG['use_type']=='3'||$_CFG['use_type']=='9'))?1:0;
 			$istool = [];
-			if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = $use_style == 'gallery'?[0,[]]:[$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
+			if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
 			if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [$issecret, ['Secret'=>'true']];
 			displayEditor(
 				'wr_content', $is?$DOC['wr_content']:'',
 				[
-					'file'=>[__MID__, $is?$DOC['wr_srl']:0, $_CFG['md_file_max'], $_CFG['md_file_accept']],
-					'html'=>$use_style != 'gallery' && $ishtml,
-					'placeholder'=>$use_style != 'gallery' ?0:getLang('gallery_content'),
-					'height'=>$use_style == 'gallery' ? '38px' : '350px',
-					'required'=>$use_style == 'gallery'?'':getLang('request_input',['content']),
-					'readonly'=>$use_style == 'gallery',
-					'toolbar'=>$use_style != 'gallery',
-					'typebar'=>$use_style == 'gallery' ?0:array(getLang('content'), $istool)
+					'html'=>$ishtml,
+					'typebar'=>array(getLang('content'), $istool),
+					'required'=>getLang('request_input',['content']),
+					'file'=>[__MID__, $is?$DOC['wr_srl']:0, (int)$_CFG['md_file_max'], $_CFG['md_file_accept']]
 				]
 			);
 		?>

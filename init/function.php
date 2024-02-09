@@ -105,22 +105,13 @@ function getUrl(){
 	return $n > 0 ? call_user_func_array('setUrlQuery', array_merge([$url], $a)) : $url;
 }
 
-// 사용법: getLang(key), getLang(key,isescape), getLang(key,[sprintf],isescape)
-// 이스케이프시 홑따옴표는 안되니 필요하면 escapeHTML 사용
-// 홑따옴표 이스케이프시 escapeHTML(getLang('msg',false),ENT_QUOTES)
-function getLang($key, $args1 = true, $args2 = true){
-	global $_LANG;
-	$args = [isset($_LANG[$l = strtolower($key)]) ? $_LANG[$l] : $key];
-	$escape = is_array($args1) ? $args2 : $args1;
-	if(is_array($args1)){
-		foreach($args1 as $v) $args[]=isset($_LANG[$l=strtolower($v)])?$_LANG[$l]:$v;
-		$args = [call_user_func_array('sprintf', $args)];
-	}
-	return $escape ? nl2br(escapeHTML($args[0])) : $args[0];
+function getLang($key, $args = []){ global $_LANG;
+	$a = [isset($_LANG[$l = strtolower($key)]) ? $_LANG[$l] : $key];
+	foreach($args as $v) $a[] = isset($_LANG[$l=strtolower($v)])?$_LANG[$l]:$v;
+	return $args ? call_user_func_array('sprintf', $a) : $a[0];
 }
 
-function setLang($key, $value){
-	global $_LANG;
+function setLang($key, $value){ global $_LANG;
 	$_LANG[strtolower($key)] = $value;
 }
 
@@ -193,21 +184,20 @@ function getFileList($id, $target){
 }
 
 // 활동 체크를 위해 기록
-function setHistory($act, $value, $allowdup = false){
-	global $_MEMBER;
-	if (empty($_MEMBER)) return false;
-	$uinfo = getHistorys($act); // 중복 허용 아니면 한번만
-	if(!$allowdup && count($uinfo)) return false;
+function setHistory($act, $value, $allowdup = false){ global $_MEMBER;
+	if(!($mb_srl=@$_MEMBER['mb_srl'])) return false;
+	if(!$allowdup && DB::count(_AF_HISTORY_TABLE_,
+		['hs_action{LIKE}'=>'%::'.$act.'::%', 'mb_srl'=>$mb_srl]
+	)) return false;
+
 	DB::transaction();
 	try {
-		DB::insert(_AF_HISTORY_TABLE_,
-			[
-				'mb_srl'=>$_MEMBER['mb_srl'],
-				'hs_action'=>'::'.$act.'::',
-				'hs_value'=>$value,
-				'^hs_regdate'=>'NOW()'
-			]
-		);
+		DB::insert(_AF_HISTORY_TABLE_, [
+			'mb_srl'=>$mb_srl,
+			'hs_action'=>'::'.$act.'::',
+			'hs_value'=>$value,
+			'^hs_regdate'=>'NOW()'
+		]);
 	} catch (Exception $ex){
 		DB::rollback();
 		return false;
@@ -215,36 +205,29 @@ function setHistory($act, $value, $allowdup = false){
 	DB::commit();
 	return true;
 }
-function getHistory($act){
-	$his = getHistorys($act);
-	return count($his) ? $his[0]['hs_value'] : null;
-}
-function getHistorys($act, $select = 'hs_value'){
-	global $_MEMBER; if(empty($_MEMBER)) return [];
+function getHistoryList($act, $select = 'hs_value'){ global $_MEMBER;
+	if(!($mb_srl=@$_MEMBER['mb_srl'])) return [];
 	return DB::gets(_AF_HISTORY_TABLE_, $select,
-		['hs_action{LIKE}'=>'%::'.$act.'::%', 'mb_srl'=>$_MEMBER['mb_srl']],
-		'hs_regdate');
+		['hs_action{LIKE}'=>'%::'.$act.'::%', 'mb_srl'=>$mb_srl],
+		'hs_regdate'
+	);
+}
+function getHistory($act){
+	return count($his=getHistoryList($act)) ? $his[0]['hs_value'] : null;
 }
 
-function setPoint($point, $mb_srl = 0){
-	if(!$point) return; // 필요 포인트가 없으면 리턴
-	global $_MEMBER;
-	if(!$mb_srl && !empty($_MEMBER)) $mb_srl = $_MEMBER['mb_srl'];
-	if(!($mb_srl = (int)$mb_srl)) return;
+function setPoint($point, $mb_srl = 0){ global $_MEMBER;
+	if(!($mb_srl = $mb_srl ? $mb_srl : @$_MEMBER['mb_srl']) || !$point) return;
 	$mb = DB::get(_AF_MEMBER_TABLE_, 'mb_point,mb_rank', ['mb_srl'=>$mb_srl]);
-	$mb_rank = $mb ? ord($mb['mb_rank']) : 255;
 	// 115 초과시 에러... 115는 관리자. 109는 메니져
-	if($mb_rank > 115) return set_error(getLang('error_request'),4303);
-	// 포인트 모자르면 에러
-	if(($mb['mb_point'] + $point) < 0){
+	if(($mb_rank=($mb?ord($mb['mb_rank']):255))>115) return set_error(getLang('error_request'),4303);
+	if(($mb['mb_point'] + $point) < 0){ // 모자르면 에러
 		return set_error(getLang('warn_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 3701);
 	}
 	$_setvals = ['^mb_point'=>'mb_point'.($point>0?'+':'').$point];
-	// 99이하는 일반 회원, 포인트에 따라 계급 조정
-	if($mb_rank < 100){
+	if($mb_rank < 100){ // 99이하 일반회원, 포인트만큼계급조정, 최대50
 		$_sum_point = $mb['mb_point'] + $point;
 		$_rank = ($_sum_point > 250000) ? 50 : floor(sqrt(floor($_sum_point / 10) / 10));
-		//최대 50 레벨 // 주의, 50레벨 이상은 일반 회원이 아님
 		$_setvals['mb_rank'] = chr($_rank + 48);
 	}
 	DB::update(_AF_MEMBER_TABLE_, $_setvals, ['mb_srl'=>$mb_srl]);
@@ -255,13 +238,11 @@ function setPoint($point, $mb_srl = 0){
 	}
 }
 
-function isAdmin(){
-	global $_MEMBER;
+function isAdmin(){ global $_MEMBER;
 	return !empty($_MEMBER['mb_srl']) && $_MEMBER['mb_rank'] == 's';
 }
 
-function isManager($md_id){
-	global $_MEMBER;
+function isManager($md_id){ global $_MEMBER;
 	if(!$md_id || empty($_MEMBER['mb_srl'])) return false;
 	if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
 	if(!($module = getModule($md_id)) || empty($module['md_manager'])) return false;
@@ -278,23 +259,19 @@ function isGrant($chk, $md_id){
 	return checkGrant($grant);
 }
 
-function checkGrant($chk){
+function checkGrant($chk){ global $_MEMBER;
 	if(is_null($chk) || strlen($chk) !== 1) return false;
-	global $_MEMBER;
 	$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 	// [s = admin, m = manager] // 0 = 48, m = 109, s = 115, 초과시 에러
 	return $rank < 116 && ord($chk) <= $rank;
 }
 
-function checkProtect($key){
-	global $_PROTECT;
+function checkProtect($key){ global $_PROTECT;
 	$grant = $_PROTECT[$key]['grant'];
 	return !is_null($grant) && checkGrant($grant);
 }
 
-function checkProtectData($key, $data){
-	global $_MEMBER;
-	global $_PROTECT;
+function checkProtectData($key, $data){ global $_MEMBER; global $_PROTECT;
 	$grade = empty($_MEMBER) ? 'guest' : $_MEMBER['mb_grade'];
 	if(!empty($_MEMBER['mb_srl']) && !empty($data['mb_srl']) && $_MEMBER['mb_srl'] === $data['mb_srl']){
 		$_PROTECT[$key][$grade] = '*'; //자기 자신 제외
@@ -334,8 +311,7 @@ function createHash($password){
 	}
 }
 
-function sendNote($srl, $msg, $nick = ''){
-	global $_MEMBER;
+function sendNote($srl, $msg, $nick = ''){ global $_MEMBER;
 	$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
 	$nick = empty($_MEMBER) ? ($nick?$nick:getLang('none')) : $_MEMBER['mb_nick'];
 	if(!$srl || $srl === $sender) return false;
@@ -499,7 +475,7 @@ function toHTML($text, $type = '2', $class = 'current_content'){
 		// 다운로드 권한이 없으면 처리
 		if(__MID__ && !isGrant('download', __MID__)){
 			$pattern = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
-			$replacement = "\\1\\2 onclick=\"alert('".escapeHTML(getLang('error_permitted',false),ENT_QUOTES,false)."');return false\" \\3";
+			$replacement = "\\1\\2 onclick=\"alert('".escapeHTML(getLang('error_permitted'),ENT_QUOTES,false)."');return false\" \\3";
 			$text = preg_replace($pattern, $replacement, $text);
 		}
 	}
@@ -508,15 +484,12 @@ function toHTML($text, $type = '2', $class = 'current_content'){
 }
 
 function triggerAddonCall($addons, $position, $trigger, &$data){
-	static $__addon_call = null;
-	if($__addon_call == null){
-		$__addon_call = function($include_file, $called_position, $called_trigger, $_ADDON, $_DATA){
-			include $include_file;
-			return $_DATA;
+	static $__triggerAddonCall = null;
+	if($__triggerAddonCall == null){
+		$__triggerAddonCall = function($_CALLED, $_ADDON, &$_DATA){
+			include $_CALLED['file'];
 		};
 	}
-	$position=strtolower($position);
-	$trigger=strtolower($trigger);
 	foreach ($addons as $key => $value){
 		$_file = _AF_ADDONS_PATH_.'/'.$key.'/index.php';
 		if(file_exists($_file)){
@@ -531,29 +504,24 @@ function triggerAddonCall($addons, $position, $trigger, &$data){
 				$_is_acc = __MID__ && in_array(__MID__, $_ex['access_md_ids']);
 				if(($_acc_md == 'include' && !$_is_acc)||($_acc_md == 'exclude' && $_is_acc)) continue;
 			}
-			$data = $__addon_call($_file, $position, $trigger, $_ex, $data);
+			$called = ['file'=>$_file, 'position'=>$position, 'trigger'=>$trigger];
+			$__triggerAddonCall($called, $_ex, $data);
 		}
 	}
 	return true;
 }
 
 function triggerModuleCall($modules, $position, $trigger, &$data){
-	static $__module_call = null;
-	if($__module_call == null){
-		$__module_call = function($include_file, $called_position, $called_trigger, $_DATA){
-			include $include_file; $r = [];
-			if(function_exists($called_position))$r=call_user_func($called_position,$_DATA);
-			return $r === true ? $_DATA : false;
+	static $__triggerModuleCall = null;
+	if($__triggerModuleCall == null){
+		$__triggerModuleCall = function($_CALLED, &$_DATA){
+			include $_CALLED['file'];
 		};
 	}
-	$position=strtolower($position);
-	$trigger=strtolower($trigger);
 	foreach ($modules as $key => $value){
-		$_file = _AF_MODULES_PATH_.'/'.$key.'/trigger/'.$trigger.'.php';
-		if(file_exists($_file)){
-			$result = $__module_call($_file, $position, $trigger, $data);
-			if($result === false) return false;
-			$data = $result;
+		if(($_file=_AF_MODULES_PATH_.'/'.$key.'/trigger/'.$trigger.'.php') && file_exists($_file)){
+			$called = ['file'=>$_file, 'position'=>$position, 'trigger'=>$trigger];
+			$__triggerModuleCall($called, $data);
 		}
 	}
 	return true;
@@ -561,21 +529,20 @@ function triggerModuleCall($modules, $position, $trigger, &$data){
 
 // TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
 function triggerCall($position, $trigger, &$data){
-	if(__MODULE__ == 'admin') return true; // 관리자 모듈은 넘어감
-	global $_MEMBER;
-	static $__triggers = null;
-	if($__triggers == null){
-		$__triggers = ['M'=>[], 'A'=>[]];
+	global $_MEMBER; if(__MODULE__ == 'admin') return true; //skip admin
+	static $__triggerCall = null;
+	if($__triggerCall == null && ($__triggerCall = ['M'=>[], 'A'=>[]])){
 		$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 		DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
 			[(__MOBILE__?'use_mobile':'use_pc')=>1,'^'=>'ASCII(grant_access)<='.$rank], 'tg_key',
-			function($r)use(&$__triggers){
-				while($tmp = DB::fetch($r)) $__triggers[$tmp['tg_key']][$tmp['tg_id']] = [];
+			function($r)use(&$__triggerCall){
+				while($tmp = DB::fetch($r)) $__triggerCall[$tmp['tg_key']][$tmp['tg_id']] = [];
 			}
 		);
 	}
-	if(count($__triggers['M']) > 0) triggerModuleCall($__triggers['M'], $position, $trigger, $data);
-	if(count($__triggers['A']) > 0) triggerAddonCall($__triggers['A'], $position, $trigger, $data);
+	$trigger=strtolower($trigger); $position=strtolower($position);
+	if(count($__triggerCall['M']) > 0) triggerModuleCall($__triggerCall['M'], $position, $trigger, $data);
+	if(count($__triggerCall['A']) > 0) triggerAddonCall($__triggerCall['A'], $position, $trigger, $data);
 	return true;
 }
 
@@ -592,18 +559,13 @@ function installModuleTrigger($id, $access){
 
 function displayModule(){
 	if(!__MODULE__) return;
-	global $_CFG;
-	global $_POST;
-	global $_MEMBER;
+	global $_CFG; global $_POST; global $_MEMBER;
 	function __module_call($tpl_path, $tpl_file, $_DATA){
-		global $_CFG;
-		global $_POST;
-		global $_MEMBER;
+		global $_CFG; global $_POST; global $_MEMBER;
 		include $tpl_path . $tpl_file;
 	};
-	$trigger = $_POST['disp'] ? $_POST['disp'] : 'Default';
-	$callproc = 'disp'.ucwords(__MODULE__).'Default';
-	if(function_exists($callproc)){
+	$trigger = $_POST['disp'] ? $_POST['disp'] : 'default';
+	if(function_exists($callproc='disp'.ucwords(__MODULE__).'Default')){
 		if(triggerCall('before_disp', $trigger, $_POST)){
 			$_result = call_user_func($callproc, $_POST);
 			triggerCall('after_disp', $trigger, $_result);
@@ -611,14 +573,12 @@ function displayModule(){
 	} else {
 		$_result = set_error(getLang('error_request'),4303);
 	}
-	if(empty($_result['error'])){
-		// 테마에 스킨(tpl)이 있으면 사용
+	if(empty($_result['error'])){ // If the theme has skin(tpl), I use it
 		$tpl_file = (empty($_result['tpl']) ? 'default' : $_result['tpl']).'.php';
 		$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
 		if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
 		__module_call($tpl_path, $tpl_file, $_result);
-	} else {
-		// 에러 번호가 4501 이면 로그인 폼 보여줌
+	} else { // If the error number is 4501, show the login form
 		if($_result['error'] == 4501 && empty($_MEMBER)){
 			global $_LANG;
 			$tpl_file = 'signin.php';
@@ -630,15 +590,15 @@ function displayModule(){
 	}
 }
 
-function displayWidget($widget, $_WIDGET = []){
+function displayWidget($_ID, $_WIDGET = []){
 	global $_MEMBER; ob_start();
-	if(file_exists(_AF_WIDGETS_PATH_ . $widget . '/index.php')){
-		include _AF_WIDGETS_PATH_ . $widget . '/index.php';
-	} else messageBox(getLang('error_founded'), 4201, getLang('Widget').': '.$widget);
+	if(file_exists(_AF_WIDGETS_PATH_ . $_ID . '/index.php')){
+		include _AF_WIDGETS_PATH_ . $_ID . '/index.php';
+	} else messageBox(getLang('error_founded'), 4201, getLang('Widget').': '.$_ID);
 	return ob_get_clean();
 }
 
-function displayEditor($name, $content, $options = []){
+function displayEditor($_ID, $_CONTENT, $_EDITOR = []){
 	@include_once _AF_MODULES_PATH_ . 'editor/index.php';
 }
 

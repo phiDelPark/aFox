@@ -27,7 +27,8 @@ $mb = getMember($_POST['mid']);
 <input type="hidden" name="module" value="member" />
 <input type="hidden" name="act" value="updateMember" />
 
-<?php if(!$mb) { ?>
+<?php  $grade = $mb ? $mb['mb_grade'] : 'guest';
+	if(!$mb) { ?>
 	<h4 class="pb-3 mb-3 border-bottom"><?php echo getLang('member_signup')?></h4>
 	<div class="mb-4">
 		<div class="input-group">
@@ -37,7 +38,6 @@ $mb = getMember($_POST['mid']);
 		<div class="form-text"><?php echo getLang('desc_mb_id')?></div>
 	</div>
 <?php } else {
-	$grade = $mb ? $mb['mb_grade'] : 'guest';
 	$next_lv = (($mb ? ord($mb['mb_rank']) : 48) - 48);
 	if ($next_lv > 50) $next_lv = 50;
 ?>

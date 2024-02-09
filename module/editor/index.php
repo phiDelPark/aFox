@@ -1,17 +1,14 @@
 <?php
 if(!defined('__AFOX__')) exit();
-
-$min_height = empty($options['height']) ? '350px' : $options['height'];
-$ops = 'name:"'. $name . '",';
-$skip_keys = ['height'=>1,'file'=>1,'typebar'=>1,'toolbar'=>1,'statebar'=>1];
-foreach ($options as $key => $v) {
-	if(!empty($skip_keys[$key])) continue;
-	$ops .= $key . ':' . (($v === TRUE || $v === FALSE) ? (int)$v : (is_int($v) || is_float($v) ? $v : '"' . $v . '"')) . ',';
-}
+$_EDITOR['height'] = empty($_EDITOR['height']) ? '280px' : $_EDITOR['height'];
+$_EDITOR['typebar'] = empty($_EDITOR['typebar']) ? false : $_EDITOR['typebar'];
+$_EDITOR['toolbar'] = empty($_EDITOR['toolbar']) ? true : $_EDITOR['toolbar'];
+$_EDITOR['required'] = empty($_EDITOR['required']) ? false : $_EDITOR['required'];
+$_EDITOR['readonly'] = empty($_EDITOR['readonly']) ? false : $_EDITOR['readonly'];
+$_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeholder'];
 ?>
-
 <style>
-#editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);-webkit-filter:invert(50%);filter:invert(50%)}
+#editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);filter:invert(50%)}
 #editorTypebar .bi-unchecked.checked::before{content:url(./module/editor/bi-check.svg)}
 #editorTypebar,#editorToolbar{font-size:12px;font-family:Arial}
 #editorToolbar button{padding:2px;border-radius:2px;height:18px;width:18px}
@@ -19,17 +16,17 @@ foreach ($options as $key => $v) {
 #uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px;background-color:var(--bs-border-color)!important}
 #editorContent .focused{outline:0;box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.3)}
 #editorContent .is-invalid,[name="remove_files[]"]+img{outline:0;box-shadow:0 0 0 0.25rem rgba(253, 13, 13, 0.3)}
-#editorContent textarea,#editorContent iframe{min-height:<?php echo $min_height ?>}
+#editorContent textarea,#editorContent iframe{min-height:<?php echo $_EDITOR['height'] ?>}
 </style>
 
-<div id="editor<?php echo ucfirst($name) ?>" class="w-100 editor-group">
-<?php if(!empty($options['typebar'])) { ?>
-	<div class="d-flex w-100 justify-content-between"<?php echo $options['readonly']?' readonly':''?> aria-label="Editor Options">
-		<label><?php echo $options['typebar'][0]?></label>
+<div id="editor<?php echo ucfirst($_ID) ?>" class="w-100 editor-group">
+<?php if($_EDITOR['typebar']) { ?>
+	<div class="d-flex w-100 justify-content-between"<?php echo $_EDITOR['readonly']?' readonly':''?> aria-label="Editor Options">
+		<label><?php echo $_EDITOR['typebar'][0]?></label>
 		<div id="editorTypebar" class="user-select-none pt-1">
 		<?php
 			$typebar_item = '<span style="cursor:pointer" class="bi-unchecked%s ms-2" tabindex="0" data-target="%s" data-value="%s">%s</span>';
-			foreach ($options['typebar'][1] as $key=>$val) {
+			foreach ($_EDITOR['typebar'][1] as $key=>$val) {
 				$target = $key;
 				$default = $val[0];
 				$item = is_array($val[1]) ? $val[1] : [$val[1]];
@@ -41,9 +38,11 @@ foreach ($options as $key => $v) {
 	</div>
 <?php } ?>
 	<div id="editorContent" role="document" aria-label="Editor Content">
-		<textarea name="<?php echo $name ?>" class="form-control" style="height:<?php echo $min_height ?>" <?php echo ($options['placeholder']?' placeholder="'.escapeHTML($options['placeholder']).'"':'').($options['readonly']?' readonly':'').($options['required']?' required':'') ?>><?php echo escapeHTML($content) ?></textarea>
+		<textarea name="<?php echo $_ID ?>" class="form-control" style="height:<?php echo $_EDITOR['height'] ?>" <?php echo ($_EDITOR['placeholder']?' placeholder="'.escapeHTML($_EDITOR['placeholder']).'"':'').($_EDITOR['readonly']?' readonly':'').($_EDITOR['required']?' required':'') ?>>
+			<?php echo escapeHTML($_CONTENT) ?>
+		</textarea>
 	</div>
-<?php if(!empty($options['toolbar'])) {
+<?php if($_EDITOR['toolbar']) {
 	$components = get_cache('_AF_EDITOR_COMPONENTS');
 	if(is_null($components)){ //에디터 컴포넌트 목록 캐시 생성
 		$components = DB::gets(_AF_ADDON_TABLE_, ['use_editor'=>'1'], [],
@@ -77,13 +76,13 @@ foreach ($options as $key => $v) {
 			<ul class="dropdown-menu dropdown-menu-end shadow">
 <?php
 	foreach($components as $v){
-		echo '<li class="dropdown-item" style="cursor:pointer" onclick="pop_win(\''._AF_URL_.'module/editor/component.php?n='.$v[0].'&k='.$name.'\', null, null, \'afox_editor_components\')">'.$v[1].'</li>';
+		echo '<li class="dropdown-item" style="cursor:pointer" onclick="pop_win(\''._AF_URL_.'module/editor/component.php?n='.$v[0].'&k='.$_ID.'\', null, null, \'afox_editor_components\')">'.$v[1].'</li>';
 	}
 ?>
 			</ul>
 		</div>
 		<div>
-		<abbr class="initialism" title="attribute">AFoX</abbr>
+		<abbr title="attribute" style="font-size:.6rem;vertical-align:super">AFoX</abbr>
 		</div>
 	</div>
 	<script>
@@ -115,11 +114,11 @@ foreach ($options as $key => $v) {
 	</script>
 <?php } ?>
 <?php
-	if(!empty($options['file']) && $options['file'][2] > 0) {
-		$file_id = $options['file'][0];
-		$file_target = $options['file'][1];
-		$file_max = empty($options['file'][2]) ? 0 : $options['file'][2];
-		$file_accept = empty($options['file'][3]) ? '' : $options['file'][3];
+	if(!empty($_EDITOR['file']) && $_EDITOR['file'][2] > 0) {
+		$file_id = $_EDITOR['file'][0];
+		$file_target = $_EDITOR['file'][1];
+		$file_max = empty($_EDITOR['file'][2]) ? 0 : $_EDITOR['file'][2];
+		$file_accept = empty($_EDITOR['file'][3]) ? '' : $_EDITOR['file'][3];
 		$fileList = empty($file_id) ? [] : getFileList($file_id, $file_target);
 ?>
 	<div class="mt-4 d-grid gap-2">
@@ -142,7 +141,7 @@ foreach ($options as $key => $v) {
 		</div>
 <?php } ?>
 		<div id="uploadFiles" class="user-select-none input-group text-secondary border rounded p-2">
-		<small class="ms-1"><?php echo $options['readonly']?'# 첨부된 파일이 없습니다.':'# 본문 첨부는 아이콘을 잡고 끌어 옮기시면 됩니다.' ?></small>
+		<small class="ms-1"><?php echo $_EDITOR['readonly']?'# 첨부된 파일이 없습니다.':'# 본문 첨부는 아이콘을 잡고 끌어 옮기시면 됩니다.' ?></small>
 		</div>
 		<input class="form-control" name="upload_files[]" type="file"<?php echo $file_accept ? ' accept="'.$file_accept.'"' : ''?> tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : ''?>>
 	</div>
@@ -152,7 +151,7 @@ foreach ($options as $key => $v) {
 <script>
 	load_script("<?php echo _AF_URL_?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js')?>")
 		.then(
-			() => { window.AFOX_EDITOR_<?php echo strtoupper($name)?> =new afoxEditor("editor<?php echo ucfirst($name)?>", {<?php echo substr($ops, 0, -1)?>}) },
+			() => { window.AFOX_EDITOR_<?php echo strtoupper($_ID)?> =new afoxEditor("<?php echo $_ID?>", <?php echo json_encode($_EDITOR)?>) },
 			() => { console.log('fail to load script') }
 		);
 </script>

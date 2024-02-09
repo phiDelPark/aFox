@@ -1,9 +1,12 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
 
-if($called_position == 'before_proc' && ($called_trigger == 'updatecomment' || $called_trigger == 'updatedocument'))
-{
-	$key = $called_trigger == 'updatecomment' ? 'rp_content' : 'wr_content' ;
+if($_CALLED['position'] == 'before_proc'
+	&& (
+		$_CALLED['trigger'] == 'updatedocument'
+		|| $_CALLED['trigger'] == 'updatecomment'
+	)
+){
+	$key = $_CALLED['trigger'] == 'updatedocument' ? 'wr_content' : 'rp_content';
 
 	$exs = str_replace(",", "|", trim($_ADDON['exclusion_attr']));
 	$_DATA[$key] = preg_replace_callback('/(<[\w\-]+)(\s[^>]*)>/is',
@@ -39,7 +42,7 @@ if($called_position == 'before_proc' && ($called_trigger == 'updatecomment' || $
 			},
 		$_DATA[$key]);
 
-		if($called_trigger == 'updatedocument') {
+		if($key == 'wr_content') {
 			$_DATA['wr_title'] = preg_replace_callback('/('.$filter.')/si',
 				function($m)use($_change, $length) {
 					$s = $_change[rand(0, $length - 1)];
