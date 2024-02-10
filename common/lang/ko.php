@@ -4,84 +4,7 @@ if(!defined('__AFOX__')) exit();
 // 필요하면 ` (악센트) 이걸 사용하세요.
 
 $_LANG['all']				= '모두';
-$_LANG['target']			= '대상';
-$_LANG['setup']			    = '설정';
-
-$_LANG['count']				= '개수';
 $_LANG['none']				= '없음';
-
-$_LANG['default']			= '기본';
-$_LANG['status']			= '상태';
-$_LANG['select']			= '선택';
-$_LANG['secret']			= '비밀';
-$_LANG['question']			= '질문';
-
-$_LANG['notice']			= '공지';
-$_LANG['document']			= '문서';
-$_LANG['comment']			= '댓글';
-$_LANG['reply']				= '답변';
-
-$_LANG['category']			= '분류';
-$_LANG['type']				= '타입';
-$_LANG['number']			= '번호';
-$_LANG['title']				= '제목';
-$_LANG['content']			= '내용';
-$_LANG['memo']				= '메모';
-$_LANG['info']				= '정보';
-$_LANG['help']				= '도움';
-
-$_LANG['next']				= '다음';
-$_LANG['previous']			= '이전';
-
-$_LANG['search']			= '검색';
-$_LANG['list']				= '목록';
-$_LANG['view']				= '열람';
-$_LANG['write']				= '글쓰기';
-$_LANG['send']				= '보내기';
-
-$_LANG['save']				= '저장';
-$_LANG['edit']				= '편집';
-$_LANG['find']				= '찾기';
-$_LANG['close']				= '닫기';
-
-$_LANG['copy']				= '복사';
-$_LANG['move']				= '이동';
-$_LANG['delete']			= '삭제';
-
-$_LANG['link']				= '링크';
-$_LANG['file']				= '파일';
-$_LANG['upload']			= '업로드';
-$_LANG['download']			= '다운로드';
-
-$_LANG['alert']				= '알림';
-$_LANG['danger']			= '위험';
-$_LANG['error']				= '에러';
-$_LANG['success']			= '성공';
-$_LANG['warning']			= '경고';
-
-$_LANG['collapse']			= '접기';
-$_LANG['expand']			= '펼치기';
-$_LANG['detail']			= '자세히';
-
-$_LANG['size']				= '크기';
-$_LANG['min']				= '최소';
-$_LANG['max']				= '최대';
-$_LANG['height']			= '세로';
-$_LANG['width']				= '가로';
-
-$_LANG['yes']				= '예';
-$_LANG['no']				= '아니오';
-$_LANG['ok']				= '확인';
-$_LANG['cancel']			= '취소';
-
-$_LANG['use']				= '사용';
-$_LANG['using']				= '사용중';
-$_LANG['notuse']			= '미사용';
-$_LANG['agree']				= '동의';
-$_LANG['disagree']			= '동의안함';
-
-$_LANG['include']			= '포함';
-$_LANG['exclude']			= '제외';
 
 $_LANG['time']				= '시간';
 $_LANG['date']				= '날짜';
@@ -92,23 +15,34 @@ $_LANG['today']				= '오늘';
 $_LANG['tomorrow']			= '내일';
 $_LANG['yesterday']			= '어제';
 
-$_LANG['admin']				= '관리자';
-$_LANG['manager']			= '매니저';
-$_LANG['member']			= '회원';
-$_LANG['id']				= '아이디';
-$_LANG['password']			= '비밀번호';
+$_LANG['alert']				= '알림';
+$_LANG['confirm']			= '확인';
+$_LANG['danger']			= '위험';
+$_LANG['error']				= '에러';
+$_LANG['success']			= '성공';
+$_LANG['warning']			= '경고';
 
-$_LANG['name']				= '이름';
-$_LANG['nickname']			= '별명';
-$_LANG['rank']				= '계급';
-$_LANG['point']				= '포인트';
-$_LANG['email']				= '메일';
-$_LANG['inbox']				= '편지함';
-$_LANG['homepage']			= '홈페이지';
-$_LANG['ip']				= '아이피';
+$_LANG['ok']				= '확인';
+$_LANG['cancel']			= '취소';
+$_LANG['yes']				= '예';
+$_LANG['no']				= '아니오';
+$_LANG['open']			    = '열기';
+$_LANG['close']				= '닫기';
+
+$_LANG['save']				= '저장';
+$_LANG['edit']				= '편집';
+$_LANG['copy']				= '복사';
+$_LANG['move']				= '이동';
+$_LANG['delete']			= '삭제';
+
+$_LANG['use']				= '사용';
+$_LANG['using']				= '사용중';
+$_LANG['notuse']			= '미사용';
+$_LANG['agree']				= '동의';
+$_LANG['disagree']			= '동의안함';
+
 $_LANG['login']				= '로그인';
 $_LANG['logout']			= '로그아웃';
-$_LANG['trash_bin']         = '휴지통';
 
 $_LANG['calling_server']	= '서버에 요청 중입니다.';
 

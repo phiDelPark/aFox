@@ -239,7 +239,7 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 		</div>
 	</div>
 
-	<div class="mb-4">
+	<div class="mb-2">
 		<span class="form-label"><?php echo getLang('upload')?></span>
 		<div>
 			<input type="radio" class="btn-check" name="grant_upload" id="grantUpload1" autocomplete="off" value="0"<?php echo !$is_new&&$BOARD['grant_upload']==='0'?' checked':'' ?>>

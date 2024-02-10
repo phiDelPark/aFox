@@ -156,7 +156,7 @@ const $_LANG = {};
 		const expires = exp ? ';expires='+ d.toUTCString() : '';
 		document.cookie =
 			name.encode64() + '=' + value.encode64() + expires + ';path=/;'
-			+ (_AF_COOKIE_DOMAIN_ || '') ? 'Domain=' + _AF_COOKIE_DOMAIN_ : ''
+			+ (cookie_domain || '') ? 'Domain=' + cookie_domain : ''
 	}
 
 	window.get_cookie = function(name) {
@@ -169,8 +169,6 @@ const $_LANG = {};
 			if(x == encode) return y.rawurldecode().decode64()
 		}
 	}
-
-	window._AF_COOKIE_DOMAIN_ = get_cookie('_AF_COOKIE_DOMAIN_');
 
 	window.exec_ajax = async function(body, headers = {}) {
 		const calling = document.createElement('DIV')

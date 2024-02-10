@@ -12,8 +12,8 @@ $_PROTECT['disp.signup']			= ['grant' => '0'];
 $_PROTECT['disp.signin']			= ['grant' => '0'];
 $_PROTECT['proc.signout']			= ['grant' => '0'];
 
-$_PROTECT['proc.deletenote']		= ['grant' => '0'];
-$_PROTECT['proc.deletetrash']		= ['grant' => '0'];
+$_PROTECT['proc.deletenotes']		= ['grant' => '0'];
+$_PROTECT['proc.deletetrashes']		= ['grant' => '0'];
 $_PROTECT['proc.readallnotes']		= ['grant' => '0'];
 $_PROTECT['proc.sendnote']			= ['grant' => '0'];
 $_PROTECT['proc.sendauthenticode']	= ['grant' => '0'];

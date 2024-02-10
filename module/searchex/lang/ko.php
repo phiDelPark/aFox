@@ -1,7 +1,15 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-$_LANG['combine_search'] = '통합검색';
+$_LANG['id']				= '아이디';
+$_LANG['name']				= '이름';
+$_LANG['title']				= '제목';
+
+$_LANG['next']				= '다음';
+$_LANG['previous']			= '이전';
+$_LANG['search']			= '검색';
+
+$_LANG['combine_search']    = '통합검색';
 $_LANG['desc_combine_search'] = '검색을 통합할 모듈을 선택해주세요.';
 
 

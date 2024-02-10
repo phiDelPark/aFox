@@ -5,6 +5,7 @@ if(!defined('__AFOX__')) exit();
 
 $_LANG['afox']					= '에이폭스';
 $_LANG['version']				= '버전';
+
 $_LANG['logo']					= '로고';
 $_LANG['favicon']				= '파비콘';
 $_LANG['theme']					= '테마';
@@ -13,6 +14,47 @@ $_LANG['addon']					= '애드온';
 $_LANG['widget']				= '위젯';
 $_LANG['page']					= '페이지';
 $_LANG['board']					= '게시판';
+
+$_LANG['setup']					= '설정';
+$_LANG['status']				= '상태';
+$_LANG['select']				= '선택';
+$_LANG['secret']				= '비밀';
+$_LANG['collapse']				= '접기';
+$_LANG['expand']				= '펼치기';
+
+$_LANG['list']					= '목록';
+$_LANG['view']					= '열람';
+$_LANG['reply']					= '답변';
+$_LANG['info']					= '정보';
+$_LANG['title']					= '제목';
+$_LANG['content']				= '내용';
+$_LANG['document']				= '문서';
+$_LANG['comment']				= '댓글';
+
+$_LANG['type']					= '타입';
+$_LANG['default']				= '기본';
+$_LANG['height']				= '세로';
+$_LANG['width']					= '가로';
+
+$_LANG['next']					= '다음';
+$_LANG['previous']				= '이전';
+$_LANG['search']				= '검색';
+
+$_LANG['id']					= '아이디';
+$_LANG['file']					= '파일';
+$_LANG['upload']				= '업로드';
+$_LANG['download']				= '다운로드';
+
+$_LANG['admin']					= '관리자';
+$_LANG['manager']				= '매니저';
+$_LANG['member']				= '회원';
+$_LANG['point']					= '포인트';
+$_LANG['ip']					= '아이피';
+$_LANG['rank']					= '계급';
+$_LANG['name']					= '이름';
+
+$_LANG['include']				= '포함';
+$_LANG['exclude']				= '제외';
 
 $_LANG['menu_name_addon'] 		= $_LANG['addon'];
 $_LANG['menu_name_board']		= $_LANG['board'];
@@ -26,7 +68,7 @@ $_LANG['menu_name_menu']		= '사이트 메뉴';
 $_LANG['menu_name_module']		= $_LANG['module'];
 $_LANG['menu_name_page']		= $_LANG['page'];
 $_LANG['menu_name_theme']		= '사이트 테마';
-$_LANG['menu_name_trash']		= $_LANG['trash_bin'];
+$_LANG['menu_name_trash']		= '휴지통';
 $_LANG['menu_name_visit']		= '방문 기록';
 $_LANG['menu_name_widget']		= $_LANG['widget'];
 $_LANG['menu_name_setup']		= '사이트 설정';

@@ -34,7 +34,7 @@ if(_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.bundle.min.js" id="defBootstrapJS"></script>
 <?php } ?>
 
-<script>var language="<?php echo _AF_LANG_ ?>",request_uri="<?php echo getRequestUri() ?>",current_url="<?php echo getUrl() ?>";</script>
+<script>const language="<?php echo _AF_LANG_ ?>",request_uri="<?php echo getRequestUri() ?>",current_url="<?php echo getUrl() ?>",cookie_domain="<?php echo _AF_COOKIE_DOMAIN_ ?>";</script>
 <script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
 <?php if(file_exists(_AF_THEME_PATH_ . 'index' . (__DEBUG__ ? '' : '.min') . '.css')) { ?>
 <link href="<?php echo _AF_THEME_URL_ . 'index' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css') ?>" rel="stylesheet">

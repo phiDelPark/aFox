@@ -1,5 +1,5 @@
 <?php if(!defined('__AFOX__')) exit();
-addJSLang(['confirm_delete', 'prompt_modify_file', 'file']);
+addJSLang(['confirm_delete', 'prompt_modify_item', 'item']);
 addJS(_AF_THEME_URL_ . 'skin/gallery/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
 // 구버전 sql 용 초기화
 $_POST['category'] = empty($_POST['category']) ? null : $_POST['category'];
@@ -93,23 +93,23 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		const ckboxs = document.querySelectorAll('.gallery .list-group [type=checkbox]')
 		ckboxs?.forEach(el => el.classList.remove('d-none'))
 		t.onclick = function(e) {
+			let srls = ''; ckboxs.forEach(el => {if(el.checked) srls += el.value + ','})
+			const __exec_ajax = function(a, s = ''){
+				exec_ajax({module:'gallery',act:a,md_id:id,mf_srls:srls,mf_about:s})
+				.then((data)=>{location.reload()}).catch((error)=>{alert(error)})
+			}
 			if(e.target.innerText == 'DELETE'){
-				if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['file']])) === true) {
-					srls = ''; ckboxs.forEach(el => {if(el.checked) srls += el.value + ','})
-					exec_ajax({module:'gallery',act:'deleteFiles',md_id:id,mf_srls:srls})
-					.then((data)=>{location.reload()}).catch((error)=>{console.log(error);alert(error)})
-				}
-			}else{
-				const s = prompt($_LANG['prompt_modify_file'], '').trim()
-				if (s) {
-					srls = ''; ckboxs.forEach(el => {if(el.checked) srls += el.value + ','})
-					exec_ajax({module:'gallery',act:'modifyFiles',md_id:id,mf_about:s,mf_srls:srls})
-					.then((data)=>{location.reload()}).catch((error)=>{console.log(error);alert(error)})
-				}
+				const r = confirm($_LANG['confirm_delete'].sprintf([$_LANG['item']]))
+				if(typeof r === 'object') r.then(()=>{__exec_ajax('deleteFiles')})
+				else if(r === true) __exec_ajax('deleteFiles')
+			}else if(e.target.innerText == 'MODIFY'){
+				const r = prompt($_LANG['prompt_modify_item'],"<?php echo str_replace(array('"',','),array('\"','|'),@$_CFG['md_category'])?>")
+				if(typeof r === 'object') r.then((e)=>{__exec_ajax('modifyFiles', e)})
+				else if(r.trim()) __exec_ajax('modifyFiles', r.trim())
 			}
 			return false
 		}
-		t.innerHTML = '<span>DELETE</span>, <span>MODIFY</span>';
+		t.innerHTML = '<span>DELETE</span><span> </span><span>MODIFY</span>';
 		return false
 	}
 </script>

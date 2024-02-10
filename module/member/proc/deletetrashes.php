@@ -43,5 +43,5 @@ function proc($data) {
 	return ['error'=>0, 'message'=>getLang('success_deleted')];
 }
 
-/* End of file deletetrash.php */
-/* Location: ./module/member/proc/deletetrash.php */
+/* End of file deletetrashes.php */
+/* Location: ./module/member/proc/deletetrashes.php */

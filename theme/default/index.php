@@ -1,4 +1,5 @@
 <?php if(!defined('__AFOX__')) exit();
+addJSLang(['alert','confirm','close']);
 $menus = getSiteMenu();
 ?>
 <ul class="bd-circles"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
