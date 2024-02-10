@@ -68,7 +68,7 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 		<div class="input-group">
 			<input type="text" name="md_category" class="form-control" id="mdCategory" maxlength="255" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_CATEGORY_)?>" value="<?php echo $BOARD['md_category'] ?>">
 		</div>
-		<div class="form-text"><?php echo getLang('desc_category')?></div>
+		<div class="form-text"><?php echo str_replace('\n','<br>',getLang('desc_category'))?></div>
 	</div>
 
 	<div class="mb-4">
@@ -76,7 +76,7 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 		<div class="input-group">
 		<input type="text" name="md_extra_keys" class="form-control" id="mdExtraKeys" maxlength="255" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_EXTRAKEY_)?>" value="<?php echo empty($BOARD['md_extra']['keys'])?'':implode(',', $BOARD['md_extra']['keys']) ?>">
 		</div>
-		<div class="form-text"><?php echo getLang('desc_extra_keys')?></div>
+		<div class="form-text"><?php echo str_replace('\n','<br>',getLang('desc_extra_keys'))?></div>
 	</div>
 
 	<div class="mb-2">

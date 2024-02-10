@@ -192,7 +192,7 @@ function proc($data) {
 			$destination = _AF_MEMBER_DATA_.$mb_srl.'/profile_image.png';
 			$dir = dirname($destination);
 			if(!is_dir($dir) && !mkdir($dir, _AF_DIR_PERMIT_, true)) {
-				throw new Exception(getLang('upload_err_code(7)'), 10407);
+				throw new Exception(getLang('error_upload(7)'), 10407);
 			}
 			@chmod($destination, 0707);
 			@move_uploaded_file($mb_icon_tmp, $destination);

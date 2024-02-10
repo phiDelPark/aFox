@@ -90,16 +90,16 @@ $_LANG['error_permitted']	= '권한이 없습니다.'; // 4501
 $_LANG['error_password']	= '비밀번호가 다릅니다.'; // 4801
 
 // upload_err_... 업로드 관련
-$_LANG['upload_err_code(0)']= '파일 업로드가 성공했습니다.'; // 10400
-$_LANG['upload_err_code(1)']= '업로드한 파일이 PHP upload_max_filesize 보다 큽니다.'; // 10401
-$_LANG['upload_err_code(2)']= '업로드한 파일이 설정된 최대 파일 크기보다 큽니다.'; // 10402
-$_LANG['upload_err_code(3)']= '파일이 일부분만 전송되었습니다.'; // 10403
-$_LANG['upload_err_code(4)']= '파일이 전송되지 않았습니다.'; // 10404
-$_LANG['upload_err_code(6)']= '임시 폴더가 없습니다.'; // 10406
-$_LANG['upload_err_code(7)']= '디스크에 파일 쓰기를 실패했습니다.'; // 10407
-$_LANG['upload_err_code(8)']= '확장에 의해 파일 업로드가 중지되었습니다.'; // 10408
-$_LANG['upload_err_code(-1)'] = '업로드한 파일이 HTTP post로 전송된 것이 아닙니다.'; // 10489
-$_LANG['upload_err_code(-3)'] = '업로드한 파일이 설정된 최대 수 보다 큽니다.'; // 10487
+$_LANG['error_upload(0)']= '파일 업로드가 성공했습니다.'; // 10400
+$_LANG['error_upload(1)']= '업로드한 파일이 PHP upload_max_filesize 보다 큽니다.'; // 10401
+$_LANG['error_upload(2)']= '업로드한 파일이 설정된 최대 파일 크기보다 큽니다.'; // 10402
+$_LANG['error_upload(3)']= '파일이 일부분만 전송되었습니다.'; // 10403
+$_LANG['error_upload(4)']= '파일이 전송되지 않았습니다.'; // 10404
+$_LANG['error_upload(6)']= '임시 폴더가 없습니다.'; // 10406
+$_LANG['error_upload(7)']= '디스크에 파일 쓰기를 실패했습니다.'; // 10407
+$_LANG['error_upload(8)']= '확장에 의해 파일 업로드가 중지되었습니다.'; // 10408
+$_LANG['error_upload(-1)'] = '업로드한 파일이 HTTP post로 전송된 것이 아닙니다.'; // 10489
+$_LANG['error_upload(-3)'] = '업로드한 파일이 설정된 최대 수 보다 큽니다.'; // 10487
 
 /* End of file default_ko.php */
 /* Location: ./common/lang/default_ko.php */

@@ -360,15 +360,15 @@ function unlinkAll($dir, $subdir = true){
 function moveUploadedFile($file, $dest, $max_size = 0){
 	if($file['error'] === UPLOAD_ERR_OK){
 		// HTTP post로 전송된 것인지 체크합니다.
-		if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('UPLOAD_ERR_CODE(-1)'),10489);
-		if($file['size'] <= 0) return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
-		if($max_size > 0 && $max_size < $file['size']) return set_error(getLang('UPLOAD_ERR_CODE(2)'),10402);
+		if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('error_upload(-1)'),10489);
+		if($file['size'] <= 0) return set_error(getLang('error_upload(4)'),10404);
+		if($max_size > 0 && $max_size < $file['size']) return set_error(getLang('error_upload(2)'),10402);
 		if(!$dest) return true; // 이동 경로가 없으면 이동 안함, 오류 체크는함
-		if(!is_dir($dir=dirname($dest)) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
-		if(file_exists($dest) && !unlinkFile($dest)) return set_error(getLang('UPLOAD_ERR_CODE(7)'),10407);
+		if(!is_dir($dir=dirname($dest)) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return set_error(getLang('error_upload(7)'),10407);
+		if(file_exists($dest) && !unlinkFile($dest)) return set_error(getLang('error_upload(7)'),10407);
 		if(move_uploaded_file($file['tmp_name'], $dest)) @chmod($dest, _AF_ATTACH_PERMIT_);
-		else return set_error(getLang('UPLOAD_ERR_CODE(4)'),10404);
-	} else return set_error(getLang('UPLOAD_ERR_CODE('.$file['error'].')'),10400+$file['error']);
+		else return set_error(getLang('error_upload(4)'),10404);
+	} else return set_error(getLang('error_upload('.$file['error'].')'),10400+$file['error']);
 }
 
 function escapeMKDW($str){

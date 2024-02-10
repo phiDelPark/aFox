@@ -47,7 +47,7 @@ function proc($data) {
 
 				// 이동할 폴더가 이미 있으면 에러
 				if(is_dir(dirname($t))) {
-					throw new Exception('UPLOAD_ERR_CODE(7)',10407);
+					throw new Exception('error_upload(7)',10407);
 				}
 
 				// 에러시 다시 돌리기 위해 여기서 입력

@@ -103,7 +103,7 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 				if(typeof r === 'object') r.then(()=>{__exec_ajax('deleteFiles')})
 				else if(r === true) __exec_ajax('deleteFiles')
 			}else if(e.target.innerText == 'MODIFY'){
-				const r = prompt($_LANG['prompt_modify_item'],"<?php echo str_replace(array('"',','),array('\"','|'),@$_CFG['md_category'])?>")
+				const r = prompt($_LANG['prompt_modify_item'],"<?php echo str_replace('"','\"',@$_CFG['md_category'])?>")
 				if(typeof r === 'object') r.then((e)=>{__exec_ajax('modifyFiles', e)})
 				else if(r.trim()) __exec_ajax('modifyFiles', r.trim())
 			}

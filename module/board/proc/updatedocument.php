@@ -158,7 +158,7 @@ function proc($data)
 		if($upload_count > 0) {
 			// 권한 체크
 			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warn_not_allowable', ['upload']), 3505);
-			if($file_max < ($upload_count+$file_count)) throw new Exception(getLang('UPLOAD_ERR_CODE(-3)'), 10487);
+			if($file_max < ($upload_count+$file_count)) throw new Exception(getLang('error_upload(-3)'), 10487);
 
 			for ($i=0; $i < $upload_count; $i++) {
 				// 빈 파일 넘김
