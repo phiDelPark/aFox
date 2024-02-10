@@ -103,14 +103,14 @@
 		return window.alert(s, 'confirm')
 	}
 	window.prompt = function(s, v) {
-		v = v.split('|'); s += '<hr class="m-1 border-0">'
-		const t = v.length > 1 ? 'checkbox' : 'radio'
-		if(v.length < 2) v = v.split(',')
-		if(v.length > 1){
-			v.forEach((a,i) => {
+		let arr = v.split('|'); s += '<hr class="m-1 border-0">'
+		const t = arr.length > 1 ? 'radio' : 'checkbox'
+		if(arr.length < 2) arr = v.split(',')
+		if(arr.length > 1){
+			arr.forEach((a,i) => {
 				s += '<label><input type="'+t+'" value="'+a+'"> '+a+'</label> '
 			})
-		}else s += '<input type="text" value="'+v+'">'
+		}else s += '<input type="text" value="'+v+'" checked>'
 		return window.alert(s, 'confirm')
 	}
 })()
