@@ -94,10 +94,8 @@ function proc($data)
 					'error' => $files['error'][$i]
 				];
 
-				if($file_accept && !preg_match('/('.($file_accept).')$/i', $file['name'])) {
-					throw new Exception(getLang('warn_allowable', [
-						str_replace('.', '', $module['md_file_accept'])
-					]), 3503);
+				if($file_accept && !preg_match('/\.('.($file_accept).')$/i', $file['name'])) {
+					throw new Exception(getLang('warn_allowable', [$module['md_file_accept']]), 3503);
 				}
 				// 실행 가능한 파일 못하게 처리
 				$file['name'] = preg_replace('/\.(php|phtm|phar|html?|cgi|pl|exe|[aj]sp|inc)/i', '$0-x', $file['name']);

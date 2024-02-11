@@ -32,7 +32,7 @@
 			displayEditor(
 				'wr_content', '',
 				[
-					'file'=>[__MID__, 0, $_CFG['md_file_max'], '.jpg,.jpeg,.png'],
+					'file'=>[__MID__, 0, $_CFG['md_file_max'], 'jpg,jpeg,png'],
 					'placeholder'=>getLang('gallery_content'),
 					'height'=>'38px',
 					'readonly'=>true

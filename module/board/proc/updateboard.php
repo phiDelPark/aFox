@@ -25,23 +25,16 @@ function proc($data)
 		if(!preg_match('/'._AF_PATTERN_EXTRAKEY_.'/u', $data['md_extra_keys'])) {
 			return set_error(getLang('invalid_value', ['extra_keys']),2001);
 		}
-
-		$tmpa = explode(',', $data['md_extra_keys']);
-		$md_extra_keys = [];
-		foreach ($tmpa as $ex_caption) {
-			$_boxs = explode('|', $ex_caption);
-			if($ex_caption = cutstr(trim($_boxs[0]), 20)){
-				unset($_boxs[0]);
-				$md_extra_keys[md5($ex_caption)] = $ex_caption
-				. (count($_boxs)>0 ? '|'.implode('|', $_boxs) : '');
-			}
+		$ex_keys['keys'] = [];
+		$tmp = explode(',', $data['md_extra_keys']);
+		foreach ($tmp as $cap) {
+			$_boxs = explode('&', $cap);
+			if($is = (count($_boxs)<2)) $_boxs = explode('|', $cap);
+			$_boxs[0] = cutstr(trim($_boxs[0]), 20);
+			$ex_keys['keys'][md5($_boxs[0])] = implode($is?'|':'&', $_boxs);
 		}
-		if(!empty($md_extra_keys)) {
-			//확장 변수 갯수 제한 99개
-			if(count($md_extra_keys) > 99) {
-				return set_error(getLang('overflow_count', ['extra_keys',99]));
-			}
-			$ex_keys['keys'] = $md_extra_keys;
+		if(count($ex_keys['keys']) > 99) { //확장 변수 갯수 제한 99개
+			return set_error(getLang('overflow_count', ['extra_keys',99]));
 		}
 	}
 
@@ -49,22 +42,14 @@ function proc($data)
 
 	$file_max = abs($data['md_file_max']);
 	$file_size = abs($data['md_file_size']) * 1024;
-	$file_extension = [];
-	$tmpa = explode(',', str_replace('|', '', $data['md_file_accept']));
-	foreach ($tmpa as $value) {
-		$value = trim($value);
-		if(!empty($value)) $file_extension[] = $value;
-	}
-	$file_extension = $file_extension?'.'.implode(',.', $file_extension):'';
+	$file_accept = str_replace(' ','',empty($data['md_file_accept'])?'':$data['md_file_accept']);
 
 	// 관리자 이이디가 넘어오면 srl로 변경
-	$md_manager = $data['md_manager'];
-	if(!empty($md_manager)) {
-		$mb = getMember($md_manager);
-		if(empty($mb['mb_srl'])) return set_error(getLang('invalid_value', ['admin']),2001);
-		$md_manager = (int) $mb['mb_srl'];
+	$md_manager = empty($data['md_manager']) ? 0 : $data['md_manager'];
+	if($md_manager && !($md_manager=getMember($md_manager))) {
+		return set_error(getLang('invalid_value', ['manager']),2001);
 	} else {
-		$md_manager = 0;
+		$md_manager = $md_manager ? (int)$md_manager['mb_srl'] : 0;
 	}
 
 	DB::transaction();
@@ -92,7 +77,7 @@ function proc($data)
 					'md_manager'=>$md_manager,
 					'md_file_max'=>$file_max,
 					'md_file_size'=>$file_size,
-					'md_file_accept'=>$file_extension,
+					'md_file_accept'=>$file_accept,
 					'md_list_count'=>$list_count,
 					'use_style'=>$data['use_style'],
 					'use_type'=>empty($data['use_type'])?$data['use_default_type']:$data['use_type'],
@@ -146,7 +131,7 @@ function proc($data)
 					'md_manager'=>$md_manager,
 					'md_file_max'=>$file_max,
 					'md_file_size'=>$file_size,
-					'md_file_accept'=>$file_extension,
+					'md_file_accept'=>$file_accept,
 					'md_list_count'=>$list_count,
 					'use_style'=>$data['use_style'],
 					'use_type'=>empty($data['use_type'])?$data['use_default_type']:$data['use_type'],

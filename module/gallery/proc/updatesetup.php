@@ -22,7 +22,7 @@ function proc($data) {
 	$list_count = empty($data['md_list_count']) ? 20 : abs($data['md_list_count']);
 	$file_max = abs($data['md_file_max']);
 	$file_size = abs($data['md_file_size']) * 1024;
-	$file_extension = '.jpg,.jpeg,.png';
+	$file_accept = 'jpg,jpeg,png';
 
 	// 관리자 이이디가 넘어오면 srl로 변경
 	$md_manager = $data['md_manager'];
@@ -55,7 +55,7 @@ function proc($data) {
 					'md_manager'=>$md_manager,
 					'md_file_max'=>$file_max,
 					'md_file_size'=>$file_size,
-					'md_file_accept'=>$file_extension,
+					'md_file_accept'=>$file_accept,
 					'md_list_count'=>$list_count,
 					'thumb_width'=>abs($data['thumb_width']),
 					'thumb_height'=>abs($data['thumb_height']),
@@ -91,7 +91,7 @@ function proc($data) {
 					'md_manager'=>$md_manager,
 					'md_file_max'=>$file_max,
 					'md_file_size'=>$file_size,
-					'md_file_accept'=>$file_extension,
+					'md_file_accept'=>$file_accept,
 					'md_list_count'=>$list_count,
 					'thumb_width'=>abs($data['thumb_width']),
 					'thumb_height'=>abs($data['thumb_height']),

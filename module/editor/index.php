@@ -38,9 +38,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 	</div>
 <?php } ?>
 	<div id="editorContent" role="document" aria-label="Editor Content">
-		<textarea name="<?php echo $_ID ?>" class="form-control" style="height:<?php echo $_EDITOR['height'] ?>" <?php echo ($_EDITOR['placeholder']?' placeholder="'.escapeHTML($_EDITOR['placeholder']).'"':'').($_EDITOR['readonly']?' readonly':'').($_EDITOR['required']?' required':'') ?>>
-			<?php echo escapeHTML($_CONTENT) ?>
-		</textarea>
+		<textarea name="<?php echo $_ID ?>" class="form-control" style="height:<?php echo $_EDITOR['height'] ?>" <?php echo ($_EDITOR['placeholder']?' placeholder="'.escapeHTML($_EDITOR['placeholder']).'"':'').($_EDITOR['readonly']?' readonly':'').($_EDITOR['required']?' required':'') ?>><?php echo escapeHTML($_CONTENT) ?></textarea>
 	</div>
 <?php if($_EDITOR['toolbar']) {
 	$components = get_cache('_AF_EDITOR_COMPONENTS');
@@ -143,7 +141,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 		<div id="uploadFiles" class="user-select-none input-group text-secondary border rounded p-2">
 		<small class="ms-1"><?php echo $_EDITOR['readonly']?'# 첨부된 파일이 없습니다.':'# 본문 첨부는 아이콘을 잡고 끌어 옮기시면 됩니다.' ?></small>
 		</div>
-		<input class="form-control" name="upload_files[]" type="file"<?php echo $file_accept ? ' accept="'.$file_accept.'"' : ''?> tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : ''?>>
+		<input class="form-control" name="upload_files[]" type="file"<?php echo $file_accept ? ' accept=".'.str_replace(',',',.',$file_accept).'"' : ''?> tabindex="-1"<?php echo $file_max > 1 ? ' multiple' : ''?>>
 	</div>
 <?php } ?>
 </div>

@@ -17,9 +17,6 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 	if(!empty($BOARD['md_extra']) && !is_array($BOARD['md_extra'])) {
 		$BOARD['md_extra'] = unserialize($BOARD['md_extra']);
 		$md_extra_keys = empty($BOARD['md_extra']['keys'])?'':$BOARD['md_extra']['keys'];
-		if($md_extra_keys){
-			//$md_extra_keys
-		}
 	}
 }
 ?>
@@ -162,7 +159,7 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 			</div>
             <div class="input-group" style="width:auto">
                 <label class="input-group-text w-100p" for="mdFileExt"><?php echo getLang('file_extension')?></label>
-                <input type="text" class="form-control mw-100p" id="mdFileExt" name="md_file_accept" maxlength="255" value="<?php echo str_replace('.', '', $BOARD['md_file_accept']) ?>">
+                <input type="text" class="form-control mw-100p" id="mdFileExt" name="md_file_accept" maxlength="255" value="<?php echo $BOARD['md_file_accept'] ?>">
             </div>
 		</div>
 		<div class="form-text"><?php echo getLang('desc_board_file')?></div>

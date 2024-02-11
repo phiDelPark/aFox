@@ -34,13 +34,15 @@ $wr_content = preg_replace('/(<img)(((?!loading)[^>])+)>/is', '\1\2 loading="laz
 		echo '<div class="border-bottom mb-3">';
 		foreach($md_extra_keys as $ex_key=>$ex_name) {
 			$tmp = $DOC['wr_extra']['values'][$ex_key];
-			$_boxs = explode('|', $ex_name); $ex_name = $_boxs[0]; $is_required = substr($ex_name, 0, 1) == '*';
+			$_boxs = explode('|', $ex_name);
+			if(!($is_radio=count($_boxs)>1))$_boxs = explode('&', $ex_name);
+			$ex_name = $_boxs[0]; $is_required = substr($ex_name, 0, 1) == '*';
 			if($is_required) $ex_name = substr($ex_name, 1);
 			if(preg_match('/^https?:\/\/.+/', $tmp)) $tmp = '<a href="'.escapeHTML($tmp).'" target="_blank">'.$tmp.'</a>';
 ?>
 		<div class="text-truncate mb-2">
 			<strong class="col-md-1 d-inline-block" style="max-width:100px"><?php echo $ex_name?></strong>
-			<span><?php echo count($_boxs)>1?str_replace(',',', ',$tmp):$tmp?></span>
+			<span><?php echo count($_boxs)>2?str_replace(',',', ',$tmp):$tmp?></span>
 		</div>
 <?php } echo '</div>'; } ?>
 	<div class="h-md-250 mb-3 p-1">

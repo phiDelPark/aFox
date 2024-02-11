@@ -46,24 +46,20 @@
 		<?php
 			if (!empty($_CFG['md_extra']['keys'])) {
 			foreach($_CFG['md_extra']['keys'] as $ex_key=>$ex_caption) {
-				$_boxs = explode('|', $ex_caption); $ex_caption = $_boxs[0]; $is_required = substr($ex_caption, 0, 1) == '*';
-				if($is_required) $ex_caption = substr($ex_caption, 1);
-				if(!($is_radio = count($_boxs) > 2) && count($_boxs) > 1) {
-					$ex_value = $_boxs[1];
-					$_boxs = explode('&', $_boxs[1]);
-					$is_radio = count($_boxs) > 1 ? 2 : 0;
-				}
-				$ex_value = $is ? @$DOC['wr_extra']['values'][$ex_key] : $ex_value;
+				$_boxs = explode('|', $ex_caption);
+				if(!($is_radio=count($_boxs)>1))$_boxs=explode('&',$ex_caption);
+				if($is_required=(substr($_boxs[0],0,1)=='*'))$_boxs[0]=substr($_boxs[0],1);
+				$ex_value = $is ? @$DOC['wr_extra']['values'][$ex_key] : (count($_boxs)===2?$_boxs[1]:'');
 		?>
-		<?php if($is_radio){ echo '<div class="form-floating mb-2"><div class="form-control'.($is_radio===2&&$is_required?' checkbox-group required':'').'">';
-				if($is_radio===2) $is_required = false; $ex_value = $is ? explode(',', $ex_value) : [];
-				for($i=($is_radio===2?0:1), $n=count($_boxs); $i < $n; $i++){?>
-					<input type="<?php echo $is_radio===2?'checkbox':'radio'?>" name="wr_extra_<?php echo $ex_key.($is_radio===2?'[]':'')?>" value="<?php echo $_boxs[$i]?>"<?php echo in_array($_boxs[$i], $ex_value)?' checked':''?> class="form-check-input" id="wrExtra_<?php echo $ex_key.$i?>"<?php echo $is_required?' required':''?>>
+		<?php if(count($_boxs)>2){ echo '<div class="form-floating mb-2"><div class="form-control'.(!$is_radio&&$is_required?' checkbox-group required':'').'">';
+				if(!$is_radio) $is_required = false; $ex_value = $is ? explode(',', $ex_value) : [];
+				for($i=1, $n=count($_boxs); $i < $n; $i++){?>
+					<input type="<?php echo $is_radio?'radio':'checkbox'?>" name="wr_extra_<?php echo $ex_key.($is_radio?'':'[]')?>" value="<?php echo $_boxs[$i]?>"<?php echo in_array($_boxs[$i], $ex_value)?' checked':''?> class="form-check-input" id="wrExtra_<?php echo $ex_key.$i?>"<?php echo $is_required?' required':''?>>
 					<label class="me-2" for="wrExtra_<?php echo $ex_key.$i?>"><?php echo $_boxs[$i]?></label>
-		<?php } echo '</div><label>'.$ex_caption.'</label></div>'; } else {?>
+		<?php } echo '</div><label>'.$_boxs[0].'</label></div>'; } else {?>
 				<div class="form-floating mb-2">
-					<input type="text" name="wr_extra_<?php echo $ex_key?>" value="<?php echo empty($ex_value)?'':escapeHTML($ex_value)?>" class="form-control" id="wrExtra_<?php echo $ex_key?>"<?php echo $is_required?' required':''?> maxlength="255">
-					<label for="wrExtra_<?php echo $ex_key?>"><?php echo $ex_caption?></label>
+					<input type="text" name="wr_extra_<?php echo $ex_key?>" value="<?php echo escapeHTML($ex_value)?>" class="form-control" id="wrExtra_<?php echo $ex_key?>"<?php echo $is_required?' required':''?> maxlength="255">
+					<label for="wrExtra_<?php echo $ex_key?>"><?php echo $_boxs[0]?></label>
 				</div>
 		<?php }}} ?>
 			<div class="mb-4">
