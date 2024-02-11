@@ -17,16 +17,16 @@
           mf_srls:srls
         })
         .then((data)=>{
-          let html =''
+          let html = []
           const tag_img = '<div class="carousel-item%s">%s<img src="%s" class="d-block w-100" alt="%s" loading="lazy"></div>'
-          data.forEach(el => {
-            html += tag_img.sprintf(
+          data.forEach((el,i) => {
+            html[i] = tag_img.sprintf(
               active==el.mf_srl?' active':'',
               '<h6>'+(el.mf_name || '')+', '+(el.mf_regdate || '')+'</h6>',
               './?file='+el.mf_srl, el.mf_name
             )
           })
-          body.innerHTML = html
+          body.innerHTML = html.join('')
         })
         .catch(error => console.log(error))
       })

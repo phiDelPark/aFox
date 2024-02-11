@@ -51,29 +51,11 @@ function proc($data)
 
 	$to_files = [];
 	$new_files = [];
-	$unlink_files = [];
 	$file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
 	DB::transaction();
 
 	try {
-
-		if(!empty($data['remove_files'])) {
-			foreach ($data['remove_files'] as $val) {
-				$file = DB::get(_AF_FILE_TABLE_, [
-					'md_id'=>$md_id,
-					'mf_srl'=>$val
-				]);
-				if(!empty($file) && true === DB::delete(_AF_FILE_TABLE_, [
-					'md_id'=>$md_id,
-					'mf_srl'=>$val])
-				) {
-					$ftype = explode('/', strtolower($file['mf_type']));
-					$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
-					$unlink_files[] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/'.$file['mf_target'].'/'.$file['mf_upload_name'];
-				}
-			}
-		}
 
 		if($upload_count > 0) {
 			// 권한 체크
@@ -146,12 +128,6 @@ function proc($data)
 		}
 		//*/
 
-		// 모두 완료 되면 지워진 파일 완전 삭제
-		foreach ($unlink_files as $val) @unlinkFile($val);
-
-		// 썸네일 제거
-		unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$md_id.'/');
-
 	} catch (Exception $ex) {
 		DB::rollback();
 
@@ -162,8 +138,6 @@ function proc($data)
 				foreach ($new_files as $file) $nfile_srls[] = $file['mf_srl'];
 				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $nfile_srls)]);
 			}
-			// 트랜잭션을 지원 안하면 삭제된 파일은 그냥 지움
-			foreach ($unlink_files as $val) @unlinkFile($val);
 		}
 
 		// 실패시 업로드 된 파일 삭제

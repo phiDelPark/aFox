@@ -10,7 +10,7 @@ function proc($data) {
 	}
 	if(!count($srls)) return set_error(getLang('error_request'),4303);
 
-	return DB::gets(_AF_FILE_TABLE_, ['md_id'=>$data['md_id'],'mf_srl{IN}'=>implode(',', $srls)]);
+	return DB::gets(_AF_FILE_TABLE_, ['md_id'=>$data['md_id'],'mf_srl{IN}'=>implode(',', $srls)], 'mf_srl');
 }
 
 /* End of file getfiles.php */
