@@ -52,13 +52,12 @@ function proc($data)
 		$md_manager = $md_manager ? (int)$md_manager['mb_srl'] : 0;
 	}
 
+	$module = getModule($data['md_id']);
+
 	DB::transaction();
 
 	try {
-
-		$module = getModule($data['md_id']);
-
-		if (empty($module['md_id'])) {
+		if(empty($module['md_id'])) {
 
 			if(!isset($data['new_md_id'])) {
 				throw new Exception(getLang('error_request'),4303);

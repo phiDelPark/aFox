@@ -54,23 +54,18 @@ if(empty($_MEMBER)){ //not logged in
 $_POST = __REQ_METHOD__ == 'JSON' //JSON accepts POST only
 	? json_decode(file_get_contents('php://input'), TRUE)
 	: array_merge($_GET, $_POST); //join
-//unset($_GET);
-
-///*첫번째 키가 모듈인지 체크 (.htaccess 대신 사용할때)
-if(!isset($_POST['module'])){
-	if(file_exists(_AF_MODULES_PATH_ . ($tmp=key($_POST)) . '/setup.php')){
-		$_POST['module'] = $tmp;
-		if(empty($_POST['act'])) $_POST['disp']=empty($_POST[$tmp])?'default':$_GET[$tmp];
-	}
+//*/첫번째 키가 모듈인지 체크 (.htaccess 대신 사용할때)
+if(!isset($_POST['module'])&&file_exists(_AF_MODULES_PATH_.($tmp=key($_GET)).'/setup.php')){
+	if(($_POST['module']=$tmp) && empty($_POST['act'])) $_POST['disp'] = @$_POST[$tmp];
 }//*/
-
-//validation test
-foreach (['module','id','act','disp'] as $tmp){
-	if(!isset($_POST[$tmp])||!preg_match('/^[a-zA-Z]+\w{2,}$/',$_POST[$tmp]))$_POST[$tmp]='';
+unset($_GET); // 보안을 위해 _GET & _POST 키 첫글자는 소문자만 받음
+foreach ($_POST as $tmp=>$tmp) if(preg_match('/^[^a-z]/', $tmp)) unset($_POST[$tmp]);
+foreach (['module','id','act','disp'] as $tmp){ //validation test
+	if(!isset($_POST[$tmp])||!preg_match('/^[a-zA-Z]+\w{2,}$/',$_POST[$tmp])) $_POST[$tmp]='';
 }
 
 //if only srl, get id
-if(empty($_POST['act']) && (!empty($_POST['srl']) || !empty($_POST['rp']))){
+if(!$_POST['act'] && (!empty($_POST['srl']) || !empty($_POST['rp']))){
 	if(!empty($_POST['rp'])&&$tmp=DB::get(_AF_COMMENT_TABLE_,'wr_srl',['rp_srl'=>(int)$_POST['rp']]))
 		$_POST['srl'] = $tmp['wr_srl'];
 	if(!empty($_POST['srl'])&&$tmp=DB::get(_AF_DOCUMENT_TABLE_,'md_id',['wr_srl'=>(int)$_POST['srl']]))
@@ -110,10 +105,9 @@ define('_AF_USE_BASE_CDN_', get_cookie('_CDN_ERROR_') ? FALSE : $tmp);
 
 header('Content-Type: '.(__REQ_METHOD__=='JSON'?'application/json':'text/html').'; charset=UTF-8');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache"); unset($tmp);
+header("Expires: 0");
 
 /* End of file common.php */
 /* Location: ./init/common.php */

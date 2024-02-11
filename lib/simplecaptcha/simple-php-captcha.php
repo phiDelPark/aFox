@@ -70,9 +70,9 @@ function simple_php_captcha($config = array()) {
 
     // Generate HTML for image src
     $image_src = basename(dirname(__FILE__));
-    $image_src .= '/simple-php-captcha.php?_CAPTCHA&amp;t=' . urlencode(microtime());
+    $image_src .= '/simple-php-captcha.php?captcha&amp;t=' . urlencode(microtime());
 
-    $_SESSION['_CAPTCHA']['config'] = serialize($captcha_config);
+    $_SESSION['CAPTCHA']['config'] = serialize($captcha_config);
 
     return array(
         'code' => $captcha_config['code'],
@@ -103,14 +103,14 @@ if( !function_exists('hex2rgb') ) {
 }
 
 // Draw the image
-if( isset($_GET['_CAPTCHA']) ) {
+if( isset($_GET['captcha']) ) {
 
     session_start();
 
-    $captcha_config = unserialize($_SESSION['_CAPTCHA']['config']);
+    $captcha_config = unserialize($_SESSION['CAPTCHA']['config']);
     if( !$captcha_config ) exit();
 
-    unset($_SESSION['_CAPTCHA']);
+    unset($_SESSION['CAPTCHA']);
 
     // Pick random background, get info, and start captcha
     $background = $captcha_config['backgrounds'][mt_rand(0, count($captcha_config['backgrounds']) -1)];

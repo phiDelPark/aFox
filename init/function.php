@@ -105,16 +105,6 @@ function getUrl(){
 	return $n > 0 ? call_user_func_array('setUrlQuery', array_merge([$url], $a)) : $url;
 }
 
-function getLang($key, $args = []){ global $_LANG;
-	$a = [isset($_LANG[$l = strtolower($key)]) ? $_LANG[$l] : $key];
-	foreach($args as $v) $a[] = isset($_LANG[$l=strtolower($v)])?$_LANG[$l]:$v;
-	return $args ? call_user_func_array('sprintf', $a) : $a[0];
-}
-
-function setLang($key, $value){ global $_LANG;
-	$_LANG[strtolower($key)] = $value;
-}
-
 function getSiteMenu($get = ''){
 	static $__menus = [];
 	if(!isset($__menus['header']) || !isset($__menus['footer'])){
@@ -168,6 +158,7 @@ function getMember($id, $get = ''){
 		$out['mb_icon'] = file_exists(_AF_MEMBER_DATA_.$_icon) ? _AF_URL_.'data/member/'.$_icon : '';
 		$grade = ['0'=>'guest','m'=>'manager','s'=>'admin'];
 		$out['mb_grade'] = array_key_exists($out['mb_rank'], $grade) ? $grade[$out['mb_rank']] : 'member';
+		unset($out['mb_password']);
 		$__members[$id] = $out;
 	}
 	return $get ? $__members[$id][$get] : $__members[$id];
@@ -559,9 +550,9 @@ function installModuleTrigger($id, $access){
 
 function displayModule(){
 	if(!__MODULE__) return;
-	global $_CFG; global $_POST; global $_MEMBER;
+	global $_CFG; global $_MEMBER;
 	function __module_call($tpl_path, $tpl_file, $_DATA){
-		global $_CFG; global $_POST; global $_MEMBER;
+		global $_CFG; global $_MEMBER;
 		include $tpl_path . $tpl_file;
 	};
 	$trigger = $_POST['disp'] ? $_POST['disp'] : 'default';
@@ -679,13 +670,19 @@ function addJS($src, $opt = ''){ global $_ADDELEMENTS;$_ADDELEMENTS['JS'][$src] 
 function addCSS($src, $opt = ''){ global $_ADDELEMENTS;$_ADDELEMENTS['CSS'][$src] = $opt; }
 function addJSLang($langs){ global $_ADDELEMENTS;foreach($langs as $k=>$v)$_ADDELEMENTS['LANG'][$v]=getLang($v); }
 
-// Essential function common to data management //
 function encode64($v){ //Because of js without encryption library
 	return str_replace(array('=','/'),array('%3d','%2f'),base64_encode(rawurlencode($v)));
 }
 function decode64($v){
 	return rawurldecode(base64_decode(str_replace(array('%3d','%2f'),array('=','/'),$v)));
 }
+
+function getLang($key, $args = []){ global $_LANG;
+	$a = [isset($_LANG[$l = strtolower($key)]) ? $_LANG[$l] : $key];
+	foreach($args as $v) $a[] = isset($_LANG[$l=strtolower($v)])?$_LANG[$l]:$v;
+	return $args ? call_user_func_array('sprintf', $a) : $a[0];
+}
+function setLang($key, $value){ global $_LANG; $_LANG[strtolower($key)] = $value;}
 function set_session($key, $val){$_SESSION[$key]=$val;}
 function get_session($key){return isset($_SESSION[$key])?$_SESSION[$key]:'';}
 function set_cookie($key, $val, $exp = 0){ //If 0, remove it when exit the browser //if -, remove

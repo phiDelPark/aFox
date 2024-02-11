@@ -2,8 +2,8 @@
 if(!defined('__AFOX__')) exit();
 @include_once dirname(__FILE__) . '/common.php';
 $is_wr_grant = isGrant('write', __MID__);
-$current_page = $LIST['current_page'];
-$total_page = $LIST['total_page'];
+$current_page = $_DATA['current_page'];
+$total_page = $_DATA['total_page'];
 ?>
 
 <section id="documentList" class="<?php echo $use_style?>">
@@ -39,7 +39,7 @@ $total_page = $LIST['total_page'];
 			<li class="page-item ms-1"><a class="btn btn-sm fw-bold btn-secondary<?php echo $total_page <= $end_page ? ' disabled" aria-disabled="true' : ''?>" href="<?php echo getUrl('page',$total_page<($current_page+10)?$total_page:$current_page+10)?>" aria-label="Next+10">&gt;&gt;</a></li>
 		</ul>
 		</nav>
-		<a class="btn btn-sm btn-secondary clearfix" href="<?php echo getUrl('disp','write','srl','')?>" role="button"><?php echo getLang('write') ?></a>
+		<a class="btn btn-sm btn-secondary clearfix<?php echo $is_wr_grant?'':' disabled'?>" href="<?php echo getUrl('disp','write','srl','')?>" role="button"><?php echo getLang('write') ?></a>
 	</div>
 </section>
 

@@ -6,7 +6,7 @@ function procPageDefault($data) {
 	$dir = _AF_MODULES_PATH_ . 'page/proc/';
 	$inc_file = $dir . $act . '.php';
 
-	if (($is=file_exists($inc_file)) && checkProtect('proc.'.$act)) {
+	if(($is=file_exists($inc_file)) && checkProtect('proc.'.$act)){
 		require_once $inc_file;
 		return checkProtectData('proc.'.$act, proc($data));
 	} else {
@@ -18,16 +18,12 @@ function procPageDefault($data) {
 }
 
 function dispPageDefault($data) {
-	$act = strtolower($data['disp']);
-
-	if (empty($act)) {
-		$act = empty($data['id']) ? '...error' : 'viewpage';
-	}
+	$disp = strtolower($data['disp'] ? $data['disp'] : 'viewpage');
 
 	$dir = _AF_MODULES_PATH_ . 'page/disp/';
-	$inc_file = $dir . $act . '.php';
+	$inc_file = $dir . $disp . '.php';
 
-	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$act)) {
+	if(($is=file_exists($inc_file)) && checkProtect('disp.'.$disp)){
 		require_once $inc_file;
 		$result = proc($data);
 		return $result;

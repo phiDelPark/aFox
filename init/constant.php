@@ -48,5 +48,7 @@ define('_AF_CACHE_DATA_', _AF_PATH_ . 'data/cache/');
 
 define('_AF_PASSWORD_ALGORITHM_', function_exists('password_hash')?'BCRYPT':'MYSQL');
 
+if(!isset($_SERVER['SERVER_ADDR'])) $_SERVER['SERVER_ADDR'] = isset($_SERVER['LOCAL_ADDR']) ? $_SERVER['LOCAL_ADDR'] : '';
+
 /* End of file constant.php */
 /* Location: ./init/constant.php */

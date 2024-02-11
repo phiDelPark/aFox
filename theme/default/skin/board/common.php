@@ -18,8 +18,8 @@ if(!isset($_CFG['md_extra']['configs'])) {
 $CONFIGS = &$_CFG['md_extra']['configs'];
 
 $DOC = &$_DATA;
-$LIST = &$_DATA['_DOCUMENT_LIST_'];
-$REPLYS = &$_DATA['_COMMENT_LIST_'];
+$LIST = &$_DATA['list'];
+$REPLYS = &$_DATA['replys'];
 
 $use_style = ['list','review','gallery','timeline'];
 $use_style = $use_style[abs($_CFG['use_style'])];

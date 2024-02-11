@@ -14,7 +14,7 @@ function proc($data)
 	//$_list = DB::query('SELECT * FROM '._AF_FILE_TABLE_.' WHERE mf_about REGEXP (\'분류\')');
 	$_list = DB::gets(_AF_FILE_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, "mf_srl", (($page - 1) * $count) . "," . $count);
 
-	$result = ['tpl' => 'list', 'data' => $_list];
+	$result = ['tpl' => 'list', 'list' => $_list];
 	$result['total_count'] = DB::foundRows();
 	$result['total_page'] = $result['end_page'] = ceil($result['total_count'] / $count);
 	$result['start_page'] = ($page - 1 - (($page - 1) % 10)) + 1;

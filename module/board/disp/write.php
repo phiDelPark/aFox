@@ -50,8 +50,8 @@ function proc($data) {
 
 	$result = $doc;
 	$result['tpl'] = 'write';
-	$result['_DOCUMENT_LIST_'] = [];
-	$result['_COMMENT_LIST_'] = [];
+	$result['list'] = [];
+	$result['replys'] = [];
 
 	return $result;
 }

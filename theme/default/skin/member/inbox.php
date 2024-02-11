@@ -2,7 +2,6 @@
 	if(!defined('__AFOX__')) exit();
 	if(!empty($_POST['srl'])) include 'inboxview.php';
 	addJSLang(['confirm_delete','note']);
-	$_list = &$_DATA['_DOCUMENT_LIST_'];
 ?>
 
 <div style="position:relative">
@@ -38,15 +37,15 @@
 <tbody>
 <?php
 	$unread_str = getLang('unread');
-	$current_page = $_list['current_page'];
-	$total_page = $_list['total_page'];
+	$current_page = $_DATA['current_page'];
+	$total_page = $_DATA['total_page'];
 	$start_page = $current_page - 4;
 	if ($start_page < 1) $start_page = 1;
 	$end_page = 9 + $start_page;
 	if ($end_page > $total_page) $end_page = $total_page;
 	$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
-	foreach ($_list['data'] as $key => $value) {
+	foreach ($_DATA['list'] as $key => $value) {
 		echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _inboxItemClick(event,\''.escapeHTML(getUrl('srl',$value['nt_srl']), ENT_QUOTES).'\')">';
 		if(__MOBILE__) {
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),255).'</a>';

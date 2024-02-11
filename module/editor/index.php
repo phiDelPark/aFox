@@ -1,10 +1,10 @@
 <?php
 if(!defined('__AFOX__')) exit();
+$_EDITOR['toolbar'] = isset($_EDITOR['toolbar']) ? $_EDITOR['toolbar'] : false;
+$_EDITOR['typebar'] = isset($_EDITOR['typebar']) ? $_EDITOR['typebar'] : false;
+$_EDITOR['readonly'] = isset($_EDITOR['readonly']) ? $_EDITOR['readonly'] : false;
+$_EDITOR['required'] = isset($_EDITOR['required']) ? $_EDITOR['required'] : false;
 $_EDITOR['height'] = empty($_EDITOR['height']) ? '280px' : $_EDITOR['height'];
-$_EDITOR['typebar'] = empty($_EDITOR['typebar']) ? false : $_EDITOR['typebar'];
-$_EDITOR['toolbar'] = empty($_EDITOR['toolbar']) ? true : $_EDITOR['toolbar'];
-$_EDITOR['required'] = empty($_EDITOR['required']) ? false : $_EDITOR['required'];
-$_EDITOR['readonly'] = empty($_EDITOR['readonly']) ? false : $_EDITOR['readonly'];
 $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeholder'];
 ?>
 <style>

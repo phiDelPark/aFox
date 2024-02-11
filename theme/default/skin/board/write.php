@@ -73,6 +73,7 @@
 				'wr_content', $is?$DOC['wr_content']:'',
 				[
 					'html'=>$ishtml,
+					'toolbar'=>true,
 					'typebar'=>array(getLang('content'), $istool),
 					'required'=>getLang('request_input',['content']),
 					'file'=>[__MID__, $is?$DOC['wr_srl']:0, (int)$_CFG['md_file_max'], $_CFG['md_file_accept']]

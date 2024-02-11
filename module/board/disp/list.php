@@ -15,11 +15,15 @@ function proc($data) {
 	$page = empty($data['page']) ? '' : $data['page'];
 
 	$count = empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count'];
+	$_list = getDocumentList($data['id'], $count, $page, $search, $category);
 
 	$result = [];
 	$result['tpl'] = 'list';
-	$result['_DOCUMENT_LIST_'] = getDocumentList($data['id'], $count, $page, $search, $category);
-	$result['_COMMENT_LIST_'] = [];
+	$result['list'] = $_list['list'];
+	$result['total_count'] = $_list['total_count'];
+	$result['total_page'] = $_list['total_page'];
+	$result['current_page'] = $_list['current_page'];
+	$result['replys'] = [];
 
 	return $result;
 }

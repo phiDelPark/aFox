@@ -71,7 +71,6 @@
 	})
 
 	window.alert = function(s, t = 'alert') {
-		console.log(s);
 		const b = t == 'confirm' ? '<button type="button" class="btn btn-primary" data-bs-whatever="ok">'+$_LANG['ok']+'</button>' : ''
 		const html = '<div class="modal-dialog"><div class="modal-content"><div class="modal-header">\
 		<h1 class="modal-title fs-5">'+$_LANG[t]+'</h1></div><div class="modal-body">'+s+'</div>\
@@ -80,7 +79,6 @@
 			const modal = document.createElement('DIV')
 			modal.classList.add('modal', 'fade')
 			modal.setAttribute('tabindex', '-1')
-			modal.setAttribute('aria-hidden', 'true')
 			modal.setAttribute('data-bs-backdrop', 'static')
 			modal.innerHTML = html
 			document.body.insertBefore(modal, document.body.firstChild)

@@ -25,15 +25,12 @@ function proc($data)
 		$data['pg_content'] = preg_replace('@\[_/?(STYLE|SCRIPT)/?_\]@is', '', $data['pg_content']);
 	}
 
+	$module = getModule($md_id);
+	$new_insert = empty($module['md_id']);
+
 	DB::transaction();
 
 	try {
-
-		$module = getModule($md_id);
-
-		$new_insert = empty($module['md_id']);
-		$new_files = [];
-
 		// 권한 체크, 파일 첨부 때문에 먼저 함
 		if ($new_insert) {
 			if (!isset($data['new_md_id'])) {

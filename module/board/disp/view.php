@@ -125,11 +125,15 @@ function proc($data) {
 	//$cpage = empty($data['cpage']) ? '' : $data['cpage'];
 
 	$count = empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count'];
+	$_list = getDocumentList($doc['md_id'], $count, $page, $search, $category);
 
 	$result = $doc;
 	$result['tpl'] = 'view';
-	$result['_DOCUMENT_LIST_'] = getDocumentList($doc['md_id'], $count, $page, $search, $category);
-	$result['_COMMENT_LIST_'] = getCommentList($doc['wr_srl'], $call);
+	$result['list'] = $_list['list'];
+	$result['total_count'] = $_list['total_count'];
+	$result['total_page'] = $_list['total_page'];
+	$result['current_page'] = $_list['current_page'];
+	$result['replys'] = getCommentList($doc['wr_srl'], $call);
 
 	return $result;
 }

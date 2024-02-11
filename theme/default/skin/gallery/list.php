@@ -34,7 +34,7 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 <div class="list-group list-group-flush mb-4" aria-label="List of post">
 <?php
 	$close_div = '';
-	foreach ($_DATA['data'] as $key => $val) {
+	foreach ($_DATA['list'] as $key => $val) {
 		if((($key % 4) === 0)){
 			echo $close_div.'<div class="w-100 d-flex justify-content-between">';
 			$close_div = '</div>';

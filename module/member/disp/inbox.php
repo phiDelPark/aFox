@@ -45,14 +45,12 @@ function proc($data) {
 	$_list = DB::gets(_AF_NOTE_TABLE_,'SQL_CALC_FOUND_ROWS *', $_wheres, 'nt_send_date', (($page-1)*$count).','.$count);
 	if($error = DB::error()) return set_error($error->getMessage(),$error->getCode());
 
-	$_list = ['data' => $_list];
-	$_list['total_count'] = DB::foundRows();
-	$_list['total_page'] = $_list['end_page'] = ceil($_list['total_count'] / $count);
-	$_list['current_page'] = $page;
-
 	$result = $_item;
 	$result['tpl'] = 'inbox';
-	$result['_DOCUMENT_LIST_'] =  $_list;
+	$result['list'] =  $_list;
+	$result['total_count'] = DB::foundRows();
+	$result['total_page'] = $result['end_page'] = ceil($result['total_count'] / $count);
+	$result['current_page'] = $page;
 
 	return $result;
 }

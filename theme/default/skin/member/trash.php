@@ -2,7 +2,6 @@
 	if(!defined('__AFOX__')) exit();
 	if(!empty($_POST['srl'])) include 'trashview.php';
 	addJSLang(['confirm_empty','confirm_restore','document']);
-	$_list = &$_DATA['_DOCUMENT_LIST_'];
 ?>
 
 <div style="position:relative">
@@ -37,15 +36,15 @@
 	</tr>
 </thead>
 <?php
-	$current_page = $_list['current_page'];
-	$total_page = $_list['total_page'];
+	$current_page = $_DATA['current_page'];
+	$total_page = $_DATA['total_page'];
 	$start_page = $current_page - 4;
 	if ($start_page < 1) $start_page = 1;
 	$end_page = 9 + $start_page;
 	if ($end_page > $total_page) $end_page = $total_page;
 	$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
-	foreach ($_list['data'] as $key => $value) {
+	foreach ($_DATA['list'] as $key => $value) {
 		echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _trashItemClick(event,\''.escapeHTML(getUrl('srl',$value['wr_srl']),ENT_QUOTES).'\')">';
 		if(__MOBILE__) {
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.escapeHTML(strip_tags($value['wr_title'])).'</a>';

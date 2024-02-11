@@ -14,7 +14,7 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 
 <div class="list-group list-group-flush mb-4" aria-label="List of post">
 <?php
-	foreach ($LIST['data'] as $key => $val) {
+	foreach ($LIST as $key => $val) {
 		$wr_secret =  $val['wr_secret'] == '1';
 		$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
 		$wr_title = !$wr_permit || $wr_secret ? '<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>' : '';
