@@ -19,7 +19,7 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		$wr_permit = !$wr_secret || $is_manager || $login_srl === $val['mb_srl'];
 		$wr_title = !$wr_permit || $wr_secret ? '<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>' : '';
 		$wr_title .= !$wr_permit ? getLang('error_permitted') : escapeHTML($val['wr_title']);
-		$href = $wr_secret&&!$wr_permit ? '#' : getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','');
+		$href = $wr_secret&&!$wr_permit ? '#' : getUrl('srl',$val['wr_srl'],'disp','','cpage','','rp','').($asc?'&asc':'');
 		echo '<a class="px-1'.($val['wr_srl']==$srl?' active" aria-current="true':'').'" href="'.$href.'">';
 		echo '<div><span class="fs-5">'.$wr_title.'</span></div>';
 		echo '<div><small>'.date('F j, Y', strtotime($val['wr_regdate'])).'</small><small>'.$val['mb_nick'].'</small></div></a>';

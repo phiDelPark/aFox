@@ -13,9 +13,10 @@ function proc($data) {
 	$category = empty($data['category']) ? '' : $data['category'];
 	$search = empty($data['search']) ? '' : $data['search'];
 	$page = empty($data['page']) ? '' : $data['page'];
+	$asc = isset($data['asc']);
 
 	$count = empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count'];
-	$_list = getDocumentList($data['id'], $count, $page, $search, $category);
+	$_list = getDocumentList($data['id'], $count, $page, $search, $category, 'wr_regdate'.($asc?' ASC':''));
 
 	$result = [];
 	$result['tpl'] = 'list';

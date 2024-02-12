@@ -4,6 +4,7 @@ if(!defined('__AFOX__')) exit();
 $is_wr_grant = isGrant('write', __MID__);
 $current_page = $_DATA['current_page'];
 $total_page = $_DATA['total_page'];
+$asc = isset($_POST['asc']);
 ?>
 
 <section id="documentList" class="<?php echo $use_style?>">
@@ -15,8 +16,8 @@ $total_page = $_DATA['total_page'];
 		$tmp = explode(',', $_CFG['md_category']);
 		foreach ($tmp as $val) {
 			$isEqual = $val == $_POST['category'];
-			$cateurl = getUrl('','id',__MID__,'category', urlencode($val));
-			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary'.($isEqual?' text-decoration-underline active" aria-current="page':' text-decoration-none').'" href="'.$cateurl.'">'.$val.'</a></li>';
+			$cateurl = getUrl('','id',__MID__,'category', urlencode($val)).($isEqual&&!$asc?'&asc':'');
+			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
 		}
 	?>
 	</ol>

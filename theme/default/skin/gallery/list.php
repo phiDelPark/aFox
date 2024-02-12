@@ -13,6 +13,7 @@ $srl = empty($_POST['srl'])?0:$_POST['srl'];
 
 $is_manager = isManager(__MID__);
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
+$asc = isset($_POST['asc']);
 ?>
 
 <section id="galleryList" class="gallery">
@@ -23,9 +24,9 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 	<?php
 		$tmp = explode(',', $_CFG['md_category']);
 		foreach ($tmp as $val) {
-			$isEqual = $val == $_POST['category'];
-			$cateurl = getUrl('','id',__MID__,'search', urlencode($val));
-			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary'.($isEqual?' text-decoration-underline active" aria-current="page':' text-decoration-none').'" href="'.$cateurl.'">'.$val.'</a></li>';
+			$isEqual = $val == $_POST['search'];
+			$cateurl = getUrl('','id',__MID__,'search', urlencode($val)).($isEqual&&!$asc?'&asc':'');
+			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
 		}
 	?>
 	</ol>
