@@ -1,14 +1,11 @@
-<?php
-if(!defined('__AFOX__')) exit();
-
-$is_manager = isManager(__MID__);
+<?php if(!defined('__AFOX__')) exit();
 
 setLang('srl', getLang('number'));
 setLang('hit', getLang('view'));
 setLang('nick', getLang('name'));
 $show_column = $CONFIGS['show_column'];
 
-$srl = empty($_POST['srl'])?0:$_POST['srl'];
+$srl = @$_GET['srl']?$_GET['srl']:0;
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 ?>
 

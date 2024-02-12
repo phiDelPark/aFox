@@ -4,9 +4,9 @@
 	$md = _AF_MODULE_TABLE_;
 	$pg = _AF_PAGE_TABLE_;
 
-	$search = empty($_POST['search'])?'':'\''.DB::escape('%'.$_POST['search'].'%').'\'';
-	$where = empty($search) ? '1' : '('.$md.'.md_title LIKE '.$search.' OR '.$pg.'.pg_content LIKE '.$search.')';
-	$page = (int)isset($_POST['page']) ? (($_POST['page'] < 1) ? 1 : $_POST['page']) : 1;
+	$search = @$_GET['search']?'\''.DB::escape('%'.$_GET['search'].'%').'\'':'';
+	$where = $search ? '('.$md.'.md_title LIKE '.$search.' OR '.$pg.'.pg_content LIKE '.$search.')': '1';
+	$page = (int)isset($_GET['page']) ? (($_GET['page'] < 1) ? 1 : $_GET['page']) : 1;
 	$count = 20;
 	$start = (($page - 1) * $count);
 
@@ -63,10 +63,10 @@
 
 <div class="d-flex w-100 justify-content-between mt-4">
 	<form action="<?php echo getUrl('') ?>" method="get">
-		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
+		<input type="hidden" name="admin" value="<?php echo $_GET['disp'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
+			<label class="input-group-text bg-transparent" for="search"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('search','').'\')"':''?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg></label>
+			<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" style="max-width:140px;border-left:0" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
 		</div>
 	</form>

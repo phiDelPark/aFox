@@ -6,7 +6,7 @@ if(!defined('__AFOX__')) exit();
 	<table class="table table-hover list-table" role="list">
 	<thead>
 		<tr>
-			<?php if(__MOBILE__) { ?>
+			<?php if(_MOBILE_) { ?>
 			<th scope="col"><?php echo getLang('title')?></th>
 			<?php } else { ?>
 			<th scope="col" class="d-none d-md-table-cell text-nowrap" style="width:1px"><?php echo getLang('id')?></th>
@@ -24,9 +24,9 @@ if(!defined('__AFOX__')) exit();
 		$start_page = $_DATA['start_page'];
 		$end_page = $_DATA['end_page'];
 		$total_count = $_DATA['total_count'];
-		$srl = empty($_POST['srl'])?0:$_POST['srl'];
+		$srl = @$_GET['srl']?$_GET['srl']:0;
 
-		$is_manager = isManager(__MID__);
+		$is_manager = isManager(_MID_);
 		$login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 
 		foreach ($_DATA['data'] as $key => $val) {
@@ -35,7 +35,7 @@ if(!defined('__AFOX__')) exit();
 			$wr_title = !$wr_permit || $wr_secret ? '<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>' : '';
 			$wr_title .= !$wr_permit ? getLang('error_permitted') : escapeHTML(strip_tags($val['wr_title']));
 
-			if(__MOBILE__) {
+			if(_MOBILE_) {
 				$class1 = 'd-flex w-100 justify-content-between';
 					echo '<tr><td><a class="d-block text-decoration-none" href="'.getUrl('','srl',$val['wr_srl'],'disp','','cpage','','rp','').'" target="_blank">'.$wr_title.($val['wr_reply']>0?' <small>(+'.$val['wr_reply'].')</small>':'');
 					echo '<div class="'.$class1.' text-body-secondary"><span data-srl="'.$val['mb_srl'].'" data-rank="'.(ord($val['mb_rank']) - 48).'">'.$val['mb_nick'].'</span>';

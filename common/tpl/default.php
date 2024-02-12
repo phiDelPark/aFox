@@ -10,13 +10,13 @@ if(empty($_CFG['md_title'])) $_CFG['md_title'] = '';
 if(empty($_CFG['md_about'])) $_CFG['md_about'] = '';
 addJSLang(['calling_server','yes','no', 'ok','cancel','error']);
 ?>
-<?php if(!__MODAL__) { ?>
+<?php if(!_MODAL_) { ?>
 <!doctype html>
 <html lang="ko"<?php echo true ? ' data-bs-theme="dark"' : '' ?>>
 <head><meta charset="utf-8">
 <meta name="referrer" content="origin" />
 <meta name="robots" content="index,nofollow"/>
-<?php if(__MOBILE__) { ?>
+<?php if(_MOBILE_) { ?>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=10,user-scalable=yes">
 <?php } else { ?>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,9 +44,9 @@ if(_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 </head><body>
 <?php }?>
 <?php
-	include _AF_THEME_PATH_ . (__POPUP__ ? 'popup' : 'index') . '.php';
+	include _AF_THEME_PATH_ . (_POPUP_ ? 'popup' : 'index') . '.php';
 	echo'<script>';foreach($_ADDELEMENTS['LANG']as$k=>$v){echo'$_LANG[\''.$k.'\']="'.$v.'";';}echo'</script>'."\n";
 	foreach($_ADDELEMENTS['CSS']as$k=>$v){echo'<link href="'.$k.'" rel="stylesheet" '.$v.'>';}
 	foreach($_ADDELEMENTS['JS']as$k=>$v){echo'<script src="'.$k.'" '.$v.'></script>';}
 ?>
-<?php if(!__MODAL__) { ?></body></html><?php } ?>
+<?php if(!_MODAL_) { ?></body></html><?php } ?>

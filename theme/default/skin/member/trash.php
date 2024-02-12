@@ -1,18 +1,18 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	if(!empty($_POST['srl'])) include 'trashview.php';
+	if(@$_GET['srl']) include 'trashview.php';
 	addJSLang(['confirm_empty','confirm_restore','document']);
 ?>
 
 <div style="position:relative">
 <input class="d-none" type="checkbox" id="searchForm">
-<form class="<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
+<form class="<?php echo @$_GET['search']?' d-block':''?>" method="get">
 	<input type="hidden" name="module" value="member">
 	<input type="hidden" name="disp" value="trash">
-	<input type="hidden" name="id" value="<?php echo __MID__ ?>">
+	<input type="hidden" name="id" value="<?php echo _MID_ ?>">
 	<div class="input-group input-group-sm">
-		<label class="input-group-text" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
-		<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" required>
+		<label class="input-group-text" for="search"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('search','').'\')"':''?>><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg></label>
+		<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" required>
 		<button class="btn btn-outline-secondary" type="submit"><?php echo getLang('search') ?></button>
 	</div>
 </form>
@@ -24,7 +24,7 @@
 <table class="table">
 <thead>
 	<tr>
-		<?php if(__MOBILE__) { ?>
+		<?php if(_MOBILE_) { ?>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
 		<?php } else { ?>
 		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchForm"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label></th>
@@ -46,7 +46,7 @@
 
 	foreach ($_DATA['list'] as $key => $value) {
 		echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _trashItemClick(event,\''.escapeHTML(getUrl('srl',$value['wr_srl']),ENT_QUOTES).'\')">';
-		if(__MOBILE__) {
+		if(_MOBILE_) {
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.escapeHTML(strip_tags($value['wr_title'])).'</a>';
 			echo '<div class="d-flex w-100 justify-content-between"><span>'.date('y/m/d', strtotime($value['wr_regdate'])).'</span>';
 			echo '<span>Del:'.date('y/m/d', strtotime($value['wr_update'])).'</span></div></td>';

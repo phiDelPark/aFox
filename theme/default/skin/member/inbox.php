@@ -1,18 +1,18 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	if(!empty($_POST['srl'])) include 'inboxview.php';
+	if(@$_GET['srl']) include 'inboxview.php';
 	addJSLang(['confirm_delete','note']);
 ?>
 
 <div style="position:relative">
 <input class="d-none" type="checkbox" id="searchForm">
-<form class="<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
+<form class="<?php echo @$_GET['search']?' d-block':''?>" method="get">
 	<input type="hidden" name="module" value="member">
 	<input type="hidden" name="disp" value="inbox">
-	<input type="hidden" name="id" value="<?php echo __MID__ ?>">
+	<input type="hidden" name="id" value="<?php echo _MID_ ?>">
 	<div class="input-group input-group-sm">
-		<label class="input-group-text" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
-		<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" required>
+		<label class="input-group-text" for="search"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('search','').'\')"':''?>><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg></label>
+		<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" required>
 		<button class="btn btn-outline-secondary" type="submit"><?php echo getLang('search') ?></button>
 	</div>
 </form>
@@ -23,7 +23,7 @@
 <table class="table">
 <thead>
 	<tr>
-		<?php if(__MOBILE__) { ?>
+		<?php if(_MOBILE_) { ?>
 		<th scope="col" class="text-wrap"><?php echo getLang('content')?></th>
 		<?php } else { ?>
 		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchForm"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label></th>
@@ -47,7 +47,7 @@
 
 	foreach ($_DATA['list'] as $key => $value) {
 		echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _inboxItemClick(event,\''.escapeHTML(getUrl('srl',$value['nt_srl']), ENT_QUOTES).'\')">';
-		if(__MOBILE__) {
+		if(_MOBILE_) {
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),255).'</a>';
 			echo '<div class="d-flex w-100 justify-content-between"><span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';
 			echo '<span>Send:'.date('y/m/d', strtotime($value['nt_send_date'])).'</span></div></td>';

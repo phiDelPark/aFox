@@ -32,8 +32,8 @@ if($_CFG['use_visit'] == '1' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_AD
 	if(!isCrawler()) insertVisitorHistory();
 }
 
-define('__MOBILE__', isMobilePhone());
-define('__REQ_METHOD__', getRequestMethod());
+define('_MOBILE_', isMobilePhone());
+define('_REQ_METHOD_', getRequestMethod());
 define('_AF_URL_', getRequestUri());
 define('_AF_THEME_URL_', _AF_URL_ . 'theme/' . _AF_THEME_ . '/');
 
@@ -51,59 +51,56 @@ if(empty($_MEMBER)){ //not logged in
 	unset($_SESSION['AF_LOGIN_ID']);
 } else unset($_MEMBER['mb_password']); //delete password
 
-$_POST = __REQ_METHOD__ == 'JSON' //JSON accepts POST only
-	? json_decode(file_get_contents('php://input'), TRUE)
-	: array_merge($_GET, $_POST); //join
+ //JSON accepts POST only
+if(_REQ_METHOD_ == 'JSON') $_POST = json_decode(file_get_contents('php://input'), TRUE);
 //*/첫번째 키가 모듈인지 체크 (.htaccess 대신 사용할때)
-if(!isset($_POST['module'])&&file_exists(_AF_MODULES_PATH_.($tmp=key($_GET)).'/setup.php')){
-	if(($_POST['module']=$tmp) && empty($_POST['act'])) $_POST['disp'] = @$_POST[$tmp];
+if(!isset($_GET['module'])&&file_exists(_AF_MODULES_PATH_.($tmp=key($_GET)).'/setup.php')){
+	$_GET['module'] = $tmp; $_GET['disp'] = @$_GET[$tmp];
 }//*/
-unset($_GET); // 보안을 위해 _GET & _POST 키 첫글자는 소문자만 받음
+// 보안을 위해 _GET & _POST 키 첫글자는 소문자만 받음
+foreach ($_GET as $tmp=>$tmp) if(preg_match('/^[^a-z]/', $tmp)) unset($_GET[$tmp]);
 foreach ($_POST as $tmp=>$tmp) if(preg_match('/^[^a-z]/', $tmp)) unset($_POST[$tmp]);
-foreach (['module','id','act','disp'] as $tmp){ //validation test
-	if(!isset($_POST[$tmp])||!preg_match('/^[a-zA-Z]+\w{2,}$/',$_POST[$tmp])) $_POST[$tmp]='';
-}
 
 //if only srl, get id
-if(!$_POST['act'] && (!empty($_POST['srl']) || !empty($_POST['rp']))){
-	if(!empty($_POST['rp'])&&$tmp=DB::get(_AF_COMMENT_TABLE_,'wr_srl',['rp_srl'=>(int)$_POST['rp']]))
-		$_POST['srl'] = $tmp['wr_srl'];
-	if(!empty($_POST['srl'])&&$tmp=DB::get(_AF_DOCUMENT_TABLE_,'md_id',['wr_srl'=>(int)$_POST['srl']]))
-		$_POST['id'] = $tmp['md_id'];
-	setQuery('id',$_POST['id'],'srl',$_POST['srl'],'rp',empty($_POST['rp'])?'':$_POST['rp']);
+if(!empty($_GET['srl']) || !empty($_GET['rp'])){
+	if(@$_GET['rp']&&$tmp=DB::get(_AF_COMMENT_TABLE_,'wr_srl',['rp_srl'=>$_GET['rp']]))
+		$_GET['srl'] = $tmp['wr_srl'];
+	if(@$_GET['srl']&&$tmp=DB::get(_AF_DOCUMENT_TABLE_,'md_id',['wr_srl'=>(int)$_GET['srl']]))
+		$_GET['id'] = $tmp['md_id'];
+	setQuery('id',$_GET['id'],'srl',$_GET['srl'],'rp',@$_GET['rp']?$_GET['rp']:'');
 }
 
 //if no module value exists, use the start page
-if(!$_POST['module'] && !$_POST['id']) $_POST['id'] = $_CFG['start'];
-if($_POST['id'] && ($tmp=getModule($_POST['id']))){
+if(!@$_GET['module'] && !@$_GET['id']) $_GET['id'] = $_CFG['start'];
+if(@$_GET['id'] && ($tmp=getModule($_GET['id']))){
 	$_CFG = array_merge($_CFG, $tmp); // join
-	$_POST['module'] = $tmp['md_key'];
+	$_GET['module'] = $tmp['md_key'];
 }
 $_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
 $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
 
-define('__MID__', $_POST['id']);
-define('__MODULE__', $_POST['module']);
-define('__MODAL__', !empty($_POST['modal']) && $_POST['modal'] === '1');
-define('__POPUP__', __MODAL__ || (!empty($_POST['popup']) && $_POST['popup'] === '1'));
+define('_MID_', _REQ_METHOD_ == 'GET' ? @$_GET['id'] : @$_POST['md_id']);
+define('_MODULE_', _REQ_METHOD_ == 'GET' ? @$_GET['module'] : @$_POST['module']);
+define('_MODAL_', @$_GET['modal'] === '1');
+define('_POPUP_', _MODAL_ || @$_GET['popup'] === '1');
 
 @include_once _AF_THEME_PATH_ . 'lang/' . _AF_LANG_ . '.php';
 
-if(__MODULE__){
-	if(file_exists(($tmp = _AF_MODULES_PATH_ . __MODULE__) . '/index.php')){
+if(_MODULE_){
+	if(file_exists(($tmp = _AF_MODULES_PATH_ . _MODULE_) . '/index.php')){
 		@include_once $tmp . '/lang/' . _AF_LANG_ . '.php';
 		require_once $tmp . '/protect.php'; require_once $tmp . '/index.php';
 	} else goUrl(_AF_URL_, '');
 }
 
 $tmp = _AF_CONFIG_DATA_.'base_cdn_list.php';
-if(!file_exists($tmp) || !empty($_POST['cdnerr'])){
+if(!file_exists($tmp) || !empty($_GET['cdnerr'])){
 	setQuery('cdnerr', ''); //If a CDN error, disable until the browser shuts down
 	set_cookie('_CDN_ERROR_', TRUE, 0);
 }
 define('_AF_USE_BASE_CDN_', get_cookie('_CDN_ERROR_') ? FALSE : $tmp);
 
-header('Content-Type: '.(__REQ_METHOD__=='JSON'?'application/json':'text/html').'; charset=UTF-8');
+header('Content-Type: '.(_REQ_METHOD_=='JSON'?'application/json':'text/html').'; charset=UTF-8');
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);

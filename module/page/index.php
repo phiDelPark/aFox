@@ -18,7 +18,7 @@ function procPageDefault($data) {
 }
 
 function dispPageDefault($data) {
-	$disp = strtolower($data['disp'] ? $data['disp'] : 'viewpage');
+	$disp = strtolower(@$data['disp'] ? $data['disp'] : 'viewpage');
 
 	$dir = _AF_MODULES_PATH_ . 'page/disp/';
 	$inc_file = $dir . $disp . '.php';

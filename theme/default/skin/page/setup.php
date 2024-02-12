@@ -9,7 +9,7 @@
 	<input type="hidden" name="success_url" value="<?php echo getUrl('disp', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="updatePage" />
-	<input type="hidden" name="md_id" value="<?php echo $_POST['id']?>" />
+	<input type="hidden" name="md_id" value="<?php echo _MID_?>" />
 
 	<div class="mb-4">
 		<?php displayEditor(

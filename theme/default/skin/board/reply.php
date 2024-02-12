@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 <section id="documentReply" class="list-group list-group-flush mb-4" aria-label="Replies to post">
 <?php
-	$rp = empty($_POST['rp'])?0:$_POST['rp'];
+	$rp = @$_GET['rp'] ? $_GET['rp'] : 0;
 	$location_hash = $rp&&$REPLYS?'documentReply':'';
 	foreach ($REPLYS as $key => $val) {
 		$_len = strlen($val['rp_depth']);
@@ -41,7 +41,7 @@ if(!defined('__AFOX__')) exit();
 		<input type="hidden" name="success_url" value="<?php echo getUrl('rp','')?>">
 		<input type="hidden" name="module" value="board">
 		<input type="hidden" name="act" value="updateComment">
-		<input type="hidden" name="wr_srl" value="<?php echo $_POST['srl'] ?>">
+		<input type="hidden" name="wr_srl" value="<?php echo $_GET['srl'] ?>">
 		<div class="mb-3<?php echo $is_rp_grant&&empty($_MEMBER)?'':' d-none'?>">
 			<input type="text" name="mb_nick" class="form-control mb-1"<?php echo empty($_MEMBER)?' required':''?> maxlength="20" placeholder="<?php echo getLang('id')?>">
 			<input type="password" name="mb_password" class="form-control"<?php echo empty($_MEMBER)?' required':''?> placeholder="<?php echo getLang('password')?>">
@@ -49,20 +49,18 @@ if(!defined('__AFOX__')) exit();
 		<div class="d-flex w-100 justify-content-between">
 		<?php
 			$istool = [];
-			if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['rp_type'] = ['1', ['TEXT'=>'0','MKDW'=>'1']];
-			if(empty($_CFG['use_secret'])) $istool['rp_secret'] = ['false', ['Secret'=>'true']];
-
+			//if(empty($_CFG['use_secret'])) $istool['rp_secret'] = ['false', ['Secret'=>'true']];
 			displayEditor(
 				'rp_content', '',
 				[
 					'height'=>'70px',
 					'required'=>getLang('request_input', ['content']),
 					'readonly'=>(!$is_rp_grant),
-					'typebar'=>count($istool)>0?array(getLang('reply'), $istool):[]
+					'placeholder'=>getLang('reply')
 				]
 			);
 		?>
-		<button type="submit" style="width:20%" class="btn btn-success ms-2 mt-4"<?php if (!$is_rp_grant) {echo ' disabled="disabled"';} ?>><?php echo getLang('save')?></button>
+		<button type="submit" style="width:20%" class="btn btn-success ms-2"<?php if (!$is_rp_grant) {echo ' disabled="disabled"';} ?>><?php echo getLang('save')?></button>
 		</div>
 	</form>
 </section>

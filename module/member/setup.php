@@ -1,6 +1,5 @@
-<?php
-if(!defined('__AFOX__')) exit();
-$mb = getMember($_POST['mid']);
+<?php if(!defined('__AFOX__')) exit();
+$mb = getMember($_GET['mid']);
 ?>
 
 <?php if($mb){?>

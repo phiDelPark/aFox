@@ -69,8 +69,8 @@ $_LANG['md_title_signin'] = '로그인';
 $_LANG['md_about_signin'] = '아이디와 비번을 입력해주세요.';
 
 // 모듈 설정이 없으므로 직접 기본정보 입력
-$_CFG['md_title'] = empty($_POST['disp'])?'':getLang('md_title_'.strtolower($_POST['disp']));
-$_CFG['md_about'] = empty($_POST['disp'])?'':getLang('md_about_'.strtolower($_POST['disp']));
+$_CFG['md_title'] = @$_GET['disp']?getLang('md_title_'.strtolower($_GET['disp'])):'';
+$_CFG['md_about'] = @$_GET['disp']?getLang('md_about_'.strtolower($_GET['disp'])):'';
 
 /* End of file ko.php */
 /* Location: ./module/member/lang/ko.php */

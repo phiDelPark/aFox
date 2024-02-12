@@ -89,12 +89,12 @@ function afoxEditor(ID, OPTIONS) {
 				range.setEnd(selection.anchorNode, selection.anchorOffset)
 			}
 		} else {
+			const nend = (textarea.value.length - selection.end) * -1;
 			html = html.replace(/%s/, selection.value ? selection.value : '...')
 			const
 				txtBefore = textarea.value.slice(0, selection.start),
-				txtAfter = textarea.value.slice(
-					(textarea.value.length - selection.end) * -1
-				)
+				txtAfter = nend ? textarea.value.slice(nend) : ''
+				console.log()
 			textarea.value = txtBefore + html + txtAfter
 		}
 	}
@@ -193,34 +193,20 @@ function afoxEditor(ID, OPTIONS) {
 		e.stopPropagation()
 
 		const htmlToCmd = {
-				'bold':'**%s**',
-				'italic':'*%s*',
+				'bold':this.htmlMode ? '<strong>%s</strong>' : '**%s**',
+				'italic':this.htmlMode ? '<em>%s</em>' : '*%s*',
 				'underline':'<u>%s</u>',
-				'strikethrough':'~~%s~~',
-				'insertorderedlist':"\n"+'1. '+'%s'+"\n"+'2. ',
-				'header':'<h2>%s</h2>',
-				'indent':'<blockquote>%s</blockquote>',
-				'codeblock':'<pre><code>%s</code></pre>',
-				'highlight':'<code>%s</code>'
+				'strikethrough':this.htmlMode ? '<strike>%s</strike>' : '~~%s~~',
+				'insertorderedlist':this.htmlMode ? '<ol><li>%s</li></ol>' : "\n"+'1. '+'%s'+"\n"+'2. ',
+				'header':this.htmlMode ? '<h2>%s</h2>' : '## %s',
+				'highlight':this.htmlMode ? '<code>%s</code>' : '`%s`',
+				'indent':this.htmlMode ? '<blockquote>%s</blockquote>' : '> %s',
+				'codeblock':this.htmlMode ? '<pre><code>%s</code></pre>' : '```'+"\n"+'%s'+"\n"+'```'
 			}
 
 		const cmd = e.target.closest('button').getAttribute('aria-label').toLowerCase()
 
 		switch (cmd) {
-			case 'bold':
-			case 'italic':
-			case 'underline':
-			case 'strikethrough':
-			case 'insertorderedlist':
-				if (this.htmlMode) {
-					iframe.contentWindow.document.execCommand(cmd, false, null)
-				} else {
-					this.pasteHtml(htmlToCmd[cmd])
-				}
-				break
-			case 'highlight':
-				this.pasteHtml(this.htmlMode ? htmlToCmd[cmd] : '`%s`')
-				break
 			case 'components':
 				break
 			default:

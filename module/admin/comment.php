@@ -1,13 +1,13 @@
 <?php if(!defined('__AFOX__')) exit();
 
-	$_POST['page'] = empty($_POST['page'])?1:$_POST['page'];
+	$_GET['page'] = @$_GET['page']?$_GET['page']:1;
 
 	$cd = _AF_COMMENT_TABLE_;
 	$dd = _AF_DOCUMENT_TABLE_;
 
 	$count = 20;
-	$search = empty($_POST['search']) ? '' : trim($_POST['search']);
-	$category = empty($_POST['category']) ? '' : $_POST['category'];
+	$search = @$_GET['search'] ? trim($_GET['search']) : '';
+	$category = @$_GET['category'] ? $_GET['category'] : '';
 
 	if(!empty($search)) {
 		$keys = [
@@ -38,10 +38,10 @@
 
 	$category = $dd.($category?'.md_id = \''.$category.'\'':'.md_id <> \'_AFOXtRASH_\'');
 	$where = $search||$category ? '('.$category.($search&&$category ? ' AND ' : '').$search.')' : '1';
-	$start = (($_POST['page'] - 1) * $count);
+	$start = (($_GET['page'] - 1) * $count);
 	$cmt_list = DB::query("SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.wr_srl WHERE $where ORDER BY $cd.rp_regdate DESC LIMIT $start,$count", true);
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$cmt_list = setDataListInfo($cmt_list, $_POST['page'], $count, DB::foundRows());
+	$cmt_list = setDataListInfo($cmt_list, $_GET['page'], $count, DB::foundRows());
 ?>
 
 <form id="af_check_items" method="post">
@@ -87,10 +87,10 @@
 
 <div class="d-flex w-100 justify-content-between mt-4">
 	<form action="<?php echo getUrl('') ?>" method="get">
-		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
+		<input type="hidden" name="admin" value="<?php echo $_GET['disp'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" placeholder="<?php echo getLang('content') ?>" oninvalid="this.setCustomValidity('@NICK, ?202201')" oninput="this.setCustomValidity('')" required>
+			<label class="input-group-text bg-transparent" for="search"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('search','').'\')"':''?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg></label>
+			<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" style="max-width:140px;border-left:0" placeholder="<?php echo getLang('content') ?>" oninvalid="this.setCustomValidity('@NICK, ?202201')" oninput="this.setCustomValidity('')" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
 		</div>
 	</form>

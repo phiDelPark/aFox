@@ -1,12 +1,6 @@
-<?php
-if(!defined('__AFOX__')) exit();
-
-if (!__MODAL__) {
-addJSLang([]);
-}
-
-// 구버전 sql 용 초기화
-$_POST['category'] = empty($_POST['category']) ? null : $_POST['category'];
+<?php if(!defined('__AFOX__')) exit();
+if (!_MODAL_) addJSLang([]);
+$is_manager = isManager(_MID_);
 
 // 개별 설정 초기화
 if(!isset($_CFG['md_extra']['configs'])) {

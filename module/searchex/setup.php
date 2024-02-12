@@ -9,7 +9,7 @@ if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode
 <form method="post" autocomplete="off">
 <input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 <input type="hidden" name="success_url" value="<?php echo getUrl('md_id','')?>" />
-<input type="hidden" name="module" value="<?php echo $_POST['md_id']?>" />
+<input type="hidden" name="module" value="<?php echo $_GET['md_id']?>" />
 <input type="hidden" name="act" value="updateSetup" />
 <input type="hidden" name="md_id" value="searchex" />
 

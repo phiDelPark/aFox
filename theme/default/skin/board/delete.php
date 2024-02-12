@@ -1,7 +1,6 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 	@include_once dirname(__FILE__) . '/common.php';
-	$is_manager = isManager(__MID__);
 ?>
 <section id="documentDelete" aria-label="Delete this post?">
 	<button type="button" class="btn-close float-end" aria-label="Back" onclick="window.history.go(-1);return false"></button>

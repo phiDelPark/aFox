@@ -3,7 +3,7 @@
 if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(__MODULE__!='board'||empty($data['md_id'])) return set_error(getLang('error_request'),4303);
+	if(_MODULE_!='board'||empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 	if(isManager($data['md_id']) === false) return set_error(getLang('error_permitted'),4501);
 
 	$module = getModule($data['md_id']);

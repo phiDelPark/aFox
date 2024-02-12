@@ -25,7 +25,7 @@ function procBoardDefault($data) {
 }
 
 function dispBoardDefault($data) {
-	if (!($disp = strtolower($data['disp']))) {
+	if (!($disp = strtolower(@$data['disp']))) {
 		$disp = empty($data['srl']) ? 'list' : 'view';
 	}
 

@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 $_WIDGET_INFO = [];
-@include_once _AF_WIDGETS_PATH_ . $_POST['wg_id'] . '/lang/' . _AF_LANG_ . '.php';
-@require_once _AF_WIDGETS_PATH_ . $_POST['wg_id'] . '/info.php';
+@include_once _AF_WIDGETS_PATH_ . $_GET['wg_id'] . '/lang/' . _AF_LANG_ . '.php';
+@require_once _AF_WIDGETS_PATH_ . $_GET['wg_id'] . '/info.php';
 $_WIDGET_INFO['author'] = empty($_WIDGET_INFO['link'])?escapeHTML($_WIDGET_INFO['author']):('<a href="'.escapeHTML($_WIDGET_INFO['link']).'" target="_blank">'.escapeHTML($_WIDGET_INFO['author']).'</a>');
 ?>
 
@@ -25,7 +25,7 @@ $_WIDGET_INFO['author'] = empty($_WIDGET_INFO['link'])?escapeHTML($_WIDGET_INFO[
 <hr>
 
 <?php
-require_once _AF_WIDGETS_PATH_ . $_POST['wg_id'] . '/setup.php';
+require_once _AF_WIDGETS_PATH_ . $_GET['wg_id'] . '/setup.php';
 ?>
 <hr>
 

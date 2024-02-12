@@ -1,11 +1,11 @@
 <?php if(!defined('__AFOX__')) exit();
 
 $BOARD = [];
-if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
+if($is_new = (empty($_GET['md_id']) || $_GET['md_id'] === '.')){
 	$r = DB::query('SHOW FULL COLUMNS FROM '._AF_MODULE_TABLE_, [], true);
 	foreach($r as $v) $BOARD[$v['Field']] = $v['Default'];
 } else{
-	$BOARD = DB::get(_AF_MODULE_TABLE_, '*', ['md_id'=>$_POST['md_id']]);
+	$BOARD = DB::get(_AF_MODULE_TABLE_, '*', ['md_id'=>$_GET['md_id']]);
 	if(empty($BOARD['md_id'])) {
 		messageBox(getLang('error_founded'), 4201);
 		return;
@@ -92,11 +92,11 @@ if($is_new = (empty($_POST['md_id']) || $_POST['md_id'] === '.')){
 
 	<div class="mb-2">
 		<span class="form-label d-inline-block my-0" style="width:100px"><?php echo getLang('type')?></span>
-		<span style="margin-left:1px"><input class="form-check-input" type="radio" name="use_default_type" value="7"<?php echo ($BOARD['use_type']==='0'||$BOARD['use_type']==='7')?' checked':'' ?>></span>
+		<span style="margin-left:1px"><input class="form-check-input" type="radio" name="use_default_type" value="7"<?php echo (!$BOARD['use_type']||$BOARD['use_type']==='7')?' checked':'' ?>></span>
 		<span style="margin-left:85px"><input class="form-check-input" type="radio" name="use_default_type" value="8"<?php echo $BOARD['use_type']==='8'?' checked':'' ?>></span>
 		<span style="margin-left:85px"><input class="form-check-input" type="radio" name="use_default_type" value="9"<?php echo $BOARD['use_type']==='9'?' checked':'' ?>></span>
 		<div>
-			<input type="radio" class="btn-check" name="use_type" id="useType1" autocomplete="off" value="0"<?php echo ($BOARD['use_type']>3||$BOARD['use_type']==='0')?' checked':'' ?>>
+			<input type="radio" class="btn-check" name="use_type" id="useType1" autocomplete="off" value="0"<?php echo ($BOARD['use_type']>3||!$BOARD['use_type'])?' checked':'' ?>>
 			<label class="btn btn-xs btn-outline-primary w-100p" for="useType1"><?php echo getLang('select')?></label>
 			<input type="radio" class="btn-check" name="use_type" id="useType2" autocomplete="off" value="1"<?php echo $BOARD['use_type']==='1'?' checked':'' ?>>
 			<label class="btn btn-xs btn-outline-primary w-100p" for="useType2"><?php echo getLang('TEXT')?></label>

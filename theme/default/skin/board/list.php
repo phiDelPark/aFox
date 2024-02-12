@@ -1,22 +1,22 @@
 <?php
 if(!defined('__AFOX__')) exit();
 @include_once dirname(__FILE__) . '/common.php';
-$is_wr_grant = isGrant('write', __MID__);
+$is_wr_grant = isGrant('write', _MID_);
 $current_page = $_DATA['current_page'];
 $total_page = $_DATA['total_page'];
-$asc = isset($_POST['asc']);
+$asc = isset($_GET['asc']);
 ?>
 
 <section id="documentList" class="<?php echo $use_style?>">
 	<h2 class="pb-3 mb-2 border-bottom"><?php echo $_CFG['md_title']?></h2>
-<?php if(empty($_POST['srl']) && !empty($_CFG['md_category'])){ ?>
+<?php if(empty($_GET['srl']) && !empty($_CFG['md_category'])){ ?>
 
 	<ol class="list-unstyled" aria-label="Category of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category']);
 		foreach ($tmp as $val) {
-			$isEqual = $val == $_POST['category'];
-			$cateurl = getUrl('','id',__MID__,'category', urlencode($val)).($isEqual&&!$asc?'&asc':'');
+			$isEqual = $val == @$_GET['category'];
+			$cateurl = getUrl('','id',_MID_,'category', urlencode($val)).($isEqual&&!$asc?'&asc':'');
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
 		}
 	?>

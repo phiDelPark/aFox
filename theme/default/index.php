@@ -27,7 +27,7 @@ $menus = getSiteMenu();
 <?php }else{ ?>
 				<a class="btn p-0" style="line-height:normal" href="#" aria-label="Member" data-bs-toggle="dropdown" aria-expanded="false"><svg class="bi bi-lg" aria-hidden="true"><title><?php echo $_MEMBER['mb_nick']?></title><use href="./theme/default/bi-icons.svg#person-bounding-box"/></svg></a>
 				<ul class="dropdown-menu">
-					<?php if(isManager(__MID__)) { ?>
+					<?php if(isManager(_MID_)) { ?>
 					<li><a class="dropdown-item" href="<?php echo _AF_URL_?>?admin" target="_blank"><svg class="bi" aria-hidden="true"><title>Site setup</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } else { ?>
 					<li><a class="dropdown-item" href="<?php echo getUrl('','member','signUp') ?>"><svg class="bi" aria-hidden="true"><title>Member info</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
@@ -43,19 +43,19 @@ $menus = getSiteMenu();
 		</div>
 		<div style="position:relative">
 		<input class="d-none" type="checkbox" id="searchExForm">
-		<form class="<?php echo empty($_POST['search']) ? '' : ' d-block'?>" method="get">
+		<form class="<?php echo @$_GET['search']?' d-block':''?>" method="get">
         <input type="hidden" name="module" value="searchex">
 		<div class="input-group input-group-sm float-end">
-		<label class="input-group-text"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('','id',(empty($_POST['return'])||$_POST['module']!='searchex'?$_POST['id']:$_POST['return'])).'\')"'?>>
-        	<svg class="bi"><use href="./theme/default/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg>
+		<label class="input-group-text"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('','id',(empty($_GET['return'])||_MODULE_!='searchex'?_MID_:$_GET['return'])).'\')"':''?>>
+        	<svg class="bi"><use href="./theme/default/bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg>
         </label>
-		<?php if(!empty($_POST['module'])&&$_POST['module']=='board') { ?>
+		<?php if(_MODULE_=='board') { ?>
         <select class="form-control" style="max-width:50px" name="id">
           <option value="">ALL</option>
-          <option value="<?php echo $_POST['id'] ?>" selected>MID</option>
+          <option value="<?php echo _MID_ ?>" selected>MID</option>
         </select>
         <?php } ?>
-			<input type="text" name="search" id="searchEX" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" oninvalid="this.setCustomValidity('<?php echo getLang('search_help') ?>')" oninput="this.setCustomValidity('')" required>
+			<input type="text" name="search" id="searchEX" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" oninvalid="this.setCustomValidity('<?php echo getLang('search_help') ?>')" oninput="this.setCustomValidity('')" required>
 			<button class="btn btn-outline-secondary" type="submit"><?php echo getLang('search') ?></button>
 		</div>
 		</form>
@@ -82,7 +82,7 @@ $menus = getSiteMenu();
 		</div>
 	</nav>
 	<div id="carouselExampleCaptions" class="carousel slide mb-5">
-<?php if(!empty($_POST['id']) && $_POST['id'] == 'welcome'){ ?>
+<?php if(_MID_ == 'welcome'){ ?>
 		<div class="carousel-indicators">
 			<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
 			<button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -119,7 +119,7 @@ $menus = getSiteMenu();
 <?php }else{ ?>
 		<div class="carousel-inner rounded">
 			<div class="carousel-item active">
-				<img src="./theme/default/img/header_<?php echo !empty($_POST['module'])&&$_POST['module']=='board'?'board':'page' ?>.jpg" class="d-block w-100" alt="...">
+				<img src="./theme/default/img/header_<?php echo _MODULE_=='board'?'board':'page' ?>.jpg" class="d-block w-100" alt="...">
 			</div>
 		</div>
 <?php } ?>

@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 $_MODULE_INFO = [];
-@include_once _AF_MODULES_PATH_ . $_POST['md_id'] . '/lang/' . _AF_LANG_ . '.php';
-@require_once _AF_MODULES_PATH_ . $_POST['md_id'] . '/info.php';
+@include_once _AF_MODULES_PATH_ . $_GET['md_id'] . '/lang/' . _AF_LANG_ . '.php';
+@require_once _AF_MODULES_PATH_ . $_GET['md_id'] . '/info.php';
 $_MODULE_INFO['author'] = empty($_MODULE_INFO['link'])?escapeHTML($_MODULE_INFO['author']):('<a href="'.escapeHTML($_MODULE_INFO['link']).'" target="_blank">'.escapeHTML($_MODULE_INFO['author']).'</a>');
 ?>
 
@@ -23,12 +23,12 @@ $_MODULE_INFO['author'] = empty($_MODULE_INFO['link'])?escapeHTML($_MODULE_INFO[
 </div>
 
 <?php
-	$_MODULE = DB::get(_AF_MODULE_TABLE_, ['md_id'=>$_POST['md_id']]);
+	$_MODULE = DB::get(_AF_MODULE_TABLE_, ['md_id'=>$_GET['md_id']]);
 	if(empty($_MODULE['md_id'])){
-		$_MODULE = DB::get(_AF_MODULE_TABLE_, ['md_key'=>$_POST['md_id']]);
+		$_MODULE = DB::get(_AF_MODULE_TABLE_, ['md_key'=>$_GET['md_id']]);
 	}
 	echo '<hr>';
-	require_once _AF_MODULES_PATH_ . $_POST['md_id'] . '/setup.php';
+	require_once _AF_MODULES_PATH_ . $_GET['md_id'] . '/setup.php';
 ?>
 <?php
 /* End of file moduleform.php */

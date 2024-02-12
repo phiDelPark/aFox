@@ -2,7 +2,7 @@
 	if(!defined('__AFOX__')) exit();
 
 	if($_DATA['nt_read_date'] === '0000-00-00 00:00:00') {
-		DB::update(_AF_NOTE_TABLE_, ['^nt_read_date'=>'NOW()'], ['nt_srl'=>$_POST['srl']]);
+		DB::update(_AF_NOTE_TABLE_, ['^nt_read_date'=>'NOW()'], ['nt_srl'=>$_GET['srl']]);
 		$_DATA['nt_read_date'] = date("Y-m-d H:i:s");
 	}
 ?>

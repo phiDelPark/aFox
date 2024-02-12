@@ -18,7 +18,7 @@ function procMemberDefault($data) {
 }
 
 function dispMemberDefault($data) {
-	$disp = strtolower($data['disp']);
+	$disp = strtolower(@$data['disp']);
 	$dir = _AF_MODULES_PATH_ . 'member/disp/';
 	$inc_file = $dir . $disp . '.php';
 

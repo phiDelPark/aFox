@@ -1,25 +1,25 @@
 <?php if(!defined('__AFOX__')) exit();
 
-	$_POST['trash'] = empty($_POST['trash']) ? null : $_POST['trash'];
+	$_GET['trash'] = @$_GET['trash'] ? $_GET['trash'] : null;
 
 	$dd = _AF_DOCUMENT_TABLE_;
 	$cd = _AF_DOCUMENT_TABLE_;
-	$search = empty($_POST['search']) ? '' : trim($_POST['search']);
+	$search = @$_GET['search'] ? trim($_GET['search']) : '';
 	$keys = [ ":" => "wr_title", "@" => "mb_nick", "#" => "wr_tags", "?" => "wr_regdate" ];
 
-	if($_POST['trash'] == 'comment') {
+	if($_GET['trash'] == 'comment') {
 		$cd = _AF_COMMENT_TABLE_;
 		$keys = [ "@" => "mb_nick", "?" => "rp_regdate" ];
-	} else if($_POST['trash'] == 'file') {
+	} else if($_GET['trash'] == 'file') {
 		$cd = _AF_FILE_TABLE_;
 		$keys = [ ":" => "mf_name", "@" => "mb_nick", "?" => "mf_regdate" ];
 	}
 
 	if(!empty($search)) {
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
-		if($_POST['trash'] == 'comment') {
+		if($_GET['trash'] == 'comment') {
 			empty($key) ? ($key = "rp_content") : ($search = substr($search, 1));
-		} else if($_POST['trash'] == 'file') {
+		} else if($_GET['trash'] == 'file') {
 			empty($key) ? ($key = "mf_type") : ($search = substr($search, 1));
 		} else {
 			empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
@@ -44,15 +44,15 @@
 		}
 	}
 
-	$category = $dd.'.md_id = \'_AFOXtRASH_\''.(empty($_POST['category'])?'':' AND wr_updater = \''.DB::escape($_POST['category']).'\'');
+	$category = $dd.'.md_id = \'_AFOXtRASH_\''.(@$_GET['category']?' AND wr_updater = \''.DB::escape($_GET['category']).'\'':'');
 	$where = $search||$category ? '('.$category.($search&&$category ? ' AND ' : '').$search.')' : '1';
-	$page = (int)isset($_POST['page']) ? (($_POST['page'] < 1) ? 1 : $_POST['page']) : 1;
+	$page = (int)isset($_GET['page']) ? (($_GET['page'] < 1) ? 1 : $_GET['page']) : 1;
 	$count = 20;
 	$start = (($page - 1) * $count);
 
-	if($_POST['trash'] == 'comment') {
+	if($_GET['trash'] == 'comment') {
 		$query = "SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id, $dd.wr_srl, $dd.wr_updater, $dd.wr_update, $cd.rp_content AS wr_title, $cd.rp_status AS wr_status, $cd.rp_secret AS wr_secret, $cd.rp_regdate AS wr_regdate FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.wr_srl WHERE $where ORDER BY $cd.rp_regdate DESC LIMIT $start,$count";
-	} else if($_POST['trash'] == 'file') {
+	} else if($_GET['trash'] == 'file') {
 		$query = "SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id, $dd.wr_srl, $dd.wr_updater, $dd.wr_update, $cd.mf_name AS wr_title, $cd.mf_download AS wr_status, $cd.mf_regdate AS wr_regdate FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.mf_target WHERE $where ORDER BY $cd.mf_regdate DESC LIMIT $start,$count";
 	} else {
 		$query = "SELECT SQL_CALC_FOUND_ROWS * FROM $cd WHERE $where ORDER BY wr_regdate DESC LIMIT $start,$count";
@@ -72,13 +72,13 @@
 
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link<?php echo ($_POST['trash']!='comment'&&$_POST['trash']!='file')?' active" aria-current="page':''?>" href="<?php echo getUrl('', 'admin', 'trash', 'trash','document')?>"><?php echo getLang('document')?></a>
+    <a class="nav-link<?php echo ($_GET['trash']!='comment'&&$_GET['trash']!='file')?' active" aria-current="page':''?>" href="<?php echo getUrl('', 'admin', 'trash', 'trash','document')?>"><?php echo getLang('document')?></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link<?php echo ($_POST['trash']=='comment')?' active" aria-current="page':''?>" href="<?php echo getUrl('', 'admin', 'trash', 'trash','comment')?>"><?php echo getLang('comment')?></a>
+    <a class="nav-link<?php echo ($_GET['trash']=='comment')?' active" aria-current="page':''?>" href="<?php echo getUrl('', 'admin', 'trash', 'trash','comment')?>"><?php echo getLang('comment')?></a>
   </li>
   <li class="nav-item">
-    <a class="nav-link<?php echo ($_POST['trash']=='file')?' active" aria-current="page"':''?>" href="<?php echo getUrl('', 'admin', 'trash', 'trash','file')?>"><?php echo getLang('file')?></a>
+    <a class="nav-link<?php echo ($_GET['trash']=='file')?' active" aria-current="page"':''?>" href="<?php echo getUrl('', 'admin', 'trash', 'trash','file')?>"><?php echo getLang('file')?></a>
   </li>
 </ul>
 
@@ -88,8 +88,8 @@
 	<tr>
 		<th scope="col">#</th>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
-		<th scope="col"><?php echo ($_POST['trash'] == 'file'?getLang('type'):'@'.getLang('author'))?></th>
-		<?php if ($_POST['trash'] != 'file') {?>
+		<th scope="col"><?php echo ($_GET['trash'] == 'file'?getLang('type'):'@'.getLang('author'))?></th>
+		<?php if ($_GET['trash'] != 'file') {?>
 		<th scope="col"><?php echo getLang('status')?></th>
 		<?php }?>
 		<th scope="col" class="d-none d-md-table-cell">?<?php echo getLang('date')?></th>
@@ -113,17 +113,17 @@
 
 
 		foreach ($trash_list['data'] as $key => $value) {
-			if($_POST['trash'] == 'comment') {
+			if($_GET['trash'] == 'comment') {
 				$tmp = 'rp='.$value['rp_srl'];
-			} else if($_POST['trash'] == 'file') {
+			} else if($_GET['trash'] == 'file') {
 				$tmp = 'srl='.$value['mf_target'];
 			} else {
 				$tmp = 'srl='.$value['wr_srl'];
 			}
 			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['wr_updater']).'">'.$value['wr_updater'].'</a></td>';
 			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' <small>('.$value['wr_reply'].')</small>').'</td>';
-			echo '<td>'.($_POST['trash'] == 'file'?'<small>'.$value['mf_type'].'</small>':$value['mb_nick']).'</td>';
-			if($_POST['trash'] != 'file') echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
+			echo '<td>'.($_GET['trash'] == 'file'?'<small>'.$value['mf_type'].'</small>':$value['mb_nick']).'</td>';
+			if($_GET['trash'] != 'file') echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
 			echo '<td class="d-none d-md-table-cell"><small>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</small></td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_update'])).'</td></tr>';
 		}
@@ -135,11 +135,10 @@
 
 <div class="d-flex w-100 justify-content-between mt-4">
 	<form action="<?php echo getUrl('') ?>" method="get">
-		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
-		<input type="hidden" name="trash" value="<?php echo $_POST['trash'] ?>">
+		<input type="hidden" name="admin" value="<?php echo $_GET['disp'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
+			<label class="input-group-text bg-transparent" for="search"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('search','').'\')"':''?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg></label>
+			<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" style="max-width:140px;border-left:0" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
 		</div>
 	</form>

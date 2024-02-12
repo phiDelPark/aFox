@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 $_ADDON_INFO = [];
-@include_once _AF_ADDONS_PATH_ . $_POST['ao_id'] . '/lang/' . _AF_LANG_ . '.php';
-@require_once _AF_ADDONS_PATH_ . $_POST['ao_id'] . '/info.php';
+@include_once _AF_ADDONS_PATH_ . $_GET['ao_id'] . '/lang/' . _AF_LANG_ . '.php';
+@require_once _AF_ADDONS_PATH_ . $_GET['ao_id'] . '/info.php';
 $_ADDON_INFO['author'] = empty($_ADDON_INFO['link'])?escapeHTML($_ADDON_INFO['author']):('<a href="'.escapeHTML($_ADDON_INFO['link']).'" target="_blank">'.escapeHTML($_ADDON_INFO['author']).'</a>');
 ?>
 
@@ -23,9 +23,9 @@ $_ADDON_INFO['author'] = empty($_ADDON_INFO['link'])?escapeHTML($_ADDON_INFO['au
 </div>
 
 <?php
-$_ADDON = DB::get(_AF_ADDON_TABLE_, ['ao_id'=>$_POST['ao_id']]);
+$_ADDON = DB::get(_AF_ADDON_TABLE_, ['ao_id'=>$_GET['ao_id']]);
 
-$out = DB::get(_AF_TRIGGER_TABLE_, ['tg_key'=>'A','tg_id'=>$_POST['ao_id']]);
+$out = DB::get(_AF_TRIGGER_TABLE_, ['tg_key'=>'A','tg_id'=>$_GET['ao_id']]);
 $_ADDON['use_pc'] = empty($out['use_pc']) ? 0 : $out['use_pc'];
 $_ADDON['use_mobile'] = empty($out['use_mobile']) ? 0 : $out['use_mobile'];
 $_ADDON['grant_access'] = empty($out['grant_access']) ? '0' : $out['grant_access'];
@@ -45,7 +45,7 @@ if(!empty($_ADDON['ao_extra'])) {
 <input type="hidden" name="success_url" value="<?php echo getUrl('ao_id','')?>" />
 <input type="hidden" name="module" value="admin" />
 <input type="hidden" name="act" value="updateaddon" />
-<input type="hidden" name="ao_id" value="<?php echo $_POST['ao_id']?>" />
+<input type="hidden" name="ao_id" value="<?php echo $_GET['ao_id']?>" />
 
 <div class="mb-2">
 	<input class="form-check-input" type="checkbox" name="use_pc" id="id_use_pc" value="1"<?php echo $_ADDON['use_pc']=='1'?' checked':'' ?>>
@@ -53,7 +53,7 @@ if(!empty($_ADDON['ao_extra'])) {
 	<input class="form-check-input ms-3" type="checkbox" name="use_mobile" id="id_use_mobile" value="1"<?php echo $_ADDON['use_mobile']=='1'?' checked':'' ?>>
 	<label for="id_use_mobile">Mobile</label>
 <?php
-	if(file_exists(_AF_ADDONS_PATH_ . $_POST['ao_id'] . '/editor.php')){
+	if(file_exists(_AF_ADDONS_PATH_ . $_GET['ao_id'] . '/editor.php')){
 		echo '<input class="form-check-input ms-3" type="checkbox" name="use_editor" id="id_use_editor" value="1"'.($_ADDON['use_editor']=='1'?' checked':'').'>'
 		."\n".'<label for="id_use_editor">Editor</label>';
 	}
@@ -71,7 +71,7 @@ if(!empty($_ADDON['ao_extra'])) {
 <hr>
 
 <?php
-require_once _AF_ADDONS_PATH_ . $_POST['ao_id'] . '/setup.php';
+require_once _AF_ADDONS_PATH_ . $_GET['ao_id'] . '/setup.php';
 
 $_list = DB::gets(_AF_MODULE_TABLE_,'md_id',[],'md_key');
 if(!DB::error()) {

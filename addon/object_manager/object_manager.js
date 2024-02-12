@@ -7,7 +7,7 @@
 // 모달 열리때 실행하기 위해 함수 등록
 window.addonObjectManager = (content_id = '.current_content') => {
 	let
-		js = document.querySelector('script[src^="'+request_uri+'addon/object_manager/object_manager."]'),
+		js = document.querySelector('script[src^="'+request_uri+'addon/object_manager/"]'),
 		module = '',
 		link_blank = false,
 		autosize_image = false,
@@ -50,6 +50,7 @@ window.addonObjectManager = (content_id = '.current_content') => {
 		})
 	}
 
+/*
 	if(autosize_image === true) {
 		const
 			$images = document.querySelectorAll(content_id + ' img,' + content_id + ' input[type=image]')
@@ -61,6 +62,7 @@ window.addonObjectManager = (content_id = '.current_content') => {
 			$e.style.maxWidth = '100%'
 		})
 	}
+*/
 
 	if(link_blank === true && (module == 'board' || module == 'page')) {
 		const $alinks = document.querySelectorAll(content_id + ' a[href]')

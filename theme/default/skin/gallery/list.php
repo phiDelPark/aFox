@@ -1,31 +1,29 @@
 <?php if(!defined('__AFOX__')) exit();
 addJSLang(['confirm_delete', 'prompt_modify_item', 'item']);
 addJS(_AF_THEME_URL_ . 'skin/gallery/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
-// 구버전 sql 용 초기화
-$_POST['category'] = empty($_POST['category']) ? null : $_POST['category'];
 
 $current_page = $_DATA['current_page'];
 $total_page = $_DATA['total_page'];
 $start_page = $_DATA['start_page'];
 $end_page = $_DATA['end_page'];
 $total_count = $_DATA['total_count'];
-$srl = empty($_POST['srl'])?0:$_POST['srl'];
+$srl = @$_GET['srl']?$_GET['srl']:0;
 
-$is_manager = isManager(__MID__);
+$is_manager = isManager(_MID_);
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
-$asc = isset($_POST['asc']);
+$asc = isset($_GET['asc']);
 ?>
 
 <section id="galleryList" class="gallery">
 	<h2 class="pb-3 mb-2 border-bottom"><?php echo $_CFG['md_title']?></h2>
 <div class="w-100 d-flex justify-content-between">
-<?php if(empty($_POST['srl']) && !empty($_CFG['md_category'])){ ?>
+<?php if(empty($_GET['srl']) && !empty($_CFG['md_category'])){ ?>
 	<ol class="list-unstyled" aria-label="Category of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category']);
 		foreach ($tmp as $val) {
-			$isEqual = $val == $_POST['search'];
-			$cateurl = getUrl('','id',__MID__,'search', urlencode($val)).($isEqual&&!$asc?'&asc':'');
+			$isEqual = $val == @$_GET['search'];
+			$cateurl = getUrl('','id',_MID_,'search', urlencode($val)).($isEqual&&!$asc?'&asc':'');
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
 		}
 	?>
@@ -41,7 +39,7 @@ $asc = isset($_POST['asc']);
 			$close_div = '</div>';
 		}
 		echo '<div style="position:relative">';
-		echo '<a href="'.getUrl('','id',__MID__).'" data-bs-toggle="modal" data-bs-target="#galleryContentModal">';
+		echo '<a href="'.getUrl('','id',_MID_).'" data-bs-toggle="modal" data-bs-target="#galleryContentModal">';
 		echo '<img src="./?file='.$val['mf_srl'].'&thumb=x"><div class="details"><span class="title">'.$val['mf_name'].'</span>';
 		echo '<span class="info">'.date('F j, Y', strtotime($val['mf_regdate'])).'</span></div></a>';
 		echo '<input class="form-check-input d-none" type="checkbox" value="'.$val['mf_srl'].'"></div>';
@@ -90,7 +88,7 @@ $asc = isset($_POST['asc']);
 </section>
 <script>
 	function _showCheckItems(t) {
-		const id = '<?php echo __MID__?>'
+		const id = '<?php echo _MID_?>'
 		const ckboxs = document.querySelectorAll('.gallery .list-group [type=checkbox]')
 		ckboxs?.forEach(el => el.classList.remove('d-none'))
 		t.onclick = function(e) {

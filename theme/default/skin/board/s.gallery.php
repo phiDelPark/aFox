@@ -1,14 +1,11 @@
-<?php
-if(!defined('__AFOX__')) exit();
-
-$is_manager = isManager(__MID__);
+<?php if(!defined('__AFOX__')) exit();
 
 setLang('srl', getLang('number'));
 setLang('hit', getLang('view'));
 setLang('nick', getLang('name'));
 $show_column = $CONFIGS['show_column'];
 
-$srl = empty($_POST['srl'])?0:$_POST['srl'];
+$srl = @$_GET['srl']?$_GET['srl']:0;
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 ?>
 
@@ -21,7 +18,7 @@ $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 		$wr_title .= !$wr_permit ? getLang('error_permitted') : escapeHTML($val['wr_title']);
 		$href = $wr_secret&&!$wr_permit ? '#' : getUrl('srl',$val['wr_srl'],'cpage','','rp','').($asc?'&asc':'');
 		echo '<div class="w-100 d-flex justify-content-between">';
-		$_image = DB::gets(_AF_FILE_TABLE_, ['md_id'=>__MID__, 'mf_target'=>$val['wr_srl'], 'mf_type{LIKE}'=>'image%']);
+		$_image = DB::gets(_AF_FILE_TABLE_, ['md_id'=>_MID_, 'mf_target'=>$val['wr_srl'], 'mf_type{LIKE}'=>'image%']);
 		if(count($_image)===0) $_image = ['mf_srl'=>0];
 		foreach ($_image as $v){
 		echo '<a class="'.($val['wr_srl']==$srl?' active" aria-current="true':'').'" href="'.$href.'">';

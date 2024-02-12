@@ -1,9 +1,6 @@
-<?php
-if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
 @include_once dirname(__FILE__) . '/common.php';
-
-$is_manager = isManager(__MID__);
-$is_rp_grant = isGrant('reply', __MID__);
+$is_rp_grant = isGrant('reply', _MID_);
 
 $wr_mb_srl = $DOC['mb_srl'];
 if(!empty($wr_mb_srl)) $doc_mb = getMember($wr_mb_srl);
@@ -19,6 +16,8 @@ $is_col_update = $use_style!='timeline'&&($use_style=='gallery'||array_search('w
 
 $wr_content = ($wr_grant_view || !$wr_secret) ? $DOC['wr_content'] : getLang('error_permitted');
 $wr_content = preg_replace('/(<img)(((?!loading)[^>])+)>/is', '\1\2 loading="lazy">', toHTML($wr_content, $DOC['wr_type']));
+
+$asc = isset($_GET['asc']);
 ?>
 
 <section id="documentView" aria-label="Contents of this post">
@@ -46,26 +45,26 @@ $wr_content = preg_replace('/(<img)(((?!loading)[^>])+)>/is', '\1\2 loading="laz
 		</div>
 <?php } echo '</div>'; } ?>
 	<div class="h-md-250 mb-3 p-1">
-		<?php echo (empty($_POST['search']) ? $wr_content : highlightText($_POST['search'], $wr_content)) ?>
+		<?php echo (empty($_GET['search']) ? $wr_content : highlightText($_GET['search'], $wr_content)) ?>
 	</div>
 	<div class="clearfix"></div>
 <?php if(!empty($DOC['wr_tags'])) {
 	echo '<div class="mb-1" aria-label="Tags in this post">';
 	$hashtags = explode(',', $DOC['wr_tags']);
 	foreach ($hashtags as $val) {
-		echo '<a class="icon-link icon-link-hover gap-0 me-2" href="'.getUrl('','id',__MID__,'search','%23'.$val).'"><svg class="bi"><use href="./theme/default/bi-icons.svg#hash"/></svg>'.$val.'</a>';
+		echo '<a class="icon-link icon-link-hover gap-0 me-2" href="'.getUrl('','id',_MID_,'search','%23'.$val).'"><svg class="bi"><use href="./theme/default/bi-icons.svg#hash"/></svg>'.$val.'</a>';
 	}
 	echo '</div>';
 } ?>
 	<p class="d-flex w-100 justify-content-between p-1 border-bottom">
-		<span><a href="<?php echo getUrl('disp','','srl','','cpage','','rp','') ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#list-square"><?php echo getLang('list') ?></use></svg></a></span>
-		<span><a href="<?php echo getUrl('disp','delete', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#x-square"><?php echo getLang('delete') ?></use></svg></a>
-		<a href="<?php echo getUrl('disp','write', 'srl', $_POST['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#pencil-square"><?php echo getLang('edit') ?></use></svg></a></span>
+		<span><a href="<?php echo getUrl('disp','','srl','','cpage','','rp','').($asc?'&asc':'') ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#list-square"><?php echo getLang('list') ?></use></svg></a></span>
+		<span><a href="<?php echo getUrl('disp','delete', 'srl', $_GET['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#x-square"><?php echo getLang('delete') ?></use></svg></a>
+		<a href="<?php echo getUrl('disp','write', 'srl', $_GET['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#pencil-square"><?php echo getLang('edit') ?></use></svg></a></span>
 	</p>
 </section>
 
 <?php
-	if(!__POPUP__) {
+	if(!_POPUP_) {
 		include 'reply.php';
 		include 'list.php';
 	}

@@ -6,7 +6,7 @@ function proc($data) {
 	$doc = empty($data['srl']) ? [] : getDocument($data['srl']);
 
 	global $_MEMBER;
-	if(empty($doc['md_id'])) $doc['md_id'] = __MID__;
+	if(empty($doc['md_id'])) $doc['md_id'] = _MID_;
 	if(empty($doc['wr_srl'])) $doc['wr_srl'] = 0;
 	if(empty($doc['wr_extra'])) $doc['wr_extra'] = null;
 

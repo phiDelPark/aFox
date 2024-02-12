@@ -1,6 +1,6 @@
 <?php if(!defined('__AFOX__')) exit();
 
-if(!empty($_POST['flush'])) {
+if(@$_GET['flush']) {
 	ob_end_clean();
 
 	$dir = _AF_CACHE_DATA_;
@@ -37,7 +37,7 @@ if(!empty($_POST['flush'])) {
 		}
 	}
 
-	if(!empty($_POST['danger'])) {
+	if(@$_GET['danger']) {
 /*// 쓰이는 파일만 data/attach_move 로 이동 (이동 후 폴더명 변경 필요)
 		$out = DB::gets(_AF_FILE_TABLE_);
 		$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
@@ -78,9 +78,9 @@ if(!empty($_POST['flush'])) {
 //*/
 	}
 
-	if(!empty($_POST['danger'])) {
+	if(@$_GET['danger']) {
 /*// 사진 정보 입력 (모델, 찍은날짜)
-		$out = DB::gets(_AF_FILE_TABLE_, ['md_id' => $_POST['danger']]);
+		$out = DB::gets(_AF_FILE_TABLE_, ['md_id' => $_GET['danger']]);
 		$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
 		foreach ($out as $key => $value) {

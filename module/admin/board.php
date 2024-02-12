@@ -1,13 +1,13 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	$_POST['page'] = empty($_POST['page'])?1:$_POST['page'];
-	$search = empty($_POST['search'])?null:'%'.$_POST['search'].'%';
+	$_GET['page'] = @$_GET['page']?$_GET['page']:1;
+	$search = @$_GET['search']?'%'.$_GET['search'].'%':null;
 	$board_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', [
 		'md_key'=>'board',
 		'(_OR_)' =>empty($search)?[]:['md_id{LIKE}'=>$search, 'md_title{LIKE}'=>$search]
-	], 'md_regdate', (($_POST['page']-1)*20).',20');
+	], 'md_regdate', (($_GET['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
-	$board_list = setDataListInfo($board_list, $_POST['page'], 20, DB::foundRows());
+	$board_list = setDataListInfo($board_list, $_GET['page'], 20, DB::foundRows());
 ?>
 
 <a class="btn btn-primary mb-3" style="width:250px" href="<?php echo getUrl('mid', '.')?>"><?php echo getLang('new_board')?></a>
@@ -52,10 +52,10 @@
 
 <div class="d-flex w-100 justify-content-between mt-4">
 	<form action="<?php echo getUrl('') ?>" method="get">
-		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
+		<input type="hidden" name="admin" value="<?php echo $_GET['disp'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" required>
+			<label class="input-group-text bg-transparent" for="search"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('search','').'\')"':''?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg></label>
+			<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" style="max-width:140px;border-left:0" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
 		</div>
 	</form>

@@ -18,7 +18,7 @@ function procGalleryDefault($data) {
 }
 
 function dispGalleryDefault($data) {
-	if (!($disp = strtolower($data['disp']))) {
+	if (!($disp = strtolower(@$data['disp']))) {
 		$disp = empty($data['srl']) ? 'list' : 'view';
 	}
 

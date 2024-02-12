@@ -1,5 +1,5 @@
 <?php if(!defined('__AFOX__')) exit();
-	$is_manager = isManager(__MID__);
+	$is_manager = isManager(_MID_);
 ?>
 
 <section id="galleryWrite" aria-label="Writing a post">
@@ -10,7 +10,7 @@
 	<input type="hidden" name="success_url" value="<?php echo getUrl('disp','','srl','')?>">
 	<input type="hidden" name="module" value="gallery" />
 	<input type="hidden" name="act" value="updateGallery" />
-	<input type="hidden" name="md_id" value="<?php echo __MID__?>">
+	<input type="hidden" name="md_id" value="<?php echo _MID_?>">
 
 	<div class="clearfix">
 		<?php if (empty($_MEMBER)) { ?>
@@ -32,7 +32,7 @@
 			displayEditor(
 				'wr_content', '',
 				[
-					'file'=>[__MID__, 0, $_CFG['md_file_max'], 'jpg,jpeg,png'],
+					'file'=>[_MID_, 0, $_CFG['md_file_max'], 'jpg,jpeg,png'],
 					'placeholder'=>getLang('gallery_content'),
 					'height'=>'38px',
 					'readonly'=>true

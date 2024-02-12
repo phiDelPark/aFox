@@ -82,7 +82,7 @@ function getRequestMethod(){
 	if(isset($_SERVER[($s='HTTP_X_REQUESTED_WITH')]) && $_SERVER[$s] == 'XMLHttpRequest'){
 		return strpos($_SERVER['HTTP_ACCEPT'],'json')?'JSON':(strpos($_SERVER['HTTP_ACCEPT'],'xml')?'XMLRPC':'JSCALLBACK');
 	} else {
-		return $_SERVER['REQUEST_METHOD'];
+		return strtoupper($_SERVER['REQUEST_METHOD']);
 	}
 }
 
@@ -96,7 +96,7 @@ function getUrl(){
 	if(_AF_USE_SSL_ === ENFORCE_SSL || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'))
 		$uri = getRequestUri(ENFORCE_SSL); // If using SSL always
 	elseif(_AF_USE_SSL_ === RELEASE_SSL) // optional SSL use
-		$uri = getRequestUri(__MODULE__ == 'admin' || __MODULE__ == 'member' ? ENFORCE_SSL : RELEASE_SSL);
+		$uri = getRequestUri(_MODULE_ == 'admin' || _MODULE_ == 'member' ? ENFORCE_SSL : RELEASE_SSL);
 	else $uri = _AF_DOMAIN_ ? getRequestUri(FOLLOW_REQUEST_SSL) : getScriptPath(); // no SSL
 	$n = func_num_args();
 	$a = func_get_args();
@@ -118,7 +118,7 @@ function getSiteMenu($get = ''){
 							$r['md_id'] = $r['mu_link'];
 							$r['mu_link'] = getUrl('','id',$r['md_id']);
 						}
-						$r['active'] = (!empty($r['md_id']) && $r['md_id'] == __MID__)
+						$r['active'] = (!empty($r['md_id']) && $r['md_id'] == _MID_)
 						|| (empty($r['md_id'])&&$r['mu_link']&&strpos($u,$r['mu_link'])===0);
 						if($i_act < 0 && $r['active']) $i_act = count($rset);
 						$rset[] = $r;
@@ -371,7 +371,7 @@ function escapeHTML($str, $quote = ENT_COMPAT, $endouble = true){
 	return htmlspecialchars($str, $quote | ENT_HTML401, 'UTF-8', $endouble);
 }
 
-function xssClean($html, $chkclosed = true){
+function xssClean($html, $close = true){
 	$admin = isAdmin();
 	$html = preg_replace('#<!--.*?-->#i', '', $html);
 	$html = preg_replace('#</*\w+:\w[^>]*+>#i', '', $html);
@@ -425,7 +425,7 @@ function xssClean($html, $chkclosed = true){
 			return "<{$match[1]}{$tag}{$attr}{$match[4]}>";
 		}
 	, $html);
-	if($chkclosed){ // close tags
+	if($close){ // close tags
 		preg_match_all('#</([a-z]+)>#iU', $html, $closeds);
 		preg_match_all('#<(?!meta|link|area|img|br|hr|input\b)([a-z]+)( .*)?(?!/)>#iU', $html, $openeds);
 		if (count($openeds[1]) !== count($closeds[1])){
@@ -464,7 +464,7 @@ function toHTML($text, $type = '2', $class = 'current_content'){
 			return empty($attrs['widget']) ? '' : displayWidget($attrs['widget'], $attrs);
 		}, $text);
 		// 다운로드 권한이 없으면 처리
-		if(__MID__ && !isGrant('download', __MID__)){
+		if(_MID_ && !isGrant('download', _MID_)){
 			$pattern = '/(<a[^>]*)(href=[\"\']?[^>\"\']*[\?\&]file=[0-9]+[^>\"\']*[\"\']?)([^>]*>)/is';
 			$replacement = "\\1\\2 onclick=\"alert('".escapeHTML(getLang('error_permitted'),ENT_QUOTES,false)."');return false\" \\3";
 			$text = preg_replace($pattern, $replacement, $text);
@@ -492,7 +492,7 @@ function triggerAddonCall($addons, $position, $trigger, &$data){
 			}
 			if(!empty($_ex['access_md_ids'])){
 				$_acc_md = $_ex['access_mode'];
-				$_is_acc = __MID__ && in_array(__MID__, $_ex['access_md_ids']);
+				$_is_acc = _MID_ && in_array(_MID_, $_ex['access_md_ids']);
 				if(($_acc_md == 'include' && !$_is_acc)||($_acc_md == 'exclude' && $_is_acc)) continue;
 			}
 			$called = ['file'=>$_file, 'position'=>$position, 'trigger'=>$trigger];
@@ -520,12 +520,12 @@ function triggerModuleCall($modules, $position, $trigger, &$data){
 
 // TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
 function triggerCall($position, $trigger, &$data){
-	global $_MEMBER; if(__MODULE__ == 'admin') return true; //skip admin
+	global $_MEMBER; if(_MODULE_ == 'admin') return true; //skip admin
 	static $__triggerCall = null;
 	if($__triggerCall == null && ($__triggerCall = ['M'=>[], 'A'=>[]])){
 		$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 		DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
-			[(__MOBILE__?'use_mobile':'use_pc')=>1,'^'=>'ASCII(grant_access)<='.$rank], 'tg_key',
+			[(_MOBILE_?'use_mobile':'use_pc')=>1,'^'=>'ASCII(grant_access)<='.$rank], 'tg_key',
 			function($r)use(&$__triggerCall){
 				while($tmp = DB::fetch($r)) $__triggerCall[$tmp['tg_key']][$tmp['tg_id']] = [];
 			}
@@ -549,16 +549,16 @@ function installModuleTrigger($id, $access){
 }
 
 function displayModule(){
-	if(!__MODULE__) return;
+	if(!_MODULE_) return;
 	global $_CFG; global $_MEMBER;
 	function __module_call($tpl_path, $tpl_file, $_DATA){
 		global $_CFG; global $_MEMBER;
 		include $tpl_path . $tpl_file;
 	};
-	$trigger = $_POST['disp'] ? $_POST['disp'] : 'default';
-	if(function_exists($callproc='disp'.ucwords(__MODULE__).'Default')){
-		if(triggerCall('before_disp', $trigger, $_POST)){
-			$_result = call_user_func($callproc, $_POST);
+	$trigger = @$_GET['disp'] ? $_GET['disp'] : 'default';
+	if(function_exists($callproc='disp'.ucwords(_MODULE_).'Default')){
+		if(triggerCall('before_disp', $trigger, $_GET)){
+			$_result = call_user_func($callproc, $_GET);
 			triggerCall('after_disp', $trigger, $_result);
 		} else $_result = get_error();
 	} else {
@@ -566,8 +566,8 @@ function displayModule(){
 	}
 	if(empty($_result['error'])){ // If the theme has skin(tpl), I use it
 		$tpl_file = (empty($_result['tpl']) ? 'default' : $_result['tpl']).'.php';
-		$tpl_path = _AF_THEME_PATH_ . 'skin/' . __MODULE__ . '/';
-		if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . __MODULE__ . '/tpl/';
+		$tpl_path = _AF_THEME_PATH_ . 'skin/' . _MODULE_ . '/';
+		if(!file_exists($tpl_path . $tpl_file)) $tpl_path = _AF_MODULES_PATH_ . _MODULE_ . '/tpl/';
 		__module_call($tpl_path, $tpl_file, $_result);
 	} else { // If the error number is 4501, show the login form
 		if($_result['error'] == 4501 && empty($_MEMBER)){

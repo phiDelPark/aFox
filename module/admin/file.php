@@ -1,10 +1,10 @@
 <?php if(!defined('__AFOX__')) exit();
 
-	$_POST['page'] = empty($_POST['page'])?1:$_POST['page'];
+	$_GET['page'] = @$_GET['page']?$_GET['page']:1;
 
-	$duplicate = !empty($_POST['duplicate']);
+	$duplicate = @$_GET['duplicate'];
 	$count = $duplicate ? 30 : 20;
-	$start = (($_POST['page'] - 1) * $count);
+	$start = (($_GET['page'] - 1) * $count);
 
 	$fl = _AF_FILE_TABLE_;
 	$dd = _AF_DOCUMENT_TABLE_;
@@ -12,7 +12,7 @@
 	if($duplicate){
 		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS a.*, d.wr_title FROM $fl as a INNER JOIN $dd as d ON (d.md_id <> '_AFOXtRASH_' and d.wr_srl = a.mf_target), (select mf_target,mf_name,mf_size from $fl where mf_link<>1 and mf_size>0 group by mf_name,mf_size having count(*) > 1) as b WHERE a.mf_link<>1 and a.mf_size=b.mf_size AND a.mf_name=b.mf_name ORDER BY a.mf_name,a.mf_regdate LIMIT $start,$count" , true);
 	}else {
-		$search = empty($_POST['search']) ? '' : trim($_POST['search']);
+		$search = @$_GET['search'] ? trim($_GET['search']) : '';
 		if(!empty($search)) {
 			$keys = [
 				":" => "mf_name", //:name
@@ -40,10 +40,10 @@
 				$search = '('.substr($tmp, 5).')';
 			}
 		}
-		$category = 'd'.(empty($_POST['category'])?'.md_id <> \'_AFOXtRASH_\'':'.md_id = \''.DB::escape($_POST['category']).'\'');
+		$category = 'd'.(@$_GET['category']?'.md_id = \''.DB::escape($_GET['category']).'\'':'.md_id <> \'_AFOXtRASH_\'');
 		$where = $search||$category ? '('.$category.($search&&$category ? ' AND ' : '').$search.')' : '1';
 		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS f.*, d.md_id FROM $fl as f INNER JOIN $dd as d ON d.wr_srl = f.mf_target WHERE $where ORDER BY f.mf_regdate DESC LIMIT $start,$count", true);
-		$file_list = setDataListInfo($file_list, $_POST['page'], $count, DB::foundRows());
+		$file_list = setDataListInfo($file_list, $_GET['page'], $count, DB::foundRows());
 	}
 	if($error = DB::error()) messageBox($error->getMessage(), $error->getCode(), false);
 	if($duplicate) messageBox(getLang('desc_data_combine'), 2, false);
@@ -128,10 +128,10 @@
 
 <div class="d-flex w-100 justify-content-between mt-4">
 	<form action="<?php echo getUrl('') ?>" method="get">
-		<input type="hidden" name="admin" value="<?php echo $_POST['disp'] ?>">
+		<input type="hidden" name="admin" value="<?php echo $_GET['disp'] ?>">
 		<div class="input-group mb-3">
-			<label class="input-group-text bg-transparent" for="search"<?php echo empty($_POST['search'])?'':' onclick="location.replace(\''.getUrl('search','').'\')"'?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_POST['search'])?'search':'x-lg'?>"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo empty($_POST['search'])?'':$_POST['search'] ?>" class="form-control" style="max-width:140px;border-left:0" placeholder="<?php echo getLang('type') ?>" oninvalid="this.setCustomValidity(':NAME, @IP, ?202201')" oninput="this.setCustomValidity('')" required>
+			<label class="input-group-text bg-transparent" for="search"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('search','').'\')"':''?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo empty($_GET['search'])?'search':'x-lg'?>"/></svg></label>
+			<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" style="max-width:140px;border-left:0" placeholder="<?php echo getLang('type') ?>" oninvalid="this.setCustomValidity(':NAME, @IP, ?202201')" oninput="this.setCustomValidity('')" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
 		</div>
 	</form>

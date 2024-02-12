@@ -9,7 +9,7 @@ if($_CALLED['position'] == 'after_disp'
 ){
 	if((empty($_DATA['wr_content']) && empty($_DATA['pg_content']) && empty($_DATA['nt_content']))) return;
 
-	$opt = 'm=' . __MODULE__ . '&';
+	$opt = 'm=' . _MODULE_ . '&';
 	$opt .= (empty($_ADDON['link_blank']) ? 'l=0&' : 'l=1&');
 	$opt .= (empty($_ADDON['autosize_image']) ? 'i=0&' : 'i=1&');
 	$opt .= (empty($_ADDON['autosize_video']) ? 'v=0' : 'v=1');

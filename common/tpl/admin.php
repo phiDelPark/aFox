@@ -8,7 +8,7 @@ addJSLang(['ok','cancel','yes','no','calling_server']);
 <meta charset="utf-8">
 <meta name="referrer" content="origin" />
 <meta name="robots" content="index,nofollow"/>
-<?php if (__MOBILE__) { ?>
+<?php if (_MOBILE_) { ?>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=10,user-scalable=yes">
 <?php } else { ?>
 <meta name="viewport" content="width=device-width, initial-scale=1">
