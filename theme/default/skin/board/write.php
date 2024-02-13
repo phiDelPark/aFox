@@ -63,7 +63,7 @@
 		<?php
 			$istool = [];
 			$ishtml = ($is&&$DOC['wr_type']=='2')||(!$is&&($_CFG['use_type']=='3'||$_CFG['use_type']=='9'))?1:0;
-			if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = [$ishtml?'2':'1', ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']];
+			if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
 			if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [($is&&$DOC['wr_secret']=='1')?'true':'false', ['Secret'=>'true']];
 			displayEditor(
 				'wr_content', $is?$DOC['wr_content']:'',

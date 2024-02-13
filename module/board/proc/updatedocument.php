@@ -290,7 +290,8 @@ function proc($data)
 
 	DB::commit();
 
-	return ['error'=>0, 'message'=>getLang('success_saved'), 'wr_srl'=>$wr_srl];
+	$success_url = $data['success_url'].'&srl='.$wr_srl;
+	return ['error'=>0, 'message'=>getLang('success_saved'), 'wr_srl'=>$wr_srl, 'success_url'=>$success_url];
 }
 
 /* End of file updatedocument.php */

@@ -1,5 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
+addJSLang(['confirm_delete','reply']);
 ?>
 
 <section id="documentReply" class="list-group list-group-flush mb-4" aria-label="Replies to post">
@@ -15,25 +16,21 @@ if(!defined('__AFOX__')) exit();
 		echo sprintf(
 			'<div id="reply-%s" class="d-flex flex-lg-row gap-3 p-2 border-bottom" style="margin-left:%spx"><svg class="bi bi-lg mt-1"><use href="%s"/></svg>
 			<div class="w-100"><div>%s</div><div class="d-flex justify-content-between text-body-secondary mt-1"><small>%s</small><small>%s:
-			<a href="%s" onclick="return confirm(\'%s\')" class="text-decoration-none">&Chi;</a></small></div></div></div>',
+			<a href="#" onclick="return themeDeleteReply(\'%s\')" class="text-decoration-none">&Chi;</a></small></div></div></div>',
 			$val['rp_srl'],
 			($_len>5?5:$_len)*30,
 			_AF_THEME_URL_.'bi-icons.svg#person-bounding-box',
 			$rp_content,
 			$val['mb_nick'],
 			date('Y/m/d', strtotime($val['rp_regdate'])),
-			getUrl(
-				'module','board','act','deleteComment','rp_srl',$val['rp_srl'],
-				'error_url',urlencode(getUrl()),
-				'success_url',urlencode(getUrl('srl',$val['wr_srl'],'rp',$val['rp_srl']))
-			),
-			getLang('confirm_delete',['reply'])
+			$val['rp_srl']
 		);
 		if($rp === $val['rp_srl']) $location_hash = 'reply-'.$val['rp_srl'];
 	}
 	if($location_hash) echo '<script>location.hash="'.$location_hash.'"</script>'
 ?>
 </section>
+<script>function themeDeleteReply(e){let t=function(e){exec_ajax({module:"board",act:"deleteComment",rp_srl:e}).then(e=>{location.reload()}).catch(e=>{alert(e)})},n=confirm($_LANG.confirm_delete.sprintf([$_LANG.reply]));return"object"==typeof n?n.then(()=>{t(e)}):!0===n&&t(e),!1}</script>
 
 <section id="replyEditer" class="mb-5" aria-label="Write a reply to this post">
 	<form method="post" autocomplete="off" needvalidate>

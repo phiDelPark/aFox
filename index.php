@@ -1,8 +1,5 @@
-<?php
-define('__AFOX__', TRUE);
-header('P3P: CP="ALL CURa ADMa DEVa TAIa OUR BUS IND PHY ONL UNI PUR FIN COM NAV INT DEM CNT STA POL HEA PRE LOC OTC"');
-@set_time_limit(0);
-ob_start(); //phpinfo();
+<?php define('__AFOX__', TRUE);
+@set_time_limit(0); ob_start(); //phpinfo();
 require_once __DIR__ . '/init/constant.php';;
 if(file_exists(($chkip=_AF_CONFIG_DATA_.'access_ip.php'))){include $chkip;$chkip=false;//checkIP
 	foreach($_ACCESS_IPS as $tmp){if($chkip=preg_match("/^{$tmp}$/",$_SERVER['REMOTE_ADDR']))break;};
@@ -19,7 +16,9 @@ if(_MODULE_ && @$_POST['act']){
 			triggerCall('after_proc', $_POST['act'], $_result);
 		} else $_result = get_error();
 		$tmp = empty($_result['error'])?'success_url':'error_url';
-		if(@$_POST[$tmp]) $_result['redirect_url'] = urldecode($_POST[$tmp]);
+		if(@$_result[$tmp]||@$_POST[$tmp]){
+			$_result['redirect_url']=urldecode(@$_result[$tmp]?$_result[$tmp]:$_POST[$tmp]);
+		}
 	}else $_result = set_error(getLang('error_request'),4303);
 	if(_REQ_METHOD_ == 'JSON'){
 		echo json_encode($_result);
