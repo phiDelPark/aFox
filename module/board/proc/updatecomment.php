@@ -147,10 +147,9 @@ function proc($data) {
 			sendNote(
 				empty($sendsrl) ? $doc['mb_srl'] : $sendsrl,
 				cutstr(strip_tags($data['rp_content']),200).sprintf(
-					'<br><a href="./?id=%s&srl=%s&rp=%s">%s...</a>',
-					$doc['md_id'], $wr_srl, $ret_rp_srl, getLang('detail')
-				),
-				$data['mb_nick']
+					"\n".'[%s...](./?id=%s&srl=%s&rp=%s)',
+					getLang('detail'), $doc['md_id'], $wr_srl, $ret_rp_srl
+				), $data['mb_nick']
 			);
 
 		} else {

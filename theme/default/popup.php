@@ -1,5 +1,5 @@
-<?php
-	if(!defined('__AFOX__')) exit();
+<?php if(!defined('__AFOX__')) exit();
+addJSLang(['alert','confirm']);
 ?>
 <div class="container">
 	<article aria-label="Dialog Contents">

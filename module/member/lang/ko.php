@@ -10,11 +10,14 @@ $_LANG['point']					= '포인트';
 $_LANG['ip']					= '아이피';
 $_LANG['rank']					= '계급';
 $_LANG['name']					= '이름';
+$_LANG['target']				= '대상';
+
 
 $_LANG['id']					= '아이디';
 $_LANG['password']				= '비밀번호';
 $_LANG['verify_password']		= '비밀번호 확인';
 
+$_LANG['send']					= '보내기';
 $_LANG['auto_login']			= '자동 로그인';
 
 $_LANG['ban_login']				= '차단';
@@ -30,6 +33,7 @@ $_LANG['title']					= '제목';
 $_LANG['content']				= '내용';
 $_LANG['search']				= '검색';
 $_LANG['document']				= '문서';
+$_LANG['reply']			    	= '답변';
 $_LANG['note']					= '쪽지';
 
 $_LANG['member_find']			= '회원조회';

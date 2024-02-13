@@ -17,6 +17,7 @@ $_LANG['download']			= '다운로드';
 $_LANG['next']				= '다음';
 $_LANG['previous']			= '이전';
 $_LANG['search']			= '검색';
+$_LANG['detail']			= '자세히';
 
 $_LANG['msg_is_secret']     = '비밀글입니다.';
 $_LANG['msg_is_deleted']    = '삭제되었습니다.';

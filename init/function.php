@@ -302,15 +302,13 @@ function createHash($password){
 	}
 }
 
-function sendNote($srl, $msg, $nick = ''){ global $_MEMBER;
-	$sender = empty($_MEMBER) ? 0 : $_MEMBER['mb_srl'];
-	$nick = empty($_MEMBER) ? ($nick?$nick:getLang('none')) : $_MEMBER['mb_nick'];
-	if(!$srl || $srl === $sender) return false;
+function sendNote($srl, $msg){ global $_MEMBER;
+	if(!$srl || !@$_MEMBER['mb_srl'] || $srl === $_MEMBER['mb_srl']) return false;
 	DB::insert(_AF_NOTE_TABLE_, [
 		'mb_srl'=>$srl,
-		'nt_sender'=>$sender,
-		'nt_sender_nick'=>$nick,
-		'nt_content'=>xssClean($msg),
+		'nt_sender'=>$_MEMBER['mb_srl'],
+		'nt_sender_nick'=>$_MEMBER['mb_nick'],
+		'nt_content'=>strip_tags($msg), // xssClean($msg)
 		'^nt_send_date'=>'NOW()'
 	]);
 }

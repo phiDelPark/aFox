@@ -31,7 +31,7 @@
 		<th scope="col" class="text-wrap">:<?php echo getLang('title')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('delete')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px">?<?php echo getLang('date')?></th>
-		<th scope="col" class="text-nowrap" style="width:1px"><input type="checkbox" onchange="_allCheckInboxItems(this)"></th>
+		<th scope="col" class="text-nowrap" style="width:1px"><input type="checkbox" onchange="themeAllCheckInboxItems(this)"></th>
 		<?php } ?>
 	</tr>
 </thead>
@@ -45,7 +45,7 @@
 	$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
 	foreach ($_DATA['list'] as $key => $value) {
-		echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return _trashItemClick(event,\''.escapeHTML(getUrl('srl',$value['wr_srl']),ENT_QUOTES).'\')">';
+		echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return themeTrashItemClick(event,\''.escapeHTML(getUrl('srl',$value['wr_srl']),ENT_QUOTES).'\')">';
 		if(_MOBILE_) {
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.escapeHTML(strip_tags($value['wr_title'])).'</a>';
 			echo '<div class="d-flex w-100 justify-content-between"><span>'.date('y/m/d', strtotime($value['wr_regdate'])).'</span>';
@@ -74,27 +74,6 @@
 		<li class="page-item ms-1"><a class="btn btn-sm fw-bold btn-secondary<?php echo $total_page <= $end_page ? ' disabled" aria-disabled="true' : ''?>" href="<?php echo getUrl('page',$total_page<($current_page+10)?$total_page:$current_page+10)?>" aria-label="Next+10">&gt;&gt;</a></li>
 	</ul>
 	</nav>
-	<a class="btn btn-sm btn-danger clearfix" href="#" onclick="return _allRemoveInboxItems()" role="button"> <?php echo getLang('delete') ?></a>
+	<a class="btn btn-sm btn-danger clearfix" href="#" onclick="return themeAllRemoveInboxItems()" role="button"> <?php echo getLang('delete') ?></a>
 </div>
-
-<script>
-	function _trashItemClick(e, href) {
-		if(e.target.tagName === 'INPUT') return true;
-		location.href = href;
-		return false;
-	}
-	function _allCheckInboxItems(el_chk) {
-		let els_chk = el_chk.closest('table').querySelectorAll('tbody [type=checkbox]');
-		els_chk.forEach(el => el.checked = el_chk.checked);
-	}
-	function _allRemoveInboxItems() {
-		const __exec_ajax = function(a){
-				exec_ajax({module:'member',act:a,...document.querySelector('#af_member_remove_trash_items').serializeArray()})
-				.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{alert(error)})
-			}
-		const r = confirm($_LANG['confirm_empty'].sprintf([$_LANG['document']]))
-		if(typeof r === 'object') r.then(()=>{__exec_ajax('deletetrashes')})
-		else if(r === true) __exec_ajax('deletetrashes')
-		return false;
-	}
-</script>
+<script>function themeTrashItemClick(e,t){return"INPUT"===e.target.tagName||(location.href=t,!1)}function themeAllCheckInboxItems(e){e.closest("table").querySelectorAll("tbody [type=checkbox]").forEach(t=>t.checked=e.checked)}function themeAllRemoveInboxItems(){let e=function(e){exec_ajax({module:"member",act:e,...document.querySelector("#af_member_remove_trash_items").serializeArray()}).then(e=>{location.href=e.redirect_url}).catch(e=>{alert(e)})},t=confirm($_LANG.confirm_empty.sprintf([$_LANG.document]));return"object"==typeof t?t.then(()=>{e("deletetrashes")}):!0===t&&e("deletetrashes"),!1}</script>

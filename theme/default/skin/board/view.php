@@ -32,7 +32,7 @@ $asc = isset($_GET['asc']);
 	if (!empty($md_extra_keys)) {
 		echo '<div class="border-bottom mb-3">';
 		foreach($md_extra_keys as $ex_key=>$ex_name) {
-			$tmp = $DOC['wr_extra']['values'][$ex_key];
+			$tmp = @$DOC['wr_extra']['values'][$ex_key];
 			$_boxs = explode('|', $ex_name);
 			if(!($is_radio=count($_boxs)>1))$_boxs = explode('&', $ex_name);
 			$ex_name = $_boxs[0]; $is_required = substr($ex_name, 0, 1) == '*';

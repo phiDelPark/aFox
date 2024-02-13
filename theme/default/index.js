@@ -46,7 +46,7 @@
 		showActiveTheme(getPreferredTheme())
 
 		document.querySelector('[data-bs-theme-value]')
-			.addEventListener('click', (e) => {
+			?.addEventListener('click', (e) => {
 				let theme = e.target.getAttribute('data-bs-theme-value')
 					theme = theme == 'dark' ? 'light' : 'dark'
 				setTheme(theme)
@@ -71,10 +71,10 @@
 	})
 
 	window.alert = function(s, t = 'alert') {
-		const b = t == 'confirm' ? '<button type="button" class="btn btn-primary" data-bs-whatever="ok">'+$_LANG['ok']+'</button>' : ''
-		const html = '<div class="modal-dialog"><div class="modal-content"><div class="modal-header">\
-		<h1 class="modal-title fs-5">'+$_LANG[t]+'</h1></div><div class="modal-body">'+s+'</div>\
-		<div class="modal-footer">'+b+'<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">'+$_LANG[t == 'confirm' ? 'cancel' : 'close']+'</button></div></div></div>'
+		const b = t == 'confirm' ? '<button class="btn btn-primary" data-bs-whatever="ok">'+$_LANG['ok']+'</button>' : ''
+		const html = '<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5">'
+		+$_LANG[t]+'</h1></div><div class="modal-body">'+s+'</div><div class="modal-footer">'+b+'<button class="btn btn-secondary" data-bs-dismiss="modal">'
+		+$_LANG[t=='confirm'?'cancel':'close']+'</button></div></div></div>'
 		return new Promise((resolve) => {
 			const modal = document.createElement('DIV')
 			modal.classList.add('modal', 'fade')
@@ -84,7 +84,7 @@
 			document.body.insertBefore(modal, document.body.firstChild)
 			const myModal = new bootstrap.Modal(modal, {})
 			modal.addEventListener('hidden.bs.modal', e => e.target.remove())
-			modal.querySelector('[data-bs-whatever]')
+			modal.querySelector('[data-bs-whatever],[data-bs-dismiss=modal]')
 				?.addEventListener('click', _ => {
 					let vals = '';
 					modal.querySelectorAll('[class=modal-body] input')
@@ -106,7 +106,7 @@
 		if(arr.length < 2) arr = v.split(',')
 		if(arr.length > 1){
 			arr.forEach((a,i) => {
-				s += '<label><input type="'+t+'" value="'+a+'"> '+a+'</label> '
+				s += '&nbsp;<label><input type="'+t+'" value="'+a+'"> '+a+'</label>&nbsp;'
 			})
 		}else s += '<input type="text" value="'+v+'" checked>'
 		return window.alert(s, 'confirm')

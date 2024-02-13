@@ -65,7 +65,7 @@ if(is_dir($theme_dir)) {
 <tbody>
 <?php
 	foreach($th_list as $key => $value) {
-		if($value) echo '<tr><td>'.$key.'</td><td><button type="button" class="btn btn-primary btn-xs mw-10" data-empty-theme="'.$key.'">'.getLang('empty_%s', ['']).'</button></td></tr>';
+		if($value) echo '<tr><td>'.$key.'</td><td><button class="btn btn-primary btn-xs mw-10" data-empty-theme="'.$key.'">'.getLang('empty_%s', ['']).'</button></td></tr>';
 	}
 ?>
 </tbody>

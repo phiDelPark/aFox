@@ -7,18 +7,7 @@ $_EDITOR['required'] = isset($_EDITOR['required']) ? $_EDITOR['required'] : fals
 $_EDITOR['height'] = empty($_EDITOR['height']) ? '280px' : $_EDITOR['height'];
 $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeholder'];
 ?>
-<style>
-#editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);filter:invert(50%)}
-#editorTypebar .bi-unchecked.checked::before{content:url(./module/editor/bi-check.svg)}
-#editorTypebar,#editorToolbar{font-size:12px;font-family:Arial}
-#editorToolbar button{padding:2px;border-radius:2px;height:18px;width:18px}
-#editorToolbar button>.bi{position:relative;left:-2px;top:-3px;height:16px;width:16px;vertical-align:baseline}
-#uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px;background-color:var(--bs-border-color)!important}
-#editorContent .focused{outline:0;box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.3)}
-#editorContent .is-invalid,[name="remove_files[]"]+img{outline:0;box-shadow:0 0 0 0.25rem rgba(253, 13, 13, 0.3)}
-#editorContent textarea,#editorContent iframe{min-height:<?php echo $_EDITOR['height'] ?>}
-</style>
-
+<style>#editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);filter:invert(50%)}#editorTypebar .bi-unchecked.checked::before{content:url(./module/editor/bi-check.svg)}#editorToolbar,#editorTypebar{font-size:12px;font-family:Arial}#editorToolbar button{padding:2px;border-radius:2px;height:18px;width:18px}#editorToolbar button>.bi{position:relative;left:-2px;top:-3px;height:16px;width:16px;vertical-align:baseline}#uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px;background-color:var(--bs-border-color)!important}#editorContent .focused{outline:0;box-shadow:0 0 0 .25rem rgba(13,110,253,.3)}#editorContent .is-invalid,[name="remove_files[]"]+img{outline:0;box-shadow:0 0 0 .25rem rgba(253,13,13,.3)}#editorContent iframe,#editorContent textarea{min-height:<?php echo $_EDITOR['height'] ?>}</style>
 <div id="editor<?php echo ucfirst($_ID) ?>" class="w-100 editor-group">
 <?php if($_EDITOR['typebar']) { ?>
 	<div class="d-flex w-100 justify-content-between"<?php echo $_EDITOR['readonly']?' readonly':''?> aria-label="Editor Options">
@@ -61,16 +50,16 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 ?>
 	<div id="editorToolbar" class="d-flex w-100 justify-content-between border-bottom py-1" role="toolbar" aria-label="Editor Controls">
 		<div>
-			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="highlight"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#stripe"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="bold"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-bold"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="italic"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-italic"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="underline"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-underline"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary me-2" tabindex="-1" aria-label="strikeThrough"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-strikethrough"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="header"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#head"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="insertorderedlist"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#list-ol"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="indent"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#blockquote-left"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary me-2" tabindex="-1" aria-label="codeblock"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#code-slash"/></svg></button>
-			<button type="button" class="btn btn-outline-secondary" tabindex="-1" aria-label="components" aria-expanded="false"	data-bs-toggle="dropdown"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#three-dots"/></svg></button>
+			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="highlight"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#stripe"/></svg></button>
+			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="bold"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-bold"/></svg></button>
+			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="italic"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-italic"/></svg></button>
+			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="underline"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-underline"/></svg></button>
+			<button class="btn btn-outline-secondary me-2" tabindex="-1" aria-label="strikeThrough"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-strikethrough"/></svg></button>
+			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="header"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#head"/></svg></button>
+			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="insertorderedlist"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#list-ol"/></svg></button>
+			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="indent"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#blockquote-left"/></svg></button>
+			<button class="btn btn-outline-secondary me-2" tabindex="-1" aria-label="codeblock"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#code-slash"/></svg></button>
+			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="components" aria-expanded="false" data-bs-toggle="dropdown"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#three-dots"/></svg></button>
 			<ul class="dropdown-menu dropdown-menu-end shadow">
 <?php
 	foreach($components as $v){
@@ -83,8 +72,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 		<abbr title="attribute" style="font-size:.6rem;vertical-align:super">AFoX</abbr>
 		</div>
 	</div>
-	<script>
-		<?php
+	<script><?php
 			echo 'var AF_EDITOR_COMPONENTS = [';
 			$components = get_cache('_AF_EDITOR_COMPONENTS');
 			if(is_null($components)){ //에디터 컴포넌트 목록 캐시 생성
@@ -108,8 +96,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 				echo $comma . '["' . $v[0] . '","' . str_replace(['[',']','"'], ['{','}','`'], $v[1]) . '"]';
 				$comma = ',';
 			} echo '];';
-		?>
-	</script>
+	?></script>
 <?php } ?>
 <?php
 	if(!empty($_EDITOR['file']) && $_EDITOR['file'][2] > 0) {
@@ -145,14 +132,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 	</div>
 <?php } ?>
 </div>
-
-<script>
-	load_script("<?php echo _AF_URL_?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js')?>")
-		.then(
-			() => { window.AFOX_EDITOR_<?php echo strtoupper($_ID)?> =new afoxEditor("<?php echo $_ID?>", <?php echo json_encode($_EDITOR)?>) },
-			() => { console.log('fail to load script') }
-		);
-</script>
+<script>load_script("<?php echo _AF_URL_?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js')?>").then(() => { window.AFOX_EDITOR_<?php echo strtoupper($_ID)?> =new afoxEditor("<?php echo $_ID?>", <?php echo json_encode($_EDITOR)?>) },() => { console.log('fail to load script') })</script>
 <?php
 /* End of file index.php */
 /* Location: ./module/editor/index.php */

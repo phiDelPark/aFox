@@ -81,7 +81,7 @@ if(is_dir($module_dir)) {
 <tbody>
 <?php
 	foreach($md_list as $key => $value) {
-		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><button type="button" class="btn btn-primary btn-xs mw-10" data-empty-module="'.$key.'">'.getLang('empty_%s', ['']).'</button></td></tr>';
+		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><button class="btn btn-primary btn-xs mw-10" data-empty-module="'.$key.'">'.getLang('empty_%s', ['']).'</button></td></tr>';
 	}
 ?>
 </tbody>

@@ -9,7 +9,7 @@ $is_admin = isAdmin();
 <!-- top navigation bar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container-fluid">
-	<button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasExample">
+	<button class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="offcanvasExample">
 	  <span class="navbar-toggler-icon" data-bs-target="#sidebar"></span>
 	</button>
 	<a class="navbar-brand me-auto ms-lg-0 ms-3 text-uppercase fw-bold" href="#">ADMINISTRATION</a>

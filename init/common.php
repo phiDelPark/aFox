@@ -62,7 +62,7 @@ foreach ($_GET as $tmp=>$tmp) if(preg_match('/^[^a-z]/', $tmp)) unset($_GET[$tmp
 foreach ($_POST as $tmp=>$tmp) if(preg_match('/^[^a-z]/', $tmp)) unset($_POST[$tmp]);
 
 //if only srl, get id
-if(!empty($_GET['srl']) || !empty($_GET['rp'])){
+if(!isset($_GET['module'])&&(!empty($_GET['srl']) || !empty($_GET['rp']))){
 	if(@$_GET['rp']&&$tmp=DB::get(_AF_COMMENT_TABLE_,'wr_srl',['rp_srl'=>$_GET['rp']]))
 		$_GET['srl'] = $tmp['wr_srl'];
 	if(@$_GET['srl']&&$tmp=DB::get(_AF_DOCUMENT_TABLE_,'md_id',['wr_srl'=>(int)$_GET['srl']]))

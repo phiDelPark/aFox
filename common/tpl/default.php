@@ -8,7 +8,7 @@ if(is_null($_THEME)) {
 }
 if(empty($_CFG['md_title'])) $_CFG['md_title'] = '';
 if(empty($_CFG['md_about'])) $_CFG['md_about'] = '';
-addJSLang(['calling_server','yes','no', 'ok','cancel','error']);
+addJSLang(['calling_server','yes','no','ok','cancel','close','error']);
 ?>
 <?php if(!_MODAL_) { ?>
 <!doctype html>
@@ -33,7 +33,6 @@ if(_AF_USE_BASE_CDN_) { include _AF_USE_BASE_CDN_; } else { ?>
 <link href="<?php echo _AF_URL_ ?>common/css/bootstrap.min.css" rel="stylesheet">
 <script src="<?php echo _AF_URL_ ?>common/js/bootstrap.bundle.min.js" id="defBootstrapJS"></script>
 <?php } ?>
-
 <script>const language="<?php echo _AF_LANG_ ?>",request_uri="<?php echo getRequestUri() ?>",current_url="<?php echo getUrl() ?>",cookie_domain="<?php echo _AF_COOKIE_DOMAIN_ ?>";</script>
 <script src="<?php echo _AF_URL_ . 'common/js/common' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js') ?>"></script>
 <?php if(file_exists(_AF_THEME_PATH_ . 'index' . (__DEBUG__ ? '' : '.min') . '.css')) { ?>

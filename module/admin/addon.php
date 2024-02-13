@@ -60,7 +60,7 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 <tbody>
 <?php
 	foreach($ao_list as $key => $value) {
-		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><button type="button" class="btn btn-primary btn-sm" data-empty-addon="'.$key.'">'.getLang('empty_%s', ['']).'</button></td></tr>';
+		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><button class="btn btn-primary btn-sm" data-empty-addon="'.$key.'">'.getLang('empty_%s', ['']).'</button></td></tr>';
 	}
 ?>
 </tbody>

@@ -28,7 +28,7 @@ $asc = isset($_GET['asc']);
 		}
 	?>
 	</ol>
-<?php } if($is_manager) echo '<a href="#setup" onclick="return _showCheckItems(this)" class="text-decoration-none" style="font-size:large">…</a>';?>
+<?php } if($is_manager) echo '<a href="#setup" onclick="return themeShowCheckItems(this)" class="text-decoration-none" style="font-size:large">…</a>';?>
 </div>
 <div class="list-group list-group-flush mb-4" aria-label="List of post">
 <?php
@@ -72,11 +72,11 @@ $asc = isset($_GET['asc']);
 		<div id="carouselGallery" class="carousel slide">
 			<div class="carousel-inner">
 			</div>
-			<button class="carousel-control-prev" type="button" data-bs-target="#carouselGallery" data-bs-slide="prev">
+			<button class="carousel-control-prev" data-bs-target="#carouselGallery" data-bs-slide="prev">
 				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 				<span class="visually-hidden">Previous</span>
 			</button>
-			<button class="carousel-control-next" type="button" data-bs-target="#carouselGallery" data-bs-slide="next">
+			<button class="carousel-control-next" data-bs-target="#carouselGallery" data-bs-slide="next">
 				<span class="carousel-control-next-icon" aria-hidden="true"></span>
 				<span class="visually-hidden">Next</span>
 			</button>
@@ -86,29 +86,4 @@ $asc = isset($_GET['asc']);
 	</div>
 </div>
 </section>
-<script>
-	function _showCheckItems(t) {
-		const id = '<?php echo _MID_?>'
-		const ckboxs = document.querySelectorAll('.gallery .list-group [type=checkbox]')
-		ckboxs?.forEach(el => el.classList.remove('d-none'))
-		t.onclick = function(e) {
-			let srls = ''; ckboxs.forEach(el => {if(el.checked) srls += el.value + ','})
-			const __exec_ajax = function(a, s = ''){
-				exec_ajax({module:'gallery',act:a,md_id:id,mf_srls:srls,mf_about:s})
-				.then((data)=>{location.reload()}).catch((error)=>{alert(error)})
-			}
-			if(e.target.innerText == 'DELETE'){
-				const r = confirm($_LANG['confirm_delete'].sprintf([$_LANG['item']]))
-				if(typeof r === 'object') r.then(()=>{__exec_ajax('deleteFiles')})
-				else if(r === true) __exec_ajax('deleteFiles')
-			}else if(e.target.innerText == 'MODIFY'){
-				const r = prompt($_LANG['prompt_modify_item'],"<?php echo str_replace('"','\"',@$_CFG['md_category'])?>")
-				if(typeof r === 'object') r.then((e)=>{__exec_ajax('modifyFiles', e)})
-				else if(r.trim()) __exec_ajax('modifyFiles', r.trim())
-			}
-			return false
-		}
-		t.innerHTML = '<span>DELETE</span><span> </span><span>MODIFY</span>';
-		return false
-	}
-</script>
+<script>function themeShowCheckItems(e){let t=document.querySelectorAll(".gallery .list-group [type=checkbox]");return t?.forEach(e=>e.classList.remove("d-none")),e.onclick=function(e){let n="";t.forEach(e=>{e.checked&&(n+=e.value+",")});let l=function(e,t=""){exec_ajax({module:"gallery",act:e,md_id:"<?php echo _MID_?>",mf_srls:n,mf_about:t}).then(e=>{location.reload()}).catch(e=>{alert(e)})};if("DELETE"==e.target.innerText){let i=confirm($_LANG.confirm_delete.sprintf([$_LANG.item]));"object"==typeof i?i.then(()=>{l("deleteFiles")}):!0===i&&l("deleteFiles")}else if("MODIFY"==e.target.innerText){let o=prompt($_LANG.prompt_modify_item,"<?php echo str_replace('"','\"',@$_CFG['md_category'])?>");"object"==typeof o?o.then(e=>{l("modifyFiles",e)}):o.trim()&&l("modifyFiles",o.trim())}return!1},e.innerHTML="<span>DELETE</span><span> </span><span>MODIFY</span>",!1}</script>
