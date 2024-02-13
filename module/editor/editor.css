@@ -1,4 +1,16 @@
-:root{
+:root,
+[data-bs-theme=light] {
+	--bs-body-color: #212529;
+	--bs-body-bg: #fff;
+	--bs-code-color: #e685b5;
+	--bs-border-color: #dee2e6;
+	--bs-tertiary-bg: #f8f9fa;
+}
+
+[data-bs-theme=dark] {
+	color-scheme: dark;
+	--bs-body-color: #dee2e6;
+	--bs-body-bg: #212529;
 	--bs-code-color: #e685b5;
 	--bs-border-color: #495057;
 	--bs-tertiary-bg: #2b3035;
@@ -8,7 +20,8 @@ body {
 	line-height: 1.5;
 	margin: .25rem;
 	padding: .125rem .5rem;
-	background-color: transparent;
+	color: var(--bs-body-color);
+	background-color: var(--bs-body-bg);
 }
 
 h1, h2 {
@@ -42,7 +55,6 @@ pre {
 	margin: 0 0 10px;
 	font-size: 13px;
 	line-height: 1.42857143;
-	color: #333;
 	word-break: break-all;
 	word-wrap: break-word;
 	background-color: transparent;

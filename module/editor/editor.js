@@ -7,6 +7,7 @@ function afoxEditor(ID, OPTIONS) {
 	this.htmlMode = false
 	this.required = OPTIONS.required
 	this.readonly = OPTIONS.readonly
+	this.theme = window.localStorage.getItem('theme')
 
 	const
 		editor = document.querySelector('#editor' + ID.toUcFirst()),
@@ -105,6 +106,7 @@ function afoxEditor(ID, OPTIONS) {
 		<meta http-equiv="Cache-Control" content="no-cache">
 		<link rel="stylesheet" href="${request_uri}module/editor/editor.min.css">`
 		iframe.style.resize = 'vertical'
+		if(this.theme) iframe.contentWindow.document.documentElement.setAttribute('data-bs-theme', this.theme)
 		iframe.contentWindow.document.head.innerHTML = s_head
 		iframe.contentWindow.document.designMode = this.readonly ? 'off' : 'on'
 		iframe.contentWindow.document.body.innerHTML = textarea.value

@@ -8,22 +8,23 @@
 'use strict'
 	const getStoredTheme = () => localStorage.getItem('theme')
 	const setStoredTheme = theme => localStorage.setItem('theme', theme)
+	const prefersScheme = '(prefers-color-scheme: dark)'
 
 	const getPreferredTheme = () => {
 		const storedTheme = getStoredTheme()
 		if (storedTheme) {
-		return storedTheme
-	}
+			return storedTheme
+		}
 
-		return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+		return window.matchMedia(prefersScheme).matches ? 'dark' : 'light'
 	}
 
 	const setTheme = theme => {
-		if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			document.documentElement.setAttribute('data-bs-theme', 'dark')
-		} else {
-			document.documentElement.setAttribute('data-bs-theme', theme)
+		if (theme === 'auto' && window.matchMedia(prefersScheme).matches) {
+			theme = 'dark'
 		}
+		setStoredTheme(theme)
+		document.documentElement.setAttribute('data-bs-theme', theme)
 	}
 
 	setTheme(getPreferredTheme())
@@ -34,7 +35,7 @@
 		switcher.setAttribute('data-bs-theme-value', theme == 'dark' ? 'dark' : 'light')
 	}
 
-	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+	window.matchMedia(prefersScheme).addEventListener('change', () => {
 		const storedTheme = getStoredTheme()
 		if (storedTheme !== 'light' && storedTheme !== 'dark') {
 			setTheme(getPreferredTheme())
@@ -48,7 +49,6 @@
 			.addEventListener('click', (e) => {
 				let theme = e.target.getAttribute('data-bs-theme-value')
 					theme = theme == 'dark' ? 'light' : 'dark'
-				setStoredTheme(theme)
 				setTheme(theme)
 				showActiveTheme(theme)
 			})

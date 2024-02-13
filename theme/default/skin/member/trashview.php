@@ -9,7 +9,7 @@
 		<?php echo toHTML($_DATA['wr_content'], $_DATA['wr_type']) ?>
 	</div>
 	<div class="clearfix"></div>
-	<form class="text-end mb-3" method="post" onsubmit="return confirm($_LANG['confirm_restore'].sprintf([$_LANG['document']]))">
+	<form class="text-end mb-3" method="post" onsubmit="return confirm($_LANG['confirm_restore'].sprintf([$_LANG['document']]))||false">
 		<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 		<input type="hidden" name="success_url" value="<?php echo getUrl('srl', '')?>" />
 		<input type="hidden" name="module" value="board" />
