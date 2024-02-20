@@ -207,13 +207,14 @@ class HtmlToMkdw
 		return $i;
 	}
 
+	function blockQuotePrefix($str){
+		if(!$str) return '';
+		$head = "\n> ";
+		return implode($head, explode("\n", $str));
+	}
+
 	protected function blockQuote($i, $parts, &$return)
 	{
-		function __prefix($str){
-			if(!$str) return '';
-			$head = "\n> ";
-			return implode($head, explode("\n", $str));
-		}
 
 		$blockouote = 0;
 
@@ -222,7 +223,7 @@ class HtmlToMkdw
 			$close = @$part[1] == '/';
 			$tag = $part[0];
 
-			if (!$tag) $r = $this->rnl2br($part[2], ''); // text
+			if (!$tag) $r = $part[2]; // text
 			else {
 				$md = $this->markdownable[$tag];
 
@@ -251,7 +252,7 @@ class HtmlToMkdw
 						case 'pre':
 							$array = [];
 							$i = $this->blockPre($i, $parts, $array);
-							$return[] = __prefix(implode('', $array));
+							$return[] = $this->blockQuotePrefix(implode('', $array));
 							continue 2; // blockPre 에서 처리 하니 넘김
 							break;
 						case 'a':
@@ -266,7 +267,7 @@ class HtmlToMkdw
 				}
 			}
 
-			$return[] = __prefix($r);
+			$return[] = $this->blockQuotePrefix($r);
 		}
 
 		return $i;
@@ -346,7 +347,7 @@ class HtmlToMkdw
 			$close = @$part[1] == '/';
 			$tag = $part[0];
 
-			if (!$tag) $r = $this->rnl2br($part[2]); // text
+			if (!$tag) $r = $this->rnl2br(trim($part[2])); // text
 			else {
 				$md = $this->markdownable[$tag];
 
@@ -435,11 +436,11 @@ class HtmlToMkdw
 		$mdable = $this->markdownable;
 
 		$ttttmp = $html;
-		$html = preg_replace('/<br[^>]*>/i', "\n", $html);
+		$html = preg_replace('/<br[^>]*>[\r\n]*/i', "\n", $html);
 
 		$html = preg_replace_callback('@(.*?)<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?)(/?)>@is',
 			function ($m) use ($mdable, &$parts) {
-				if($t = trim($m[1])) $parts[] = ['', '', $t];
+				if($t = $m[1]) $parts[] = ['', '', $t];
 				if (($tag = strtolower($m[3])) && @$mdable[$tag]) {
 					$parts[] = [$tag, $m[2], $m[4]];
 				}
@@ -453,10 +454,9 @@ class HtmlToMkdw
 			$part = $parts[$i];
 			$tag = $part[0];
 			$close = @$part[1] == '/';
-			$md = $mdable[$tag];
 
 			if (!$tag) $r = $part[2]; // text
-			else {
+			else if ($md = @$mdable[$tag]) {
 				if ($md['type'] == 'admin' && $admin) {
 					$return[] = '<'.$part[1].$tag.$part[2].'>';
 					continue;
@@ -500,6 +500,7 @@ class HtmlToMkdw
 
 		$html = implode('', $return);
 		//$html = preg_replace('/[\n]{3,}/', "\n\n", $html);
+		debugPrint($html);
 		return preg_replace('/^(((> )[\r\n]+){2,}>\s$|(\n\n)[\n]+)/m', "\\3\\4", $html);
 	}
 }

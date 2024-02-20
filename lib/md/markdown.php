@@ -22,11 +22,13 @@ class MD {
 			'/((<[\w]+[^>]+)javascript\s*\:|(&)amp;)/i', '\2\3',
 			  $__Parsedown->text($text)
 		);
+		/*//
 		$text = preg_replace_callback('@(<pre[^>]*>)(.+?)(<\/pre>)@s',
 			function ($m) use($__Parsedown) {
 				return $m[1].$__Parsedown->line($m[2]).$m[3];
 			}
 		, $text);
+		//*/
 		return $text;
 	}
 }

@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 define('_AF_VERSION_', '0.400');
 
-define('__DEBUG__', 1);
+define('__DEBUG__', 0);
 define('_AF_SERVER_TIME_', time());
 
 /*** SSL ***/
