@@ -52,7 +52,7 @@ $asc = isset($_GET['asc']);
 	echo '<div class="mb-1" aria-label="Tags in this post">';
 	$hashtags = explode(',', $DOC['wr_tags']);
 	foreach ($hashtags as $val) {
-		echo '<a class="icon-link icon-link-hover gap-0 me-2" href="'.getUrl('','id',_MID_,'search','%23'.$val).'"><svg class="bi"><use href="./theme/default/bi-icons.svg#hash"/></svg>'.$val.'</a>';
+		echo '<a class="icon-link icon-link-hover gap-0 me-2" href="'.getUrl('','id',_MID_,'search','+'.$val).'"><svg class="bi"><use href="./theme/default/bi-icons.svg#hash"/></svg>'.$val.'</a>';
 	}
 	echo '</div>';
 } ?>

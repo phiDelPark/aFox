@@ -92,6 +92,11 @@ $_LANG['menu_desc_widget']		= '사용 가능한 위젯과 사용 코드를 봅�
 $_LANG['menu_desc_setup']		= '사이트 관리에 필요한 설정을 합니다.';
 $_LANG['menu_desc_clearcache']	= '캐시 파일을 청소하고 재생성 합니다.';
 
+$_LANG['search_help_document']	= '기본 (내용 검색)\n! 제목 검색\n? 닉네임 검색\n: 날짜 검색 ( 202201 )';
+$_LANG['search_help_comment']	= '기본 (내용 검색)\n? 닉네임 검색\n: 날짜 검색 ( 202201 )';
+$_LANG['search_help_file']		= '기본 (이름 검색)\n! 타입 검색\n: 날짜 검색 ( 202201 )';
+$_LANG['search_help_visit']		= '기본 (에이전트)\n! 리퍼러 검색\n? 아이피 검색\n: 날짜 검색 ( 202201 )';
+
 $_LANG['agent']					= '에이전트';
 $_LANG['md_id']					= '모듈 아이디';
 $_LANG['base_cdn_list']			= '기본 CDN';

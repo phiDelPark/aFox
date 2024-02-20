@@ -92,7 +92,7 @@ function proc($data)
 		if (!empty($module['md_extra']['keys'])) {
 			$values = [];
 			foreach($module['md_extra']['keys'] as $ex_key=>$ex_caption){
-				$value = $data['wr_extra_'.$ex_key];
+				$value = @$data['wr_extra_'.$ex_key];
 				$value = trim(is_array($value) ? implode(',', $value) : $value);
 				if(empty($value) && substr($ex_caption,-1,1) === '*') {
 					return set_error(getLang('request_input',[substr($ex_caption,0,-1)]), 1);
@@ -103,8 +103,11 @@ function proc($data)
 		}
 	}
 
-	$data['wr_content'] = xssClean($data['wr_content']);
+	$data['wr_type'] = @$data['wr_type'] ? $data['wr_type'] : 0;
+	if($data['wr_type'] > 1) $data['wr_type'] = 1; // 저장은 MD 타입으로 저장 (db 가벼워져서)
+
 	$data['wr_tags'] = empty($data['wr_tags'])?getHashtags($data['wr_content']):implode(',',$data['wr_tags']);
+	$data['wr_content'] = xssClean($data['wr_content'], $module['use_type'] == '9' || $module['use_type'] == '3');
 
 	DB::transaction();
 
@@ -208,20 +211,17 @@ function proc($data)
 				$file_count++;
 			}
 
-			$patterns = '/<[img|a][^>]+[src|href]=[\\"\']+blob\:[^>\\"\']+[\\"\']?[^>]*target=[\\"\']+([0-9])+[\\"\']?[^>]*>/is';
-
+			//$patterns = '/\[blob-([0-9]+)\]\(([^\)\"]+)(?:(?(R)\"|\s\"([^\"]+)\"\))|\))/Us';
+			$patterns = '/\(blob[^\)\"]+\s\"blob-([0-9]+)\"\)/Us';
 			$data['wr_content'] = preg_replace_callback(
 				$patterns,
 				function ($matches) use($new_files) {
 					$file = $new_files[(int)$matches[1]];
 					$es_name = escapeHTML($file['name']);
 					$isimg = substr($file['type'], 0, 5) == 'image';
-					return sprintf(
-						$isimg ? '<img src="%s" class="%s" alt="%s">'
-							: '<a href="%s" class="%s" title="%s" target="_file">',
+					return sprintf('(%s "%s")',
 						'./?file='.$file['mf_srl'],
-						escapeHTML($file['type']),
-						$es_name.' ('.shortFileSize($file['size']). ')'
+						escapeHTML($file['type'])
 					);
 				},
 				$data['wr_content']
@@ -236,7 +236,7 @@ function proc($data)
 				'wr_category'=>trim($data['wr_category']),
 				'wr_title'=>$data['wr_title'],
 				'wr_content'=>$data['wr_content'],
-				'wr_tags'=>$data['wr_tags'],
+				'wr_tags'=>substr($data['wr_tags'], 0, 255),
 				'wr_file'=>$file_count,
 				'wr_extra'=>empty($wr_extra)?'':serialize($wr_extra),
 				'^wr_update'=>'NOW()'

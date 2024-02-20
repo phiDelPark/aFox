@@ -46,6 +46,9 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 .current_content {
 	overflow: hidden;
 }
+.current_content *:is(h1, h2, h3){
+	margin-top: .5em;
+}
 .current_content img {
 	max-width: 100%;
 }
@@ -61,10 +64,7 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 	background-color: rgba(var(--bs-tertiary-bg-rgb),.7)!important;
 }
 .current_content code {
-	padding: 0 2px;
-	font-size: 85%;
-	border-radius: 3px;
-	background-color: var(--bs-light);
+	font-size: inherit;
 }
 .current_content pre code {
 	background-color: transparent!important;

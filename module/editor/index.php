@@ -114,12 +114,11 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 		$es_name = escapeHTML($val['mf_name']);
 		echo sprintf(
 			substr($val['mf_type'], 0, 5) == 'image'
-			? '<img src="%s" class="%s" title="%s" alt="%s">'
-			: '<img src="%s" class="%s" title="%s" alt="%s" srcset="./module/editor/bi-binary.svg">',
+			? '<img src="%s" title="%s" alt="%s">'
+			: '<img src="%s" title="%s" alt="%s" srcset="./module/editor/bi-binary.svg">',
 			'./?file='.$val['mf_srl'],
-			escapeHTML($val['mf_type']),
 			$es_name.' ('.shortFileSize( $val['mf_size']). ')',
-			$es_name
+			escapeHTML($val['mf_type'])
 		);
 	}
 ?>

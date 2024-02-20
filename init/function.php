@@ -1,6 +1,6 @@
 <?php if(!defined('__AFOX__')) exit();
+require_once _AF_LIBS_PATH_ . 'md/markdown.php';
 
-require_once _AF_LIBS_PATH_ . 'parsedown/Parsedown.php';
 define('ENFORCE_SSL', 1);
 define('RELEASE_SSL', 2);
 define('FOLLOW_REQUEST_SSL', 0);
@@ -369,97 +369,25 @@ function escapeHTML($str, $quote = ENT_COMPAT, $endouble = true){
 	return htmlspecialchars($str, $quote | ENT_HTML401, 'UTF-8', $endouble);
 }
 
-function xssClean($html, $close = true){
-	$admin = isAdmin();
-	$html = preg_replace('#<!--.*?-->#i', '', $html);
-	$html = preg_replace('#</*\w+:\w[^>]*+>#i', '', $html);
-	$html = preg_replace('#</*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|i(?:frame|layer)|l(?:ayer|ink)|meta|object|title|xml|s(?:cript|tyle))[^>]*+>#i', '', $html);
-	// XE removeSrcHack https://www.xpressengine.com/
-	$html = preg_replace_callback('@<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?\b(?:on[a-z]+|data|data\-[a-z\-]+|class|style|background|href|(?:dyn|low)?src)\s*=[\s\S]*?)(/?)($|>|<)@i',
-		function ($match) use ($admin){
-			$tag = strtolower($match[2]);
-			if($tag == 'xmp') return "<{$match[1]}xmp>";
-			if($match[1]) return $match[0];
-			if($match[4]) $match[4] = ' ' . $match[4];
-			$attrs = array();
-			if(preg_match_all('/([\w:-]+)\s*=(?:\s*(["\']))?(?(2)(.*?)\2|([^ ]+))/s', $match[3], $m)){
-				foreach($m[1] as $idx => $name){
-					if(strlen($name) >= 2 && substr_compare($name, 'on', 0, 2) === 0) continue;
-					$val = preg_replace_callback('/&#(?:x([a-fA-F0-9]+)|0*(\d+));/', function ($c){return chr(($c[1]?'0x00'.$c[1]:$c[2])+0);}, $m[3][$idx] . $m[4][$idx]);
-					$val = preg_replace('/^\s+|[\t\n\r]+/', '', $val);
-					if(preg_match('/^[a-z]+script:/i', $val)) continue;
-					$attrs[strtolower(trim($name))] = $val;
-				}
-			}
-			if(!$admin && isset($attrs['widget'])) return ""; // only admin
-			if(isset($attrs['id'])) unset($attrs['id']);
-			if(isset($attrs['name'])) unset($attrs['name']);
-			if(isset($attrs['style'])){
-				$style = '';
-				if(preg_match_all('/([\w\-]+)\s*:\s*([^;]+)/s', $attrs['style'], $m)){
-					foreach($m[1] as $idx => $name){
-						if(preg_match('/(expression|data|position|z\-)[\w\-]*/i', $name)) continue;
-						if(preg_match('/expression\s*\(|data\s*\:|\n/i', $m[2][$idx])) continue;
-						$style .= $name . ':' . $m[2][$idx] . ';';
-					}
-				}
-				if($style == ''){ unset($attrs['style']); } else { $attrs['style'] = $style; }
-			}
-			$attr = array();
-			foreach($attrs as $name => $val){
-				if(stripos($name, 'data') === 0){ // block ajax
-					if($name == 'data' && ($tag == 'object' || $tag == 'embed' || $tag == 'a')){
-						if(stripos($val, 'data:') === 0) continue;
-					} else continue;
-				} elseif($tag == 'object' || $tag == 'embed' || $tag == 'a' || $tag == 'img'){
-					if($tag == 'img' || $name == 'src' || $name == 'href'){
-						if(stripos($val, 'data:') === 0) continue;
-					}
-				}
-				$val = str_replace('"', '&quot;', $val);
-				$attr[] = $name . "=\"{$val}\"";
-			}
-			$attr = count($attr) ? ' ' . implode(' ', $attr) : '';
-			return "<{$match[1]}{$tag}{$attr}{$match[4]}>";
-		}
-	, $html);
-	if($close){ // close tags
-		preg_match_all('#</([a-z]+)>#iU', $html, $closeds);
-		preg_match_all('#<(?!meta|link|area|img|br|hr|input\b)([a-z]+)( .*)?(?!/)>#iU', $html, $openeds);
-		if (count($openeds[1]) !== count($closeds[1])){
-			$closeds = $closeds[1];
-			$openeds = array_reverse($openeds[1]);
-			foreach ($openeds as $val){
-				if (in_array($val, $closeds)){ unset($closeds[array_search($val, $closeds)]); }
-				else { $html .= '</' . $val . '>'; }
-			}
-		}
+function xssClean($html, $tomd = false){ // to MD
+	// html 타입이면 toMKDW
+	if($tomd) return MD::toMKDW($html, isAdmin());
+	else {
+		return strip_tags($html, (isAdmin()?'<widget><script><style>':'').'<br>');
 	}
-	return $html;
 }
 
-function toHTML($text, $type = '2', $class = 'current_content'){
-	static $__parsedown = null;
-	if($type == '0') $text = nl2br(escapeHTML($text));
+function toHTML($text, $type, $class = 'current_content'){
+	if(!(int)$type) $text = nl2br(escapeHTML($text));
 	else {
-		if($type == '1'){
-			if($__parsedown == null){
-				$__parsedown = new Parsedown();
-				$__parsedown->setBreaksEnabled(true)->setMarkupEscaped(false);
-			}
-			$text =$__parsedown->text($text);
-			// 비디오,오디오 처리
-			$pattern = '/(<a[^>]*href=[\"\']?)([^>\"\']+)([\"\']?[^>]*title=[\"\']?_)(audio|video)(\/[^>\"\']+)(_[\"\']?[^>]*>.*?<\/a>)/is';
-			$replacement = '<\\4 width="100%" controls><source src="\\2" type="\\4\\5">Your browser does not support the \\4 element.</\\4>';
-			// \/ = 줄바꿈
-			$text = str_replace('\\n', '<br>', preg_replace($pattern, $replacement, $text));
-		}
-		$text = preg_replace_callback('/<img([^>]*\s+widget\s*=[^>]*)>/is', function($m){
+		$text = MD::toHTML($text);
+		$text = preg_replace_callback('/<widget\s+([^>]*)>([\w]+)<\/widget>/is', function($m){
+			//$m[1] = htmlspecialchars_decode($m[1]);
 			$attrs = [];
 			if(preg_match_all('/([a-z0-9_-]+)="([^"]+)"/is', $m[1], $m2)){
 				foreach ($m2[1] as $key => $val) $attrs[$val] = $m2[2][$key];
 			}
-			return empty($attrs['widget']) ? '' : displayWidget($attrs['widget'], $attrs);
+			return $m[2] ? displayWidget($m[2], $attrs) : '';
 		}, $text);
 		// 다운로드 권한이 없으면 처리
 		if(_MID_ && !isGrant('download', _MID_)){
@@ -468,8 +396,7 @@ function toHTML($text, $type = '2', $class = 'current_content'){
 			$text = preg_replace($pattern, $replacement, $text);
 		}
 	}
-
-	return '<div class="'.$class.'">'.$text.'</div>';
+	return $class ? '<div class="'.$class.'">'.$text.'</div>' : $text;
 }
 
 function triggerAddonCall($addons, $position, $trigger, &$data){
@@ -613,8 +540,8 @@ function shortFileSize($size){
 function timePassed($datetime){
 	$t = time() - strtotime($datetime);
 	$vs1 = ['minute','hour','day', 'week', 'month','year',  ''];
-	$vs2 = [60,      3600,  86400, 604800, 2592000,31536000,1];
-	foreach ($vs2 as $key => $value){ if($t < $value) break; }
+	$vs2 = [60,	  3600,  86400, 604800, 2592000,31536000,1];
+	foreach($vs2 as $key => $value){ if($t < $value) break; }
 	if($key < 1) return 'just now'; //second
 	$value = floor($t/$vs2[$key-1]);
 	return $value.' '.$vs1[$key-1].($value > 1 ? 's' : '').' ago';

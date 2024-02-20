@@ -58,14 +58,14 @@ if(is_dir($theme_dir)) {
 <table class="table">
 <thead>
 	<tr>
-		<th>#<?php echo getLang('removed_theme')?></th>
-		<th class="text-end"><?php echo getLang('empty_%s', [''])?></th>
+		<th scope="col" class="text-wrap">#<?php echo getLang('removed_theme')?></th>
+		<th scope="col" class="text-end"><?php echo getLang('empty_%s', [''])?></th>
 	</tr>
 </thead>
 <tbody>
 <?php
 	foreach($th_list as $key => $value) {
-		if($value) echo '<tr><td>'.$key.'</td><td><button class="btn btn-primary btn-xs mw-10" data-empty-theme="'.$key.'">'.getLang('empty_%s', ['']).'</button></td></tr>';
+		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><a class="btn btn-primary btn-xs mw-10" onclick="return deleteThemeConfig(\''.$key.'\')">'.getLang('empty_%s', ['']).'</a></td></tr>';
 	}
 ?>
 </tbody>
@@ -74,6 +74,14 @@ if(is_dir($theme_dir)) {
 <script>
 	const select_form = document.querySelector('#themeSelectForm'), th_ids = select_form.querySelectorAll('[name="th_id"]');
 	th_ids.forEach(el => el.addEventListener('change', e => select_form.submit()));
+	function deleteThemeConfig(id){
+		exec_ajax({
+			module:'admin',
+			act:'deletethemeconfig',
+			th_id:id,
+		}).then(_=>location.reload()).catch(error=>alert(error))
+		return false
+	}
 </script>
 
 <?php

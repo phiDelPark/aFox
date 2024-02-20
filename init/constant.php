@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 define('_AF_VERSION_', '0.400');
 
-define('__DEBUG__', 0);
+define('__DEBUG__', 1);
 define('_AF_SERVER_TIME_', time());
 
 /*** SSL ***/
@@ -49,6 +49,19 @@ define('_AF_CACHE_DATA_', _AF_PATH_ . 'data/cache/');
 define('_AF_PASSWORD_ALGORITHM_', function_exists('password_hash')?'BCRYPT':'MYSQL');
 
 if(!isset($_SERVER['SERVER_ADDR'])) $_SERVER['SERVER_ADDR'] = isset($_SERVER['LOCAL_ADDR']) ? $_SERVER['LOCAL_ADDR'] : '';
-
+/*
+if (!function_exists('array_key_first')) { // PHP 7 >= 7.3.0, PHP 8
+	function array_key_first(array $arr) {
+		foreach($arr as $key=>$key) return $key;
+		return NULL;
+	}
+}
+if (! function_exists("array_key_last")) { // PHP 7 >= 7.3.0, PHP 8
+	function array_key_last($array) {
+		if (!is_array($array) || empty($array)) return NULL;
+		return array_keys($array)[count($array)-1];
+	}
+}
+*/
 /* End of file constant.php */
 /* Location: ./init/constant.php */

@@ -1,6 +1,6 @@
 <?php if(!defined('__AFOX__')) exit();
 
-if(@$_GET['flush']) {
+if(@$_GET['clear']) {
 	ob_end_clean();
 
 	$dir = _AF_CACHE_DATA_;
@@ -129,7 +129,7 @@ if(@$_GET['flush']) {
 
 ?>
 
-<iframe src="./?admin=clearcache&flush=1" style="width:100%;height:calc(100vh - 10rem - var(--topNavbarHeight));">
+<iframe src="./?admin=clearcache&clear=1" style="width:100%;height:calc(100vh - 10rem - var(--topNavbarHeight));">
 Your browser does not support iframes.
 </iframe>
 

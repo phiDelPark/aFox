@@ -24,7 +24,7 @@ body {
 	background-color: var(--bs-body-bg);
 }
 
-h1, h2 {
+h1, h2, h3 {
 	font-size: 26px;
 	margin-top: .85em;
 	margin-bottom: .5em;

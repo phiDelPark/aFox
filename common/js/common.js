@@ -170,7 +170,7 @@ const $_LANG = {};
 		}
 	}
 
-	window.exec_ajax = async function(body, headers = {}) {
+	window.exec_ajax = async function(body, headers = {}, debug = false) {
 		const calling = document.createElement('DIV')
 		calling.setAttribute('id', 'calling_server')
 		calling.setAttribute('class', 'alert alert-warning')
@@ -187,6 +187,7 @@ const $_LANG = {};
 			body: JSON.stringify(body),
 		}
 		const res = await fetch(request_uri, options)
+		if(debug) throw Error(await res.text())
 		const data = await res.json()
 		calling?.fadeOut($e => $e.remove())
 		if(!res.ok || (data?.error || 0) !== 0) throw Error(data?.message)

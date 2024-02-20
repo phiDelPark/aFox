@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 <h5>사용법 :</h5>
 <pre class="border rounded p-3">
-&lt;img widget="youtube" vid="아이디"&gt;
+&lt;widget vid="유튜브(VID)"&gt;youtube&lt;/widget&gt;
 
 * 사용 가능한 옵션 *
   width     : 동영상 넓이
@@ -17,5 +17,5 @@ if(!defined('__AFOX__')) exit();
 
 <h5>사용예: </h5>
 <pre class="border rounded p-3">
-&lt;img widget="youtube" vid="id" start="45" showbest="0"&gt;
+&lt;widget vid="id" start="45" showbest="0"&gt;youtube&lt;/widget&gt;
 </pre>

@@ -11,8 +11,8 @@
 
 	if(!empty($search)) {
 		$keys = [
-			"@" => "mb_nick", //@nick
-			"?" => "rp_regdate", //?202010
+			":" => "wr_regdate", //:202010
+			"?" => "mb_nick", //?nick
 		];
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "rp_content") : ($search = substr($search, 1));
@@ -52,9 +52,9 @@
 	<tr>
 		<th scope="col"><a href="#" onclick="return _showCheckItems(this)"><?php echo getLang('data_manage')?></a></th>
 		<th scope="col" class="text-wrap"><input class="me-3 d-none" type="checkbox" onchange="_allCheckItems(this)"><small class="d-none">[ <a href="#" onclick="return _deleteCheckItems(this)">DELETE</a> ]</small><span><?php echo getLang('content')?></span></th>
-		<th scope="col">@<?php echo getLang('author')?></th>
+		<th scope="col"><?php echo getLang('author')?></th>
 		<th scope="col"><?php echo getLang('status')?></th>
-		<th scope="col" class="text-end">?<?php echo getLang('date')?></th>
+		<th scope="col" class="text-end"><?php echo getLang('date')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -90,7 +90,7 @@
 		<input type="hidden" name="admin" value="<?php echo $_GET['disp'] ?>">
 		<div class="input-group mb-3">
 			<label class="input-group-text bg-transparent" for="search"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('search','').'\')"':''?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" style="max-width:140px;border-left:0" placeholder="<?php echo getLang('content') ?>" oninvalid="this.setCustomValidity('@NICK, ?202201')" oninput="this.setCustomValidity('')" required>
+			<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" style="max-width:140px;border-left:0" oninvalid="this.setCustomValidity('<?php echo getLang('search_help_'.$admin)?>')" oninput="this.setCustomValidity('')" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
 		</div>
 	</form>

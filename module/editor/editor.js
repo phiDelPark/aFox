@@ -95,7 +95,6 @@ function afoxEditor(ID, OPTIONS) {
 			const
 				txtBefore = textarea.value.slice(0, selection.start),
 				txtAfter = nend ? textarea.value.slice(nend) : ''
-				console.log()
 			textarea.value = txtBefore + html + txtAfter
 		}
 	}
@@ -146,15 +145,11 @@ function afoxEditor(ID, OPTIONS) {
 			e.stopPropagation()
 			return false
 		}
-		if(/<[img][^>]+[class]=[\\"\']+image\//g.test(e.target.outerHTML)) {
-			e.dataTransfer.setData('text', e.target.outerHTML)
-		} else {
-			const html = e.target.outerHTML.replace(
-				/^(<[img]+\ssrc)([^>]+title=[\\"\']+)([^>\\"\']+)([^>]+)srcset=[\\"\']+[^>\\"\']+([^>]+>)$/g,
-				'<a href' + "$2$3$4" + 'target="_file' + "$5$3" + '</a>'
-			)
-			e.dataTransfer.setData('text', html)
-		}
+		const regexp = /(?:src|title|alt)="([^"]+)"/gi
+		const a = [...e.target.outerHTML.matchAll(regexp)]
+		html = a[2][1].slice(0,5).toLowerCase() == 'image'
+			? '<img src="%s" title="%s" alt="%s">' : '<a href="%s" title="%s">%s</a>'
+		e.dataTransfer.setData('text', html.sprintf(a[0][1], a[2][1], a[1][1]))
 	}
 
 	updedFiles.forEach(el => {
@@ -175,12 +170,11 @@ function afoxEditor(ID, OPTIONS) {
 				url = elURL.createObjectURL(e.target.files[key])
 			window.uploadFiles.push(url)
 			const index = window.uploadFiles.length - 1
-			if(type.slice(0, 5) != 'image') type = type + '" srcset="./module/editor/bi-binary.svg'
-			let html = `="${url}" title="${name} (${size})" alt="${name}" target="${index}"`
-			span.innerHTML = '<image class="' + type + '" src' + html + '>'
+			let html = `="${url}" title="blob-${index}" alt="${name} (${size})"`,
+				image = type.slice(0, 5) == 'image'
+			span.innerHTML = '<image src' + html + (image?'':' srcset="./module/editor/bi-binary.svg"') + '>'
 				+ (e.target.files.length === 1 ? '<span>' + e.target.value + '</span>' : '')
-			html = type.slice(0, 5) == 'image'
-				? '<image src' + html + '>' : `<a href${html}>${name} (${size})</a>`
+			html = image ? '<image src' + html + '>' : `<a href${html}>${name} (${size})</a>`
 			span.addEventListener('dragstart', ee => {
 				ee.dataTransfer.setData('text', html)
 			})
@@ -200,7 +194,7 @@ function afoxEditor(ID, OPTIONS) {
 				'underline':'<u>%s</u>',
 				'strikethrough':this.htmlMode ? '<strike>%s</strike>' : '~~%s~~',
 				'insertorderedlist':this.htmlMode ? '<ol><li>%s</li></ol>' : "\n"+'1. '+'%s'+"\n"+'2. ',
-				'header':this.htmlMode ? '<h2>%s</h2>' : '## %s',
+				'header':this.htmlMode ? '<h3>%s</h3>' : '## %s',
 				'highlight':this.htmlMode ? '<code>%s</code>' : '`%s`',
 				'indent':this.htmlMode ? '<blockquote>%s</blockquote>' : '> %s',
 				'codeblock':this.htmlMode ? '<pre><code>%s</code></pre>' : '```'+"\n"+'%s'+"\n"+'```'

@@ -5,7 +5,7 @@ require_once _AF_PATH_ . 'lib/db/mysql'.(function_exists('mysqli_connect')?'i':'
 define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
 define('_AF_DOMAIN_', $_DBINFO['domain']);
 define('_AF_COOKIE_DOMAIN_', $_DBINFO['cookie_domain']);
-DB::init($_DBINFO); unset($_DBINFO);
+DB::connect($_DBINFO); unset($_DBINFO);
 
 date_default_timezone_set(_AF_TIME_ZONE_);
 session_set_cookie_params(0, '/', _AF_COOKIE_DOMAIN_);
@@ -53,6 +53,8 @@ if(empty($_MEMBER)){ //not logged in
 
  //JSON accepts POST only
 if(_REQ_METHOD_ == 'JSON') $_POST = json_decode(file_get_contents('php://input'), TRUE);
+if(_REQ_METHOD_ != 'GET') $_GET['module'] = @$_POST['module'].'';
+
 //*/첫번째 키가 모듈인지 체크 (.htaccess 대신 사용할때)
 if(!isset($_GET['module'])&&file_exists(_AF_MODULES_PATH_.($tmp=key($_GET)).'/setup.php')){
 	$_GET['module'] = $tmp; $_GET['disp'] = @$_GET[$tmp];
@@ -71,11 +73,12 @@ if(!isset($_GET['module'])&&(!empty($_GET['srl']) || !empty($_GET['rp']))){
 }
 
 //if no module value exists, use the start page
-if(!@$_GET['module'] && !@$_GET['id']) $_GET['id'] = $_CFG['start'];
+if(!isset($_GET['module']) && !@$_GET['id']) $_GET['id'] = $_CFG['start'];
 if(@$_GET['id'] && ($tmp=getModule($_GET['id']))){
 	$_CFG = array_merge($_CFG, $tmp); // join
 	$_GET['module'] = $tmp['md_key'];
 }
+
 $_CFG['logo'] = file_exists(_AF_CONFIG_DATA_.'logo.png') ? _AF_URL_.'data/config/logo.png' : FALSE;
 $_CFG['favicon'] = file_exists(_AF_CONFIG_DATA_.'favicon.ico') ? _AF_URL_.'data/config/favicon.ico' : FALSE;
 

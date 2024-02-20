@@ -12,10 +12,10 @@ function proc($data)
 
 	if (!empty($search)) {
 		$keys = [
-			":" => "wr_title", //:title
-			"@" => "mb_nick", //@nick
-			"#" => "wr_tags", //#tag
-			"?" => "wr_regdate", //?202010
+			"!" => "wr_title", //!title
+			":" => "wr_regdate", //:202010
+			"+" => "wr_tags", //+tag
+			"?" => "mb_nick", //?nick
 		];
 
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';

@@ -5,7 +5,7 @@
  */
 
 /*! use
- * DB::init(array(
+ * DB::connect(array(
  * 'host'=>$db_host,
  * 'port'=>$db_port,
  * 'name'=>$db_name,
@@ -44,7 +44,11 @@ class DB {
 		return self::$info['num_rows'];
 	}
 
-	private static function connect() {
+	public static function connect( /*array*/ $o) {
+		self::$option = $o;
+	}
+
+	private static function __connect() {
 		$o = self::$option;
 
 		if(($l = mysql_connect(
@@ -62,10 +66,6 @@ class DB {
 		} else {
 			die('Could not connect to MySQL database.');
 		}
-	}
-
-	public static function init( /*array*/ $o) {
-		self::$option = $o;
 	}
 
 	private static function __where($info, $type = 'AND') {
@@ -149,7 +149,7 @@ class DB {
 	}
 
 	public static function query($qry, $params = [], $return = false) {
-		if(self::$link === null) {self::connect();}
+		if(self::$link === null) {self::__connect();}
 		if($params === true || is_callable($params)) {
 			$return = $params !== true ? $params : true;
 			$params = [];
@@ -185,7 +185,7 @@ class DB {
 	}
 
 	public static function __gets($table, $select = '*', $one = false, $callback = null) {
-		if(self::$link === null) {self::connect();}
+		if(self::$link === null) {self::__connect();}
 		$data = [];
 		$sql = sprintf("SELECT %s FROM %s%s", $select, $table, self::__extra());
 		self::$info['last_query'] = $sql;
@@ -292,7 +292,7 @@ class DB {
 	DB::insert(_TABLE_, [_DATA_])
 	**/
 	public static function insert($table, $data) {
-		if(self::$link === null) {self::connect();}
+		if(self::$link === null) {self::__connect();}
 		$fields = '';
 		$values = '';
 		foreach($data as $col => $value){
@@ -323,7 +323,7 @@ class DB {
 		if(empty(self::$where)){
 			throw new Exception("Where is not set. Can't update whole table.", 1);
 		}else{
-			if(self::$link === null) {self::connect();}
+			if(self::$link === null) {self::__connect();}
 			$update = '';
 			foreach($data as $col => $value){
 				if(strpos($col, '^') === 0)
@@ -348,7 +348,7 @@ class DB {
 	**/
 	public static function delete($table) {
 		if(func_num_args() > 1) self::__sets(array_slice(func_get_args(), 1));
-		if(self::$link === null) {self::connect();}
+		if(self::$link === null) {self::__connect();}
 		$sql = sprintf("DELETE FROM %s%s", $table, self::__extra());
 		self::$info['last_query'] = $sql;
 		if(!mysql_query($sql)){
@@ -406,7 +406,7 @@ class DB {
 	}
 
 	public static function transaction() {
-		if(self::$link === null) {self::connect();}
+		if(self::$link === null) {self::__connect();}
 		mysql_query("SET AUTOCOMMIT=0; START TRANSACTION");
 	}
 
@@ -434,7 +434,7 @@ class DB {
 	}
 
 	public static function status($table, $key = '') {
-		if(self::$link === NULL) {self::connect();}
+		if(self::$link === NULL) {self::__connect();}
 		$r = mysql_query("SHOW TABLE STATUS WHERE Name = '{$table}'");
 		if(mysql_errno()){
 			throw new Exception(mysql_error(), mysql_errno());
@@ -453,7 +453,7 @@ class DB {
 
 	// exemple: DB::version('5.5.0', '<')
 	public static function version($chk_version = null, $operator = '>=') {
-		if(self::$link === NULL) {self::connect();}
+		if(self::$link === NULL) {self::__connect();}
 		$version = mysql_get_client_info();
 		if (empty($chk_version)) {
 			return $version;

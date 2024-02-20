@@ -120,6 +120,10 @@ $menus = getSiteMenu();
 		<div class="carousel-inner rounded">
 			<div class="carousel-item active">
 				<img src="./theme/default/img/header_<?php echo _MODULE_=='board'?'board':'page' ?>.jpg" class="d-block w-100" alt="...">
+				<div class="carousel-caption d-none d-md-block">
+					<h2>&nbsp;</h2>
+					<h5><?php echo escapeHTML(@$_CFG['md_about'])?></h5>
+				</div>
 			</div>
 		</div>
 <?php } ?>

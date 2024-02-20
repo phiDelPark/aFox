@@ -108,7 +108,7 @@ $o['sock'] = isset($o['sock'])   ? $o['sock']   : FALSE;
 $o['charset'] = isset($o['charset']) ? $o['charset'] : "utf8";
 $o['time_zone'] = isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul";
 
-DB::init($o);
+DB::connect($o);
 
 function createHash($password) {
 	try {

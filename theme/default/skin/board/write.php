@@ -61,12 +61,16 @@
 		<?php }}} ?>
 			<div class="mb-4">
 		<?php
-			$istool = [];
-			$ishtml = ($is&&$DOC['wr_type']=='2')||(!$is&&($_CFG['use_type']=='3'||$_CFG['use_type']=='9'))?1:0;
-			if(empty($_CFG['use_type']) || $_CFG['use_type'] > 6) $istool['wr_type'] = [$ishtml?'2':'1', ['MKDW'=>'1','HTML'=>'2']];
-			if(empty($_CFG['use_secret'])) $istool['wr_secret'] = [($is&&$DOC['wr_secret']=='1')?'true':'false', ['Secret'=>'true']];
+			if(($_CFG['use_type']&&$_CFG['use_type'] < 7)){
+				$istool = [];
+			}else{
+				$DOC['wr_type'] = $is ? $DOC['wr_type'] : ($_CFG['use_type']&&$_CFG['use_type']>7?'1':'0');
+				$istool = ['wr_type'=>[$DOC['wr_type'], ['TEXT'=>'0',($_CFG['use_type']=='9'?'HTML':'MKDW')=>'1']]];
+			}
+			if(empty($_CFG['use_secret'])) $istool['wr_secret']=[($is&&$DOC['wr_secret']=='1')?'true':'false',['Secret'=>'true']];
+			$ishtml = $_CFG['use_type']=='9'&&(!$is||$DOC['wr_type']);
 			displayEditor(
-				'wr_content', $is?$DOC['wr_content']:'',
+				'wr_content', $_CFG['use_type']=='9'?toHTML(@$DOC['wr_content'],1,''):@$DOC['wr_content'],
 				[
 					'html'=>$ishtml,
 					'toolbar'=>true,

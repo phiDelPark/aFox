@@ -5,14 +5,14 @@
 	$dd = _AF_DOCUMENT_TABLE_;
 	$cd = _AF_DOCUMENT_TABLE_;
 	$search = @$_GET['search'] ? trim($_GET['search']) : '';
-	$keys = [ ":" => "wr_title", "@" => "mb_nick", "#" => "wr_tags", "?" => "wr_regdate" ];
+	$keys = [ "!" => "wr_title", "?" => "mb_nick", "+" => "wr_tags", ":" => "wr_regdate" ];
 
 	if($_GET['trash'] == 'comment') {
 		$cd = _AF_COMMENT_TABLE_;
-		$keys = [ "@" => "mb_nick", "?" => "rp_regdate" ];
+		$keys = [ "?" => "mb_nick", ":" => "rp_regdate" ];
 	} else if($_GET['trash'] == 'file') {
 		$cd = _AF_FILE_TABLE_;
-		$keys = [ ":" => "mf_name", "@" => "mb_nick", "?" => "mf_regdate" ];
+		$keys = [ "!" => "mf_type", "?" => "mb_nick", ":" => "mf_regdate" ];
 	}
 
 	if(!empty($search)) {
@@ -20,7 +20,7 @@
 		if($_GET['trash'] == 'comment') {
 			empty($key) ? ($key = "rp_content") : ($search = substr($search, 1));
 		} else if($_GET['trash'] == 'file') {
-			empty($key) ? ($key = "mf_type") : ($search = substr($search, 1));
+			empty($key) ? ($key = "mf_name") : ($search = substr($search, 1));
 		} else {
 			empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
 		}
@@ -88,11 +88,11 @@
 	<tr>
 		<th scope="col">#</th>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
-		<th scope="col"><?php echo ($_GET['trash'] == 'file'?getLang('type'):'@'.getLang('author'))?></th>
+		<th scope="col"><?php echo ($_GET['trash'] == 'file'?getLang('type'):getLang('author'))?></th>
 		<?php if ($_GET['trash'] != 'file') {?>
 		<th scope="col"><?php echo getLang('status')?></th>
 		<?php }?>
-		<th scope="col" class="d-none d-md-table-cell">?<?php echo getLang('date')?></th>
+		<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('date')?></th>
 		<th scope="col"><?php echo getLang('removed_date')?></th>
 	</tr>
 </thead>

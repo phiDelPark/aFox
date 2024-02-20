@@ -60,12 +60,21 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 <tbody>
 <?php
 	foreach($ao_list as $key => $value) {
-		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><button class="btn btn-primary btn-sm" data-empty-addon="'.$key.'">'.getLang('empty_%s', ['']).'</button></td></tr>';
+		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><a class="btn btn-primary btn-sm" onclick="return deleteAddonConfig(\''.$key.'\')">'.getLang('empty_%s', ['']).'</a></td></tr>';
 	}
 ?>
 </tbody>
 </table>
-
+<script>
+	function deleteAddonConfig(id){
+		exec_ajax({
+			module:'admin',
+			act:'deleteaddonconfig',
+			ao_id:id,
+		}).then(_=>location.reload()).catch(error=>alert(error))
+		return false
+	}
+</script>
 <?php
 /* End of file addon.php */
 /* Location: ./module/admin/addon.php */

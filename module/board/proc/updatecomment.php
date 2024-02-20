@@ -106,6 +106,9 @@ function proc($data) {
 	if(!empty($module['use_secret'])) $data['rp_secret'] = ((int)$module['use_secret'])-1;
 	if($parent_secret) $data['rp_secret'] = 1;
 
+	$data['rp_type'] = @$data['rp_type'] ? $data['rp_type'] : 0;
+	if($data['rp_type'] > 1) $data['rp_type'] = 1; // 저장은 MD 타입으로 저장 (db 가벼워져서)
+
 	$data['rp_content'] = xssClean($data['rp_content']);
 
 	DB::transaction();

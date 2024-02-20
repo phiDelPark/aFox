@@ -8,7 +8,7 @@
 		<a href="<?php echo getUrl('disp','setupPage', 'id', _MID_)?>" class="icon-link-hover text-decoration-none position-absolute top-0 end-0"><svg class="bi"><use href="<?php echo _AF_THEME_URL_ ?>bi-icons.svg#pencil-square"><?php echo getLang('edit') ?></use></svg></a>
 	</div>
 <?php }
-echo toHTML(preg_replace('@\[_(/?)(STYLE|SCRIPT)/?_\]@is', '<\\1\\2>', $_DATA['pg_content']), $_DATA['pg_type']);
+echo toHTML($_DATA['pg_content'], $_DATA['pg_type']);
 ?>
 </section>
 <?php

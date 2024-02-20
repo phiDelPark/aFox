@@ -33,7 +33,7 @@ if($type === 'gallery') {
 		<?php
 			$w = (100 / $count);
 			foreach ($_list as $val) {
-				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target'],'popup',$target=='_popup'?'1':'','modal',$target=='_modal'?'1':'').'"'.(empty($target)?'':' target="'.$target.'"').'><img class="d-inline-block p-2" src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="max-height:150px;"></a>';
+				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target']).'"'.(empty($target)?'':' target="'.$target.'"').'><img class="d-inline-block p-2" src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="max-height:150px;"></a>';
 			}
 		?>
 		</div>
@@ -41,8 +41,7 @@ if($type === 'gallery') {
 		<div class="list-group" role="list">
 		<?php
 			foreach ($_list as $val) {
-				$tmp = $target=='_modal'?' data-bs-toggle="modal" data-bs-target="#widgetContentModal"':' target="'.$target.'"';
-				echo '<a class="list-group-item d-inline-block text-truncate" href="'.getUrl('','id',$val['md_id'],$target=='_modal'?'wr_srl':'srl',$val['wr_srl']).'"'.$tmp.'>'.$val['wr_title'].'</a>';
+				echo '<a class="list-group-item d-inline-block text-truncate" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl']).'" target="'.$target.'">'.$val['wr_title'].'</a>';
 			}
 		?>
 		</div >

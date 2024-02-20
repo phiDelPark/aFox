@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 <h5>사용법 :</h5>
 <pre class="border rounded p-3">
-&lt;img widget="content" module="아이디"&gt;
+&lt;widget module="모듈(ID)"&gt;content&lt;/widget&gt;
 
 * 사용 가능한 옵션 *
   type          : 목록 타입 (default, gallery)
@@ -17,17 +17,8 @@ if(!defined('__AFOX__')) exit();
   mstyle        : 모바일 화면에서의 스타일
 </pre>
 
-<h5>사용예 1</h5>
+<h5>사용예</h5>
 <pre class="border rounded p-3">
-&lt;img widget="content" module="id_1" type="default" count="5"&gt;
-&lt;img widget="content" module="id_2" count="5" class="color-swatch gray"&gt;
-</pre>
-
-<h5>사용예 2</h5>
-<pre class="border rounded p-3">
-&lt;div style="text-align:justify"&gt;
-&lt;img widget="content" module="id_1" style="width:48.5%;display:inline-block" mstyle="width:100%"&gt;
-&lt;img widget="content" module="id_2" style="width:48.5%;display:inline-block" mstyle="width:100%"&gt;
-&lt;div style="width:48.5%;display:inline-block;height:1px"&gt;&lt;/div&gt;
-&lt;/div&gt;
+&lt;widget module="id_1" count="5" class="col-4"&gt;content&lt;/widget&gt;
+&lt;widget module="id_2" type="gallery" count="5"&gt;content&lt;/widget&gt;
 </pre>

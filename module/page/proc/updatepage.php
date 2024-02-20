@@ -19,14 +19,13 @@ function proc($data)
 	$unlink_files = [];
 	$file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 
-	$data['pg_content'] = empty($data['pg_content']) ? '' : xssClean($data['pg_content']);
-
-	if (!isAdmin()) {
-		$data['pg_content'] = preg_replace('@\[_/?(STYLE|SCRIPT)/?_\]@is', '', $data['pg_content']);
-	}
-
 	$module = getModule($md_id);
 	$new_insert = empty($module['md_id']);
+
+	$data['pg_type'] = @$data['pg_type'] ? $data['pg_type'] : 0;
+	if($data['pg_type'] > 1) $data['pg_type'] = 1; // 저장은 MD 타입으로 저장 (db 가벼워져서)
+
+	$data['pg_content'] = xssClean($data['pg_content']);
 
 	DB::transaction();
 
@@ -137,33 +136,22 @@ function proc($data)
 				$file_count++;
 			}
 
-			$patterns = '/<[img|a][^>]+[src|href]=[\\"\']+blob\:[^>\\"\']+[\\"\']?[^>]*target=[\\"\']+([0-9])+[\\"\']?[^>]*>/i';
-
+			//$patterns = '/\[blob-([0-9]+)\]\(([^\)\"]+)(?:(?(R)\"|\s\"([^\"]+)\"\))|\))/Us';
+			$patterns = '/\(blob[^\)\"]+\s\"blob-([0-9]+)\"\)/Us';
 			$data['pg_content'] = preg_replace_callback(
 				$patterns,
 				function ($matches) use($new_files) {
 					$file = $new_files[(int)$matches[1]];
 					$es_name = escapeHTML($file['name']);
 					$isimg = substr($file['type'], 0, 5) == 'image';
-					return sprintf(
-						$isimg ? '<img src="%s" class="%s" title="%s" alt="%s"%s>'
-							: '<a href="%s" class="%s" title="%s" alt="%s"%s>',
+					return sprintf('(%s "%s")',
 						'./?file='.$file['mf_srl'],
-						escapeHTML($file['type']),
-						$es_name.' ('.shortFileSize($file['size']). ')',
-						$es_name,
-						$isimg ? ' width="'.$file['width'].'" height="'.$file['height'].'"' : ' target="_file"'
+						escapeHTML($file['type'])
 					);
 				},
 				$data['pg_content']
 			);
 		}
-
-		// 첨부 파일 도메인 주소 잘라내기
-		$data['pg_content'] = preg_replace(
-			'@(<(a|img)\s(src|href)=")(https?://.+)(/\?file)@is',
-			 '$1.$5', $data['pg_content']
-		);
 
 		DB::update(_AF_MODULE_TABLE_,
 			[

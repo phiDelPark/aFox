@@ -9,9 +9,9 @@
 
 	if (!empty($search)) {
 		$keys = [
-			":" => "vs_referer", //:referer
-			"@" => "mb_ipaddress", //@ip
-			"?" => "vs_regdate", //?202010
+			"!" => "vs_referer", //!referer
+			"?" => "mb_ipaddress", //?ip
+			":" => "vs_regdate", //:202010
 		];
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "vs_agent") : ($search = substr($search, 1));
@@ -41,9 +41,9 @@
 <table class="table">
 <thead>
 	<tr>
-		<th scope="col">@<?php echo getLang('ip')?></th>
+		<th scope="col"><?php echo getLang('ip')?></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('agent')?></th>
-		<th scope="col" class="text-end">?<?php echo getLang('date')?></th>
+		<th scope="col" class="text-end"><?php echo getLang('date')?></th>
 	</tr>
 </thead>
 <tbody>
@@ -76,7 +76,7 @@
 		<input type="hidden" name="admin" value="<?php echo $_GET['disp'] ?>">
 		<div class="input-group mb-3">
 			<label class="input-group-text bg-transparent" for="search"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('search','').'\')"':''?>><svg class="bi" aria-hidden="true"><use href="<?php echo _AF_URL_?>module/admin/bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg></label>
-			<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" style="max-width:140px;border-left:0" required>
+			<input type="text" name="search" id="search" value="<?php echo @$_GET['search']?$_GET['search']:''?>" class="form-control" style="max-width:140px;border-left:0" oninvalid="this.setCustomValidity('<?php echo getLang('search_help_'.$admin)?>')" oninput="this.setCustomValidity('')" required>
 			<button class="btn btn-default btn-outline-control" style="border-color:var(--bs-border-color)" type="submit"><?php echo getLang('search') ?></button>
 		</div>
 	</form>

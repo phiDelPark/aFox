@@ -3,6 +3,7 @@
 ?>
 
 <section id="pageView">
+<button class="btn-close float-end" aria-label="Back" onclick="window.history.go(-1);return false"></button>
 	<h3 class="pb-3 mb-3 border-bottom"><?php echo getLang('write')?></h3>
 <form id="setup" method="post" autocomplete="off" enctype="multipart/form-data" needvalidate>
 	<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
@@ -17,9 +18,8 @@
 				$_DATA['pg_content'],
 				[
 					'file'=>[$_DATA['md_id'], 1, 99999],
-					'html'=>$_DATA['pg_type'] === '2',
 					'toolbar'=>true,
-					'typebar'=>array(getLang('content'), ['pg_type'=>[$_DATA['pg_type'], ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']]])
+					'typebar'=>array(getLang('content'), ['pg_type'=>[$_DATA['pg_type'], ['TEXT'=>'0','MKDW'=>'1']]])
 				]
 			);
 		?>

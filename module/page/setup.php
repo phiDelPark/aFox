@@ -94,9 +94,8 @@
 				$PAGE['pg_content'],
 				[
 					'file'=>[$is_new?'':$PAGE['md_id'], 1, 99999],
-					'html'=>!$is_new&&$PAGE['pg_type'] === '2',
 					'toolbar'=>true,
-					'typebar'=>array(getLang('content'), ['pg_type'=>[$is_new?'1':$PAGE['pg_type'], ['TEXT'=>'0','MKDW'=>'1','HTML'=>'2']]])
+					'typebar'=>array(getLang('content'), ['pg_type'=>[$is_new?'1':$PAGE['pg_type'], ['TEXT'=>'0','MKDW'=>'1']]])
 				]
 			);
 		?>
