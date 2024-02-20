@@ -3,7 +3,7 @@
  * aFox (https://github.com/phiDelPark/aFox)
  * Copyright 2016 afox, Inc.
  */
-require_once _AF_LIBS_PATH_ . 'parsedown/Parsedown.php';
+require_once _AF_LIBS_PATH_ . 'md/parsedown/Parsedown.php';
 require_once _AF_LIBS_PATH_ . 'md/html2mkdw.php';
 
 class MD {
