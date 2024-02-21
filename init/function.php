@@ -86,10 +86,9 @@ function getRequestMethod(){
 	}
 }
 
-function getScriptPath(){
-	static $__url = null;
-	if($__url == null) $__url = preg_replace('/index.php$/i', '', str_replace('\\', '/', $_SERVER['SCRIPT_NAME']));
-	return $__url;
+function getScriptPath(){ static $__scriptpath;
+	if(!@$__scriptpath) $__scriptpath = preg_replace('/index.php$/i', '', str_replace('\\', '/', $_SERVER['SCRIPT_NAME']));
+	return $__scriptpath;
 }
 
 function getUrl(){
@@ -400,8 +399,8 @@ function toHTML($text, $type, $class = 'current_content'){
 }
 
 function triggerAddonCall($addons, $position, $trigger, &$data){
-	static $__triggerAddonCall = null;
-	if($__triggerAddonCall == null){
+	static $__triggerAddonCall;
+	if(!@$__triggerAddonCall){
 		$__triggerAddonCall = function($_CALLED, $_ADDON, &$_DATA){
 			include $_CALLED['file'];
 		};
@@ -428,8 +427,8 @@ function triggerAddonCall($addons, $position, $trigger, &$data){
 }
 
 function triggerModuleCall($modules, $position, $trigger, &$data){
-	static $__triggerModuleCall = null;
-	if($__triggerModuleCall == null){
+	static $__triggerModuleCall;
+	if(!@$__triggerModuleCall){
 		$__triggerModuleCall = function($_CALLED, &$_DATA){
 			include $_CALLED['file'];
 		};
@@ -446,8 +445,8 @@ function triggerModuleCall($modules, $position, $trigger, &$data){
 // TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
 function triggerCall($position, $trigger, &$data){
 	global $_MEMBER; if(_MODULE_ == 'admin') return true; //skip admin
-	static $__triggerCall = null;
-	if($__triggerCall == null && ($__triggerCall = ['M'=>[], 'A'=>[]])){
+	static $__triggerCall;
+	if(!@$__triggerCall && ($__triggerCall = ['M'=>[], 'A'=>[]])){
 		$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 		DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
 			[(_MOBILE_?'use_mobile':'use_pc')=>1,'^'=>'ASCII(grant_access)<='.$rank], 'tg_key',
@@ -622,8 +621,8 @@ function set_cache($key, $val, $exp = 0){ //If 0, keep //if -, remove
 	$s = sprintf($s,($exp?_AF_SERVER_TIME_+$exp:$exp),var_export($val,true));
 	file_put_contents(_AF_CACHE_DATA_.encode64($key).'.php', $s, LOCK_EX);
 }
-function get_cache($key){ static $__af_caches = null;
-	if(!empty($__af_caches[$key])) return $__af_caches[$key];
+function get_cache($key){ static $__af_caches;
+	if(@$__af_caches[$key]) return $__af_caches[$key];
 	if(!file_exists($f=(_AF_CACHE_DATA_.encode64($key).'.php'))) return;
 	if((@include $f)!==1||(!empty($_EXPIRE)&&$_EXPIRE<_AF_SERVER_TIME_))
 	{@chmod($f,0707);@unlink($f);return;} return ($__af_caches[$key] = $_CACHE);

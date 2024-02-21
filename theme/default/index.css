@@ -46,8 +46,11 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 .current_content {
 	overflow: hidden;
 }
-.current_content *:is(h1, h2, h3){
-	margin-top: .5em;
+.current_content *:is(h1, h2, h3) {
+	margin-top: .8em;
+}
+.current_content>:first-child {
+	margin-top: 0;
 }
 .current_content img {
 	max-width: 100%;
