@@ -12,7 +12,8 @@ if($_CALLED['position'] == 'after_disp'
 	$opt = 'm=' . _MODULE_ . '&';
 	$opt .= (empty($_ADDON['link_blank']) ? 'l=0&' : 'l=1&');
 	$opt .= (empty($_ADDON['autosize_image']) ? 'i=0&' : 'i=1&');
-	$opt .= (empty($_ADDON['autosize_video']) ? 'v=0' : 'v=1');
+	$opt .= (empty($_ADDON['autosize_video']) ? 'v=0&' : 'v=1&');
+	$opt .= (empty($_ADDON['autosize_table']) ? 't=0' : 't=1');
 
 	addJS(_AF_URL_.'addon/object_manager/object_manager'.(__DEBUG__ ? '.js' : '.min.js').(empty($opt)?'':'?'.$opt));
 }

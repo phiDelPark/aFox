@@ -11,7 +11,8 @@ window.addonObjectManager = (content_id = '.current_content') => {
 		module = '',
 		link_blank = false,
 		autosize_image = false,
-		autosize_video = false
+		autosize_video = false,
+		autosize_table = false
 
 	if(js) {
 		js = js.getAttribute('src').getQuery()
@@ -19,6 +20,7 @@ window.addonObjectManager = (content_id = '.current_content') => {
 		if((js['l'] || '0') == '1') link_blank = true
 		if((js['i'] || '0') == '1') autosize_image = true
 		if((js['v'] || '0') == '1') autosize_video = true
+		if((js['t'] || '0') == '1') autosize_table = true
 	}
 /*
 	const reSizeElement = (el, width) => {
@@ -46,9 +48,26 @@ window.addonObjectManager = (content_id = '.current_content') => {
 				$iframe.style.height = (width*0.5625) + 'px'
 				$e.before($iframe)
 				$e.style.display = 'none'
+			} else {
+				$e.style.width = width + 'px'
 			}
 		})
 	}
+
+	if(autosize_table === true) {
+		const
+			$tables = document.querySelectorAll(content_id + ' table'),
+			width = ($tables[0]?.closest(content_id).clientWidth) || '200'
+		$tables.forEach($table => {
+			const $tr = $table.querySelectorAll('tr')
+			$tr.forEach($tr => {
+				const $td = $tr.querySelectorAll('th,td'),
+					n = $td?.length || 0
+				$td.forEach($td => $td.style.maxWidth = ((width / n) - 1) + 'px');
+			})
+		})
+	}
+
 
 /*
 	if(autosize_image === true) {

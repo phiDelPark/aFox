@@ -376,8 +376,9 @@ class HtmlToMkdw
 			$close = @$part[1] == '/' ? '/' : '';
 			$tag = $part[0];
 
-			if (!$tag) $r = $this->rnl2br(trim($part[2])); // text
-			else {
+			if (!$tag) {
+				$r = $this->rnl2br($part[2]); // text
+			} else {
 				$md = $this->markdownable[$tag];
 				$r = $close ? $md['tail'] : $r = $md['head'];
 
@@ -474,7 +475,7 @@ class HtmlToMkdw
 
 		$html = preg_replace_callback('@(.*?)<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?)(/?)>@is',
 			function ($m) {
-				if($t = $m[1]) $this->htmlParts[] = ['', '', $t];
+				if(trim($m[1])) $this->htmlParts[] = ['', '', $m[1]];
 				if (($tag = strtolower($m[3])) && @$this->markdownable[$tag]) {
 					$this->htmlParts[] = [$tag, $m[2], $m[4]];
 				}
