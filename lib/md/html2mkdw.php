@@ -10,8 +10,8 @@ class HtmlToMkdw
 		'widget'	=> ['type'=>'admin','head'=>'','tail'=>''],
 		'script'	=> ['type'=>'admin','head'=>'','tail'=>''],
 		'style'		=> ['type'=>'admin','head'=>'','tail'=>''],
-		//'br'		=> ['type'=>'break','head'=>"\n",'tail'=>''],
-		'hr'		=> ['type'=>'break','head'=>"\n___\n",'tail'=>''],
+		'br'		=> ['type'=>'break','head'=>"<br>",'tail'=>''],
+		'hr'		=> ['type'=>'break','head'=>"<hr>",'tail'=>''],
 		'h1'		=> ['type'=>'block','head'=>"\n# ",'tail'=>"\n"],
 		'h2'		=> ['type'=>'block','head'=>"\n## ",'tail'=>"\n"],
 		'h3'		=> ['type'=>'block','head'=>"\n### ",'tail'=>"\n"],
@@ -54,13 +54,20 @@ class HtmlToMkdw
 		return preg_replace('/[\r\n]+/', $br, $str);
 	}
 
+	protected function parts_rtrim($index)
+	{
+		for ($i=$index, $n=count($this->htmlParts); $i < $n; $i++) {
+			if($this->htmlParts[$i][0]) break;
+			$this->htmlParts[$i][2] = '';
+		}
+	}
+
 	protected function inlineImage($part)
 	{
 		$a = $this->markdownable['img']['attrs'];
 		if (preg_match_all('/(\b(?:'.implode('|', array_keys($a)).'))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is', $part[2], $m2)) {
 			foreach ($m2[1] as $m2k => $m2v) $a[strtolower($m2v)] = $m2[3][$m2k];
 		}
-
 		$r = '';
 		if ($srl = $a['src']) {
 			$r = sprintf('![%s](%s%s)', $a['alt'] ? $a['alt'] : '!IMAGE', $srl, $a['title']?' "'.$a['title'].'"':'');
@@ -119,7 +126,7 @@ class HtmlToMkdw
 				}
 			}
 
-			$return[] = $r;
+			if($r) $return[] = $r;
 		}
 
 		return $i;
@@ -176,7 +183,7 @@ class HtmlToMkdw
 				}
 			}
 
-			$return[] = $r;
+			if($r) $return[] = $r;
 		}
 
 		return $i;
@@ -248,7 +255,7 @@ class HtmlToMkdw
 				}
 			}
 
-			$return[] = $r;
+			if($r) $return[] = $r;
 		}
 
 		return $i;
@@ -303,7 +310,7 @@ class HtmlToMkdw
 				}
 			}
 
-			$return[] = $__Prefix($r);
+			if($r) $return[] = $__Prefix($r);
 		}
 
 		return $i;
@@ -334,18 +341,19 @@ class HtmlToMkdw
 						break 2; // exit loop
 					case '/li': case '/dt': case '/dd':
 						if($blocklist > 1) $r = '';
+						$this->parts_rtrim($i + 1);
 						break;
 					case 'ol': case 'ul': case 'dl':
 						if($blocklist++) $r = '';
 						break;
 					case 'li': case 'dt': case 'dd':
 						if($blocklist > 1){
-							$r = "<br> &bull; ";
+							$r = '<br> &bull; ';
 						} else {
 							if($listtype != '-') {
 								$r = $listtype++ . '. ';
 							} else if($tag == 'dd') {
-								$r = '- &rsaquo;&nbsp; ';
+								$r = '&rsaquo; ';
 							} else {
 								$r = '- ';
 							}
@@ -358,12 +366,16 @@ class HtmlToMkdw
 						continue 2; // inlineElement 에서 처리 하니 넘김
 						break;
 					default:
+						// li, dt, dd 바로 다음엔 줄 바꿈 안함
+						if (preg_match('/^(- |[0-9]+\. |&rsaquo; |<br> &bull; )$/', end($return), $t)) {
+							$r = ltrim($r);
+						}
 						$r = $this->rnl2br($r);
 						break;
 				}
 			}
 
-			$return[] = $r;
+			if($r) $return[] = $r;
 		}
 
 		return $i;
@@ -400,20 +412,24 @@ class HtmlToMkdw
 							}
 							$r .= "|\n";
 						}
-						break;
+						//break;
 					case '/th': case '/td':
+						$this->parts_rtrim($i + 1);
 						break;
 					case '/caption':
 						if($tr) $r = $this->rnl2br($r);
+						$this->parts_rtrim($i + 1);
 						break;
 					case 'table':
 						if($blocktable++) $r = '';
 						$span['rowspan'] = [];
+						$this->parts_rtrim($i + 1);
 						break;
 					case 'tr':
 						$tr++;
 						$span['count'] = 0; // 해더 입력을 위해
 						$span['colspan'] = [];
+						$this->parts_rtrim($i + 1);
 						break;
 					case 'th': case 'td':
 						if((int)@$span['colspan'] > 0){ // colspan 처리
@@ -445,7 +461,7 @@ class HtmlToMkdw
 				}
 			}
 
-			$return[] = $r;
+			if($r) $return[] = $r;
 		}
 
 		return $i;
@@ -466,20 +482,38 @@ class HtmlToMkdw
 		}
 		return $i;
 	}
-
+/*
+	protected function getIndexByName($tag)
+	{
+		for ($i=count($this->htmlParts)-1; $i > -1; $i--) {
+			if ($this->htmlParts[$i][0] == $tag) return $i;
+		}
+		return -1;
+	}
+*/
 	public function html($html, $admin)
 	{
-		$html = preg_replace('#(<!--.*?-->|\r)#s', '', $html);
-
+		$ltrim = false;
 		$this->htmlParts = [];
 
-		$ttttmp = $html;
-		$html = preg_replace('/<br[^>]*>[\r\n]*/i', "\n", $html);
-
+		$html = preg_replace('#(<!--.*?-->|\r)#s', '', $html);
+		$html = preg_replace('/[\r\n]*<(hr|br)[^>]*>[\r\n]*/i', '<\1>', $html);
 		$html = preg_replace_callback('@(.*?)<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?)(/?)>@is',
-			function ($m) {
-				if(trim($m[1], "\r\n")) $this->htmlParts[] = ['', '', $m[1]];
-				if (($tag = strtolower($m[3])) && @$this->markdownable[$tag]) {
+			function ($m) use(&$ltrim) {
+				$this->htmlParts[] = ['', '', $ltrim ? ltrim($m[1],"\r\n") : $m[1]];
+				$ltrim = false;
+				if (($tag = strtolower($m[3])) && ($md = @$this->markdownable[$tag])) {
+					$isblock = strpos($md['type'], 'block') !== false;
+					$isinline = strpos($md['type'], 'inline') !== false;
+					if ($isblock) { // 블록 안쪽 (끝, 시작) 줄 바꿈 지움
+						if($m[2]=='/') {
+							end($this->htmlParts);
+							if (($t = key($this->htmlParts)) > -1) {
+								$this->htmlParts[$t][2] = rtrim($this->htmlParts[$t][2], "\r\n");
+							}
+							//if(!$isinline) $ltrim = true; // 블록 바깥 다음 줄 바꿈 지움 (자동 입력)
+						} else $ltrim = true;
+					}
 					$this->htmlParts[] = [$tag, $m[2], $m[4]];
 				}
 				return '';
@@ -526,7 +560,7 @@ class HtmlToMkdw
 				}
 			}
 
-			$return[] = $r;
+			if($r) $return[] = $r;
 		}
 
 		$html = implode('', $return) . $html;
