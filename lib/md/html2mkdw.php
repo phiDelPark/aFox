@@ -7,11 +7,11 @@
 class HtmlToMkdw
 {
 	protected $markdownable = [
-		//'br'		=> ['type'=>'break','head'=>"\n"],
-		'hr'		=> ['type'=>'break','head'=>"\n___\n"],
 		'widget'	=> ['type'=>'admin','head'=>'','tail'=>''],
 		'script'	=> ['type'=>'admin','head'=>'','tail'=>''],
 		'style'		=> ['type'=>'admin','head'=>'','tail'=>''],
+		//'br'		=> ['type'=>'break','head'=>"\n",'tail'=>''],
+		'hr'		=> ['type'=>'break','head'=>"\n___\n",'tail'=>''],
 		'h1'		=> ['type'=>'block','head'=>"\n# ",'tail'=>"\n"],
 		'h2'		=> ['type'=>'block','head'=>"\n## ",'tail'=>"\n"],
 		'h3'		=> ['type'=>'block','head'=>"\n### ",'tail'=>"\n"],
@@ -31,26 +31,25 @@ class HtmlToMkdw
 		'table'		=> ['type'=>'block','head'=>"\n",'tail'=>"\n"],
 		'caption'	=> ['type'=>'block','head'=>"",'tail'=>"\n\n"],
 		'tr'		=> ['type'=>'block','head'=>"",'tail'=>"|\n"],
-		'th'		=> ['type'=>'inlineblock','head'=>'| ','tail'=>' '],
-		'td'		=> ['type'=>'inlineblock','head'=>'| ','tail'=>' '],
-		'i'			=> ['type'=>'inline','head'=>'*','tail'=>'*'],
-		'em'		=> ['type'=>'inline','head'=>'*','tail'=>'*'],
-		'b'			=> ['type'=>'inline','head'=>'**','tail'=>'**'],
-		'strong'	=> ['type'=>'inline','head'=>'**','tail'=>'**'],
-		's'			=> ['type'=>'inline','head'=>'~~','tail'=>'~~'],
-		'strike'	=> ['type'=>'inline','head'=>'~~','tail'=>'~~'],
-		'del'		=> ['type'=>'inline','head'=>'~~','tail'=>'~~'],
-		'u'			=> ['type'=>'inline','head'=>'__','tail'=>'__'],
-		'u'			=> ['type'=>'inline','head'=>'__','tail'=>'__'],
-		'code'		=> ['type'=>'inline','head'=>'`','tail'=>'`'],
-		'input'		=> ['type'=>'inline','head'=>'`input:`'],
+		'th'		=> ['type'=>'inline/block','head'=>'| ','tail'=>' '],
+		'td'		=> ['type'=>'inline/block','head'=>'| ','tail'=>' '],
+		'i'			=> ['type'=>'inline/text','head'=>'*','tail'=>'*'],
+		'em'		=> ['type'=>'inline/text','head'=>'*','tail'=>'*'],
+		'b'			=> ['type'=>'inline/text','head'=>'**','tail'=>'**'],
+		'strong'	=> ['type'=>'inline/text','head'=>'**','tail'=>'**'],
+		's'			=> ['type'=>'inline/text','head'=>'~~','tail'=>'~~'],
+		'strike'	=> ['type'=>'inline/text','head'=>'~~','tail'=>'~~'],
+		'del'		=> ['type'=>'inline/text','head'=>'~~','tail'=>'~~'],
+		'u'			=> ['type'=>'inline/text','head'=>'<u>','tail'=>'</u>'],
+		'code'		=> ['type'=>'inline/text','head'=>'`','tail'=>'`'],
+		'input'		=> ['type'=>'inline','head'=>'`input:`','tail'=>''],
 		'img'		=> ['type'=>'inline','head'=>'![','tail'=>']','attrs'=>['src'=>'','title'=>'','label'=>'','alt'=>'!IMAGE']],
-		'a'			=> ['type'=>'inlineblock','head'=>'[','tail'=>']','attrs'=>['href'=>'','title'=>'','label'=>'','alt'=>'!LINK']],
+		'a'			=> ['type'=>'inline/block','head'=>'[','tail'=>']','attrs'=>['href'=>'','title'=>'','label'=>'','alt'=>'!LINK']],
 	];
 
 	protected $htmlParts = [];
 
-	protected function rnl2br($str, $br = '<br />')
+	protected function rnl2br($str, $br = '<br>')
 	{
 		return preg_replace('/[\r\n]+/', $br, $str);
 	}
@@ -58,7 +57,6 @@ class HtmlToMkdw
 	protected function inlineImage($part)
 	{
 		$a = $this->markdownable['img']['attrs'];
-
 		if (preg_match_all('/(\b(?:'.implode('|', array_keys($a)).'))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is', $part[2], $m2)) {
 			foreach ($m2[1] as $m2k => $m2v) $a[strtolower($m2v)] = $m2[3][$m2k];
 		}
@@ -67,7 +65,6 @@ class HtmlToMkdw
 		if ($srl = $a['src']) {
 			$r = sprintf('![%s](%s%s)', $a['alt'] ? $a['alt'] : '!IMAGE', $srl, $a['title']?' "'.$a['title'].'"':'');
 		}
-
 		return $r;
 	}
 
@@ -195,7 +192,7 @@ class HtmlToMkdw
 				$i = $this->inlineLink($i, $return);
 				break;
 			case 'img':
-				$return[] = $this->inlineImage($part);
+				$return[] = $this->inlineImage($this->htmlParts[$i]);
 				break;
 		}
 		return $i;
@@ -322,7 +319,7 @@ class HtmlToMkdw
 			$close = @$part[1] == '/' ? '/' : '';
 			$tag = $part[0];
 
-			if (!$tag) $r = $this->rnl2br(trim($part[2])); // text
+			if (!$tag) $r = $this->rnl2br($part[2]); // text
 			else {
 				$md = $this->markdownable[$tag];
 				$r = $close ? $md['tail'] : $r = $md['head'];
@@ -336,16 +333,22 @@ class HtmlToMkdw
 						$return[] = $r;
 						break 2; // exit loop
 					case '/li': case '/dt': case '/dd':
+						if($blocklist > 1) $r = '';
 						break;
 					case 'ol': case 'ul': case 'dl':
 						if($blocklist++) $r = '';
 						break;
 					case 'li': case 'dt': case 'dd':
-						$r = $listtype . ' ';
-						if($listtype != '-') {
-							$listtype++;
-						} else if($tag == 'dd') {
-							$r .= '&nbsp;&nbsp;&nbsp;';
+						if($blocklist > 1){
+							$r = "<br> &bull; ";
+						} else {
+							if($listtype != '-') {
+								$r = $listtype++ . '. ';
+							} else if($tag == 'dd') {
+								$r = '- &rsaquo;&nbsp; ';
+							} else {
+								$r = '- ';
+							}
 						}
 						break;
 					case 'a':
@@ -475,7 +478,7 @@ class HtmlToMkdw
 
 		$html = preg_replace_callback('@(.*?)<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?)(/?)>@is',
 			function ($m) {
-				if(trim($m[1])) $this->htmlParts[] = ['', '', $m[1]];
+				if(trim($m[1], "\r\n")) $this->htmlParts[] = ['', '', $m[1]];
 				if (($tag = strtolower($m[3])) && @$this->markdownable[$tag]) {
 					$this->htmlParts[] = [$tag, $m[2], $m[4]];
 				}
