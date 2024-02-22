@@ -22,7 +22,7 @@ class MD {
 			'/((<[\w]+[^>]+)javascript\s*\:|(&)amp;)/i', '\2\3',
 			  $__Parsedown->text($text)
 		);
-		//*//
+		/*// DEPRECATED (Parsedown 에서 자동으로 하게 고침)
 		$__Parsedown->setBreaksEnabled(false);
 		$text = preg_replace_callback('@(<pre[^>]*>)(.+?)(<\/pre>)@s',
 			function ($m) use($__Parsedown) {
