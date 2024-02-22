@@ -18,9 +18,9 @@ class HtmlToMkdw
 		'h4'		=> ['type'=>'block','head'=>"\n#### ",'tail'=>"\n"],
 		'h5'		=> ['type'=>'block','head'=>"\n##### ",'tail'=>"\n"],
 		'h6'		=> ['type'=>'block','head'=>"\n###### ",'tail'=>"\n"],
-		'p'			=> ['type'=>'block','head'=>"\n",'tail'=>"\n"],
 		'div'		=> ['type'=>'block','head'=>'','tail'=>"\n"],
-		'blockquote'=> ['type'=>'block','head'=>"> ",'tail'=>"\n\n"],
+		'p'			=> ['type'=>'block','head'=>"\n",'tail'=>"\n"],
+		'blockquote'=> ['type'=>'block','head'=>"\n> ",'tail'=>"\n\n"],
 		'pre'		=> ['type'=>'block','head'=>"\n```\n",'tail'=>"\n```\n"],
 		'ol'		=> ['type'=>'block','head'=>"\n",'tail'=>"\n\n"],
 		'ul'		=> ['type'=>'block','head'=>"\n",'tail'=>"\n\n"],
@@ -54,11 +54,39 @@ class HtmlToMkdw
 		return preg_replace('/[\r\n]+/', $br, $str);
 	}
 
-	protected function parts_rtrim($index)
+	protected function array_ltrim($index, $array)
+	{
+		for ($i=$index; $i < -1; $i--) {
+			if(trim($array[$i])) break;
+			$array[$i] = '';
+		}
+		return $array;
+	}
+
+	protected function array_rtrim($index, $array)
+	{
+		for ($i=$index, $n=count($array); $i < $n; $i++) {
+			if(trim($array[$i])) break;
+			$array[$i] = '';
+		}
+		return $array;
+	}
+
+	protected function parts_ltrim($index, $chars = '')
+	{
+		for ($i=$index; $i < -1; $i--) {
+			if(($t = $this->htmlParts[$i]) && $t[0]) break;
+			if (!$chars) $t[2] = '';
+			else if ($t[2] = rtrim($t[2], $chars)) break;
+		}
+	}
+
+	protected function parts_rtrim($index, $chars = '')
 	{
 		for ($i=$index, $n=count($this->htmlParts); $i < $n; $i++) {
-			if($this->htmlParts[$i][0]) break;
-			$this->htmlParts[$i][2] = '';
+			if(($t = $this->htmlParts[$i]) && $t[0]) break;
+			if (!$chars) $t[2] = '';
+			else if ($t[2] = ltrim($t[2], $chars)) break;
 		}
 	}
 
@@ -143,7 +171,6 @@ class HtmlToMkdw
 				$md = $this->markdownable[$tag];
 				$r = $close ? $md['tail'] : $r = $md['head'];
 				$isblock = strpos($md['type'], 'block') !== false;
-				if($isblock) $r = $close ? preg_replace('/[^\n]/', '', $r) : '';
 
 				switch ($close.$tag) {
 					case '/code':
@@ -174,7 +201,9 @@ class HtmlToMkdw
 					case 'img':
 						$r = '`'.$this->inlineImage($part).'`';
 						break;
-					//default: break;
+					default:
+						if($isblock) $r = $close ? preg_replace('/[^\n]/', '', $r) : '';
+					break;
 				}
 			}
 
@@ -202,6 +231,7 @@ class HtmlToMkdw
 
 	protected function blockPre($i, &$return)
 	{
+		$array = [];
 		$blockpre = 0;
 
 		for ($i=$i, $n=count($this->htmlParts); $i < $n; $i++) {
@@ -213,6 +243,7 @@ class HtmlToMkdw
 			else {
 				$md = $this->markdownable[$tag];
 				$r = $close ? $md['tail'] : $r = $md['head'];
+				$isblock = strpos($md['type'], 'block') !== false;
 
 				switch ($close.$tag) {
 					case '/pre':
@@ -220,7 +251,7 @@ class HtmlToMkdw
 							$r = '';
 							break 1;
 						}
-						$return[] = $r;
+						$array[] = $r;
 						break 2; // exit loop
 					case 'pre':
 						if($blockpre++) $r = '';
@@ -229,31 +260,44 @@ class HtmlToMkdw
 						$r = ''; //pre>code 는 넘김
 						break;
 					case 'code':
-						if(@end($return) == "\n```\n"){
+						if(@end($array) == "\n```\n"){
 							// 코드 문법 강조를 위해 language 처리
 							if(preg_match_all('/(\b(?:class))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is', $part[2], $m2)) {
 								if(($class = $m2[3][0]) && substr($class, 0, 9) == 'language-'){
-									$return[key($return)] = "\n```".substr($class, 9)."\n";
+									$array[key($array)] = "\n```".substr($class, 9)."\n";
 								}
 							}
 							$r = ''; //pre>code 는 넘김
 						} else {
-							$i = $this->inlineCode($i, $return);
+							$i = $this->inlineCode($i, $array);
 							continue 2; // inlineCode 에서 처리 하니 넘김
 						}
 						break;
 					case 'a':
 					case 'img':
-						$i = $this->inlineElement($tag, $i, $return);
+						$i = $this->inlineElement($tag, $i, $array);
 						continue 2; // inlineElement 에서 처리 하니 넘김
 						break;
-					//default: break;
+					default:
+						if($isblock) {
+							$r = preg_replace('/[^\n]/', '', $r);
+							if ($close) {
+								// 마지막 블럭 태그가 2개 이상일때 1개만 적용
+								if (($t = @$this->htmlParts[$i + 1]) && ($t[1] == '/')
+									&& ($t2 = @$this->markdownable[$t[0]]) && (strpos($t2['type'], 'block') !== false))
+								{
+									$r = '';
+								}
+							}
+						}
+					break;
 				}
 			}
 
-			if($r) $return[] = $r;
+			if($r) $array[] = $r;
 		}
 
+		$return = array_merge($return, $this->array_rtrim(1, $array));
 		return $i;
 	}
 
@@ -262,11 +306,11 @@ class HtmlToMkdw
 		if(!@$__Prefix) {
 			$__Prefix = function ($str) {
 				if(!$str) return '';
-				$head = "\n> ";
-				return implode($head, explode("\n", $str));
+				return implode("\n> ", explode("\n", $str));
 			};
 		}
 
+		$array = [];
 		$blockouote = 0;
 
 		for ($i=$i, $n=count($this->htmlParts); $i < $n; $i++) {
@@ -285,30 +329,34 @@ class HtmlToMkdw
 							$r = '';
 							break 1;
 						}
-						$return[] = $r;
+						//$array[] = $r;
 						break 2; // exit loop
 					case 'blockquote':
 						if($blockouote++) $r = '';
+						else {
+							//$array[] = "\n> ";
+							//$array[] = "\n"; // 처음 한 줄 뛰우고 시작
+							continue 2;
+						}
 						break;
 					case 'pre':
-						$array = [];
 						$i = $this->blockPre($i, $array);
-						$return[] = $__Prefix(implode('', $array));
 						continue 2; // blockPre 에서 처리 하니 넘김
 						break;
 					case 'a':
 					case 'img':
 					case 'code':
-						$i = $this->inlineElement($tag, $i, $return);
+						$i = $this->inlineElement($tag, $i, $array);
 						continue 2; // inlineElement 에서 처리 하니 넘김
 						break;
 					//default: break;
 				}
 			}
 
-			if($r) $return[] = $__Prefix($r);
+			if($r) $array[] = $r;
 		}
 
+		$return[] = $__Prefix("\n".implode('', $this->array_rtrim(0, $array))) ."\n>\n";
 		return $i;
 	}
 
@@ -498,21 +546,16 @@ class HtmlToMkdw
 		$this->htmlParts = [];
 
 		$html = preg_replace('#(<!--.*?-->|\r)#s', '', $html);
-		$html = preg_replace('/[\r\n]*<(hr|br)[^>]*>[\r\n]*/i', '<\1>', $html);
+		$html = preg_replace('/[\r\n]*<(hr|br)[^>]*>[\r\n]*/i', '<$1>', $html);
 		$html = preg_replace_callback('@(.*?)<(/?)([a-z]+[0-9]?)((?>"[^"]*"|\'[^\']*\'|[^>])*?)(/?)>@is',
 			function ($m) use(&$ltrim) {
-				$this->htmlParts[] = ['', '', $this->escapeMKDW($ltrim ? ltrim($m[1],"\r\n") : $m[1])];
-				$ltrim = false;
+				$m[1] = $this->escapeMKDW($ltrim ? ltrim($m[1],"\r\n") : $m[1]) AND $ltrim = false;
+				if($m[1]) $this->htmlParts[] = ['', '', $m[1]];
 				if (($tag = strtolower($m[3])) && ($md = @$this->markdownable[$tag])) {
 					$isblock = strpos($md['type'], 'block') !== false;
-					$isinline = strpos($md['type'], 'inline') !== false;
 					if ($isblock) { // 블록 안쪽 (끝, 시작) 줄 바꿈 지움
-						if($m[2]=='/') {
-							end($this->htmlParts);
-							if (($t = key($this->htmlParts)) > -1) {
-								$this->htmlParts[$t][2] = rtrim($this->htmlParts[$t][2], "\r\n");
-							}
-							//if(!$isinline) $ltrim = true; // 블록 바깥 다음 줄 바꿈 지움 (자동 입력)
+						if(($m[2]=='/') && ($t = count($this->parts_ltrim) - 1) > -1) {
+							$this->parts_ltrim($t, "\n\r");
 						} else $ltrim = true;
 					}
 					$this->htmlParts[] = [$tag, $m[2], $m[4]];
@@ -567,7 +610,7 @@ class HtmlToMkdw
 		$html = implode('', $return) . $html;
 		//$html = preg_replace('/[\n]{3,}/', "\n\n", $html);
 		//debugPrint($html);
-		return preg_replace('/^(((> )[\r\n]+){2,}>\s$|(\n\n)[\n]+)/m', "\\3\\4", $html);
+		return preg_replace('/(((> )[\r\n]+){2,}>\s$|(\n\n\n)[\n]+|((\s\s)[\s]+))/', "$3$4$6", $html);
 	}
 }
 

@@ -1143,6 +1143,7 @@ class Parsedown
         {
             $text = $matches[2];
             $text = preg_replace("/[ ]*\n/", ' ', $text);
+
             // compile code tags by afox
             $text = $this->line($text);
 
@@ -1522,8 +1523,9 @@ class Parsedown
             elseif (!$permitRawHtml)
             {
                 // compile code tags by afox
-                if ($Element['name'] == 'code')
+                if ($Element['name'] == 'code') {
                     $markup .= $this->line($text);
+                }
                 else $markup .= self::escape($text, true);
             }
             else
