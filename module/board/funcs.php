@@ -53,7 +53,7 @@ function getDocumentList($id, $count, $page, $search = "", $category = "", $orde
 		];
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
-		$search = explode(" ", trim($search));
+		$search = explode(" ", str_replace(array('<','>'), array('&lt;','&gt;'), trim($search)));
 
 		if (!empty($search)) {
 			$index = 0;
@@ -130,11 +130,20 @@ function getHashtags($content)
 	return implode(",", $tags);
 }
 
-function highlightText($key, $html)
+function highlightText($search, $html)
 {
-	return preg_replace_callback('#((?:(?!<[/a-z]).)*)([^>]*>|$)#si', function ($mc) use ($key)
-		{
-			return str_ireplace($key, "<mark>" . $key . "</mark>", $mc[1]) . $mc[2];
+	$keys = [
+		"!" => "wr_title", //!title
+		":" => "wr_regdate", //:202010
+		"+" => "wr_tags", //+tag
+		"?" => "mb_nick", //?nick
+	];
+	$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
+	$s = explode(" ", str_replace(array('<','>'), array('&lt;','&gt;'), trim($search)));
+
+	return preg_replace_callback('@(.*?)(</?[a-z]+[0-9]?(?>"[^"]*"|\'[^\']*\'|[^>])*?/?>)@is',
+		function ($mc) use ($s) {
+			return preg_replace('/('.implode('|', $s).')/', "<mark>$1</mark>", $mc[1]) . $mc[2];
 		}
 	, $html);
 }
