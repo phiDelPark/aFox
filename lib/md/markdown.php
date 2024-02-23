@@ -17,6 +17,7 @@ class MD {
 	public static function toHTML($text)
 	{
 		if (!@$__Parsedown) $__Parsedown = new Parsedown;
+		$__Parsedown->setUrlsLinked(false);
 		$text = preg_replace(
 			'/((<[\w]+[^>]+)javascript\s*\:|(&)amp;)/i', '\2\3',
 			  $__Parsedown->text($text)
