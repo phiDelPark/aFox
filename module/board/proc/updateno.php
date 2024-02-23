@@ -30,7 +30,7 @@ function proc($data) {
 
 			DB::update(_AF_DOCUMENT_TABLE_,
 				[
-					'^wr_no'=>'wr_no+1'
+					'wr_no(=)'=>'wr_no+1'
 				], [
 					'wr_srl'=>$wr_srl
 				]

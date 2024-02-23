@@ -8,7 +8,7 @@ function proc($data)
 	$page = empty($data["page"]) ? 1 : $data["page"];
 
 	if (empty($mids)) $mids[] = "@@@@@@@@@@"; // 검색할 모듈이 없으면 임시 값
-	$_wheres = ["md_id{IN}" => implode(",", $mids) , "(_AND_)" => [], "(_OR_)" => []];
+	$_wheres = ["md_id{IN}" => implode(",", $mids) , "_AND_" => [], "_OR_" => []];
 
 	if (!empty($search)) {
 		$keys = [
@@ -27,18 +27,17 @@ function proc($data)
 			$index = 0;
 			foreach ($search as $value) {
 				$value = explode("&", trim($value));
-				$and_or = count($value) > 1 ? "(_AND_)" : "(_OR_)";
+				$and_or = count($value) > 1 ? "_AND_" : "_OR_";
 
 				foreach ($value as $v) {
-					$cmd = '{LIKE}';
+					$cmd = $key == "wr_tags" ? '{REGEXP}' : '{LIKE}';
 					if ($key == "wr_regdate") {
 						$v = str_split($v, 4);
 						$v = $v[0].(empty($v[1])?"":"-".implode("-",str_split($v[1],2)))."%";
-					} else if ($key == "wr_tags") {
-						$cmd = '{REGEXP}'; $key = '^'.$key;
+					} else if ($cmd == '{REGEXP}') {
 						$v = "('(^|,)".DB::escape($v)."($|,)')";
 					} else {
-						$v = DB::escape("%" . $v. "%");
+						$v = "%" . $v. "%";
 					}
 					$_wheres[$and_or][$key . $cmd . '[' . $index++ . ']'] = $v;
 				}

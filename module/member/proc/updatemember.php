@@ -161,8 +161,8 @@ function proc($data) {
 			}
 
 			$in_data['mb_id'] = $data['mb_id'];
-			$in_data['^mb_regdate'] = 'NOW()';
-			$in_data['^mb_login'] = 'NOW()';
+			$in_data['mb_regdate(=)'] = 'NOW()';
+			$in_data['mb_login(=)'] = 'NOW()';
 			if(empty($in_data['mb_point'])) $in_data['mb_point'] = 0;
 
 			DB::insert(_AF_MEMBER_TABLE_, $in_data);

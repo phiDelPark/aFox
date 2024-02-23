@@ -5,7 +5,8 @@ define('ENFORCE_SSL', 1);
 define('RELEASE_SSL', 2);
 define('FOLLOW_REQUEST_SSL', 0);
 
-function getUrlQuery(){
+function getUrlQuery()
+{
 	$n = func_num_args();
 	$a = func_get_args();
 	$p = [];
@@ -18,7 +19,8 @@ function getUrlQuery(){
 	return empty($a[1]) ? $p : $p[$a[1]];
 }
 
-function setUrlQuery(){
+function setUrlQuery()
+{
 	//$n = func_num_args();
 	$a = func_get_args();
 	$url = $a[0];
@@ -34,11 +36,13 @@ function setUrlQuery(){
 	return $url . ($n === 0 ? $r : substr('?'.$r, 0, -1));
 }
 
-function getQuery($val){
+function getQuery($val)
+{
 	return getUrlQuery(getUrl(), $val);
 }
 
-function setQuery(){
+function setQuery()
+{
 	$a = array_merge([getUrl()], func_get_args());
 	$u = call_user_func_array('setUrlQuery', $a);
 	$p = strpos($u, '?');
@@ -47,8 +51,8 @@ function setQuery(){
 }
 
 // XE getRequestUri 참고 https://www.xpressengine.com/
-function getRequestUri($ssl_mode = FOLLOW_REQUEST_SSL){
-	static $__url = [];
+function getRequestUri($ssl_mode = FOLLOW_REQUEST_SSL)
+{	static $__url = [];
 	if(!isset($_SERVER['SERVER_PROTOCOL'])) return; // Check HTTP Request
 	if(_AF_USE_SSL_ === ENFORCE_SSL) $ssl_mode = ENFORCE_SSL; // always
 	$domain = _AF_DOMAIN_ ? _AF_DOMAIN_ : $_SERVER['HTTP_HOST'];
@@ -78,7 +82,8 @@ function getRequestUri($ssl_mode = FOLLOW_REQUEST_SSL){
 	return $__url[$ssl_mode][$domain_key];
 }
 
-function getRequestMethod(){
+function getRequestMethod()
+{
 	if(isset($_SERVER[($s='HTTP_X_REQUESTED_WITH')]) && $_SERVER[$s] == 'XMLHttpRequest'){
 		return strpos($_SERVER['HTTP_ACCEPT'],'json')?'JSON':(strpos($_SERVER['HTTP_ACCEPT'],'xml')?'XMLRPC':'JSCALLBACK');
 	} else {
@@ -86,12 +91,14 @@ function getRequestMethod(){
 	}
 }
 
-function getScriptPath(){ static $__scriptpath;
+function getScriptPath()
+{	static $__scriptpath;
 	if(!@$__scriptpath) $__scriptpath = preg_replace('/index.php$/i', '', str_replace('\\', '/', $_SERVER['SCRIPT_NAME']));
 	return $__scriptpath;
 }
 
-function getUrl(){
+function getUrl()
+{
 	if(_AF_USE_SSL_ === ENFORCE_SSL || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on'))
 		$uri = getRequestUri(ENFORCE_SSL); // If using SSL always
 	elseif(_AF_USE_SSL_ === RELEASE_SSL) // optional SSL use
@@ -104,8 +111,8 @@ function getUrl(){
 	return $n > 0 ? call_user_func_array('setUrlQuery', array_merge([$url], $a)) : $url;
 }
 
-function getSiteMenu($get = ''){
-	static $__menus = [];
+function getSiteMenu($get = '')
+{	static $__menus = [];
 	if(!isset($__menus['header']) || !isset($__menus['footer'])){
 		$i_act = -1;
 		for ($i=0; $i < 2; $i++){
@@ -138,8 +145,8 @@ function getSiteMenu($get = ''){
 }
 
 // 모듈 설정 가져오기
-function getModule($id, $get = ''){
-	static $__md_cfg = [];
+function getModule($id, $get = '')
+{	static $__md_cfg = [];
 	if(!isset($__md_cfg[$id])){
 		$out = DB::get(_AF_MODULE_TABLE_, ['md_id'=>$id]);
 		$__md_cfg[$id] = empty($out['md_id']) ? [] : $out;
@@ -147,8 +154,8 @@ function getModule($id, $get = ''){
 	return $get ? $__md_cfg[$id][$get] : $__md_cfg[$id];
 }
 
-function getMember($id, $get = ''){
-	static $__members = [];
+function getMember($id, $get = '')
+{	static $__members = [];
 	if(!isset($__members[$id])){
 		$skey = is_numeric($id) ? 'mb_srl' : 'mb_id';
 		$out = DB::get(_AF_MEMBER_TABLE_, [$skey => $id]);
@@ -163,8 +170,8 @@ function getMember($id, $get = ''){
 	return $get ? $__members[$id][$get] : $__members[$id];
 }
 
-function getFileList($id, $target){
-	static $__file_list = [];
+function getFileList($id, $target)
+{	static $__file_list = [];
 	$key = $id.'_'.$target;
 	if(!isset($__file_list[$key])){
 		$out = DB::gets(_AF_FILE_TABLE_, ['md_id'=>$id,'mf_target'=>$target], 'mf_type');
@@ -174,7 +181,8 @@ function getFileList($id, $target){
 }
 
 // 활동 체크를 위해 기록
-function setHistory($act, $value, $allowdup = false){ global $_MEMBER;
+function setHistory($act, $value, $allowdup = false)
+{	global $_MEMBER;
 	if(!($mb_srl=@$_MEMBER['mb_srl'])) return false;
 	if(!$allowdup && DB::count(_AF_HISTORY_TABLE_,
 		['hs_action{LIKE}'=>'%::'.$act.'::%', 'mb_srl'=>$mb_srl]
@@ -186,7 +194,7 @@ function setHistory($act, $value, $allowdup = false){ global $_MEMBER;
 			'mb_srl'=>$mb_srl,
 			'hs_action'=>'::'.$act.'::',
 			'hs_value'=>$value,
-			'^hs_regdate'=>'NOW()'
+			'hs_regdate(=)'=>'NOW()'
 		]);
 	} catch (Exception $ex){
 		DB::rollback();
@@ -195,18 +203,20 @@ function setHistory($act, $value, $allowdup = false){ global $_MEMBER;
 	DB::commit();
 	return true;
 }
-function getHistoryList($act, $select = 'hs_value'){ global $_MEMBER;
+function getHistoryList($act, $select = 'hs_value')
+{	global $_MEMBER;
 	if(!($mb_srl=@$_MEMBER['mb_srl'])) return [];
 	return DB::gets(_AF_HISTORY_TABLE_, $select,
-		['hs_action{LIKE}'=>'%::'.$act.'::%', 'mb_srl'=>$mb_srl],
-		'hs_regdate'
+		['hs_action{LIKE}'=>'%::'.$act.'::%', 'mb_srl'=>$mb_srl], 'hs_regdate'
 	);
 }
-function getHistory($act){
+function getHistory($act)
+{
 	return count($his=getHistoryList($act)) ? $his[0]['hs_value'] : null;
 }
 
-function setPoint($point, $mb_srl = 0){ global $_MEMBER;
+function setPoint($point, $mb_srl = 0)
+{	global $_MEMBER;
 	if(!($mb_srl = $mb_srl ? $mb_srl : @$_MEMBER['mb_srl']) || !$point) return;
 	$mb = DB::get(_AF_MEMBER_TABLE_, 'mb_point,mb_rank', ['mb_srl'=>$mb_srl]);
 	// 115 초과시 에러... 115는 관리자. 109는 메니져
@@ -214,7 +224,7 @@ function setPoint($point, $mb_srl = 0){ global $_MEMBER;
 	if(($mb['mb_point'] + $point) < 0){ // 모자르면 에러
 		return set_error(getLang('warn_shortage', ['point']).' ('.($mb['mb_point']+$point).')', 3701);
 	}
-	$_setvals = ['^mb_point'=>'mb_point'.($point>0?'+':'').$point];
+	$_setvals = ['mb_point(=)'=>'mb_point'.($point>0?'+':'').$point];
 	if($mb_rank < 100){ // 99이하 일반회원, 포인트만큼계급조정, 최대50
 		$_sum_point = $mb['mb_point'] + $point;
 		$_rank = ($_sum_point > 250000) ? 50 : floor(sqrt(floor($_sum_point / 10) / 10));
@@ -228,18 +238,21 @@ function setPoint($point, $mb_srl = 0){ global $_MEMBER;
 	}
 }
 
-function isAdmin(){ global $_MEMBER;
+function isAdmin()
+{	global $_MEMBER;
 	return !empty($_MEMBER['mb_srl']) && $_MEMBER['mb_rank'] == 's';
 }
 
-function isManager($md_id){ global $_MEMBER;
+function isManager($md_id)
+{	global $_MEMBER;
 	if(!$md_id || empty($_MEMBER['mb_srl'])) return false;
 	if($_MEMBER['mb_rank'] == 's' || $_MEMBER['mb_rank'] == 'm') return true;
 	if(!($module = getModule($md_id)) || empty($module['md_manager'])) return false;
 	return $module['md_manager'] === $_MEMBER['mb_srl'];
 }
 
-function isGrant($chk, $md_id){
+function isGrant($chk, $md_id)
+{
 	if(!$md_id || !$chk) return false;
 	if($md_id == '_AFOXtRASH_') $grant = 'm'; // 휴지통은 메니져 이상
 	else {
@@ -249,19 +262,22 @@ function isGrant($chk, $md_id){
 	return checkGrant($grant);
 }
 
-function checkGrant($chk){ global $_MEMBER;
+function checkGrant($chk)
+{	global $_MEMBER;
 	if(is_null($chk) || strlen($chk) !== 1) return false;
 	$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 	// [s = admin, m = manager] // 0 = 48, m = 109, s = 115, 초과시 에러
 	return $rank < 116 && ord($chk) <= $rank;
 }
 
-function checkProtect($key){ global $_PROTECT;
+function checkProtect($key)
+{	global $_PROTECT;
 	$grant = $_PROTECT[$key]['grant'];
 	return !is_null($grant) && checkGrant($grant);
 }
 
-function checkProtectData($key, $data){ global $_MEMBER; global $_PROTECT;
+function checkProtectData($key, $data)
+{	global $_PROTECT; global $_MEMBER;
 	$grade = empty($_MEMBER) ? 'guest' : $_MEMBER['mb_grade'];
 	if(!empty($_MEMBER['mb_srl']) && !empty($data['mb_srl']) && $_MEMBER['mb_srl'] === $data['mb_srl']){
 		$_PROTECT[$key][$grade] = '*'; //자기 자신 제외
@@ -272,7 +288,8 @@ function checkProtectData($key, $data){ global $_MEMBER; global $_PROTECT;
 	return $result;
 }
 
-function checkPassword($password, $hash){
+function checkPassword($password, $hash)
+{
 	try {
 		$password = trim($password);
 		if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT')
@@ -286,7 +303,8 @@ function checkPassword($password, $hash){
 	}
 }
 
-function createHash($password){
+function createHash($password)
+{
 	try {
 		$password = trim($password);
 		if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT')
@@ -301,18 +319,20 @@ function createHash($password){
 	}
 }
 
-function sendNote($srl, $msg){ global $_MEMBER;
+function sendNote($srl, $msg)
+{	global $_MEMBER;
 	if(!$srl || !@$_MEMBER['mb_srl'] || $srl === $_MEMBER['mb_srl']) return false;
 	DB::insert(_AF_NOTE_TABLE_, [
 		'mb_srl'=>$srl,
 		'nt_sender'=>$_MEMBER['mb_srl'],
 		'nt_sender_nick'=>$_MEMBER['mb_nick'],
 		'nt_content'=>strip_tags($msg), // xssClean($msg)
-		'^nt_send_date'=>'NOW()'
+		'nt_send_date(=)'=>'NOW()'
 	]);
 }
 
-function unlinkFile($file){
+function unlinkFile($file)
+{
 	@chmod($file, 0777);
 	if(!@unlink($file)){
 		@chmod($file, _AF_FILE_PERMIT_);
@@ -320,7 +340,8 @@ function unlinkFile($file){
 	} else return true;
 }
 
-function unlinkDir($dir){
+function unlinkDir($dir)
+{
 	@chmod($dir, 0777);
 	if(!@rmdir($dir)){
 		@chmod($dir, _AF_DIR_PERMIT_);
@@ -328,9 +349,9 @@ function unlinkDir($dir){
 	} else return true;
 }
 
-function unlinkAll($dir, $subdir = true){
-	$ret = true; // 폴더가 없어도 성공으로 간주
-	if(is_dir($dir)){
+function unlinkAll($dir, $subdir = true)
+{
+	if(($ret = true) && is_dir($dir)){
 		$handle = @opendir($dir); // 절대경로
 		while ($file = readdir($handle)){
 			if($file != '.' && $file != '..'){ // 하위 폴더면
@@ -345,7 +366,8 @@ function unlinkAll($dir, $subdir = true){
 	return $ret;
 }
 
-function moveUploadedFile($file, $dest, $max_size = 0){
+function moveUploadedFile($file, $dest, $max_size = 0)
+{
 	if($file['error'] === UPLOAD_ERR_OK){
 		// HTTP post로 전송된 것인지 체크합니다.
 		if(!is_uploaded_file($file['tmp_name'])) return set_error(getLang('error_upload(-1)'),10489);
@@ -359,24 +381,21 @@ function moveUploadedFile($file, $dest, $max_size = 0){
 	} else return set_error(getLang('error_upload('.$file['error'].')'),10400+$file['error']);
 }
 
-function escapeMKDW($str){
-	return preg_replace('/([\\\`\*\_\{\}\[\]\(\)\>\#\+\-\.\!])/m', '\\\\$1', $str);
-}
-
 function escapeHTML($str, $quote = ENT_COMPAT, $endouble = true){
 	//$str = str_replace('&', '&amp;', $str);  // double_encode = false
 	return htmlspecialchars($str, $quote | ENT_HTML401, 'UTF-8', $endouble);
 }
 
-function xssClean($html, $tomd = false){ // to MD
-	// html 타입이면 toMKDW
+function xssClean($html, $tomd = false)
+{	// to MD // html 타입이면 toMKDW
 	if($tomd) return MD::toMKDW($html, isAdmin());
 	else {
-		return strip_tags($html, (isAdmin()?'<widget><script><style>':'').'<br>');
+		return strip_tags($html, (isAdmin()?'<widget><script><style>':'').'<br><hr>');
 	}
 }
 
-function toHTML($text, $type, $class = 'current_content'){
+function toHTML($text, $type, $class = 'current_content')
+{
 	if(!(int)$type) $text = nl2br(escapeHTML($text));
 	else {
 		$text = MD::toHTML($text);
@@ -398,8 +417,8 @@ function toHTML($text, $type, $class = 'current_content'){
 	return $class ? '<div class="'.$class.'">'.$text.'</div>' : $text;
 }
 
-function triggerAddonCall($addons, $position, $trigger, &$data){
-	static $__triggerAddonCall;
+function triggerAddonCall($addons, $position, $trigger, &$data)
+{	static $__triggerAddonCall;
 	if(!@$__triggerAddonCall){
 		$__triggerAddonCall = function($_CALLED, $_ADDON, &$_DATA){
 			include $_CALLED['file'];
@@ -426,8 +445,8 @@ function triggerAddonCall($addons, $position, $trigger, &$data){
 	return true;
 }
 
-function triggerModuleCall($modules, $position, $trigger, &$data){
-	static $__triggerModuleCall;
+function triggerModuleCall($modules, $position, $trigger, &$data)
+{	static $__triggerModuleCall;
 	if(!@$__triggerModuleCall){
 		$__triggerModuleCall = function($_CALLED, &$_DATA){
 			include $_CALLED['file'];
@@ -443,9 +462,9 @@ function triggerModuleCall($modules, $position, $trigger, &$data){
 }
 
 // TODO 후에 모듈쪽에서 트리거가 필요할때를 대비해 함수명 통일
-function triggerCall($position, $trigger, &$data){
-	global $_MEMBER; if(_MODULE_ == 'admin') return true; //skip admin
-	static $__triggerCall;
+function triggerCall($position, $trigger, &$data)
+{	global $_MEMBER; static $__triggerCall;
+	if(_MODULE_ == 'admin') return true; //skip admin
 	if(!@$__triggerCall && ($__triggerCall = ['M'=>[], 'A'=>[]])){
 		$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 		DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
@@ -461,7 +480,8 @@ function triggerCall($position, $trigger, &$data){
 	return true;
 }
 
-function installModuleTrigger($id, $access){
+function installModuleTrigger($id, $access)
+{
 	if(DB::count(_AF_TRIGGER_TABLE_,
 		['tg_key'=>'M','tg_id'=>$id,'use_pc'=>1,'use_mobile'=>1,'grant_access'=>$access]
 	)!==1){
@@ -472,9 +492,9 @@ function installModuleTrigger($id, $access){
 	}
 }
 
-function displayModule(){
+function displayModule()
+{	global $_CFG; global $_MEMBER;
 	if(!_MODULE_) return;
-	global $_CFG; global $_MEMBER;
 	function __module_call($tpl_path, $tpl_file, $_DATA){
 		global $_CFG; global $_MEMBER;
 		include $tpl_path . $tpl_file;
@@ -505,8 +525,8 @@ function displayModule(){
 	}
 }
 
-function displayWidget($_ID, $_WIDGET = []){
-	global $_MEMBER; ob_start();
+function displayWidget($_ID, $_WIDGET = [])
+{	global $_MEMBER; ob_start();
 	if(file_exists(_AF_WIDGETS_PATH_ . $_ID . '/index.php')){
 		include _AF_WIDGETS_PATH_ . $_ID . '/index.php';
 	} else messageBox(getLang('error_founded'), 4201, getLang('Widget').': '.$_ID);
@@ -517,7 +537,8 @@ function displayEditor($_ID, $_CONTENT, $_EDITOR = []){
 	@include_once _AF_MODULES_PATH_ . 'editor/index.php';
 }
 
-function cutstr($str, $length, $tail = '...'){
+function cutstr($str, $length, $tail = '...')
+{
 	if($length < 1) return $str;
 	$count = 0;
 	for ($i=$length; $i > 0; $i--){
@@ -527,7 +548,8 @@ function cutstr($str, $length, $tail = '...'){
 	return substr($str, 0, $count) . $tail;
 }
 
-function shortFileSize($size){
+function shortFileSize($size)
+{
 	$tails = ['B','K','M','G','T'];
 	for ($i = 0; $i < 4; $i++){
 		if($size <= 1024) break;
@@ -536,7 +558,8 @@ function shortFileSize($size){
 	return round($size, 1) . $tails[$i];
 }
 
-function timePassed($datetime){
+function timePassed($datetime)
+{
 	$t = time() - strtotime($datetime);
 	$vs1 = ['minute','hour','day', 'week', 'month','year',  ''];
 	$vs2 = [60,	  3600,  86400, 604800, 2592000,31536000,1];
@@ -546,7 +569,8 @@ function timePassed($datetime){
 	return $value.' '.$vs1[$key-1].($value > 1 ? 's' : '').' ago';
 }
 
-function isMobilePhone(){
+function isMobilePhone()
+{
 	$agent = $_SERVER['HTTP_USER_AGENT'];
 	// Check if user-agent is a tablet PC as iPad or Andoid tablet.
 	if(preg_match("/iPad|Android|webOS|hp-tablet|PlayBook/", $agent)){
@@ -557,21 +581,24 @@ function isMobilePhone(){
 	return false;
 }
 
-function isCrawler(){
+function isCrawler()
+{
 	$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
 	return preg_match("/bot|crawl|slurp|spider|facebook|fetch|twikle|wotbox|pingdom|yahooseeker|google keyword|curl|request/", $agent);
 }
 
-function insertVisitorHistory(){
+function insertVisitorHistory()
+{
 	$addr=strip_tags($_SERVER['REMOTE_ADDR']);
 	if($addr && DB::count(_AF_VISITOR_TABLE_,['mb_ipaddress'=>$addr,'^'=>'TIMESTAMPDIFF(HOUR,`vs_regdate`,DATE_ADD(NOW(),INTERVAL -1 HOUR))<1'])===0){
 		DB::insert(_AF_VISITOR_TABLE_,[
-			'mb_ipaddress'=>$addr,'vs_agent'=>strip_tags($_SERVER['HTTP_USER_AGENT']), 'vs_referer'=>strip_tags($_SERVER['HTTP_REFERER']),'^vs_regdate'=>'NOW()'
+			'mb_ipaddress'=>$addr,'vs_agent'=>strip_tags($_SERVER['HTTP_USER_AGENT']), 'vs_referer'=>strip_tags($_SERVER['HTTP_REFERER']),'vs_regdate(=)'=>'NOW()'
 		]);
 	}
 }
 
-function goUrl($url, $msg=NULL){
+function goUrl($url, $msg=NULL)
+{
 	$url = str_replace("&amp;", "&", $url);
 	if (headers_sent()){
 		echo '<script>'.($msg?'alert("'.$msg.'");':'').' location.replace("'.$url.'");</script>'
@@ -584,7 +611,8 @@ function goUrl($url, $msg=NULL){
 	if(is_string($msg)) exit($msg); //메세지 있으면 중단
 }
 
-function messageBox($message, $type = 1){
+function messageBox($message, $type = 1)
+{
 	$a_type = ['success', 'info', 'warning', 'danger'];
 	$type = ($type>2000 && $type<6000) ? ($type<4000 ? 2 : 3) : ($type>3 ? 1 : $type);
 	echo '<div class="alert alert-'.$a_type[$type].'" role="alert">'.$message.'</div>';

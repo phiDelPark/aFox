@@ -23,7 +23,7 @@ function proc($data) {
 					'md_title'=>getLang('combine_search'),
 					'md_list_count'=>(int)$count,
 					'md_extra'=>$ids,
-					'^md_regdate'=>'NOW()'
+					'md_regdate(=)'=>'NOW()'
 				]
 			);
 		} else {

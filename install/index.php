@@ -19,12 +19,12 @@ if(file_exists($datadir.'config/_db_config.php')) {
 if(is_dir($datadir) || @mkdir($datadir, 0707)) {
 	if(is_dir($datadir)) { chmod($datadir, 0707); }
 } else {
-	exit("<br>${datadir} 디렉토리를 생성하지 못했습니다.");
+	exit("<br>{$datadir} 디렉토리를 생성하지 못했습니다.");
 }
 
 if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
  if (!(is_readable($datadir) && is_writeable($datadir) && is_executable($datadir))){
-	exit("<br>${datadir} 디렉토리 퍼미션을 707로 변경하여 주세요.");
+	exit("<br>{$datadir} 디렉토리 퍼미션을 707로 변경하여 주세요.");
  }
 }
 
@@ -63,7 +63,7 @@ $dir_arr = array (
 );
 
 for ($i=0; $i<count($dir_arr); $i++) {
-	if(!is_dir($dir_arr[$i]) && !@mkdir($dir_arr[$i], 0755)) exit("${$dir_arr[$i]} 디렉토리를 생성하지 못했습니다.");
+	if(!is_dir($dir_arr[$i]) && !@mkdir($dir_arr[$i], 0755)) exit("{$dir_arr[$i]} 디렉토리를 생성하지 못했습니다.");
 	@chmod($dir_arr[$i], 0755);
 }
 

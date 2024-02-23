@@ -4,7 +4,7 @@
 	$search = @$_GET['search']?'%'.$_GET['search'].'%':null;
 	$board_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', [
 		'md_key'=>'board',
-		'(_OR_)' =>empty($search)?[]:['md_id{LIKE}'=>$search, 'md_title{LIKE}'=>$search]
+		'_OR_' =>empty($search)?[]:['md_id{LIKE}'=>$search, 'md_title{LIKE}'=>$search]
 	], 'md_regdate', (($_GET['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 	$board_list = setDataListInfo($board_list, $_GET['page'], 20, DB::foundRows());

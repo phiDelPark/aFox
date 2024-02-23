@@ -125,8 +125,8 @@ function proc($data)
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
 					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
-					'^wr_regdate'=>'NOW()',
-					'^wr_update'=>'NOW()'
+					'wr_regdate(=)'=>'NOW()',
+					'wr_update(=)'=>'NOW()'
 				]
 			)) {
 				$wr_srl = DB::insertId();
@@ -203,7 +203,7 @@ function proc($data)
 					'mf_type'=>$file['type'],
 					'mb_srl'=>$data['mb_srl'],
 					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
-					'^mf_regdate'=>'NOW()'
+					'mf_regdate(=)'=>'NOW()'
 				]);
 
 				$file['mf_srl'] = $mf_srl = DB::insertId();
@@ -239,7 +239,7 @@ function proc($data)
 				'wr_tags'=>substr($data['wr_tags'], 0, 255),
 				'wr_file'=>$file_count,
 				'wr_extra'=>empty($wr_extra)?'':serialize($wr_extra),
-				'^wr_update'=>'NOW()'
+				'wr_update(=)'=>'NOW()'
 			], [
 				'wr_srl'=>$wr_srl
 			]

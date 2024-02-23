@@ -65,7 +65,7 @@ function proc($data) {
 					'grant_list'=>empty($data['grant_list'])?'0':$data['grant_list'],
 					'grant_view'=>empty($data['grant_view'])?'0':$data['grant_view'],
 					'grant_upload'=>empty($data['grant_upload'])?'0':$data['grant_upload'],
-					'^md_regdate'=>'NOW()'
+					'md_regdate(=)'=>'NOW()'
 				]
 			);
 		} else {

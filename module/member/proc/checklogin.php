@@ -70,13 +70,13 @@ function proc($data) {
 		set_cookie('AF_AUTO_LOGIN', '', -1);
 	}
 
-	$setvalues = ['^mb_login'=>'NOW()'];
+	$setvalues = ['mb_login(=)'=>'NOW()'];
 
 	if(substr($mb['mb_login'], 0, 10) != date('Y-m-d')) {
 		// 포인트 //TODO 포인트 - 시 모자르면 로그인 못하게 할까?
 		$point = (int)(empty($_CFG['point_login'])?0:$_CFG['point_login']);
 		if($point !== 0) {
-			$setvalues['^mb_point'] = 'mb_point'.($point>0?'+':'').$point;
+			$setvalues['mb_point(=)'] = 'mb_point'.($point>0?'+':'').$point;
 			// 아직 $_MEMBER 에 정보가 없기에 직접 입력 필요
 			// setHistory('mb_login', $point, true);
 			DB::insert(_AF_HISTORY_TABLE_,
@@ -84,7 +84,7 @@ function proc($data) {
 					'mb_srl'=>$mb['mb_srl'],
 					'hs_action'=>'::mb_login::',
 					'hs_value'=>$point,
-					'^hs_regdate'=>'NOW()'
+					'hs_regdate(=)'=>'NOW()'
 				]
 			);
 		}

@@ -13,14 +13,13 @@ function proc($data) {
 	$count = 20;
 	$page = empty($data["page"]) ? 1 : $data["page"];
 	$search = empty($data['search']) ? '' : $data['search'];
-	$_wheres = ['md_id'=>'_AFOXtRASH_','mb_srl'=>$_MEMBER['mb_srl'], "(_AND_)" => [], "(_OR_)" => []];
+	$_wheres = ['md_id'=>'_AFOXtRASH_','mb_srl'=>$_MEMBER['mb_srl'], "_AND_" => [], "_OR_" => []];
 
 	if (!empty($search)) {
 		$keys = [
-			":" => "wr_title", //:title
-			//"@" => "mb_nick", //@nick
-			"#" => "wr_tags", //#tag
-			"?" => "wr_regdate", //?202010
+			"!" => "wr_title", //!title
+			":" => "wr_regdate", //:202010
+			"+" => "wr_tags", //+tag
 		];
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
@@ -30,17 +29,16 @@ function proc($data) {
 			$index = 0;
 			foreach ($search as $value) {
 				$value = explode("&", trim($value));
-				$and_or = count($value) > 1 ? "(_AND_)" : "(_OR_)";
+				$and_or = count($value) > 1 ? "_AND_" : "_OR_";
 				foreach ($value as $v) {
-					$cmd = '{LIKE}';
+					$cmd = $key == "wr_tags" ? '{REGEXP}' : '{LIKE}';
 					if ($key == "wr_regdate") {
 						$v = str_split($v, 4);
 						$v = $v[0].(empty($v[1])?"":"-".implode("-",str_split($v[1],2)))."%";
-					} else if ($key == "wr_tags") {
-						$cmd = '{REGEXP}'; $key = '^'.$key;
+					} else if ($cmd == '{REGEXP}') {
 						$v = "('(^|,)".DB::escape($v)."($|,)')";
 					} else {
-						$v = DB::escape("%" . $v. "%");
+						$v = "%" . $v. "%";
 					}
 					$_wheres[$and_or][$key . $cmd . '[' . $index++ . ']'] = $v;
 				}

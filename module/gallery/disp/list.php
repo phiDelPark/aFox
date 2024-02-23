@@ -6,9 +6,9 @@ function proc($data)
 	$search = empty($data["search"]) ? "" : $data["search"];
 	$page = empty($data["page"]) ? 1 : $data["page"];
 
-	$_wheres = ["md_id" => $data['id'], "(_AND_)" => [], "(_OR_)" => []];
+	$_wheres = ["md_id" => $data['id'], "_AND_" => [], "_OR_" => []];
 	if($search){
-		$_wheres['(_AND_)']['^mf_about{REGEXP}'] = "('(^|,)".DB::escape($search)."($|,)')";
+		$_wheres['_AND_']['mf_about{REGEXP}'] = "('(^|,)".DB::escape($search)."($|,)')";
 	}
 	$asc = isset($data['asc']);
 

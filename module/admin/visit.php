@@ -4,7 +4,7 @@
 	$_GET['page'] = @$_GET['page'] ? $_GET['page'] : 1;
 	$search = @$_GET['search'] ? trim($_GET['search']) : '';
 	$_wheres = [
-		"(_AND_)" => [], "(_OR_)" => []
+		"_AND_" => [], "_OR_" => []
 	];
 
 	if (!empty($search)) {
@@ -19,7 +19,7 @@
 			$index = 0;
 			foreach ($search as $value) {
 				$value = explode("&", trim($value));
-				$and_or = count($value) > 1 ? "(_AND_)" : "(_OR_)";
+				$and_or = count($value) > 1 ? "_AND_" : "_OR_";
 				foreach ($value as $v) {
 					if ($key == "vs_regdate") {
 						$v = str_split($v, 4);
@@ -27,7 +27,7 @@
 					} else {
 						$v = "%" . $v;
 					}
-					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = DB::escape($v . "%");
+					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = $v . "%";
 				}
 			}
 		}

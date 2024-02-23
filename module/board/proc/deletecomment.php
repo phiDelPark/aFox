@@ -58,7 +58,7 @@ function proc($data) {
 			);
 		} else {
 			DB::delete(_AF_COMMENT_TABLE_ , ['rp_srl'=>$rp_srl]);
-			DB::update(_AF_DOCUMENT_TABLE_, ['^wr_reply'=>'wr_reply-1'], ['wr_srl'=>$wr_srl]);
+			DB::update(_AF_DOCUMENT_TABLE_, ['wr_reply(=)'=>'wr_reply-1'], ['wr_srl'=>$wr_srl]);
 		}
 
 		// 포인트 삭제

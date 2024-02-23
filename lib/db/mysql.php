@@ -71,32 +71,29 @@ class DB {
 	private static function __where($info, $type = 'AND') {
 		$result = [];
 		foreach($info as $field => $value){
-			if(empty($field)) continue;
-			if(is_array($value) && ($field == '(_AND_)' || $field == '(_OR_)')) {
-				$type = $field == '(_OR_)' ? 'OR' : 'AND';
-				$tmp = self::__where($value, $type);
-				if(count($tmp) > 0) $result[] = '('.implode(' '.$type.' ', $tmp).')';
-			} else {
-				$operator = '=';
-				$noquote = strpos($field, '^') === 0;
-				if($noquote) $field = substr($field, 1);
-				//인덱스... 일단 만들어둠
-				if(preg_match("/^(.+)\[([0-9]+)\]$/", $field, $m)) {
-					$field = $m[1]; $index = $m[2];
+			if(is_array($value) && ($field == '_AND_' || $field == '_OR_')) {
+				if(($type = substr($field, 1, -1)) && ($tmp = self::__where($value, $type))) {
+					$result[] = '('.implode(" {$type} ", $tmp).')';
 				}
-				//(=|<>|<=|>=|<|>|IS|IN|LIKE|RLIKE)
-				if(preg_match("/^(.+){(=|<>|<=|>=|<|>|[A-Z]+)}$/", $field, $m)) {
-					$field = $m[1]; $operator = $m[2];
-					$noquote = $noquote || $operator == 'IS' || $operator == 'IN';
-					if($operator == 'IN') {
-						$tmp = []; $value = explode(',', $value);
-						foreach ($value as $v) { if(!empty($v)) $tmp[$v] = self::__quotes($v); }
+			} else if($field) {
+				$operator = '=';
+				$no_quote = false;
+				if(preg_match("/^(.+)\[([0-9]+)\]$/", $field, $m)) {
+					$field = $m[1]; $index = $m[2]; //인덱스... 일단 만들어둠
+				}
+				//(=|<>|<=|>=|<|>|IS|IN|LIKE|REGEXP)
+				if(preg_match("/^(.+)([{\(])(\.|[<>=]+|[A-Z]+)[}\)]$/", $field, $m)) {
+					$field = $m[1];
+					$operator = $m[3] === '.' ? '' : $m[3];
+					$no_quote = $m[2] === '(' || in_array($operator, ['IS', 'IN', 'REGEXP']);
+					if(($operator == 'IN') && ($value = explode(',', $value))) {
+						$tmp = [];
+						foreach ($value as $v) { if($v) $tmp[$v] = self::__quotes($v); }
 						if(count($tmp)===0) continue; $value = '('.implode(',', $tmp).')';
 					}
 				}
-				if(!$noquote) $value = self::__quotes($value);
-				if(empty($field) && !empty($value)) $result[] = $value;
-				else $result[] = sprintf("`%s`%s %s", $field, $operator, $value);
+				if($field !== '^' && !$no_quote) $value = self::__quotes($value);
+				$result[] = $field === '^' ? $value : sprintf("`%s`%s %s", $field, $operator, $value);
 			}
 		}
 		return $result;
@@ -115,7 +112,7 @@ class DB {
 				$group[] = $field;
 			} else {
 				$cm = empty($order) ? 'ORDER BY' : ',';
-				$order .= $field=='^'?sprintf("%s %s",$cm,$type):sprintf("%s `%s` %s",$cm,$field,$type);
+				$order .= sprintf("%s%s %s", $cm, $field=='^'?'':" `{$field}`", $type);
 			}
 		}
 		self::$order = $order;
@@ -212,10 +209,9 @@ class DB {
 	}
 
 	private static function __sets($opts) {
-		if(!empty($opts[0])) {
-			$r = self::__where($opts[0]);
-			if(count($r) > 0) self::$where = 'WHERE '.implode(' AND ', $r);
-		}elseif(is_array($opts[0])) self::$where = 'WHERE 1';
+		if(!empty($opts[0]) && $r = self::__where($opts[0])) {
+			self::$where = 'WHERE '.implode(' AND ', $r);
+		} else if(is_array($opts[0])) self::$where = 'WHERE 1';
 		if(!empty($opts[1])) self::__order($opts[1]);
 		if(!empty($opts[2])) self::__limit($opts[2]);
 	}
@@ -224,10 +220,10 @@ class DB {
 	DB::get(_TABLE_)
 	DB::get(_TABLE_, 'select', ['where'=>'value'])
 	DB::get(_TABLE_, ['where'=>'value']) // default select = '*'
-	// where group (or,and)
-	DB::get(_TABLE_, ['where'=>'value', '(_OR_)'=>['w1'=>'v1','w2'=>'v2']])
+	// where group (or, and)
+	DB::get(_TABLE_, ['where'=>'value', '_OR_'=>['w1'=>'v1','w2'=>'v2']])
 		-> WHERE where=value AND (w1=v1 OR w2=v2)
-	DB::get(_TABLE_, ['(_OR_)'=>['w1'=>'v1','w2'=>'v2'], '(_AND_)'=>['w3'=>'v3','w4'=>'v4']])
+	DB::get(_TABLE_, ['_OR_'=>['w1'=>'v1','w2'=>'v2'], '_AND_'=>['w3'=>'v3','w4'=>'v4']])
 		-> WHERE (w1=v1 OR w2=v2) AND (w3=v3 AND w4=v4)
 	**/
 	public static function get($table, $select = '*') {
@@ -251,18 +247,20 @@ class DB {
 	/** // list
 	DB::gets(_TABLE_)
 	DB::gets(_TABLE_, 'select', ['where'=>'value'])
-	// operator : ['field{(=|<>|<=|>=|<|>|IN|LIKE|IS)}'=>'value']
-	DB::gets(_TABLE_, ['where'=>'value','field1{>}'=>1,'field2{LIKE}'=>'value%'])
-	// command : ['^field'=>'command()'] // first char = '^' // not __quotes
-	DB::gets(_TABLE_, ['where'=>'value','^field'=>'NOW()','^'=>'LOWER(field)=\'abc\''])
+	// operator : ['field{.|=|<>|<=|>=|<|>|IS|IN|LIKE|REGEXP}'=>'value'] // . = none operator
+	// operator : ['field(.|=|<>|<=|>=|<|>|IS|IN|LIKE|REGEXP)'=>'value'] // no quote
+	DB::gets(_TABLE_, 'select', ['where'=>'value', 'field2{LIKE}'=>'value%'])
+	DB::gets(_TABLE_, 'select', ['where'=>'value', 'field1(>)'=>1, 'field(=)'=>'NOW()'])
+	// command : ['^'=>'command()']
+	DB::gets(_TABLE_, 'select', ['where'=>'value', '^'=>'LOWER(field)=\'abc\''])
 	// order by and (limit = 'start,count')
-	DB::gets(_TABLE_, ['where'=>'value'], 'order', '5,20')
-	DB::gets(_TABLE_, ['where'=>'value'], 'order1,order2', '1,5')
-	DB::gets(_TABLE_, ['where'=>'value'], ['order'=>'ASC'], '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], 'order', '5,20')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], 'order1,order2', '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['order'=>'ASC'], '1,5')
 	// order by and group by
-	DB::gets(_TABLE_, ['where'=>'value'], ['order'=>'DESC','group'=>'GROUP'], '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['order'=>'DESC','group'=>'GROUP'], '1,5')
 	// command order by : ['^'=>'command()']
-	DB::gets(_TABLE_, ['where'=>'value'], ['^'=>'rand()'], '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['^'=>'rand()'], '1,5')
 	**/
 	public static function gets($table) {
 		$callback = null;
@@ -296,9 +294,7 @@ class DB {
 		$fields = '';
 		$values = '';
 		foreach($data as $col => $value){
-			if(strpos($col, '^') === 0){
-				$col = substr($col, 1);
-			}
+			if(substr($col, -3) === '(=)') $col = substr($col, 0, -3);
 			else $value = self::__quotes($value);
 			$fields .= sprintf("`%s`,", $col);
 			$values .= sprintf("%s,", $value);
@@ -326,8 +322,7 @@ class DB {
 			if(self::$link === null) {self::__connect();}
 			$update = '';
 			foreach($data as $col => $value){
-				if(strpos($col, '^') === 0)
-					$col = substr($col, 1);
+				if(substr($col, -3) === '(=)') $col = substr($col, 0, -3);
 				else $value = self::__quotes($value);
 				$update .= sprintf("`%s`=%s, ", $col, $value);
 			}
@@ -464,10 +459,10 @@ class DB {
 
 	public static function escape($str) {
 		return str_replace(
-					['\\',"\0","\n","\r","'",'"',"\x1a"],
-					['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],
-					$str
-				);
+			['\\',"\x00","\x08","\n","\r","\t","\x1a","'",'"'],
+			['\\\\','\\0',"\\b",'\\n','\\r',"\\t",'\\Z',"\\'",'\\"'],
+			$str
+		);
 		// 연결이 되야 사용 가능하기에 안씀
 		// return mysql_real_escape_string($str);
 	}

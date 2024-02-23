@@ -44,7 +44,7 @@ function proc($data) {
 				[
 					'md_id'=>'_AFOXtRASH_',
 					'wr_updater'=>$md_id,
-					'^wr_update'=>'NOW()'
+					'wr_update(=)'=>'NOW()'
 				], [
 					'wr_srl'=>$wr_srl
 				]

@@ -39,7 +39,7 @@ function proc($data) {
 			[
 				'md_id'=>$doc['wr_updater'],
 				'wr_updater'=>'',
-				'^wr_update'=>'NOW()'
+				'wr_update(=)'=>'NOW()'
 			], [
 				'wr_srl'=>$wr_srl
 			]

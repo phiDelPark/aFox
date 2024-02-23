@@ -13,7 +13,7 @@ function proc($data) {
 	$count = 20;
 	$page = empty($data["page"]) ? 1 : $data["page"];
 	$search = empty($data['search']) ? '' : $data['search'];
-	$_wheres = ['mb_srl'=>$_MEMBER['mb_srl'], "(_AND_)" => [], "(_OR_)" => []];
+	$_wheres = ['mb_srl'=>$_MEMBER['mb_srl'], "_AND_" => [], "_OR_" => []];
 
 	if (!empty($search)) {
 		$keys = [
@@ -28,7 +28,7 @@ function proc($data) {
 			$index = 0;
 			foreach ($search as $value) {
 				$value = explode("&", trim($value));
-				$and_or = count($value) > 1 ? "(_AND_)" : "(_OR_)";
+				$and_or = count($value) > 1 ? "_AND_" : "_OR_";
 				foreach ($value as $v) {
 					if ($key == "nt_send_date") {
 						$v = str_split($v, 4);

@@ -129,8 +129,8 @@ function proc($data) {
 					'mb_nick'=>$data['mb_nick'],
 					'mb_password'=>$encrypt_password,
 					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
-					'^rp_regdate'=>'NOW()',
-					'^rp_update'=>'NOW()'
+					'rp_regdate(=)'=>'NOW()',
+					'rp_update(=)'=>'NOW()'
 				]
 			);
 
@@ -145,7 +145,7 @@ function proc($data) {
 				}
 			}
 
-			DB::update(_AF_DOCUMENT_TABLE_, ['^wr_reply'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);
+			DB::update(_AF_DOCUMENT_TABLE_, ['wr_reply(=)'=>'wr_reply+1'], ['wr_srl'=>$wr_srl]);
 
 			sendNote(
 				empty($sendsrl) ? $doc['mb_srl'] : $sendsrl,
@@ -162,7 +162,7 @@ function proc($data) {
 					'rp_secret'=>$data['rp_secret'],
 					'rp_type'=>$data['rp_type'],
 					'rp_content'=>$data['rp_content'],
-					'^rp_update'=>'NOW()'
+					'rp_update(=)'=>'NOW()'
 				], [
 					'rp_srl'=>$rp_srl
 				]

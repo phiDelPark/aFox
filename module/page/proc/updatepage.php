@@ -43,11 +43,11 @@ function proc($data)
 					'md_key'=>'page',
 					'md_title'=>trim(strip_tags($data['md_title'])),
 					'md_extra'=>'',
-					'^md_regdate'=>'NOW()'
+					'md_regdate(=)'=>'NOW()'
 				]
 			);
 
-			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$md_id,'^pg_regdate'=>'NOW()','^pg_update'=>'NOW()']);
+			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$md_id,'pg_regdate(=)'=>'NOW()','pg_update(=)'=>'NOW()']);
 
 			$module = getModule($md_id);
 		} else {
@@ -128,7 +128,7 @@ function proc($data)
 					'mf_type'=>$file['type'],
 					'mb_srl'=>$data['mb_srl'],
 					'mb_ipaddress'=>$_SERVER['REMOTE_ADDR'],
-					'^mf_regdate'=>'NOW()'
+					'mf_regdate(=)'=>'NOW()'
 				]);
 
 				$file['mf_srl'] = $mf_srl = DB::insertId();
@@ -177,7 +177,7 @@ function proc($data)
 				'pg_type'=>$data['pg_type'],
 				'pg_content'=>$data['pg_content'],
 				'pg_file'=>$file_count,
-				'^pg_update'=>'NOW()'
+				'pg_update(=)'=>'NOW()'
 			], [
 				'md_id'=>$md_id
 			]
