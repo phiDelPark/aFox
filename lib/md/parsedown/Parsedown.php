@@ -1409,8 +1409,8 @@ class Parsedown
         {
             return;
         }
-
-        if (preg_match('/\bhttps?:[\/]{2}[^\s<]+\b\/*/ui', $Excerpt['context'], $matches, PREG_OFFSET_CAPTURE))
+        // fix url regex by afox
+        if (preg_match('/\bhttps?:[\/]{2}[^\"\s<]+\b\/*/ui', $Excerpt['context'], $matches, PREG_OFFSET_CAPTURE))
         {
             $url = $matches[0][0];
 
