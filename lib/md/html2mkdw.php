@@ -18,7 +18,7 @@ class HtmlToMkdw
 		'h4'		=> ['type'=>'block','head'=>"\n#### ",'tail'=>"\n"],
 		'h5'		=> ['type'=>'block','head'=>"\n##### ",'tail'=>"\n"],
 		'h6'		=> ['type'=>'block','head'=>"\n###### ",'tail'=>"\n"],
-		'div'		=> ['type'=>'block','head'=>'','tail'=>"\n"],
+		'div'		=> ['type'=>'block','head'=>"\n",'tail'=>""],
 		'p'			=> ['type'=>'block','head'=>"\n",'tail'=>"\n"],
 		'blockquote'=> ['type'=>'block','head'=>"\n> ",'tail'=>"\n\n"],
 		'pre'		=> ['type'=>'block','head'=>"\n```\n",'tail'=>"\n```\n"],
@@ -548,7 +548,8 @@ class HtmlToMkdw
 		$html = preg_replace('/[\r\n]*<(hr|br)[^>]*>[\r\n]*/i', '<$1>', $html);
 		$html = preg_replace_callback('@(.*?)<(/?)([a-z]+[0-9]?)((?>"[^>"]*"|\'[^\']*\'|[^>])*?)(/?)>@is',
 			function ($m) use(&$ltrim) {
-				$m[1] = $this->escapeMKDW($ltrim ? ltrim($m[1],"\r\n") : $m[1]) AND $ltrim = false;
+				$m[1] = $this->escapeMKDW($ltrim ? ltrim($m[1],"\r\n") : $m[1]);
+				$ltrim = false;
 				if($m[1]) $this->htmlParts[] = ['', '', $m[1]];
 				if (($tag = strtolower($m[3])) && ($md = @$this->markdownable[$tag])) {
 					$isblock = strpos($md['type'], 'block') !== false;

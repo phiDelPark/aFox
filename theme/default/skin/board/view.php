@@ -23,7 +23,7 @@ $asc = isset($_GET['asc']);
 <section id="documentView" aria-label="Contents of this post">
 	<h2 class="pb-3 mb-1 border-bottom"><?php echo $DOC['wr_title']?></h2>
 	<p class="d-flex w-100 justify-content-between text-secondary">
-		<small><svg class="bi" style="vertical-align:-2px"><use href="./theme/default/bi-icons.svg#<?php echo $wr_secret ? 'shield-lock' : 'clock'?>"/></svg>
+		<small><svg class="bi sm" style="vertical-align:-2px"><use href="./theme/default/bi-icons.svg#<?php echo $wr_secret ? 'shield-lock' : 'clock'?>"/></svg>
 		<?php echo date('l jS \of F Y', strtotime($DOC[$is_col_update?'wr_update':'wr_regdate']))?></small>
 		<small><?php echo $DOC['mb_nick']?></small>
 	</p>

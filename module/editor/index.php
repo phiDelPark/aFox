@@ -7,8 +7,8 @@ $_EDITOR['required'] = isset($_EDITOR['required']) ? $_EDITOR['required'] : fals
 $_EDITOR['height'] = empty($_EDITOR['height']) ? '280px' : $_EDITOR['height'];
 $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeholder'];
 ?>
-<style>#editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);filter:invert(50%)}#editorTypebar .bi-unchecked.checked::before{content:url(./module/editor/bi-check.svg)}#editorToolbar,#editorTypebar{font-size:12px;font-family:Arial}#editorToolbar button{padding:2px;border-radius:2px;height:18px;width:18px}#editorToolbar button>.bi{position:relative;left:-2px;top:-3px;height:16px;width:16px;vertical-align:baseline}#uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px;background-color:var(--bs-border-color)!important}#editorContent .focused{outline:0;box-shadow:0 0 0 .25rem rgba(13,110,253,.3)}#editorContent .is-invalid,[name="remove_files[]"]+img{outline:0;box-shadow:0 0 0 .25rem rgba(253,13,13,.3)}#editorContent iframe,#editorContent textarea{min-height:<?php echo $_EDITOR['height'] ?>}</style>
-<div id="editor<?php echo ucfirst($_ID) ?>" class="w-100 editor-group">
+<style>#editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);filter:invert(50%)}#editorTypebar .bi-unchecked.checked::before{content:url(./module/editor/bi-check.svg)}#editorToolbar,#editorTypebar{font-size:12px;font-family:Arial}#editorToolbar button{padding:2px;border-radius:2px;height:20px;width:20px}#editorToolbar button>.bi{position:relative;left:-1px;top:-1px;height:16px;width:16px;vertical-align:baseline}#uploadFiles img,#uploadedFiles img{height:24px;width:24px;margin-right:6px;background-color:var(--bs-border-color)!important}#editorContent .focused{outline:0;box-shadow:0 0 0 .25rem rgba(13,110,253,.3)}#editorContent .is-invalid,[name="remove_files[]"]+img{outline:0;box-shadow:0 0 0 .25rem rgba(253,13,13,.3)}#editorContent iframe,#editorContent textarea{min-height:<?php echo $_EDITOR['height'] ?>}</style>
+<div id="editor<?php echo ucfirst($_ID) ?>" class="clearfix w-100 editor-group">
 <?php if($_EDITOR['typebar']) { ?>
 	<div class="d-flex w-100 justify-content-between"<?php echo $_EDITOR['readonly']?' readonly':''?> aria-label="Editor Options">
 		<label><?php echo $_EDITOR['typebar'][0]?></label>
@@ -48,7 +48,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 		); set_cache('_AF_EDITOR_COMPONENTS', $components);
 	}
 ?>
-	<div id="editorToolbar" class="d-flex w-100 justify-content-between border-bottom py-1" role="toolbar" aria-label="Editor Controls">
+	<div id="editorToolbar" class="d-flex w-100 justify-content-between border-bottom m-0 py-1" role="toolbar" aria-label="Editor Controls">
 		<div>
 			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="highlight"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#stripe"/></svg></button>
 			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="bold"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#type-bold"/></svg></button>

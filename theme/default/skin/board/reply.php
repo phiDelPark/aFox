@@ -14,7 +14,7 @@ addJSLang(['confirm_delete','reply']);
 		$rp_content = !$rp_permit || $rp_secret ? '<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>' : '';
 		$rp_content .= !$rp_permit ? getLang('error_permitted') : toHTML($val['rp_content'], $val['rp_type']);
 		echo sprintf(
-			'<div id="reply-%s" class="d-flex flex-lg-row gap-3 p-2 border-bottom" style="margin-left:%spx"><svg class="bi bi-lg mt-1"><use href="%s"/></svg>
+			'<div id="reply-%s" class="d-flex flex-lg-row gap-3 p-2 border-bottom" style="margin-left:%spx"><svg class="bi xl mt-1"><use href="%s"/></svg>
 			<div class="w-100"><div>%s</div><div class="d-flex justify-content-between text-body-secondary mt-1"><small>%s</small><small>%s:
 			<a href="#" onclick="return themeDeleteReply(\'%s\')" class="text-decoration-none">&Chi;</a></small></div></div></div>',
 			$val['rp_srl'],

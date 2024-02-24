@@ -23,9 +23,9 @@ $menus = getSiteMenu();
 			<div class="col-4 d-flex justify-content-end align-items-end">
 				<label class="link-secondary icon-link-hover me-2" style="cursor:pointer" href="#" for="searchExForm" aria-label="Search"><svg class="bi m-1" aria-hidden="true"><title>Search</title><use href="./theme/default/bi-icons.svg#search"/></svg></label>
 <?php if(empty($_MEMBER)){ ?>
-				<a class="btn p-0" style="line-height:normal" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi bi-lg" aria-hidden="true"><title>Sign In</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg></a>
+				<a class="btn p-0" style="line-height:normal" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi xl" aria-hidden="true"><title>Sign In</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg></a>
 <?php }else{ ?>
-				<a class="btn p-0" style="line-height:normal" href="#" aria-label="Member" data-bs-toggle="dropdown" aria-expanded="false"><svg class="bi bi-lg" aria-hidden="true"><title><?php echo $_MEMBER['mb_nick']?></title><use href="./theme/default/bi-icons.svg#person-bounding-box"/></svg></a>
+				<a class="btn p-0" style="line-height:normal" href="#" aria-label="Member" data-bs-toggle="dropdown" aria-expanded="false"><svg class="bi xl" aria-hidden="true"><title><?php echo $_MEMBER['mb_nick']?></title><use href="./theme/default/bi-icons.svg#person-bounding-box"/></svg></a>
 				<ul class="dropdown-menu">
 					<?php if(isManager(_MID_)) { ?>
 					<li><a class="dropdown-item" href="<?php echo _AF_URL_?>?admin" target="_blank"><svg class="bi" aria-hidden="true"><title>Site setup</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
@@ -63,7 +63,7 @@ $menus = getSiteMenu();
 	</div>
 	<nav class="navbar navbar-expand-md border-bottom mb-4 p-0">
 		<div class="container-fluid p-0">
-			<a class="navbar-brand ms-2" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" style="vertical-align:-.2em;width:1.25em;height:1.25em"><use href="./theme/default/bi-icons.svg#house-door-fill"/></svg></a>
+			<a class="navbar-brand ms-2" href="<?php echo getUrl('')?>" aria-label="Goto the main page"><svg class="bi" style="vertical-align:-.2em"><use href="./theme/default/bi-icons.svg#house-door-fill"/></svg></a>
 			<button class="navbar-toggler py-0 me-1" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>

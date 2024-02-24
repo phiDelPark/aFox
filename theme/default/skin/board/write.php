@@ -14,9 +14,8 @@
 	<input type="hidden" name="md_id" value="<?php echo _MID_?>">
 	<input type="hidden" name="wr_srl" value="<?php echo $is?$DOC['wr_srl']:''?>">
 
-	<div class="clearfix">
 		<?php if (empty($_MEMBER) || (!empty($DOC['wr_srl']) && $_MEMBER['mb_srl'] !== $DOC['mb_srl'])) { ?>
-		<div class="mb-4">
+		<div class="mb-2">
 			<input type="text" name="mb_nick" value="<?php echo $is?$DOC['mb_nick']:''?>" class="form-control mb-1" maxlength="20" placeholder="<?php echo getLang('id')?>"<?php echo empty($_MEMBER)?' required':''?><?php echo empty($DOC['wr_srl'])?'':' readonly'?>>
 			<?php if (!$is_manager && empty($DOC['mb_srl'])) { ?>
 				<input type="password" name="mb_password" class="form-control" placeholder="<?php echo getLang('password')?>"<?php echo empty($_MEMBER)?' required':''?>>
@@ -59,7 +58,7 @@
 					<label for="wrExtra_<?php echo $ex_key?>"><?php echo $_boxs[0]?></label>
 				</div>
 		<?php }}} ?>
-			<div class="mb-4">
+		<div class="clearfix my-4">
 		<?php
 			if(($_CFG['use_type']&&$_CFG['use_type'] < 7)){
 				$istool = [];
@@ -80,7 +79,6 @@
 				]
 			);
 		?>
-			</div>
 
 			<hr class="mb-4">
 			<div class="d-grid">
