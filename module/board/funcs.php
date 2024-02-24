@@ -31,7 +31,7 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 		if (!get_session($hit_key) && !get_cookie($hit_key)) {
 			$ukey = ($uinfo["mb_srl"] > 0 ? "mb_srl" : "mb_ipaddress") . "{<>}";
 			$uval = $uinfo["mb_srl"] > 0 ? $uinfo["mb_srl"] : $uinfo["ipaddress"];
-			DB::update(_AF_DOCUMENT_TABLE_, ["^wr_hit" => "wr_hit+1"], ["wr_srl" => $srl, $ukey => $uval]);
+			DB::update(_AF_DOCUMENT_TABLE_, ["wr_hit(=)" => "wr_hit+1"], ["wr_srl" => $srl, $ukey => $uval]);
 		}
 		set_session($hit_key, true);
 		set_cookie($hit_key, true, 86400 * 31);
