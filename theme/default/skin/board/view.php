@@ -57,9 +57,9 @@ $asc = isset($_GET['asc']);
 	echo '</div>';
 } ?>
 	<p class="d-flex w-100 justify-content-between p-1 border-bottom">
-		<span><a href="<?php echo getUrl('disp','','srl','','cpage','','rp','').($asc?'&asc':'') ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#list-square"><?php echo getLang('list') ?></use></svg></a></span>
-		<span><a href="<?php echo getUrl('disp','delete', 'srl', $_GET['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#x-square"><?php echo getLang('delete') ?></use></svg></a>
-		<a href="<?php echo getUrl('disp','write', 'srl', $_GET['srl']) ?>" class="icon-link-hover"><svg class="bi"><use href="./theme/default/bi-icons.svg#pencil-square"><?php echo getLang('edit') ?></use></svg></a></span>
+		<span><a href="<?php echo getUrl('disp','','srl','','cpage','','rp','').($asc?'&asc':'') ?>" class="icon-link-hover"><svg class="bi lg"><use href="./theme/default/bi-icons.svg#list-square"><?php echo getLang('list') ?></use></svg></a></span>
+		<span><a href="<?php echo getUrl('disp','delete', 'srl', $_GET['srl']) ?>" class="icon-link-hover"><svg class="bi lg"><use href="./theme/default/bi-icons.svg#x-square"><?php echo getLang('delete') ?></use></svg></a>
+		<a href="<?php echo getUrl('disp','write', 'srl', $_GET['srl']) ?>" class="icon-link-hover"><svg class="bi lg"><use href="./theme/default/bi-icons.svg#pencil-square"><?php echo getLang('edit') ?></use></svg></a></span>
 	</p>
 </section>
 

@@ -10,7 +10,6 @@
 }
 
 :is([type="radio"],[type="checkbox"])+label {
-	vertical-align: middle;
 	user-select: none!important;
 	-moz-user-select: none!important;
 	-webkit-user-select: none!important;

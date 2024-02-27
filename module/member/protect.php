@@ -10,7 +10,7 @@ $_PROTECT['disp.sendnotebox']		= ['grant' => '0'];
 
 $_PROTECT['disp.signup']			= ['grant' => '0'];
 $_PROTECT['disp.signin']			= ['grant' => '0'];
-$_PROTECT['proc.signout']			= ['grant' => '0'];
+$_PROTECT['disp.signout']			= ['grant' => '0'];
 
 $_PROTECT['proc.deletenotes']		= ['grant' => '0'];
 $_PROTECT['proc.deletetrashes']		= ['grant' => '0'];

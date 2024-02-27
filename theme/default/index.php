@@ -30,13 +30,13 @@ $menus = getSiteMenu();
 					<?php if(isManager(_MID_)) { ?>
 					<li><a class="dropdown-item" href="<?php echo _AF_URL_?>?admin" target="_blank"><svg class="bi" aria-hidden="true"><title>Site setup</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } else { ?>
-					<li><a class="dropdown-item" href="<?php echo getUrl('','member','signUp') ?>"><svg class="bi" aria-hidden="true"><title>Member info</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','signUp')?>"><svg class="bi" aria-hidden="true"><title>Member info</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } ?>
 					<li><hr class="dropdown-divider"></li>
-					<li><a class="dropdown-item" href="<?php echo getUrl('','member','inbox') ?>"><svg class="bi" aria-hidden="true"><use href="./theme/default/bi-icons.svg#envelope"/></svg> <?php echo getLang('Inbox')?></a></li>
-					<li><a class="dropdown-item" href="<?php echo getUrl('','member','trash') ?>"><svg class="bi" aria-hidden="true"><use href="./theme/default/bi-icons.svg#trash"/></svg> <?php echo getLang('trash_bin')?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','inbox')?>"><svg class="bi" aria-hidden="true"><use href="./theme/default/bi-icons.svg#envelope"/></svg> <?php echo getLang('Inbox')?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','trash')?>"><svg class="bi" aria-hidden="true"><use href="./theme/default/bi-icons.svg#trash"/></svg> <?php echo getLang('trash_bin')?></a></li>
 					<li><hr class="dropdown-divider"></li>
-					<li><a class="dropdown-item" href="<?php echo getUrl('', 'module', 'member', 'act', 'signOut')?>"><svg class="bi" aria-hidden="true"><use href="./theme/default/bi-icons.svg#power"/></svg> <?php echo getLang('Logout')?></a></li>
+					<li><a class="dropdown-item" href="<?php echo getUrl('','member','signOut')?>"><svg class="bi" aria-hidden="true"><use href="./theme/default/bi-icons.svg#power"/></svg> <?php echo getLang('Logout')?></a></li>
 				</ul>
 <?php } ?>
 			</div>
