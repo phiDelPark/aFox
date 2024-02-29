@@ -21,11 +21,11 @@ $menus = getSiteMenu();
 				<h1 class="header-logo text-body-emphasis mb-0"><?php echo $_CFG['title']?></h1>
 			</div>
 			<div class="col-4 d-flex justify-content-end align-items-end">
-				<label class="link-secondary icon-link-hover me-2" style="cursor:pointer" href="#" for="searchExForm" aria-label="Search"><svg class="bi m-1" aria-hidden="true"><title>Search</title><use href="./theme/default/bi-icons.svg#search"/></svg></label>
+				<label class="link-secondary icon-link-hover m-1" style="cursor:pointer" href="#" for="searchExForm" aria-label="Search"><svg class="bi" aria-hidden="true"><title>Search</title><use href="./theme/default/bi-icons.svg#search"/></svg></label>
 <?php if(empty($_MEMBER)){ ?>
-				<a class="btn p-0" style="line-height:normal" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi xl" aria-hidden="true"><title>Sign In</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg></a>
+				<a class="btn p-0" href="<?php echo getUrl('', 'member', 'signIn')?>" aria-label="SignIn"><svg class="bi xl" aria-hidden="true"><title>Sign In</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg></a>
 <?php }else{ ?>
-				<a class="btn p-0" style="line-height:normal" href="#" aria-label="Member" data-bs-toggle="dropdown" aria-expanded="false"><svg class="bi xl" aria-hidden="true"><title><?php echo $_MEMBER['mb_nick']?></title><use href="./theme/default/bi-icons.svg#person-bounding-box"/></svg></a>
+				<a class="btn p-0" href="#" aria-label="Member" data-bs-toggle="dropdown" aria-expanded="false"><svg class="bi xl" aria-hidden="true"><title><?php echo $_MEMBER['mb_nick']?></title><use href="./theme/default/bi-icons.svg#person-bounding-box"/></svg></a>
 				<ul class="dropdown-menu">
 					<?php if(isManager(_MID_)) { ?>
 					<li><a class="dropdown-item" href="<?php echo _AF_URL_?>?admin" target="_blank"><svg class="bi" aria-hidden="true"><title>Site setup</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
