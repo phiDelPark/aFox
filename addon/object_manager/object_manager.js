@@ -59,12 +59,15 @@ window.addonObjectManager = (content_id = '.current_content') => {
 			$tables = document.querySelectorAll(content_id + ' table'),
 			width = ($tables[0]?.closest(content_id).clientWidth) || '200'
 		$tables.forEach($table => {
-			const $tr = $table.querySelectorAll('tr')
-			$tr.forEach($tr => {
-				const $td = $tr.querySelectorAll('th,td'),
-					n = $td?.length || 0
-				$td.forEach($td => $td.style.maxWidth = ((width / n) - 1) + 'px');
-			})
+			if($table.offsetWidth > width) {
+				const $tr = $table.querySelectorAll('tr')
+				$tr.forEach($tr => {
+					const $td = $tr.querySelectorAll('th,td'),
+						n = $td?.length || 0
+					$td.forEach($td => $td.style.maxWidth = ((width / n) - 1) + 'px');
+					return false
+				})
+			}
 		})
 	}
 

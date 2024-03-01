@@ -20,8 +20,13 @@ if($type === 'gallery') {
 	$_list = DB::query("SELECT f.*, d.md_id FROM $fl as f INNER JOIN $dd as d ON d.wr_srl=f.mf_target AND d.md_id = f.md_id WHERE f.md_id=:1 AND f.mf_size>:2 AND f.mf_type LIKE :3 GROUP BY f.mf_target ORDER BY rand() DESC LIMIT 5", [$_WIDGET['module'],500, 'image%'], true);
 } else {
 	$select = ['md_id'=>$_WIDGET['module']];
-	if(!empty($category)) $select['wr_category'] = $category;
-	$_list = DB::gets(_AF_DOCUMENT_TABLE_,$select,$order,$count);
+	if(is_numeric($target)){
+		$select["wr_srl"] = $target;
+		$_list = DB::get(_AF_DOCUMENT_TABLE_, 'wr_content', $select);
+	} else {
+		if(!empty($category)) $select['wr_category'] = $category;
+		$_list = DB::gets(_AF_DOCUMENT_TABLE_,$select,$order,$count);
+	}
 }
 ?>
 <div class="content_widget<?php echo $class?>" <?php echo $style?>>
@@ -37,7 +42,7 @@ if($type === 'gallery') {
 			}
 		?>
 		</div>
-	<?php } else { ?>
+	<?php } else if(is_numeric($target)) { echo toHTML($_list['wr_content'], $type == 'text' ? 0 : 1); } else { ?>
 		<div class="list-group" role="list">
 		<?php
 			foreach ($_list as $val) {

@@ -36,6 +36,12 @@ h1, h2, h3 {
 	border-bottom: 2px dashed var(--bs-tertiary-bg);
 }
 
+table th, table td {
+	padding: .5em;
+	border: 1px solid var(--bs-border-color);
+	background-color: var(--bs-tertiary-bg);
+}
+
 code {
 	padding: 0 2px;
 	font-size: 80%;
