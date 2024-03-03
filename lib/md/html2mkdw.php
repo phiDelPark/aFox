@@ -196,6 +196,7 @@ class HtmlToMkdw
 								}
 							}
 						}
+						break;
 					case 'img':
 						$array[] = $this->inlineImage();
 						break;
