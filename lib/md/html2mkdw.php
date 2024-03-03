@@ -196,15 +196,13 @@ class HtmlToMkdw
 								}
 							}
 						}
-					default:
-						if(method_exists($this, $type[0].'Element')){
-							$tmp = $this->{$type[0].'Element'}($tag);
-							if($tag == 'code'){
-								$tmp = substr($tmp, 1, -1); // code 는 처음과 끝 (`) 제거
-							}
-							$array[] = $tmp;
-						}
+					case 'img':
+						$array[] = $this->inlineImage();
 						break;
+					case 'a':
+						$array[] = $this->inlineLink();
+						break;
+					//default: break;
 				}
 			}
 
@@ -516,7 +514,7 @@ class HtmlToMkdw
 		}
 
 		$html = implode('', $result) . preg_replace('/[\r\n\t]+/', ' ', $html);
-		//debugPrint($html);
+		debugPrint($html);
 		return preg_replace('/(((> )[\r\n]+){2,}>\s$|(\n\n\n)[\n]+)/m', "$3$4", $html);
 	}
 }

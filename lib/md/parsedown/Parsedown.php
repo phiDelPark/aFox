@@ -1392,15 +1392,26 @@ class Parsedown
 
         if ($Excerpt['text'][1] === '~' and preg_match('/^~~(?=\S)(.+?)(?<=\S)~~/', $Excerpt['text'], $matches))
         {
-            return array(
-                'extent' => strlen($matches[0]),
-                'element' => array(
-                    'name' => 'del',
-                    'text' => $matches[1],
-                    'handler' => 'line',
-                ),
-            );
+            $Strikethrough = 'del';
         }
+        // compile underline by afox
+        elseif (preg_match('/^~(?=\S)(.+?)(?<=\S)~/', $Excerpt['text'], $matches))
+        {
+            $Strikethrough = 'u';
+        }
+        else
+        {
+            return;
+        }
+
+        return array(
+            'extent' => strlen($matches[0]),
+            'element' => array(
+                'name' => $Strikethrough,
+                'text' => $matches[1],
+                'handler' => 'line',
+            ),
+        );
     }
 
     protected function inlineUrl($Excerpt)
