@@ -514,7 +514,7 @@ class HtmlToMkdw
 		}
 
 		$html = implode('', $result) . preg_replace('/[\r\n\t]+/', ' ', $html);
-		debugPrint($html);
+		//debugPrint($html);
 		return preg_replace('/(((> )[\r\n]+){2,}>\s$|(\n\n\n)[\n]+)/m', "$3$4", $html);
 	}
 }
