@@ -11,7 +11,7 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 <div id="siteMap">
 	<h5 class="pb-2 mb-4 border-bottom"><?php echo getLang('main_menu')?></h5>
 	<div class="mb-5">
-		<form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off">
+		<form method="post" autocomplete="off">
 			<header class="float-start">
 			<div class="text-center"><input type="button" width="24" height="24" onclick="return siteMapItemAdd(this, 1)"><br><?php echo getLang('insert')?></div>
 			<div class="text-center" style="margin-top:20px"><input type="submit" width="24" height="24"><br><?php echo getLang('save')?></div>
@@ -19,6 +19,7 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 			<div>
 			<input type="hidden" name="success_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
 			<input type="hidden" name="error_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="module" value="admin">
 			<input type="hidden" name="act" value="updateMenu">
 			<input type="hidden" name="mu_type" value="0">
 			<ul id="siteMapRoot1" class="ms-5 p-2 border rounded" style="min-height:300px">
@@ -69,7 +70,7 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 
 	<h5 class="pb-2 mb-4 border-bottom"><?php echo getLang('foot_menu')?></h5>
 	<div class="mb-5">
-		<form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off">
+		<form method="post" autocomplete="off">
 			<header class="float-start">
 			<div class="text-center"><input type="button" width="24" height="24" onclick="return siteMapItemAdd(this, 2)"><br><?php echo getLang('insert')?></div>
 			<div class="text-center" style="margin-top:20px"><input type="submit" width="24" height="24"><br><?php echo getLang('save')?></div>
@@ -77,6 +78,7 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 			<div>
 			<input type="hidden" name="success_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
 			<input type="hidden" name="error_url" value="<?php echo getUrl('', 'admin', 'menu') ?>">
+			<input type="hidden" name="module" value="admin">
 			<input type="hidden" name="act" value="updateMenu">
 			<input type="hidden" name="mu_type" value="1">
 			<ul id="siteMapRoot2" class="ms-5 p-2 border rounded" style="min-height:300px">

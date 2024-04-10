@@ -412,20 +412,6 @@ $create_sql = '
 DB::query($create_sql);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
 
-$_err_keys = _AF_VISITOR_TABLE_;
-$create_sql = '
-	  CREATE TABLE IF NOT EXISTS '._AF_VISITOR_TABLE_.' (
-	   mb_ipaddress    VARCHAR(128) NOT NULL,
-	   vs_agent        VARCHAR(255) NOT NULL,
-	   vs_referer      VARCHAR(255) NOT NULL,
-	   vs_regdate      DATETIME     NOT NULL,
-
-	  INDEX AGENT_IX (vs_agent),
-	  INDEX REGDATE_IX (vs_regdate))'.$_engine;
-
-DB::query($create_sql);
-if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
-
 $_err_keys = _AF_TRIGGER_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_TRIGGER_TABLE_.' (
@@ -437,6 +423,17 @@ $create_sql = '
 
 	  INDEX PC_IX (use_pc),
 	  INDEX MOBILE_IX (use_mobile))'.$_engine;
+
+DB::query($create_sql);
+if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
+
+$_err_keys = _AF_VISITOR_TABLE_;
+$create_sql = '
+	  CREATE TABLE IF NOT EXISTS '._AF_VISITOR_TABLE_.' (
+	   mb_ipaddress    VARCHAR(128) NOT NULL,
+	   vs_agent        VARCHAR(255) NOT NULL,
+	   vs_referer      VARCHAR(255) NOT NULL,
+	   vs_regdate      DATETIME     NOT NULL)'.$_engine;
 
 DB::query($create_sql);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());

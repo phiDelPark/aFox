@@ -13,12 +13,14 @@ input[name=favicon]::before {
 }
 </style>
 
-<form action="<?php echo _AF_URL_ . '?admin' ?>" method="post" autocomplete="off" enctype="multipart/form-data">
+<form method="post" autocomplete="off">
+	<input type="hidden" name="version" value="<?php echo _AF_VERSION_?>">
 	<input type="hidden" name="success_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
 	<input type="hidden" name="error_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
+	<input type="hidden" name="module" value="admin">
 	<input type="hidden" name="act" value="updateSetup">
-	<input type="hidden" name="lang" value="ko">
 	<input type="hidden" name="theme" value="<?php echo empty($config['theme'])?'default':$config['theme']?>">
+	<input type="hidden" name="lang" value="<?php echo empty($config['lang'])?'ko':$config['lang']?>">
 
 	<div class="mb-4">
 		<div class="input-group">

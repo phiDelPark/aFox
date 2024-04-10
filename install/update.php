@@ -379,29 +379,6 @@ $success = true;
 	}
 
 	/**********************************/
-	$r = DB::query('SHOW FULL COLUMNS FROM '._AF_VISITOR_TABLE_, [], true);
-	$o = [
-		'mb_ipaddress VARCHAR(128) NOT NULL',
-		'vs_agent VARCHAR(255) NOT NULL',
-		'vs_referer VARCHAR(255) NOT NULL',
-		'vs_regdate DATETIME NOT NULL'
-	];
-	$t = [];
-	foreach($r as $v) {
-		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
-			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
-	}
-	echo '<b style="color:blue">'._AF_VISITOR_TABLE_."</b><br>\n";
-	foreach($o as $v) {
-		if(!in_array($v, $t)){
-			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
-			ob_flush();
-			flush();
-			$success = false;
-		}
-	}
-
-	/**********************************/
 	$r = DB::query('SHOW FULL COLUMNS FROM '._AF_TRIGGER_TABLE_, [], true);
 	$o = [
 		'tg_key CHAR(1) NOT NULL',
@@ -416,6 +393,29 @@ $success = true;
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_TRIGGER_TABLE_."</b><br>\n";
+	foreach($o as $v) {
+		if(!in_array($v, $t)){
+			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
+			ob_flush();
+			flush();
+			$success = false;
+		}
+	}
+
+	/**********************************/
+	$r = DB::query('SHOW FULL COLUMNS FROM '._AF_VISITOR_TABLE_, [], true);
+	$o = [
+		'mb_ipaddress VARCHAR(128) NOT NULL',
+		'vs_agent VARCHAR(255) NOT NULL',
+		'vs_referer VARCHAR(255) NOT NULL',
+		'vs_regdate DATETIME NOT NULL'
+	];
+	$t = [];
+	foreach($r as $v) {
+		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
+			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
+	}
+	echo '<b style="color:blue">'._AF_VISITOR_TABLE_."</b><br>\n";
 	foreach($o as $v) {
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
