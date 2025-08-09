@@ -173,9 +173,8 @@ class HtmlToMkdw
 
 		while (list($tag, $close, $attr) = current($this->htmlParts))
 		{
-			if (!$tag) {
-				if($attr) $array[] = $attr; // text
-			} else {
+			if (!$tag) $array[] = $attr; // text
+			else {
 				$md = $this->markdownable[$tag];
 				$type = explode('/', $md['type']);
 
