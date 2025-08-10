@@ -19,13 +19,19 @@
 ?>
 
 <?php if(!$is_new){?>
-<form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return confirm('<?php echo getLang('confirm_delete',['page'])?>')">
+<form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return validateForm(this)">
 	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="deletePage" />
-	<input type="hidden" name="md_id" value="<?php echo $PAGE['md_id']?>" />
+	<input type="hidden" name="md_id" value="" />
 	<button type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('permanent_delete')?></button>
 </form>
+<script>
+function validateForm(f) {
+	var return_value = prompt('<?php echo getLang('confirm_delete',['page'])?>', 'Page ID?');
+	if (return_value === '<?php echo $PAGE['md_id']?>') {f.md_id.value = return_value; return true;} else return false;
+}
+</script>
 <?php }?>
 
 <form id="setup" method="post" autocomplete="off" enctype="multipart/form-data">

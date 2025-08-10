@@ -9,3 +9,5 @@ obj/
 ehthumbs?
 Thumbs.db
 data/
+addon/
+!addon/object_manager

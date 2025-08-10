@@ -61,6 +61,7 @@ $_LANG['menu_name_board']		= $_LANG['board'];
 $_LANG['menu_name_comment']		= $_LANG['comment'];
 $_LANG['menu_name_content']		= '콘텐츠 보기';
 $_LANG['menu_name_dashbd']		= '대시보드';
+$_LANG['menu_name_default']		= $_LANG['menu_name_dashbd'];
 $_LANG['menu_name_document']	= $_LANG['document'];
 $_LANG['menu_name_file']		= $_LANG['file'];
 $_LANG['menu_name_member']		= '회원 설정';
@@ -74,11 +75,13 @@ $_LANG['menu_name_widget']		= $_LANG['widget'];
 $_LANG['menu_name_setup']		= '사이트 설정';
 $_LANG['menu_name_clearcache']	= '캐시 청소';
 
+
 $_LANG['menu_desc_addon']		= '애드온을 관리하고 설정합니다.';
 $_LANG['menu_desc_board']		= '게시판을 관리하고 설정합니다.';
 $_LANG['menu_desc_comment']		= '댓글 목록을 보고 관리합니다.';
 $_LANG['menu_desc_content']		= '콘텐츠 보기';
 $_LANG['menu_desc_dashbd']		= '각각의 통계 개요를 봅니다.';
+$_LANG['menu_desc_default']		= $_LANG['menu_desc_dashbd'];
 $_LANG['menu_desc_document']	= '문서 목록을 보고 관리합니다.';
 $_LANG['menu_desc_file']		= '첨부된 파일 목록을 보고 관리합니다.';
 $_LANG['menu_desc_member']		= '회원 목록을 보고 설정합니다.';
