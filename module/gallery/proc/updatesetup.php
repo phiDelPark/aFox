@@ -19,10 +19,13 @@ function proc($data) {
 		if($category) $category = substr($category, 0, -1);
 	}
 
-	$list_count = empty($data['md_list_count']) ? 100 : abs($data['md_list_count']);
+	$file_accept = 'jpg,jpeg,png';
 	$file_max = abs($data['md_file_max']);
 	$file_size = abs($data['md_file_size']) * 1024;
-	$file_accept = 'jpg,jpeg,png';
+	$list_count = empty($data['md_list_count']) ? 100 : abs($data['md_list_count']);
+
+	$data['thumb_width'] = abs($data['thumb_width']) < 1 ? 320 : abs($data['thumb_width']);
+	$data['thumb_height'] = abs($data['thumb_height']) < 1 ? 240 : abs($data['thumb_height']);
 
 	// 관리자 이이디가 넘어오면 srl로 변경
 	$md_manager = $data['md_manager'];
@@ -82,6 +85,14 @@ function proc($data) {
 				}
 			}
 
+			// 썸네일 사이즈 변경시 이전 썸네일 삭제 체크
+			if(is_dir(_AF_ATTACH_DATA_.'thumbnail/'.$data['md_id'].'/')
+				&& (abs($module['thumb_width']) != abs($data['thumb_width'])
+					|| abs($module['thumb_height']) != abs($data['thumb_height']))
+			){
+				throw new Exception(getLang('invalid_value', ['thumbnail']), 4303);
+			}
+
 			DB::update(_AF_MODULE_TABLE_,
 				[
 					'md_key'=>'gallery',
@@ -107,9 +118,6 @@ function proc($data) {
 				]
 			);
 		}
-
-		// 썸네일 제거
-		unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$data['md_id'].'/');
 
 	} catch (Exception $ex) {
 		DB::rollback();

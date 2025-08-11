@@ -2,6 +2,7 @@
 if(!defined('__AFOX__')) exit();
 
 $_PROTECT['setup']				= ['grant' => 's'];
+$_PROTECT['clear']				= ['grant' => 's'];
 $_PROTECT['proc.updatesetup']	= ['grant' => 's'];
 $_PROTECT['proc.deletefiles']	= ['grant' => 's'];
 $_PROTECT['proc.modifyfiles']	= ['grant' => 's'];

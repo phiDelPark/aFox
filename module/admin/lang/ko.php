@@ -1,7 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
 // 에러가 발생할 가능성이 있으니 언어에 ' (홑따옴표)는 쓰지마세요.
-// 필요하면 ` (악센트) 이걸 사용하세요.
 
 $_LANG['afox']					= '에이폭스';
 $_LANG['version']				= '버전';
@@ -151,12 +150,10 @@ $_LANG['data_manage']			= '관리';
 $_LANG['advanced_setup']		= '고급 설정';
 $_LANG['empty_%s']				= '%s 비우기';
 
-$_LANG['overflow_max']			= '%s의 최대 크기 (%s)를 벗어났습니다.';
+$_LANG['overflow_size']			= '%s의 최대 크기 (%s)를 벗어났습니다.';
 $_LANG['overflow_count']		= '%s의 최대 수 (%s)를 벗어났습니다.';
 
-$_LANG['cant_delete_welcome']	= 'welcome 페이지는 삭제할 수 없습니다.';
 $_LANG['cant_change_category']	= '분류 %s에 문서가 존재하여 변경할 수 없습니다.';
-
 $_LANG['prompt_move_board']		= '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n카테고리를 선택하시려면 뒤에 :카테고리를 입력하세요.\n예) 모듈ID : 카테고리';
 
 $_LANG['desc_mb_id']			= '첫 글자는 영문이여야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다.';

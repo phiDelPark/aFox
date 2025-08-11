@@ -23,7 +23,7 @@ function proc($data) {
 		// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 		$extra = serialize($data);
 		if(strlen($extra) > 65535) {
-			throw new Exception(getLang('overflow_max', ['extra_keys',65535]), 1401);
+			throw new Exception(getLang('overflow_size', ['extra_keys',65535]), 1401);
 		}
 
 		DB::delete(_AF_TRIGGER_TABLE_,['tg_key'=>'A','tg_id'=>$ao_id]);

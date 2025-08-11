@@ -50,7 +50,7 @@
 <thead>
 	<tr>
 		<th scope="col"><a href="#" onclick="return _showCheckItems(this)"><?php echo getLang('data_manage')?></a></th>
-		<th scope="col" class="text-wrap"><input class="me-3 d-none" type="checkbox" onchange="_allCheckItems(this)"><small class="d-none">[ <a href="#" onclick="return _deleteCheckItems(this)">DELETE</a> ] [ <a href="#" onclick="return _moveCheckItems(this)">MOVE</a> ]</small><span><?php echo getLang('title')?></span></th>
+		<th scope="col" class="text-wrap"><input class="me-3 d-none" type="checkbox" onchange="_allCheckItems(this)"><small class="d-none">[ <a href="#" onclick="return _deleteCheckItems(this)"><?php echo getLang('delete')?></a> ] [ <a href="#" onclick="return _moveCheckItems(this)"><?php echo getLang('move')?></a> ]</small><span><?php echo getLang('title')?></span></th>
 		<th scope="col"><?php echo getLang('author')?></th>
 		<th scope="col"><?php echo getLang('status')?></th>
 		<th scope="col" class="text-end"><?php echo getLang('date')?></th>

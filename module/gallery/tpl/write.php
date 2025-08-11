@@ -33,7 +33,7 @@
 				'wr_content', '',
 				[
 					'file'=>[_MID_, 0, $_CFG['md_file_max'], 'jpg,jpeg,png'],
-					'placeholder'=>getLang('gallery_content'),
+					'placeholder'=>getLang('add_image'),
 					'height'=>'38px',
 					'readonly'=>true
 				]

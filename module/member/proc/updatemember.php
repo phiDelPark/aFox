@@ -85,7 +85,7 @@ function proc($data) {
 	// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 	$_extras = serialize($_extras);
 	if(strlen($_extras) > 65535) {
-		return set_error(getLang('overflow_max', ['extra_keys',65535]), 1401);
+		return set_error(getLang('overflow_size', ['extra_keys',65535]), 1401);
 	}
 
 	// 아이콘 삭제 값이 넘어오면

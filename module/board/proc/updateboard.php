@@ -64,7 +64,7 @@ function proc($data)
 			}
 			// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 			$_extras = serialize($ex_keys);
-			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_max', ['extra_keys',65535]), 1401);
+			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_size', ['extra_keys',65535]), 1401);
 
 			DB::insert(_AF_MODULE_TABLE_,
 				[
@@ -119,7 +119,7 @@ function proc($data)
 			else $_extras['keys'] = $ex_keys['keys'];
 			// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 			$_extras = serialize($_extras);
-			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_max', ['extra_keys',65535]), 1401);
+			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_size', ['extra_keys',65535]), 1401);
 
 			DB::update(_AF_MODULE_TABLE_,
 				[

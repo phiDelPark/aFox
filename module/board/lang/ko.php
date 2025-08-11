@@ -24,7 +24,5 @@ $_LANG['msg_is_deleted']    = '삭제되었습니다.';
 $_LANG['msg_reply_exists']  = '이 문서와 관련된 답변이 존재합니다.';
 $_LANG['msg_not_write_reply'] = '이 답변의 하위 답변은 93개를 넘을 수 없습니다.\n새로 답변을 작성해 주세요.';
 
-$_LANG['gallery_content']   = '아래 첨부 버튼을 눌러 이미지를 추가하시면 자동 출력됩니다.';
-
 /* End of file ko.php */
 /* Location: ./module/board/lang/ko.php */

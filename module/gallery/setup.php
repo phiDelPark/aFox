@@ -6,6 +6,11 @@ if($is_new = (empty($_GET['sub_id']) || $_GET['sub_id'] === '@new')){
 	foreach($r as $v) $GALLERY[$v['Field']] = $v['Default'];
 } else {
 	$GALLERY = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'gallery', 'md_id'=>$_GET['sub_id']]);
+	if(empty($GALLERY)) {
+		$_GET['sub_id'] = '';
+	} else if(!empty($_GET['clear'])){
+		include_once _AF_MODULES_PATH_ . 'gallery/clearcache.php';
+	}
 }
 
 if(empty($_GET['sub_id'])){
@@ -17,8 +22,8 @@ if(empty($_GET['sub_id'])){
 <table class="table table-hover">
 <thead>
 	<tr>
-		<th scope="col"><?php echo getLang('id')?></th>
-		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
+		<th scope="col"><a href="#" onclick="return _showCheckItems(this)"><?php echo getLang('data_manage')?></a></th>
+		<th scope="col" class="text-wrap"><input class="me-3 d-none" type="checkbox" onchange="_allCheckItems(this)"><small class="d-none">[ <a href="#" onclick="return _clearCacheItems(this)"><?php echo getLang('clear_cache')?></a> ]</small><span><?php echo getLang('title')?></span></th>
 		<th scope="col"><?php echo getLang('grant')?></th>
 		<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('date')?></th>
 		<th scope="col" class="text-end"><?php echo getLang('setup')?></th>
@@ -34,7 +39,7 @@ if(empty($_GET['sub_id'])){
 		$grants = ['0'=>'A','1'=>'M','m'=>'S'];
 		foreach ($_list as $key => $value) {
 			echo '<tr><th scope="row" ><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
-			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_about'])?'':' - '.$value['md_about'])),50)).'</td>';
+			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="md_ids[]" value="'.$value['md_id'].'"><span>'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_about'])?'':' - '.$value['md_about'])),50)).'</span></td>';
 			echo '<td class="fixed-width">'.$grants[$value['grant_list']].$grants[$value['grant_view']].$grants[$value['grant_upload']].'</td>';
 			echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['md_regdate'])).'</td>';
 			echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('sub_id', $value['md_id']).'">'.getLang('setup').'</a></td></tr>';
@@ -43,6 +48,26 @@ if(empty($_GET['sub_id'])){
 ?>
 </tbody>
 </table>
+
+<script>
+	function _showCheckItems(el_chk) {
+		const tb = el_chk.closest('table'), first_chk = tb.querySelector('[type=checkbox]')
+		tb.querySelectorAll('[type=checkbox]')?.forEach(el => el.classList.remove('d-none'))
+		first_chk.parentNode?.lastChild.classList.add('d-none')
+		first_chk.parentNode?.childNodes[1].classList.remove('d-none')
+		return false
+	}
+	function _allCheckItems(el_chk) {
+		el_chk.closest('table').querySelectorAll('tbody [type=checkbox]')?.forEach(el => el.checked = el_chk.checked)
+	}
+	function _clearCacheItems() {
+		if (confirm($_LANG['confirm_empty'].sprintf(['Cache'])) === true) {
+			exec_ajax({module:'gallery',act:'clearCache',...document.querySelector('#af_check_items').serializeArray()})
+			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
+		}
+		return false;
+	}
+</script>
 
 <?php } else { ?>
 
@@ -97,7 +122,7 @@ function validateForm(f) {
 		<div class="input-group">
 			<input type="text" name="md_category" class="form-control" id="mdCategory" maxlength="255" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_CATEGORY_)?>" value="<?php echo $GALLERY['md_category'] ?>">
 		</div>
-		<div class="form-text"><?php echo getLang('desc_category')?></div>
+		<div class="form-text"><?php echo str_replace('\n','<br>',getLang('desc_category'))?></div>
 	</div>
 
 	<div class="input-group mb-4">
@@ -107,7 +132,7 @@ function validateForm(f) {
 		</div>
 		<div class="form-text"><?php echo getLang('desc_list_count')?></div>
 	</div>
-
+<?php $thumb_exists = !(empty($_GET['sub_id']) || !is_dir(_AF_ATTACH_DATA_.'thumbnail/'.$_GET['sub_id'].'/')); ?>
 	<div class="mb-4">
 		<label class="form-label me-1"><?php echo getLang('thumbnail')?>:</label>
 		<input class="form-check-input mx-1" type="checkbox" id="thumbOption" name="thumb_option" value="1"<?php echo $GALLERY['thumb_option']==='1'?' checked':'' ?>>
@@ -115,14 +140,30 @@ function validateForm(f) {
 		<div class="d-flex flex-row">
 			<div class="input-group me-2" style="width:auto">
 				<label class="input-group-text w-100p" for="thumbWidth"><?php echo getLang('width')?></label>
-				<input type="number" class="form-control mw-100p" id="thumbWidth" name="thumb_width" min="0" max="9999" maxlength="5" value="<?php echo empty($GALLERY['thumb_width'])?'':$GALLERY['thumb_width'] ?>">
+				<input <?php echo $thumb_exists ? 'readonly="readonly" ' : ''?>type="number" class="form-control mw-100p" id="thumbWidth" name="thumb_width" min="0" max="9999" maxlength="5" value="<?php echo empty($GALLERY['thumb_width'])?'':$GALLERY['thumb_width'] ?>">
 			</div>
 			<div class="input-group me-2" style="width:auto">
 				<label class="input-group-text w-100p" for="thumbHeight"><?php echo getLang('height')?></label>
-				<input type="number" class="form-control mw-100p" id="thumbHeight" name="thumb_height" min="0" max="9999" maxlength="5" value="<?php echo empty($GALLERY['thumb_height'])?'':$GALLERY['thumb_height'] ?>">
+				<input <?php echo $thumb_exists ? 'readonly="readonly" ' : ''?>type="number" class="form-control mw-100p" id="thumbHeight" name="thumb_height" min="0" max="9999" maxlength="5" value="<?php echo empty($GALLERY['thumb_height'])?'':$GALLERY['thumb_height'] ?>">
 			</div>
 		</div>
+<?php if($thumb_exists){?>
+		<div class="form-text"><?php echo getLang('clear_thumbnail')?></div>
+		<div class="form-text"><a id="openClearThumbnail" href="#" onclick="return clearThumbnail(this)">Clear thumbnail...</a></div>
+		<iframe id="iframeClearThumbnail" src="about:blank" style="width:100%;height:100px;display:none">
+		Your browser does not support iframes.
+		</iframe>
+		<script>
+			function clearThumbnail(a) {
+				var iframe = document.querySelector('#iframeClearThumbnail');
+				iframe.style.display = 'block';
+				iframe.contentWindow.location.href = '<?php echo getUrl('', 'module', 'gallery', 'popup', '1', 'clear', $_GET['sub_id']) ?>';
+				return false;
+			}
+		</script>
+<?php } else { ?>
 		<div class="form-text"><?php echo getLang('desc_thumbnail')?></div>
+<?php } ?>
 	</div>
 
 	<div class="mb-4">

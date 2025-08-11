@@ -65,7 +65,7 @@
 		<?php } else { ?>
 		<th scope="col"><a href="#" onclick="return _showCheckItems(this)"><?php echo getLang('data_manage')?></a></th>
 		<?php } ?>
-		<th scope="col" class="text-wrap"><input class="me-3 d-none" type="checkbox" onchange="_allCheckItems(this)"><small class="d-none">[ <a href="#" onclick="return _deleteCheckItems(this)">DELETE</a> ]</small><span><?php echo getLang('name')?></span></th>
+		<th scope="col" class="text-wrap"><input class="me-3 d-none" type="checkbox" onchange="_allCheckItems(this)"><small class="d-none">[ <a href="#" onclick="return _deleteCheckItems(this)"><?php echo getLang('delete')?></a> ]</small><span><?php echo getLang('name')?></span></th>
 		<?php if($duplicate) { ?>
 		<th scope="col"><?php echo getLang('size')?></th>
 		<?php } ?>

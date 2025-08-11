@@ -4,7 +4,7 @@ if(!defined('__AFOX__')) exit();
 
 function proc($data) {
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
-	if($data['md_id'] === 'welcome') return set_error(getLang('cant_delete_welcome'),303);
+	if($data['md_id'] === 'welcome') return set_error(getLang('warn_not_allowable',['Welcome']),303);
 
 	DB::transaction();
 

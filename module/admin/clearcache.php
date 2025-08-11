@@ -3,23 +3,20 @@
 if(@$_GET['clear']) {
 	ob_end_clean();
 
-	$dir = _AF_CACHE_DATA_;
-	$subdir = true;
-
-	if(is_dir($dir)){
+	function __unlinkThumbnail($dir)
+	{
 		$handle = @opendir($dir); // 절대경로
 		while ($file = readdir($handle)){
 			if($file != '.' && $file != '..'){ // 하위 폴더면
-				if($subdir && is_dir($dir.$file.'/'))
-					unlinkAll($dir.$file.'/', $subdir);
+				if(is_dir($dir.$file.'/'))
+					__unlinkThumbnail($dir.$file.'/');
 				else if(unlinkFile($dir.$file)){
-					/*
-					echo '<b style="color:green">SUCCESS:</b> '.$dir.$file.'<br />';
+					//echo '<b style="color:blue">SUCCESS:</b> '.$file.'<br />';
+					echo '○';
 					ob_flush();
 					flush();
-					*/
 				} else {
-					echo '<b style="color:red">ERROR:</b> '.$dir.$file.'<br />';
+					echo '<b style="color:red">ERROR:</b> '.$file.'<br />';
 					ob_flush();
 					flush();
 				}
@@ -27,7 +24,8 @@ if(@$_GET['clear']) {
 		}
 		@closedir($handle);
 		if(unlinkDir($dir)){
-			echo '<b style="color:blue">SUCCESS:</b> '.$dir.'<br />';
+			//echo '<b style="color:blue">SUCCESS:</b> '.$dir.'<br />';
+			echo '●';
 			ob_flush();
 			flush();
 		} else {
@@ -35,6 +33,10 @@ if(@$_GET['clear']) {
 			ob_flush();
 			flush();
 		}
+	}
+
+	if(is_dir(_AF_CACHE_DATA_)){
+		__unlinkThumbnail(_AF_CACHE_DATA_);
 	}
 
 	if(@$_GET['danger']) {

@@ -18,9 +18,13 @@ function procGalleryDefault($data) {
 }
 
 function dispGalleryDefault($data) {
-	if (!($disp = strtolower(@$data['disp']))) {
+	if (!empty($data['clear']) && checkProtect('clear')) {
+		require_once _AF_MODULES_PATH_ . 'gallery/clear.php';
+		exit;
+	} else if (!($disp = strtolower(@$data['disp']))) {
 		$disp = empty($data['srl']) ? 'list' : 'view';
 	}
+
 
 	$dir = _AF_MODULES_PATH_ . 'gallery/disp/';
 	$inc_file = $dir . $disp . '.php';
