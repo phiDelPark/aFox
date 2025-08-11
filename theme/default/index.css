@@ -46,6 +46,10 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 	--bs-icon-link-transform: translate3d(0, -.125rem, 0);
 }
 
+.modal.alert {
+	z-index: 9999!important;
+}
+
 .header-logo {
 	font-size: 2.4rem;
 }

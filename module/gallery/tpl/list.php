@@ -1,5 +1,5 @@
 <?php if(!defined('__AFOX__')) exit();
-addJSLang(['confirm_delete', 'prompt_modify_item', 'item']);
+addJSLang(['confirm_page_left', 'confirm_page_right', 'confirm_delete', 'prompt_modify_item', 'item']);
 if(file_exists(_AF_THEME_URL_ . 'skin/gallery/gallery.js')){
   addJS(_AF_THEME_URL_ . 'skin/gallery/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
 } else {
@@ -59,12 +59,12 @@ $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 ?>
 </div>
 	<div class="w-100 text-end bg-body-tertiary p-1">
-		<nav aria-label="Page navigation of the list">
+		<nav id="paginationGallery" aria-label="Page navigation of the list">
 		<ul class="pagination pagination-sm float-start">
 			<li class="page-item me-1"><a class="btn btn-sm fw-bold btn-secondary<?php echo $current_page<11 ? ' disabled" aria-disabled="true' : ''?>" href="<?php echo  getUrl('page',$current_page-10)?>" aria-label="Previous-10">&lt;&lt;</a></li>
 			<li class="page-item me-1 d-md-none"><a class="btn btn-sm btn-secondary<?php echo $current_page <= 1 ? ' disabled" aria-disabled="true' : ''?>" href="<?php echo  getUrl('page',$current_page-1)?>" aria-label="Previous">&lt;</a></li>
 			<li class="page-item d-md-none"><a class="btn btn-sm border border-1 rounded-0 border-end-0 border-start-0 btn-outline-secondary disabled" aria-disabled="true"><?php echo $current_page.' / '.$total_page?></a></li>
-			<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li class="page-item d-none d-md-block"><a class="btn btn-sm border border-1 rounded-0 border-end-0 border-start-0'.($current_page == $i ? ' text-decoration-underline fw-bold" aria-current="page' : ' btn-outline-secondary').'" href="'.getUrl('page',$i).'">'.$i.'</a></li>' ?>
+			<?php for ($i=$start_page; $i <= $end_page; $i++) echo '<li class="page-item page-number d-none d-md-block" '.($current_page == $i ? 'selected="true"' : '').'><a class="btn btn-sm border border-1 rounded-0 border-end-0 border-start-0'.($current_page == $i ? ' text-decoration-underline fw-bold" aria-current="page' : ' btn-outline-secondary').'" href="'.getUrl('page',$i).'">'.$i.'</a></li>' ?>
 			<li class="page-item ms-1 d-md-none"><a class="btn btn-sm btn-secondary<?php echo $total_page<($current_page+1) ? ' disabled" aria-disabled="true' : ''?>" href="<?php echo getUrl('page',$total_page<($current_page+1)?$total_page:$current_page+1)?>" aria-label="Next">&gt;</a></li>
 			<li class="page-item ms-1"><a class="btn btn-sm fw-bold btn-secondary<?php echo $total_page <= $end_page ? ' disabled" aria-disabled="true' : ''?>" href="<?php echo getUrl('page',$total_page<($current_page+10)?$total_page:$current_page+10)?>" aria-label="Next+10">&gt;&gt;</a></li>
 		</ul>

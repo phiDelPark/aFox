@@ -77,7 +77,7 @@
 		+$_LANG[t=='confirm'?'cancel':'close']+'</button></div></div></div>'
 		return new Promise((resolve) => {
 			const modal = document.createElement('DIV')
-			modal.classList.add('modal', 'fade')
+			modal.classList.add('modal', 'alert', 'fade')
 			modal.setAttribute('tabindex', '-1')
 			modal.setAttribute('data-bs-backdrop', 'static')
 			modal.innerHTML = html

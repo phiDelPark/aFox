@@ -30,5 +30,24 @@
         })
         .catch(error => console.log(error))
       })
+
+      document.getElementById('carouselGallery')
+        ?.addEventListener('slide.bs.carousel', function (e) {
+          if((e.from == 0 && e.direction == 'right') || (e.to == 0 && e.direction == 'left')){
+            e.preventDefault()
+            e.stopPropagation()
+            let _items = document.getElementById('paginationGallery').querySelectorAll('li.page-number')
+            confirm($_LANG['confirm_page_' + e.direction])
+              .then(()=>{
+                _items.forEach((el,i) => {
+                  if(el.hasAttribute('selected')){
+                    _items[e.direction == 'left' ? i+1 : i-1]?.querySelector('a').click()
+                    return
+                  }
+                })
+              })
+              .catch(error => console.log(error))
+          }
+        })
   })
 })()
