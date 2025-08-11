@@ -34,7 +34,7 @@ function proc($data)
 			$ex_keys['keys'][md5($_boxs[0])] = implode($is?'|':'&', $_boxs);
 		}
 		if(count($ex_keys['keys']) > 99) { //확장 변수 갯수 제한 99개
-			return set_error(getLang('overflow_count', ['extra_keys',99]));
+			return set_error(getLang('overflow_value', ['extra_keys','Count',99]),2301);
 		}
 	}
 
@@ -43,6 +43,9 @@ function proc($data)
 	$file_max = abs($data['md_file_max']);
 	$file_size = abs($data['md_file_size']) * 1024;
 	$file_accept = str_replace(' ','',empty($data['md_file_accept'])?'':$data['md_file_accept']);
+
+	$data['thumb_width'] = abs($data['thumb_width']) < 1 ? 400 : abs($data['thumb_width']);
+	$data['thumb_height'] = abs($data['thumb_height']) < 1 ? 180 : abs($data['thumb_height']);
 
 	// 관리자 이이디가 넘어오면 srl로 변경
 	$md_manager = empty($data['md_manager']) ? 0 : $data['md_manager'];
@@ -64,7 +67,7 @@ function proc($data)
 			}
 			// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 			$_extras = serialize($ex_keys);
-			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_size', ['extra_keys',65535]), 1401);
+			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_value', ['extra_keys','Size',65535]), 2301);
 
 			DB::insert(_AF_MODULE_TABLE_,
 				[
@@ -112,6 +115,14 @@ function proc($data)
 				}
 			}
 
+			// 썸네일 사이즈 변경시 이전 썸네일 삭제 체크
+			if(is_dir(_AF_ATTACH_DATA_.'thumbnail/'.$data['md_id'].'/')
+				&& (abs($module['thumb_width']) != abs($data['thumb_width'])
+					|| abs($module['thumb_height']) != abs($data['thumb_height']))
+			){
+				throw new Exception(getLang('invalid_value', ['thumbnail']), 4303);
+			}
+
 			// 확장 변수가 있으면 unserialize
 			$_extras = empty($module['md_extra']) || !is_string($module['md_extra']) ? [] : unserialize($module['md_extra']);
 			// 확장변수 키가 있으면 합침
@@ -119,7 +130,7 @@ function proc($data)
 			else $_extras['keys'] = $ex_keys['keys'];
 			// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 			$_extras = serialize($_extras);
-			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_size', ['extra_keys',65535]), 1401);
+			if(strlen($_extras) > 65535) throw new Exception(getLang('overflow_value', ['extra_keys','Size',65535]), 2301);
 
 			DB::update(_AF_MODULE_TABLE_,
 				[
@@ -156,7 +167,7 @@ function proc($data)
 		}
 
 		// 썸네일 제거
-		unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$data['md_id'].'/');
+		//unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$data['md_id'].'/');
 
 	} catch (Exception $ex) {
 		DB::rollback();

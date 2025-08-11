@@ -143,18 +143,11 @@ $_LANG['start']					= '홈';
 $_LANG['menu']					= '메뉴';
 $_LANG['grant']					= '승인';
 $_LANG['insert']				= '추가';
-$_LANG['thumbnail']				= '썸네일';
 $_LANG['author']				= '작성자';
 
 $_LANG['data_manage']			= '관리';
 $_LANG['advanced_setup']		= '고급 설정';
 $_LANG['empty_%s']				= '%s 비우기';
-
-$_LANG['overflow_size']			= '%s의 최대 크기 (%s)를 벗어났습니다.';
-$_LANG['overflow_count']		= '%s의 최대 수 (%s)를 벗어났습니다.';
-
-$_LANG['cant_change_category']	= '분류 %s에 문서가 존재하여 변경할 수 없습니다.';
-$_LANG['prompt_move_board']		= '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n카테고리를 선택하시려면 뒤에 :카테고리를 입력하세요.\n예) 모듈ID : 카테고리';
 
 $_LANG['desc_mb_id']			= '첫 글자는 영문이여야 하며 영문, 숫자, 언더바(_)만 사용 가능합니다.';
 $_LANG['desc_base_cdn_list']	= '사용할 bootstrap 5.x 등의 CDN 서버를 적어주세요. (비워두면 기본값)';
@@ -169,12 +162,13 @@ $_LANG['desc_prohibit_id']		= '입력된 단어가 포함된 아이디나 이름
 $_LANG['desc_access_ip']		= '입력된 IP의 접근을 허용 또는 차단할 수 있습니다. 123.123.+ 도 입력 가능. (엔터로 구분)';
 $_LANG['desc_start_page']		= '사이트에서 사용할 시작 페이지를 선택하세요.';
 $_LANG['desc_terms_of_use']		= '이용약관을 적어주시면 회원 가입시 약관을 출력해줍니다. (비워두면 출력안함)';
-$_LANG['desc_thumbnail']		= '갤러리, 리뷰 게시판에 목록 이미지를 썸네일로 사용하시려면 크기를 입력하세요.';
 $_LANG['desc_access_md_id']		= '선택된 모듈 아이디만 포함 혹은 제외 가능합니다. (선택된 항목이 없으면 모두 포함)';
 $_LANG['desc_use_signup']		= '회원가입을 허락할지 설정합니다.';
 $_LANG['desc_use_visit']		= '방문자 정보를 기록할지 설정합니다.';
 $_LANG['desc_use_protect']		= '다른 사이트에선 파일을 사용할 수 없게 설정합니다.';
 $_LANG['desc_use_captcha']		= '사람과 컴퓨터를 판별하는 캡차를 보여줄지 설정합니다.';
+
+$_LANG['prompt_move_board']		= '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n카테고리를 선택하시려면 뒤에 :카테고리를 입력하세요.\n예) 모듈ID : 카테고리';
 
 /* End of file admin_ko.php */
 /* Location: ./common/lang/admin_ko.php */

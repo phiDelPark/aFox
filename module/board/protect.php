@@ -1,5 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
+$_PROTECT['clear']					= ['grant' => 's'];
 
 $_PROTECT['proc.deleteboard']		= ['grant' => 's'];
 $_PROTECT['proc.updateboard']		= ['grant' => 's'];

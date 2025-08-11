@@ -69,6 +69,7 @@ $_LANG['success_finished']	= '작업을 마쳤습니다.';
 
 // invalid_... 올바르지 않은 값 오류번호 2001~2999
 $_LANG['invalid_value']		= '%s의 값이 올바르지 않습니다.'; //2001
+$_LANG['overflow_value']	= '%s의 최대 %s(%s)를 벗어났습니다.'; //2301
 
 // warn_... 경고 오류번호 3001~3999
 $_LANG['warn_exists']		= '%s이(가) 존재합니다.'; // 3103

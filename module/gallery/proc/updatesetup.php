@@ -24,8 +24,8 @@ function proc($data) {
 	$file_size = abs($data['md_file_size']) * 1024;
 	$list_count = empty($data['md_list_count']) ? 100 : abs($data['md_list_count']);
 
-	$data['thumb_width'] = abs($data['thumb_width']) < 1 ? 320 : abs($data['thumb_width']);
-	$data['thumb_height'] = abs($data['thumb_height']) < 1 ? 240 : abs($data['thumb_height']);
+	$data['thumb_width'] = abs($data['thumb_width']) < 1 ? 400 : abs($data['thumb_width']);
+	$data['thumb_height'] = abs($data['thumb_height']) < 1 ? 180 : abs($data['thumb_height']);
 
 	// 관리자 이이디가 넘어오면 srl로 변경
 	$md_manager = $data['md_manager'];

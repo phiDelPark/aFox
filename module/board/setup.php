@@ -134,7 +134,7 @@ function validateForm(f) {
 		</div>
 		<div class="form-text"><?php echo getLang('desc_list_count')?></div>
 	</div>
-
+<?php $thumb_exists = !(empty($_GET['bo_id']) || !is_dir(_AF_ATTACH_DATA_.'thumbnail/'.$_GET['bo_id'].'/')); ?>
 	<div class="mb-4">
 		<label class="form-label me-1"><?php echo getLang('thumbnail')?>:</label>
 		<input class="form-check-input mx-1" type="checkbox" id="thumbOption" name="thumb_option" value="1"<?php echo $BOARD['thumb_option']==='1'?' checked':'' ?>>
@@ -142,14 +142,30 @@ function validateForm(f) {
 		<div class="d-flex flex-row">
 			<div class="input-group me-2" style="width:auto">
 				<label class="input-group-text w-100p" for="thumbWidth"><?php echo getLang('width')?></label>
-				<input type="number" class="form-control mw-100p" id="thumbWidth" name="thumb_width" min="0" max="9999" maxlength="5" value="<?php echo empty($BOARD['thumb_width'])?'':$BOARD['thumb_width'] ?>">
+				<input <?php echo $thumb_exists ? 'readonly="readonly" ' : ''?>type="number" class="form-control mw-100p" id="thumbWidth" name="thumb_width" min="0" max="9999" maxlength="5" value="<?php echo empty($BOARD['thumb_width'])?'':$BOARD['thumb_width'] ?>">
 			</div>
 			<div class="input-group me-2" style="width:auto">
 				<label class="input-group-text w-100p" for="thumbHeight"><?php echo getLang('height')?></label>
-				<input type="number" class="form-control mw-100p" id="thumbHeight" name="thumb_height" min="0" max="9999" maxlength="5" value="<?php echo empty($BOARD['thumb_height'])?'':$BOARD['thumb_height'] ?>">
+				<input <?php echo $thumb_exists ? 'readonly="readonly" ' : ''?>type="number" class="form-control mw-100p" id="thumbHeight" name="thumb_height" min="0" max="9999" maxlength="5" value="<?php echo empty($BOARD['thumb_height'])?'':$BOARD['thumb_height'] ?>">
 			</div>
 		</div>
+<?php if($thumb_exists){?>
+		<div class="form-text"><?php echo getLang('clear_thumbnail')?></div>
+		<div class="form-text"><a id="openClearThumbnail" href="#" onclick="return clearThumbnail(this)">Clear thumbnail...</a></div>
+		<iframe id="iframeClearThumbnail" src="about:blank" style="width:100%;height:100px;display:none">
+		Your browser does not support iframes.
+		</iframe>
+		<script>
+			function clearThumbnail(a) {
+				var iframe = document.querySelector('#iframeClearThumbnail');
+				iframe.style.display = 'block';
+				iframe.contentWindow.location.href = '<?php echo getUrl('', 'module', 'board', 'popup', '1', 'clear', $_GET['bo_id']) ?>';
+				return false;
+			}
+		</script>
+<?php } else { ?>
 		<div class="form-text"><?php echo getLang('desc_thumbnail')?></div>
+<?php } ?>
 	</div>
 
 	<div class="mb-4">

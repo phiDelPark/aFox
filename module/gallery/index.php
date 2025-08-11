@@ -25,7 +25,6 @@ function dispGalleryDefault($data) {
 		$disp = empty($data['srl']) ? 'list' : 'view';
 	}
 
-
 	$dir = _AF_MODULES_PATH_ . 'gallery/disp/';
 	$inc_file = $dir . $disp . '.php';
 
