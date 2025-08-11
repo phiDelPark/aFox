@@ -19,7 +19,7 @@ function proc($data) {
 		if($category) $category = substr($category, 0, -1);
 	}
 
-	$list_count = empty($data['md_list_count']) ? 20 : abs($data['md_list_count']);
+	$list_count = empty($data['md_list_count']) ? 100 : abs($data['md_list_count']);
 	$file_max = abs($data['md_file_max']);
 	$file_size = abs($data['md_file_size']) * 1024;
 	$file_accept = 'jpg,jpeg,png';

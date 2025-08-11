@@ -2,7 +2,9 @@
 
 function proc($data)
 {
-	$count = empty($data["md_list_count"]) ? 20 : $data["md_list_count"];
+	global $_CFG;
+
+	$count = empty($_CFG["md_list_count"]) ? 100 : $_CFG["md_list_count"];
 	$search = empty($data["search"]) ? "" : $data["search"];
 	$page = empty($data["page"]) ? 1 : $data["page"];
 

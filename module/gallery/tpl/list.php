@@ -1,6 +1,10 @@
 <?php if(!defined('__AFOX__')) exit();
 addJSLang(['confirm_delete', 'prompt_modify_item', 'item']);
-addJS(_AF_THEME_URL_ . 'skin/gallery/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
+if(file_exists(_AF_THEME_URL_ . 'skin/gallery/gallery.js')){
+  addJS(_AF_THEME_URL_ . 'skin/gallery/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
+} else {
+  addJS(_AF_URL_ . 'module/gallery/tpl/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
+}
 
 $current_page = $_DATA['current_page'];
 $total_page = $_DATA['total_page'];
@@ -12,6 +16,9 @@ $srl = @$_GET['srl']?$_GET['srl']:0;
 $is_manager = isManager(_MID_);
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 $asc = isset($_GET['asc']);
+
+$_CFG['thumb_width'] = $_CFG['thumb_width'] ? $_CFG['thumb_width'] : 'auto';
+$_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 ?>
 
 <section id="galleryList" class="gallery">
@@ -40,7 +47,7 @@ $asc = isset($_GET['asc']);
 		}
 		echo '<div style="position:relative">';
 		echo '<a href="'.getUrl('','id',_MID_).'" data-bs-toggle="modal" data-bs-target="#galleryContentModal">';
-		echo '<img src="./?file='.$val['mf_srl'].'&thumb=x"><div class="details"><span class="title">'.$val['mf_name'].'</span>';
+		echo '<img loading="lazy" width="'.$_CFG['thumb_width'].'" height="'.$_CFG['thumb_height'].'" src="./?file='.$val['mf_srl'].'&thumb=x"><div class="details"><span class="title">'.$val['mf_name'].'</span>';
 		echo '<span class="info">'.date('F j, Y', strtotime($val['mf_regdate'])).'</span></div></a>';
 		echo '<input class="form-check-input d-none" type="checkbox" value="'.$val['mf_srl'].'"></div>';
 	}

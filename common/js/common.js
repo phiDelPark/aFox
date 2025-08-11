@@ -13,10 +13,6 @@ const $_LANG = {};
 (() => {
 'use strict'
 
-	String.prototype.toUcFirst = function() {
-		return this.charAt(0).toUpperCase()+this.slice(1).toLowerCase()
-	}
-
 	String.prototype.escapeMKDW = function(f) {
 		const rex = f === false ? /[\`\[\]]/g : /[\\\`\*\_\{\}\[\]\(\)\>\#\+\-\.\!]/g
 		return this.replace(rex, (s) => { return '\\' + s })
@@ -83,6 +79,10 @@ const $_LANG = {};
 				return a[i].padStart(Number($1||0), $2=='d'?'0':'_')
 			})
 		} return s
+	}
+
+	String.prototype.toUcFirst = function() {
+		return this.charAt(0).toUpperCase()+this.slice(1).toLowerCase()
 	}
 
 	Number.prototype.shortFileSize = function() {

@@ -33,7 +33,7 @@ if(empty($_GET['mid'])){
 
 		$grants = ['0'=>'A','1'=>'M','m'=>'S'];
 		foreach ($_list as $key => $value) {
-			echo '<tr><th scope="row" >'.$value['md_id'].'</th>';
+			echo '<tr><th scope="row" ><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
 			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_about'])?'':' - '.$value['md_about'])),50)).'</td>';
 			echo '<td class="fixed-width">'.$grants[$value['grant_list']].$grants[$value['grant_view']].$grants[$value['grant_upload']].'</td>';
 			echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['md_regdate'])).'</td>';
