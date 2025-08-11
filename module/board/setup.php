@@ -1,11 +1,11 @@
 <?php if(!defined('__AFOX__')) exit();
 
 $BOARD = [];
-if($is_new = (empty($_GET['md_id']) || $_GET['md_id'] === '.')){
+if($is_new = (empty($_GET['bo_id']) || $_GET['bo_id'] === '@new')){
 	$r = DB::query('SHOW FULL COLUMNS FROM '._AF_MODULE_TABLE_, [], true);
 	foreach($r as $v) $BOARD[$v['Field']] = $v['Default'];
 } else{
-	$BOARD = DB::get(_AF_MODULE_TABLE_, '*', ['md_id'=>$_GET['md_id']]);
+	$BOARD = DB::get(_AF_MODULE_TABLE_, '*', ['md_id'=>$_GET['bo_id']]);
 	if(empty($BOARD['md_id'])) {
 		messageBox(getLang('error_founded'), 4201);
 		return;
@@ -23,7 +23,7 @@ if($is_new = (empty($_GET['md_id']) || $_GET['md_id'] === '.')){
 
 <?php if(!$is_new){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return validateForm(this)">
-	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('bo_id', '')?>" />
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="deleteBoard" />
 	<input type="hidden" name="md_id" value="" />
@@ -38,7 +38,7 @@ function validateForm(f) {
 <?php }?>
 
 <form id="setup" method="post" autocomplete="off">
-	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('bo_id', '')?>" />
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="updateBoard" />
 	<input type="hidden" name="md_id" value="<?php echo $is_new?'':$BOARD['md_id'] ?>" />

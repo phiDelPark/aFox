@@ -1,18 +1,18 @@
 <?php if(!defined('__AFOX__')) exit();
 
 $GALLERY = [];
-if($is_new = (empty($_GET['mid']) || $_GET['mid'] === '.')){
+if($is_new = (empty($_GET['sub_id']) || $_GET['sub_id'] === '@new')){
 	$r = DB::query('SHOW FULL COLUMNS FROM '._AF_MODULE_TABLE_, [], true);
 	foreach($r as $v) $GALLERY[$v['Field']] = $v['Default'];
 } else {
-	$GALLERY = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'gallery', 'md_id'=>$_GET['mid']]);
+	$GALLERY = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'gallery', 'md_id'=>$_GET['sub_id']]);
 }
 
-if(empty($_GET['mid'])){
+if(empty($_GET['sub_id'])){
 	$_list = DB::gets(_AF_MODULE_TABLE_, 'SQL_CALC_FOUND_ROWS *', ['md_key'=>'gallery']);
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 ?>
-<a class="btn btn-primary mb-3" style="width:250px" href="<?php echo getUrl('mid', '.')?>"><?php echo getLang('new_gallery')?></a>
+<a class="btn btn-primary mb-3" style="width:250px" href="<?php echo getUrl('sub_id', '@new')?>"><?php echo getLang('new_gallery')?></a>
 
 <table class="table table-hover">
 <thead>
@@ -37,7 +37,7 @@ if(empty($_GET['mid'])){
 			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_about'])?'':' - '.$value['md_about'])),50)).'</td>';
 			echo '<td class="fixed-width">'.$grants[$value['grant_list']].$grants[$value['grant_view']].$grants[$value['grant_upload']].'</td>';
 			echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['md_regdate'])).'</td>';
-			echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('mid', $value['md_id']).'">'.getLang('setup').'</a></td></tr>';
+			echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('sub_id', $value['md_id']).'">'.getLang('setup').'</a></td></tr>';
 		}
 	}
 ?>
@@ -48,7 +48,7 @@ if(empty($_GET['mid'])){
 
 <?php if(!$is_new){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return validateForm(this)">
-	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('sub_id', '', 'md_id', '')?>" />
 	<input type="hidden" name="module" value="gallery" />
 	<input type="hidden" name="act" value="deleteGallery" />
 	<input type="hidden" name="md_id" value="" />
@@ -64,7 +64,7 @@ function validateForm(f) {
 
 <form method="post" autocomplete="off">
 	<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
-	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('sub_id', '')?>" />
 	<input type="hidden" name="module" value="<?php echo $_GET['md_id']?>" />
 	<input type="hidden" name="act" value="updateSetup" />
 	<input type="hidden" name="md_id" value="<?php echo $is_new?'':$GALLERY['md_id'] ?>" />

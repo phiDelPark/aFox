@@ -10,7 +10,7 @@
 	$board_list = setDataListInfo($board_list, $_GET['page'], 20, DB::foundRows());
 ?>
 
-<a class="btn btn-primary mb-3" style="width:250px" href="<?php echo getUrl('mid', '.')?>"><?php echo getLang('new_board')?></a>
+<a class="btn btn-primary mb-3" style="width:250px" href="<?php echo getUrl('bo_id', '@new')?>"><?php echo getLang('new_board')?></a>
 
 <table class="table">
 <thead>
@@ -42,7 +42,7 @@
 			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_about'])?'':' - '.$value['md_about'])),50)).'</td>';
 			echo '<td class="fixed-width">'.$grants[$value['grant_list']].$grants[$value['grant_view']].$grants[$value['grant_write']].$grants[$value['grant_reply']].$grants[$value['grant_upload']].$grants[$value['grant_download']].'</td>';
 			echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['md_regdate'])).'</td>';
-			echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('mid', $value['md_id']).'">'.getLang('setup').'</a></td></tr>';
+			echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('bo_id', $value['md_id']).'">'.getLang('setup').'</a></td></tr>';
 		}
 	}
 ?>

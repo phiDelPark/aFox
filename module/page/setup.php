@@ -1,12 +1,12 @@
 <?php if(!defined('__AFOX__')) exit();
 	$PAGE = [];
-	if($is_new = (empty($_GET['md_id']) || $_GET['md_id'] === '.')){
+	if($is_new = (empty($_GET['pg_id']) || $_GET['pg_id'] === '@new')){
 		$r = DB::query('SHOW FULL COLUMNS FROM '._AF_PAGE_TABLE_, [], true);
 		foreach($r as $v) $PAGE[$v['Field']] = $v['Default'];
 		$r = DB::query('SHOW FULL COLUMNS FROM '._AF_MODULE_TABLE_, [], true);
 		foreach($r as $v) $PAGE[$v['Field']] = $v['Default'];
 	} else{
-		$PAGE = DB::get(_AF_PAGE_TABLE_, '*', ['md_id'=>$_GET['md_id']]);
+		$PAGE = DB::get(_AF_PAGE_TABLE_, '*', ['md_id'=>$_GET['pg_id']]);
 		if(empty($PAGE['md_id'])) {
 			messageBox(getLang('error_founded'), 4201);
 			return;
@@ -20,7 +20,7 @@
 
 <?php if(!$is_new){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return validateForm(this)">
-	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '', 'md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('pg_id', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="deletePage" />
 	<input type="hidden" name="md_id" value="" />
@@ -35,7 +35,7 @@ function validateForm(f) {
 <?php }?>
 
 <form id="setup" method="post" autocomplete="off" enctype="multipart/form-data">
-	<input type="hidden" name="success_url" value="<?php echo getUrl('mid', '','md_id', '')?>" />
+	<input type="hidden" name="success_url" value="<?php echo getUrl('pg_id', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="updatePage" />
 	<input type="hidden" name="md_id" value="<?php echo $is_new?'':$PAGE['md_id'] ?>" />

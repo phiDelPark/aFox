@@ -88,5 +88,5 @@ if(is_dir($module_dir)) {
 </table>
 
 <?php
-/* End of file module.ls.php */
-/* Location: ./module/admin/module.ls.php */
+/* End of file module.php */
+/* Location: ./module/admin/module.php */

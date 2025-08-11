@@ -18,7 +18,7 @@
 
 ?>
 
-<a class="btn btn-primary mb-3" style="width:250px" href="<?php echo getUrl('mid', '.')?>"><?php echo getLang('new_page')?></a>
+<a class="btn btn-primary mb-3" style="width:250px" href="<?php echo getUrl('pg_id', '@new')?>"><?php echo getLang('new_page')?></a>
 
 <table class="table">
 <thead>
@@ -52,7 +52,7 @@
 				echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title']),50)).'</td>';
 				echo '<td class="fixed-width">'.$grants[$value['grant_view']].$grants[$value['grant_reply']].$grants[$value['grant_download']].'</td>';
 				echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['pg_update'])).'</td>';
-				echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('mid', $value['md_id']).'">'.getLang('setup').'</a></td></tr>';
+				echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('pg_id', $value['md_id']).'">'.getLang('setup').'</a></td></tr>';
 			}
 		}
 	}
