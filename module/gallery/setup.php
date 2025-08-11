@@ -22,7 +22,8 @@ if(empty($_GET['sub_id'])){
 <table class="table table-hover">
 <thead>
 	<tr>
-		<th scope="col"><a href="#" onclick="return _showCheckItems(this)"><?php echo getLang('data_manage')?></a></th>
+		<!-- <th scope="col"><a href="#" onclick="return _showCheckItems(this)"><?php//echo getLang('data_manage')?></a></th> -->
+		<th scope="col"><?php echo getLang('id')?></th>
 		<th scope="col" class="text-wrap"><input class="me-3 d-none" type="checkbox" onchange="_allCheckItems(this)"><small class="d-none">[ <a href="#" onclick="return _clearCacheItems(this)"><?php echo getLang('clear_cache')?></a> ]</small><span><?php echo getLang('title')?></span></th>
 		<th scope="col"><?php echo getLang('grant')?></th>
 		<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('date')?></th>
@@ -48,26 +49,6 @@ if(empty($_GET['sub_id'])){
 ?>
 </tbody>
 </table>
-
-<script>
-	function _showCheckItems(el_chk) {
-		const tb = el_chk.closest('table'), first_chk = tb.querySelector('[type=checkbox]')
-		tb.querySelectorAll('[type=checkbox]')?.forEach(el => el.classList.remove('d-none'))
-		first_chk.parentNode?.lastChild.classList.add('d-none')
-		first_chk.parentNode?.childNodes[1].classList.remove('d-none')
-		return false
-	}
-	function _allCheckItems(el_chk) {
-		el_chk.closest('table').querySelectorAll('tbody [type=checkbox]')?.forEach(el => el.checked = el_chk.checked)
-	}
-	function _clearCacheItems() {
-		if (confirm($_LANG['confirm_empty'].sprintf(['Cache'])) === true) {
-			exec_ajax({module:'gallery',act:'clearCache',...document.querySelector('#af_check_items').serializeArray()})
-			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
-		}
-		return false;
-	}
-</script>
 
 <?php } else { ?>
 

@@ -87,12 +87,12 @@ function validateForm(f) {
 		<div>
 			<input type="radio" class="btn-check" name="use_style" id="useStyle1" autocomplete="off" value="0"<?php echo $BOARD['use_style']==='0'?' checked':'' ?>>
 			<label class="btn btn-xs btn-outline-primary w-100p" for="useStyle1"><?php echo getLang('Default')?></label>
-			<input type="radio" class="btn-check" name="use_style" id="useStyle2" autocomplete="off" value="1"<?php echo $BOARD['use_style']==='1'?' checked':'' ?>>
-			<label class="btn btn-xs btn-outline-primary w-100p" for="useStyle2"><?php echo getLang('Review')?></label>
-			<input type="radio" class="btn-check" name="use_style" id="useStyle3" autocomplete="off" value="2"<?php echo $BOARD['use_style']==='2'?' checked':'' ?>>
-			<label class="btn btn-xs btn-outline-primary w-100p" for="useStyle3"><?php echo getLang('Gallery')?></label>
-			<input type="radio" class="btn-check" name="use_style" id="useStyle4" autocomplete="off" value="3"<?php echo $BOARD['use_style']==='3'?' checked':'' ?>>
-			<label class="btn btn-xs btn-outline-primary w-100p" for="useStyle4"><?php echo getLang('Timeline')?></label>
+			<input type="radio" class="btn-check" name="use_style" id="useStyle2" disabled autocomplete="off" value="1"<?php echo $BOARD['use_style']==='1'?' checked':'' ?>>
+			<label class="btn btn-xs btn-outline-secondary w-100p" for="useStyle2" disabled><?php echo getLang('Review')?></label>
+			<input type="radio" class="btn-check" name="use_style" id="useStyle3" disabled autocomplete="off" value="2"<?php echo $BOARD['use_style']==='2'?' checked':'' ?>>
+			<label class="btn btn-xs btn-outline-secondary w-100p" for="useStyle3" disabled><?php echo getLang('Webzine')?></label>
+			<input type="radio" class="btn-check" name="use_style" id="useStyle4" disabled autocomplete="off" value="3"<?php echo $BOARD['use_style']==='3'?' checked':'' ?>>
+			<label class="btn btn-xs btn-outline-secondary w-100p" for="useStyle4" disabled><?php echo getLang('Timeline')?></label>
 		</div>
 	</div>
 

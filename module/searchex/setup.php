@@ -25,9 +25,7 @@ if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode
 <table class="table table-hover">
 <thead>
 	<tr>
-		<th scope="col"><input type="checkbox" onclick="_allCheckTableItems(this)">
-		<?php echo getLang('id')?>
-		</th>
+		<th scope="col"><input type="checkbox" onclick="_allCheckTableItems(this)" style="margin-right:10px"><span><?php echo getLang('id')?></span></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
 	</tr>
 </thead>
@@ -40,7 +38,7 @@ if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode
 		messageBox($error['message'], $error['error']);
 	} else {
 		foreach ($_list as $key => $value) {
-			echo '<tr><th scope="row"><label><input type="checkbox" name="md_ids[]" value="'.$value['md_id'].'" class="data_selecter" style="margin-right:5px"'.(empty($_mids)||array_search($value['md_id'], $_mids)===false?'':' checked').'>'.$value['md_id'].'</label></th>';
+			echo '<tr><th scope="row"><label><input type="checkbox" name="md_ids[]" value="'.$value['md_id'].'" class="data_selecter" style="margin-right:10px"'.(empty($_mids)||array_search($value['md_id'], $_mids)===false?'':' checked').'><span>'.$value['md_id'].'</span></label></th>';
 			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_about'])?'':' - '.$value['md_about'])),50)).'</td></tr>';
 		}
 	}
