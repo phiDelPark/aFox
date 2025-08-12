@@ -3,6 +3,11 @@
   --offcanvas-width: 220px;
   --topNavbarHeight: 56px;
 }
+[fix-disabled],
+[fix-disabled]+label{
+  pointer-events: none;
+  opacity: 0.5;
+}
 .bi {
   vertical-align: -.125em;
   fill: currentColor;

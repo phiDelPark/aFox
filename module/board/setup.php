@@ -137,7 +137,7 @@ function validateForm(f) {
 <?php $thumb_exists = !(empty($_GET['bo_id']) || !is_dir(_AF_ATTACH_DATA_.'thumbnail/'.$_GET['bo_id'].'/')); ?>
 	<div class="mb-4">
 		<label class="form-label me-1"><?php echo getLang('thumbnail')?>:</label>
-		<input class="form-check-input mx-1" type="checkbox" id="thumbOption" name="thumb_option" <?php echo $thumb_exists ? 'disabled="disabled" ' : ''?>value="1"<?php echo $BOARD['thumb_option']==='1'?' checked':'' ?>>
+		<input class="form-check-input mx-1" type="checkbox" id="thumbOption" name="thumb_option" <?php echo $thumb_exists ? 'fix-disabled="disabled" ' : ''?>value="1"<?php echo $BOARD['thumb_option']==='1'?' checked':'' ?>>
 		<label for="thumbOption"><?php echo getLang('thumb_fit')?></label>
 		<div class="d-flex flex-row">
 			<div class="input-group me-2" style="width:auto">
