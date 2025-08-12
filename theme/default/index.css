@@ -134,120 +134,12 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 .list .list-group a small {
 	color: var(--bs-secondary-color);
 }
-
-.gallery .list-group a {
-	display: inline-block;
-	margin: 10px;
-	text-align: left;
-	opacity: 0.99;
-	overflow: hidden;
-	position: relative;
-	border-radius: 3px;
-	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.05);
-}
-.gallery .list-group a:before {
-	content: "";
-	background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%);
-	width: 100%;
-	height: 50%;
-	opacity: 0;
-	position: absolute;
-	top: 100%;
-	left: 0;
-	z-index: 2;
-	transition-property: top, opacity;
-	transition-duration: 0.3s;
-}
-.gallery .list-group a img {
-	display: block;
-	width: 100%;
-	max-width: 100%;
-	backface-visibility: hidden;
-	-webkit-backface-visibility: hidden;
-}
-.gallery .list-group a .details {
-	font-size: 16px;
-	padding: 20px;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	z-index: 3;
-	width: 100%;
-	color: var(--bs-list-group-color);
-}
-.gallery .list-group a .details span {
-	display: block;
-	opacity: 0;
-	position: relative;
-	top: 100px;
-	transition-property: top, opacity;
-	transition-duration: 0.3s;
-	transition-delay: 0s;
-	color: var(--bs-secondary-color);
-}
-.gallery .list-group a .details .title {
-	line-height: 1;
-	font-weight: 600;
-	font-size: 18px;
-	max-width: 100%;
-	overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-	display: inline-block!important;
-}
-.gallery .list-group a .details .info {
-	line-height: 1.2;
-	margin-top: 5px;
-	font-size: 12px;
-}
-.gallery .list-group a:hover span, .gallery .list-group a:hover:before {
-	top: 50%;
-	opacity: 1;
-}
-.gallery .list-group a:hover span {
-	top: 0;
-}
-.gallery .list-group a:hover .title {
-	transition-delay: 0.15s;
-}
-.gallery .list-group a:hover .info {
-	transition-delay: 0.25s;
-}
-.gallery .list-group [type=checkbox] {
-	position: absolute;
-	left: 4px;
-	width: 2rem;
-	height: 2rem;
-	z-index: 1;
-}
-.gallery .carousel-inner{
-	min-height: 90vh;
-}
-.gallery .carousel-control-prev,
-.gallery .carousel-control-next {
-	opacity: 0;
-}
-.gallery .carousel-control-prev:hover,
-.gallery .carousel-control-next:hover {
-	opacity: 1;
-	background-color: rgba(var(--bs-tertiary-bg-rgb), .65);
-}
-.gallery .carousel-inner h6{
-	position: absolute;
-	writing-mode: vertical-rl;
-	margin: 0;
-}
-.gallery .carousel-inner img{
-	margin-left: 2.3rem;
-}
-
 .editor-group label:nth-of-type(1) {
 	font-size: .85rem;
 	padding-left: .75rem;
 	color:rgba(var(--bs-body-color-rgb), .65);
 	border-left: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
 }
-
 .mode-toggle {
 	position: fixed;
 	bottom: 1rem;

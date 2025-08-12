@@ -15,6 +15,9 @@ if(!defined('__AFOX__')) exit();
   class         : CSS 클래스
   style         : 스타일
   mstyle        : 모바일 화면에서의 스타일
+
+* 주의사항 *
+  타입이 gallery 이면 해당 모듈에 썸네일 설정을 해주세요.
 </pre>
 
 <h5>사용예</h5>

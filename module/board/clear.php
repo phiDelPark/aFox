@@ -38,6 +38,10 @@ if(@$_GET['clear']) {
 		}
 	}
 
+	echo '<style>body{word-wrap:break-word}</style>';
+	ob_flush();
+	flush();
+
 	$thumbnail_dir = _AF_ATTACH_DATA_.'thumbnail/'.$_GET['clear'].'/';
 	if(is_dir($thumbnail_dir)){
 		__unlinkThumbnail($thumbnail_dir);
@@ -48,7 +52,7 @@ if(!is_dir($thumbnail_dir)){
 ?>
 
 <script>
-	parent.document.querySelector('#thumbOption').removeAttribute('readonly');
+	parent.document.querySelector('#thumbOption').removeAttribute('disabled');
 	parent.document.querySelector('#thumbWidth').removeAttribute('readonly');
 	parent.document.querySelector('#thumbHeight').removeAttribute('readonly');
 	parent.document.querySelector('#openClearThumbnail').style.display = 'none';

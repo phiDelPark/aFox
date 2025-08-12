@@ -1,10 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 addJSLang(['confirm_page_left', 'confirm_page_right', 'confirm_delete', 'prompt_modify_item', 'item']);
-if(file_exists(_AF_THEME_URL_ . 'skin/gallery/gallery.js')){
-  addJS(_AF_THEME_URL_ . 'skin/gallery/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
-} else {
-  addJS(_AF_URL_ . 'module/gallery/tpl/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
-}
+addCSS(_AF_URL_ . 'module/gallery/tpl/gallery' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css'));
+addJS(_AF_URL_ . 'module/gallery/tpl/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
 
 $current_page = $_DATA['current_page'];
 $total_page = $_DATA['total_page'];
