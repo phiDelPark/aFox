@@ -3,6 +3,7 @@
 function proc($data)
 {
 	global $_CFG;
+	if(!isGrant('upload', _MID_))return set_error(getLang('error_permitted'),4501);
 
 	$count = empty($_CFG["md_list_count"]) ? 100 : $_CFG["md_list_count"];
 	$search = empty($data["search"]) ? "" : $data["search"];

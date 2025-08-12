@@ -2,6 +2,7 @@
 
 function proc($data) {
 	if(empty($data['md_id']) || empty($data['mf_srls'])) return set_error(getLang('error_request'),4303);
+	if(!isGrant('view', _MID_)) return set_error(getLang('error_permitted'),4501);
 
 	$srls = [];
 	$mf_srls = explode(',', $data['mf_srls']);

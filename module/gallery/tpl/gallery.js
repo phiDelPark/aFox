@@ -11,6 +11,7 @@
     inner.innerHTML = html.join('')
 
     const getImage = (id, srl) => {
+      let item = inner.querySelector('.carousel-item[item-key="'+srl+'"]')
       exec_ajax({
         module:'gallery',
         act:'getFiles',
@@ -18,7 +19,6 @@
         mf_srls:srl
       })
       .then((data)=>{
-          let item = inner.querySelector('.carousel-item[item-key="'+srl+'"]')
           data.forEach((el) => {
             let img = item.querySelector('img')
             img.src = './?file='+el.mf_srl
@@ -27,7 +27,10 @@
             return
           })
       })
-      .catch(error => console.log(error))
+      .catch((error)=>{
+        console.log(error)
+        item.querySelector('h6').innerHTML = error
+      })
     }
 
     const md_id = current_url.getQuery('id')
