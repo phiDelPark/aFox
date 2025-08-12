@@ -10,7 +10,7 @@
 	$member_list = setDataListInfo($member_list, $_GET['page'], 20, DB::foundRows());
 ?>
 
-<a class="btn btn-primary mb-3" style="width:250px" href="<?php echo getUrl('mid', '.')?>"><?php echo getLang('new_member')?></a>
+<a class="btn btn-primary mb-3" style="width:250px" href="<?php echo getUrl('mb_id', '@new')?>"><?php echo getLang('new_member')?></a>
 
 <table class="table">
 <thead>
@@ -47,7 +47,7 @@
 			echo '<td>'.$value['mb_point'].'</td>';
 			echo '<td>'.($value['mb_status']?$value['mb_status']:'--/--').'</td>';
 			echo '<td class="d-none d-md-table-cell">'.date('Y/m/d', strtotime($value['mb_login'])).'</td>';
-			echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('mid', $value['mb_id']).'">'.getLang('setup').'</a></td></tr>';
+			echo '<td><a class="btn btn-primary btn-sm" href="'.getUrl('mb_id', $value['mb_id']).'">'.getLang('setup').'</a></td></tr>';
 		}
 	}
 ?>

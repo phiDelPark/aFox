@@ -198,7 +198,7 @@ $is_admin = isAdmin();
 					: (!empty($_GET['md_id']) ? 'moduleform'
 						: (!empty($_GET['ao_id']) ? 'addonform'
 							: 'widgetform'))) . '.php';
-			} else if(!empty($_GET['bo_id']) ||	!empty($_GET['pg_id'])) {
+			} else if(!empty($_GET['mb_id']) ||	!empty($_GET['bo_id']) ||	!empty($_GET['pg_id'])) {
 				@include_once _AF_MODULES_PATH_ . $admin . '/lang/' . _AF_LANG_ . '.php';
 				require_once _AF_MODULES_PATH_ . $admin . '/setup.php';
 			} else {

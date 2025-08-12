@@ -13,6 +13,7 @@ $_LANG['addon']					= '애드온';
 $_LANG['widget']				= '위젯';
 $_LANG['page']					= '페이지';
 $_LANG['board']					= '게시판';
+$_LANG['memo']					= '메모';
 
 $_LANG['setup']					= '설정';
 $_LANG['status']				= '상태';
