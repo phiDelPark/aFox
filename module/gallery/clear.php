@@ -48,6 +48,7 @@ if(!is_dir($thumbnail_dir)){
 ?>
 
 <script>
+	parent.document.querySelector('#thumbOption').removeAttribute('readonly');
 	parent.document.querySelector('#thumbWidth').removeAttribute('readonly');
 	parent.document.querySelector('#thumbHeight').removeAttribute('readonly');
 	parent.document.querySelector('#openClearThumbnail').style.display = 'none';

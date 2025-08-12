@@ -9,6 +9,7 @@ $_LANG['item']				= '선택한 항목';
 $_LANG['upload']			= '업로드';
 $_LANG['download']			= '다운로드';
 $_LANG['thumbnail']			= '썸네일';
+$_LANG['thumb_fit']			= '비율맞춤';
 
 $_LANG['next']				= '다음';
 $_LANG['previous']			= '이전';

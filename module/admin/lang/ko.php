@@ -134,7 +134,6 @@ $_LANG['removed_date']			= '삭제 날짜';
 $_LANG['removed_module']		= '삭제된 모듈';
 $_LANG['removed_theme']			= '삭제된 테마';
 $_LANG['terms_of_use']			= '이용약관';
-$_LANG['thumb_fit']				= '크기맞춤';
 $_LANG['view_details']			= '자세히 보기';
 $_LANG['option']				= '옵션';
 $_LANG['style']					= '모양';
