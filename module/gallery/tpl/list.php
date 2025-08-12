@@ -37,8 +37,9 @@ $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 <div class="list-group list-group-flush mb-4" aria-label="List of post">
 <?php
 	$close_div = '';
+	$w_cnt = _MOBILE_ ? 2 : 4;
 	foreach ($_DATA['list'] as $key => $val) {
-		if((($key % 4) === 0)){
+		if((($key % $w_cnt) === 0)){
 			echo $close_div.'<div class="w-100 d-flex justify-content-between">';
 			$close_div = '</div>';
 		}
