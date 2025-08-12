@@ -12,7 +12,6 @@ define('_AF_HTTPS_PORT_', 443);
 
 define('_AF_DIR_PERMIT_', 0755);
 define('_AF_FILE_PERMIT_', 0644);
-define('_AF_ATTACH_PERMIT_', 0600);
 
 define('_AF_CONFIG_TABLE_', 'afox_config');
 define('_AF_MEMBER_TABLE_', 'afox_members');

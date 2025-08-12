@@ -376,7 +376,7 @@ function moveUploadedFile($file, $dest, $max_size = 0)
 		if(!$dest) return true; // 이동 경로가 없으면 이동 안함, 오류 체크는함
 		if(!is_dir($dir=dirname($dest)) && !mkdir($dir, _AF_DIR_PERMIT_, true)) return set_error(getLang('error_upload(7)'),10407);
 		if(file_exists($dest) && !unlinkFile($dest)) return set_error(getLang('error_upload(7)'),10407);
-		if(move_uploaded_file($file['tmp_name'], $dest)) @chmod($dest, _AF_ATTACH_PERMIT_);
+		if(move_uploaded_file($file['tmp_name'], $dest)) @chmod($dest, _AF_FILE_PERMIT_);
 		else return set_error(getLang('error_upload(4)'),10404);
 	} else return set_error(getLang('error_upload('.$file['error'].')'),10400+$file['error']);
 }
