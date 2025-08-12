@@ -187,12 +187,10 @@ class HtmlToMkdw
 						if(!$blockpre++) $array[] = "\n```\n";
 						break;
 					case 'code':
-						if(@end($array) == "\n```\n"){
-							// 코드 문법 강조를 위해 language 처리
-							if(preg_match_all('/(\b(?:class))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is', $attr, $m2)) {
-								if(($class = $m2[3][0]) && substr($class, 0, 9) == 'language-'){
-									$array[key($array)] = "\n```".substr($class, 9)."\n";
-								}
+						// 코드 문법 강조를 위해 language 처리
+						if(preg_match_all('/(\b(?:class))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is', $attr, $m2)) {
+							if(($class = $m2[3][0]) && substr($class, 0, 9) == 'language-'){
+								$array[key($array)] = "\n```".substr($class, 9)."\n";
 							}
 						}
 						break;
