@@ -100,8 +100,9 @@
 	writing-mode: vertical-rl;
 	margin: 0;
 }
+.gallery .carousel-inner{
+	background: url(../../../common/img/loading.gif) top no-repeat;
+}
 .gallery .carousel-inner img{
 	margin-left: 2.3rem;
-	min-height: 50px;
-	background: url(../../../common/img/loading.gif) center no-repeat;
 }

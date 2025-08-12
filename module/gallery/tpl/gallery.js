@@ -1,34 +1,43 @@
 (() => {
   'use strict'
   window.addEventListener('load', () => {
+    let html = []
+        const tag_img = '<div class="carousel-item" item-key="%s"><h6></h6><img src="%s" class="d-block w-100" alt="" loading="lazy"></div>'
+    document.querySelector('#galleryList .list-group').querySelectorAll('img')
+      ?.forEach((el,i) => {
+            html[i] = tag_img.sprintf(el.src.getQuery('file'),'./common/img/blank.png')
+      })
+    let inner = document.querySelector('#galleryContentModal .carousel-inner')
+    inner.innerHTML = html.join('')
+
+    const getImage = (id, srl) => {
+      exec_ajax({
+        module:'gallery',
+        act:'getFiles',
+        md_id:id,
+        mf_srls:srl
+      })
+      .then((data)=>{
+          let item = inner.querySelector('.carousel-item[item-key="'+srl+'"]')
+          data.forEach((el) => {
+            let img = item.querySelector('img')
+            img.src = './?file='+el.mf_srl
+            img.setAttribute('alt', el.mf_name)
+            item.querySelector('h6').innerHTML = (el.mf_name || '')+', '+(el.mf_regdate || '')
+            return
+          })
+      })
+      .catch(error => console.log(error))
+    }
+
+    const md_id = current_url.getQuery('id')
+
     document.querySelector('#galleryContentModal')
       ?.addEventListener('show.bs.modal', e => {
-        const body = e.target.querySelector('.carousel-inner'),
-          querys = e.relatedTarget.href.getQuery(),
-          group = e.relatedTarget.closest('.list-group'),
-          active = e.relatedTarget.querySelector('img')?.src.getQuery('file'),
-          imgs = group.querySelectorAll('img')
-        let srls = ''
-        imgs.forEach(el => {srls += el.src.getQuery('file') + ','})
-        exec_ajax({
-          module:'gallery',
-          act:'getFiles',
-          md_id:querys['id'],
-          mf_srls:srls
-        })
-        .then((data)=>{
-          let html = []
-          const tag_img = '<div class="carousel-item%s">%s<img src="%s" class="d-block w-100" alt="%s" loading="lazy"></div>'
-          data.forEach((el,i) => {
-            html[i] = tag_img.sprintf(
-              active==el.mf_srl?' active':'',
-              '<h6>'+(el.mf_name || '')+', '+(el.mf_regdate || '')+'</h6>',
-              './?file='+el.mf_srl, el.mf_name
-            )
-          })
-          body.innerHTML = html.join('')
-        })
-        .catch(error => console.log(error))
+        let srl = e.relatedTarget.querySelector('img')?.src.getQuery('file')
+        inner.querySelectorAll('.carousel-item.active')?.forEach((el) => {el.classList.remove('active')})
+        inner.querySelector('.carousel-item[item-key="'+srl+'"]').classList.add('active')
+        getImage(md_id, srl);
       })
 
       document.getElementById('carouselGallery')
@@ -36,18 +45,20 @@
           if((e.from == 0 && e.direction == 'right') || (e.to == 0 && e.direction == 'left')){
             e.preventDefault()
             e.stopPropagation()
-            let _items = document.getElementById('paginationGallery').querySelectorAll('li.page-number')
+            let items = document.getElementById('paginationGallery').querySelectorAll('li.page-number')
             confirm($_LANG['confirm_page_' + e.direction])
               .then(()=>{
-                _items.forEach((el,i) => {
+                items.forEach((el,i) => {
                   if(el.hasAttribute('selected')){
-                    _items[e.direction == 'left' ? i+1 : i-1]?.querySelector('a').click()
+                    items[e.direction == 'left' ? i+1 : i-1]?.querySelector('a').click()
                     return
                   }
                 })
               })
               .catch(error => console.log(error))
+          } else {
+            getImage(md_id, e.relatedTarget.getAttribute('item-key'));
           }
         })
-  })
+    })
 })()
