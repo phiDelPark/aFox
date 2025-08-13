@@ -1,5 +1,5 @@
 <?php if(!defined('__AFOX__')) exit();
-addJSLang(['confirm_page_left', 'confirm_page_right', 'confirm_delete', 'prompt_modify_item', 'item']);
+addJSLang(['item', 'delete', 'modify', 'confirm_page_left', 'confirm_page_right', 'confirm_delete', 'prompt_modify_item']);
 addCSS(_AF_URL_ . 'module/gallery/tpl/gallery' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css'));
 addJS(_AF_URL_ . 'module/gallery/tpl/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
 
@@ -18,11 +18,11 @@ $_CFG['thumb_width'] = $_CFG['thumb_width'] ? $_CFG['thumb_width'] : 'auto';
 $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 ?>
 
-<section id="galleryList" class="gallery">
+<section id="galleryList" class="-g gallery">
 	<h2 class="pb-3 mb-2 border-bottom"><?php echo $_CFG['md_title']?></h2>
 <div class="w-100 d-flex justify-content-between">
+<ol class="list-unstyled" aria-label="Category of the list">
 <?php if(empty($_GET['srl']) && !empty($_CFG['md_category'])){ ?>
-	<ol class="list-unstyled" aria-label="Category of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category']);
 		foreach ($tmp as $val) {
@@ -31,8 +31,10 @@ $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
 		}
 	?>
-	</ol>
-<?php } if($is_manager) echo '<a href="#setup" onclick="return themeShowCheckItems(this)" class="text-decoration-none" style="font-size:large">…</a>';?>
+<?php } ?>
+	<li class="d-none"></li>
+</ol>
+<?php if($is_manager) echo '<a href="#setup" onclick="return _g_showCheckItems(this)">…</a>';?>
 </div>
 <div class="list-group list-group-flush mb-4" aria-label="List of post">
 <?php
@@ -43,10 +45,11 @@ $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 			echo $close_div.'<div class="w-100 d-flex justify-content-between">';
 			$close_div = '</div>';
 		}
+		echo '<div style="position:relative">';
 		echo '<a href="'.getUrl('','id',_MID_).'" data-bs-toggle="modal" data-bs-target="#galleryContentModal">';
 		echo '<img loading="lazy" width="'.$_CFG['thumb_width'].'" height="'.$_CFG['thumb_height'].'" src="./?file='.$val['mf_srl'].'&thumb=x"><div class="details"><span class="title">'.$val['mf_name'].'</span>';
 		echo '<span class="info">'.date('F j, Y', strtotime($val['mf_regdate'])).'</span></div></a>';
-		echo '<input class="form-check-input d-none" type="checkbox" value="'.$val['mf_srl'].'">';
+		echo '<input class="form-check-input d-none" type="checkbox" value="'.$val['mf_srl'].'"></div>';
 	}
 	if($close_div) echo $close_div;
 	$start_page = $current_page - 4;
@@ -90,4 +93,4 @@ $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 	</div>
 </div>
 </section>
-<script>function themeShowCheckItems(e){let t=document.querySelectorAll(".gallery .list-group [type=checkbox]");return t?.forEach(e=>e.classList.remove("d-none")),e.onclick=function(e){let n="";t.forEach(e=>{e.checked&&(n+=e.value+",")});let l=function(e,t=""){exec_ajax({module:"gallery",act:e,md_id:"<?php echo _MID_?>",mf_srls:n,mf_about:t}).then(e=>{location.reload()}).catch(e=>{alert(e)})};if("DELETE"==e.target.innerText){let i=confirm($_LANG.confirm_delete.sprintf([$_LANG.item]));"object"==typeof i?i.then(()=>{l("deleteFiles")}):!0===i&&l("deleteFiles")}else if("MODIFY"==e.target.innerText){let o=prompt($_LANG.prompt_modify_item,"<?php echo str_replace('"','\"',@$_CFG['md_category'])?>");"object"==typeof o?o.then(e=>{l("modifyFiles",e)}):o.trim()&&l("modifyFiles",o.trim())}return!1},e.innerHTML="<span>DELETE</span><span> </span><span>MODIFY</span>",!1}</script>
+<script>function _g_showCheckItems(e){let t=document.querySelectorAll(".-g .list-group [type=checkbox]");t?.forEach((e=>e.classList.remove("d-none"))),e.insertAdjacentHTML("afterend",'<div>[<a href="#" key="delete">'+$_LANG.delete+'</a>] [<a href="#" key="modify">'+$_LANG.modify+"</a>]</div>"),e.classList.add("d-none"),e.nextSibling.querySelectorAll("a").forEach((e=>e.onclick=function(){let l,o="";t.forEach((e=>{e.checked&&(o+=e.value+",")})),l="delete"==e.getAttribute("key")?confirm($_LANG.confirm_delete.sprintf([$_LANG.item])):prompt($_LANG.prompt_modify_item,"<?php echo str_replace('"','\"',@$_CFG['md_category'])?>"),l.then((t=>{exec_ajax({module:"gallery",act:"delete"==e.getAttribute("key")?"deleteFiles":"modifyFiles",md_id:"<?php echo _MID_?>",mf_srls:o,mf_about:t}).then((()=>{location.reload()})).catch((e=>{alert(e)})).catch((e=>{alert(e)}))}))}))}</script>

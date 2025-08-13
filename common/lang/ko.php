@@ -33,6 +33,9 @@ $_LANG['edit']				= '편집';
 $_LANG['copy']				= '복사';
 $_LANG['move']				= '이동';
 $_LANG['delete']			= '삭제';
+$_LANG['modify']			= '수정';
+$_LANG['register']			= '등록';
+$_LANG['restore']			= '복구';
 
 $_LANG['use']				= '사용';
 $_LANG['using']				= '사용중';

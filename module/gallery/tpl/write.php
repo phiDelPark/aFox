@@ -2,7 +2,7 @@
 	$is_manager = isManager(_MID_);
 ?>
 
-<section id="galleryWrite" aria-label="Writing a post">
+<section id="galleryWrite" class="-g gallery" aria-label="Writing a post">
 	<button class="btn-close float-end" aria-label="Back" onclick="window.history.go(-1);return false"></button>
 	<h2 class="pb-3 mb-4 border-bottom"><?php echo getLang('upload')?></h2>
 	<form id="setup" method="post" autocomplete="off" enctype="multipart/form-data" needvalidate>

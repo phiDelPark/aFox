@@ -108,7 +108,7 @@
 			arr.forEach((a,i) => {
 				s += '&nbsp;<label><input type="'+t+'" value="'+a+'"> '+a+'</label>&nbsp;'
 			})
-		}else s += '<input type="text" value="'+v+'" checked>'
+		}else s += '<input type="text" value="'+v+'" style="width:100%">'
 		return window.alert(s, 'confirm')
 	}
 })()
