@@ -81,7 +81,7 @@ $mb = getMember($_GET['mb_id']);
 
 	<div class="input-group mb-2">
 		<label class="input-group-text w-100p" for="id_mb_nick"><?php echo getLang('nickname')?></label>
-		<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" minlength="2" maxlength="5" value="<?php echo $mb?$mb['mb_nick']:''?>" required pattern="^[가-힣ぁ-んァ-ン一-龥A-Za-z][가-힣ぁ-んァ-ン一-龥\w]{1,4}$">
+		<input type="text" name="mb_nick" class="form-control" id="id_mb_nick" minlength="2" maxlength="5" value="<?php echo $mb?$mb['mb_nick']:''?>" required pattern="^[가-힣ぁ-んァ-ン一-龥A-Za-z]{2,5}$">
 	</div>
 
 	<div class="input-group mb-2">
