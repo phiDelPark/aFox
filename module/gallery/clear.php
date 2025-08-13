@@ -54,7 +54,7 @@ if(!is_dir($thumbnail_dir)){
 <script>
 	parent.document.querySelector('#thumbWidth').removeAttribute('readonly');
 	parent.document.querySelector('#thumbHeight').removeAttribute('readonly');
-	parent.document.querySelector('#thumbOption').removeAttribute('fix-disabled');
+	parent.document.querySelector('#thumbOption').classList.remove('disabled');
 	parent.document.querySelector('#openClearThumbnail').style.display = 'none';
 </script>
 

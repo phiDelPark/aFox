@@ -106,17 +106,24 @@ function validateForm(f) {
 		<div class="form-text"><?php echo str_replace('\n','<br>',getLang('desc_category'))?></div>
 	</div>
 
-	<div class="input-group mb-4">
-		<div class="input-group">
-		<label class="input-group-text w-100p" for="listCount"><?php echo getLang('list_count')?></label>
-			<input type="number" class="form-control mw-100p" id="listCount" name="md_list_count" min="1" max="9999" maxlength="5" value="<?php echo $GALLERY['md_list_count'] ?>">
+	<div class="mb-4">
+		<div class="d-flex flex-row mb-2">
+			<div class="input-group me-2" style="width:auto">
+				<label class="input-group-text w-100p" for="listCount"><?php echo getLang('list_count')?></label>
+				<input type="number" class="form-control mw-100p" id="listCount" name="md_list_count" min="1" max="9999" maxlength="5" value="<?php echo $GALLERY['md_list_count'] ?>">
+			</div>
+			<div class="input-group me-2" style="width:auto">
+				<label class="input-group-text w-100p" for="horizontalCount"><?php echo getLang('horizontal_count')?></label>
+				<input type="number" class="form-control mw-100p" id="horizontalCount" name="md_file_max" min="1" max="9999" maxlength="5" value="<?php echo empty($GALLERY['md_file_max']) ? 3 : $GALLERY['md_file_max'] ?>">
+			</div>
 		</div>
 		<div class="form-text"><?php echo getLang('desc_list_count')?></div>
 	</div>
+
 <?php $thumb_exists = !(empty($_GET['sub_id']) || !is_dir(_AF_ATTACH_DATA_.'thumbnail/'.$_GET['sub_id'].'/')); ?>
 	<div class="mb-4">
 		<label class="form-label me-1"><?php echo getLang('thumbnail')?>:</label>
-		<input class="form-check-input mx-1" type="checkbox" id="thumbOption" name="thumb_option" <?php echo $thumb_exists ? 'fix-disabled="disabled" ' : ''?>value="1"<?php echo $GALLERY['thumb_option']==='1'?' checked':'' ?>>
+		<input class="form-check-input mx-1<?php echo $thumb_exists ? ' disabled' : ''?>" type="checkbox" id="thumbOption" name="thumb_option" value="1"<?php echo $GALLERY['thumb_option']==='1'?' checked':'' ?>>
 		<label for="thumbOption"><?php echo getLang('thumb_fit')?></label>
 		<div class="d-flex flex-row">
 			<div class="input-group me-2" style="width:auto">
@@ -151,12 +158,12 @@ function validateForm(f) {
 		<label class="form-label"><?php echo getLang('file')?></label>
 		<div class="d-flex flex-row mb-2">
 			<div class="input-group me-2" style="width:auto">
-				<label class="input-group-text w-100p" for="mdFileMax"><?php echo getLang('max_file_count')?></label>
-				<input type="number" class="form-control mw-100p" id="mdFileMax" name="md_file_max" min="0" max="9999" maxlength="4" value="<?php echo empty($GALLERY['md_file_max'])?'3':$GALLERY['md_file_max'] ?>">
-			</div>
-			<div class="input-group me-2" style="width:auto">
 				<label class="input-group-text w-100p" for="mdFileSize"><?php echo getLang('max_file_size')?></label>
 				<input type="number" class="form-control mw-100p" id="mdFileSize" name="md_file_size" min="0" placeholder="KB" value="<?php echo empty($GALLERY['md_file_size'])?'1024':($GALLERY['md_file_size']/1024) ?>">
+			</div>
+			<div class="input-group me-2" style="width:auto">
+				<label class="input-group-text w-100p" for="mdFileaccept"><?php echo getLang('file_extension')?></label>
+				<input type="text" class="form-control mw-100p" id="mdFileaccept" name="md_file_accept" placeholder="jpg,png" value="<?php echo empty($GALLERY['md_file_accept'])?'jpg,png':$GALLERY['md_file_accept'] ?>">
 			</div>
 		</div>
 		<div class="form-text"><?php echo getLang('desc_board_file')?></div>

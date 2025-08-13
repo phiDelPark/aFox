@@ -37,17 +37,16 @@ $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 <div class="list-group list-group-flush mb-4" aria-label="List of post">
 <?php
 	$close_div = '';
-	$w_cnt = _MOBILE_ ? 2 : 4;
+	$w_cnt = _MOBILE_ ? 2 : $_CFG['horizontal_count'];
 	foreach ($_DATA['list'] as $key => $val) {
 		if((($key % $w_cnt) === 0)){
 			echo $close_div.'<div class="w-100 d-flex justify-content-between">';
 			$close_div = '</div>';
 		}
-		echo '<div style="position:relative">';
 		echo '<a href="'.getUrl('','id',_MID_).'" data-bs-toggle="modal" data-bs-target="#galleryContentModal">';
 		echo '<img loading="lazy" width="'.$_CFG['thumb_width'].'" height="'.$_CFG['thumb_height'].'" src="./?file='.$val['mf_srl'].'&thumb=x"><div class="details"><span class="title">'.$val['mf_name'].'</span>';
 		echo '<span class="info">'.date('F j, Y', strtotime($val['mf_regdate'])).'</span></div></a>';
-		echo '<input class="form-check-input d-none" type="checkbox" value="'.$val['mf_srl'].'"></div>';
+		echo '<input class="form-check-input d-none" type="checkbox" value="'.$val['mf_srl'].'">';
 	}
 	if($close_div) echo $close_div;
 	$start_page = $current_page - 4;

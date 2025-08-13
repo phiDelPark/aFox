@@ -10,6 +10,7 @@ $_LANG['upload']			= '업로드';
 $_LANG['download']			= '다운로드';
 $_LANG['thumbnail']			= '썸네일';
 $_LANG['thumb_fit']			= '비율맞춤';
+$_LANG['horizontal_count']	= '가로 수';
 
 $_LANG['next']				= '다음';
 $_LANG['previous']			= '이전';
@@ -18,6 +19,8 @@ $_LANG['search']			= '검색';
 $_LANG['gallery']			= '갤러리';
 $_LANG['new_gallery']		= '새 갤러리 등록';
 $_LANG['add_image']			= '아래 첨부 버튼을 눌러 이미지를 추가하시면 자동 출력됩니다.';
+
+$_LANG['desc_board_file']= '첨부 파일의 최대 크기(KB)를 정할 수 있습니다. (첨부 확장자는 ,로 구분합니다)';
 
 $_LANG['confirm_page_left']	= '다음 페이지로 이동 할까요?';
 $_LANG['confirm_page_right']= '이전 페이지로 이동 할까요?';

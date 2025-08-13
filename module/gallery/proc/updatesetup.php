@@ -19,10 +19,10 @@ function proc($data) {
 		if($category) $category = substr($category, 0, -1);
 	}
 
-	$file_accept = 'jpg,jpeg,png';
-	$file_max = abs($data['md_file_max']);
 	$file_size = abs($data['md_file_size']) * 1024;
-	$list_count = empty($data['md_list_count']) ? 100 : abs($data['md_list_count']);
+	$file_accept = empty($data['md_file_accept']) ? 'jpg,png' : $data['md_file_accept'];
+	$list_count = abs($data['md_list_count']) < 1 ? 100 : abs($data['md_list_count']);
+	$horizontal_count = abs($data['md_file_max']) < 1 ? 3 : abs($data['md_file_max']);
 
 	$data['thumb_width'] = abs($data['thumb_width']) < 1 ? 400 : abs($data['thumb_width']);
 	$data['thumb_height'] = abs($data['thumb_height']) < 1 ? 180 : abs($data['thumb_height']);
@@ -56,7 +56,7 @@ function proc($data) {
 					'md_title'=>$data['md_title'],
 					'md_about'=>$data['md_about'],
 					'md_manager'=>$md_manager,
-					'md_file_max'=>$file_max,
+					'md_file_max'=>$horizontal_count,
 					'md_file_size'=>$file_size,
 					'md_file_accept'=>$file_accept,
 					'md_list_count'=>$list_count,
@@ -100,7 +100,7 @@ function proc($data) {
 					'md_title'=>$data['md_title'],
 					'md_about'=>$data['md_about'],
 					'md_manager'=>$md_manager,
-					'md_file_max'=>$file_max,
+					'md_file_max'=>$horizontal_count,
 					'md_file_size'=>$file_size,
 					'md_file_accept'=>$file_accept,
 					'md_list_count'=>$list_count,

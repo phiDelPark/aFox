@@ -3,11 +3,6 @@
   --offcanvas-width: 220px;
   --topNavbarHeight: 56px;
 }
-[fix-disabled],
-[fix-disabled]+label{
-  pointer-events: none;
-  opacity: 0.5;
-}
 .bi {
   vertical-align: -.125em;
   fill: currentColor;
@@ -27,6 +22,11 @@
   --bs-btn-padding-y: .1rem;
   --bs-btn-padding-x: .3rem;
   --bs-btn-font-size: .8rem;
+}
+.disabled,
+.disabled+label{
+  pointer-events: none;
+  opacity: 0.5;
 }
 .fixed-width {
   font-family: "Consolas", monospace;
@@ -48,6 +48,9 @@ button {
 .table tr >:not(.text-wrap) {
   text-wrap: nowrap;
   width: 1px;
+}
+.table thead th {
+  background-color:var(--bs-gray-100)
 }
 .navbar-divider {
   height: 1px;
