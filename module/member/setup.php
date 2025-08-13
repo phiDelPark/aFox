@@ -110,7 +110,7 @@ $mb = getMember($_GET['mb_id']);
 		<img class="position-absolute border rounded p-1" style="width:58px;height:58px" src="<?php echo $tmp ?>">
 		<div style="margin-left:70px">
 			<div class="input-group">
-				<input class="form-control" type="file" name="mb_icon" aria-describedby="id_mb_icon_desc">
+				<input class="form-control" type="file" name="mb_icon" accept="image/png" aria-describedby="id_mb_icon_desc">
 			</div>
 			<div class="form-text"><?php echo getLang('desc_member_icon')?></div>
 		</div>

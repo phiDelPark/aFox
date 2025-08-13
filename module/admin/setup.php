@@ -13,7 +13,7 @@ input[name=favicon]::before {
 }
 </style>
 
-<form method="post" autocomplete="off">
+<form method="post" autocomplete="off" enctype="multipart/form-data">
 	<input type="hidden" name="version" value="<?php echo _AF_VERSION_?>">
 	<input type="hidden" name="success_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
 	<input type="hidden" name="error_url" value="<?php echo getUrl('', 'admin', 'setup') ?>">
@@ -37,7 +37,7 @@ input[name=favicon]::before {
 
 	<div class="form-file-group mb-2">
 		<div class="input-group">
-			<input class="form-control" type="file" name="logo" aria-describedby="logoLabel logoDesc">
+			<input class="form-control" type="file" name="logo" AC accept="image/png" aria-describedby="logoLabel logoDesc">
 		</div>
 		<div id="logoDesc">
 		<?php if($isfile = file_exists($tmp = _AF_CONFIG_DATA_.'logo.png')){ ?>
@@ -49,7 +49,7 @@ input[name=favicon]::before {
 
 	<div class="form-file-group mb-4">
 		<div class="input-group">
-			<input class="form-control" type="file" name="favicon" aria-describedby="faviconLabel faviconDesc">
+			<input class="form-control" type="file" name="favicon" accept=".ico" aria-describedby="faviconLabel faviconDesc">
 		</div>
 		<div id="faviconDesc">
 		<?php if($isfile = file_exists($tmp = _AF_CONFIG_DATA_.'favicon.ico')){ ?>
