@@ -1,8 +1,17 @@
 <?php if(!defined('__AFOX__')) exit();
 
 function proc($data) {
-	if(empty($data['md_id']) || empty($data['mf_about']) || empty($data['mf_srls']))
-	return set_error(getLang('error_request'),4303);
+	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
+
+	// 권한 체크 // 관리자만
+	if(!isAdmin()) return set_error(getLang('error_permitted'), 4501);
+
+	$srls = [];
+	$mf_srls = explode(',', $data['mf_srls']);
+	foreach ($mf_srls as $value) {
+		if($value = trim($value)) $srls[] = $value;
+	}
+	if(!count($srls)) return set_error(getLang('warn_selected', ['image']),4303);
 
 	$module = getModule($data['md_id']);
 	if(empty($module)) return set_error(getLang('error_founded'), 4201);
@@ -19,13 +28,6 @@ function proc($data) {
 		$data['wr_tags'] = implode(',',$wr_tags);
 	}
 	if(!$data['wr_tags']) return set_error(getLang('request_input',['category']), 1);
-
-	$srls = [];
-	$mf_srls = explode(',', $data['mf_srls']);
-	foreach ($mf_srls as $value) {
-		if($value = trim($value)) $srls[] = $value;
-	}
-	if(!count($srls)) return set_error(getLang('warn_selected', ['image']),4303);
 
 	DB::transaction();
 
