@@ -45,7 +45,7 @@ function proc($data)
 	$files = empty($_FILES['upload_files']['tmp_name'])?null:$_FILES['upload_files'];
 	$upload_count = $files&&!empty($files['tmp_name'][0])?count($files['tmp_name']):0;
 
-	$file_max = $is_admin ? 999999 : (int) $module['md_file_max'];
+	$file_max = 999999;
 	$file_max_size = $is_admin ? 0 : (int) $module['md_file_size'];
 	$file_accept = $is_admin ? '' : str_replace(',', '|', $module['md_file_accept']);
 
@@ -60,7 +60,6 @@ function proc($data)
 		if($upload_count > 0) {
 			// 권한 체크
 			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warn_not_allowable', ['upload']), 3505);
-			if($file_max < ($upload_count+$file_count)) throw new Exception(getLang('error_upload(-3)'), 10487);
 			$exif = function_exists('exif_read_data');
 
 			for ($i=0; $i < $upload_count; $i++) {

@@ -1,9 +1,6 @@
 <?php if(!defined('__AFOX__')) exit();
 include_once _AF_INIT_PATH_ . 'patterns.php';
 
-$_CFG['horizontal_count'] = $_CFG['md_file_max'];
-$_CFG['md_file_max'] = 999999;
-
 function procGalleryDefault($data) {
 	$act = strtolower($data['act']);
 	$dir = _AF_MODULES_PATH_ . 'gallery/proc/';

@@ -32,7 +32,7 @@
 			displayEditor(
 				'wr_content', '',
 				[
-					'file'=>[_MID_, 0, $_CFG['md_file_max'], $_CFG['md_file_accept']],
+					'file'=>[_MID_, 0, 999999, $_CFG['md_file_accept']],
 					'placeholder'=>getLang('add_image'),
 					'height'=>'38px',
 					'readonly'=>true

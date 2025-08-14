@@ -10,10 +10,12 @@ $end_page = $_DATA['end_page'];
 $total_count = $_DATA['total_count'];
 $srl = @$_GET['srl']?$_GET['srl']:0;
 
+
 $is_manager = isManager(_MID_);
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 $asc = isset($_GET['asc']);
 
+$_CFG['horizontal_count'] = $_CFG['md_file_max'];
 $_CFG['thumb_width'] = $_CFG['thumb_width'] ? $_CFG['thumb_width'] : 'auto';
 $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 ?>
@@ -93,4 +95,4 @@ $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 	</div>
 </div>
 </section>
-<script>function _g_showCheckItems(e){let t=document.querySelectorAll(".-g .list-group [type=checkbox]");t?.forEach((e=>e.classList.remove("d-none"))),e.insertAdjacentHTML("afterend",'<div>[<a href="#" key="delete">'+$_LANG.delete+'</a>] [<a href="#" key="modify">'+$_LANG.modify+"</a>]</div>"),e.classList.add("d-none"),e.nextSibling.querySelectorAll("a").forEach((e=>e.onclick=function(){let l,o="";t.forEach((e=>{e.checked&&(o+=e.value+",")})),l="delete"==e.getAttribute("key")?confirm($_LANG.confirm_delete.sprintf([$_LANG.item])):prompt($_LANG.prompt_modify_item,"<?php echo str_replace('"','\"',@$_CFG['md_category'])?>"),l.then((t=>{exec_ajax({module:"gallery",act:"delete"==e.getAttribute("key")?"deleteFiles":"modifyFiles",md_id:"<?php echo _MID_?>",mf_srls:o,mf_about:t}).then((()=>{location.reload()})).catch((e=>{alert(e)})).catch((e=>{alert(e)}))}))}))}</script>
+<script>function _g_showCheckItems(e){let t=document.querySelectorAll(".-g .list-group [type=checkbox]");t?.forEach((e=>e.classList.remove("d-none"))),e.insertAdjacentHTML("afterend",'<div>[<a href="#" key="delete">'+$_LANG.delete+'</a>] [<a href="#" key="modify">'+$_LANG.modify+"</a>]</div>"),e.classList.add("d-none"),e.nextSibling.querySelectorAll("a").forEach((e=>e.onclick=function(){let l,o="";t.forEach((e=>{e.checked&&(o+=e.value+",")})),l="delete"==e.getAttribute("key")?confirm($_LANG.confirm_delete.sprintf([$_LANG.item])):prompt($_LANG.prompt_modify_item,"<?php echo str_replace('"','\"',@$_CFG['md_category'])?>"),l.then((t=>{exec_ajax({module:"gallery",act:"delete"==e.getAttribute("key")?"deleteFiles":"modifyFiles",md_id:"<?php echo _MID_?>",mf_srls:o,mf_about:t}).then((()=>{location.reload()})).catch((e=>{alert(e)})).catch((e=>{alert(e)}))}));return!1}));return!1}</script>

@@ -16,7 +16,7 @@ function proc($data) {
 	foreach ($mf_srls as $value) {
 		if($value = trim($value)) $srls[] = $value;
 	}
-	if(!count($srls)) return set_error(getLang('error_request'),4303);
+	if(!count($srls)) return set_error(getLang('warn_selected', ['image']),4303);
 
 	DB::transaction();
 
