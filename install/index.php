@@ -1,7 +1,7 @@
 <?php define('__AFOX__',   TRUE);
 // 서버 필요 조건
 // * UTF-8
-// * PHP version 5.4.0 이상
+// * PHP version 7.4.0 이상
 // * MYSQL version 5.1.0 이상
 require_once __DIR__ . '/../init/constant.php';
 //load DB // When using a query, you must perform the escape yourself, or use parameters
@@ -30,8 +30,8 @@ if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 
 if(empty($_POST['db_name'])) {
 
-	if(version_compare(PHP_VERSION, '5.4.0', '<')) {
-		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 5.4.0 이상 버전을 사용해주세요. </h3>';
+	if(version_compare(PHP_VERSION, '7.4.0', '<')) {
+		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 7.4.0 이상 버전을 사용해주세요. </h3>';
 	}
 
 	echo '<h3>에이폭스 CMS 설치</h3><form action="index.php" method="post" autocomplete="off">';
@@ -532,7 +532,7 @@ fwrite($f, ");");
 fclose($f);
 chmod($file, 0644);
 
-echo "<br><b>설치 성공</b><br><br>관리자 아이디 : admin<br>관리자 비밀번호 : ".$af_pass."<br><br>설치를 성공적으로 마쳤습니다.";
+echo "<br><b>설치 성공</b><br><br>관리자 아이디 : admin<br>관리자 비밀번호 : ".$af_pass."<br><br>설치를 성공적으로 마쳤습니다.<br><br><a href='./../index.php'>홈으로</a>";
 
 ?>
 </body></html>
