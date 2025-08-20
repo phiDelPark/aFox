@@ -21,7 +21,7 @@ $asc = isset($_GET['asc']);
 		}
 	?>
 	</ol>
-
+<?php if(empty($_GET['srl']) && !empty($_CFG['md_category2'])){ ?>
 	<ol class="list-unstyled" aria-label="Category of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category2']);
@@ -32,7 +32,7 @@ $asc = isset($_GET['asc']);
 		}
 	?>
 	</ol>
-<?php }
+<?php }}
 	include dirname(__FILE__) . '/s.' . $use_style . '.php';
 	$start_page = $current_page - 4;
 	if ($start_page < 1) $start_page = 1;

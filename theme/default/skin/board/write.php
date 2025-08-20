@@ -35,7 +35,7 @@
 				</div>
 			</div>
 		<?php } ?>
-		<?php if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category2']);?>
+		<?php if (!empty($_CFG['md_category2'])) { $tmp = explode(',', $_CFG['md_category2']);?>
 			<div class="form-control mb-2">
 					<?php
 						$i=0;

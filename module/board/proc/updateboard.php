@@ -24,7 +24,7 @@ function proc($data)
 				if($category) $category = substr($category, 0, -1).'&';
 			}
 		}
-		if($category) $category = substr($category, 0, -2);
+		if($category) $category = substr($category, 0, -1);
 	}
 
 	$ex_keys = []; // 확장 변수 키값
