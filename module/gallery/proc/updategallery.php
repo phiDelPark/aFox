@@ -101,7 +101,7 @@ function proc($data)
 				DB::insert(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>1,
-					'mf_name'=>$file['name'],
+					'mf_name'=>urldecode($file['name']),
 					'mf_upload_name'=>$fname,
 					'mf_type'=>$file['type'],
 					'mf_about'=>$data['wr_tags'],

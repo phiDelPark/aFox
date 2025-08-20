@@ -202,7 +202,7 @@ function proc($data)
 				DB::insert(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>$wr_srl,
-					'mf_name'=>$file['name'],
+					'mf_name'=>urldecode($file['name']),
 					'mf_upload_name'=>$fname,
 					'mf_size'=>$file['size'],
 					'mf_type'=>$file['type'],
