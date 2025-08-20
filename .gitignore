@@ -9,8 +9,9 @@ obj/
 ehthumbs?
 Thumbs.db
 data/
-addon/
-!addon/object_manager
+!addon/object
+.vscode/
+.mysql/
 .docker/
-mysql/
+.devcontainer/
 docker-compose.yml
