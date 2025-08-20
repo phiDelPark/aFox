@@ -22,7 +22,7 @@ $asc = isset($_GET['asc']);
 	?>
 	</ol>
 <?php if(empty($_GET['srl']) && !empty($_CFG['md_category2'])){ ?>
-	<ol class="list-unstyled" aria-label="Category of the list">
+	<ol class="list-unstyled" aria-label="Category2 of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category2']);
 		foreach ($tmp as $val) {

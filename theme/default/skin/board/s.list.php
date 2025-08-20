@@ -9,7 +9,7 @@ $srl = @$_GET['srl']?$_GET['srl']:0;
 $login_srl = empty($_MEMBER['mb_srl']) ? false : $_MEMBER['mb_srl'];
 ?>
 
-<div class="list-group list-group-flush mb-4" aria-label="List of post">
+<div class="list-group list-group-flush mb-4<?php echo empty($_CFG['md_category2']) ? '' : ' border-top'?>" aria-label="List of post">
 <?php
 	foreach ($LIST as $key => $val) {
 		$wr_secret =  $val['wr_secret'] == '1';
