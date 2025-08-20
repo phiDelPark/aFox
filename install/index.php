@@ -363,7 +363,7 @@ $create_sql = '
 	   md_id           CHAR(11)     NOT NULL,
 	   mf_target       INT(11)      NOT NULL,
 	   mf_name         VARCHAR(255) NOT NULL,
-	   mf_about        VARCHAR(255) NOT NULL,
+	   mf_about        VARCHAR(255),
 	   mf_upload_name  VARCHAR(32)  NOT NULL,
 	   mf_type         VARCHAR(128) NOT NULL,
 	   mf_link         CHAR(1)      NOT NULL DEFAULT 0,
