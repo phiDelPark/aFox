@@ -77,7 +77,7 @@ function validateForm(f) {
 	<div class="mb-4">
 		<label class="form-label" for="mdCategory"><?php echo getLang('category')?> .1</label>
 		<div class="input-group">
-			<input type="text" name="md_category" class="form-control" id="mdCategory" maxlength="255" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_CATEGORY_)?>" value="<?php echo $BOARD['md_category'] ?>">
+			<input type="text" name="md_category" class="form-control" id="mdCategory" maxlength="120" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_CATEGORY_)?>" value="<?php echo $BOARD['md_category'] ?>">
 		</div>
 		<div class="form-text"><?php echo str_replace('\n','<br>',getLang('desc_category'))?></div>
 	</div>
@@ -85,7 +85,7 @@ function validateForm(f) {
 	<div class="mb-4">
 		<label class="form-label" for="mdCategory"><?php echo getLang('category')?> .2</label>
 		<div class="input-group">
-			<input type="text" name="md_category2" class="form-control" id="mdCategory" maxlength="255" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_CATEGORY_)?>" value="<?php echo $BOARD['md_category2'] ?>">
+			<input type="text" name="md_category2" class="form-control" id="mdCategory" maxlength="120" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_CATEGORY_)?>" value="<?php echo $BOARD['md_category2'] ?>">
 		</div>
 		<div class="form-text"><?php echo str_replace('\n','<br>',getLang('desc_category2'))?></div>
 	</div>

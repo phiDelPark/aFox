@@ -86,7 +86,7 @@ $mb = getMember($_GET['mb_id']);
 
 	<div class="input-group mb-2">
 	<label class="input-group-text w-100p" for="id_mb_email"><?php echo getLang('email')?></label>
-		<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="255" value="<?php echo $mb?escapeHTML($mb['mb_email']):''?>" required pattern="^[\w]+[\w._%+-]+@[\w.-]+\.[\w]+$">
+		<input type="email" name="mb_email" class="form-control" id="id_mb_email" maxlength="128" value="<?php echo $mb?escapeHTML($mb['mb_email']):''?>" required pattern="^[\w]+[\w._%+-]+@[\w.-]+\.[\w]+$">
 	</div>
 
 	<div class="input-group mb-4">
