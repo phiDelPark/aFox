@@ -20,6 +20,7 @@
 
 <?php if(!$is_new){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return validateForm(this)">
+	<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="success_url" value="<?php echo getUrl('pg_id', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="deletePage" />
@@ -35,6 +36,7 @@ function validateForm(f) {
 <?php }?>
 
 <form id="setup" method="post" autocomplete="off" enctype="multipart/form-data">
+	<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="success_url" value="<?php echo getUrl('pg_id', '')?>" />
 	<input type="hidden" name="module" value="page" />
 	<input type="hidden" name="act" value="updatePage" />

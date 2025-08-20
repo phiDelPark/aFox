@@ -42,7 +42,7 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 
 function getDocumentList($id, $count, $page, $search = "", $category = "", $order = "wr_regdate", $callback = null)
 {
-	$_wheres = ["md_id" => $id, "_AND_" => empty($category) ? [] : ["wr_category" => $category], "_OR_" => []];
+	$_wheres = ["md_id" => $id, "_AND_" => empty($category) ? [] : ["wr_category{REGEXP}" => "('(^|,|&)".DB::escape($category)."($|,|&)')"], "_OR_" => []];
 
 	if (!empty($search)) {
 		$keys = [
@@ -93,6 +93,7 @@ function getDocumentList($id, $count, $page, $search = "", $category = "", $orde
 	$page = empty($page) ? 1 : $page;
 	$_list = DB::gets(_AF_DOCUMENT_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, $order, (($page - 1) * $count) . "," . $count, $callback);
 
+	debugPrint(DB::lastQuery());
 	$result = [];
 	$result['list'] = $_list;
 	$result['total_count'] = DB::foundRows();

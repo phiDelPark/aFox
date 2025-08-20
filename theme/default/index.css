@@ -47,7 +47,7 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 }
 
 .modal.alert {
-	z-index: 9999!important;
+	z-index: 9950!important;
 }
 
 .header-logo {

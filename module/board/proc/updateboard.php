@@ -8,16 +8,23 @@ function proc($data)
 	}
 
 	$category = ''; // 분류 정리
-	if(!empty($data['md_category'])) {
-		if(!preg_match('/'._AF_PATTERN_CATEGORY_.'/u', $data['md_category'])) {
-			return set_error(getLang('invalid_value', ['category']),2001);
+	if(!empty($data['md_category2']) && empty($data['md_category'])){
+		return set_error(getLang('msg_requires_catagory1'), 3);
+	} else {
+		foreach	([$data['md_category'], $data['md_category2']] as $cate){
+			if(!empty($cate)) {
+				if(!preg_match('/'._AF_PATTERN_CATEGORY_.'/u', $cate)) {
+					return set_error(getLang('invalid_value', ['category']),2001);
+				}
+				$tmpa = explode(',', $cate);
+				foreach ($tmpa as $value) {
+					$value = trim($value);
+					if(!empty($value)) $category .= cutstr($value,10,'') . ',';
+				}
+				if($category) $category = substr($category, 0, -1).'&';
+			}
 		}
-		$tmpa = explode(',', $data['md_category']);
-		foreach ($tmpa as $value) {
-			$value = trim($value);
-			if(!empty($value)) $category .= cutstr($value,20,'') . ',';
-		}
-		if($category) $category = substr($category, 0, -1);
+		if($category) $category = substr($category, 0, -2);
 	}
 
 	$ex_keys = []; // 확장 변수 키값
@@ -106,12 +113,15 @@ function proc($data)
 				throw new Exception(getLang('warn_exists', ['id']), 3103);
 			}
 
+			// 카테고리 변경시 기존 문서에 해당 카테고리가 있는지 체크
 			if ($category != $module['md_category']) {
-				$diff = array_diff(explode(',',$module['md_category']), explode(',',$category));
+				$temp1 = str_replace('&', ',', $category);
+				$temp2 = str_replace('&', ',', $module['md_category']);
+				$diff = array_diff(explode(',', $temp2), explode(',', $temp1));
 				if (count($diff)>0 && !empty($diff[0])) {
 					$diff = implode(',', $diff);
 					$out = DB::get(_AF_DOCUMENT_TABLE_, 'wr_category', ['md_id'=>$data['md_id'], 'wr_category{IN}'=>$diff]);
-					if(!empty($out)) throw new Exception(getLang('cant_change_category', [$out['wr_category']]), 3);
+					if(!empty($out)) throw new Exception(getLang('msg_document_exists', [getLang('category')."(".$out['wr_category'].")"]), 3);
 				}
 			}
 

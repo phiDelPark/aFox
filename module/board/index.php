@@ -7,6 +7,12 @@ installModuleTrigger('board', 0);
 
 // 모듈 설정 확장변수 unserialize
 $_CFG['md_extra'] = empty($_CFG['md_extra']) ? [] : unserialize($_CFG['md_extra']);
+// 분류를 1차 2차로 나눔
+if(!empty($_CFG['md_category'])){
+$_CFG['md_category2'] = explode('&', $_CFG['md_category']);
+$_CFG['md_category'] = $_CFG['md_category2'][0];
+$_CFG['md_category2'] = empty($_CFG['md_category2'][1]) ? '' : $_CFG['md_category2'][1];
+}else $_CFG['md_category2'] = "";
 
 function procBoardDefault($data) {
 	$act = strtolower($data['act']);

@@ -128,6 +128,16 @@ function proc($data) {
 	$count = empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count'];
 	$_list = getDocumentList($doc['md_id'], $count, $page, $search, $category, 'wr_regdate'.($asc?' ASC':''));
 
+	// 분류를 1차 2차로 나눔
+	if(!empty($doc['wr_category'])){
+	$doc['wr_category2'] = explode('&', $doc['wr_category']);
+	$doc['wr_category'] = explode(',', $doc['wr_category2'][0]);
+	$doc['wr_category2'] = explode(',', empty($doc['wr_category2'][1]) ? '' : $doc['wr_category2'][1]);
+	}else {
+		$doc['wr_category'] = [];
+		$doc['wr_category2'] = [];
+	}
+
 	$result = $doc;
 	$result['tpl'] = 'view';
 	$result['list'] = $_list['list'];

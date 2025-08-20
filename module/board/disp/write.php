@@ -48,6 +48,16 @@ function proc($data) {
 		$doc['wr_extra'] = unserialize($doc['wr_extra']);
 	}
 
+	// 분류를 1차 2차로 나눔
+	if(!empty($doc['wr_category'])){
+	$doc['wr_category2'] = explode('&', $doc['wr_category']);
+	$doc['wr_category'] = explode(',', $doc['wr_category2'][0]);
+	$doc['wr_category2'] = explode(',', empty($doc['wr_category2'][1]) ? '' : $doc['wr_category2'][1]);
+	}else {
+		$doc['wr_category'] = [];
+		$doc['wr_category2'] = [];
+	}
+
 	$result = $doc;
 	$result['tpl'] = 'write';
 	$result['list'] = [];

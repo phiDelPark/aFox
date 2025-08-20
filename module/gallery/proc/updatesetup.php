@@ -14,7 +14,7 @@ function proc($data) {
 		$tmpa = explode(',', $data['md_category']);
 		foreach ($tmpa as $value) {
 			$value = trim($value);
-			if(!empty($value)) $category .= cutstr($value,20,'') . ',';
+			if(!empty($value)) $category .= cutstr($value,10,'') . ',';
 		}
 		if($category) $category = substr($category, 0, -1);
 	}
@@ -81,7 +81,7 @@ function proc($data) {
 				if (count($diff)>0 && !empty($diff[0])) {
 					$diff = implode(',', $diff);
 					$out = DB::get(_AF_DOCUMENT_TABLE_, 'wr_category', ['md_id'=>$data['md_id'], 'wr_category{IN}'=>$diff]);
-					if(!empty($out)) throw new Exception(getLang('cant_change_category', [$out['wr_category']]), 3);
+					if(!empty($out)) throw new Exception(getLang('msg_document_exists', [getLang('category')."(".$out['wr_category'].")"]), 3);
 				}
 			}
 

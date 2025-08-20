@@ -55,6 +55,7 @@ if(empty($_GET['sub_id'])){
 <?php if(!$is_new){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return validateForm(this)">
 	<input type="hidden" name="success_url" value="<?php echo getUrl('sub_id', '', 'md_id', '')?>" />
+	<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="module" value="gallery" />
 	<input type="hidden" name="act" value="deleteGallery" />
 	<input type="hidden" name="md_id" value="" />

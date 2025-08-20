@@ -11,7 +11,7 @@ $asc = isset($_GET['asc']);
 	<h2 class="pb-3 mb-2 border-bottom"><?php echo $_CFG['md_title']?></h2>
 <?php if(empty($_GET['srl']) && !empty($_CFG['md_category'])){ ?>
 
-	<ol class="list-unstyled" aria-label="Category of the list">
+	<ol class="list-unstyled mb-1" aria-label="Category of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category']);
 		foreach ($tmp as $val) {
@@ -22,6 +22,16 @@ $asc = isset($_GET['asc']);
 	?>
 	</ol>
 
+	<ol class="list-unstyled" aria-label="Category of the list">
+	<?php
+		$tmp = explode(',', $_CFG['md_category2']);
+		foreach ($tmp as $val) {
+			$isEqual = $val == @$_GET['category'];
+			$cateurl = getUrl('','id',_MID_,'category', urlencode($val)).($isEqual&&!$asc?'&asc':'');
+			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
+		}
+	?>
+	</ol>
 <?php }
 	include dirname(__FILE__) . '/s.' . $use_style . '.php';
 	$start_page = $current_page - 4;

@@ -11,3 +11,6 @@ Thumbs.db
 data/
 addon/
 !addon/object_manager
+.docker/
+mysql/
+docker-compose.yml

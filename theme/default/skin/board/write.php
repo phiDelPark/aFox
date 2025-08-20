@@ -24,15 +24,25 @@
 		<?php } ?>
 		<?php if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category']);?>
 			<div class="form-floating mb-2">
-					<select name="wr_category" class="form-control" id="wrCategory" required>
-					<option value=""></option>
+				<input type="hidden"class="form-control"><label><?php echo getLang('category')?></label>
+				<div class="form-control mb-2" style="line-height:inherit">
+						<?php
+							$i=0;
+							foreach ($tmp as $val) {
+								echo '<input class="form-check-input mx-1" type="checkbox" id="wr_category_'.++$i.'" name="wr_category[]" value="'.$val.'"'.($is&&in_array($val, $DOC['wr_category'])?' checked="checked"':'').'><label class="me-1" for="wr_category_'.$i.'">'.$val.'</label>';
+							}
+						?>
+				</div>
+			</div>
+		<?php } ?>
+		<?php if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category2']);?>
+			<div class="form-control mb-2">
 					<?php
+						$i=0;
 						foreach ($tmp as $val) {
-							echo '<option value="'.$val.'"'.(($is&&$val==$DOC['wr_category'])?' selected="selected"':'').'>'.$val.'</option>';
+							echo '<input class="form-check-input mx-1" type="checkbox" id="wr_category_2'.++$i.'" name="wr_category2[]" value="'.$val.'"'.($is&&in_array($val, $DOC['wr_category2'])?' checked="checked"':'').'><label class="me-1" for="wr_category_2'.$i.'">'.$val.'</label>';
 						}
 					?>
-					</select>
-				<label for="wrCategory"><?php echo getLang('category')?></label>
 			</div>
 		<?php } ?>
 			<div class="form-floating mb-2">

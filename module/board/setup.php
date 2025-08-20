@@ -13,17 +13,24 @@ if($is_new = (empty($_GET['bo_id']) || $_GET['bo_id'] === '@new')){
 		messageBox(getLang('error_permitted'), 4501);
 		return;
 	}
+
 	// 확장 변수가 있으면 unserialize
 	if(!empty($BOARD['md_extra']) && !is_array($BOARD['md_extra'])) {
 		$BOARD['md_extra'] = unserialize($BOARD['md_extra']);
 		$md_extra_keys = empty($BOARD['md_extra']['keys'])?'':$BOARD['md_extra']['keys'];
 	}
 }
+
+// 분류를 1차 2차로 나눔
+$tmpa = explode('&', $BOARD['md_category']);
+$BOARD['md_category'] = $tmpa[0];
+$BOARD['md_category2'] = empty($tmpa[1]) ? '' : $tmpa[1];
 ?>
 
 <?php if(!$is_new){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return validateForm(this)">
 	<input type="hidden" name="success_url" value="<?php echo getUrl('bo_id', '')?>" />
+	<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="deleteBoard" />
 	<input type="hidden" name="md_id" value="" />
@@ -39,6 +46,7 @@ function validateForm(f) {
 
 <form id="setup" method="post" autocomplete="off">
 	<input type="hidden" name="success_url" value="<?php echo getUrl('bo_id', '')?>" />
+	<input type="hidden" name="error_url" value="<?php echo getUrl()?>" />
 	<input type="hidden" name="module" value="board" />
 	<input type="hidden" name="act" value="updateBoard" />
 	<input type="hidden" name="md_id" value="<?php echo $is_new?'':$BOARD['md_id'] ?>" />
@@ -67,11 +75,19 @@ function validateForm(f) {
 	</div>
 
 	<div class="mb-4">
-		<label class="form-label" for="mdCategory"><?php echo getLang('category')?></label>
+		<label class="form-label" for="mdCategory"><?php echo getLang('category')?> .1</label>
 		<div class="input-group">
 			<input type="text" name="md_category" class="form-control" id="mdCategory" maxlength="255" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_CATEGORY_)?>" value="<?php echo $BOARD['md_category'] ?>">
 		</div>
 		<div class="form-text"><?php echo str_replace('\n','<br>',getLang('desc_category'))?></div>
+	</div>
+
+	<div class="mb-4">
+		<label class="form-label" for="mdCategory"><?php echo getLang('category')?> .2</label>
+		<div class="input-group">
+			<input type="text" name="md_category2" class="form-control" id="mdCategory" maxlength="255" pattern="<?php echo str_replace(array('{','}'),'',_AF_PATTERN_CATEGORY_)?>" value="<?php echo $BOARD['md_category2'] ?>">
+		</div>
+		<div class="form-text"><?php echo str_replace('\n','<br>',getLang('desc_category2'))?></div>
 	</div>
 
 	<div class="mb-4">

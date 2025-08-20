@@ -62,13 +62,18 @@ function proc($data)
 	$wr_secret = empty($data['wr_secret']) ? 0 : ($data['wr_secret'] == 'true' ||  $data['wr_secret'] === 1);
 	$wr_secret = empty($module['use_secret']) ? (int)$wr_secret : ((int)$module['use_secret'])-1;
 
-	if(!empty($module['md_category'])) {
-		if(empty($data['wr_category'])) return set_error(getLang('request_input',['category']), 1);
-		if(!in_array($data['wr_category'], explode(',', $module['md_category']))) {
-			return set_error(getLang('invalid_value', ['category']), 2001);
-		}
+	$category = '';
+	if(!empty($module['md_category']) && empty($data['wr_category']) && empty($data['wr_category2'])) {
+		return set_error(getLang('request_input',['category']), 1);
+	}else if(!empty($data['wr_category2']) && empty($data['wr_category'])){
+		return set_error(getLang('msg_requires_catagory1'), 3);
 	} else {
-		$data['wr_category'] = '';
+		$category = implode(',', $data['wr_category']) . '&' . implode(',', $data['wr_category2']);
+		$temp1 = explode(',', str_replace('&', ',', $module['md_category']));
+		$temp2 = explode(',', str_replace('&', ',', $category));
+		foreach ($temp2 as $val) {
+			if(!in_array($val, $temp1)) return set_error(getLang('invalid_value', [$val]), 2001);
+		}
 	}
 
 	// 파일이 업로드되면 최대 수 체크
@@ -233,7 +238,7 @@ function proc($data)
 				'md_id'=>$md_id,
 				'wr_secret'=>$wr_secret,
 				'wr_type'=>$data['wr_type'],
-				'wr_category'=>trim($data['wr_category']),
+				'wr_category'=>trim($category),
 				'wr_title'=>$data['wr_title'],
 				'wr_content'=>$data['wr_content'],
 				'wr_tags'=>substr($data['wr_tags'], 0, 255),

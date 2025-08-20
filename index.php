@@ -1,5 +1,6 @@
 <?php define('__AFOX__', TRUE);
 @set_time_limit(0); ob_start(); //phpinfo();
+
 require_once __DIR__ . '/init/constant.php';;
 if(file_exists(($chkip=_AF_CONFIG_DATA_.'access_ip.php'))){include $chkip;$chkip=false;//checkIP
 	foreach($_ACCESS_IPS as $tmp){if($chkip=preg_match("/^{$tmp}$/",$_SERVER['REMOTE_ADDR']))break;};

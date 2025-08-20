@@ -1,7 +1,7 @@
 <?php define('__AFOX__',   TRUE);
 // 서버 필요 조건
 // * UTF-8
-// * PHP version 7.4.0 이상
+// * PHP version 5.4.0 이상
 // * MYSQL version 5.1.0 이상
 require_once __DIR__ . '/../init/constant.php';
 //load DB // When using a query, you must perform the escape yourself, or use parameters
@@ -30,8 +30,8 @@ if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
 
 if(empty($_POST['db_name'])) {
 
-	if(version_compare(PHP_VERSION, '7.4.0', '<')) {
-		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 7.4.0 이상 버전을 사용해주세요. </h3>';
+	if(version_compare(PHP_VERSION, '5.4.0', '<')) {
+		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 5.4.0 이상 버전을 사용해주세요. </h3>';
 	}
 
 	echo '<h3>에이폭스 CMS 설치</h3><form action="index.php" method="post" autocomplete="off">';
@@ -40,7 +40,7 @@ if(empty($_POST['db_name'])) {
 	echo '<strong style="display:inline-block;width:150px">DB 이름*</strong> : <input type="text" name="db_name" value=""><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 종류*</strong> : <select name="db_type"><option value="myisam">MyISAM</option><option value="innodb" '.(version_compare(PHP_VERSION, '5.5.0', '>=')?'selected':'').'>InnoDB (COMPACT)</option><option value="innodb8">InnoDB (KEY_BLOCK_8)</option><option value="innodb16">InnoDB (KEY_BLOCK_16)</option></select><br><br>';
 	echo '<strong style="display:inline-block;width:150px">DB 아이디*</strong> : <input type="text" name="db_user" value=""><br>';
-	echo '<strong style="display:inline-block;width:150px">DB 비밀번호*</strong> : <input type="text" name="db_pass" value=""><br><br>';
+	echo '<strong style="display:inline-block;width:150px">DB 비밀번호</strong> : <input type="text" name="db_pass" value=""><br><br>';
 	echo '<h3>에이폭스 계정 설정</h3>';
 	echo '<strong style="display:inline-block;width:150px">계정 아이디*</strong> : <strong>admin</strong><br>';
 	echo '<strong style="display:inline-block;width:150px">계정 비밀번호*</strong> : <input type="text" name="af_pass" value=""><br><br>';
@@ -67,7 +67,7 @@ for ($i=0; $i<count($dir_arr); $i++) {
 	@chmod($dir_arr[$i], 0755);
 }
 
-if(empty($_POST['db_host'])||empty($_POST['db_port'])||empty($_POST['db_name'])||empty($_POST['db_user'])||empty($_POST['db_pass'])||empty($_POST['af_pass'])) {
+if(empty($_POST['db_host'])||empty($_POST['db_port'])||empty($_POST['db_name'])||empty($_POST['db_user'])||empty($_POST['af_pass'])) {
 	exit("* 필수 값을 모두 채워 주세요.");
 }
 
@@ -78,7 +78,7 @@ $db_host = $_POST['db_host'];
 $db_port = $_POST['db_port'];
 $db_name = $_POST['db_name'];
 $db_user = $_POST['db_user'];
-$db_pass = $_POST['db_pass'];
+$db_pass = $_POST['db_pass'] ? $_POST['db_pass'] : '';
 $time_zone = empty($_POST['time_zone']) ? 'Asia/Seoul' : $_POST['time_zone'];
 
 $__tmp = trim($_POST['domain']);
@@ -280,7 +280,7 @@ $create_sql = '
 	   wr_status       CHAR(1)      NOT NULL DEFAULT 0,
 	   wr_secret       CHAR(1)      NOT NULL DEFAULT 0,
 	   wr_type         CHAR(1)      NOT NULL DEFAULT 0,
-	   wr_category     VARCHAR(20)  NOT NULL DEFAULT \'\',
+	   wr_category     VARCHAR(255) NOT NULL DEFAULT \'\',
 	   wr_title        VARCHAR(255) NOT NULL,
 	   wr_content      LONGTEXT,
 	   wr_extra        TEXT,
