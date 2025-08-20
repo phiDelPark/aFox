@@ -152,7 +152,7 @@ $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_CONFIG_TABLE_.' (
 	   lang           CHAR(5)      NOT NULL,
 	   start          CHAR(11)     NOT NULL,
-	   theme          VARCHAR(100) NOT NULL,
+	   theme          CHAR(11)     NOT NULL,
 	   title          VARCHAR(255) NOT NULL,
 	   version        CHAR(11)     NOT NULL,
 	   use_signup     CHAR(1)      NOT NULL DEFAULT 0,
@@ -168,7 +168,7 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 $_err_keys = _AF_THEME_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_THEME_TABLE_.' (
-	   th_id          VARCHAR(100) NOT NULL,
+	   th_id          CHAR(11)     NOT NULL,
 	   th_extra       TEXT,
 
 	   UNIQUE KEY ID_UK (th_id))'.$_engine;
@@ -183,7 +183,7 @@ $create_sql = '
 	   mu_parent       INT(11)      NOT NULL DEFAULT 0,
 	   mu_status       CHAR(1)      NOT NULL DEFAULT 0,
 	   mu_type         CHAR(1)      NOT NULL,
-	   mu_title        VARCHAR(255) NOT NULL,
+	   mu_title        VARCHAR(20) NOT NULL,
 	   mu_about        VARCHAR(255) NOT NULL DEFAULT \'\',
 	   mu_link         VARCHAR(255) NOT NULL DEFAULT \'\',
 	   mu_collapse     CHAR(1)      NOT NULL DEFAULT 0,
@@ -205,7 +205,7 @@ $create_sql = '
 	   mb_status       CHAR(1)      NOT NULL DEFAULT 0,
 	   mb_point        INT(11)      DEFAULT 0,
 	   mb_nick         VARCHAR(20)  NOT NULL,
-	   mb_email        VARCHAR(255) NOT NULL DEFAULT \'\',
+	   mb_email        VARCHAR(128) NOT NULL DEFAULT \'\',
 	   mb_homepage     VARCHAR(255) NOT NULL DEFAULT \'\',
 	   mb_about        TEXT,
 	   mb_extra        TEXT,
@@ -223,7 +223,7 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 $_err_keys = _AF_ADDON_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_ADDON_TABLE_.' (
-	   ao_id          VARCHAR(100) NOT NULL,
+	   ao_id          CHAR(11)     NOT NULL,
 	   ao_extra       TEXT,
 	   use_editor     CHAR(1)      NOT NULL DEFAULT 0,
 
@@ -236,7 +236,7 @@ $_err_keys = _AF_MODULE_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_MODULE_TABLE_.' (
 	   md_id           CHAR(11)     NOT NULL,
-	   md_key          VARCHAR(100) NOT NULL,
+	   md_key          CHAR(11)     NOT NULL,
 	   md_status       CHAR(1)      NOT NULL DEFAULT 0,
 	   md_category     VARCHAR(255) NOT NULL DEFAULT \'\',
 	   md_title        VARCHAR(255) NOT NULL,
@@ -280,7 +280,7 @@ $create_sql = '
 	   wr_status       CHAR(1)      NOT NULL DEFAULT 0,
 	   wr_secret       CHAR(1)      NOT NULL DEFAULT 0,
 	   wr_type         CHAR(1)      NOT NULL DEFAULT 0,
-	   wr_category     VARCHAR(255) NOT NULL DEFAULT \'\',
+	   wr_category     VARCHAR(120) NOT NULL DEFAULT \'\',
 	   wr_title        VARCHAR(255) NOT NULL,
 	   wr_content      LONGTEXT,
 	   wr_extra        TEXT,
@@ -365,7 +365,6 @@ $create_sql = '
 	   mf_name         VARCHAR(255) NOT NULL,
 	   mf_upload_name  VARCHAR(32)  NOT NULL,
 	   mf_type         VARCHAR(128) NOT NULL,
-	   mf_about        VARCHAR(255),
 	   mf_link         CHAR(1)      NOT NULL DEFAULT 0,
 	   mf_size         INT(11)      NOT NULL,
 	   mf_download     INT(11)      NOT NULL DEFAULT 0,
@@ -416,7 +415,7 @@ $_err_keys = _AF_TRIGGER_TABLE_;
 $create_sql = '
 	  CREATE TABLE IF NOT EXISTS '._AF_TRIGGER_TABLE_.' (
 	   tg_key         CHAR(1)      NOT NULL,
-	   tg_id          VARCHAR(100) NOT NULL,
+	   tg_id          CHAR(11)     NOT NULL,
 	   use_pc         CHAR(1)      NOT NULL DEFAULT 0,
 	   use_mobile     CHAR(1)      NOT NULL DEFAULT 0,
 	   grant_access   CHAR(1)      NOT NULL DEFAULT 0,
@@ -495,6 +494,19 @@ if (empty($row['md_id'])) {
 }
 
 DB::commit();
+
+
+$file = $datadir.'.htaccess'; // 첨부파일 접근 금지 (확장자 없음)
+if(!file_exists($file)) {
+	$f = @fopen($file, 'w');
+	fwrite($f, "Order deny, allow\n");
+	fwrite($f, "Deny from all\n");
+	fwrite($f, '<FilesMatch "\.[a-zA-Z]+$">'."\n");
+	fwrite($f, "  Allow from all\n");
+	fwrite($f, "</FilesMatch>\n");
+	fclose($f);
+	chmod($file, 0644);
+}
 
 $file = $datadir.'config/prohibit_id.php';
 if(!file_exists($file)) {

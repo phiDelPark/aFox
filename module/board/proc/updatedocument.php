@@ -68,11 +68,11 @@ function proc($data)
 	}else if(!empty($data['wr_category2']) && empty($data['wr_category'])){
 		return set_error(getLang('msg_requires_catagory1'), 3);
 	} else {
-		$category = implode(',', $data['wr_category']) . '&' . implode(',', $data['wr_category2']);
+		$category = implode(',', $data['wr_category']) . (empty($data['wr_category2']) ? '' : '&' . implode(',', $data['wr_category2']));
 		$temp1 = explode(',', str_replace('&', ',', $module['md_category']));
 		$temp2 = explode(',', str_replace('&', ',', $category));
 		foreach ($temp2 as $val) {
-			if(!in_array($val, $temp1)) return set_error(getLang('invalid_value', [$val]), 2001);
+			if(!in_array($val, $temp1)) return set_error(getLang('invalid_value', [$category]), 2001);
 		}
 	}
 
