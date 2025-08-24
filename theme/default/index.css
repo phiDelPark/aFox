@@ -89,6 +89,9 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 	border: 0;
 	border-left: 5px solid var(--bs-border-color);
 }
+.current_content blockquote p {
+	margin-bottom: 0;
+}
 .current_content table:not([class=hljs-ln]){
 	width: 100%;
 }
