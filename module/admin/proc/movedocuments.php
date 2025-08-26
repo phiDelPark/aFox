@@ -1,4 +1,5 @@
 <?php if(!defined('__AFOX__')) exit();
+@set_time_limit(0);
 
 function proc($data) {
 	if(empty($data['md_id']) || empty($data['wr_srls'])) return set_error(getLang('error_request'),4303);

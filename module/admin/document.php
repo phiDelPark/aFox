@@ -7,7 +7,7 @@
 
 	$_wheres = [
 		'md_id'.(empty($mid)?'{<>}':'')=>empty($mid)?'_AFOXtRASH_':$mid,
-		"_AND_" => empty($category) ? [] : ["wr_category{REGEXP}" => "('(^|,|&)".DB::escape($category)."($|,|&)')"], 
+		"_AND_" => empty($category) ? [] : ["wr_category{REGEXP}" => "('(^|,|&)(".DB::escape($category).")($|,|&)')"],
 		"_OR_" => []
 	];
 

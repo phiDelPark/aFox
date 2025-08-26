@@ -42,7 +42,7 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 
 function getDocumentList($id, $count, $page, $search = "", $category = "", $order = "wr_regdate", $callback = null)
 {
-	$_wheres = ["md_id" => $id, "_AND_" => empty($category) ? [] : ["wr_category{REGEXP}" => "('(^|,|&)".DB::escape($category)."($|,|&)')"], "_OR_" => []];
+	$_wheres = ["md_id" => $id, "_AND_" => empty($category) ? [] : ["wr_category{REGEXP}" => "('(^|,|&)(".DB::escape($category).")($|,|&)')"], "_OR_" => []];
 
 	if (!empty($search)) {
 		$keys = [

@@ -1,6 +1,6 @@
 <?php
-
 if(!defined('__AFOX__')) exit();
+@set_time_limit(0);
 
 function proc($data) {
 
