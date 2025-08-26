@@ -124,13 +124,30 @@ button {
 #advanced_setup:checked ~ .advanced_setup{
   display: block;
 }
-#calling_server {
+#calling_server::before,
+#calling_server b {
 	position: fixed;
 	top: 0px;
 	left: 0px;
 	margin: 1rem;
 	padding: 10px 50px;
 	z-index: 9900;
+}
+#calling_server b {
+  color: #ffda6a;
+  border: 1px solid #997404;
+  border-radius: 0.375rem;
+  background-color: #fff3cd;
+}
+#calling_server::before {
+	margin: 0;
+  width: 100%;
+  height: 100%;
+  content: " ";
+  display: block;
+  background-color: black;
+  opacity: .5;
+  z-index: 9898;
 }
 @media (min-width: 992px) {
   body {

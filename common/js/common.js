@@ -173,8 +173,7 @@ const $_LANG = {};
 	window.exec_ajax = async function(body, headers = {}, debug = false) {
 		const calling = document.createElement('DIV')
 		calling.setAttribute('id', 'calling_server')
-		calling.setAttribute('class', 'alert alert-warning')
-		calling.innerText = $_LANG['calling_server'];
+		calling.innerHTML = '<b>' + $_LANG['calling_server'] + '</b>'
 		document.body.insertBefore(calling, document.body.firstChild)
 		const options = {
 			method: "POST",
