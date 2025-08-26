@@ -25,8 +25,9 @@ $asc = isset($_GET['asc']);
 	<ol class="list-unstyled" aria-label="Category2 of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category2']);
+		$cates = explode('|', empty($_GET['category'])?'':$_GET['category']);
 		foreach ($tmp as $val) {
-			$isEqual = $val == @$_GET['category'];
+			$isEqual = in_array($val, $cates);
 			$cateurl = getUrl('','id',_MID_,'category', urlencode($val)).($isEqual&&!$asc?'&asc':'');
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
 		}
