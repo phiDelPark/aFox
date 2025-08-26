@@ -19,7 +19,8 @@ function proc($data) {
 
 		if (!empty($module['md_category'])) {
 			if (empty($md_cate)) throw new Exception(getLang('request_input', ['category']), 1);
-			$md_categorys = explode(',', $module['md_category']);
+			$md_categorys = str_replace('&', ',', $module['md_category']);
+			$md_categorys = explode(',', $md_categorys);
 			if (!in_array($md_cate, $md_categorys)) {
 				throw new Exception(getLang('warn_not_exists', [$md_cate]), 3105);
 			}
@@ -59,9 +60,8 @@ function proc($data) {
 					while (false !== ($filename = readdir($dir))) {
 						if($filename == '.' || $filename == '..')
 							continue;
-						copy($s.$filename, $t.$filename);
+						rename($s.$filename, $t.$filename);
 					}
-					unlinkAll($s);
 				}
 			}
 
@@ -100,9 +100,8 @@ function proc($data) {
 					while (false !== ($filename = readdir($dir))) {
 						if($filename == '.' || $filename == '..')
 							continue;
-						copy($t.$filename, $s.$filename);
+						rename($t.$filename, $s.$filename);
 					}
-					unlinkAll($t);
 				}
 			}
 		}

@@ -76,6 +76,7 @@ function proc($data) {
 				throw new Exception(getLang('warn_exists', ['id']), 3103);
 			}
 
+			// 카테고리 변경시 해당 카테고리에 문서가 있는지 체크
 			if ($category != $module['md_category']) {
 				$diff = array_diff(explode(',',$module['md_category']), explode(',',$category));
 				if (count($diff)>0 && !empty($diff[0])) {

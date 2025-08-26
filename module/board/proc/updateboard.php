@@ -113,7 +113,7 @@ function proc($data)
 				throw new Exception(getLang('warn_exists', ['id']), 3103);
 			}
 
-			// 카테고리 변경시 기존 문서에 해당 카테고리가 있는지 체크
+			// 카테고리 변경시 해당 카테고리에 문서가 있는지 체크
 			if ($category != $module['md_category']) {
 				$temp1 = str_replace('&', ',', $category);
 				$temp2 = str_replace('&', ',', $module['md_category']);

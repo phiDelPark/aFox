@@ -1,11 +1,14 @@
 <?php if(!defined('__AFOX__')) exit();
 
+	$mid = @$_GET['mid'] ? $_GET['mid']: null;
 	$_GET['page'] = @$_GET['page']?$_GET['page']:1;
 	$search = @$_GET['search'] ? trim($_GET['search']): '';
-	$category = @$_GET['category'] ? $_GET['category']: null;
+	$category = @$_GET['category'] ? trim($_GET['category']): '';
+
 	$_wheres = [
-		'md_id'.(empty($category)?'{<>}':'')=>empty($category)?'_AFOXtRASH_':$category,
-		"_AND_" => [], "_OR_" => []
+		'md_id'.(empty($mid)?'{<>}':'')=>empty($mid)?'_AFOXtRASH_':$mid,
+		"_AND_" => empty($category) ? [] : ["wr_category{REGEXP}" => "('(^|,|&)".DB::escape($category)."($|,|&)')"], 
+		"_OR_" => []
 	];
 
 	if (!empty($search)) {
@@ -15,7 +18,7 @@
 			"+" => "wr_tags", //+tag
 			"?" => "mb_nick", //?nick
 		];
-		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
+		$key = array_key_exists($key = substr($search, 0, 1), $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
 		if ($search = explode(" ", $search)) {
 			$index = 0;
@@ -71,7 +74,7 @@
 		$end_page = $doc_list['end_page'];
 
 		foreach ($doc_list['data'] as $key => $value) {
-			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></td>';
+			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('mid',$value['md_id']).'">'.$value['md_id'].'</a></td>';
 			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="wr_srls[]" value="'.$value['wr_srl'].'"><a href="./?srl='.$value['wr_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).'</a>'.(empty($value['wr_reply'])?'':' <small>('.$value['wr_reply'].')</small>').'</td>';
 			echo '<td>'.$value['mb_nick'].'</td>';
 			echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';

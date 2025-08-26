@@ -32,7 +32,7 @@ addJSLang(['confirm_delete','reply']);
 </section>
 <script>function themeDeleteReply(e){let t=function(e){exec_ajax({module:"board",act:"deleteComment",rp_srl:e}).then(e=>{location.reload()}).catch(e=>{alert(e)})},n=confirm($_LANG.confirm_delete.sprintf([$_LANG.reply]));return"object"==typeof n?n.then(()=>{t(e)}):!0===n&&t(e),!1}</script>
 
-<section id="replyEditer" class="mb-5" aria-label="Write a reply to this post">
+<section id="replyEditor" class="mb-5" aria-label="Write a reply to this post">
 	<form method="post" autocomplete="off" needvalidate>
 		<input type="hidden" name="error_url" value="<?php echo getUrl()?>">
 		<input type="hidden" name="success_url" value="<?php echo getUrl('rp','')?>">
