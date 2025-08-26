@@ -33,11 +33,11 @@ function proc($data)
 			return set_error(getLang('invalid_value', ['extra_keys']),2001);
 		}
 		$ex_keys['keys'] = [];
-		$tmp = explode(',', $data['md_extra_keys']);
-		foreach ($tmp as $cap) {
+		$_caps = explode(',', $data['md_extra_keys']);
+		foreach ($_caps as $cap) {
 			$_boxs = explode('&', $cap);
 			if($is = (count($_boxs)<2)) $_boxs = explode('|', $cap);
-			$_boxs[0] = cutstr(trim($_boxs[0]), 20);
+			for ($i = 0; $i < count($_boxs); $i++) $_boxs[$i] = cutstr(trim($_boxs[$i]), 10);
 			$ex_keys['keys'][md5($_boxs[0])] = implode($is?'|':'&', $_boxs);
 		}
 		if(count($ex_keys['keys']) > 99) { //확장 변수 갯수 제한 99개
