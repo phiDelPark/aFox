@@ -12,7 +12,7 @@ function proc($data) {
 	$tmp = explode(':', $data['md_id']);
 	$md_id = trim($tmp[0]);
 	$md_cate = count($tmp) > 1 ? trim($tmp[1]) : '';
-	$wr_srls = is_array($data['wr_srls']) ? $data['wr_srls'] : [$data['wr_srls']];
+	$wr_srls = is_array($data['wr_srls']) ? $data['wr_srls'] : explode(',', $data['wr_srls']);
 
 	try {
 		$module = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$md_id]);
@@ -26,9 +26,6 @@ function proc($data) {
 				throw new Exception(getLang('warn_not_exists', [$md_cate]), 3105);
 			}
 		}
-
-		$param = ['md_id'=>$md_id];
-		if(!empty($md_cate)) $param['wr_category'] = $md_cate;
 
 		$source_md_id = '';
 		$source_wr_srl = '';
@@ -45,35 +42,36 @@ function proc($data) {
 				$s = _AF_ATTACH_DATA_ . $val . '/' . $source_md_id . '/' . $wr_srl . '/';
 				$t = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/';
 
-				if(!is_dir(dirname($s))) continue;
+				if(!is_dir($s)) continue;
 
 				// 이동할 폴더가 이미 있으면 에러
-				if(is_dir(dirname($t))) {
-					throw new Exception('error_upload(7)',10407);
+				if(is_dir($t)) {
+					throw new Exception(getLang('error_upload(7)'),10407);
 				}
 
 				// 에러시 다시 돌리기 위해 여기서 입력
 				$source_wr_srl = $wr_srl;
 
-				if(mkdir($t, _AF_DIR_PERMIT_, true))
+				if(@mkdir($t, _AF_DIR_PERMIT_, true))
 				{
 					$dir = opendir($s);
 					while (false !== ($filename = readdir($dir))) {
 						if($filename == '.' || $filename == '..')
 							continue;
-						rename($s.$filename, $t.$filename);
+						@rename($s.$filename, $t.$filename);
 					}
+					unlinkAll($s);
 				}
 			}
 
 			DB::update(_AF_FILE_TABLE_,
-				$param, [
+				['md_id'=>$md_id], [
 					'mf_target'=>$wr_srl
 				]
 			);
 
 			DB::update(_AF_DOCUMENT_TABLE_,
-				$param, [
+				['md_id'=>$md_id, 'wr_category'=>$md_cate], [
 					//'wr_srl{IN}'=>implode(',', $wr_srls)
 					'wr_srl'=>$wr_srl
 				]
@@ -95,14 +93,15 @@ function proc($data) {
 
 				if(!is_dir(dirname($t))) continue;
 
-				if(mkdir($s, _AF_DIR_PERMIT_, true))
+				if(@mkdir($s, _AF_DIR_PERMIT_, true))
 				{
 					$dir = opendir($t);
 					while (false !== ($filename = readdir($dir))) {
 						if($filename == '.' || $filename == '..')
 							continue;
-						rename($t.$filename, $s.$filename);
+						@rename($t.$filename, $s.$filename);
 					}
+					unlinkAll($t);
 				}
 			}
 		}
