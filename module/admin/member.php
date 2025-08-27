@@ -5,7 +5,7 @@
 	$search = @$_GET['search']?'%'.$_GET['search'].'%':null;
 	$member_list = DB::gets(_AF_MEMBER_TABLE_, 'SQL_CALC_FOUND_ROWS *', [
 		'_OR_' =>empty($search)?[]:['mb_id{LIKE}'=>$search, 'mb_nick{LIKE}'=>$search]
-	],'mb_regdate', (($_GET['page']-1)*20).',20');
+	],['mb_regdate'=>'DESC'], (($_GET['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 	$member_list = setDataListInfo($member_list, $_GET['page'], 20, DB::foundRows());
 ?>

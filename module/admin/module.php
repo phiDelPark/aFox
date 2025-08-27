@@ -1,6 +1,6 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	$md_list = DB::gets(_AF_MODULE_TABLE_,'md_key',[],'md_key', function ($r) {
+	$md_list = DB::gets(_AF_MODULE_TABLE_,'md_key',[],['md_key'=>'DESC'], function ($r) {
 		$rset = [];
 		while ($row = DB::fetch($r)) {
 			$rset[$row['md_key']] = true;

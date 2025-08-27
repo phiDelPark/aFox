@@ -45,7 +45,7 @@ function proc($data)
 		}
 	}
 
-	$_list = DB::gets(_AF_DOCUMENT_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, "md_id,wr_regdate", (($page - 1) * $count) . "," . $count);
+	$_list = DB::gets(_AF_DOCUMENT_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, ["md_id"=>'DESC',"wr_regdate"=>'DESC'], (($page - 1) * $count) . "," . $count);
 
 	$result = [];
 	$result['data'] = $_list;

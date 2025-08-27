@@ -46,7 +46,7 @@ function proc($data) {
 		}
 	}
 
-	$_list = DB::gets(_AF_DOCUMENT_TABLE_,'SQL_CALC_FOUND_ROWS *', $_wheres, 'wr_regdate', (($page-1)*$count).','.$count);
+	$_list = DB::gets(_AF_DOCUMENT_TABLE_,'SQL_CALC_FOUND_ROWS *', $_wheres, ['wr_regdate'=>'DESC'], (($page-1)*$count).','.$count);
 	if($error = DB::error()) return set_error($error->getMessage(),$error->getCode());
 
 	$result = $_item;

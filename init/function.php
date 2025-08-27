@@ -174,7 +174,7 @@ function getFileList($id, $target)
 {	static $__file_list = [];
 	$key = $id.'_'.$target;
 	if(!isset($__file_list[$key])){
-		$out = DB::gets(_AF_FILE_TABLE_, ['md_id'=>$id,'mf_target'=>$target], 'mf_type');
+		$out = DB::gets(_AF_FILE_TABLE_, ['md_id'=>$id,'mf_target'=>$target], ['mf_type'=>'DESC']);
 		$__file_list[$key] = $out;
 	}
 	return $__file_list[$key];
@@ -207,7 +207,7 @@ function getHistoryList($act, $select = 'hs_value')
 {	global $_MEMBER;
 	if(!($mb_srl=@$_MEMBER['mb_srl'])) return [];
 	return DB::gets(_AF_HISTORY_TABLE_, $select,
-		['hs_action{LIKE}'=>'%::'.$act.'::%', 'mb_srl'=>$mb_srl], 'hs_regdate'
+		['hs_action{LIKE}'=>'%::'.$act.'::%', 'mb_srl'=>$mb_srl], ['hs_regdate'=>'DESC']
 	);
 }
 function getHistory($act)
@@ -468,7 +468,7 @@ function triggerCall($position, $trigger, &$data)
 	if(!@$__triggerCall && ($__triggerCall = ['M'=>[], 'A'=>[]])){
 		$rank = ord(empty($_MEMBER['mb_rank']) ? '0' : $_MEMBER['mb_rank']);
 		DB::gets(_AF_TRIGGER_TABLE_, 'tg_key,tg_id',
-			[(_MOBILE_?'use_mobile':'use_pc')=>1,'^'=>'ASCII(grant_access)<='.$rank], 'tg_key',
+			[(_MOBILE_?'use_mobile':'use_pc')=>1,'^'=>'ASCII(grant_access)<='.$rank], ['tg_key'=>'DESC'],
 			function($r)use(&$__triggerCall){
 				while($tmp = DB::fetch($r)) $__triggerCall[$tmp['tg_key']][$tmp['tg_id']] = [];
 			}

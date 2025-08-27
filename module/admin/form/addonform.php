@@ -73,7 +73,7 @@ if(!empty($_ADDON['ao_extra'])) {
 <?php
 require_once _AF_ADDONS_PATH_ . $_GET['ao_id'] . '/setup.php';
 
-$_list = DB::gets(_AF_MODULE_TABLE_,'md_id',[],'md_key');
+$_list = DB::gets(_AF_MODULE_TABLE_,'md_id',[],['md_key'=>'DESC']);
 if(!DB::error()) {
 	echo '<hr>
 		<label class="btn p-0 border-0 btn-link" for="advanced_setup">'.getLang('advanced_setup').'</label>

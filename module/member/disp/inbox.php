@@ -42,7 +42,7 @@ function proc($data) {
 		}
 	}
 
-	$_list = DB::gets(_AF_NOTE_TABLE_,'SQL_CALC_FOUND_ROWS *', $_wheres, 'nt_send_date', (($page-1)*$count).','.$count);
+	$_list = DB::gets(_AF_NOTE_TABLE_,'SQL_CALC_FOUND_ROWS *', $_wheres, ['nt_send_date'=>'DESC'], (($page-1)*$count).','.$count);
 	if($error = DB::error()) return set_error($error->getMessage(),$error->getCode());
 
 	$result = $_item;

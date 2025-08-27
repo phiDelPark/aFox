@@ -101,23 +101,16 @@ class DB {
 		return $result;
 	}
 
-	private static function __order($by, $order_type = 'DESC') {
+	private static function __order($orders) {
 		$group = [];
-		$order = self::$order;
-		if(!is_array($by)) $by = explode(',', $by);
-		foreach($by as $field => $type){
-			if(is_int($field) && !preg_match('/(DESC|desc|ASC|asc)/', $type)){
-				$field = $type;
-				$type = $order_type;
-			}
-			if(strtoupper($type) === 'GROUP') {
-				$group[] = $field;
-			} else {
-				$cm = empty($order) ? 'ORDER BY' : ',';
-				$order .= sprintf("%s%s %s", $cm, $field=='^'?'':" `{$field}`", $type);
+		$order = [];
+		foreach($orders as $field => $type){
+			if(strtoupper($type) === 'GROUP') $group[] = $field;
+			else {
+				$order[] = sprintf("%s %s", $field=='^'?'':" `{$field}`", $type);
 			}
 		}
-		self::$order = $order;
+		self::$order = count($order) > 0 ? 'ORDER BY '.implode(',', $order) : '';
 		self::$group = count($group) > 0 ? 'GROUP BY '.implode(',', $group) : '';
 	}
 
@@ -215,8 +208,8 @@ class DB {
 		if(!empty($opts[0]) && $r = self::__where($opts[0])) {
 			self::$where = 'WHERE '.implode(' AND ', $r);
 		} else if(is_array($opts[0])) self::$where = 'WHERE 1';
-		if(!empty($opts[1])) self::__order($opts[1]);
 		if(!empty($opts[2])) self::__limit($opts[2]);
+		if(!empty($opts[1])) is_array($opts[1]) ? self::__order($opts[1]) : self::__limit($opts[1]);
 	}
 
 	/** // only one
@@ -256,14 +249,15 @@ class DB {
 	DB::gets(_TABLE_, 'select', ['where'=>'value', 'field1(>)'=>1, 'field(=)'=>'NOW()'])
 	// command : ['^'=>'command()']
 	DB::gets(_TABLE_, 'select', ['where'=>'value', '^'=>'LOWER(field)=\'abc\''])
-	// order by and (limit = 'start,count')
-	DB::gets(_TABLE_, 'select', ['where'=>'value'], 'order', '5,20')
-	DB::gets(_TABLE_, 'select', ['where'=>'value'], 'order1,order2', '1,5')
-	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['order'=>'ASC'], '1,5')
+	// limit = 'start,count'
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], '1,20')
+	// order by
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['order'=>'DESC'])
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['order'=>'ASC'], '5,10')
 	// order by and group by
-	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['order'=>'DESC','group'=>'GROUP'], '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['order'=>'ASC','group'=>'GROUP'])
 	// command order by : ['^'=>'command()']
-	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['^'=>'rand()'], '1,5')
+	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['^'=>'rand()'], '5,10')
 	**/
 	public static function gets($table) {
 		$callback = null;

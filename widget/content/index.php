@@ -25,7 +25,8 @@ if($type === 'gallery') {
 		$_list = DB::get(_AF_DOCUMENT_TABLE_, 'wr_content', $select);
 	} else {
 		if(!empty($category)) $select['wr_category'] = $category;
-		$_list = DB::gets(_AF_DOCUMENT_TABLE_,$select,$order,$count);
+		$order = explode(' ',$order);
+		$_list = DB::gets(_AF_DOCUMENT_TABLE_,$select,[$order[0]=>empty($order[1])?$order[1]:'DESC'],$count);
 	}
 }
 ?>

@@ -41,7 +41,7 @@
 		}
 	}
 
-	$doc_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres,'wr_regdate', (($_GET['page']-1)*20).',20');
+	$doc_list = DB::gets(_AF_DOCUMENT_TABLE_, 'SQL_CALC_FOUND_ROWS *', $_wheres,['wr_regdate'=>'DESC'], (($_GET['page']-1)*20).',20');
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 	$doc_list = setDataListInfo($doc_list, $_GET['page'], 20, DB::foundRows());
 ?>

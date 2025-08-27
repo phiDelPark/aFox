@@ -8,8 +8,8 @@ if(!defined('__AFOX__')) exit();
 
 * 사용 가능한 옵션 *
   type          : 목록 타입 (default, gallery)
+  order         : 정렬 필드 (예: wr_srl desc)
   count         : 목록 수
-  order         : 정렬 필드
   category      : 분류 선택
   title         : 제목
   class         : CSS 클래스
