@@ -218,6 +218,8 @@ class DB {
 		-> WHERE where=value AND (w1=v1 OR w2=v2)
 	DB::get(_TABLE_, ['_OR_'=>['w1'=>'v1','w2'=>'v2'], '_AND_'=>['w3'=>'v3','w4'=>'v4']])
 		-> WHERE (w1=v1 OR w2=v2) AND (w3=v3 AND w4=v4)
+	// Use indexes when names are the same
+	DB::get(_TABLE_, 'select', ['where[0]'=>'value', 'where[1]'=>'value'])
 	**/
 	public static function get($table, $select = '*') {
 		$anum = func_num_args();
@@ -243,7 +245,9 @@ class DB {
 	// operator : ['field{.|=|<>|<=|>=|<|>|IS|IN|LIKE|REGEXP}'=>'value'] // {.} = none operator
 	// operator : ['field(.|=|<>|<=|>=|<|>|IS|IN|LIKE|REGEXP)'=>'value'] // (=) = no quote
 	DB::gets(_TABLE_, 'select', ['where'=>'value', 'field2{LIKE}'=>'value%'])
-	DB::gets(_TABLE_, 'select', ['where'=>'value', 'field1(>)'=>1, 'field(=)'=>'NOW()'])
+	DB::gets(_TABLE_, 'select', ['where'=>'value', 'field1(>)'=>1, 'field2(=)'=>'NOW()'])
+	// Use indexes when names are the same
+	DB::gets(_TABLE_, 'select', ['field1[0]'=>'value', 'field1{.}[1]'=>'value'])
 	// command : ['^'=>'command()']
 	DB::gets(_TABLE_, 'select', ['where'=>'value', '^'=>'LOWER(field)=\'abc\''])
 	// limit = 'start,count'
