@@ -9,13 +9,14 @@ $asc = isset($_GET['asc']);
 
 <section id="documentList" class="<?php echo $use_style?>">
 	<h2 class="pb-3 mb-2 border-bottom"><?php echo $_CFG['md_title']?></h2>
-<?php if(empty($_GET['srl']) && !empty($_CFG['md_category'])){ ?>
-
+<?php if(empty($_GET['srl']) && !empty($_CFG['md_category'])){
+	$categorys = explode(':',(empty($_GET['category'])?'':$_GET['category']).':');
+?>
 	<ol class="list-unstyled mb-1" aria-label="Category of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category']);
 		foreach ($tmp as $val) {
-			$isEqual = $val == @$_GET['category'];
+			$isEqual = $val == $categorys[0];
 			$cateurl = getUrl('','id',_MID_,'category', urlencode($val)).($isEqual&&!$asc?'&asc':'');
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
 		}
@@ -25,10 +26,9 @@ $asc = isset($_GET['asc']);
 	<ol class="list-unstyled" aria-label="Category2 of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category2']);
-		$cates = explode('|', empty($_GET['category'])?'':$_GET['category']);
 		foreach ($tmp as $val) {
-			$isEqual = in_array($val, $cates);
-			$cateurl = getUrl('','id',_MID_,'category', urlencode($val)).($isEqual&&!$asc?'&asc':'');
+			$isEqual = $val == $categorys[1];
+			$cateurl = getUrl('','id',_MID_,'category', urlencode($categorys[0]).':'.urlencode($val)).($isEqual&&!$asc?'&asc':'');
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
 		}
 	?>

@@ -42,7 +42,11 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 
 function getDocumentList($id, $count, $page, $search = "", $category = "", $order = "", $callback = null)
 {
-	$_wheres = ["md_id" => $id, "_AND_" => empty($category) ? [] : ["wr_category{REGEXP}" => "('(^|,|&)(".DB::escape($category).")($|,|&)')"], "_OR_" => []];
+	$_wheres = ["md_id" => $id, "_AND_" => [], "_OR_" => []];
+	$category = explode(':', empty($category) ? '' : $category);
+	foreach ($category as $i => $c) {
+		if (!empty($c)) $_wheres["_AND_"]["wr_category{REGEXP}[$i]"] = "('(^|,|&)".DB::escape($c)."($|,|&)')";
+	}
 
 	if (!empty($search)) {
 		$keys = [
@@ -66,7 +70,7 @@ function getDocumentList($id, $count, $page, $search = "", $category = "", $orde
 						$v = str_split($v, 4);
 						$v = $v[0].(empty($v[1])?"":"-".implode("-",str_split($v[1],2)))."%";
 					} else if ($cmd == '{REGEXP}') {
-						$v = "('(^|,)".DB::escape($v)."($|,)')";
+						$v = "('(^|,)(".DB::escape($v).")($|,)')";
 					} else {
 						$v = "%" . $v. "%";
 					}
