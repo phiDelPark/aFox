@@ -94,13 +94,13 @@ function getDocumentList($id, $count, $page, $search = "", $category = "", $orde
 		};
 	}
 
+	$order = is_array($order) ? $order : (
+		($tmp = explode(' ', (empty($order) ? "wr_regdate desc" : $order).' ')) ? [$tmp[0]=>$tmp[1]] : []
+	);
+
 	$page = empty($page) ? 1 : $page;
 	$_list = DB::gets(_AF_DOCUMENT_TABLE_,
-		"SQL_CALC_FOUND_ROWS *",
-		$_wheres,
-		empty($order) ? ["wr_regdate"=>'DESC'] : $order,
-		(($page - 1) * $count) . "," . $count,
-		$callback
+		"SQL_CALC_FOUND_ROWS *", $_wheres, $order, (($page - 1) * $count) . "," . $count, $callback
 	);
 
 	debugPrint(DB::lastQuery());

@@ -126,7 +126,7 @@ function proc($data) {
 	$asc = isset($data['asc']);
 
 	$count = empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count'];
-	$_list = getDocumentList($doc['md_id'], $count, $page, $search, $category, 'wr_regdate'.($asc?' ASC':''));
+	$_list = getDocumentList($doc['md_id'], $count, $page, $search, $category, 'wr_regdate '.($asc?'ASC':'DESC'));
 
 	// 분류를 1차 2차로 나눔
 	if(!empty($doc['wr_category'])){

@@ -16,7 +16,7 @@ function proc($data) {
 	$asc = isset($data['asc']);
 
 	$count = empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count'];
-	$_list = getDocumentList($data['id'], $count, $page, $search, $category, 'wr_regdate'.($asc?' ASC':''));
+	$_list = getDocumentList($data['id'], $count, $page, $search, $category, 'wr_regdate '.($asc?'ASC':'DESC'));
 
 	$result = [];
 	$result['tpl'] = 'list';
