@@ -85,7 +85,6 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 }
 .current_content blockquote {
 	padding: 10px 0 10px 20px;
-	font-size: 17.5px;
 	border: 0;
 	border-left: 5px solid var(--bs-border-color);
 }
@@ -100,6 +99,7 @@ h1, h2, h3, h4, h5, h6, .font-gugi {
 	padding: .5em;
 	border: 1px solid var(--bs-border-color);
 	background-color: rgba(var(--bs-tertiary-bg-rgb),.7)!important;
+	vertical-align: top;
 }
 
 .list .list-group a{

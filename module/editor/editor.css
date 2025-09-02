@@ -40,6 +40,7 @@ table th, table td {
 	padding: .5em;
 	border: 1px solid var(--bs-border-color);
 	background-color: var(--bs-tertiary-bg);
+	vertical-align: top;
 }
 
 code {
