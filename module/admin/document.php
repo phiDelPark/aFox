@@ -3,11 +3,11 @@
 	$mid = @$_GET['mid'] ? $_GET['mid']: null;
 	$_GET['page'] = @$_GET['page']?$_GET['page']:1;
 	$search = @$_GET['search'] ? trim($_GET['search']): '';
-	$category = @$_GET['category'] ? trim($_GET['category']): '';
+	$cat = @$_GET['cat'] ? trim($_GET['cat']): '';
 
 	$_wheres = [
 		'md_id'.(empty($mid)?'{<>}':'')=>empty($mid)?'_AFOXtRASH_':$mid,
-		"_AND_" => empty($category) ? [] : ["wr_category{REGEXP}" => "('(^|,|&)(".DB::escape($category).")($|,|&)')"],
+		"_AND_" => empty($cat) ? [] : ["wr_category{REGEXP}" => "('(^|,|&)(".DB::escape($cat).")($|,|&)')"],
 		"_OR_" => []
 	];
 

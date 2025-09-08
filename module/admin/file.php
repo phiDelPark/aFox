@@ -40,8 +40,8 @@
 				$search = '('.substr($tmp, 5).')';
 			}
 		}
-		$category = 'd'.(@$_GET['category']?'.md_id = \''.DB::escape($_GET['category']).'\'':'.md_id <> \'_AFOXtRASH_\'');
-		$where = $search||$category ? '('.$category.($search&&$category ? ' AND ' : '').$search.')' : '1';
+		$cat = 'd'.(@$_GET['cat']?'.md_id = \''.DB::escape($_GET['cat']).'\'':'.md_id <> \'_AFOXtRASH_\'');
+		$where = $search||$cat ? '('.$cat.($search&&$cat ? ' AND ' : '').$search.')' : '1';
 		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS f.*, d.md_id FROM $fl as f INNER JOIN $dd as d ON d.wr_srl = f.mf_target WHERE $where ORDER BY f.mf_regdate DESC LIMIT $start,$count", true);
 		$file_list = setDataListInfo($file_list, $_GET['page'], $count, DB::foundRows());
 	}
@@ -108,7 +108,7 @@
 				echo '<td class="hidden-xs">'.$value['mf_size'].'</td>';
 
 			}else{
-			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></td>';
+			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('cat',$value['md_id']).'">'.$value['md_id'].'</a></td>';
 			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="mf_srls[]" value="'.$value['mf_srl'].'"><a href="./?srl='.$value['mf_target'].'" target="_blank">'.escapeHTML(cutstr($value['mf_name'],50)).'</a></td>';
 			}
 			echo '<td><small>'.$value['mf_download'].'</small></td>';

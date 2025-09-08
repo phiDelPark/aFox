@@ -40,7 +40,7 @@ function getDocument($srl, $field = "*", $inc_hit = false)
 	return $result;
 }
 
-function getDocumentList($id, $count, $page, $search = "", $category = "", $order = "", $callback = null)
+function getDocumentList($id, $count, $page, $category = "", $search = "", $order = "", $callback = null)
 {
 	$_wheres = ["md_id" => $id, "_AND_" => [], "_OR_" => []];
 	$category = explode(':', empty($category) ? '' : $category);

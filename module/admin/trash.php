@@ -44,8 +44,8 @@
 		}
 	}
 
-	$category = $dd.'.md_id = \'_AFOXtRASH_\''.(@$_GET['category']?' AND wr_updater = \''.DB::escape($_GET['category']).'\'':'');
-	$where = $search||$category ? '('.$category.($search&&$category ? ' AND ' : '').$search.')' : '1';
+	$cat = $dd.'.md_id = \'_AFOXtRASH_\''.(@$_GET['cat']?' AND wr_updater = \''.DB::escape($_GET['cat']).'\'':'');
+	$where = $search||$cat ? '('.$cat.($search&&$cat ? ' AND ' : '').$search.')' : '1';
 	$page = (int)isset($_GET['page']) ? (($_GET['page'] < 1) ? 1 : $_GET['page']) : 1;
 	$count = 20;
 	$start = (($page - 1) * $count);
@@ -120,7 +120,7 @@
 			}else{
 				$tmp = 'srl='.$value['wr_srl'];
 			}
-			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['wr_updater']).'">'.$value['wr_updater'].'</a></td>';
+			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('cat',$value['wr_updater']).'">'.$value['wr_updater'].'</a></td>';
 			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).(empty($value['wr_reply'])?'':' <small>('.$value['wr_reply'].')</small>').'</td>';
 			echo '<td>'.($_GET['trash'] == 'file'?'<small>'.$value['mf_type'].'</small>':$value['mb_nick']).'</td>';
 			if($_GET['trash'] != 'file') echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';

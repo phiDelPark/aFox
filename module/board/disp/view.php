@@ -119,14 +119,14 @@ function proc($data){
 
 	//unset($doc['mb_password']);
 
-	$category = empty($data['category']) ? '' : $data['category'];
+	$cat = empty($data['cat']) ? '' : $data['cat'];
 	$search = empty($data['search']) ? '' : $data['search'];
 	$page = empty($data['page']) ? '' : $data['page'];
 	//$cpage = empty($data['cpage']) ? '' : $data['cpage'];
 	$asc = isset($data['asc']);
 
 	$count = empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count'];
-	$_list = getDocumentList($doc['md_id'], $count, $page, $search, $category, 'wr_regdate '.($asc?'ASC':'DESC'));
+	$_list = getDocumentList($doc['md_id'], $count, $page, $cat, $search, 'wr_regdate '.($asc?'ASC':'DESC'));
 
 	// 분류를 1차 2차로 나눔
 	if(!empty($doc['wr_category'])){

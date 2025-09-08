@@ -10,13 +10,13 @@ function proc($data){
 
 	global $_CFG;
 
-	$category = empty($data['category']) ? '' : $data['category'];
+	$cat = empty($data['cat']) ? '' : $data['cat'];
 	$search = empty($data['search']) ? '' : $data['search'];
 	$page = empty($data['page']) ? '' : $data['page'];
 	$asc = isset($data['asc']);
 
 	$count = empty($_CFG['md_list_count']) ? 20 : $_CFG['md_list_count'];
-	$_list = getDocumentList($data['id'], $count, $page, $search, $category, 'wr_regdate '.($asc?'ASC':'DESC'));
+	$_list = getDocumentList($data['id'], $count, $page, $cat, $search, 'wr_regdate '.($asc?'ASC':'DESC'));
 
 	$result = [];
 	$result['tpl'] = 'list';
