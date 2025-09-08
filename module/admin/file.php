@@ -105,7 +105,7 @@
 				echo '<td scope="row" rowspan="2" style="padding:2px"><img src="'.($unfilename).'" width="65" height="65"></td>';
 				echo '<td scope="row">'.$value['md_id'].'</td>';
 				echo '<td class="title">'.escapeHTML(cutstr($value['mf_name'],50)).'</td>';
-				echo '<td class="hidden-xs">'.shortFileSize($value['mf_size']).'</td>';
+				echo '<td class="hidden-xs">'.$value['mf_size'].'</td>';
 
 			} else {
 			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></td>';

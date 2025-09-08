@@ -53,15 +53,15 @@
 				showActiveTheme(theme)
 			})
 
-		const $qlink = document.querySelector('#quickLink li')
-		if($qlink){
-			const $h1 = document.querySelectorAll('.current_content *:is(h1,h2,h3)')
-			for (let idx = $h1.length - 1; idx > -1 ; idx--) {
-				if(!$h1[idx].innerText || ($h1.length - idx) > 22) continue
-				const $li = document.createElement('LI'); $li.innerHTML = $qlink.innerHTML
-				const $lia = $li.querySelector('a'), $lisvg = $lia.querySelector('svg')
-				$h1[idx].id = 'quickLink_' + idx; $lia.href = '#' + $h1[idx].id
-				$lia.innerHTML = $lisvg.outerHTML + $h1[idx].innerText; $qlink.after($li)
+		const qlink = document.querySelector('#quickLink li')
+		if(qlink){
+			const h1 = document.querySelectorAll('.current_content *:is(h1,h2,h3)')
+			for (let idx = h1.length - 1; idx > -1 ; idx--) {
+				if(!h1[idx].innerText || (h1.length - idx) > 22) continue
+				const li = document.createElement('LI'); li.innerHTML = qlink.innerHTML
+				const lia = li.querySelector('a'), lisvg = lia.querySelector('svg')
+				h1[idx].id = 'quickLink_' + idx; lia.href = '#' + h1[idx].id
+				lia.innerHTML = lisvg.outerHTML + h1[idx].innerText; qlink.after(li)
 			}
 		}
 	})

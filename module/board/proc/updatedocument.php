@@ -216,8 +216,7 @@ function proc($data)
 				$file_count++;
 			}
 
-			//$patterns = '/\[blob-([0-9]+)\]\(([^\)\"]+)(?:(?(R)\"|\s\"([^\"]+)\"\))|\))/Us';
-			$patterns = '/\(blob[^\)\"]+\s\"blob-([0-9]+)\"\)/Us';
+			$patterns = '/\(blob:http:[^#]+#([0-9]+)[^\)]*(\)")*?\)/Us';
 			$data['wr_content'] = preg_replace_callback(
 				$patterns,
 				function ($matches) use($new_files) {

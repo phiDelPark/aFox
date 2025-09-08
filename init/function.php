@@ -548,16 +548,6 @@ function cutstr($str, $length, $tail = '...')
 	return substr($str, 0, $count) . $tail;
 }
 
-function shortFileSize($size)
-{
-	$tails = ['B','K','M','G','T'];
-	for ($i = 0; $i < 4; $i++){
-		if($size <= 1024) break;
-		$size = $size / 1024;
-	}
-	return round($size, 1) . $tails[$i];
-}
-
 function timePassed($datetime)
 {
 	$t = time() - strtotime($datetime);

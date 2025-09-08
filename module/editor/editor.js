@@ -83,7 +83,7 @@ function afoxEditor(ID, OPTIONS) {
 			if (range) {
 				const el = iframe.contentWindow.document.createElement("div")
 				el.appendChild(range.cloneContents())
-				el.innerHTML = html.replace(/%s/, el.innerHTML ? el.innerHTML : '...')
+				el.innerHTML = html.replace(/%s/, el.innerHTML || '...')
 				range.deleteContents()
 				range.insertNode(el.firstElementChild)
 				range.setStart(selection.focusNode, selection.focusOffset)
@@ -91,7 +91,7 @@ function afoxEditor(ID, OPTIONS) {
 			}
 		} else {
 			const nend = (textarea.value.length - selection.end) * -1;
-			html = html.replace(/%s/, selection.value ? selection.value : '...')
+			html = html.replace(/%s/, selection.value || '...')
 			const
 				txtBefore = textarea.value.slice(0, selection.start),
 				txtAfter = nend ? textarea.value.slice(nend) : ''
@@ -166,19 +166,19 @@ function afoxEditor(ID, OPTIONS) {
 			let span = document.createElement('span'),
 				name = e.target.files[key].name.escapeHTML(),
 				type = e.target.files[key].type.escapeHTML(),
-				size = e.target.files[key].size.shortFileSize(),
+				size = (e.target.files[key].size+'').toFileSize(),
 				url = elURL.createObjectURL(e.target.files[key])
 			window.uploadFiles.push(url)
 			const index = window.uploadFiles.length - 1
-			let html = `="${url}" title="blob-${index}" alt="${name} (${size})"`,
+			let html = `="${url}#${index}" title="${name} (${size})" alt="${type}"`,
 				image = type.slice(0, 5) == 'image'
-			span.innerHTML = '<image src' + html + (image?'':' srcset="./module/editor/bi-binary.svg"') + '>'
+			span.innerHTML = '<img src' + html + (image?'':' srcset="./module/editor/bi-binary.svg"') + '>'
 				+ (e.target.files.length === 1 ? '<span>' + e.target.value + '</span>' : '')
-			html = image ? '<image src' + html + '>' : `<a href${html}>${name} (${size})</a>`
-			span.addEventListener('dragstart', ee => {
-				ee.dataTransfer.setData('text', html)
-			})
+			html = image ? '<img src' + html + '>' : `<a href${html}>${name} (${size})</a>`
 			updFiles.append(span)
+			updFiles.querySelectorAll('img').forEach(el => {
+				el.addEventListener('dragstart', dragStartFile)
+			})
 		})
 	}
 
@@ -197,6 +197,7 @@ function afoxEditor(ID, OPTIONS) {
 				'header':this.htmlMode ? '<h3>%s</h3>' : '## %s',
 				'highlight':this.htmlMode ? '<code>%s</code>' : '`%s`',
 				'indent':this.htmlMode ? '<blockquote>%s</blockquote>' : '> %s',
+				'table':this.htmlMode ? '<table><tr><th>...</th><th>...</th></tr><tr><td>%s</td><td> </td></tr></table>' : '| ... | ... |\n|---|---|\n| %s |   |',
 				'codeblock':this.htmlMode ? '<pre><code>%s</code></pre>' : '```'+"\n"+'%s'+"\n"+'```'
 			}
 
@@ -251,8 +252,8 @@ function afoxEditor(ID, OPTIONS) {
 
 	const form = editor.closest('FORM')
 
-	const check_groups = form.querySelectorAll('.checkbox-group.required');
-	check_groups.forEach(el => el.addEventListener('change', _=> el.classList.remove('is-invalid')))
+	const chk_group = form.querySelectorAll('.checkbox-group.required');
+	chk_group.forEach(el => el.addEventListener('change', _=> el.classList.remove('is-invalid')))
 
 	if(form.hasAttribute('needvalidate')) form.setAttribute('novalidate', '')
 	form.addEventListener('submit', e => {
@@ -260,7 +261,7 @@ function afoxEditor(ID, OPTIONS) {
 			if (this.htmlMode) {
 				textarea.value = iframe.contentWindow.document.body.innerHTML
 			}
-			check_groups.forEach(el => {
+			chk_group.forEach(el => {
 				if(el.querySelectorAll('[type=checkbox]:checked')?.length === 0){
 					el.classList.add('is-invalid')
 					e.preventDefault()

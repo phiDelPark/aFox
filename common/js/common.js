@@ -85,9 +85,23 @@ const $_LANG = {};
 		return this.charAt(0).toUpperCase()+this.slice(1).toLowerCase()
 	}
 
-	Number.prototype.shortFileSize = function() {
-		let	s = this, i = 0; while(s > 1024){s = s / 1024; i++}
+	String.prototype.toFileSize = function() {
+		let	s = Number.parseInt(this), i = 0; while(s > 1024){s = s / 1024; i++}
 		return s.toFixed(1) + (['B','K','M','G','T'].at(i) || '?')
+	}
+
+	String.prototype.stripTags = function(a) { // php.js
+		// making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
+		a=(((a||'')+'').toLowerCase().match(/<[a-z][a-z0-9]*>/g)||[]).join('')
+		const tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+			pags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi
+		return this.replace(pags, '').replace(tags, ($0, $1) => {
+			return a.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : ''
+		})
+	}
+
+	String.prototype.nl2br = function(br) {
+		return this.replace(/\r\n|\n\r|\r|\n/g, (br || "<br>"))
 	}
 
 	HTMLElement.prototype.fadeIn = function(callback, speed = 50) {
@@ -134,20 +148,6 @@ const $_LANG = {};
 			if (['checkbox', 'radio'].indexOf($e.type) >-1 && !$e.checked) return
 			arr[$e.name] = (arr[$e.name] ? arr[$e.name] + ',' : '') + $e.value
 		}); return arr
-	}
-
-	window.nl2br = function(s, br) {
-		return s.replace(/\r\n|\n\r|\r|\n/g, (br || "<br>"))
-	}
-
-	window.strip_tags = function(s, a) { // php.js
-		// making sure the allowed arg is a string containing only tags in lowercase (<a><b><c>)
-		a=(((a||'')+'').toLowerCase().match(/<[a-z][a-z0-9]*>/g)||[]).join('')
-		const tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
-			pags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi
-		return s.replace(pags, '').replace(tags, ($0, $1) => {
-			return a.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : ''
-		})
 	}
 
 	//If 0, remove it when exit the browser //if -, remove

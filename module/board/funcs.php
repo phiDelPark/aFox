@@ -103,7 +103,6 @@ function getDocumentList($id, $count, $page, $search = "", $category = "", $orde
 		"SQL_CALC_FOUND_ROWS *", $_wheres, $order, (($page - 1) * $count) . "," . $count, $callback
 	);
 
-	debugPrint(DB::lastQuery());
 	$result = [];
 	$result['list'] = $_list;
 	$result['total_count'] = DB::foundRows();

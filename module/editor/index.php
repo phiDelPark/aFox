@@ -15,10 +15,10 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 		<div id="editorTypebar" class="user-select-none pt-1">
 		<?php
 			$typebar_item = '<span style="cursor:pointer" class="bi-unchecked%s ms-2" tabindex="0" data-target="%s" data-value="%s">%s</span>';
-			foreach ($_EDITOR['typebar'][1] as $key=>$val) {
-				$target = $key;
-				$default = $val[0];
-				$item = is_array($val[1]) ? $val[1] : [$val[1]];
+			foreach ($_EDITOR['typebar'][1] as $k=>$v) {
+				$target = $k;
+				$default = $v[0];
+				$item = is_array($v[1]) ? $v[1] : [$v[1]];
 				foreach ($item as $k=>$v) echo sprintf($typebar_item, $v===$default?' checked':'', $target, $v, $k);
 				echo '<input type="hidden" name="'.$target.'" value="'.$default.'">';
 			}
@@ -58,6 +58,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="header"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#head"/></svg></button>
 			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="insertorderedlist"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#list-ol"/></svg></button>
 			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="indent"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#blockquote-left"/></svg></button>
+			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="table"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#plus-lg"/></svg></button>
 			<button class="btn btn-outline-secondary me-2" tabindex="-1" aria-label="codeblock"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#code-slash"/></svg></button>
 			<button class="btn btn-outline-secondary" tabindex="-1" aria-label="components" aria-expanded="false" data-bs-toggle="dropdown"><svg class="bi"><use href="<?php echo _AF_URL_ ?>module/editor/bi-icons.svg#three-dots"/></svg></button>
 			<ul class="dropdown-menu dropdown-menu-end shadow">
@@ -110,15 +111,15 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 <?php if(!empty($fileList) && count($fileList)>0) { ?>
 		<div id="uploadedFiles" class="user-select-none input-group text-secondary border rounded p-2">
 <?php
-	foreach ($fileList as $val) {
-		$es_name = escapeHTML($val['mf_name']);
+	foreach ($fileList as $v) {
 		echo sprintf(
-			substr($val['mf_type'], 0, 5) == 'image'
-			? '<img src="%s" title="%s" alt="%s">'
-			: '<img src="%s" title="%s" alt="%s" srcset="./module/editor/bi-binary.svg">',
-			'./?file='.$val['mf_srl'],
-			$es_name.' ('.shortFileSize( $val['mf_size']). ')',
-			escapeHTML($val['mf_type'])
+			substr($v['mf_type'], 0, 5) == 'image'
+			? '<img src="%s" title="%s" alt="%s" size="%s">'
+			: '<img src="%s" title="%s" alt="%s" size="%s" srcset="./module/editor/bi-binary.svg">',
+			'./?file='.$v['mf_srl'],
+			escapeHTML($v['mf_name']),
+			escapeHTML($v['mf_type']),
+			$v['mf_size']
 		);
 	}
 ?>
@@ -131,6 +132,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 	</div>
 <?php } ?>
 </div>
+<script>document.querySelectorAll('#uploadedFiles img').forEach(img=>{img.setAttribute('title', img.getAttribute('title') + ` (${img.getAttribute('size').toFileSize()})`)})</script>
 <script>load_script("<?php echo _AF_URL_?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js')?>").then(() => { window.AFOX_EDITOR_<?php echo strtoupper($_ID)?> =new afoxEditor("<?php echo $_ID?>", <?php echo json_encode($_EDITOR)?>) },() => { console.log('fail to load script') })</script>
 <?php
 /* End of file index.php */
