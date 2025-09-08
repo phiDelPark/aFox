@@ -5,7 +5,7 @@
 
 let siteMap_tempKey = -1
 
-function SiteMap(id) {
+function SiteMap(id){
 	const depth = 5
 	const container = document.querySelector(id)
 
@@ -23,7 +23,7 @@ function SiteMap(id) {
 		let top = 0,
 			left = 0
 
-		while (el && el != offsetParent) {
+		while (el && el != offsetParent){
 			top += el.offsetTop
 			left += el.offsetLeft
 			el = el.offsetParent
@@ -36,15 +36,15 @@ function SiteMap(id) {
 	}
 
 	const setPidHolder = (info, yPos) => {
-		if (Math.abs(info.top - yPos) <= 4) {
+		if (Math.abs(info.top - yPos) <= 4){
 			pholder.style.top = (info.top - 4) + 'px'
 			pholder.style.height = '8px'
 			return 'before'
-		} else if (Math.abs(info.bottom - yPos) <= 4) {
+		} else if (Math.abs(info.bottom - yPos) <= 4){
 			pholder.style.top = (info.bottom - 4) + 'px'
 			pholder.style.height = '8px'
 			return 'after'
-		} else {
+		}else{
 			const eh = target.firstChild.nextSibling
 			pholder.style.top = (info.top + 1) + 'px'
 			pholder.style.height = (eh.offsetHeight || 48) + 8 + 'px'
@@ -67,21 +67,21 @@ function SiteMap(id) {
 
 		nTop = offset.top - diff.y
 
-		for (let i = 0, n = offsets.length; i < n; i++) {
+		for (let i = 0, n = offsets.length; i < n; i++){
 			t = nTop
 			o = offsets[i]
 
 			if (i === 0 && t < o.top) t = o.top
 			if (i == n - 1 && t > o.bottom) t = o.bottom
 
-			if (o.top <= t && o.bottom >= t) {
+			if (o.top <= t && o.bottom >= t){
 				dropzone = {
 					element: o.item,
 					state: setPidHolder(o, t)
 				}
 				pholder.style.opacity = .6;
 				break
-			} else {
+			}else{
 				pholder.style.opacity = 0;
 			}
 		}
@@ -109,7 +109,7 @@ function SiteMap(id) {
 			? dropzone.element.closest('LI') : dropzone.element
 
 		try {
-			switch (dropzone.state) {
+			switch (dropzone.state){
 				case 'after':
 					el.after(target)
 					break
@@ -119,12 +119,12 @@ function SiteMap(id) {
 				case 'prepend':
 					let ul_child = dropzone.element.querySelector('UL'),
 						tmp = dropzone.element, n_parent = 0
-					while (tmp?.tagName == 'LI' || tmp?.tagName == 'UL') {
+					while (tmp?.tagName == 'LI' || tmp?.tagName == 'UL'){
 						if(tmp?.tagName == 'UL') n_parent++
 						tmp = tmp.parentNode
 					}
-					if (n_parent < depth) {
-						if (!ul_child) {
+					if (n_parent < depth){
+						if (!ul_child){
 							ul_child = document.createElement("ul")
 							dropzone.element.append(ul_child)
 						}
@@ -135,7 +135,7 @@ function SiteMap(id) {
 			let el_pkey = target.querySelector('input[name="parent_key[]"]'),
 				el_pli = target.parentNode.closest('LI')
 			el_pkey.value = el_pli?.querySelector('input[name="item_key[]"]').value || '0'
-		} catch (_) {}
+		} catch (_){}
 		return false
 	}
 
@@ -248,14 +248,14 @@ function SiteMap(id) {
 				el.setAttribute('type', 'hidden')
 			})
 			return true
-		} catch (error) {
+		} catch (error){
 			e.preventDefault()
 			return false
 		}
 	})
 }
 
-window.onload = function() {
+window.onload = function(){
 	window.siteMapItemAdd = (th, idx) => {
 		try {
 			const container = document.querySelector('#siteMapRoot' + idx),
@@ -281,7 +281,7 @@ window.onload = function() {
 				el_setup.classList.toggle('d-none')
 			})
 			container.prepend(el)
-		} catch (error) {
+		} catch (error){
 
 		}
 		return false

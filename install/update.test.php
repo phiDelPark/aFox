@@ -1,8 +1,8 @@
 <?php define('__AFOX__',   TRUE);
-require_once __DIR__ . '/../init/constant.php';
+require_once __DIR__.'/../init/constant.php';
 include_once _AF_CONFIG_DATA_.'_db_config.php';
 //load DB // When using a query, you must perform the escape yourself, or use parameters
-require_once _AF_LIBS_PATH_ . 'db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
+require_once _AF_LIBS_PATH_.'db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
 DB::connect($_DBINFO);
 $success = true;
 ?>
@@ -26,12 +26,12 @@ $success = true;
 		'point_login INT(11) NOT NULL DEFAULT 0'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_CONFIG_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -47,12 +47,12 @@ $success = true;
 		'th_extra TEXT'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_THEME_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -75,12 +75,12 @@ $success = true;
 		'mu_new_win CHAR(1) NOT NULL DEFAULT 0'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_MENU_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -108,12 +108,12 @@ $success = true;
 		'mb_regdate DATETIME NOT NULL'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_MEMBER_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -130,12 +130,12 @@ $success = true;
 		'use_editor CHAR(1) NOT NULL DEFAULT 0'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_ADDON_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -178,12 +178,12 @@ $success = true;
 		'md_regdate DATETIME NOT NULL'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_MODULE_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -221,12 +221,12 @@ $success = true;
 		'wr_regdate DATETIME NOT NULL'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_DOCUMENT_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -256,12 +256,12 @@ $success = true;
 		'rp_regdate DATETIME NOT NULL'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_COMMENT_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -283,12 +283,12 @@ $success = true;
 		'pg_regdate DATETIME NOT NULL'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_PAGE_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -315,12 +315,12 @@ $success = true;
 		'mf_regdate DATETIME NOT NULL'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_FILE_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -338,12 +338,12 @@ $success = true;
 		'hs_regdate DATETIME NOT NULL'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_HISTORY_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -364,12 +364,12 @@ $success = true;
 		'nt_content TEXT'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_NOTE_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -388,12 +388,12 @@ $success = true;
 		'grant_access CHAR(1) NOT NULL DEFAULT 0'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_TRIGGER_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -411,12 +411,12 @@ $success = true;
 		'vs_regdate DATETIME NOT NULL'
 	];
 	$t = [];
-	foreach($r as $v) {
+	foreach($r as $v){
 		$t[] = $v['Field'].' '.strtoupper($v['Type']=='mediumtext'?'text':$v['Type']).($v['Null']=='NO'?' NOT NULL':'')
 			.($v['Default']!==NULL?' DEFAULT '.$v['Default']:'').($v['Extra']=='auto_increment'?' AUTO_INCREMENT':'');
 	}
 	echo '<b style="color:blue">'._AF_VISITOR_TABLE_."</b><br>\n";
-	foreach($o as $v) {
+	foreach($o as $v){
 		if(!in_array($v, $t)){
 			echo '<b style="color:red">- miss: </b>'.$v."<br>\n";
 			ob_flush();
@@ -427,7 +427,7 @@ $success = true;
 
 ?>
 <?php
-	if($success) {
+	if($success){
 		DB::query('UPDATE `'._AF_CONFIG_TABLE_.'` SET `version`="'._AF_VERSION_.'" WHERE 1');
 		if($error = DB::error()) echo "<br>\n".('<b style="color:red">'.$error->getMessage().'</b>');
 		else echo "<br>\n".('<b style="color:green">업데이트 성공</b>');

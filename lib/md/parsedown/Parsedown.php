@@ -405,7 +405,7 @@ class Parsedown
             return;
         }
 
-        $Block['markup'] .= "\n" . $Line['body'];
+        $Block['markup'] .= "\n".$Line['body'];
 
         if (preg_match('/-->$/', $Line['text']))
         {
@@ -523,7 +523,7 @@ class Parsedown
 
             $Block = array(
                 'element' => array(
-                    'name' => 'h' . min(6, $level),
+                    'name' => 'h'.min(6, $level),
                     'text' => $text,
                     'handler' => 'line',
                 ),
@@ -1165,7 +1165,7 @@ class Parsedown
 
             if ( ! isset($matches[2]))
             {
-                $url = 'mailto:' . $url;
+                $url = 'mailto:'.$url;
             }
 
             return array(
@@ -1534,7 +1534,7 @@ class Parsedown
             elseif (!$permitRawHtml)
             {
                 // compile code tags by afox
-                if ($Element['name'] == 'code') {
+                if ($Element['name'] == 'code'){
                     $markup .= $this->line($text);
                 }
                 else $markup .= self::escape($text, true);
@@ -1560,7 +1560,7 @@ class Parsedown
 
         foreach ($Elements as $Element)
         {
-            $markup .= "\n" . $this->element($Element);
+            $markup .= "\n".$this->element($Element);
         }
 
         $markup .= "\n";

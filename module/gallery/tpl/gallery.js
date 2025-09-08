@@ -44,7 +44,7 @@
       })
 
       document.getElementById('carouselGallery')
-        ?.addEventListener('slide.bs.carousel', function (e) {
+        ?.addEventListener('slide.bs.carousel', function (e){
           if((e.from == 0 && e.direction == 'right') || (e.to == 0 && e.direction == 'left')){
             e.preventDefault()
             e.stopPropagation()
@@ -59,7 +59,7 @@
                 })
               })
               .catch(error => console.log(error))
-          } else {
+          }else{
             getImage(md_id, e.relatedTarget.getAttribute('item-key'));
           }
         })

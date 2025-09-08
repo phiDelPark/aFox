@@ -7,35 +7,35 @@
 	$search = @$_GET['search'] ? trim($_GET['search']) : '';
 	$keys = [ "!" => "wr_title", "?" => "mb_nick", "+" => "wr_tags", ":" => "wr_regdate" ];
 
-	if($_GET['trash'] == 'comment') {
+	if($_GET['trash'] == 'comment'){
 		$cd = _AF_COMMENT_TABLE_;
 		$keys = [ "?" => "mb_nick", ":" => "rp_regdate" ];
-	} else if($_GET['trash'] == 'file') {
+	} else if($_GET['trash'] == 'file'){
 		$cd = _AF_FILE_TABLE_;
 		$keys = [ "!" => "mf_type", "?" => "mb_nick", ":" => "mf_regdate" ];
 	}
 
-	if(!empty($search)) {
+	if(!empty($search)){
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
-		if($_GET['trash'] == 'comment') {
+		if($_GET['trash'] == 'comment'){
 			empty($key) ? ($key = "rp_content") : ($search = substr($search, 1));
-		} else if($_GET['trash'] == 'file') {
+		} else if($_GET['trash'] == 'file'){
 			empty($key) ? ($key = "mf_name") : ($search = substr($search, 1));
-		} else {
+		}else{
 			empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
 		}
-		if ($search = explode(" ", $search)) {
+		if ($search = explode(" ", $search)){
 			$index = 0;
 			$tmp = '';
-			foreach ($search as $value) {
+			foreach ($search as $value){
 				$value = explode("&", trim($value));
 				$and_or = count($value) > 1 ? ' AND ' : ' OR  ';
-				foreach ($value as $v) {
-					if (substr($key, 2) == "_regdate") {
+				foreach ($value as $v){
+					if (substr($key, 2) == "_regdate"){
 						$v = str_split($v, 4);
-						$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
+						$v = $v[0].(empty($v[1]) ? "" : "-".implode("-", str_split($v[1], 2)));
 						$tmp .= $and_or.$cd.'.'.$key.' LIKE \''.DB::escape($v.'%').'\'';
-					} else {
+					}else{
 						$tmp .= $and_or.$cd.'.'.$key.' LIKE \''.DB::escape('%'.$v.'%').'\'';
 					}
 				}
@@ -50,11 +50,11 @@
 	$count = 20;
 	$start = (($page - 1) * $count);
 
-	if($_GET['trash'] == 'comment') {
+	if($_GET['trash'] == 'comment'){
 		$query = "SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id, $dd.wr_srl, $dd.wr_updater, $dd.wr_update, $cd.rp_content AS wr_title, $cd.rp_status AS wr_status, $cd.rp_secret AS wr_secret, $cd.rp_regdate AS wr_regdate FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.wr_srl WHERE $where ORDER BY $cd.rp_regdate DESC LIMIT $start,$count";
-	} else if($_GET['trash'] == 'file') {
+	} else if($_GET['trash'] == 'file'){
 		$query = "SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id, $dd.wr_srl, $dd.wr_updater, $dd.wr_update, $cd.mf_name AS wr_title, $cd.mf_download AS wr_status, $cd.mf_regdate AS wr_regdate FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.mf_target WHERE $where ORDER BY $cd.mf_regdate DESC LIMIT $start,$count";
-	} else {
+	}else{
 		$query = "SELECT SQL_CALC_FOUND_ROWS * FROM $cd WHERE $where ORDER BY wr_regdate DESC LIMIT $start,$count";
 	}
 
@@ -89,7 +89,7 @@
 		<th scope="col">#</th>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
 		<th scope="col"><?php echo ($_GET['trash'] == 'file'?getLang('type'):getLang('author'))?></th>
-		<?php if ($_GET['trash'] != 'file') {?>
+		<?php if ($_GET['trash'] != 'file'){?>
 		<th scope="col"><?php echo getLang('status')?></th>
 		<?php }?>
 		<th scope="col" class="d-none d-md-table-cell"><?php echo getLang('date')?></th>
@@ -102,9 +102,9 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
+	if($error){
 		messageBox($error['message'], $error['error'], false);
-	} else {
+	}else{
 		$current_page = $trash_list['current_page'];
 		$total_page = $trash_list['total_page'];
 		$start_page = $trash_list['start_page'];
@@ -112,12 +112,12 @@
 
 
 
-		foreach ($trash_list['data'] as $key => $value) {
-			if($_GET['trash'] == 'comment') {
+		foreach ($trash_list['data'] as $key => $value){
+			if($_GET['trash'] == 'comment'){
 				$tmp = 'rp='.$value['rp_srl'];
-			} else if($_GET['trash'] == 'file') {
+			} else if($_GET['trash'] == 'file'){
 				$tmp = 'srl='.$value['mf_target'];
-			} else {
+			}else{
 				$tmp = 'srl='.$value['wr_srl'];
 			}
 			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['wr_updater']).'">'.$value['wr_updater'].'</a></td>';

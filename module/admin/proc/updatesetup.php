@@ -2,18 +2,18 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['start'])) return set_error(getLang('error_request'),4303);
 	if(empty($data['theme'])) $data['theme'] = 'default';
 
-	if(!empty($_FILES)) {
+	if(!empty($_FILES)){
 		$_lst = ['logo','favicon'];
 		$_lsext = ['png','ico'];
 
-		foreach ($_lst as $key => $val) {
+		foreach ($_lst as $key => $val){
 			if (empty($_FILES[$val]['name'])) continue;
 
-			if(!preg_match('/\.('.$_lsext[$key].')$/i', $_FILES[$val]['name'])) {
+			if(!preg_match('/\.('.$_lsext[$key].')$/i', $_FILES[$val]['name'])){
 				return set_error(getLang('warn_allowable',[$_lsext[$key]]),3503);
 			}
 
@@ -24,8 +24,8 @@ function proc($data) {
 		}
 	}
 
-	if(!empty($data['remove_files'])) {
-		foreach ($data['remove_files'] as $val) {
+	if(!empty($data['remove_files'])){
+		foreach ($data['remove_files'] as $val){
 			unlinkFile(_AF_CONFIG_DATA_.$val.'.'.$_lsext[(int)($val=='favicon')]);
 		}
 	}
@@ -50,21 +50,21 @@ function proc($data) {
 		);
 
 		$_lst = ['prohibit_id','access_ip'];
-		foreach ($_lst as $val) {
+		foreach ($_lst as $val){
 			$data[$val] = trim($data[$val]);
 			$file = _AF_CONFIG_DATA_.$val.'.php';
-			if(empty($data[$val])) {
+			if(empty($data[$val])){
 				unlinkFile($file);
-			} else {
+			}else{
 				$_comma = '';
 				$prohibit_id = explode(($val=='prohibit_id'?',':"\n"), $data[$val]);
 				$f = @fopen($file, 'w');
 				fwrite($f, "<?php if(!defined('__AFOX__')) exit();\n");
-				if($val=='access_ip') {
+				if($val=='access_ip'){
 					fwrite($f, '$_ACCESS_IP_MODE="'.($data['access_ip_mode']=='possible'?'possible':'intercept').'";');
 				}
 				fwrite($f, '$_'.strtoupper($val).'S=array(');
-				foreach ($prohibit_id as $v) {
+				foreach ($prohibit_id as $v){
 					$v = escapeHTML(trim(strip_tags($v)));
 					if(empty($v)) continue;
 					if($val=='access_ip'){
@@ -83,12 +83,12 @@ function proc($data) {
 		unlinkFile(_AF_ATTACH_DATA_.'.htaccess');
 
 		$_lst = ['base_cdn_list','terms_of_use'];
-		foreach ($_lst as $val) {
+		foreach ($_lst as $val){
 			$data[$val] = trim($data[$val]);
 			$file = _AF_CONFIG_DATA_.$val.'.php';
-			if(empty($data[$val])) {
+			if(empty($data[$val])){
 				unlinkFile($file);
-			} else {
+			}else{
 				$f = @fopen($file, 'w');
 				fwrite($f, "<?php if(!defined('__AFOX__')) exit();?>\n");
 				fwrite($f, $data[$val]);
@@ -97,7 +97,7 @@ function proc($data) {
 			}
 		}
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

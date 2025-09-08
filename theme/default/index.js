@@ -12,7 +12,7 @@
 
 	const getPreferredTheme = () => {
 		const storedTheme = getStoredTheme()
-		if (storedTheme) {
+		if (storedTheme){
 			return storedTheme
 		}
 
@@ -20,7 +20,7 @@
 	}
 
 	const setTheme = theme => {
-		if (theme === 'auto' && window.matchMedia(prefersScheme).matches) {
+		if (theme === 'auto' && window.matchMedia(prefersScheme).matches){
 			theme = 'dark'
 		}
 		setStoredTheme(theme)
@@ -37,7 +37,7 @@
 
 	window.matchMedia(prefersScheme).addEventListener('change', () => {
 		const storedTheme = getStoredTheme()
-		if (storedTheme !== 'light' && storedTheme !== 'dark') {
+		if (storedTheme !== 'light' && storedTheme !== 'dark'){
 			setTheme(getPreferredTheme())
 		}
 	})
@@ -56,7 +56,7 @@
 		const qlink = document.querySelector('#quickLink li')
 		if(qlink){
 			const h1 = document.querySelectorAll('.current_content *:is(h1,h2,h3)')
-			for (let idx = h1.length - 1; idx > -1 ; idx--) {
+			for (let idx = h1.length - 1; idx > -1 ; idx--){
 				if(!h1[idx].innerText || (h1.length - idx) > 22) continue
 				const li = document.createElement('LI'); li.innerHTML = qlink.innerHTML
 				const lia = li.querySelector('a'), lisvg = lia.querySelector('svg')
@@ -70,7 +70,7 @@
 		document.querySelector('#loading_page')?.fadeOut($e => $e.remove())
 	})
 
-	window.alert = function(s, t = 'alert') {
+	window.alert = function(s, t = 'alert'){
 		const b = t == 'confirm' ? '<button class="btn btn-primary" data-bs-whatever="ok">'+$_LANG['ok']+'</button>' : ''
 		const html = '<div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5">'
 		+$_LANG[t]+'</h1></div><div class="modal-body">'+s+'</div><div class="modal-footer">'+b+'<button class="btn btn-secondary" data-bs-dismiss="modal">'
@@ -97,10 +97,10 @@
 			myModal.show()
 		})
 	}
-	window.confirm = function(s) {
+	window.confirm = function(s){
 		return window.alert(s, 'confirm')
 	}
-	window.prompt = function(s, v) {
+	window.prompt = function(s, v){
 		let arr = v.split('|'); s += '<hr class="m-1 border-0">'
 		const t = arr.length > 1 ? 'radio' : 'checkbox'
 		if(arr.length < 2) arr = v.split(',')

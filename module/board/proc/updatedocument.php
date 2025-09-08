@@ -11,15 +11,15 @@ function proc($data)
 
 	global $_MEMBER;
 
-	if(empty($_MEMBER)) {
+	if(empty($_MEMBER)){
 		$data['mb_nick'] = empty($data['mb_nick'])?'':$data['mb_nick'];
-		if(empty($data['mb_nick']) || empty($data['mb_password'])) {
+		if(empty($data['mb_nick']) || empty($data['mb_password'])){
 			return set_error(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
 		}
 		$data['mb_srl'] = 0;
 		$data['mb_rank'] = 0;
 		$encrypt_password = createHash($data['mb_password']);
-	} else {
+	}else{
 		$data['mb_srl'] = $_MEMBER['mb_srl'];
 		$data['mb_rank'] = $_MEMBER['mb_rank'];
 		$data['mb_nick'] = $_MEMBER['mb_nick'];
@@ -33,22 +33,22 @@ function proc($data)
 
 	$doc = DB::get(_AF_DOCUMENT_TABLE_, 'md_id, mb_srl, mb_password', ['wr_srl'=>$wr_srl]);
 	if($ex=DB::error()) return set_error($ex->getMessage(), $ex->getCode());
-	if(!empty($wr_srl) && (empty($doc['md_id']) || $doc['md_id'] != $md_id)) {
+	if(!empty($wr_srl) && (empty($doc['md_id']) || $doc['md_id'] != $md_id)){
 		return set_error(getLang('error_request'),4303);
 	}
 
 	// 권한 체크
-	if ($new_insert) {
-		if(!isGrant('write', $md_id)) {
+	if ($new_insert){
+		if(!isGrant('write', $md_id)){
 			return set_error(getLang('error_permitted'),4501);
 		}
-	} else {
-		if(empty($_MEMBER)) {
-			if(empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
+	}else{
+		if(empty($_MEMBER)){
+			if(empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])){
 				return set_error(getLang('error_permitted'),4501);
 			}
-		} else if(!isManager($md_id)) {
-			if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
+		} else if(!isManager($md_id)){
+			if($_MEMBER['mb_srl'] != $doc['mb_srl']){
 				return set_error(getLang('error_permitted'),4501);
 			}
 		}
@@ -63,15 +63,15 @@ function proc($data)
 	$wr_secret = empty($module['use_secret']) ? (int)$wr_secret : ((int)$module['use_secret'])-1;
 
 	$category = '';
-	if(!empty($module['md_category']) && empty($data['wr_category']) && empty($data['wr_category2'])) {
+	if(!empty($module['md_category']) && empty($data['wr_category']) && empty($data['wr_category2'])){
 		return set_error(getLang('request_input',['category']), 1);
 	}else if(!empty($data['wr_category2']) && empty($data['wr_category'])){
 		return set_error(getLang('msg_requires_catagory1'), 3);
-	} else {
-		$category = implode(',', $data['wr_category']) . (empty($data['wr_category2']) ? '' : '&' . implode(',', $data['wr_category2']));
+	}else{
+		$category = implode(',', $data['wr_category']).(empty($data['wr_category2']) ? '' : '&'.implode(',', $data['wr_category2']));
 		$temp1 = explode(',', str_replace('&', ',', $module['md_category']));
 		$temp2 = explode(',', str_replace('&', ',', $category));
-		foreach ($temp2 as $val) {
+		foreach ($temp2 as $val){
 			if(!in_array($val, $temp1)) return set_error(getLang('invalid_value', [$category]), 2001);
 		}
 	}
@@ -91,15 +91,15 @@ function proc($data)
 
 	$wr_extra = [];
 
-	if(!empty($module['md_extra']) && !is_array($module['md_extra'])) {
+	if(!empty($module['md_extra']) && !is_array($module['md_extra'])){
 		$module['md_extra'] = unserialize($module['md_extra']);
 		// 확장 변수 키값이 있으면 해당 값을 입력
-		if (!empty($module['md_extra']['keys'])) {
+		if (!empty($module['md_extra']['keys'])){
 			$values = [];
 			foreach($module['md_extra']['keys'] as $ex_key=>$ex_caption){
 				$value = @$data['wr_extra_'.$ex_key];
 				$value = trim(is_array($value) ? implode(',', $value) : $value);
-				if(empty($value) && substr($ex_caption,-1,1) === '*') {
+				if(empty($value) && substr($ex_caption,-1,1) === '*'){
 					return set_error(getLang('request_input',[substr($ex_caption,0,-1)]), 1);
 				}
 				$values[$ex_key] = cutstr($value,255,'');
@@ -117,7 +117,7 @@ function proc($data)
 	DB::transaction();
 
 	try {
-		if ($new_insert) {
+		if ($new_insert){
 
 			// 문서 번호를 얻기 위해 먼저 추가
 			if(true === DB::insert(
@@ -133,16 +133,16 @@ function proc($data)
 					'wr_regdate(=)'=>'NOW()',
 					'wr_update(=)'=>'NOW()'
 				]
-			)) {
+			)){
 				$wr_srl = DB::insertId();
 			}
-			if (empty($wr_srl)) {
+			if (empty($wr_srl)){
 				throw new Exception(getLang('error_occured'), 4001);
 			}
 		}
 
-		if(!empty($data['remove_files'])) {
-			foreach ($data['remove_files'] as $val) {
+		if(!empty($data['remove_files'])){
+			foreach ($data['remove_files'] as $val){
 				$file = DB::get(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_target'=>$wr_srl,
@@ -152,7 +152,7 @@ function proc($data)
 					'md_id'=>$md_id,
 					'mf_target'=>$wr_srl,
 					'mf_srl'=>$val])
-				) {
+				){
 					$ftype = explode('/', strtolower($file['mf_type']));
 					$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
 					$unlink_files[] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/'.$wr_srl.'/'.$file['mf_upload_name'];
@@ -163,12 +163,12 @@ function proc($data)
 		// 첨부 파일 수 계산을 위해 미리 가져 오기
 		$file_count = DB::count(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>$wr_srl]);
 
-		if($upload_count > 0) {
+		if($upload_count > 0){
 			// 권한 체크
 			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warn_not_allowable', ['upload']), 3505);
 			if($file_max < ($upload_count+$file_count)) throw new Exception(getLang('error_upload(-3)'), 10487);
 
-			for ($i=0; $i < $upload_count; $i++) {
+			for ($i=0; $i < $upload_count; $i++){
 				// 빈 파일 넘김
 				if(empty($files['tmp_name'][$i])) continue;
 
@@ -184,7 +184,7 @@ function proc($data)
 					'error' => $files['error'][$i]
 				];
 
-				if($file_accept && !preg_match('/\.('.($file_accept).')$/i', $file['name'])) {
+				if($file_accept && !preg_match('/\.('.($file_accept).')$/i', $file['name'])){
 					throw new Exception(getLang('warn_allowable', [$module['md_file_accept']]), 3503);
 				}
 				// 실행 가능한 파일 못하게 처리
@@ -194,7 +194,7 @@ function proc($data)
 				$ftype = explode('/', strtolower($file['type']));
 				$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
 
-				$to_files[$i] = _AF_ATTACH_DATA_ . $ftype . '/' . $md_id . '/' . $wr_srl . '/' . $fname;
+				$to_files[$i] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/'.$wr_srl.'/'.$fname;
 
 				$ret = moveUploadedFile($file, $to_files[$i], $file_max_size);
 				if(!empty($ret['error'])) throw new Exception($ret['message'], $ret['error']);
@@ -219,7 +219,7 @@ function proc($data)
 			$patterns = '/\(blob:http:[^#]+#([0-9]+)[^\)]*(\)")*?\)/Us';
 			$data['wr_content'] = preg_replace_callback(
 				$patterns,
-				function ($matches) use($new_files) {
+				function ($matches) use($new_files){
 					$file = $new_files[(int)$matches[1]];
 					$es_name = escapeHTML($file['name']);
 					$isimg = substr($file['type'], 0, 5) == 'image';
@@ -262,23 +262,23 @@ function proc($data)
 		foreach ($unlink_files as $val) @unlinkFile($val);
 
 		// 비회원이면 비밀번호 다시 안묻기위해 임시권한주기
-		if(empty($_MEMBER)) {
-			$PERMIT_KEY = md5($md_id.'_'.$wr_srl . '_' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+		if(empty($_MEMBER)){
+			$PERMIT_KEY = md5($md_id.'_'.$wr_srl.'_'.$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT']);
 			set_session('_AF_SECRET_DOCUMENT_'.$PERMIT_KEY, true);
 		}
 
 		// 썸네일 제거
 		unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$md_id.'/'.$wr_srl.'/');
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 
 		// Engine == MyISAM 트랜잭션을 지원 안한다.
-		if (DB::engine(_AF_DOCUMENT_TABLE_) == 'myisam') {
-			if($new_insert && !empty($wr_srl)) {
+		if (DB::engine(_AF_DOCUMENT_TABLE_) == 'myisam'){
+			if($new_insert && !empty($wr_srl)){
 				@DB::delete(_AF_DOCUMENT_TABLE_, ['wr_srl'=>$wr_srl]);
 				@DB::delete(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>$wr_srl]);
-			} else if(count($new_files)>0) {
+			} else if(count($new_files)>0){
 				$nfile_srls = [];
 				foreach ($new_files as $file) $nfile_srls[] = $file['mf_srl'];
 				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $nfile_srls)]);

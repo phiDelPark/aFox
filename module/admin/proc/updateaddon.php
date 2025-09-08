@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['ao_id'])) return set_error(getLang('error_request'),4303);
 
 	DB::transaction();
@@ -16,13 +16,13 @@ function proc($data) {
 		$grant_access = empty($data['grant_access'])?'0':$data['grant_access'];
 
 		$remove_array = ['ao_id', 'use_pc', 'use_mobile', 'grant_access', 'module', 'id', 'act', 'disp', 'success_url', 'error_url','response_tags'];
-		foreach ($remove_array as $value) {
+		foreach ($remove_array as $value){
 			if(isset($data[$value])) unset($data[$value]);
 		}
 
 		// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 		$extra = serialize($data);
-		if(strlen($extra) > 65535) {
+		if(strlen($extra) > 65535){
 			throw new Exception(getLang('overflow_value', ['extra_keys','Size',65535]), 2301);
 		}
 
@@ -55,7 +55,7 @@ function proc($data) {
 				$rset = [];
 				$_ADDON_INFO = [];
 				while ($row = DB::fetch($r)){
-					$tmp = _AF_ADDONS_PATH_ . $row['ao_id'] . '/info.php';
+					$tmp = _AF_ADDONS_PATH_.$row['ao_id'].'/info.php';
 					if(file_exists($tmp)){
 						include $tmp;
 						$rset[] = [0=>$row['ao_id'],1=>$_ADDON_INFO['title']];
@@ -66,7 +66,7 @@ function proc($data) {
 		);
 		set_cache('_AF_EDITOR_COMPONENTS', $out);
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

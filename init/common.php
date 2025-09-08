@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 (@include_once(_AF_CONFIG_DATA_.'_db_config.php')) OR exit('Please <a href="./install/">install</a> afox.');
 //load DB // When using a query, you must perform the escape yourself, or use parameters
-require_once _AF_PATH_ . 'lib/db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
+require_once _AF_PATH_.'lib/db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
 define('_AF_TIME_ZONE_', $_DBINFO['time_zone']);
 define('_AF_DOMAIN_', $_DBINFO['domain']);
 define('_AF_COOKIE_DOMAIN_', $_DBINFO['cookie_domain']);
@@ -21,13 +21,13 @@ $_ADDELEMENTS = ['LANG'=>[],'CSS'=>[],'JS'=>[]];
 
 define('_AF_LANG_', $_CFG['lang']?$_CFG['lang']:'ko');
 define('_AF_THEME_', $_CFG['theme']?$_CFG['theme']:'default');
-define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
+define('_AF_THEME_PATH_', _AF_THEMES_PATH_._AF_THEME_.'/');
 
-@include_once _AF_PATH_ . 'common/lang/' . _AF_LANG_ . '.php';
-require_once _AF_INIT_PATH_ . 'function.php';
+@include_once _AF_PATH_.'common/lang/'._AF_LANG_.'.php';
+require_once _AF_INIT_PATH_.'function.php';
 
 if($_CFG['use_protect'] == '1' && !file_exists(_AF_ATTACH_DATA_.'.htaccess')){
-	create_protect_file() OR exit("The operation to protect the file failed.");
+	createProtectFile() OR exit("The operation to protect the file failed.");
 }
 
 //when using visit history
@@ -39,7 +39,7 @@ if($_CFG['use_visit'] == '1' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_AD
 define('_MOBILE_', isMobilePhone());
 define('_REQ_METHOD_', getRequestMethod());
 define('_AF_URL_', getRequestUri());
-define('_AF_THEME_URL_', _AF_URL_ . 'theme/' . _AF_THEME_ . '/');
+define('_AF_THEME_URL_', _AF_URL_.'theme/'._AF_THEME_.'/');
 
 //login member
 $_MEMBER = isset($_SESSION['AF_LOGIN_ID']) ? $_SESSION['AF_LOGIN_ID'] : get_cookie('AF_LOGIN_ID');
@@ -91,12 +91,12 @@ define('_MODULE_', _REQ_METHOD_ == 'GET' ? @$_GET['module'] : @$_POST['module'])
 define('_MODAL_', @$_GET['modal'] === '1');
 define('_POPUP_', _MODAL_ || @$_GET['popup'] === '1');
 
-@include_once _AF_THEME_PATH_ . 'lang/' . _AF_LANG_ . '.php';
+@include_once _AF_THEME_PATH_.'lang/'._AF_LANG_.'.php';
 
 if(_MODULE_){
-	if(file_exists(($tmp = _AF_MODULES_PATH_ . _MODULE_) . '/index.php')){
-		@include_once $tmp . '/lang/' . _AF_LANG_ . '.php';
-		require_once $tmp . '/protect.php'; require_once $tmp . '/index.php';
+	if(file_exists(($tmp = _AF_MODULES_PATH_._MODULE_).'/index.php')){
+		@include_once $tmp.'/lang/'._AF_LANG_.'.php';
+		require_once $tmp.'/protect.php'; require_once $tmp.'/index.php';
 	} else goUrl(_AF_URL_, '');
 }
 
@@ -108,7 +108,7 @@ if(!file_exists($tmp) || !empty($_GET['cdnerr'])){
 define('_AF_USE_BASE_CDN_', get_cookie('_CDN_ERROR_') ? FALSE : $tmp);
 
 header('Content-Type: '.(_REQ_METHOD_=='JSON'?'application/json':'text/html').'; charset=UTF-8');
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Expires: 0");

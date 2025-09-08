@@ -27,7 +27,7 @@ $mb = getMember($_GET['mb_id']);
 <input type="hidden" name="act" value="updateMember" />
 
 <?php  $grade = $mb ? $mb['mb_grade'] : 'guest';
-	if(!$mb) { ?>
+	if(!$mb){ ?>
 	<h4 class="pb-3 mb-3 border-bottom"><?php echo getLang('member_signup')?></h4>
 	<div class="mb-4">
 		<div class="input-group">
@@ -36,7 +36,7 @@ $mb = getMember($_GET['mb_id']);
 		</div>
 		<div class="form-text"><?php echo getLang('desc_mb_id')?></div>
 	</div>
-<?php } else {
+<?php }else{
 	$next_lv = (($mb ? ord($mb['mb_rank']) : 48) - 48);
 	if ($next_lv > 50) $next_lv = 50;
 ?>
@@ -104,7 +104,7 @@ $mb = getMember($_GET['mb_id']);
 
 	<?php
 		$tmp = 'data/member/'.(empty($mb['mb_srl'])?'___':$mb['mb_srl']).'/profile_image.png';
-		$tmp = _AF_URL_ . ($mb&&file_exists(_AF_PATH_ . $tmp) ? $tmp : 'common/img/user_default.jpg');
+		$tmp = _AF_URL_.($mb&&file_exists(_AF_PATH_.$tmp) ? $tmp : 'common/img/user_default.jpg');
 	?>
 	<div class="position-relative mb-4">
 		<img class="position-absolute border rounded p-1" style="width:58px;height:58px" src="<?php echo $tmp ?>">

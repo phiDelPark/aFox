@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	return $result = ['tpl'=>'signout'];
 }
 

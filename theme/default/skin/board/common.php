@@ -3,7 +3,7 @@ if (!_MODAL_) addJSLang([]);
 $is_manager = isManager(_MID_);
 
 // 개별 설정 초기화
-if(!isset($_CFG['md_extra']['configs'])) {
+if(!isset($_CFG['md_extra']['configs'])){
 	$_CFG['md_extra']['configs'] = [
 		'show_column'=>['wr_srl','wr_title','mb_nick','wr_hit','wr_regdate'],
 		'show_rv_column'=>['mb_nick','extra_values','wr_update']

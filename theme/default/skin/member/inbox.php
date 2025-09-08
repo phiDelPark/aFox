@@ -23,9 +23,9 @@
 <table class="table">
 <thead>
 	<tr>
-		<?php if(_MOBILE_) { ?>
+		<?php if(_MOBILE_){ ?>
 		<th scope="col" class="text-wrap"><?php echo getLang('content')?></th>
-		<?php } else { ?>
+		<?php }else{ ?>
 		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchForm"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label></th>
 		<th scope="col" class="text-wrap"><?php echo getLang('content')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('status')?></th>
@@ -45,13 +45,13 @@
 	if ($end_page > $total_page) $end_page = $total_page;
 	$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
-	foreach ($_DATA['list'] as $key => $value) {
+	foreach ($_DATA['list'] as $key => $value){
 		echo '<tr'.($value['nt_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return themeInboxItemClick(event,\''.escapeHTML(getUrl('srl',$value['nt_srl']), ENT_QUOTES).'\')">';
-		if(_MOBILE_) {
+		if(_MOBILE_){
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),255).'</a>';
 			echo '<div class="d-flex w-100 justify-content-between"><span>'.date('y/m/d', strtotime($value['nt_read_date'])).'</span>';
 			echo '<span>Send:'.date('y/m/d', strtotime($value['nt_send_date'])).'</span></div></td>';
-		} else {
+		}else{
 			echo '<th scope="row" class="text-nowrap"'.($value['nt_sender']?'':' style="font-weight:normal"').'>'.$value['nt_sender_nick'].'</th>';
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.cutstr(strip_tags($value['nt_content']),90).'</a></td>';
 			echo '<td class="text-nowrap">'.($value['nt_read_date'] === '0000-00-00 00:00:00'?$unread_str:date('y/m/d', strtotime($value['nt_read_date']))).'</td>';

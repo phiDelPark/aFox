@@ -1,12 +1,12 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	global $_MEMBER;
 	if(empty($_MEMBER)) return set_error(getLang('error_request'),4303);
 
 	$_item = $schs = [];
-	if(!empty($data['srl'])) {
+	if(!empty($data['srl'])){
 		$_item = DB::get(_AF_NOTE_TABLE_, ['mb_srl'=>$_MEMBER['mb_srl'],'nt_srl'=>$data['srl']]);
 	}
 
@@ -15,7 +15,7 @@ function proc($data) {
 	$search = empty($data['search']) ? '' : $data['search'];
 	$_wheres = ['mb_srl'=>$_MEMBER['mb_srl'], "_AND_" => [], "_OR_" => []];
 
-	if (!empty($search)) {
+	if (!empty($search)){
 		$keys = [
 			"@" => "nt_sender_nick",
 			"?" => "nt_send_date",
@@ -24,19 +24,19 @@ function proc($data) {
 		empty($key) ? ($key = "nt_content") : ($search = substr($search, 1));
 		$search = explode(" ", trim($search));
 
-		if (!empty($search)) {
+		if (!empty($search)){
 			$index = 0;
-			foreach ($search as $value) {
+			foreach ($search as $value){
 				$value = explode("&", trim($value));
 				$and_or = count($value) > 1 ? "_AND_" : "_OR_";
-				foreach ($value as $v) {
-					if ($key == "nt_send_date") {
+				foreach ($value as $v){
+					if ($key == "nt_send_date"){
 						$v = str_split($v, 4);
-						$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
-					} else {
-						$v = "%" . $v;
+						$v = $v[0].(empty($v[1]) ? "" : "-".implode("-", str_split($v[1], 2)));
+					}else{
+						$v = "%".$v;
 					}
-					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = DB::escape($v . "%");
+					$_wheres[$and_or][$key."{LIKE}[".$index++."]"] = DB::escape($v."%");
 				}
 			}
 		}

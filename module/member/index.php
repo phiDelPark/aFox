@@ -1,15 +1,15 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-function procMemberDefault($data) {
+function procMemberDefault($data){
 	$act = strtolower($data['act']);
-	$dir = _AF_MODULES_PATH_ . 'member/proc/';
-	$inc_file = $dir . $act . '.php';
+	$dir = _AF_MODULES_PATH_.'member/proc/';
+	$inc_file = $dir.$act.'.php';
 
-	if (($is=file_exists($inc_file)) && checkProtect('proc.'.$act)) {
+	if (($is=file_exists($inc_file)) && checkProtect('proc.'.$act)){
 		require_once $inc_file;
 		return checkProtectData('proc.'.$act, proc($data));
-	} else {
+	}else{
 		return set_error(
 			getLang($is ? 'error_permitted' : 'error_request'),
 			$is ? 4501 : 4303
@@ -17,15 +17,15 @@ function procMemberDefault($data) {
 	}
 }
 
-function dispMemberDefault($data) {
+function dispMemberDefault($data){
 	$disp = strtolower(@$data['disp']);
-	$dir = _AF_MODULES_PATH_ . 'member/disp/';
-	$inc_file = $dir . $disp . '.php';
+	$dir = _AF_MODULES_PATH_.'member/disp/';
+	$inc_file = $dir.$disp.'.php';
 
-	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$disp)) {
+	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$disp)){
 		require_once $inc_file;
 		return proc($data);
-	} else {
+	}else{
 		return set_error(
 			getLang($is ? 'error_permitted' : 'error_request'),
 			$is ? 4501 : 4303

@@ -32,23 +32,23 @@ class DB {
 
 	private static $option = [];
 
-	public static function lastQuery() {
+	public static function lastQuery(){
 		return self::$info['last_query'];
 	}
 
-	public static function insertId() {
+	public static function insertId(){
 		return self::$info['insert_id'];
 	}
 
-	public static function numRows() {
+	public static function numRows(){
 		return self::$info['num_rows'];
 	}
 
-	public static function connect( /*array*/ $o) {
+	public static function connect( /*array*/ $o){
 		self::$option = $o;
 	}
 
-	private static function __connect() {
+	private static function __connect(){
 		$o = self::$option;
 
 		if(($l = mysql_connect(
@@ -56,39 +56,39 @@ class DB {
 			(isset($o['port'])   ? $o['port']   : 3306),
 			 isset($o['user'])   ? $o['user']   : 'root',
 			 isset($o['pass'])   ? $o['pass']   : ''
-		)) && mysql_select_db(isset($o['name']) ? $o['name'] : 'default', $l)) {
+		)) && mysql_select_db(isset($o['name']) ? $o['name'] : 'default', $l)){
 			self::$link = $l;
 			mysql_set_charset(isset($o['charset']) ? $o['charset'] : "utf8");
 			mysql_query("SET time_zone = '".(
 				isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul"
 			)."'");
 			mysql_query("SET AUTOCOMMIT=1");
-		} else {
+		}else{
 			die('Could not connect to MySQL database.');
 		}
 	}
 
-	private static function __where($info, $type = 'AND') {
+	private static function __where($info, $type='AND'){
 		$result = [];
 		foreach($info as $field => $value){
-			if(is_array($value) && ($field == '_AND_' || $field == '_OR_')) {
-				if(($type = substr($field, 1, -1)) && ($tmp = self::__where($value, $type))) {
+			if(is_array($value) && ($field == '_AND_' || $field == '_OR_')){
+				if(($type = substr($field, 1, -1)) && ($tmp = self::__where($value, $type))){
 					$result[] = '('.implode(" {$type} ", $tmp).')';
 				}
-			} else if($field) {
+			} else if($field){
 				$operator = '=';
 				$no_quote = false;
-				if(preg_match("/^(.+)\[([0-9]+)\]$/", $field, $m)) {
+				if(preg_match("/^(.+)\[([0-9]+)\]$/", $field, $m)){
 					$field = $m[1]; $index = $m[2]; //인덱스... 일단 만들어둠
 				}
 				//(=|<>|<=|>=|<|>|IS|IN|LIKE|REGEXP)
-				if(preg_match("/^(.+)([{\(])(\.|[<>=]+|[A-Z]+)[}\)]$/", $field, $m)) {
+				if(preg_match("/^(.+)([{\(])(\.|[<>=]+|[A-Z]+)[}\)]$/", $field, $m)){
 					$field = $m[1];
 					$operator = $m[3] === '.' ? '' : $m[3];
 					$no_quote = $m[2] === '(' || in_array($operator, ['IS', 'IN', 'REGEXP']);
-					if(($operator == 'IN') && ($value = explode(',', $value))) {
+					if(($operator == 'IN') && ($value = explode(',', $value))){
 						$tmp = [];
-						foreach ($value as $v) { if($v) $tmp[$v] = self::__quotes($v); }
+						foreach ($value as $v){ if($v) $tmp[$v] = self::__quotes($v); }
 						if(count($tmp)===0) continue; $value = '('.implode(',', $tmp).')';
 					}
 				}
@@ -99,7 +99,7 @@ class DB {
 		return $result;
 	}
 
-	private static function __order($orders) {
+	private static function __order($orders){
 		$group = [];
 		$order = [];
 		foreach($orders as $field => $type){
@@ -112,11 +112,11 @@ class DB {
 		self::$group = count($group) > 0 ? 'GROUP BY '.implode(',', $group) : '';
 	}
 
-	private static function __limit($limit) {
+	private static function __limit($limit){
 		self::$limit = preg_match('/[0-9,\s]+/', $limit) ? 'LIMIT '.$limit : '';
 	}
 
-	private static function __extra() {
+	private static function __extra(){
 		$extra = '';
 		if(!empty(self::$where)) $extra .= ' '.self::$where;
 		if(!empty(self::$group)) $extra .= ' '.self::$group;
@@ -130,33 +130,33 @@ class DB {
 		return $extra;
 	}
 
-	private static function __quotes($val) {
-		if($val === true || $val === false) { return (int)$val; }
-		else if(is_int($val) || is_float($val)) { return $val; }
+	private static function __quotes($val){
+		if($val === true || $val === false){ return (int)$val; }
+		else if(is_int($val) || is_float($val)){ return $val; }
 		else { return "'".self::escape($val)."'"; }
 		//연결이 안되있을때도 동작하기 위해 str_replace 사용
 		//return "'".mysql_real_escape_string($val)."'";
 	}
 
-	public static function query($qry, $params = [], $return = false) {
-		if(self::$link === null) {self::__connect();}
-		if($params === true || is_callable($params)) {
+	public static function query($qry, $params=[], $return=false){
+		if(self::$link === null){self::__connect();}
+		if($params === true || is_callable($params)){
 			$return = $params !== true ? $params : true;
 			$params = [];
 		}
-		if(!empty($params)) {
+		if(!empty($params)){
 			if(!is_array($params)) $params = array_slice(func_get_args(), 1);
 			$qry = preg_replace_callback('/:(\d+)/',
-						function ($m) use ($params) {
+						function ($m) use ($params){
 						  return self::__quotes($params[$m[1] - 1]);
 						}, $qry
 					);
 		}
 		self::$info['last_query'] = $qry;
 		$result = mysql_query($qry);
-		if(mysql_errno()) {
+		if(mysql_errno()){
 			throw new Exception(mysql_error(), mysql_errno());
-		} else {
+		}else{
 			if(is_resource($result)){
 				self::$info['num_rows'] = mysql_num_rows($result);
 			}
@@ -174,8 +174,8 @@ class DB {
 		}
 	}
 
-	public static function __gets($table, $select = '*', $one = false, $callback = null) {
-		if(self::$link === null) {self::__connect();}
+	public static function __gets($table, $select='*', $one=false, $callback=null){
+		if(self::$link === null){self::__connect();}
 		$data = [];
 		$sql = sprintf("SELECT %s FROM %s%s", $select, $table, self::__extra());
 		self::$info['last_query'] = $sql;
@@ -201,8 +201,8 @@ class DB {
 		return $data;
 	}
 
-	private static function __sets($opts) {
-		if(!empty($opts[0]) && $r = self::__where($opts[0])) {
+	private static function __sets($opts){
+		if(!empty($opts[0]) && $r = self::__where($opts[0])){
 			self::$where = 'WHERE '.implode(' AND ', $r);
 		} else if(is_array($opts[0])) self::$where = 'WHERE 1';
 		if(!empty($opts[2])) self::__limit($opts[2]);
@@ -221,7 +221,7 @@ class DB {
 	// Use indexes when names are the same
 	DB::get(_TABLE_, 'select', ['where[0]'=>'value', 'where[1]'=>'value'])
 	**/
-	public static function get($table, $select = '*') {
+	public static function get($table, $select='*'){
 		$anum = func_num_args();
 		$args = func_get_args();
 		$select = $anum > 1 ? $args[1] : '*';
@@ -234,7 +234,7 @@ class DB {
 		try{
 			self::__limit('1');
 			return self::__gets($table, $select, true);
-		} catch (Exception $e) {
+		} catch (Exception $e){
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
@@ -260,7 +260,7 @@ class DB {
 	// command order by : ['^'=>'command()']
 	DB::gets(_TABLE_, 'select', ['where'=>'value'], ['^'=>'rand()'], '5,10')
 	**/
-	public static function gets($table) {
+	public static function gets($table){
 		$callback = null;
 		$anum = func_num_args();
 		$args = func_get_args();
@@ -270,7 +270,7 @@ class DB {
 			$select = '*';
 			$i--;
 		}
-		if($anum > $i) {
+		if($anum > $i){
 			if(is_callable($args[$anum - 1])){
 				$callback = $args[$anum - 1];
 				$args[$anum - 1] = null;
@@ -279,7 +279,7 @@ class DB {
 		}
 		try{
 			return self::__gets($table, $select, false, $callback);
-		} catch (Exception $e) {
+		} catch (Exception $e){
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
@@ -287,8 +287,8 @@ class DB {
 	/**
 	DB::insert(_TABLE_, [_DATA_])
 	**/
-	public static function insert($table, $data) {
-		if(self::$link === null) {self::__connect();}
+	public static function insert($table, $data){
+		if(self::$link === null){self::__connect();}
 		$fields = '';
 		$values = '';
 		foreach($data as $col => $value){
@@ -312,12 +312,12 @@ class DB {
 	/**
 	DB::update(_TABLE_, [_DATA_], ['where'=>'value'])
 	**/
-	public static function update($table, $data) {
+	public static function update($table, $data){
 		if(func_num_args() > 2) self::__sets(array_slice(func_get_args(), 2));
 		if(empty(self::$where)){
 			throw new Exception("Where is not set. Can't update whole table.", 1);
 		}else{
-			if(self::$link === null) {self::__connect();}
+			if(self::$link === null){self::__connect();}
 			$update = '';
 			foreach($data as $col => $value){
 				if(substr($col, -3) === '(=)') $col = substr($col, 0, -3);
@@ -339,9 +339,9 @@ class DB {
 	DB::delete(_TABLE_) // all
 	DB::delete(_TABLE_, ['where'=>'value'])
 	**/
-	public static function delete($table) {
+	public static function delete($table){
 		if(func_num_args() > 1) self::__sets(array_slice(func_get_args(), 1));
-		if(self::$link === null) {self::__connect();}
+		if(self::$link === null){self::__connect();}
 		$sql = sprintf("DELETE FROM %s%s", $table, self::__extra());
 		self::$info['last_query'] = $sql;
 		if(!mysql_query($sql)){
@@ -355,27 +355,27 @@ class DB {
 	DB::count(_TABLE_) // all
 	DB::count(_TABLE_, ['where'=>'value'])
 	**/
-	public static function count($table) {
+	public static function count($table){
 		if(func_num_args() > 1) self::__sets(array_slice(func_get_args(), 1));
 		try{
 			$result = self::get($table, 'COUNT(*) as cnt');
 			return (int)$result['cnt'];
-		} catch (Exception $e) {
+		} catch (Exception $e){
 			return -1;
 		}
 	}
 
-	public static function foundRows() {
+	public static function foundRows(){
 		try{
 			$result = self::query("SELECT FOUND_ROWS() as c", true);
 			return (int)$result[0]['c'];
-		} catch (Exception $e) {
+		} catch (Exception $e){
 			return -1;
 		}
 	}
 
-	public static function fetch($res, $type = 'assoc') {
-		switch ($type) {
+	public static function fetch($res, $type='assoc'){
+		switch ($type){
 			case 'array':
 				return mysql_fetch_array($res);
 			break;
@@ -398,20 +398,20 @@ class DB {
 		throw new Exception("Where is not type.", 1);
 	}
 
-	public static function transaction() {
-		if(self::$link === null) {self::__connect();}
+	public static function transaction(){
+		if(self::$link === null){self::__connect();}
 		mysql_query("SET AUTOCOMMIT=0; START TRANSACTION");
 	}
 
-	public static function commit() {
+	public static function commit(){
 		mysql_query("COMMIT; SET AUTOCOMMIT=1");
 	}
 
-	public static function rollback() {
+	public static function rollback(){
 		mysql_query("ROLLBACK; SET AUTOCOMMIT=1");
 	}
 
-	public static function exists($table, $column = '') {
+	public static function exists($table, $column=''){
 		try {
 			$params = [self::$option['name'], $table];
 			$query = "SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = :1 AND TABLE_NAME =:2";
@@ -421,13 +421,13 @@ class DB {
 			}
 			$r = self::query($query, $params);
 			return $r->num_rows > 0;
-		} catch (Exception $e) {
+		} catch (Exception $e){
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
 
-	public static function status($table, $key = '') {
-		if(self::$link === NULL) {self::__connect();}
+	public static function status($table, $key=''){
+		if(self::$link === NULL){self::__connect();}
 		$r = mysql_query("SHOW TABLE STATUS WHERE Name = '{$table}'");
 		if(mysql_errno()){
 			throw new Exception(mysql_error(), mysql_errno());
@@ -436,26 +436,26 @@ class DB {
 		return empty($key) ? $row : $row[$key];
 	}
 
-	public static function engine($table) {
+	public static function engine($table){
 		try {
 			return self::status($table, 'Engine');
-		} catch (Exception $e) {
+		} catch (Exception $e){
 			throw new Exception($e->getMessage(), $e->getCode());
 		}
 	}
 
 	// exemple: DB::version('5.5.0', '<')
-	public static function version($chk_version = null, $operator = '>=') {
-		if(self::$link === NULL) {self::__connect();}
+	public static function version($chk_version=null, $operator='>='){
+		if(self::$link === NULL){self::__connect();}
 		$version = mysql_get_client_info();
-		if (empty($chk_version)) {
+		if (empty($chk_version)){
 			return $version;
-		} else {
+		}else{
 			return version_compare($version, $chk_version, $operator);
 		}
 	}
 
-	public static function escape($str) {
+	public static function escape($str){
 		return str_replace(
 			['\\',"\x00","\x08","\n","\r","\t","\x1a","'",'"'],
 			['\\\\','\\0',"\\b",'\\n','\\r',"\\t",'\\Z',"\\'",'\\"'],
@@ -465,10 +465,10 @@ class DB {
 		// return mysql_real_escape_string($str);
 	}
 
-	public static function error() {
-		if(mysql_errno()) {
+	public static function error(){
+		if(mysql_errno()){
 			return new Exception(mysql_error(), mysql_errno());
-		} else {
+		}else{
 			return false;
 		}
 	}

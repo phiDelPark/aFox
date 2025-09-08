@@ -1,6 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
-@include_once dirname(__FILE__) . '/common.php';
+@include_once dirname(__FILE__).'/common.php';
 $is_wr_grant = isGrant('write', _MID_);
 $current_page = $_DATA['current_page'];
 $total_page = $_DATA['total_page'];
@@ -15,7 +15,7 @@ $asc = isset($_GET['asc']);
 	<ol class="list-unstyled mb-1" aria-label="Category of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category']);
-		foreach ($tmp as $val) {
+		foreach ($tmp as $val){
 			$isEqual = $val == $categorys[0];
 			$cateurl = getUrl('','id',_MID_,'category', urlencode($val)).($isEqual&&!$asc?'&asc':'');
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
@@ -26,7 +26,7 @@ $asc = isset($_GET['asc']);
 	<ol class="list-unstyled" aria-label="Category2 of the list">
 	<?php
 		$tmp = explode(',', $_CFG['md_category2']);
-		foreach ($tmp as $val) {
+		foreach ($tmp as $val){
 			$isEqual = $val == $categorys[1];
 			$cateurl = getUrl('','id',_MID_,'category', urlencode($categorys[0]).':'.urlencode($val)).($isEqual&&!$asc?'&asc':'');
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
@@ -34,7 +34,7 @@ $asc = isset($_GET['asc']);
 	?>
 	</ol>
 <?php }}
-	include dirname(__FILE__) . '/s.' . $use_style . '.php';
+	include dirname(__FILE__).'/s.'.$use_style.'.php';
 	$start_page = $current_page - 4;
 	if ($start_page < 1) $start_page = 1;
 	$end_page = 9 + $start_page;

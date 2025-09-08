@@ -29,18 +29,18 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 			$is_parent = $depth = 0;
 			$deps = [0];
 			$li = '';
-			foreach ($menus['header'] as $key => $value) {
+			foreach ($menus['header'] as $key => $value){
 
-				if($is_parent < $value['mu_parent']) {
+				if($is_parent < $value['mu_parent']){
 					$depth++;
 					echo "<ul>";
 					$is_parent = $value['mu_parent'];
-				}else if($is_parent > $value['mu_parent']) {
+				}else if($is_parent > $value['mu_parent']){
 					$tmp = $depth - isset($deps[$value['mu_parent']]) ? $deps[$value['mu_parent']] : 0;
-					echo "</li>" . str_repeat("</ul></li>", $depth - $tmp);
+					echo "</li>".str_repeat("</ul></li>", $depth - $tmp);
 					$depth = $tmp;
 					$is_parent = $value['mu_parent'];
-				} else {
+				}else{
 					echo $li;
 					$li = "</li>";
 				}
@@ -55,11 +55,11 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 				echo '<span class="indent setup d-none"><input type="text" name="desc_key[]" value="'. escapeHTML($value['mu_about']) .'" class="form-control" placeholder="'.getLang('menu_desc').'">'."\n";
 				echo '<input type="checkbox" name="collapse_key[]"'.(empty($value['mu_collapse'])?'':' checked').'>'.getLang('collapse')."\n";
 				echo '<input type="checkbox" name="new_win_key[]"'.(empty($value['mu_new_win'])?'':' checked').'>'.getLang('new_window').'</span>'."\n";
-				echo '<span class="indent input"><input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHTML($value['mu_title']) .'" class="form-control">'."\n";
-				echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)',['id','link']) . '" value="'. (empty($value['md_id'])?escapeHTML($value['mu_link']):$value['md_id']) .'" class="form-control"></span>'."\n";
+				echo '<span class="indent input"><input type="text" name="item_title[]" placeholder="'.$placeholder.'" value="'. escapeHTML($value['mu_title']) .'" class="form-control">'."\n";
+				echo '<input type="text" name="item_link[]" placeholder="'.getLang('%s (or %s)',['id','link']).'" value="'. (empty($value['md_id'])?escapeHTML($value['mu_link']):$value['md_id']) .'" class="form-control"></span>'."\n";
 			}
 
-			echo str_repeat("</li></ul>", $depth) . $li;
+			echo str_repeat("</li></ul>", $depth).$li;
 		}
 ?>
 
@@ -88,18 +88,18 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 			$is_parent = $depth = 0;
 			$deps = [0];
 			$li = '';
-			foreach ($menus['footer'] as $key => $value) {
+			foreach ($menus['footer'] as $key => $value){
 
-				if($is_parent < $value['mu_parent']) {
+				if($is_parent < $value['mu_parent']){
 					$depth++;
 					echo "<ul>";
 					$is_parent = $value['mu_parent'];
-				}else if($is_parent > $value['mu_parent']) {
+				}else if($is_parent > $value['mu_parent']){
 					$tmp = $depth - isset($deps[$value['mu_parent']]) ? $deps[$value['mu_parent']] : 0;
-					echo "</li>" . str_repeat("</ul></li>", $depth - $tmp);
+					echo "</li>".str_repeat("</ul></li>", $depth - $tmp);
 					$depth = $tmp;
 					$is_parent = $value['mu_parent'];
-				} else {
+				}else{
 					echo $li;
 					$li = "</li>";
 				}
@@ -114,11 +114,11 @@ $placeholder = getLang('%s %s', ['category', 'title']);
 				echo '<span class="indent setup d-none"><input type="text" name="desc_key[]" value="'. escapeHTML($value['mu_about']) .'" class="form-control" placeholder="'.getLang('menu_desc').'">'."\n";
 				echo '<input type="checkbox" name="collapse_key[]"'.(empty($value['mu_collapse'])?'':' checked').'>'.getLang('collapse')."\n";
 				echo '<input type="checkbox" name="new_win_key[]"'.(empty($value['mu_new_win'])?'':' checked').'>'.getLang('new_window').'</span>'."\n";
-				echo '<span class="indent input"><input type="text" name="item_title[]" placeholder="' . $placeholder . '" value="'. escapeHTML($value['mu_title']) .'" class="form-control">'."\n";
-				echo '<input type="text" name="item_link[]" placeholder="' . getLang('%s (or %s)',['id','link']) . '" value="'. (empty($value['md_id'])?escapeHTML($value['mu_link']):$value['md_id']) .'" class="form-control"></span>'."\n";
+				echo '<span class="indent input"><input type="text" name="item_title[]" placeholder="'.$placeholder.'" value="'. escapeHTML($value['mu_title']) .'" class="form-control">'."\n";
+				echo '<input type="text" name="item_link[]" placeholder="'.getLang('%s (or %s)',['id','link']).'" value="'. (empty($value['md_id'])?escapeHTML($value['mu_link']):$value['md_id']) .'" class="form-control"></span>'."\n";
 			}
 
-			echo str_repeat("</li></ul>", $depth) . $li;
+			echo str_repeat("</li></ul>", $depth).$li;
 		}
 ?>
 

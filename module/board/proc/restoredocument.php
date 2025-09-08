@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['wr_srl'])) return set_error(getLang('error_request'),4303);
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
 
@@ -17,15 +17,15 @@ function proc($data) {
 	if($module['md_id'] != $doc['wr_updater']) return set_error(getLang('invalid_value',['module']), 2001);
 
 	// 권한 체크
-	if(empty($_MEMBER)) {
-		if(empty($data['mb_password'])) {
+	if(empty($_MEMBER)){
+		if(empty($data['mb_password'])){
 			return set_error(getLang('request_input', ['password']), 1);
 		}
-		if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
+		if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])){
 			return set_error(getLang('error_permitted'),4501);
 		}
-	} else if(!isManager($doc['md_id'])) {
-		if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
+	} else if(!isManager($doc['md_id'])){
+		if($_MEMBER['mb_srl'] != $doc['mb_srl']){
 			return set_error(getLang('error_permitted'),4501);
 		}
 	}
@@ -50,7 +50,7 @@ function proc($data) {
 			// TODO 에러 발생시...
 		}
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

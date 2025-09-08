@@ -3,7 +3,7 @@
  * Copyright 2016 afox, Inc.
  */
 
-function afoxEditor(ID, OPTIONS) {
+function afoxEditor(ID, OPTIONS){
 	this.htmlMode = false
 	this.required = OPTIONS.required
 	this.readonly = OPTIONS.readonly
@@ -23,13 +23,13 @@ function afoxEditor(ID, OPTIONS) {
 
 	const modeSwitch = (is_html) => {
 		this.htmlMode = textarea.classList.contains('d-none')
-		if (is_html && !this.htmlMode) {
+		if (is_html && !this.htmlMode){
 			iframe.style.height = textarea.offsetHeight + "px"
 			iframe.contentWindow.document.body.innerHTML = textarea.value
 			textarea.classList.add('d-none')
 			iframe.classList.remove('d-none')
 			if(this.required) textarea.removeAttribute('required')
-		} else if (!is_html && this.htmlMode) {
+		} else if (!is_html && this.htmlMode){
 			textarea.style.height = iframe.offsetHeight + "px"
 			textarea.value = iframe.contentWindow.document.body.innerHTML
 			iframe.classList.add('d-none')
@@ -40,14 +40,14 @@ function afoxEditor(ID, OPTIONS) {
 	}
 
 	this.querySelector = (selectors) => {
-		if(!this.htmlMode) {
+		if(!this.htmlMode){
 			iframe.contentWindow.document.body.innerHTML = textarea.value
 		}
 		return iframe.contentWindow.document.body.querySelector(selectors)
 	}
 
 	this.querySelectorAll = (selectors) => {
-		if(!this.htmlMode) {
+		if(!this.htmlMode){
 			iframe.contentWindow.document.body.innerHTML = textarea.value
 		}
 		return iframe.contentWindow.document.body.querySelectorAll(selectors)
@@ -57,13 +57,13 @@ function afoxEditor(ID, OPTIONS) {
 		const w = iframe.contentWindow
 		this.htmlMode ? w.document.body.focus() : textarea.focus()
 
-		if (this.htmlMode) {
-			if (w.getSelection) {
+		if (this.htmlMode){
+			if (w.getSelection){
 				return w.getSelection()
-			} else if (w.document.getSelection) {
+			} else if (w.document.getSelection){
 				return w.document.getSelection()
 			}
-		} else {
+		}else{
 			return {
 				start: textarea.selectionStart,
 				end: textarea.selectionEnd,
@@ -78,9 +78,9 @@ function afoxEditor(ID, OPTIONS) {
 	this.pasteHtml = (html) => {
 		const selection = this.getSelection()
 
-		if (this.htmlMode) {
+		if (this.htmlMode){
 			let range = selection.getRangeAt(0)
-			if (range) {
+			if (range){
 				const el = iframe.contentWindow.document.createElement("div")
 				el.appendChild(range.cloneContents())
 				el.innerHTML = html.replace(/%s/, el.innerHTML || '...')
@@ -89,7 +89,7 @@ function afoxEditor(ID, OPTIONS) {
 				range.setStart(selection.focusNode, selection.focusOffset)
 				range.setEnd(selection.anchorNode, selection.anchorOffset)
 			}
-		} else {
+		}else{
 			const nend = (textarea.value.length - selection.end) * -1;
 			html = html.replace(/%s/, selection.value || '...')
 			const
@@ -123,11 +123,11 @@ function afoxEditor(ID, OPTIONS) {
 	const clickRemoveFile = (e) => {
 		const srl = e.target.getAttribute('src').getQuery('file')
 		const el_del = editor.querySelector('[name="remove_files[]"][value="' + srl + '"]')
-		if (el_del) {
+		if (el_del){
 			el_del.remove()
 			//e.target.style.filter = 'invert(0)'
 			//e.target.style.webkitFilter = 'invert(0)'
-		} else {
+		}else{
 			const input = document.createElement('input')
 			input.setAttribute('type', 'hidden')
 			input.setAttribute('name', 'remove_files[]')
@@ -140,7 +140,7 @@ function afoxEditor(ID, OPTIONS) {
 
 	const dragStartFile = (e) => {
 		const srl = e.target.getAttribute('src').getQuery('file')
-		if (editor.querySelector('[name="remove_files[]"][value="' + srl + '"]')) {
+		if (editor.querySelector('[name="remove_files[]"][value="' + srl + '"]')){
 			e.preventDefault()
 			e.stopPropagation()
 			return false
@@ -203,7 +203,7 @@ function afoxEditor(ID, OPTIONS) {
 
 		const cmd = e.target.closest('button').getAttribute('aria-label').toLowerCase()
 
-		switch (cmd) {
+		switch (cmd){
 			case 'components':
 				break
 			default:
@@ -243,7 +243,7 @@ function afoxEditor(ID, OPTIONS) {
 	toolbar.forEach(el => el.addEventListener('click', clickToolbar))
 	typebar.forEach(el => el.addEventListener('click', clickTypebar))
 	typebar.forEach(el => el.addEventListener('keydown', e => {
-		if (e.which == 32 && e.shiftKey !== true) { //"Space"
+		if (e.which == 32 && e.shiftKey !== true){ //"Space"
 			e.preventDefault()
 			e.stopPropagation()
 			e.target.click()
@@ -258,7 +258,7 @@ function afoxEditor(ID, OPTIONS) {
 	if(form.hasAttribute('needvalidate')) form.setAttribute('novalidate', '')
 	form.addEventListener('submit', e => {
 		try {
-			if (this.htmlMode) {
+			if (this.htmlMode){
 				textarea.value = iframe.contentWindow.document.body.innerHTML
 			}
 			chk_group.forEach(el => {
@@ -270,20 +270,20 @@ function afoxEditor(ID, OPTIONS) {
 			})
 			content_validity = !this.required || textarea.value
 			if(e.currentTarget.hasAttribute('needvalidate')){
-				if (!content_validity || !e.currentTarget.checkValidity()) {
+				if (!content_validity || !e.currentTarget.checkValidity()){
 					e.preventDefault()
 					e.stopPropagation()
 					if(!content_validity) iframe.classList.add('is-invalid')
 				}
 				e.currentTarget.classList.add('was-validated')
-			} else {
-				if (!content_validity) {
+			}else{
+				if (!content_validity){
 					this.htmlMode
 						? iframe.contentWindow.document.body.focus() : textarea.focus()
 					throw new Error(this.required)
 				}
 			}
-		} catch (error) {
+		} catch (error){
 			e.preventDefault()
 			e.stopPropagation()
 			console.log(error)
@@ -294,13 +294,13 @@ function afoxEditor(ID, OPTIONS) {
 	if(OPTIONS.html) modeSwitch(true)
 }
 
-(function() {
+(function(){
 	'use strict'
 	window.uploadFiles = []
 	window.addEventListener('beforeunload', e => {
 		let url // remove files from spent memory
 		const elURL = (window.URL || window.webkitURL)
-		while (window.uploadFiles.length > 0) {
+		while (window.uploadFiles.length > 0){
 			url = window.uploadFiles.pop()
 			elURL.revokeObjectURL(url)
 			//console.error(url)

@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	global $_MEMBER;
 
 	// 로그인중이 아니면 에러

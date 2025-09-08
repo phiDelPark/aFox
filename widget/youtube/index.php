@@ -8,12 +8,12 @@ $showinfo = isset($_WIDGET['showinfo']) ? $_WIDGET['showinfo'] : '1';
 $controls = isset($_WIDGET['controls']) ? $_WIDGET['controls'] : '1';
 $time = $_WIDGET['time'];
 
-if(!empty($time)) {
+if(!empty($time)){
 	$s = 0;
-	if(preg_match_all('/([0-9]+)[h|m|s]/is', $time, $m)) {
-		if(count($m[1]) === 3) {
+	if(preg_match_all('/([0-9]+)[h|m|s]/is', $time, $m)){
+		if(count($m[1]) === 3){
 			$s = ($m[1][0]*60)+($m[1][1]*60)+$m[1][2];
-		} else if(count($m[1]) === 2) {
+		} else if(count($m[1]) === 2){
 			$s = ($m[1][0]*60)+$m[1][1];
 		} else $s = $m[1][0];
 	}

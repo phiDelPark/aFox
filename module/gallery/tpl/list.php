@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 addJSLang(['item', 'delete', 'modify', 'confirm_page_left', 'confirm_page_right', 'confirm_delete', 'prompt_modify_item']);
-addCSS(_AF_URL_ . 'module/gallery/tpl/gallery' . (__DEBUG__ ? '.css?' . _AF_SERVER_TIME_ : '.min.css'));
-addJS(_AF_URL_ . 'module/gallery/tpl/gallery' . (__DEBUG__ ? '.js?' . _AF_SERVER_TIME_ : '.min.js'));
+addCSS(_AF_URL_.'module/gallery/tpl/gallery'.(__DEBUG__ ? '.css?'._AF_SERVER_TIME_ : '.min.css'));
+addJS(_AF_URL_.'module/gallery/tpl/gallery'.(__DEBUG__ ? '.js?'._AF_SERVER_TIME_ : '.min.js'));
 
 $current_page = $_DATA['current_page'];
 $total_page = $_DATA['total_page'];
@@ -27,7 +27,7 @@ $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 <?php if(empty($_GET['srl']) && !empty($_CFG['md_category'])){ ?>
 	<?php
 		$tmp = explode(',', $_CFG['md_category']);
-		foreach ($tmp as $val) {
+		foreach ($tmp as $val){
 			$isEqual = $val == @$_GET['search'];
 			$cateurl = getUrl('','id',_MID_,'search', urlencode($val)).($isEqual&&!$asc?'&asc':'');
 			echo '<li class="d-inline mx-1"><a class="badge text-bg-secondary text-decoration-none'.($isEqual?' active" aria-current="page':'').'" href="'.$cateurl.'">'.$val.($isEqual?($asc?'▴':'▾'):'').'</a></li>';
@@ -42,7 +42,7 @@ $_CFG['thumb_height'] = $_CFG['thumb_height'] ? $_CFG['thumb_height'] : 'auto';
 <?php
 	$close_div = '';
 	$w_cnt = _MOBILE_ ? 2 : $_CFG['horizontal_count'];
-	foreach ($_DATA['list'] as $key => $val) {
+	foreach ($_DATA['list'] as $key => $val){
 		if((($key % $w_cnt) === 0)){
 			echo $close_div.'<div class="w-100 d-flex justify-content-between">';
 			$close_div = '</div>';

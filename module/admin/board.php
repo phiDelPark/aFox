@@ -28,16 +28,16 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
+	if($error){
 		messageBox($error['message'], $error['error'], false);
-	} else {
+	}else{
 		$current_page = $board_list['current_page'];
 		$total_page = $board_list['total_page'];
 		$start_page = $board_list['start_page'];
 		$end_page = $board_list['end_page'];
 
 		$grants = ['0'=>'A','1'=>'M','m'=>'S'];
-		foreach ($board_list['data'] as $key => $value) {
+		foreach ($board_list['data'] as $key => $value){
 			echo '<tr><th scope="row" ><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
 			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_about'])?'':' - '.$value['md_about'])),50)).'</td>';
 			echo '<td class="fixed-width">'.$grants[$value['grant_list']].$grants[$value['grant_view']].$grants[$value['grant_write']].$grants[$value['grant_reply']].$grants[$value['grant_upload']].$grants[$value['grant_download']].'</td>';

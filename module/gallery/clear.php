@@ -1,6 +1,6 @@
 <?php if(!defined('__AFOX__')) exit();
 
-if(@$_GET['clear']) {
+if(@$_GET['clear']){
 	ob_end_clean();
 
 	function __unlinkThumbnail($dir)
@@ -18,7 +18,7 @@ if(@$_GET['clear']) {
 					ob_flush();
 					flush();
 					*/
-				} else {
+				}else{
 					echo '<b style="color:red">ERROR:</b> '.$file.'<br />';
 					ob_flush();
 					flush();
@@ -31,7 +31,7 @@ if(@$_GET['clear']) {
 			echo '●';
 			ob_flush();
 			flush();
-		} else {
+		}else{
 			echo '<b style="color:red">ERROR:</b> '.$dir.'<br />';
 			ob_flush();
 			flush();

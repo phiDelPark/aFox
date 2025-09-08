@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	$ids = empty($data['md_ids'])?'':serialize($data['md_ids']);
@@ -14,7 +14,7 @@ function proc($data) {
 
 		$md_id = getModule('@searchex', 'md_id');
 
-		if (empty($md_id)) {
+		if (empty($md_id)){
 
 			DB::insert(_AF_MODULE_TABLE_,
 				[
@@ -26,7 +26,7 @@ function proc($data) {
 					'md_regdate(=)'=>'NOW()'
 				]
 			);
-		} else {
+		}else{
 
 			DB::update(_AF_MODULE_TABLE_,
 				[
@@ -39,7 +39,7 @@ function proc($data) {
 			);
 		}
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

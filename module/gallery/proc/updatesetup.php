@@ -1,20 +1,20 @@
 <?php if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 
 	if(isset($data['new_md_id'])) $data['md_id'] = $data['new_md_id'];
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 	if(!preg_match('/'._AF_PATTERN_ID_.'/', $data['md_id'])) return set_error(getLang('invalid_value', ['id']),2001);
 
 	$category = ''; // 분류 정리
-	if(!empty($data['md_category'])) {
-		if(!preg_match('/'._AF_PATTERN_CATEGORY_.'/u', $data['md_category'])) {
+	if(!empty($data['md_category'])){
+		if(!preg_match('/'._AF_PATTERN_CATEGORY_.'/u', $data['md_category'])){
 			return set_error(getLang('invalid_value', ['category']),2001);
 		}
 		$tmpa = explode(',', $data['md_category']);
-		foreach ($tmpa as $value) {
+		foreach ($tmpa as $value){
 			$value = trim($value);
-			if(!empty($value)) $category .= cutstr($value,10,'') . ',';
+			if(!empty($value)) $category .= cutstr($value,10,'').',';
 		}
 		if($category) $category = substr($category, 0, -1);
 	}
@@ -29,11 +29,11 @@ function proc($data) {
 
 	// 관리자 이이디가 넘어오면 srl로 변경
 	$md_manager = $data['md_manager'];
-	if(!empty($md_manager)) {
+	if(!empty($md_manager)){
 		$mb = getMember($md_manager);
 		if(empty($mb['mb_srl'])) return set_error(getLang('invalid_value', ['admin']), 2001);
 		$md_manager = (int) $mb['mb_srl'];
-	} else {
+	}else{
 		$md_manager = 0;
 	}
 
@@ -42,9 +42,9 @@ function proc($data) {
 	DB::transaction();
 
 	try {
-		if(empty($module['md_id'])) {
+		if(empty($module['md_id'])){
 
-			if(!isset($data['new_md_id'])) {
+			if(!isset($data['new_md_id'])){
 				throw new Exception(getLang('error_request'),4303);
 			}
 
@@ -71,15 +71,15 @@ function proc($data) {
 					'md_regdate(=)'=>'NOW()'
 				]
 			);
-		} else {
-			if(isset($data['new_md_id']) || $module['md_key'] != 'gallery') {
+		}else{
+			if(isset($data['new_md_id']) || $module['md_key'] != 'gallery'){
 				throw new Exception(getLang('warn_exists', ['id']), 3103);
 			}
 
 			// 카테고리 변경시 해당 카테고리에 문서가 있는지 체크
-			if ($category != $module['md_category']) {
+			if ($category != $module['md_category']){
 				$diff = array_diff(explode(',',$module['md_category']), explode(',',$category));
-				if (count($diff)>0 && !empty($diff[0])) {
+				if (count($diff)>0 && !empty($diff[0])){
 					$diff = implode(',', $diff);
 					$out = DB::get(_AF_DOCUMENT_TABLE_, 'wr_category', ['md_id'=>$data['md_id'], 'wr_category{IN}'=>$diff]);
 					if(!empty($out)) throw new Exception(getLang('msg_document_exists', [getLang('category')."(".$out['wr_category'].")"]), 3);
@@ -120,7 +120,7 @@ function proc($data) {
 			);
 		}
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

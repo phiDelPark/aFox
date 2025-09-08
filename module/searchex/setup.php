@@ -34,10 +34,10 @@ if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
+	if($error){
 		messageBox($error['message'], $error['error']);
-	} else {
-		foreach ($_list as $key => $value) {
+	}else{
+		foreach ($_list as $key => $value){
 			echo '<tr><th scope="row"><label><input type="checkbox" name="md_ids[]" value="'.$value['md_id'].'" class="data_selecter" style="margin-right:10px"'.(empty($_mids)||array_search($value['md_id'], $_mids)===false?'':' checked').'><span>'.$value['md_id'].'</span></label></th>';
 			echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_about'])?'':' - '.$value['md_about'])),50)).'</td></tr>';
 		}
@@ -53,7 +53,7 @@ if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode
 </form>
 
 <script>
-	function _allCheckTableItems(el_chk) {
+	function _allCheckTableItems(el_chk){
 		let els_chk = el_chk.closest('table').querySelectorAll('tbody [type=checkbox]');
 		els_chk.forEach(el => el.checked = el_chk.checked);
 	}

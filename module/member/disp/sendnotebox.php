@@ -1,12 +1,12 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	global $_CFG;
 	global $_MEMBER;
 
 	// TODO 쪽지 차단 기능 추가하자
-	if(empty($_MEMBER)) {
+	if(empty($_MEMBER)){
 		return set_error(getLang('error_request'),4303);
 	}
 

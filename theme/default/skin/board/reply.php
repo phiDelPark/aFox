@@ -7,7 +7,7 @@ addJSLang(['confirm_delete','reply']);
 <?php
 	$rp = @$_GET['rp'] ? $_GET['rp'] : 0;
 	$location_hash = $rp&&$REPLYS?'documentReply':'';
-	foreach ($REPLYS as $key => $val) {
+	foreach ($REPLYS as $key => $val){
 		$_len = strlen($val['rp_depth']);
 		$rp_secret =  $val['rp_secret'] == '1';
 		$rp_permit = !$rp_secret || $value['grant_view'] || $is_manager || $login_srl === $val['mb_srl'];
@@ -47,6 +47,7 @@ addJSLang(['confirm_delete','reply']);
 		<?php
 			$istool = [];
 			//if(empty($_CFG['use_secret'])) $istool['rp_secret'] = ['false', ['Secret'=>'true']];
+			@include_once _AF_MODULES_PATH_.'editor/index.php';
 			displayEditor(
 				'rp_content', '',
 				[
@@ -57,7 +58,7 @@ addJSLang(['confirm_delete','reply']);
 				]
 			);
 		?>
-		<button type="submit" style="width:20%" class="btn btn-success ms-2"<?php if (!$is_rp_grant) {echo ' disabled="disabled"';} ?>><?php echo getLang('save')?></button>
+		<button type="submit" style="width:20%" class="btn btn-success ms-2"<?php if (!$is_rp_grant){echo ' disabled="disabled"';} ?>><?php echo getLang('save')?></button>
 		</div>
 	</form>
 </section>

@@ -9,25 +9,25 @@
 	$search = @$_GET['search'] ? trim($_GET['search']) : '';
 	$category = @$_GET['category'] ? $_GET['category'] : '';
 
-	if(!empty($search)) {
+	if(!empty($search)){
 		$keys = [
 			":" => "wr_regdate", //:202010
 			"?" => "mb_nick", //?nick
 		];
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "rp_content") : ($search = substr($search, 1));
-		if ($search = explode(" ", $search)) {
+		if ($search = explode(" ", $search)){
 			$index = 0;
 			$tmp = '';
-			foreach ($search as $value) {
+			foreach ($search as $value){
 				$value = explode("&", trim($value));
 				$and_or = count($value) > 1 ? ' AND ' : ' OR  ';
-				foreach ($value as $v) {
-					if ($key == "rp_regdate") {
+				foreach ($value as $v){
+					if ($key == "rp_regdate"){
 						$v = str_split($v, 4);
-						$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
+						$v = $v[0].(empty($v[1]) ? "" : "-".implode("-", str_split($v[1], 2)));
 						$tmp .= $and_or.$cd.'.'.$key.' LIKE \''.DB::escape($v.'%').'\'';
-					} else {
+					}else{
 						$tmp .= $and_or.$cd.'.'.$key.' LIKE \''.DB::escape('%'.$v.'%').'\'';
 					}
 				}
@@ -63,15 +63,15 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
+	if($error){
 		messageBox($error['message'], $error['error'], false);
-	} else {
+	}else{
 		$current_page = $cmt_list['current_page'];
 		$total_page = $cmt_list['total_page'];
 		$start_page = $cmt_list['start_page'];
 		$end_page = $cmt_list['end_page'];
 
-		foreach ($cmt_list['data'] as $key => $value) {
+		foreach ($cmt_list['data'] as $key => $value){
 			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></td>';
 			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="rp_srls[]" value="'.$value['rp_srl'].'"><a href="./?rp='.$value['rp_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['rp_content']),50)).'</a></td>';
 			echo '<td>'.$value['mb_nick'].'</td>';
@@ -107,18 +107,18 @@
 </div>
 
 <script>
-	function _showCheckItems(el_chk) {
+	function _showCheckItems(el_chk){
 		const tb = el_chk.closest('table'), first_chk = tb.querySelector('[type=checkbox]')
 		tb.querySelectorAll('[type=checkbox]')?.forEach(el => el.classList.remove('d-none'))
 		first_chk.parentNode?.lastChild.classList.add('d-none')
 		first_chk.parentNode?.childNodes[1].classList.remove('d-none')
 		return false
 	}
-	function _allCheckItems(el_chk) {
+	function _allCheckItems(el_chk){
 		el_chk.closest('table').querySelectorAll('tbody [type=checkbox]')?.forEach(el => el.checked = el_chk.checked)
 	}
-	function _deleteCheckItems() {
-		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['comment']])) === true) {
+	function _deleteCheckItems(){
+		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['comment']])) === true){
 			exec_ajax({module:'admin',act:'deleteComments',...document.querySelector('#af_check_items').serializeArray()})
 			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
 		}

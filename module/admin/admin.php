@@ -177,7 +177,7 @@ $is_admin = isAdmin();
 <!-- offcanvas -->
 <main class="my-4 p-1 pt-5">
 
-<?php if($_GET['disp'] != 'default') { ?>
+<?php if($_GET['disp'] != 'default'){ ?>
 
 	<div class="mx-2 mb-4">
 		<h3><?php echo getLang('menu_name_'.$admin)?></h3>
@@ -188,21 +188,21 @@ $is_admin = isAdmin();
 <?php } ?>
 	<section class="container-fluid">
 <?php
-		if (!$is_admin && !in_array($admin,['default'])) {
+		if (!$is_admin && !in_array($admin,['default'])){
 			messageBox(getLang('error_permitted'), 4501, false);
-		} else {
+		}else{
 			if (is_array($err = get_error())) messageBox($err['message'], $err['error'], false);
-			if(!empty($_GET['th_id']) || !empty($_GET['md_id']) || !empty($_GET['ao_id']) || !empty($_GET['wg_id'])) {
-				require_once _AF_ADMIN_PATH_ . 'form/' . (
+			if(!empty($_GET['th_id']) || !empty($_GET['md_id']) || !empty($_GET['ao_id']) || !empty($_GET['wg_id'])){
+				require_once _AF_ADMIN_PATH_.'form/'.(
 					!empty($_GET['th_id'])	? 'themeform'
 					: (!empty($_GET['md_id']) ? 'moduleform'
 						: (!empty($_GET['ao_id']) ? 'addonform'
-							: 'widgetform'))) . '.php';
-			} else if(!empty($_GET['mb_id']) ||	!empty($_GET['bo_id']) ||	!empty($_GET['pg_id'])) {
-				@include_once _AF_MODULES_PATH_ . $admin . '/lang/' . _AF_LANG_ . '.php';
-				require_once _AF_MODULES_PATH_ . $admin . '/setup.php';
-			} else {
-				require_once _AF_ADMIN_PATH_ . $admin . '.php';
+							: 'widgetform'))).'.php';
+			} else if(!empty($_GET['mb_id']) ||	!empty($_GET['bo_id']) ||	!empty($_GET['pg_id'])){
+				@include_once _AF_MODULES_PATH_.$admin.'/lang/'._AF_LANG_.'.php';
+				require_once _AF_MODULES_PATH_.$admin.'/setup.php';
+			}else{
+				require_once _AF_ADMIN_PATH_.$admin.'.php';
 			}
 		}
 ?>

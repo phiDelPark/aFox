@@ -7,7 +7,7 @@
 		"_AND_" => [], "_OR_" => []
 	];
 
-	if (!empty($search)) {
+	if (!empty($search)){
 		$keys = [
 			"!" => "vs_referer", //!referer
 			"?" => "mb_ipaddress", //?ip
@@ -15,19 +15,19 @@
 		];
 		$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "vs_agent") : ($search = substr($search, 1));
-		if ($search = explode(" ", $search)) {
+		if ($search = explode(" ", $search)){
 			$index = 0;
-			foreach ($search as $value) {
+			foreach ($search as $value){
 				$value = explode("&", trim($value));
 				$and_or = count($value) > 1 ? "_AND_" : "_OR_";
-				foreach ($value as $v) {
-					if ($key == "vs_regdate") {
+				foreach ($value as $v){
+					if ($key == "vs_regdate"){
 						$v = str_split($v, 4);
-						$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
-					} else {
-						$v = "%" . $v;
+						$v = $v[0].(empty($v[1]) ? "" : "-".implode("-", str_split($v[1], 2)));
+					}else{
+						$v = "%".$v;
 					}
-					$_wheres[$and_or][$key . "{LIKE}[" . $index++ . "]"] = $v . "%";
+					$_wheres[$and_or][$key."{LIKE}[".$index++."]"] = $v."%";
 				}
 			}
 		}
@@ -52,15 +52,15 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
+	if($error){
 		messageBox($error['message'], $error['error'], false);
-	} else {
+	}else{
 		$current_page = $vs_list['current_page'];
 		$total_page = $vs_list['total_page'];
 		$start_page = $vs_list['start_page'];
 		$end_page = $vs_list['end_page'];
 
-		foreach ($vs_list['data'] as $key => $value) {
+		foreach ($vs_list['data'] as $key => $value){
 			echo '<tr><th scope="row">'.$value['mb_ipaddress'].'</th>';
 			echo '<td class="text-wrap">'.escapeHTML($value['vs_agent']).(empty($value['vs_referer'])?'':'<br><a href="'.$value['vs_referer'].'" target="_blank">'.escapeHTML($value['vs_referer']).'</a>').'</td>';
 			echo '<td>'.date('y/m/d h:i', strtotime($value['vs_regdate'])).'</td></tr>';

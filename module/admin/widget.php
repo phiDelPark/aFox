@@ -15,8 +15,8 @@
 
 <?php
 $widget_dir = _AF_WIDGETS_PATH_;
-if(is_dir($widget_dir)) {
-	foreach(glob($widget_dir.'*', GLOB_ONLYDIR) as $dir) {
+if(is_dir($widget_dir)){
+	foreach(glob($widget_dir.'*', GLOB_ONLYDIR) as $dir){
 		$name = basename($dir);
 
 		$_WIDGET_INFO = [];

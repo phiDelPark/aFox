@@ -10,16 +10,16 @@ function proc($data)
 	$category = ''; // 분류 정리
 	if(!empty($data['md_category2']) && empty($data['md_category'])){
 		return set_error(getLang('msg_requires_catagory1'), 3);
-	} else {
+	}else{
 		foreach	([$data['md_category'], $data['md_category2']] as $cate){
-			if(!empty($cate)) {
-				if(!preg_match('/'._AF_PATTERN_CATEGORY_.'/u', $cate)) {
+			if(!empty($cate)){
+				if(!preg_match('/'._AF_PATTERN_CATEGORY_.'/u', $cate)){
 					return set_error(getLang('invalid_value', ['category']),2001);
 				}
 				$tmpa = explode(',', $cate);
-				foreach ($tmpa as $value) {
+				foreach ($tmpa as $value){
 					$value = trim($value);
-					if(!empty($value)) $category .= cutstr($value,10,'') . ',';
+					if(!empty($value)) $category .= cutstr($value,10,'').',';
 				}
 				if($category) $category = substr($category, 0, -1).'&';
 			}
@@ -28,19 +28,19 @@ function proc($data)
 	}
 
 	$ex_keys = []; // 확장 변수 키값
-	if(!empty($data['md_extra_keys'])) {
-		if(!preg_match('/'._AF_PATTERN_EXTRAKEY_.'/u', $data['md_extra_keys'])) {
+	if(!empty($data['md_extra_keys'])){
+		if(!preg_match('/'._AF_PATTERN_EXTRAKEY_.'/u', $data['md_extra_keys'])){
 			return set_error(getLang('invalid_value', ['extra_keys']),2001);
 		}
 		$ex_keys['keys'] = [];
 		$_caps = explode(',', $data['md_extra_keys']);
-		foreach ($_caps as $cap) {
+		foreach ($_caps as $cap){
 			$_boxs = explode('&', $cap);
 			if($is = (count($_boxs)<2)) $_boxs = explode('|', $cap);
 			for ($i = 0; $i < count($_boxs); $i++) $_boxs[$i] = cutstr(trim($_boxs[$i]), 10);
 			$ex_keys['keys'][md5($_boxs[0])] = implode($is?'|':'&', $_boxs);
 		}
-		if(count($ex_keys['keys']) > 99) { //확장 변수 갯수 제한 99개
+		if(count($ex_keys['keys']) > 99){ //확장 변수 갯수 제한 99개
 			return set_error(getLang('overflow_value', ['extra_keys','Count',99]),2301);
 		}
 	}
@@ -56,9 +56,9 @@ function proc($data)
 
 	// 관리자 이이디가 넘어오면 srl로 변경
 	$md_manager = empty($data['md_manager']) ? 0 : $data['md_manager'];
-	if($md_manager && !($md_manager=getMember($md_manager))) {
+	if($md_manager && !($md_manager=getMember($md_manager))){
 		return set_error(getLang('invalid_value', ['manager']),2001);
-	} else {
+	}else{
 		$md_manager = $md_manager ? (int)$md_manager['mb_srl'] : 0;
 	}
 
@@ -67,9 +67,9 @@ function proc($data)
 	DB::transaction();
 
 	try {
-		if(empty($module['md_id'])) {
+		if(empty($module['md_id'])){
 
-			if(!isset($data['new_md_id'])) {
+			if(!isset($data['new_md_id'])){
 				throw new Exception(getLang('error_request'),4303);
 			}
 			// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
@@ -108,17 +108,17 @@ function proc($data)
 					'md_regdate(=)'=>'NOW()'
 				]
 			);
-		} else {
-			if(isset($data['new_md_id']) || $module['md_key'] != 'board') {
+		}else{
+			if(isset($data['new_md_id']) || $module['md_key'] != 'board'){
 				throw new Exception(getLang('warn_exists', ['id']), 3103);
 			}
 
 			// 카테고리 변경시 해당 카테고리에 문서가 있는지 체크
-			if ($category != $module['md_category']) {
+			if ($category != $module['md_category']){
 				$temp1 = str_replace('&', ',', $category);
 				$temp2 = str_replace('&', ',', $module['md_category']);
 				$diff = array_diff(explode(',', $temp2), explode(',', $temp1));
-				if (count($diff)>0 && !empty($diff[0])) {
+				if (count($diff)>0 && !empty($diff[0])){
 					$diff = implode(',', $diff);
 					$out = DB::get(_AF_DOCUMENT_TABLE_, 'wr_category', ['md_id'=>$data['md_id'], 'wr_category{IN}'=>$diff]);
 					if(!empty($out)) throw new Exception(getLang('msg_document_exists', [getLang('category')."(".$out['wr_category'].")"]), 3);
@@ -179,7 +179,7 @@ function proc($data)
 		// 썸네일 제거
 		//unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$data['md_id'].'/');
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

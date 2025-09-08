@@ -1,6 +1,6 @@
 <?php if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['wr_srl'])) return set_error(getLang('error_request'),4303);
 	$wr_srl = (int) abs(empty($data['wr_srl']) ? 0 : $data['wr_srl']);
 
@@ -10,15 +10,15 @@ function proc($data) {
 	if(empty($doc['wr_srl'])) return set_error(getLang('error_request'),4303);
 
 	// 권한 체크
-	if(!isManager($doc['md_id'])) {
-		if(empty($_MEMBER) || empty($doc['mb_srl'])) {
-			if(empty($doc['mb_srl']) && empty($data['mb_password'])) {
+	if(!isManager($doc['md_id'])){
+		if(empty($_MEMBER) || empty($doc['mb_srl'])){
+			if(empty($doc['mb_srl']) && empty($data['mb_password'])){
 				return set_error(getLang('request_input', ['password']), 1);
 			}
-			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
+			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])){
 				return set_error(getLang('error_permitted'),4501);
 			}
-		} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
+		} else if($_MEMBER['mb_srl'] != $doc['mb_srl']){
 			return set_error(getLang('error_permitted'),4501);
 		}
 	}
@@ -26,7 +26,7 @@ function proc($data) {
 	$md_id = $doc['md_id'];
 
 	// 관리자나 자신이 아니면 휴지통
-	if (!isAdmin() && (empty($_MEMBER) || $_MEMBER['mb_srl'] != $doc['mb_srl'])) {
+	if (!isAdmin() && (empty($_MEMBER) || $_MEMBER['mb_srl'] != $doc['mb_srl'])){
 		unset($data['is_empty']);
 	}
 
@@ -34,9 +34,9 @@ function proc($data) {
 
 	try {
 
-		if(empty($data['is_empty'])) {
+		if(empty($data['is_empty'])){
 			// 이미 휴지통이면 에러
-			if($md_id == '_AFOXtRASH_') {
+			if($md_id == '_AFOXtRASH_'){
 				throw new Exception(getLang('error_request'),4303);
 			}
 			// 휴지통으로 보냄
@@ -49,10 +49,10 @@ function proc($data) {
 					'wr_srl'=>$wr_srl
 				]
 			);
-		} else {
+		}else{
 			// 완전 삭제
 			// 휴지통이면 원래 모듈 id 가져오기
-			if($md_id == '_AFOXtRASH_') {
+			if($md_id == '_AFOXtRASH_'){
 				$module = getModule($doc['wr_updater']);
 				if(empty($module)) throw new Exception(getLang('error_founded'), 4201);
 				if($module['md_id'] != $doc['wr_updater']) throw new Exception(getLang('invalid_value',['module']), 2001);
@@ -66,8 +66,8 @@ function proc($data) {
 
 		// 파일 삭제 // 휴지통 이동이면 썸네일만 제거
 		$types = empty($data['is_empty']) ? ['thumbnail'] : ['binary','image','video','audio','thumbnail'];
-		foreach ($types as $val) {
-			unlinkAll(_AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/');
+		foreach ($types as $val){
+			unlinkAll(_AF_ATTACH_DATA_.$val.'/'.$md_id.'/'.$wr_srl.'/');
 		}
 
 		// 포인트 삭제
@@ -75,7 +75,7 @@ function proc($data) {
 			// TODO 에러 발생시...
 		}
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

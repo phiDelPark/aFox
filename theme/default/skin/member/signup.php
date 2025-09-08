@@ -11,8 +11,8 @@
 	<input type="hidden" name="module" value="member" />
 	<input type="hidden" name="act" value="updateMember" />
 
-<?php if(!$ismb) { ?>
-	<?php if(file_exists($tmp = _AF_CONFIG_DATA_.'terms_of_use.php')) { ?>
+<?php if(!$ismb){ ?>
+	<?php if(file_exists($tmp = _AF_CONFIG_DATA_.'terms_of_use.php')){ ?>
 		<div class="mb-3">
 			<label for="id_terms_of_use"><?php echo getLang('terms_of_use')?></label>
 			<textarea class="form-control"  rows="5" id="id_terms_of_use"><?php include $tmp; ?></textarea>
@@ -27,7 +27,7 @@
 			</div>
 			<div class="form-text"><?php echo getLang('desc_mb_id')?></div>
 		</div>
-<?php } else {
+<?php }else{
 	$mb_rank = ord($_MEMBER['mb_rank']);
 	$rank_nicks = ['109'=>getLang('manager'),'115'=>getLang('admin')];
 	$next_lv = $mb_rank > 99 ? '100' : explode('.',sprintf('%.2f',round(sqrt(floor($_MEMBER['mb_point'] / 10) / 10), 2)))[1];
@@ -76,7 +76,7 @@
 
 	<?php
 		$tmp = 'data/member/'.(empty($_MEMBER['mb_srl'])?'___':$_MEMBER['mb_srl']).'/profile_image.png';
-		$tmp = _AF_URL_ . ($ismb&&file_exists(_AF_PATH_ . $tmp) ? $tmp : 'common/img/user_default.jpg');
+		$tmp = _AF_URL_.($ismb&&file_exists(_AF_PATH_.$tmp) ? $tmp : 'common/img/user_default.jpg');
 	?>
 	<div class="position-relative mb-4">
 		<img class="position-absolute border rounded p-1" style="width:58px;height:58px" src="<?php echo $tmp ?>">

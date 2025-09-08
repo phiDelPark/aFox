@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['rp_srl'])) return set_error(getLang('error_request'),4303);
 	$rp_srl = (int) abs($data['rp_srl']);
 
@@ -18,15 +18,15 @@ function proc($data) {
 	$is_manager = isManager($doc['md_id']);
 
 	// 권한 체크
-	if(!$is_manager) {
-		if(empty($_MEMBER) || empty($cmt['mb_srl'])) {
-			if(empty($cmt['mb_srl']) && empty($data['mb_password'])) {
+	if(!$is_manager){
+		if(empty($_MEMBER) || empty($cmt['mb_srl'])){
+			if(empty($cmt['mb_srl']) && empty($data['mb_password'])){
 				return set_error(getLang('request_input', ['password']), 1);
 			}
-			if (empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
+			if (empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])){
 				return set_error(getLang('error_permitted'),4501);
 			}
-		} else if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
+		} else if($_MEMBER['mb_srl'] != $cmt['mb_srl']){
 			return set_error(getLang('error_permitted'),4501);
 		}
 	}
@@ -44,7 +44,7 @@ function proc($data) {
 
 	try {
 		// 하위 댓글이 있으면 삭제 표시만... (관리자전용)
-		if($_cnt > 0) {
+		if($_cnt > 0){
 			DB::update(_AF_COMMENT_TABLE_,
 				[
 					'rp_status'=>4,
@@ -56,7 +56,7 @@ function proc($data) {
 					'rp_srl'=>$rp_srl
 				]
 			);
-		} else {
+		}else{
 			DB::delete(_AF_COMMENT_TABLE_ , ['rp_srl'=>$rp_srl]);
 			DB::update(_AF_DOCUMENT_TABLE_, ['wr_reply(=)'=>'wr_reply-1'], ['wr_srl'=>$wr_srl]);
 		}
@@ -66,7 +66,7 @@ function proc($data) {
 			// TODO 에러 발생시...
 		}
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

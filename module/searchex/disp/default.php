@@ -10,7 +10,7 @@ function proc($data)
 	if (empty($mids)) $mids[] = "@@@@@@@@@@"; // 검색할 모듈이 없으면 임시 값
 	$_wheres = ["md_id{IN}" => implode(",", $mids) , "_AND_" => [], "_OR_" => []];
 
-	if (!empty($search)) {
+	if (!empty($search)){
 		$keys = [
 			"!" => "wr_title", //!title
 			":" => "wr_regdate", //:202010
@@ -22,30 +22,30 @@ function proc($data)
 		empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
 		$search = explode(" ", trim($search));
 
-		if (!empty($search)) {
+		if (!empty($search)){
 
 			$index = 0;
-			foreach ($search as $value) {
+			foreach ($search as $value){
 				$value = explode("&", trim($value));
 				$and_or = count($value) > 1 ? "_AND_" : "_OR_";
 
-				foreach ($value as $v) {
+				foreach ($value as $v){
 					$cmd = $key == "wr_tags" ? '{REGEXP}' : '{LIKE}';
-					if ($key == "wr_regdate") {
+					if ($key == "wr_regdate"){
 						$v = str_split($v, 4);
 						$v = $v[0].(empty($v[1])?"":"-".implode("-",str_split($v[1],2)))."%";
-					} else if ($cmd == '{REGEXP}') {
+					} else if ($cmd == '{REGEXP}'){
 						$v = "('(^|,)".DB::escape($v)."($|,)')";
-					} else {
-						$v = "%" . $v. "%";
+					}else{
+						$v = "%".$v. "%";
 					}
-					$_wheres[$and_or][$key . $cmd . '[' . $index++ . ']'] = $v;
+					$_wheres[$and_or][$key.$cmd.'['.$index++.']'] = $v;
 				}
 			}
 		}
 	}
 
-	$_list = DB::gets(_AF_DOCUMENT_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, ["md_id"=>'DESC',"wr_regdate"=>'DESC'], (($page - 1) * $count) . "," . $count);
+	$_list = DB::gets(_AF_DOCUMENT_TABLE_, "SQL_CALC_FOUND_ROWS *", $_wheres, ["md_id"=>'DESC',"wr_regdate"=>'DESC'], (($page - 1) * $count).",".$count);
 
 	$result = [];
 	$result['data'] = $_list;

@@ -3,7 +3,7 @@ addJSLang(['alert','confirm']);
 $menus = getSiteMenu();
 ?>
 <ul class="bd-circles"><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>
-<?php if(!empty($_THEME['use_loader'])) { ?>
+<?php if(!empty($_THEME['use_loader'])){ ?>
 <div id="loading_page" aria-label="Loading..."><noscript><style>#loading_page{display:none}</style></noscript></div>
 <?php } ?>
 <div class="mode-toggle" onclick="this.classList.toggle('open')">
@@ -27,9 +27,9 @@ $menus = getSiteMenu();
 <?php }else{ ?>
 				<a class="btn p-0" href="#" aria-label="Member" data-bs-toggle="dropdown" aria-expanded="false"><svg class="bi xl" aria-hidden="true"><title><?php echo $_MEMBER['mb_nick']?></title><use href="./theme/default/bi-icons.svg#person-bounding-box"/></svg></a>
 				<ul class="dropdown-menu">
-					<?php if(isManager(_MID_)) { ?>
+					<?php if(isManager(_MID_)){ ?>
 					<li><a class="dropdown-item" href="<?php echo _AF_URL_?>?admin" target="_blank"><svg class="bi" aria-hidden="true"><title>Site setup</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
-					<?php } else { ?>
+					<?php }else{ ?>
 					<li><a class="dropdown-item" href="<?php echo getUrl('','member','signUp')?>"><svg class="bi" aria-hidden="true"><title>Member info</title><use href="./theme/default/bi-icons.svg#person-fill"/></svg> <?php echo $_MEMBER['mb_nick']?></a></li>
 					<?php } ?>
 					<li><hr class="dropdown-divider"></li>
@@ -49,7 +49,7 @@ $menus = getSiteMenu();
 		<label class="input-group-text"<?php echo @$_GET['search']?' onclick="location.replace(\''.getUrl('','id',(empty($_GET['return'])||_MODULE_!='searchex'?_MID_:$_GET['return'])).'\')"':''?>>
         	<svg class="bi"><use href="./theme/default/bi-icons.svg#<?php echo @$_GET['search']?'x-lg':'search'?>"/></svg>
         </label>
-		<?php if(_MODULE_=='board') { ?>
+		<?php if(_MODULE_=='board'){ ?>
         <select class="form-control" style="max-width:50px" name="id">
           <option value="">ALL</option>
           <option value="<?php echo _MID_ ?>" selected>MID</option>
@@ -133,7 +133,7 @@ $menus = getSiteMenu();
 	<div class="row g-5 mb-4">
 	<article class="<?php echo $sub_menus ? 'col-lg-9 order-lg-1 ' : ''?>mt-4" aria-label="Site Contents">
 <?php
-	if($error = get_error()) { messageBox($error['message'], $error['error']); }
+	if($error = get_error()){ messageBox($error['message'], $error['error']); }
 	displayModule();
 ?>
 	</article>
@@ -142,7 +142,7 @@ $menus = getSiteMenu();
 		<div class="position-sticky" style="top:2rem">
 			<h2 class="pb-2"><?php echo empty($menus['header'][$active_menu]['mu_title'])?'Categories':$menus['header'][$active_menu]['mu_title']?></h2>
 			<ol class="list-unstyled">
-	<?php for ($i=$active_menu+1,$n=count($menus['header']); $i < $n; $i++) { $val = $menus['header'][$i]; if(!$val['mu_parent']) break;
+	<?php for ($i=$active_menu+1,$n=count($menus['header']); $i < $n; $i++){ $val = $menus['header'][$i]; if(!$val['mu_parent']) break;
 		echo '<li><a href="'. escapeHTML($val['mu_link']) .'" class="d-flex flex-column flex-lg-row gap-3 py-3 link-body-emphasis text-decoration-none border-top'.($val['active']?' active':'').'"'.($val['mu_new_win']==='1'?' target="_blank"':'').'>';
 	?>
 					<svg class="bd-placeholder-img" width="100%" height="41" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="gray"></rect></svg>
@@ -164,7 +164,7 @@ $menus = getSiteMenu();
 	<ul class="list-unstyled"><li style="visibility:hidden"></li>
 <?php
 	if(!empty($menus['footer'])){
-		foreach ($menus['footer'] as $val) {
+		foreach ($menus['footer'] as $val){
 			echo '<li class="d-inline mx-2"><a href="'. escapeHTML($val['mu_link']) .'"'.($val['mu_new_win']==='1'?' target="_blank"':'').' title="'.escapeHTML($val['mu_about']).'">'. escapeHTML($val['mu_title']) .'</a></li>';
 		}
 	}

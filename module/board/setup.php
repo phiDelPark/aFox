@@ -6,16 +6,16 @@ if($is_new = (empty($_GET['bo_id']) || $_GET['bo_id'] === '@new')){
 	foreach($r as $v) $BOARD[$v['Field']] = $v['Default'];
 } else{
 	$BOARD = DB::get(_AF_MODULE_TABLE_, '*', ['md_id'=>$_GET['bo_id']]);
-	if(empty($BOARD['md_id'])) {
+	if(empty($BOARD['md_id'])){
 		messageBox(getLang('error_founded'), 4201);
 		return;
-	} else if(!isGrant('view', $BOARD['md_id'])) {
+	} else if(!isGrant('view', $BOARD['md_id'])){
 		messageBox(getLang('error_permitted'), 4501);
 		return;
 	}
 
 	// 확장 변수가 있으면 unserialize
-	if(!empty($BOARD['md_extra']) && !is_array($BOARD['md_extra'])) {
+	if(!empty($BOARD['md_extra']) && !is_array($BOARD['md_extra'])){
 		$BOARD['md_extra'] = unserialize($BOARD['md_extra']);
 		$md_extra_keys = empty($BOARD['md_extra']['keys'])?'':$BOARD['md_extra']['keys'];
 	}
@@ -37,9 +37,9 @@ $BOARD['md_category2'] = empty($tmpa[1]) ? '' : $tmpa[1];
 	<button type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('permanent_delete')?></button>
 </form>
 <script>
-function validateForm(f) {
+function validateForm(f){
 	var return_value = prompt('<?php echo getLang('confirm_delete',['board'])?>', 'Board ID?');
-	if (return_value === '<?php echo $BOARD['md_id']?>') {f.md_id.value = return_value; return true;} else return false;
+	if (return_value === '<?php echo $BOARD['md_id']?>'){f.md_id.value = return_value; return true;} else return false;
 }
 </script>
 <?php }?>
@@ -172,14 +172,14 @@ function validateForm(f) {
 		Your browser does not support iframes.
 		</iframe>
 		<script>
-			function clearThumbnail(a) {
+			function clearThumbnail(a){
 				var iframe = document.querySelector('#iframeClearThumbnail');
 				iframe.style.display = 'block';
 				iframe.contentWindow.location.href = '<?php echo getUrl('', 'module', 'board', 'popup', '1', 'clear', $_GET['bo_id']) ?>';
 				return false;
 			}
 		</script>
-<?php } else { ?>
+<?php }else{ ?>
 		<div class="form-text"><?php echo getLang('desc_thumbnail')?></div>
 <?php } ?>
 	</div>

@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 $_ADDON_INFO = [];
-@include_once _AF_ADDONS_PATH_ . $_GET['ao_id'] . '/lang/' . _AF_LANG_ . '.php';
-@require_once _AF_ADDONS_PATH_ . $_GET['ao_id'] . '/info.php';
+@include_once _AF_ADDONS_PATH_.$_GET['ao_id'].'/lang/'._AF_LANG_.'.php';
+@require_once _AF_ADDONS_PATH_.$_GET['ao_id'].'/info.php';
 $_ADDON_INFO['author'] = empty($_ADDON_INFO['link'])?escapeHTML($_ADDON_INFO['author']):('<a href="'.escapeHTML($_ADDON_INFO['link']).'" target="_blank">'.escapeHTML($_ADDON_INFO['author']).'</a>');
 ?>
 
@@ -17,7 +17,7 @@ $_ADDON_INFO['author'] = empty($_ADDON_INFO['link'])?escapeHTML($_ADDON_INFO['au
 </div>
 <div class="row">
 	<label class="col-md-2"><?php echo getLang('author') ?></label>
-	<span class="col-md-auto"><?php echo $_ADDON_INFO['author'] . ' ('.escapeHTML($_ADDON_INFO['email']) . ')' ?></span>
+	<span class="col-md-auto"><?php echo $_ADDON_INFO['author'].' ('.escapeHTML($_ADDON_INFO['email']).')' ?></span>
 </div>
 <p class="form-text"><?php echo nl2br(escapeHTML($_ADDON_INFO['about'])) ?></p>
 </div>
@@ -33,7 +33,7 @@ $_ADDON['grant_access'] = empty($out['grant_access']) ? '0' : $out['grant_access
 if(empty($_ADDON['access_mode'])) $_ADDON['access_mode'] = null;
 $_ADDON['use_editor'] = empty($_ADDON['use_editor']) ? 0 : $_ADDON['use_editor'];
 
-if(!empty($_ADDON['ao_extra'])) {
+if(!empty($_ADDON['ao_extra'])){
     $extra = unserialize($_ADDON['ao_extra']);
     unset($_ADDON['ao_extra']);
     $_ADDON = array_merge($_ADDON, $extra);
@@ -53,7 +53,7 @@ if(!empty($_ADDON['ao_extra'])) {
 	<input class="form-check-input ms-3" type="checkbox" name="use_mobile" id="id_use_mobile" value="1"<?php echo $_ADDON['use_mobile']=='1'?' checked':'' ?>>
 	<label for="id_use_mobile">Mobile</label>
 <?php
-	if(file_exists(_AF_ADDONS_PATH_ . $_GET['ao_id'] . '/editor.php')){
+	if(file_exists(_AF_ADDONS_PATH_.$_GET['ao_id'].'/editor.php')){
 		echo '<input class="form-check-input ms-3" type="checkbox" name="use_editor" id="id_use_editor" value="1"'.($_ADDON['use_editor']=='1'?' checked':'').'>'
 		."\n".'<label for="id_use_editor">Editor</label>';
 	}
@@ -71,21 +71,21 @@ if(!empty($_ADDON['ao_extra'])) {
 <hr>
 
 <?php
-require_once _AF_ADDONS_PATH_ . $_GET['ao_id'] . '/setup.php';
+require_once _AF_ADDONS_PATH_.$_GET['ao_id'].'/setup.php';
 
 $_list = DB::gets(_AF_MODULE_TABLE_,'md_id',[],['md_key'=>'DESC']);
-if(!DB::error()) {
+if(!DB::error()){
 	echo '<hr>
 		<label class="btn p-0 border-0 btn-link" for="advanced_setup">'.getLang('advanced_setup').'</label>
 		<input type="checkbox" id="advanced_setup" class="d-none">
 		<div class="advanced_setup my-2 mb-4"><div><label>'.getLang('md_id').':</label>&nbsp;&nbsp;<label><input class="form-check-input" name="access_mode" type="radio" value="include"'.($_ADDON['access_mode']!='exclude'?' checked="checked"':'').'> '.getLang('include').'</label>&nbsp;&nbsp;<label><input class="form-check-input" name="access_mode" type="radio" value="exclude"'.($_ADDON['access_mode']=='exclude'?' checked="checked"':'').'> '.getLang('exclude').'</label></div><p class="form-text">'.getLang('desc_access_md_id').'</p><div>';
 	$access_md_ids = [];
-	if(!empty($_ADDON['access_md_ids'])) {
-		foreach ($_ADDON['access_md_ids'] as $v) {
+	if(!empty($_ADDON['access_md_ids'])){
+		foreach ($_ADDON['access_md_ids'] as $v){
 			$access_md_ids[$v] = true;
 		}
 	}
-	foreach ($_list as $row) {
+	foreach ($_list as $row){
 		echo '<label><input class="form-check-input" name="access_md_ids[]" type="checkbox" value="'.$row['md_id'].'"'.(empty($access_md_ids[$row['md_id']])?'':' checked="checked"').'> '.$row['md_id'].'</label>&nbsp;&nbsp;';
 	}
 	echo '</div></div>';

@@ -3,34 +3,34 @@
 // * UTF-8
 // * PHP version 5.4.0 이상
 // * MYSQL version 5.1.0 이상
-require_once __DIR__ . '/../init/constant.php';
+require_once __DIR__.'/../init/constant.php';
 //load DB // When using a query, you must perform the escape yourself, or use parameters
-require_once _AF_PATH_ . 'lib/db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
+require_once _AF_PATH_.'lib/db/mysql'.(function_exists('mysqli_connect')?'i':'').'.php';
 ?>
 <!doctype html><html lang="ko"><head><meta charset="utf-8"></head><body>
 
 <?php
-$datadir = dirname(__FILE__) . '/../data/';
+$datadir = dirname(__FILE__).'/../data/';
 
-if(file_exists($datadir.'config/_db_config.php')) {
+if(file_exists($datadir.'config/_db_config.php')){
 	exit("<br>이미 설치되어있습니다.<br><br>다시 설치하시려면 아래 파일을 지워주세요.<br>./data/config/_db_config.php");
 }
 
-if(is_dir($datadir) || @mkdir($datadir, 0707)) {
-	if(is_dir($datadir)) { chmod($datadir, 0707); }
-} else {
+if(is_dir($datadir) || @mkdir($datadir, 0707)){
+	if(is_dir($datadir)){ chmod($datadir, 0707); }
+}else{
 	exit("<br>{$datadir} 디렉토리를 생성하지 못했습니다.");
 }
 
-if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN'){
  if (!(is_readable($datadir) && is_writeable($datadir) && is_executable($datadir))){
 	exit("<br>{$datadir} 디렉토리 퍼미션을 707로 변경하여 주세요.");
  }
 }
 
-if(empty($_POST['db_name'])) {
+if(empty($_POST['db_name'])){
 
-	if(version_compare(PHP_VERSION, '5.4.0', '<')) {
+	if(version_compare(PHP_VERSION, '5.4.0', '<')){
 		echo '<h3 style="color:red">PHP 버전이 낮습니다.<br>PHP 5.4.0 이상 버전을 사용해주세요. </h3>';
 	}
 
@@ -62,12 +62,12 @@ $dir_arr = array (
 	$datadir.'config',
 );
 
-for ($i=0; $i<count($dir_arr); $i++) {
+for ($i=0; $i<count($dir_arr); $i++){
 	if(!is_dir($dir_arr[$i]) && !@mkdir($dir_arr[$i], 0755)) exit("{$dir_arr[$i]} 디렉토리를 생성하지 못했습니다.");
 	@chmod($dir_arr[$i], 0755);
 }
 
-if(empty($_POST['db_host'])||empty($_POST['db_port'])||empty($_POST['db_name'])||empty($_POST['db_user'])||empty($_POST['af_pass'])) {
+if(empty($_POST['db_host'])||empty($_POST['db_port'])||empty($_POST['db_name'])||empty($_POST['db_user'])||empty($_POST['af_pass'])){
 	exit("* 필수 값을 모두 채워 주세요.");
 }
 
@@ -110,17 +110,17 @@ $o['time_zone'] = isset($o['time_zone']) ? $o['time_zone'] : "Asia/Seoul";
 
 DB::connect($o);
 
-function createHash($password) {
+function createHash($password){
 	try {
 		$password = trim($password);
-		if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT') {
+		if(_AF_PASSWORD_ALGORITHM_ == 'BCRYPT'){
 			return password_hash($password, PASSWORD_BCRYPT);
-		} else {
+		}else{
 			$password =  DB::escape($password);
 			$result = DB::query("SELECT password('$password') as pass", true);
 			return $result[0]['pass'];
 		}
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		exit($ex->getMessage());
 	}
 }
@@ -131,14 +131,14 @@ if($is_innodb){
 	try {
 		@DB::query("SET GLOBAL innodb_file_format=Barracuda");
 		@DB::query("SET GLOBAL innodb_file_per_table=ON");
-	} catch (Exception $e) {
+	} catch (Exception $e){
 	}
-	if($innodb_option==='') {
+	if($innodb_option===''){
 	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPACT DEFAULT CHARSET='.$charset.';';
-	} else {
+	}else{
 	   $_engine = ' ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE='.$innodb_option.' DEFAULT CHARSET='.$charset.';';
 	}
-} else {
+}else{
 	$_engine = ' ENGINE=MyISAM DEFAULT CHARSET='.$charset.';';
 }
 
@@ -442,7 +442,7 @@ if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCod
 $_err_keys = 'insert_members';
 $row = DB::get(_AF_MEMBER_TABLE_, 'mb_id', ['mb_id'=>'admin']);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
-if (empty($row['mb_id'])) {
+if (empty($row['mb_id'])){
 	$sql = 'INSERT INTO '._AF_MEMBER_TABLE_.' (`mb_point`, `mb_rank`, `mb_id`, `mb_password`, `mb_nick`, `mb_about`, `mb_regdate`, `mb_login`, `mb_block_id`, `mb_extra`) VALUES (0, "%s", "%s", "%s", "%s", "", NOW(), NOW(), "", "")';
 	DB::query(sprintf($sql, 's', 'admin', createHash($af_pass), '관리자'));
 }
@@ -450,7 +450,7 @@ if (empty($row['mb_id'])) {
 $_err_keys = 'insert_themes';
 $row = DB::get(_AF_THEME_TABLE_, 'th_id', ['th_id'=>'default']);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
-if (empty($row['th_id'])) {
+if (empty($row['th_id'])){
 	$tmp = [];
 	$tmp['carousel_item_1'] = '<h2 class="fw-bold">First slide label</h2><p>Some representative placeholder content for the first slide.</p>';
 	$tmp['carousel_item_2'] = '<h2 class="fw-bold">Second slide label</h2><p>Some representative placeholder content for the second slide.</p>';
@@ -464,7 +464,7 @@ if (empty($row['th_id'])) {
 $_err_keys = 'insert_config';
 $row = DB::get(_AF_CONFIG_TABLE_, 'theme', []);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
-if (empty($row['theme'])) {
+if (empty($row['theme'])){
 	$sql = 'INSERT INTO '._AF_CONFIG_TABLE_.' (`version`, `lang`,`theme`, `start`, `title`, `use_signup`) VALUES ("'._AF_VERSION_.'", "ko", "default", "welcome", "AfoX", "1")';
 	DB::query($sql);
 }
@@ -472,7 +472,7 @@ if (empty($row['theme'])) {
 $_err_keys = 'insert_modules';
 $row = DB::get(_AF_MODULE_TABLE_, 'md_id', ['md_id'=>'welcome']);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
-if (empty($row['md_id'])) {
+if (empty($row['md_id'])){
 	$sql = 'INSERT INTO '._AF_MODULE_TABLE_.' (`md_id`, `md_key`, `md_title`, `md_regdate`, `md_extra`) VALUES ("%s", "%s", "%s", NOW(), "")';
 	DB::query(sprintf($sql, 'welcome', 'page', 'CMS'));
 }
@@ -480,24 +480,24 @@ if (empty($row['md_id'])) {
 $_err_keys = 'insert_pages';
 $row = DB::get(_AF_PAGE_TABLE_, 'md_id', ['md_id'=>'welcome']);
 if($error = DB::error()) throw new Exception($error->getMessage(),$error->getCode());
-if (empty($row['md_id'])) {
+if (empty($row['md_id'])){
 	$doc_data = '';
-	$fp = fopen(dirname(__FILE__) . '/../README.md',"r");
+	$fp = fopen(dirname(__FILE__).'/../README.md',"r");
 	while( !feof($fp) ) $doc_data .= fgets($fp);
 	fclose($fp);
 	$sql = 'INSERT INTO '._AF_PAGE_TABLE_.' (`md_id`, `pg_type`, `pg_content`, `pg_update`, `pg_regdate`) VALUES ("%s", "1", %s, NOW(), NOW())';
 	DB::query(sprintf($sql, 'welcome', "'".str_replace(['\\',"\0","\n","\r","'",'"',"\x1a"],['\\\\','\\0','\\n','\\r',"\\'",'\\"','\\Z'],$doc_data)."'"));
 }
 
-} catch (Exception $ex) {
+} catch (Exception $ex){
 	DB::rollback();
-	exit('{"STATUS":' . $ex->getCode() . ',"MESSAGE":"'.$_err_keys.': ' . $ex->getMessage() .'"}');
+	exit('{"STATUS":'.$ex->getCode().',"MESSAGE":"'.$_err_keys.': '.$ex->getMessage() .'"}');
 }
 
 DB::commit();
 
 $file = $datadir.'config/prohibit_id.php';
-if(!file_exists($file)) {
+if(!file_exists($file)){
 	$f = @fopen($file, 'w');
 	fwrite($f, "<?php if(!defined('__AFOX__')) exit();\n");
 	fwrite($f, "\$_PROHIBIT_IDS=array('system','시스템','admin','administrator','관리자','운영자','주인장','어드민','webmaster','웹마스터','sysop','시삽','시샵','manager','매니저','메니저','root','루트','support','서포트','guest','방문객');");
@@ -506,7 +506,7 @@ if(!file_exists($file)) {
 }
 
 $file = $datadir.'config/base_cdn_list.php';
-if(!file_exists($file)) {
+if(!file_exists($file)){
 	$f = @fopen($file, 'w');
 	fwrite($f, "<?php if(!defined('__AFOX__')) exit();?>\n");
 	fwrite($f, '<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">'."\n");

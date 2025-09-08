@@ -13,7 +13,9 @@
 	<input type="hidden" name="md_id" value="<?php echo _MID_?>" />
 
 	<div class="mb-4">
-		<?php displayEditor(
+		<?php
+			@include_once _AF_MODULES_PATH_.'editor/index.php';
+			displayEditor(
 				'pg_content',
 				$_DATA['pg_content'],
 				[

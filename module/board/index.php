@@ -1,9 +1,9 @@
 <?php if(!defined('__AFOX__')) exit();
-include_once _AF_INIT_PATH_ . 'patterns.php';
+include_once _AF_INIT_PATH_.'patterns.php';
 
 // 트리거 확인및 설치
 installModuleTrigger('board', 0);
-@include_once dirname(__FILE__) . '/funcs.php';
+@include_once dirname(__FILE__).'/funcs.php';
 
 // 모듈 설정 확장변수 unserialize
 $_CFG['md_extra'] = empty($_CFG['md_extra']) ? [] : unserialize($_CFG['md_extra']);
@@ -14,15 +14,15 @@ $_CFG['md_category'] = $_CFG['md_category2'][0];
 $_CFG['md_category2'] = empty($_CFG['md_category2'][1]) ? '' : $_CFG['md_category2'][1];
 }else $_CFG['md_category2'] = "";
 
-function procBoardDefault($data) {
+function procBoardDefault($data){
 	$act = strtolower($data['act']);
-	$dir = _AF_MODULES_PATH_ . 'board/proc/';
-	$inc_file = $dir . $act . '.php';
+	$dir = _AF_MODULES_PATH_.'board/proc/';
+	$inc_file = $dir.$act.'.php';
 
-	if (($is=file_exists($inc_file)) && checkProtect('proc.'.$act)) {
+	if (($is=file_exists($inc_file)) && checkProtect('proc.'.$act)){
 		require_once $inc_file;
 		return checkProtectData('proc.'.$act, proc($data));
-	} else {
+	}else{
 		return set_error(
 			getLang($is ? 'error_permitted' : 'error_request'),
 			$is ? 4501 : 4303
@@ -30,22 +30,22 @@ function procBoardDefault($data) {
 	}
 }
 
-function dispBoardDefault($data) {
-	if (!empty($data['clear']) && checkProtect('clear')) {
-		require_once _AF_MODULES_PATH_ . 'board/clear.php';
+function dispBoardDefault($data){
+	if (!empty($data['clear']) && checkProtect('clear')){
+		require_once _AF_MODULES_PATH_.'board/clear.php';
 		exit;
-	} else if (!($disp = strtolower(@$data['disp']))) {
+	} else if (!($disp = strtolower(@$data['disp']))){
 		$disp = empty($data['srl']) ? 'list' : 'view';
 	}
 
-	$dir = _AF_MODULES_PATH_ . 'board/disp/';
-	$inc_file = $dir . $disp . '.php';
+	$dir = _AF_MODULES_PATH_.'board/disp/';
+	$inc_file = $dir.$disp.'.php';
 
-	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$disp)) {
+	if (($is=file_exists($inc_file)) && checkProtect('disp.'.$disp)){
 		require_once $inc_file;
 		$result = proc($data);
 		return $result;
-	} else {
+	}else{
 		return set_error(
 			getLang($is ? 'error_permitted' : 'error_request'),
 			$is ? 4501 : 4303

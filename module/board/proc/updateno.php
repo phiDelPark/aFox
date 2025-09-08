@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	$wr_srl = (int) $data['wr_srl'];
 	if(empty($wr_srl)) return set_error(getLang('error_request'),4303);
 
@@ -42,7 +42,7 @@ function proc($data) {
 
 		$wr_no = $doc['wr_no'] + 1;
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

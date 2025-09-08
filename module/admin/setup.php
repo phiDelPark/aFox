@@ -107,7 +107,7 @@ input[name=favicon]::before {
 	<div class="mb-4">
 		<?php
 			$_ACCESS_IP_MODE = '';
-			if (file_exists($tmp = _AF_CONFIG_DATA_.'access_ip.php')) {
+			if (file_exists($tmp = _AF_CONFIG_DATA_.'access_ip.php')){
 				include $tmp;
 			}
 		?>
@@ -125,7 +125,7 @@ input[name=favicon]::before {
 	<div class="mb-4">
 		<label class="form-label" for="prohibitId"id="prohibitIdLabel"><?php echo getLang('prohibit_id')?></label>
 		<div class="input-group">
-		<textarea class="form-control" rows="3" name="prohibit_id" id="prohibitId" aria-describedby="prohibitIdLabel prohibitIdDesc"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'prohibit_id.php')) {include $tmp; echo implode(',',$_PROHIBIT_IDS);} ?></textarea>
+		<textarea class="form-control" rows="3" name="prohibit_id" id="prohibitId" aria-describedby="prohibitIdLabel prohibitIdDesc"><?php if (file_exists($tmp = _AF_CONFIG_DATA_.'prohibit_id.php')){include $tmp; echo implode(',',$_PROHIBIT_IDS);} ?></textarea>
 		</div>
 		<div class="form-text" id="prohibitIdDesc"><?php echo getLang('desc_prohibit_id')?></div>
 	</div>

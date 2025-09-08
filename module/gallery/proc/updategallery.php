@@ -8,15 +8,15 @@ function proc($data)
 
 	global $_MEMBER;
 
-	if(empty($_MEMBER)) {
+	if(empty($_MEMBER)){
 		$data['mb_nick'] = empty($data['mb_nick'])?'':$data['mb_nick'];
-		if(empty($data['mb_nick']) || empty($data['mb_password'])) {
+		if(empty($data['mb_nick']) || empty($data['mb_password'])){
 			return set_error(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
 		}
 		$data['mb_srl'] = 0;
 		$data['mb_rank'] = 0;
 		$encrypt_password = createHash($data['mb_password']);
-	} else {
+	}else{
 		$data['mb_srl'] = $_MEMBER['mb_srl'];
 		$data['mb_rank'] = $_MEMBER['mb_rank'];
 		$data['mb_nick'] = $_MEMBER['mb_nick'];
@@ -30,11 +30,11 @@ function proc($data)
 	if(empty($module)) return set_error(getLang('error_founded'), 4201);
 
 	$data['wr_category'] = '';
-	if(!empty($module['md_category'])) {
+	if(!empty($module['md_category'])){
 		if(empty($data['wr_tags'])) return set_error(getLang('request_input',['category']), 1);
 		$md_categorys = explode(',', $module['md_category']);
-		foreach ($data['wr_tags'] as $value) {
-			if(!in_array($value, $md_categorys)) {
+		foreach ($data['wr_tags'] as $value){
+			if(!in_array($value, $md_categorys)){
 				return set_error(getLang('invalid_value', ['category']), 2001);
 			}
 		}
@@ -57,12 +57,12 @@ function proc($data)
 
 	try {
 
-		if($upload_count > 0) {
+		if($upload_count > 0){
 			// 권한 체크
 			if(!isGrant('upload', $md_id)) throw new Exception(getLang('warn_not_allowable', ['upload']), 3505);
 			$exif = function_exists('exif_read_data');
 
-			for ($i=0; $i < $upload_count; $i++) {
+			for ($i=0; $i < $upload_count; $i++){
 				// 빈 파일 넘김
 				if(empty($files['tmp_name'][$i])) continue;
 
@@ -75,7 +75,7 @@ function proc($data)
 					'error' => $files['error'][$i]
 				];
 
-				if($file_accept && !preg_match('/\.('.($file_accept).')$/i', $file['name'])) {
+				if($file_accept && !preg_match('/\.('.($file_accept).')$/i', $file['name'])){
 					throw new Exception(getLang('warn_allowable', [$module['md_file_accept']]), 3503);
 				}
 				// 실행 가능한 파일 못하게 처리
@@ -84,7 +84,7 @@ function proc($data)
 				$ftype = explode('/', strtolower($file['type']));
 				$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
 
-				$to_files[$i] = _AF_ATTACH_DATA_ . $ftype . '/' . $md_id . '/1/' . $fname;
+				$to_files[$i] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/1/'.$fname;
 
 				$ret = moveUploadedFile($file, $to_files[$i], $file_max_size);
 				if(!empty($ret['error'])) throw new Exception($ret['message'], $ret['error']);
@@ -92,7 +92,7 @@ function proc($data)
 				if($exif && $ftype == 'image' && ($ifd0=@exif_read_data($to_files[$i]))){
 					$DateTime = trim(empty($ifd0['DateTimeOriginal']) ? '' : $ifd0['DateTimeOriginal']);
 					if($DateTime) $file['date'] = date('Y-m-d H:i:s', strtotime($DateTime));
-					if($Model = (trim(empty($ifd0['Make']) ? 'Unavailable' : $ifd0['Make']))) {
+					if($Model = (trim(empty($ifd0['Make']) ? 'Unavailable' : $ifd0['Make']))){
 						$Model .= ' - '.trim(empty($ifd0['Model']) ? 'Unavailable' : $ifd0['Model']);
 						$file['name'] = $Model;
 					}
@@ -127,12 +127,12 @@ function proc($data)
 		}
 		//*/
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 
 		// Engine == MyISAM 트랜잭션을 지원 안한다.
-		if (DB::engine(_AF_FILE_TABLE_) == 'myisam') {
-			if(count($new_files)>0) {
+		if (DB::engine(_AF_FILE_TABLE_) == 'myisam'){
+			if(count($new_files)>0){
 				$nfile_srls = [];
 				foreach ($new_files as $file) $nfile_srls[] = $file['mf_srl'];
 				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $nfile_srls)]);

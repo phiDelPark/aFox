@@ -31,8 +31,8 @@ function proc($data)
 
 	try {
 		// 권한 체크, 파일 첨부 때문에 먼저 함
-		if ($new_insert) {
-			if (!isset($data['new_md_id'])) {
+		if ($new_insert){
+			if (!isset($data['new_md_id'])){
 				throw new Exception(getLang('error_request'),4303);
 			}
 
@@ -50,8 +50,8 @@ function proc($data)
 			DB::insert(_AF_PAGE_TABLE_,['md_id'=>$md_id,'pg_regdate(=)'=>'NOW()','pg_update(=)'=>'NOW()']);
 
 			$module = getModule($md_id);
-		} else {
-			if (isset($data['new_md_id']) || $module['md_key'] != 'page') {
+		}else{
+			if (isset($data['new_md_id']) || $module['md_key'] != 'page'){
 				throw new Exception(getLang('warn_exists', ['id']), 3103);
 			}
 
@@ -66,16 +66,16 @@ function proc($data)
 
 		// 관리자만 권한 설정 가능
 		/*
-		if (!isAdmin()) {
+		if (!isAdmin()){
 			$data['grant_view'] = $module['grant_view'];
 			$data['grant_reply'] = $module['grant_reply'];
 			$data['grant_download'] = $module['grant_download'];
 		}
 		*/
 
-		if (!empty($data['remove_files'])) {
+		if (!empty($data['remove_files'])){
 
-			foreach ($data['remove_files'] as $val) {
+			foreach ($data['remove_files'] as $val){
 				$file = DB::get(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_srl'=>$val
@@ -83,7 +83,7 @@ function proc($data)
 				if (!empty($file) && true === DB::delete(_AF_FILE_TABLE_, [
 					'md_id'=>$md_id,
 					'mf_srl'=>$val])
-				) {
+				){
 					$ftype = explode('/', strtolower($file['mf_type']));
 					$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
 					$unlink_files[] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/'.$file['mf_target'].'/'.$file['mf_upload_name'];
@@ -94,8 +94,8 @@ function proc($data)
 		// 첨부 파일 수 계산을 위해 미리 가져 오기
 		$file_count = DB::count(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>1]);
 
-		if ($upload_count>0) {
-			for ($i=0; $i < $upload_count; $i++) {
+		if ($upload_count>0){
+			for ($i=0; $i < $upload_count; $i++){
 				// 빈 파일 넘김
 				if(empty($files['tmp_name'][$i])) continue;
 
@@ -114,7 +114,7 @@ function proc($data)
 				$ftype = explode('/', strtolower($file['type']));
 				$ftype = empty($file_types[$ftype[0]]) ? 'binary' : $ftype[0];
 
-				$to_files[$i] = _AF_ATTACH_DATA_ . $ftype . '/' . $md_id . '/1/' . $fname;
+				$to_files[$i] = _AF_ATTACH_DATA_.$ftype.'/'.$md_id.'/1/'.$fname;
 
 				$ret = moveUploadedFile($file, $to_files[$i], 0);
 				if(!empty($ret['error'])) throw new Exception($ret['message'], $ret['error']);
@@ -140,7 +140,7 @@ function proc($data)
 			$patterns = '/\(blob[^\)\"]+\s\"blob-([0-9]+)\"\)/Us';
 			$data['pg_content'] = preg_replace_callback(
 				$patterns,
-				function ($matches) use($new_files) {
+				function ($matches) use($new_files){
 					$file = $new_files[(int)$matches[1]];
 					$es_name = escapeHTML($file['name']);
 					$isimg = substr($file['type'], 0, 5) == 'image';
@@ -189,16 +189,16 @@ function proc($data)
 		// 썸네일 제거
 		unlinkAll(_AF_ATTACH_DATA_.'thumbnail/'.$md_id.'/');
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 
 		// Engine == MyISAM 트랜잭션을 지원 안한다.
-		if (DB::engine(_AF_PAGE_TABLE_) == 'myisam') {
-			if ($new_insert) {
+		if (DB::engine(_AF_PAGE_TABLE_) == 'myisam'){
+			if ($new_insert){
 				@DB::delete(_AF_PAGE_TABLE_, ['md_id'=>$md_id]);
 				@DB::delete(_AF_MODULE_TABLE_, ['md_id'=>$md_id]);
 				@DB::delete(_AF_FILE_TABLE_, ['md_id'=>$md_id,'mf_target'=>1]);
-			} else if (count($new_files)>0) {
+			} else if (count($new_files)>0){
 				$nfile_srls = [];
 				foreach ($new_files as $file) $nfile_srls[] = $file['mf_srl'];
 				@DB::delete(_AF_FILE_TABLE_, ['mf_srl{IN}'=>implode(',', $nfile_srls)]);

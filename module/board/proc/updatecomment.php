@@ -2,21 +2,21 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['wr_srl']) && empty($data['rp_parent']) && empty($data['rp_srl'])) return set_error(getLang('error_request'),4303);
 	if(empty($data['rp_content'])) return set_error(getLang('request_input', ['content']),1);
 
 	global $_MEMBER;
 
-	if(empty($_MEMBER)) {
+	if(empty($_MEMBER)){
 		$data['mb_nick'] = empty($data['mb_nick'])?'':$data['mb_nick'];
-		if(empty($data['mb_nick']) || empty($data['mb_password'])) {
+		if(empty($data['mb_nick']) || empty($data['mb_password'])){
 			return set_error(getLang('request_input', [getLang('%s, %s', ['id', 'password'])]), 1);
 		}
 		$data['mb_srl'] = 0;
 		$data['mb_rank'] = 0;
 		$encrypt_password = createHash($data['mb_password']);
-	} else {
+	}else{
 		$data['mb_srl'] = $_MEMBER['mb_srl'];
 		$data['mb_rank'] = $_MEMBER['mb_rank'];
 		$data['mb_nick'] = $_MEMBER['mb_nick'];
@@ -35,7 +35,7 @@ function proc($data) {
 	$ret_rp_srl = 0;
 	$new_insert = !empty($rp_parent) || empty($rp_srl);
 
-	if(!empty($rp_srl)) {
+	if(!empty($rp_srl)){
 		$cmt = DB::get(_AF_COMMENT_TABLE_, 'wr_srl, rp_parent, rp_secret, rp_depth, mb_srl, mb_password', ['rp_srl'=>$rp_srl]);
 		if(empty($cmt['wr_srl'])) return set_error(getLang('error_founded'), 4201);
 		$wr_srl = (int) abs(empty($cmt['wr_srl']) ? 0 : $cmt['wr_srl']);
@@ -46,7 +46,7 @@ function proc($data) {
 		// true이면 하위 답변도 비밀글
 		$parent_secret = !empty($rp_parent) && $cmt['rp_secret'] == '1';
 
-		if(!empty($rp_parent)) {
+		if(!empty($rp_parent)){
 			$_len = strlen($cmt['rp_depth']) + 1;
 			if ($_len > 5) return set_error(getLang('msg_not_write_reply'), 571);
 
@@ -65,13 +65,13 @@ function proc($data) {
 				]
 			);
 
-			if (empty($_out1['reply'])) {
+			if (empty($_out1['reply'])){
 				$rp_depth .= $_begin_char;
 			} else if (ord($_out1['reply']) == ord($_end_char))
 				return set_error(getLang('msg_not_write_reply'), 571);
 			else $rp_depth .= chr(ord($_out1['reply']) + 1);
 		}
-	} else {
+	}else{
 		$_out1 = DB::get(_AF_COMMENT_TABLE_, 'max(rp_parent) as max', ['wr_srl'=>$wr_srl]);
 		$rp_root = $_out1['max'] + 1;
 	}
@@ -80,17 +80,17 @@ function proc($data) {
 	if(empty($doc['wr_srl'])) return set_error(getLang('error_founded'), 4201);
 
 	// 권한 체크
-	if ($new_insert) {
-		if(!isGrant('reply', $doc['md_id'])) {
+	if ($new_insert){
+		if(!isGrant('reply', $doc['md_id'])){
 			return set_error(getLang('error_permitted'),4501);
 		}
 	}else{
-		if(empty($_MEMBER)) {
-			if(empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])) {
+		if(empty($_MEMBER)){
+			if(empty($cmt['mb_password']) || !checkPassword($data['mb_password'], $cmt['mb_password'])){
 				return set_error(getLang('error_permitted'),4501);
 			}
-		} else if(!isManager($doc['md_id'])) {
-			if($_MEMBER['mb_srl'] != $cmt['mb_srl']) {
+		} else if(!isManager($doc['md_id'])){
+			if($_MEMBER['mb_srl'] != $cmt['mb_srl']){
 				return set_error(getLang('error_permitted'),4501);
 			}
 		}
@@ -114,7 +114,7 @@ function proc($data) {
 	DB::transaction();
 
 	try {
-		if ($new_insert) {
+		if ($new_insert){
 
 			DB::insert(_AF_COMMENT_TABLE_,
 				[
@@ -155,7 +155,7 @@ function proc($data) {
 				), $data['mb_nick']
 			);
 
-		} else {
+		}else{
 
 			DB::update(_AF_COMMENT_TABLE_,
 				[
@@ -172,17 +172,17 @@ function proc($data) {
 		}
 
 		// 비회원이면 비밀번호 다시 안묻기위해 임시권한주기
-		if(empty($_MEMBER)) {
-			$PERMIT_KEY = md5($module['md_id'].'_'.$ret_rp_srl . '_' . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+		if(empty($_MEMBER)){
+			$PERMIT_KEY = md5($module['md_id'].'_'.$ret_rp_srl.'_'.$_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT']);
 			set_session('_AF_SECRET_COMMENT_'.$PERMIT_KEY, true);
 		}
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 
 		// Engine == MyISAM 트랜잭션을 지원 안한다.
-		if (DB::engine(_AF_COMMENT_TABLE_) == 'myisam') {
-			if($new_insert && !empty($ret_rp_srl)) {
+		if (DB::engine(_AF_COMMENT_TABLE_) == 'myisam'){
+			if($new_insert && !empty($ret_rp_srl)){
 				@DB::delete(_AF_COMMENT_TABLE_, ['rp_srl'=>$ret_rp_srl]);
 			}
 		}

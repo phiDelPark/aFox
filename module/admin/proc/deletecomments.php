@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['rp_srls'])) return set_error(getLang('error_request'),4303);
 
 	// 권한 체크 // 관리자만
@@ -26,7 +26,7 @@ function proc($data) {
 			]
 		);
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

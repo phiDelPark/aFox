@@ -31,15 +31,15 @@
 	$start_page = $current_page = 1;
 	$rank_arr = ['61'=>getLang('manager'),'67'=>getLang('admin')];
 
-	if($error) {
+	if($error){
 		messageBox($error['message'], $error['error'], false);
-	} else {
+	}else{
 		$current_page = $member_list['current_page'];
 		$total_page = $member_list['total_page'];
 		$start_page = $member_list['start_page'];
 		$end_page = $member_list['end_page'];
 
-		foreach ($member_list['data'] as $key => $value) {
+		foreach ($member_list['data'] as $key => $value){
 			$rank = ord($value['mb_rank']) - 48;
 			echo '<tr><th scope="row">'.$value['mb_id'].'</th>';
 			echo '<td>'.(isset($rank_arr[$rank])?$rank_arr[$rank]:'LV. '.$rank).'</td>';

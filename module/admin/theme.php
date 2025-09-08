@@ -1,14 +1,14 @@
 <?php
 	if(!defined('__AFOX__')) exit();
 
-	$th_list = DB::gets(_AF_THEME_TABLE_, 'th_id', [], function ($r) {
+	$th_list = DB::gets(_AF_THEME_TABLE_, 'th_id', [], function ($r){
 		$rset = [];
-		while ($row = DB::fetch($r)) {
+		while ($row = DB::fetch($r)){
 			$rset[$row['th_id']] = true;
 		}
 		return $rset;
 	});
-	if($ex = DB::error()) {
+	if($ex = DB::error()){
 		messageBox($ex->getMessage(), $ex->getCode(), false);
 	}
 	$theme_id = empty($_CFG['theme']) ? 'default' : $_CFG['theme'];
@@ -33,8 +33,8 @@
 
 <?php
 $theme_dir = _AF_THEMES_PATH_;
-if(is_dir($theme_dir)) {
-	foreach(glob($theme_dir.'*', GLOB_ONLYDIR) as $dir) {
+if(is_dir($theme_dir)){
+	foreach(glob($theme_dir.'*', GLOB_ONLYDIR) as $dir){
 		$name = basename($dir);
 		if(isset($th_list[$name])) $th_list[$name] = false;
 
@@ -64,7 +64,7 @@ if(is_dir($theme_dir)) {
 </thead>
 <tbody>
 <?php
-	foreach($th_list as $key => $value) {
+	foreach($th_list as $key => $value){
 		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><a class="btn btn-primary btn-xs mw-10" onclick="return deleteThemeConfig(\''.$key.'\')">'.getLang('empty_%s', ['']).'</a></td></tr>';
 	}
 ?>

@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(_MODULE_!='board'||empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 	if(isManager($data['md_id']) === false) return set_error(getLang('error_permitted'),4501);
 
@@ -10,21 +10,21 @@ function proc($data) {
 	if(empty($module['md_id'])) return set_error(getLang('error_founded'),4201);
 
 	// 확장 변수가 있으면 unserialize
-	if(!empty($module['md_extra']) && !is_array($module['md_extra'])) {
+	if(!empty($module['md_extra']) && !is_array($module['md_extra'])){
 		$md_extra = unserialize($module['md_extra']);
-	} else {
+	}else{
 		$md_extra = [];
 	}
 
 	$remove_array = ['md_id', 'module', 'id', 'act', 'disp', 'success_url', 'error_url','response_tags'];
-	foreach ($remove_array as $value) {
+	foreach ($remove_array as $value){
 		if(isset($data[$value])) unset($data[$value]);
 	}
 
 	// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 	$md_extra['configs'] = $data;
 	$md_extra = serialize($md_extra);
-	if(strlen($md_extra) > 65535) {
+	if(strlen($md_extra) > 65535){
 		return set_error(getLang('overflow_value', ['extra_keys','Size',65535]), 2301);
 	}
 

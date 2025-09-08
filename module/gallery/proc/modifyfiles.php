@@ -1,6 +1,6 @@
 <?php if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['md_id'])) return set_error(getLang('error_request'),4303);
 
 	// 권한 체크 // 관리자만
@@ -8,7 +8,7 @@ function proc($data) {
 
 	$srls = [];
 	$mf_srls = explode(',', $data['mf_srls']);
-	foreach ($mf_srls as $value) {
+	foreach ($mf_srls as $value){
 		if($value = trim($value)) $srls[] = $value;
 	}
 	if(!count($srls)) return set_error(getLang('warn_selected', ['image']),4303);
@@ -18,10 +18,10 @@ function proc($data) {
 
 	$data['wr_category'] = $data['wr_tags'] = '';
 	$wr_tags = explode(',', $data['mf_about']);
-	if(!empty($module['md_category'])) {
+	if(!empty($module['md_category'])){
 		$md_categorys = explode(',', $module['md_category']);
-		foreach ($wr_tags as $value) {
-			if(!in_array($value, $md_categorys)) {
+		foreach ($wr_tags as $value){
+			if(!in_array($value, $md_categorys)){
 				return set_error(getLang('invalid_value', ['category']), 2001);
 			}
 		}
@@ -33,7 +33,7 @@ function proc($data) {
 
 	try {
 		DB::update(_AF_FILE_TABLE_, ['mf_about'=>$data['wr_tags']], ['md_id'=>$data['md_id'],'mf_srl{IN}'=>implode(',', $srls)]);
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

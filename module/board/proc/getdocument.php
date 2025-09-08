@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(!isset($data['wr_srl'])) return set_error(getLang('error_request'),4303);
 
 	global $_MEMBER;
@@ -12,31 +12,31 @@ function proc($data) {
 
 	// 요청값이 있으면 요청값만 보냄
 	$response_tags = empty($data['response_tags']) ? '' : $data['response_tags'];
-	if(!empty($response_tags) && count($response_tags) > 0) {
+	if(!empty($response_tags) && count($response_tags) > 0){
 		$field = $default_field.','.implode(',', $response_tags);
 	}
 
 	$doc = getDocument($data['wr_srl'], $field);
 
-	if(!empty($doc['error'])) {
+	if(!empty($doc['error'])){
 		return set_error($doc['message'],$doc['error']);
-	} else if(empty($doc['wr_srl'])) {
+	} else if(empty($doc['wr_srl'])){
 		return set_error(getLang('error_founded'),4201);
-	} else if(!isGrant('view', $doc['md_id'])) {
+	} else if(!isGrant('view', $doc['md_id'])){
 		return set_error(getLang('error_permitted'),4501);
 	}
 
 	// 비밀글이면
-	if($doc['wr_secret'] == '1' && !isManager($doc['md_id'])) {
+	if($doc['wr_secret'] == '1' && !isManager($doc['md_id'])){
 		// 권한 체크
-		if(empty($_MEMBER) || empty($doc['mb_srl'])) {
-			if(empty($data['mb_password'])) {
+		if(empty($_MEMBER) || empty($doc['mb_srl'])){
+			if(empty($data['mb_password'])){
 				return set_error(getLang('request_input', ['password']),1);
 			}
-			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])) {
+			if (empty($doc['mb_password']) || !checkPassword($data['mb_password'], $doc['mb_password'])){
 				return set_error(getLang('error_password'),4801);
 			}
-		} else if($_MEMBER['mb_srl'] != $doc['mb_srl']) {
+		} else if($_MEMBER['mb_srl'] != $doc['mb_srl']){
 			return set_error(getLang('error_permitted'),4501);
 		}
 	}
@@ -46,7 +46,7 @@ function proc($data) {
 	//if($hide_ipaddress) unset($doc['mb_ipaddress']);
 
 	// 확장 변수가 있으면 unserialize
-	if(!empty($doc['wr_extra']) && !is_array($doc['wr_extra'])) {
+	if(!empty($doc['wr_extra']) && !is_array($doc['wr_extra'])){
 		$doc['wr_extra'] = unserialize($doc['wr_extra']);
 	}
 

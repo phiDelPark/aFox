@@ -7,10 +7,10 @@
 		foreach($r as $v) $PAGE[$v['Field']] = $v['Default'];
 	} else{
 		$PAGE = DB::get(_AF_PAGE_TABLE_, '*', ['md_id'=>$_GET['pg_id']]);
-		if(empty($PAGE['md_id'])) {
+		if(empty($PAGE['md_id'])){
 			messageBox(getLang('error_founded'), 4201);
 			return;
-		} else if(!isGrant('view', $PAGE['md_id'])) {
+		} else if(!isGrant('view', $PAGE['md_id'])){
 			messageBox(getLang('error_permitted'), 4501);
 			return;
 		}
@@ -28,9 +28,9 @@
 	<button type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('permanent_delete')?></button>
 </form>
 <script>
-function validateForm(f) {
+function validateForm(f){
 	var return_value = prompt('<?php echo getLang('confirm_delete',['page'])?>', 'Page ID?');
-	if (return_value === '<?php echo $PAGE['md_id']?>') {f.md_id.value = return_value; return true;} else return false;
+	if (return_value === '<?php echo $PAGE['md_id']?>'){f.md_id.value = return_value; return true;} else return false;
 }
 </script>
 <?php }?>
@@ -97,7 +97,9 @@ function validateForm(f) {
 	</div>
 
 	<div class="editor-group mb-4">
-		<?php displayEditor(
+		<?php
+			@include_once _AF_MODULES_PATH_.'editor/index.php';
+			displayEditor(
 				'pg_content',
 				$PAGE['pg_content'],
 				[

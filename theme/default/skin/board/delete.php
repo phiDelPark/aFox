@@ -1,6 +1,6 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	@include_once dirname(__FILE__) . '/common.php';
+	@include_once dirname(__FILE__).'/common.php';
 ?>
 <section id="documentDelete" aria-label="Delete this post?">
 	<button class="btn-close float-end" aria-label="Back" onclick="window.history.go(-1);return false"></button>
@@ -12,10 +12,10 @@
 	<input type="hidden" name="act" value="deleteDocument" />
 	<input type="hidden" name="wr_srl" value="<?php echo $DOC['wr_srl']?>" />
 
-		<?php if (empty($_MEMBER) || ($_MEMBER['mb_srl'] !== $DOC['mb_srl'])) { ?>
+		<?php if (empty($_MEMBER) || ($_MEMBER['mb_srl'] !== $DOC['mb_srl'])){ ?>
 		<div class="mb-4">
 			<input type="text" name="mb_nick" class="form-control mb-1" maxlength="20" value="<?php echo $DOC['mb_nick']?>" required readonly>
-			<?php if (!$is_manager) { ?>
+			<?php if (!$is_manager){ ?>
 				<input type="password" name="mb_password" class="form-control" placeholder="<?php echo getLang('password')?>">
 			<?php } ?>
 		</div>

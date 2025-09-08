@@ -1,5 +1,6 @@
 <?php
 if(!defined('__AFOX__')) exit();
+function displayEditor($_ID, $_CONTENT, $_EDITOR = []){
 $_EDITOR['toolbar'] = isset($_EDITOR['toolbar']) ? $_EDITOR['toolbar'] : false;
 $_EDITOR['typebar'] = isset($_EDITOR['typebar']) ? $_EDITOR['typebar'] : false;
 $_EDITOR['readonly'] = isset($_EDITOR['readonly']) ? $_EDITOR['readonly'] : false;
@@ -9,13 +10,13 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 ?>
 <style>#editorTypebar .bi-unchecked::before{padding-right:5px;vertical-align:-.27em;content:url(./module/editor/bi-uncheck.svg);filter:invert(50%)}#editorTypebar .bi-unchecked.checked::before{content:url(./module/editor/bi-check.svg)}#editorToolbar,#editorTypebar{font-size:12px;font-family:Arial}#editorToolbar button{padding:2px;border-radius:2px;height:20px;width:20px}#editorToolbar button>.bi{position:relative;left:-1px;top:-2px;height:16px;width:16px;vertical-align:baseline}#uploadFiles img,#uploadedFiles img{height:48px;width:48px;margin-right:6px;background-color:var(--bs-border-color)!important}#editorContent .focused{outline:0;box-shadow:0 0 0 .25rem rgba(13,110,253,.3)}#editorContent .is-invalid,[name="remove_files[]"]+img{outline:0;box-shadow:0 0 0 .25rem rgba(253,13,13,.3)}#editorContent iframe,#editorContent textarea{min-height:<?php echo $_EDITOR['height'] ?>}</style>
 <div id="editor<?php echo ucfirst($_ID) ?>" class="clearfix w-100 editor-group">
-<?php if($_EDITOR['typebar']) { ?>
+<?php if($_EDITOR['typebar']){ ?>
 	<div class="d-flex w-100 justify-content-between"<?php echo $_EDITOR['readonly']?' readonly':''?> aria-label="Editor Options">
 		<label><?php echo $_EDITOR['typebar'][0]?></label>
 		<div id="editorTypebar" class="user-select-none pt-1">
 		<?php
 			$typebar_item = '<span style="cursor:pointer" class="bi-unchecked%s ms-2" tabindex="0" data-target="%s" data-value="%s">%s</span>';
-			foreach ($_EDITOR['typebar'][1] as $k=>$v) {
+			foreach ($_EDITOR['typebar'][1] as $k=>$v){
 				$target = $k;
 				$default = $v[0];
 				$item = is_array($v[1]) ? $v[1] : [$v[1]];
@@ -29,7 +30,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 	<div id="editorContent" role="document" aria-label="Editor Content">
 		<textarea name="<?php echo $_ID ?>" class="form-control" style="height:<?php echo $_EDITOR['height'] ?>" <?php echo ($_EDITOR['placeholder']?' placeholder="'.escapeHTML($_EDITOR['placeholder']).'"':'').($_EDITOR['readonly']?' readonly':'').($_EDITOR['required']?' required':'') ?>><?php echo escapeHTML($_CONTENT) ?></textarea>
 	</div>
-<?php if($_EDITOR['toolbar']) {
+<?php if($_EDITOR['toolbar']){
 	$components = get_cache('_AF_EDITOR_COMPONENTS');
 	if(is_null($components)){ //에디터 컴포넌트 목록 캐시 생성
 		$components = DB::gets(_AF_ADDON_TABLE_, ['use_editor'=>'1'], [],
@@ -37,7 +38,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 				$rset = [];
 				$_ADDON_INFO = [];
 				while ($row = DB::fetch($r)){
-					$tmp = _AF_ADDONS_PATH_ . $row['ao_id'] . '/info.php';
+					$tmp = _AF_ADDONS_PATH_.$row['ao_id'].'/info.php';
 					if(file_exists($tmp)){
 						include $tmp;
 						$rset[] = [0=>$row['ao_id'],1=>$_ADDON_INFO['title']];
@@ -82,7 +83,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 						$rset = [];
 						$_ADDON_INFO = [];
 						while ($row = DB::fetch($r)){
-							$tmp = _AF_ADDONS_PATH_ . $row['ao_id'] . '/info.php';
+							$tmp = _AF_ADDONS_PATH_.$row['ao_id'].'/info.php';
 							if(file_exists($tmp)){
 								include $tmp;
 								$rset[] = [0=>$row['ao_id'],1=>$_ADDON_INFO['title']];
@@ -94,13 +95,13 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 			}
 			$comma = '';
 			foreach($components as $v){
-				echo $comma . '["' . $v[0] . '","' . str_replace(['[',']','"'], ['{','}','`'], $v[1]) . '"]';
+				echo $comma.'["'.$v[0].'","'.str_replace(['[',']','"'], ['{','}','`'], $v[1]).'"]';
 				$comma = ',';
 			} echo '];';
 	?></script>
 <?php } ?>
 <?php
-	if(!empty($_EDITOR['file']) && $_EDITOR['file'][2] > 0) {
+	if(!empty($_EDITOR['file']) && $_EDITOR['file'][2] > 0){
 		$file_id = $_EDITOR['file'][0];
 		$file_target = $_EDITOR['file'][1];
 		$file_max = empty($_EDITOR['file'][2]) ? 0 : $_EDITOR['file'][2];
@@ -108,10 +109,10 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 		$fileList = empty($file_id) ? [] : getFileList($file_id, $file_target);
 ?>
 	<div class="mt-4 d-grid gap-2">
-<?php if(!empty($fileList) && count($fileList)>0) { ?>
+<?php if(!empty($fileList) && count($fileList)>0){ ?>
 		<div id="uploadedFiles" class="user-select-none input-group text-secondary border rounded p-2">
 <?php
-	foreach ($fileList as $v) {
+	foreach ($fileList as $v){
 		echo sprintf(
 			substr($v['mf_type'], 0, 5) == 'image'
 			? '<img src="%s" title="%s" alt="%s" size="%s">'
@@ -133,7 +134,7 @@ $_EDITOR['placeholder'] = empty($_EDITOR['placeholder']) ? '' : $_EDITOR['placeh
 <?php } ?>
 </div>
 <script>document.querySelectorAll('#uploadedFiles img').forEach(img=>{img.setAttribute('title', img.getAttribute('title') + ` (${img.getAttribute('size').toFileSize()})`)})</script>
-<script>load_script("<?php echo _AF_URL_?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?' . _AF_SERVER_TIME_ : 'min.js')?>").then(() => { window.AFOX_EDITOR_<?php echo strtoupper($_ID)?> =new afoxEditor("<?php echo $_ID?>", <?php echo json_encode($_EDITOR)?>) },() => { console.log('fail to load script') })</script>
-<?php
+<script>load_script("<?php echo _AF_URL_?>module/editor/editor.<?php echo (__DEBUG__ ? 'js?'._AF_SERVER_TIME_ : 'min.js')?>").then(() => { window.AFOX_EDITOR_<?php echo strtoupper($_ID)?> =new afoxEditor("<?php echo $_ID?>", <?php echo json_encode($_EDITOR)?>) },() => { console.log('fail to load script') })</script>
+<?php }
 /* End of file index.php */
 /* Location: ./module/editor/index.php */

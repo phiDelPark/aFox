@@ -1,10 +1,10 @@
 <?php if(!defined('__AFOX__')) exit();
-if($_CFG['use_captcha'] == '1') {
-	$try_count = get_session('afox_login_try_' . $_SERVER['REMOTE_ADDR']);
-	if($try_count > 2) {
+if($_CFG['use_captcha'] == '1'){
+	$try_count = get_session('afox_login_try_'.$_SERVER['REMOTE_ADDR']);
+	if($try_count > 2){
 		include(_AF_LIBS_PATH_.'simplecaptcha/simple-php-captcha.php');
 		$captcha = simple_php_captcha();
-		set_session('afox_captcha_' . $_SERVER['REMOTE_ADDR'], $captcha);
+		set_session('afox_captcha_'.$_SERVER['REMOTE_ADDR'], $captcha);
 	}
 }
 ?>
@@ -31,7 +31,7 @@ if($_CFG['use_captcha'] == '1') {
 					<a href="<?php echo _AF_URL_ ?>?module=member&disp=findAccount"><?php echo getLang('member_find')?></a>
 				</span>
 			</div>
-				<?php if(!empty($captcha['image_src'])) { ?>
+				<?php if(!empty($captcha['image_src'])){ ?>
 				<div class="d-flex w-100 justify-content-between mt-3">
 					<img src="<?php echo './lib/'.$captcha['image_src'] ?>" alt="CAPTCHA code">
 					<input type="text" class="form-control ms-2" placeholder="<?php echo getLang('captcha_code')?>" name="captcha_code" required>

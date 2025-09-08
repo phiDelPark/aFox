@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['th_id'])) return set_error(getLang('error_request'),4303);
 
 	DB::transaction();
@@ -17,26 +17,26 @@ function proc($data) {
 		$theme_exists = !empty($out['th_id']);
 
 		$remove_array = ['th_id', 'module', 'id', 'act', 'disp', 'success_url', 'error_url','response_tags'];
-		foreach ($remove_array as $value) {
+		foreach ($remove_array as $value){
 			if(isset($data[$value])) unset($data[$value]);
 		}
 
 		// 오류 방지를 위해서 확장 필드 최대 사이즈 체크
 		$extra = serialize($data);
-		if(strlen($extra) > 65535) {
+		if(strlen($extra) > 65535){
 			throw new Exception(getLang('overflow_value', ['extra_keys','Size',65535]), 2301);
 		}
 
-		if($theme_exists) {
+		if($theme_exists){
 			DB::update(_AF_THEME_TABLE_,['th_extra'=>$extra], ['th_id'=>$th_id]);
-		} else {
+		}else{
 			DB::insert(_AF_THEME_TABLE_,['th_id'=>$th_id,'th_extra'=>$extra]);
 		}
 
 		// 캐시 재생성
 		set_cache('_AF_THEME_'.$th_id, $data);
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

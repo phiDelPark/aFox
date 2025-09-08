@@ -4,12 +4,12 @@ $GALLERY = [];
 if($is_new = (empty($_GET['sub_id']) || $_GET['sub_id'] === '@new')){
 	$r = DB::query('SHOW FULL COLUMNS FROM '._AF_MODULE_TABLE_, [], true);
 	foreach($r as $v) $GALLERY[$v['Field']] = $v['Default'];
-} else {
+}else{
 	$GALLERY = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'gallery', 'md_id'=>$_GET['sub_id']]);
-	if(empty($GALLERY)) {
+	if(empty($GALLERY)){
 		$_GET['sub_id'] = '';
 	} else if(!empty($_GET['clear'])){
-		include_once _AF_MODULES_PATH_ . 'gallery/clearcache.php';
+		include_once _AF_MODULES_PATH_.'gallery/clearcache.php';
 	}
 }
 
@@ -33,12 +33,12 @@ if(empty($_GET['sub_id'])){
 <tbody>
 <?php
 
-	if($error) {
+	if($error){
 		messageBox($error['message'], $error['error'], false);
-	} else {
+	}else{
 
 		$grants = ['0'=>'A','1'=>'M','m'=>'S'];
-		foreach ($_list as $key => $value) {
+		foreach ($_list as $key => $value){
 			echo '<tr><th scope="row" ><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
 			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="md_ids[]" value="'.$value['md_id'].'"><span>'.escapeHTML(cutstr(strip_tags($value['md_title'].(empty($value['md_about'])?'':' - '.$value['md_about'])),50)).'</span></td>';
 			echo '<td class="fixed-width">'.$grants[$value['grant_list']].$grants[$value['grant_view']].$grants[$value['grant_upload']].'</td>';
@@ -50,7 +50,7 @@ if(empty($_GET['sub_id'])){
 </tbody>
 </table>
 
-<?php } else { ?>
+<?php }else{ ?>
 
 <?php if(!$is_new){?>
 <form method="post" autocomplete="off" enctype="multipart/form-data" onsubmit="return validateForm(this)">
@@ -62,9 +62,9 @@ if(empty($_GET['sub_id'])){
 	<button type="submit" class="btn btn-sm btn-danger float-end"><?php echo getLang('permanent_delete')?></button>
 </form>
 <script>
-function validateForm(f) {
+function validateForm(f){
 	var return_value = prompt('<?php echo getLang('confirm_delete',['gallery'])?>', 'Gallery ID?');
-	if (return_value === '<?php echo $GALLERY['md_id']?>') {f.md_id.value = return_value; return true;} else return false;
+	if (return_value === '<?php echo $GALLERY['md_id']?>'){f.md_id.value = return_value; return true;} else return false;
 }
 </script>
 <?php }?>
@@ -143,14 +143,14 @@ function validateForm(f) {
 		Your browser does not support iframes.
 		</iframe>
 		<script>
-			function clearThumbnail(a) {
+			function clearThumbnail(a){
 				var iframe = document.querySelector('#iframeClearThumbnail');
 				iframe.style.display = 'block';
 				iframe.contentWindow.location.href = '<?php echo getUrl('', 'module', 'gallery', 'popup', '1', 'clear', $_GET['sub_id']) ?>';
 				return false;
 			}
 		</script>
-<?php } else { ?>
+<?php }else{ ?>
 		<div class="form-text"><?php echo getLang('desc_thumbnail')?></div>
 <?php } ?>
 	</div>

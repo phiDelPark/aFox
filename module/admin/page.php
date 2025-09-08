@@ -36,17 +36,17 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
+	if($error){
 		messageBox($error['message'], $error['error'], false);
-	} else {
-		if(count($page_list) > 0) {
+	}else{
+		if(count($page_list) > 0){
 			$current_page = $page_list['current_page'];
 			$total_page = $page_list['total_page'];
 			$start_page = $page_list['start_page'];
 			$end_page = $page_list['end_page'];
 
 			$grants = ['0'=>'A','1'=>'M','m'=>'S'];
-			foreach ($page_list['data'] as $key => $value) {
+			foreach ($page_list['data'] as $key => $value){
 				$pg_type = $_type[(int)$value['pg_type']];
 				echo '<tr><th scope="row"><a href="'._AF_URL_.'?id='.$value['md_id'].'" target="_blank">'.$value['md_id'].'</a></th>';
 				echo '<td class="text-wrap">'.escapeHTML(cutstr(strip_tags($value['md_title']),50)).'</td>';

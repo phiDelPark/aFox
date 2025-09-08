@@ -24,9 +24,9 @@
 <table class="table">
 <thead>
 	<tr>
-		<?php if(_MOBILE_) { ?>
+		<?php if(_MOBILE_){ ?>
 		<th scope="col" class="text-wrap"><?php echo getLang('title')?></th>
-		<?php } else { ?>
+		<?php }else{ ?>
 		<th scope="col" class="text-nowrap" style="width:1px;padding-left:.25rem"><label class="btn btn-sm align-baseline p-0 px-1" for="searchForm"><svg class="bi"><use href="<?php echo _AF_THEME_URL_?>bi-icons.svg#search"/></svg></label></th>
 		<th scope="col" class="text-wrap">:<?php echo getLang('title')?></th>
 		<th scope="col" class="text-nowrap" style="width:1px"><?php echo getLang('delete')?></th>
@@ -44,13 +44,13 @@
 	if ($end_page > $total_page) $end_page = $total_page;
 	$srl = empty($_DATA['srl'])?0:$_DATA['srl'];
 
-	foreach ($_DATA['list'] as $key => $value) {
+	foreach ($_DATA['list'] as $key => $value){
 		echo '<tr'.($value['wr_srl']==$srl?' class="active"':'').' style="cursor:pointer" onclick="return themeTrashItemClick(event,\''.escapeHTML(getUrl('srl',$value['wr_srl']),ENT_QUOTES).'\')">';
-		if(_MOBILE_) {
+		if(_MOBILE_){
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.escapeHTML(strip_tags($value['wr_title'])).'</a>';
 			echo '<div class="d-flex w-100 justify-content-between"><span>'.date('y/m/d', strtotime($value['wr_regdate'])).'</span>';
 			echo '<span>Del:'.date('y/m/d', strtotime($value['wr_update'])).'</span></div></td>';
-		} else {
+		}else{
 			echo '<th scope="row">'.$value['wr_srl'].'</th>';
 			echo '<td class="text-wrap"><a href="#" onclick="return false">'.($value['wr_secret']?'<svg class="bi me-1"><use href="'._AF_THEME_URL_.'bi-icons.svg#shield-lock"/></svg>':'').escapeHTML(cutstr(strip_tags($value['wr_title']),50)).'</a></td>';
 			echo '<td>'.date('y/m/d', strtotime($value['wr_update'])).'</td>';

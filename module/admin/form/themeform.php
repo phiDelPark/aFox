@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 $_THEME_INFO = [];
-@include_once _AF_THEMES_PATH_ . $_GET['th_id'] . '/lang/' . _AF_LANG_ . '.php';
-@require_once _AF_THEMES_PATH_ . $_GET['th_id'] . '/info.php';
+@include_once _AF_THEMES_PATH_.$_GET['th_id'].'/lang/'._AF_LANG_.'.php';
+@require_once _AF_THEMES_PATH_.$_GET['th_id'].'/info.php';
 $_THEME_INFO['author'] = empty($_THEME_INFO['link'])?escapeHTML($_THEME_INFO['author']):('<a href="'.escapeHTML($_THEME_INFO['link']).'" target="_blank">'.escapeHTML($_THEME_INFO['author']).'</a>');
 
 $_THEME = DB::get(_AF_THEME_TABLE_,'th_extra',['th_id'=>$_GET['th_id']]);
@@ -20,7 +20,7 @@ if(!$ex = DB::error()) $_THEME = empty($_THEME['th_extra'])?[]:unserialize($_THE
 </div>
 <div class="row">
 	<label class="col-md-2"><?php echo getLang('author') ?></label>
-	<span class="col-md-auto"><?php echo $_THEME_INFO['author'] . ' ('.escapeHTML($_THEME_INFO['email']) . ')' ?></span>
+	<span class="col-md-auto"><?php echo $_THEME_INFO['author'].' ('.escapeHTML($_THEME_INFO['email']).')' ?></span>
 </div>
 <p class="form-text"><?php echo nl2br(escapeHTML($_THEME_INFO['about'])) ?></p>
 </div>
@@ -34,7 +34,7 @@ if(!$ex = DB::error()) $_THEME = empty($_THEME['th_extra'])?[]:unserialize($_THE
 
 <hr>
 <?php
-require_once _AF_THEMES_PATH_ . $_GET['th_id'] . '/setup.php';
+require_once _AF_THEMES_PATH_.$_GET['th_id'].'/setup.php';
 ?>
 
 <hr class="mb-5">

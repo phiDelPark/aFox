@@ -1,15 +1,15 @@
 <?php
 	if(!defined('__AFOX__')) exit();
-	$ao_list = DB::gets(_AF_TRIGGER_TABLE_,['tg_key'=>'A'], function ($r) {
+	$ao_list = DB::gets(_AF_TRIGGER_TABLE_,['tg_key'=>'A'], function ($r){
 		$rset = [];
-		while ($row = DB::fetch($r)) {
+		while ($row = DB::fetch($r)){
 			$grade = ['0'=>'A','m'=>'S','s'=>'S'];
 			$grade = array_key_exists($row['grant_access'], $grade) ? $grade[$row['grant_access']] : 'M';
 			$rset[$row['tg_id']] = (empty($row['use_pc'])?'-':'P').(empty($row['use_mobile'])?'-/':'M/').$grade;
 		}
 		return $rset;
 	});
-	if($ex = DB::error()) {
+	if($ex = DB::error()){
 		messageBox($ex->getMessage(), $ex->getCode(), false);
 	}
 ?>
@@ -27,17 +27,17 @@
 <tbody>
 
 <?php
-if(is_dir(_AF_ADDONS_PATH_)) {
-	foreach(glob(_AF_ADDONS_PATH_ . '*', GLOB_ONLYDIR) as $dir) {
+if(is_dir(_AF_ADDONS_PATH_)){
+	foreach(glob(_AF_ADDONS_PATH_.'*', GLOB_ONLYDIR) as $dir){
 		$opt = '--/-';
 		$name = basename($dir);
-		if(isset($ao_list[$name])) {
+		if(isset($ao_list[$name])){
 			$opt = $ao_list[$name];
 			$ao_list[$name] = false;
 		}
 
 		$_ADDON_INFO = [];
-		@include _AF_ADDONS_PATH_ . $name . '/info.php';
+		@include _AF_ADDONS_PATH_.$name.'/info.php';
 
 		echo '<tr><th scope="row" class="text-wrap">'.(escapeHTML(empty($_ADDON_INFO['title'])?$name:$_ADDON_INFO['title'])).'</th>';
 		echo '<td class="d-none d-md-table-cell">'.(empty($_ADDON_INFO['author'])?'...':'<a href="'.(empty($_ADDON_INFO['link'])?'mailto:'.$_ADDON_INFO['email'].'"':$_ADDON_INFO['link'].'" target="_blank"').'>'.$_ADDON_INFO['author'].'</a>').'</td>';
@@ -59,7 +59,7 @@ if(is_dir(_AF_ADDONS_PATH_)) {
 </thead>
 <tbody>
 <?php
-	foreach($ao_list as $key => $value) {
+	foreach($ao_list as $key => $value){
 		if($value) echo '<tr><th scope="row" class="text-wrap">'.$key.'</th><td><a class="btn btn-primary btn-sm" onclick="return deleteAddonConfig(\''.$key.'\')">'.getLang('empty_%s', ['']).'</a></td></tr>';
 	}
 ?>

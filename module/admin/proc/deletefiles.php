@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['mf_srls'])) return set_error(getLang('error_request'),4303);
 
 	// 권한 체크 // 관리자만
@@ -14,14 +14,14 @@ function proc($data) {
 
 	try {
 
-		$callback = function($r) {
-			while ($row = DB::fetch($r)) {
+		$callback = function($r){
+			while ($row = DB::fetch($r)){
 				$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 				$filetype = explode('/', strtolower($row['mf_type']));
 				$filetype = empty($_file_types[$filetype[0]]) ? 'binary' : $filetype[0];
-				$unfilename = _AF_ATTACH_DATA_ . $filetype . '/' . $row['md_id'] . '/' . $row['mf_target'] . '/' . $row['mf_upload_name'];
+				$unfilename = _AF_ATTACH_DATA_.$filetype.'/'.$row['md_id'].'/'.$row['mf_target'].'/'.$row['mf_upload_name'];
 
-				if(!file_exists($unfilename) || unlinkFile($unfilename)) {
+				if(!file_exists($unfilename) || unlinkFile($unfilename)){
 					DB::delete(_AF_FILE_TABLE_,['mf_srl'=>$row['mf_srl']]);
 				}
 			}
@@ -30,7 +30,7 @@ function proc($data) {
 
 		DB::query('SELECT * FROM '._AF_FILE_TABLE_.' WHERE mf_srl IN ('.implode(',', $mf_srls).')', $callback);
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

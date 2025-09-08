@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	if(empty($data['mf_srl']) || empty($data['mf_name'])) return set_error(getLang('error_request'),4303);
 
 	$out = DB::get(_AF_FILE_TABLE_, ['mf_srl'=>$data['mf_srl']]);
@@ -19,13 +19,13 @@ function proc($data) {
 
 		DB::update(_AF_FILE_TABLE_,
 			[
-				'mf_name'=>$name . $ext
+				'mf_name'=>$name.$ext
 			], [
 				'mf_srl'=>$data['mf_srl']
 			]
 		);
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

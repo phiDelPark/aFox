@@ -3,8 +3,8 @@
  * aFox (https://github.com/phiDelPark/aFox)
  * Copyright 2016 afox, Inc.
  */
-require_once _AF_LIBS_PATH_ . 'md/parsedown/Parsedown.php';
-require_once _AF_LIBS_PATH_ . 'md/html2mkdw.php';
+require_once _AF_LIBS_PATH_.'md/parsedown/Parsedown.php';
+require_once _AF_LIBS_PATH_.'md/html2mkdw.php';
 
 class MD {
 
@@ -24,7 +24,7 @@ class MD {
 		);
 		/*// DEPRECATED (Parsedown 에서 자동으로 하게 고침)
 		$text = preg_replace_callback('@(<pre[^>]*>)(.+?)(<\/pre>)@s',
-			function ($m) use($__Parsedown) {
+			function ($m) use($__Parsedown){
 				return $m[1].$__Parsedown->line($m[2]).$m[3];
 			}
 		, $text);

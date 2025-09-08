@@ -14,16 +14,16 @@ $style = _MOBILE_ && isset($_WIDGET['mstyle']) ? 'style="'.$_WIDGET['mstyle'].'"
 
 
 $md_title = getModule($_WIDGET['module'], 'md_title');
-if($type === 'gallery') {
+if($type === 'gallery'){
 	$fl = _AF_FILE_TABLE_;
 	$dd = _AF_DOCUMENT_TABLE_;
 	$_list = DB::query("SELECT f.*, d.md_id FROM $fl as f INNER JOIN $dd as d ON d.wr_srl=f.mf_target AND d.md_id = f.md_id WHERE f.md_id=:1 AND f.mf_size>:2 AND f.mf_type LIKE :3 GROUP BY f.mf_target ORDER BY rand() DESC LIMIT 5", [$_WIDGET['module'],500, 'image%'], true);
-} else {
+}else{
 	$select = ['md_id'=>$_WIDGET['module']];
 	if($type === 'document'){
 		$select["wr_srl"] = $order;
 		$_list = DB::get(_AF_DOCUMENT_TABLE_, 'wr_content', $select);
-	} else {
+	}else{
 		if(!empty($category)) $select['wr_category'] = $category;
 		$order = explode(' ',$order);
 		$_list = DB::gets(_AF_DOCUMENT_TABLE_,$select,[$order[0]=>empty($order[1])?$order[1]:'DESC'],$count);
@@ -34,19 +34,19 @@ if($type === 'gallery') {
 	<h5><?php echo empty($title) ? (empty($md_title)?'':$md_title) : $title ?>
 	<a class="float-end text-decoration-none" style="font-size:large" href="<?php echo getUrl('','id',$_WIDGET['module'],'category',$category)?>">&hellip;</a></h5>
 	<div class="clearfix mt-1"></div>
-	<?php if($type === 'gallery') { ?>
+	<?php if($type === 'gallery'){ ?>
 		<div class="p-2 border rounded" role="list">
 		<?php
 			$w = (100 / $count);
-			foreach ($_list as $val) {
+			foreach ($_list as $val){
 				echo '<a href="'.getUrl('','id',$val['md_id'],'srl',$val['mf_target']).'"'.(empty($target)?'':' target="'.$target.'"').'><img class="d-inline-block p-2" src="./?file='.$val['mf_srl'].'&thumb=100x100" width="'.$w.'%" style="max-height:150px;"></a>';
 			}
 		?>
 		</div>
-	<?php } else if($type === 'document') { echo toHTML($_list['wr_content'], $type == 'text' ? 0 : 1); } else { ?>
+	<?php } else if($type === 'document'){ echo toHTML($_list['wr_content'], $type == 'text' ? 0 : 1); }else{ ?>
 		<div class="list-group" role="list">
 		<?php
-			foreach ($_list as $val) {
+			foreach ($_list as $val){
 				echo '<a class="list-group-item d-inline-block text-truncate" href="'.getUrl('','id',$val['md_id'],'srl',$val['wr_srl']).'" target="'.$target.'">'.$val['wr_title'].'</a>';
 			}
 		?>

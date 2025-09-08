@@ -2,7 +2,7 @@
 
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 
 	if(!isset($data['mu_type'])) return set_error(getLang('error_request'),4303);
 
@@ -27,7 +27,7 @@ function proc($data) {
 			$new_win_key = $data['new_win_key'];
 			$ins_srl = [0];
 
-			foreach ($item_key as $key => $value) {
+			foreach ($item_key as $key => $value){
 
 				DB::insert(_AF_MENU_TABLE_,
 					[
@@ -45,7 +45,7 @@ function proc($data) {
 			}
 		}
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		DB::rollback();
 		return set_error($ex->getMessage(),$ex->getCode());
 	}

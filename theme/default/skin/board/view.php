@@ -1,5 +1,5 @@
 <?php if(!defined('__AFOX__')) exit();
-@include_once dirname(__FILE__) . '/common.php';
+@include_once dirname(__FILE__).'/common.php';
 $is_rp_grant = isGrant('reply', _MID_);
 
 $wr_mb_srl = $DOC['mb_srl'];
@@ -29,9 +29,9 @@ $asc = isset($_GET['asc']);
 	</p>
 	<?php
 	$md_extra_keys = empty($_CFG['md_extra']['keys']) ? [] : $_CFG['md_extra']['keys'];
-	if (!empty($md_extra_keys)) {
+	if (!empty($md_extra_keys)){
 		echo '<div class="border-bottom mb-3">';
-		foreach($md_extra_keys as $ex_key=>$ex_name) {
+		foreach($md_extra_keys as $ex_key=>$ex_name){
 			$tmp = @$DOC['wr_extra']['values'][$ex_key];
 			$_boxs = explode('|', $ex_name);
 			if(!($is_radio=count($_boxs)>1))$_boxs = explode('&', $ex_name);
@@ -48,10 +48,10 @@ $asc = isset($_GET['asc']);
 		<?php echo (empty($_GET['search']) ? $wr_content : highlightText($_GET['search'], $wr_content)) ?>
 	</div>
 	<div class="clearfix"></div>
-<?php if(!empty($DOC['wr_tags'])) {
+<?php if(!empty($DOC['wr_tags'])){
 	echo '<div class="mb-1" aria-label="Tags in this post">';
 	$hashtags = explode(',', $DOC['wr_tags']);
-	foreach ($hashtags as $val) {
+	foreach ($hashtags as $val){
 		echo '<a class="icon-link icon-link-hover gap-0 me-2" href="'.getUrl('','id',_MID_,'search','+'.$val).'"><svg class="bi"><use href="./theme/default/bi-icons.svg#hash"/></svg>'.$val.'</a>';
 	}
 	echo '</div>';
@@ -64,7 +64,7 @@ $asc = isset($_GET['asc']);
 </section>
 
 <?php
-	if(!_POPUP_) {
+	if(!_POPUP_){
 		include 'reply.php';
 		include 'list.php';
 	}

@@ -1,5 +1,5 @@
 <?php if(!defined('__AFOX__')) exit();
-	@include_once dirname(__FILE__) . '/common.php';
+	@include_once dirname(__FILE__).'/common.php';
 	$is = !empty($DOC)&&!empty($DOC['wr_srl']);
 ?>
 
@@ -14,20 +14,20 @@
 	<input type="hidden" name="md_id" value="<?php echo _MID_?>">
 	<input type="hidden" name="wr_srl" value="<?php echo $is?$DOC['wr_srl']:''?>">
 
-		<?php if (empty($_MEMBER) || (!empty($DOC['wr_srl']) && $_MEMBER['mb_srl'] !== $DOC['mb_srl'])) { ?>
+		<?php if (empty($_MEMBER) || (!empty($DOC['wr_srl']) && $_MEMBER['mb_srl'] !== $DOC['mb_srl'])){ ?>
 		<div class="mb-2">
 			<input type="text" name="mb_nick" value="<?php echo $is?$DOC['mb_nick']:''?>" class="form-control mb-1" maxlength="20" placeholder="<?php echo getLang('id')?>"<?php echo empty($_MEMBER)?' required':''?><?php echo empty($DOC['wr_srl'])?'':' readonly'?>>
-			<?php if (!$is_manager && empty($DOC['mb_srl'])) { ?>
+			<?php if (!$is_manager && empty($DOC['mb_srl'])){ ?>
 				<input type="password" name="mb_password" class="form-control" placeholder="<?php echo getLang('password')?>"<?php echo empty($_MEMBER)?' required':''?>>
 			<?php } ?>
 		</div>
 		<?php } ?>
-		<?php if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category']);?>
+		<?php if (!empty($_CFG['md_category'])){ $tmp = explode(',', $_CFG['md_category']);?>
 			<div class="form-floating mb-2">
 					<select name="wr_category[]" class="form-control" id="wrCategory" required>
 					<option value=""></option>
 					<?php
-						foreach ($tmp as $val) {
+						foreach ($tmp as $val){
 							echo '<option value="'.$val.'"'.($is&&in_array($val, $DOC['wr_category'])?' selected="selected"':'').'>'.$val.'</option>';
 						}
 					?>
@@ -35,11 +35,11 @@
 				<label for="wrCategory"><?php echo getLang('category')?></label>
 			</div>
 		<?php } ?>
-		<?php if (!empty($_CFG['md_category2'])) { $tmp = explode(',', $_CFG['md_category2']);?>
+		<?php if (!empty($_CFG['md_category2'])){ $tmp = explode(',', $_CFG['md_category2']);?>
 			<div class="form-control mb-2">
 					<?php
 						$i=0;
-						foreach ($tmp as $val) {
+						foreach ($tmp as $val){
 							echo '<input class="form-check-input mx-1" type="checkbox" id="wr_category_2'.++$i.'" name="wr_category2[]" value="'.$val.'"'.($is&&in_array($val, $DOC['wr_category2'])?' checked="checked"':'').'><label class="me-1" for="wr_category_2'.$i.'">'.$val.'</label>';
 						}
 					?>
@@ -50,8 +50,8 @@
 				<label for="wrTitle"><?php echo getLang('title')?></label>
 			</div>
 		<?php
-			if (!empty($_CFG['md_extra']['keys'])) {
-			foreach($_CFG['md_extra']['keys'] as $ex_key=>$ex_caption) {
+			if (!empty($_CFG['md_extra']['keys'])){
+			foreach($_CFG['md_extra']['keys'] as $ex_key=>$ex_caption){
 				$_boxs = explode('|', $ex_caption);
 				if(!($is_radio=count($_boxs)>1))$_boxs=explode('&',$ex_caption);
 				if($is_required=(substr($_boxs[0],0,1)=='*'))$_boxs[0]=substr($_boxs[0],1);
@@ -62,7 +62,7 @@
 				for($i=1, $n=count($_boxs); $i < $n; $i++){?>
 					<input type="<?php echo $is_radio?'radio':'checkbox'?>" name="wr_extra_<?php echo $ex_key.($is_radio?'':'[]')?>" value="<?php echo $_boxs[$i]?>"<?php echo in_array($_boxs[$i], $ex_value)?' checked':''?> class="form-check-input" id="wrExtra_<?php echo $ex_key.$i?>"<?php echo $is_required?' required':''?>>
 					<label class="me-2" for="wrExtra_<?php echo $ex_key.$i?>"><?php echo $_boxs[$i]?></label>
-		<?php } echo '</div><label>'.$_boxs[0].'</label></div>'; } else {?>
+		<?php } echo '</div><label>'.$_boxs[0].'</label></div>'; }else{?>
 				<div class="form-floating mb-2">
 					<input type="text" name="wr_extra_<?php echo $ex_key?>" value="<?php echo escapeHTML($ex_value)?>" class="form-control" id="wrExtra_<?php echo $ex_key?>"<?php echo $is_required?' required':''?> maxlength="255">
 					<label for="wrExtra_<?php echo $ex_key?>"><?php echo $_boxs[0]?></label>
@@ -78,6 +78,7 @@
 			}
 			if(empty($_CFG['use_secret'])) $istool['wr_secret']=[($is&&$DOC['wr_secret']=='1')?'true':'false',['Secret'=>'true']];
 			$ishtml = $_CFG['use_type']=='9'&&(!$is||$DOC['wr_type']);
+			@include_once _AF_MODULES_PATH_.'editor/index.php';
 			displayEditor(
 				'wr_content', $_CFG['use_type']=='9'?toHTML(@$DOC['wr_content'],1,''):@$DOC['wr_content'],
 				[

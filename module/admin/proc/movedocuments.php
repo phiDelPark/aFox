@@ -1,7 +1,7 @@
 <?php if(!defined('__AFOX__')) exit();
 @set_time_limit(0);
 
-function proc($data) {
+function proc($data){
 	if(empty($data['md_id']) || empty($data['wr_srls'])) return set_error(getLang('error_request'),4303);
 
 	// 권한 체크 // 관리자만
@@ -18,11 +18,11 @@ function proc($data) {
 		$module = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$md_id]);
 		if (empty($module['md_id'])) throw new Exception(getLang('error_founded'),4201);
 
-		if (!empty($module['md_category'])) {
+		if (!empty($module['md_category'])){
 			if (empty($md_cate)) throw new Exception(getLang('request_input', ['category']), 1);
 			$md_categorys = str_replace('&', ',', $module['md_category']);
 			$md_categorys = explode(',', $md_categorys);
-			if (!in_array($md_cate, $md_categorys)) {
+			if (!in_array($md_cate, $md_categorys)){
 				throw new Exception(getLang('warn_not_exists', [$md_cate]), 3105);
 			}
 		}
@@ -38,14 +38,14 @@ function proc($data) {
 
 			// 파일 이동
 			$types = ['binary','image','video','audio','thumbnail'];
-			foreach ($types as $val) {
-				$s = _AF_ATTACH_DATA_ . $val . '/' . $source_md_id . '/' . $wr_srl . '/';
-				$t = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $wr_srl . '/';
+			foreach ($types as $val){
+				$s = _AF_ATTACH_DATA_.$val.'/'.$source_md_id.'/'.$wr_srl.'/';
+				$t = _AF_ATTACH_DATA_.$val.'/'.$md_id.'/'.$wr_srl.'/';
 
 				if(!is_dir($s)) continue;
 
 				// 이동할 폴더가 이미 있으면 에러
-				if(is_dir($t)) {
+				if(is_dir($t)){
 					throw new Exception(getLang('error_upload(7)'),10407);
 				}
 
@@ -55,7 +55,7 @@ function proc($data) {
 				if(@mkdir($t, _AF_DIR_PERMIT_, true))
 				{
 					$dir = opendir($s);
-					while (false !== ($filename = readdir($dir))) {
+					while (false !== ($filename = readdir($dir))){
 						if($filename == '.' || $filename == '..')
 							continue;
 						@rename($s.$filename, $t.$filename);
@@ -81,22 +81,22 @@ function proc($data) {
 			$source_wr_srl = '';
 		}
 
-	} catch (Exception $ex) {
+	} catch (Exception $ex){
 		//DB::rollback(); //롤백 안하고 이미 이동된거 그냥둠
 		// 에러난 문서의 이동된 파일 다시 돌리기
 		if (!empty($md_id) && !empty($source_wr_srl))
 		{
 			$types = ['binary','image','video','audio','thumbnail'];
-			foreach ($types as $val) {
-				$s = _AF_ATTACH_DATA_ . $val . '/' . $source_md_id . '/' . $source_wr_srl . '/';
-				$t = _AF_ATTACH_DATA_ . $val . '/' . $md_id . '/' . $source_wr_srl . '/';
+			foreach ($types as $val){
+				$s = _AF_ATTACH_DATA_.$val.'/'.$source_md_id.'/'.$source_wr_srl.'/';
+				$t = _AF_ATTACH_DATA_.$val.'/'.$md_id.'/'.$source_wr_srl.'/';
 
 				if(!is_dir(dirname($t))) continue;
 
 				if(@mkdir($s, _AF_DIR_PERMIT_, true))
 				{
 					$dir = opendir($t);
-					while (false !== ($filename = readdir($dir))) {
+					while (false !== ($filename = readdir($dir))){
 						if($filename == '.' || $filename == '..')
 							continue;
 						@rename($t.$filename, $s.$filename);

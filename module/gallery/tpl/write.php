@@ -13,12 +13,12 @@
 	<input type="hidden" name="md_id" value="<?php echo _MID_?>">
 
 	<div class="clearfix">
-		<?php if (empty($_MEMBER)) { ?>
+		<?php if (empty($_MEMBER)){ ?>
 		<div class="mb-4">
 			<input type="text" name="mb_nick" class="form-control mb-1" maxlength="20" placeholder="<?php echo getLang('id')?>" required>
 			<input type="password" name="mb_password" class="form-control" placeholder="<?php echo getLang('password')?>" required>
 		</div>
-		<?php } if (!empty($_CFG['md_category'])) { $tmp = explode(',', $_CFG['md_category']);?>
+		<?php } if (!empty($_CFG['md_category'])){ $tmp = explode(',', $_CFG['md_category']);?>
 		<div class="form-floating mb-2"><div class="form-control checkbox-group required">
 			<?php $tags = [];
 				foreach($tmp as $val){?>
@@ -29,6 +29,7 @@
 		<?php } ?>
 		<div class="mb-4">
 		<?php
+			@include_once _AF_MODULES_PATH_.'editor/index.php';
 			displayEditor(
 				'wr_content', '',
 				[

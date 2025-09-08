@@ -1,7 +1,7 @@
 <?php
 if(!defined('__AFOX__')) exit();
 
-function proc($data) {
+function proc($data){
 	global $_MEMBER;
 	//if(!empty($_MEMBER['mb_srl'])) return  ['error'=>4303, 'message'=>getLang('error_request')];
 	return ['tpl'=>'signin'];

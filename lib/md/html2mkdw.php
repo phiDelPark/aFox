@@ -49,7 +49,7 @@ class HtmlToMkdw
 
 	protected function array_ltrim($index, $array)
 	{
-		for ($i=$index; $i > -1; $i--) {
+		for ($i=$index; $i > -1; $i--){
 			if(trim($array[$i])) break;
 			$array[$i] = '';
 		}
@@ -58,7 +58,7 @@ class HtmlToMkdw
 
 	protected function array_rtrim($index, $array)
 	{
-		for ($i=$index, $n=count($array); $i < $n; $i++) {
+		for ($i=$index, $n=count($array); $i < $n; $i++){
 			if(trim($array[$i])) break;
 			$array[$i] = '';
 		}
@@ -74,9 +74,9 @@ class HtmlToMkdw
 				'/(\b(?:'.implode('|', array_keys($a)).'))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is',
 				$attr,
 				$m2
-			)) {
+			)){
 				foreach ($m2[1] as $m2k => $m2v) $a[strtolower($m2v)] = $m2[3][$m2k];
-				if ($srl = $a['src']) {
+				if ($srl = $a['src']){
 					return sprintf('![%s](%s%s)', $a['alt'] ? $a['alt'] : '!IMAGE', $srl, $a['title']?' "'.$a['title'].'"':'');
 				}
 			}
@@ -97,10 +97,10 @@ class HtmlToMkdw
 				$md = $this->markdownable[$tag];
 				$type = explode('/', $md['type']);
 
-				switch ($close.$tag) {
+				switch ($close.$tag){
 					case '/a':
 						if(--$inlinelink) break 1;
-						if($srl = $a['href']) {
+						if($srl = $a['href']){
 							if(@end($array) == '['){
 								$array[] = ($a['alt'] ? $a['alt'] : '!LINK');
 							}
@@ -144,7 +144,7 @@ class HtmlToMkdw
 				$md = $this->markdownable[$tag];
 				$type = explode('/', $md['type']);
 
-				switch ($close.$tag) {
+				switch ($close.$tag){
 					case '/code':
 						if(--$inlinecode) break 1;
 						$array[] = "`";
@@ -178,7 +178,7 @@ class HtmlToMkdw
 				$md = $this->markdownable[$tag];
 				$type = explode('/', $md['type']);
 
-				switch ($close.$tag) {
+				switch ($close.$tag){
 					case '/pre':
 						if(--$blockpre) break 1;
 						$array[] = "\n```\n";
@@ -188,7 +188,7 @@ class HtmlToMkdw
 						break;
 					case 'code':
 						// 코드 문법 강조를 위해 language 처리
-						if(preg_match_all('/(\b(?:class))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is', $attr, $m2)) {
+						if(preg_match_all('/(\b(?:class))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is', $attr, $m2)){
 							if(($class = $m2[3][0]) && substr($class, 0, 9) == 'language-'){
 								$array[key($array)] = "\n```".substr($class, 9)."\n";
 							}
@@ -212,8 +212,8 @@ class HtmlToMkdw
 
 	protected function blockQuote()
 	{
-		if(!@$__Prefix) {
-			$__Prefix = function ($str) {
+		if(!@$__Prefix){
+			$__Prefix = function ($str){
 				if(!$str) return '';
 				return implode("\n> ", explode("\n", $str));
 			};
@@ -229,7 +229,7 @@ class HtmlToMkdw
 				$md = $this->markdownable[$tag];
 				$type = explode('/', $md['type']);
 
-				switch ($close.$tag) {
+				switch ($close.$tag){
 					case '/blockquote':
 						if(--$blockouote) break 1;
 						break 2; // exit loop
@@ -263,7 +263,7 @@ class HtmlToMkdw
 				$md = $this->markdownable[$tag];
 				$type = explode('/', $md['type']);
 
-				switch ($close.$tag) {
+				switch ($close.$tag){
 					case '/ol': case '/ul': case '/dl':
 						if(--$blocklist) break 1;
 						break 2; // exit loop
@@ -273,8 +273,8 @@ class HtmlToMkdw
 						if(!$blocklist++) $listtype = $tag == 'ol' ? 1 : '-';
 						break;
 					case 'li': case 'dt': case 'dd':
-						$tmp = $listtype == '-' ? '- ' : ($listtype++) . '. ';
-						$array[] = "\n".str_pad('', $blocklist - 1 + ($tag == 'dd' ? 1 : 0), ' ') . $tmp;
+						$tmp = $listtype == '-' ? '- ' : ($listtype++).'. ';
+						$array[] = "\n".str_pad('', $blocklist - 1 + ($tag == 'dd' ? 1 : 0), ' ').$tmp;
 						break;
 					default:
 						if(method_exists($this, $type[0].'Element')){
@@ -287,13 +287,13 @@ class HtmlToMkdw
 			next($this->htmlParts);
 		}
 
-		return "\n\n" . implode('', $array) . "\n\n";
+		return "\n\n".implode('', $array)."\n\n";
 	}
 
 	protected function blockTable()
 	{
-		if(!@$__Escape) {
-			$__Escape = function ($str) {
+		if(!@$__Escape){
+			$__Escape = function ($str){
 				return str_replace('|', '&#124;', $str);
 			};
 		}
@@ -308,7 +308,7 @@ class HtmlToMkdw
 				$md = $this->markdownable[$tag];
 				$type = explode('/', $md['type']);
 
-				switch ($close.$tag) {
+				switch ($close.$tag){
 					case '/caption':
 						$array[] = "\n\n";
 						break;
@@ -317,11 +317,11 @@ class HtmlToMkdw
 						break 2; // exit loop
 					case '/tr':
 						$tmp = '';
-						if($tr == 1) {
+						if($tr == 1){
 							$tmp = "|\n";
 							for($c=$span['count']; $c>0; $c--) $tmp .='| --- ';
 						}
-						$array[] = $tmp . "|\n";
+						$array[] = $tmp."|\n";
 						break;
 					case '/th': case '/td':
 						$array[] = ' ';
@@ -346,9 +346,9 @@ class HtmlToMkdw
 							$array[] = '|  ';
 							$span['rowspan'][$span['count']]--;
 						}
-						if (preg_match_all('/(\b(?:rowspan|colspan))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is', $attr, $m2)) {
+						if (preg_match_all('/(\b(?:rowspan|colspan))\s*=(?:\s*["\'])?(?(2)([^"\']*?)\2|([^"\']+))/is', $attr, $m2)){
 							// rowspan,colspan 처리를 위해 값입력 -1
-							foreach ($m2[1] as $m2k => $m2v) {
+							foreach ($m2[1] as $m2k => $m2v){
 								$span[strtolower($m2v)][$span['count']] = (int)$m2[3][$m2k] - 1;
 							}
 							$span['colspan'] = (int)@$span['colspan'][$span['count']];
@@ -368,12 +368,12 @@ class HtmlToMkdw
 
 		// 줄바꿈 처리
 		$array = preg_replace_callback('/(\| ([^\|]+)|\|[\r\n]+)/s',
-			function ($m) {
+			function ($m){
 				return @$m[2] ? '| '. $this->rnl2br(trim($m[2])) .' ' : "|\n";
 			}
 			, implode('', $array)
 		);
-		return "\n\n" . $array . "\n\n";
+		return "\n\n".$array."\n\n";
 	}
 
 	protected function blockHeader()
@@ -388,7 +388,7 @@ class HtmlToMkdw
 				$md = $this->markdownable[$tag];
 				$type = explode('/', $md['type']);
 
-				switch ($close.$tag) {
+				switch ($close.$tag){
 					case '/h1': case '/h2': case '/h3': case '/h4': case '/h5': case '/h6':
 						if(--$blockheader) break 1;
 						break 2; // exit loop
@@ -411,7 +411,7 @@ class HtmlToMkdw
 
 	protected function inlineElement($tag)
 	{
-		switch ($tag) {
+		switch ($tag){
 			case 'input':
 				return '`input:`';
 			case 'img':
@@ -434,7 +434,7 @@ class HtmlToMkdw
 
 	protected function blockElement($tag)
 	{
-		switch ($tag) {
+		switch ($tag){
 			case 'pre':
 				return $this->blockPre();
 			case 'table':
@@ -451,7 +451,7 @@ class HtmlToMkdw
 
 	protected function breakElement($tag)
 	{
-		switch ($tag) {
+		switch ($tag){
 			case 'hr':
 			case 'br':
 				return '<'.$tag.'>';
@@ -464,7 +464,7 @@ class HtmlToMkdw
 /*
 	protected function getIndexByName($tag)
 	{
-		for ($i=count($this->htmlParts)-1; $i > -1; $i--) {
+		for ($i=count($this->htmlParts)-1; $i > -1; $i--){
 			if ($this->htmlParts[$i][0] == $tag) return $i;
 		}
 		return -1;
@@ -482,7 +482,7 @@ class HtmlToMkdw
 
 		$html = preg_replace('#(<!--.*?-->|\r| )#s', '', $html);
 		$html = preg_replace_callback('@(.*?)<(/?)([a-z]+[0-9]?)((?>"[^>"]*"|\'[^\']*\'|[^>])*?)(/?)>@is',
-			function ($m) use(&$pre) {
+			function ($m) use(&$pre){
 				if (($tag = strtolower($m[3])) == 'pre') $m[2] == '/' ? $pre-- : $pre++;
 				// pre 가 아니면 공백은 1개이상 불필요
 				$m[1] = $pre ? $m[1] : preg_replace('/( )[ ]+/m', "$1", $m[1]);
@@ -502,16 +502,16 @@ class HtmlToMkdw
 			else if($md = @$this->markdownable[$tag])
 			{
 				$type = explode('/', $md['type']);
-				if(method_exists($this, $type[0].'Element')) {
+				if(method_exists($this, $type[0].'Element')){
 					$result[] = $this->{$type[0].'Element'}($tag);
-				} else if($type[0] == 'admin' && $admin) {
+				} else if($type[0] == 'admin' && $admin){
 					$result[] = '<'.$close.$tag.$attr.'>';
 				}
 			}
 			next($this->htmlParts);
 		}
 
-		$html = implode('', $result) . preg_replace('/[\r\n\t]+/', ' ', $html);
+		$html = implode('', $result).preg_replace('/[\r\n\t]+/', ' ', $html);
 		//debugPrint($html);
 		return preg_replace('/(((> )[\r\n]+){2,}>\s$|(\n\n\n)[\n]+)/m', "$3$4", $html);
 	}

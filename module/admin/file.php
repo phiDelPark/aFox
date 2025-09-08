@@ -13,7 +13,7 @@
 		$file_list = DB::query("SELECT SQL_CALC_FOUND_ROWS a.*, d.wr_title FROM $fl as a INNER JOIN $dd as d ON (d.md_id <> '_AFOXtRASH_' and d.wr_srl = a.mf_target), (select mf_target,mf_name,mf_size from $fl where mf_link<>1 and mf_size>0 group by mf_name,mf_size having count(*) > 1) as b WHERE a.mf_link<>1 and a.mf_size=b.mf_size AND a.mf_name=b.mf_name ORDER BY a.mf_name,a.mf_regdate LIMIT $start,$count" , true);
 	}else {
 		$search = @$_GET['search'] ? trim($_GET['search']) : '';
-		if(!empty($search)) {
+		if(!empty($search)){
 			$keys = [
 				"!" => "mf_type", //!type
 				"?" => "mb_ipaddress", //?ip
@@ -21,18 +21,18 @@
 			];
 			$key = array_key_exists($key = substr($search, 0, 1) , $keys) ? $keys[$key] : '';
 			empty($key) ? ($key = "mf_name") : ($search = substr($search, 1));
-			if ($search = explode(" ", $search)) {
+			if ($search = explode(" ", $search)){
 				$index = 0;
 				$tmp = '';
-				foreach ($search as $value) {
+				foreach ($search as $value){
 					$value = explode("&", trim($value));
 					$and_or = count($value) > 1 ? ' AND ' : ' OR  ';
-					foreach ($value as $v) {
-						if ($key == "mf_regdate") {
+					foreach ($value as $v){
+						if ($key == "mf_regdate"){
 							$v = str_split($v, 4);
-							$v = $v[0] . (empty($v[1]) ? "" : "-" . implode("-", str_split($v[1], 2)));
+							$v = $v[0].(empty($v[1]) ? "" : "-".implode("-", str_split($v[1], 2)));
 							$tmp .= $and_or.'f.'.$key.' LIKE \''.DB::escape($v.'%').'\'';
-						} else {
+						}else{
 							$tmp .= $and_or.'f.'.$key.' LIKE \''.DB::escape('%'.$v.'%').'\'';
 						}
 					}
@@ -48,7 +48,7 @@
 	if($error = DB::error()) messageBox($error->getMessage(), $error->getCode(), false);
 	if($duplicate) messageBox(getLang('desc_data_combine'), 2, false);
 ?>
-<?php if($duplicate) { ?>
+<?php if($duplicate){ ?>
 <a class="btn btn-success" href="#" onclick="return data_selected_combine()"><?php echo getLang('data_combine')?></a>
 <?php } ?>
 
@@ -58,15 +58,15 @@
 <table class="table">
 <thead>
 	<tr>
-		<?php if($duplicate) { ?>
+		<?php if($duplicate){ ?>
 		<th scope="col"><?php echo getLang('select')?></th>
 		<th scope="col"><?php echo getLang('module')?></th>
 		<th scope="col">.</th>
-		<?php } else { ?>
+		<?php }else{ ?>
 		<th scope="col"><a href="#" onclick="return _showCheckItems(this)"><?php echo getLang('data_manage')?></a></th>
 		<?php } ?>
 		<th scope="col" class="text-wrap"><input class="me-3 d-none" type="checkbox" onchange="_allCheckItems(this)"><small class="d-none">[ <a href="#" onclick="return _deleteCheckItems(this)"><?php echo getLang('delete')?></a> ]</small><span><?php echo getLang('name')?></span></th>
-		<?php if($duplicate) { ?>
+		<?php if($duplicate){ ?>
 		<th scope="col"><?php echo getLang('size')?></th>
 		<?php } ?>
 		<th scope="col">&raquo;</th>
@@ -81,13 +81,13 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if(!$error) {
+	if(!$error){
 		$current_page = $file_list['current_page'];
 		$total_page = $file_list['total_page'];
 		$start_page = $file_list['start_page'];
 		$end_page = $file_list['end_page'];
 
-		foreach ($file_list['data'] as $key => $value) {
+		foreach ($file_list['data'] as $key => $value){
 			if($duplicate){
 				$dutmp1 = isset($file_list['data'][$key + 1]) ? $file_list['data'][$key + 1] : ['mf_size'=>0,'mf_name'=>''];
 				$dutmp2 = isset($file_list['data'][$key - 1]) ? $file_list['data'][$key - 1] : ['mf_size'=>0,'mf_name'=>''];
@@ -96,18 +96,18 @@
 					continue;
 				}
 			}
-			if($duplicate) {
+			if($duplicate){
 				$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 				$filetype = explode('/', strtolower($value['mf_type']));
 				$filetype = empty($_file_types[$filetype[0]]) ? 'binary' : $filetype[0];
-				$unfilename = _AF_ATTACH_DATA_. $filetype . '/' . $value['md_id'] . '/' . $value['mf_target'] . '/' . $value['mf_upload_name'];
+				$unfilename = _AF_ATTACH_DATA_. $filetype.'/'.$value['md_id'].'/'.$value['mf_target'].'/'.$value['mf_upload_name'];
 				echo '<tr><th scope="row" rowspan="2"><input type="radio" name="mf_standard" value="'.$value['mf_srl'].'" class="data_standard" style="margin-right:5px" data-except-ajax><input type="checkbox" value="'.$value['mf_srl'].'" class="data_selecter" style="margin-right:5px" data-except-ajax></th>';
 				echo '<td scope="row" rowspan="2" style="padding:2px"><img src="'.($unfilename).'" width="65" height="65"></td>';
 				echo '<td scope="row">'.$value['md_id'].'</td>';
 				echo '<td class="title">'.escapeHTML(cutstr($value['mf_name'],50)).'</td>';
 				echo '<td class="hidden-xs">'.$value['mf_size'].'</td>';
 
-			} else {
+			}else{
 			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('category',$value['md_id']).'">'.$value['md_id'].'</a></td>';
 			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="mf_srls[]" value="'.$value['mf_srl'].'"><a href="./?srl='.$value['mf_target'].'" target="_blank">'.escapeHTML(cutstr($value['mf_name'],50)).'</a></td>';
 			}
@@ -115,7 +115,7 @@
 			echo '<td><small>'.$value['mf_type'].'</small></td>';
 			echo '<td><small>'.$value['mb_ipaddress'].'</small></td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['mf_regdate'])).'</td></tr>';
-			if($duplicate) {
+			if($duplicate){
 				echo '<tr><td class="title" colspan="4" style="color:#555;text-decoration:underline"><a href="'.getUrl('','id',$value['md_id'],'srl',$value['mf_target']).'" target="_blank">'.escapeHTML(cutstr($value['wr_title'],50)).'</a></td></tr>';
 			}
 		}
@@ -148,18 +148,18 @@
 </div>
 
 <script>
-	function _showCheckItems(el_chk) {
+	function _showCheckItems(el_chk){
 		const tb = el_chk.closest('table'), first_chk = tb.querySelector('[type=checkbox]')
 		tb.querySelectorAll('[type=checkbox]')?.forEach(el => el.classList.remove('d-none'))
 		first_chk.parentNode?.lastChild.classList.add('d-none')
 		first_chk.parentNode?.childNodes[1].classList.remove('d-none')
 		return false
 	}
-	function _allCheckItems(el_chk) {
+	function _allCheckItems(el_chk){
 		el_chk.closest('table').querySelectorAll('tbody [type=checkbox]')?.forEach(el => el.checked = el_chk.checked)
 	}
-	function _deleteCheckItems() {
-		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['file']])) === true) {
+	function _deleteCheckItems(){
+		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['file']])) === true){
 			exec_ajax({module:'admin',act:'deleteFiles',...document.querySelector('#af_check_items').serializeArray()})
 			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
 		}

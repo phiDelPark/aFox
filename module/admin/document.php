@@ -11,7 +11,7 @@
 		"_OR_" => []
 	];
 
-	if (!empty($search)) {
+	if (!empty($search)){
 		$keys = [
 			"!" => "wr_title", //!title
 			":" => "wr_regdate", //:202010
@@ -20,22 +20,22 @@
 		];
 		$key = array_key_exists($key = substr($search, 0, 1), $keys) ? $keys[$key] : '';
 		empty($key) ? ($key = "wr_content") : ($search = substr($search, 1));
-		if ($search = explode(" ", $search)) {
+		if ($search = explode(" ", $search)){
 			$index = 0;
-			foreach ($search as $value) {
+			foreach ($search as $value){
 				$value = explode("&", trim($value));
 				$and_or = count($value) > 1 ? "_AND_" : "_OR_";
-				foreach ($value as $v) {
+				foreach ($value as $v){
 					$cmd = $key == "wr_tags" ? '{REGEXP}' : '{LIKE}';
-					if ($key == "wr_regdate") {
+					if ($key == "wr_regdate"){
 						$v = str_split($v, 4);
 						$v = $v[0].(empty($v[1])?"":"-".implode("-",str_split($v[1],2)))."%";
-					} else if ($cmd == '{REGEXP}') {
+					} else if ($cmd == '{REGEXP}'){
 						$v = "('(^|,)".DB::escape($v)."($|,)')";
-					} else {
-						$v = "%" . $v. "%";
+					}else{
+						$v = "%".$v. "%";
 					}
-					$_wheres[$and_or][$key . $cmd . '[' . $index++ . ']'] = $v;
+					$_wheres[$and_or][$key.$cmd.'['.$index++.']'] = $v;
 				}
 			}
 		}
@@ -65,15 +65,15 @@
 	$end_page = $total_page = 0;
 	$start_page = $current_page = 1;
 
-	if($error) {
+	if($error){
 		messageBox($error['message'], $error['error'], false);
-	} else {
+	}else{
 		$current_page = $doc_list['current_page'];
 		$total_page = $doc_list['total_page'];
 		$start_page = $doc_list['start_page'];
 		$end_page = $doc_list['end_page'];
 
-		foreach ($doc_list['data'] as $key => $value) {
+		foreach ($doc_list['data'] as $key => $value){
 			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('mid',$value['md_id']).'">'.$value['md_id'].'</a></td>';
 			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="wr_srls[]" value="'.$value['wr_srl'].'"><a href="./?srl='.$value['wr_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).'</a>'.(empty($value['wr_reply'])?'':' <small>('.$value['wr_reply'].')</small>').'</td>';
 			echo '<td>'.$value['mb_nick'].'</td>';
@@ -109,26 +109,26 @@
 </div>
 
 <script>
-	function _showCheckItems(el_chk) {
+	function _showCheckItems(el_chk){
 		const tb = el_chk.closest('table'), first_chk = tb.querySelector('[type=checkbox]')
 		tb.querySelectorAll('[type=checkbox]')?.forEach(el => el.classList.remove('d-none'))
 		first_chk.parentNode?.lastChild.classList.add('d-none')
 		first_chk.parentNode?.childNodes[1].classList.remove('d-none')
 		return false
 	}
-	function _allCheckItems(el_chk) {
+	function _allCheckItems(el_chk){
 		el_chk.closest('table').querySelectorAll('tbody [type=checkbox]')?.forEach(el => el.checked = el_chk.checked)
 	}
-	function _moveCheckItems() {
+	function _moveCheckItems(){
 		const id = prompt($_LANG['prompt_move_board'], '').trim()
-		if (id) {
+		if (id){
 			exec_ajax({module:'admin',act:'moveDocuments',md_id:id,...document.querySelector('#af_check_items').serializeArray()})
 			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
 		}
 		return false;
 	}
-	function _deleteCheckItems() {
-		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['document']])) === true) {
+	function _deleteCheckItems(){
+		if (confirm($_LANG['confirm_delete'].sprintf([$_LANG['document']])) === true){
 			exec_ajax({module:'admin',act:'deleteDocuments',...document.querySelector('#af_check_items').serializeArray()})
 			.then((data)=>{location.href = data['redirect_url']}).catch((error)=>{console.log(error);alert(error)})
 		}

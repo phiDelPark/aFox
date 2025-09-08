@@ -30,33 +30,33 @@ define('_AF_TRIGGER_TABLE_', 'afox_triggers');
 
 define('_AF_PATH_', str_replace('\\', '/', substr(__DIR__, 0, -4)));
 
-define('_AF_INIT_PATH_', _AF_PATH_ . 'init/');
-define('_AF_LIBS_PATH_', _AF_PATH_ . 'lib/');
-define('_AF_MODULES_PATH_', _AF_PATH_ . 'module/');
-define('_AF_ADDONS_PATH_', _AF_PATH_ . 'addon/');
-define('_AF_WIDGETS_PATH_', _AF_PATH_ . 'widget/');
-define('_AF_THEMES_PATH_', _AF_PATH_ . 'theme/');
-define('_AF_ADMIN_PATH_', _AF_PATH_ . 'module/admin/');
-define('_AF_TPLS_PATH_', _AF_PATH_ . 'common/tpl/');
+define('_AF_INIT_PATH_', _AF_PATH_.'init/');
+define('_AF_LIBS_PATH_', _AF_PATH_.'lib/');
+define('_AF_MODULES_PATH_', _AF_PATH_.'module/');
+define('_AF_ADDONS_PATH_', _AF_PATH_.'addon/');
+define('_AF_WIDGETS_PATH_', _AF_PATH_.'widget/');
+define('_AF_THEMES_PATH_', _AF_PATH_.'theme/');
+define('_AF_ADMIN_PATH_', _AF_PATH_.'module/admin/');
+define('_AF_TPLS_PATH_', _AF_PATH_.'common/tpl/');
 
-define('_AF_CONFIG_DATA_', _AF_PATH_ . 'data/config/');
-define('_AF_MEMBER_DATA_', _AF_PATH_ . 'data/member/');
-define('_AF_MODULE_DATA_', _AF_PATH_ . 'data/module/');
-define('_AF_ATTACH_DATA_', _AF_PATH_ . 'data/attach/');
-define('_AF_CACHE_DATA_', _AF_PATH_ . 'data/cache/');
+define('_AF_CONFIG_DATA_', _AF_PATH_.'data/config/');
+define('_AF_MEMBER_DATA_', _AF_PATH_.'data/member/');
+define('_AF_MODULE_DATA_', _AF_PATH_.'data/module/');
+define('_AF_ATTACH_DATA_', _AF_PATH_.'data/attach/');
+define('_AF_CACHE_DATA_', _AF_PATH_.'data/cache/');
 
 define('_AF_PASSWORD_ALGORITHM_', function_exists('password_hash')?'BCRYPT':'MYSQL');
 
 if(!isset($_SERVER['SERVER_ADDR'])) $_SERVER['SERVER_ADDR'] = isset($_SERVER['LOCAL_ADDR']) ? $_SERVER['LOCAL_ADDR'] : '';
 /*
-if (!function_exists('array_key_first')) { // PHP 7 >= 7.3.0, PHP 8
-	function array_key_first(array $arr) {
+if (!function_exists('array_key_first')){ // PHP 7 >= 7.3.0, PHP 8
+	function array_key_first(array $arr){
 		foreach($arr as $key=>$key) return $key;
 		return NULL;
 	}
 }
-if (! function_exists("array_key_last")) { // PHP 7 >= 7.3.0, PHP 8
-	function array_key_last($array) {
+if (! function_exists("array_key_last")){ // PHP 7 >= 7.3.0, PHP 8
+	function array_key_last($array){
 		if (!is_array($array) || empty($array)) return NULL;
 		return array_keys($array)[count($array)-1];
 	}
