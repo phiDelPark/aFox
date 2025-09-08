@@ -26,6 +26,10 @@ define('_AF_THEME_PATH_', _AF_THEMES_PATH_ . _AF_THEME_ . '/');
 @include_once _AF_PATH_ . 'common/lang/' . _AF_LANG_ . '.php';
 require_once _AF_INIT_PATH_ . 'function.php';
 
+if($_CFG['use_protect'] == '1' && !file_exists(_AF_ATTACH_DATA_.'.htaccess')){
+	create_protect_file() OR exit("The operation to protect the file failed.");
+}
+
 //when using visit history
 if($_CFG['use_visit'] == '1' && get_cookie('ck_visit_ip') != $_SERVER['REMOTE_ADDR']){
 	set_cookie('ck_visit_ip', $_SERVER['REMOTE_ADDR'], 86400); // 하루동안 저장

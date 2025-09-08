@@ -548,17 +548,6 @@ function cutstr($str, $length, $tail = '...')
 	return substr($str, 0, $count) . $tail;
 }
 
-function timePassed($datetime)
-{
-	$t = time() - strtotime($datetime);
-	$vs1 = ['minute','hour','day', 'week', 'month','year',  ''];
-	$vs2 = [60,	  3600,  86400, 604800, 2592000,31536000,1];
-	foreach($vs2 as $key => $value){ if($t < $value) break; }
-	if($key < 1) return 'just now'; //second
-	$value = floor($t/$vs2[$key-1]);
-	return $value.' '.$vs1[$key-1].($value > 1 ? 's' : '').' ago';
-}
-
 function isMobilePhone()
 {
 	$agent = $_SERVER['HTTP_USER_AGENT'];
@@ -651,10 +640,15 @@ function set_error($msg, $err = 3){
 function get_error(){
 	return isset($_SESSION[($key='AF_VALIDATOR_ERROR')])?$_SESSION[$key]:'';
 }
+function create_protect_file(){
+	if($f = @fopen(_AF_ATTACH_DATA_.'.htaccess', 'w')){
+		fwrite($f, "Order deny, allow\nDeny from all\n<FilesMatch \"\.[a-zA-Z]+$\">\n  Allow from all\n</FilesMatch>\n");
+		fclose($f); chmod(_AF_ATTACH_DATA_.'.htaccess', 0644); return true;
+	} return false;
+}
 function debugPrint($o = null){ if(!(__DEBUG__ & 1)) return;
 	file_put_contents(_AF_PATH_.'_debug.php',implode(PHP_EOL,[date('== Y-m-d H:i:s =='),
-	in_array(($type=gettype($o)),['array','object','resource'])?print_r($o,true):$type.'('.var_export($o,true).')'
-	]).PHP_EOL.PHP_EOL,FILE_APPEND|LOCK_EX);
+	in_array(($type=gettype($o)),['array','object','resource'])?print_r($o,true):$type.'('.var_export($o,true).')']).PHP_EOL.PHP_EOL,FILE_APPEND|LOCK_EX);
 }
 
 /* End of file function.php */

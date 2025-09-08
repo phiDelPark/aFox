@@ -80,6 +80,8 @@ function proc($data) {
 			}
 		}
 
+		unlinkFile(_AF_ATTACH_DATA_.'.htaccess');
+
 		$_lst = ['base_cdn_list','terms_of_use'];
 		foreach ($_lst as $val) {
 			$data[$val] = trim($data[$val]);

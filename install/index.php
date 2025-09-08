@@ -496,19 +496,6 @@ if (empty($row['md_id'])) {
 
 DB::commit();
 
-
-$file = $datadir.'.htaccess'; // 첨부파일 접근 금지 (확장자 없음)
-if(!file_exists($file)) {
-	$f = @fopen($file, 'w');
-	fwrite($f, "Order deny, allow\n");
-	fwrite($f, "Deny from all\n");
-	fwrite($f, '<FilesMatch "\.[a-zA-Z]+$">'."\n");
-	fwrite($f, "  Allow from all\n");
-	fwrite($f, "</FilesMatch>\n");
-	fclose($f);
-	chmod($file, 0644);
-}
-
 $file = $datadir.'config/prohibit_id.php';
 if(!file_exists($file)) {
 	$f = @fopen($file, 'w');
