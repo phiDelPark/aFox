@@ -36,10 +36,13 @@ function proc($data){
 			$result = DB::get(_AF_DOCUMENT_TABLE_, 'md_id,mb_srl,wr_category', ['wr_srl'=>$wr_srl]);
 			if (empty($result['md_id'])) throw new Exception(getLang('error_founded'),4201);
 			// 마지막 문자가 & 이면 카테고리 1번만 교체
+
+			$input_cate = $full_cate;
 			if(substr($full_cate, -1) == '&'){
 				$md_cate = explode('&', $result['wr_category']);
-				$full_cate = $full_cate.($md_cate[count($md_cate) - 1]);
+				$input_cate = $full_cate.($md_cate[count($md_cate) - 1]);
 			}
+
 			// 이동할 모듈이 같으면 파일 이동은 안함
 			if($result['md_id'] != $md_id){
 				$source_md_id = $result['md_id'];
@@ -79,7 +82,7 @@ function proc($data){
 			}
 
 			DB::update(_AF_DOCUMENT_TABLE_,
-				['md_id'=>$md_id, 'wr_category'=>$full_cate], [
+				['md_id'=>$md_id, 'wr_category'=>$input_cate], [
 					//'wr_srl{IN}'=>implode(',', $wr_srls)
 					'wr_srl'=>$wr_srl
 				]
