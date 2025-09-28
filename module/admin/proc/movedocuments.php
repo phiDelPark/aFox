@@ -11,17 +11,18 @@ function proc($data){
 
 	$tmp = explode(':', $data['md_id']);
 	$md_id = trim($tmp[0]);
-	$md_cate = count($tmp) > 1 ? trim($tmp[1]) : '';
+	$full_cate = count($tmp) > 1 ? trim($tmp[1]) : '';
 	$wr_srls = is_array($data['wr_srls']) ? $data['wr_srls'] : explode(',', $data['wr_srls']);
+
 
 	try {
 		$module = DB::get(_AF_MODULE_TABLE_, ['md_key'=>'board','md_id'=>$md_id]);
 		if (empty($module['md_id'])) throw new Exception(getLang('error_founded'),4201);
 
 		if (!empty($module['md_category'])){
-			if (empty($md_cate)) throw new Exception(getLang('request_input', ['category']), 1);
-			$md_categorys = str_replace('&', ',', $module['md_category']);
-			$md_categorys = explode(',', $md_categorys);
+			if (empty($full_cate)) throw new Exception(getLang('request_input', ['category']), 1);
+			$md_cate = explode('&', $full_cate)[0];
+			$md_categorys = explode(',', str_replace('&', ',', $module['md_category']));
 			if (!in_array($md_cate, $md_categorys)){
 				throw new Exception(getLang('warn_not_exists', [$md_cate]), 3105);
 			}
@@ -32,46 +33,53 @@ function proc($data){
 
 		foreach ($wr_srls as $wr_srl)
 		{
-			$result = DB::get(_AF_DOCUMENT_TABLE_, 'md_id,mb_srl', ['wr_srl'=>$wr_srl]);
+			$result = DB::get(_AF_DOCUMENT_TABLE_, 'md_id,mb_srl,wr_category', ['wr_srl'=>$wr_srl]);
 			if (empty($result['md_id'])) throw new Exception(getLang('error_founded'),4201);
-			$source_md_id = $result['md_id'];
+			// 마지막 문자가 & 이면 카테고리 1번만 교체
+			if(substr($full_cate, -1) == '&'){
+				$md_cate = explode('&', $result['wr_category']);
+				$full_cate = $full_cate.($md_cate[count($md_cate) - 1]);
+			}
+			// 이동할 모듈이 같으면 파일 이동은 안함
+			if($result['md_id'] != $md_id){
+				$source_md_id = $result['md_id'];
+				// 파일 이동
+				$types = ['binary','image','video','audio','thumbnail'];
+				foreach ($types as $val){
+					$s = _AF_ATTACH_DATA_.$val.'/'.$source_md_id.'/'.$wr_srl.'/';
+					$t = _AF_ATTACH_DATA_.$val.'/'.$md_id.'/'.$wr_srl.'/';
 
-			// 파일 이동
-			$types = ['binary','image','video','audio','thumbnail'];
-			foreach ($types as $val){
-				$s = _AF_ATTACH_DATA_.$val.'/'.$source_md_id.'/'.$wr_srl.'/';
-				$t = _AF_ATTACH_DATA_.$val.'/'.$md_id.'/'.$wr_srl.'/';
+					if(!is_dir($s)) continue;
 
-				if(!is_dir($s)) continue;
-
-				// 이동할 폴더가 이미 있으면 에러
-				if(is_dir($t)){
-					throw new Exception(getLang('error_upload(7)'),10407);
-				}
-
-				// 에러시 다시 돌리기 위해 여기서 입력
-				$source_wr_srl = $wr_srl;
-
-				if(@mkdir($t, _AF_DIR_PERMIT_, true))
-				{
-					$dir = opendir($s);
-					while (false !== ($filename = readdir($dir))){
-						if($filename == '.' || $filename == '..')
-							continue;
-						@rename($s.$filename, $t.$filename);
+					// 이동할 폴더가 이미 있으면 에러
+					if(is_dir($t)){
+						throw new Exception(getLang('error_upload(7)'),10407);
 					}
-					unlinkAll($s);
+
+					// 에러시 다시 돌리기 위해 여기서 입력
+					$source_wr_srl = $wr_srl;
+
+					if(@mkdir($t, _AF_DIR_PERMIT_, true))
+					{
+						$dir = opendir($s);
+						while (false !== ($filename = readdir($dir))){
+							if($filename == '.' || $filename == '..')
+								continue;
+							@rename($s.$filename, $t.$filename);
+						}
+						unlinkAll($s);
+					}
 				}
+
+				DB::update(_AF_FILE_TABLE_,
+					['md_id'=>$md_id], [
+						'mf_target'=>$wr_srl
+					]
+				);
 			}
 
-			DB::update(_AF_FILE_TABLE_,
-				['md_id'=>$md_id], [
-					'mf_target'=>$wr_srl
-				]
-			);
-
 			DB::update(_AF_DOCUMENT_TABLE_,
-				['md_id'=>$md_id, 'wr_category'=>$md_cate], [
+				['md_id'=>$md_id, 'wr_category'=>$full_cate], [
 					//'wr_srl{IN}'=>implode(',', $wr_srls)
 					'wr_srl'=>$wr_srl
 				]

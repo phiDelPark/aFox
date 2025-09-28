@@ -163,7 +163,7 @@ $_LANG['desc_use_visit']		= '방문자 정보를 기록할지 설정합니다.';
 $_LANG['desc_use_protect']		= '다른 사이트에선 파일을 사용할 수 없게 설정합니다.';
 $_LANG['desc_use_captcha']		= '사람과 컴퓨터를 판별하는 캡차를 보여줄지 설정합니다.';
 
-$_LANG['prompt_move_board']		= '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n카테고리를 선택하시려면 뒤에 :카테고리를 입력하세요.\n예) 모듈ID : 카테고리';
+$_LANG['prompt_move_board']		= '이동할 게시판의 모듈 아이디를 입력해주세요.\n\n카테고리를 선택하시려면 뒤에 :카테고리를 입력하세요.\n예) 모듈ID:카테고리\n* 분류 1번만 바꾸려면 카테고리 뒤에 &를 붙이세요.';
 
 /* End of file admin_ko.php */
 /* Location: ./common/lang/admin_ko.php */

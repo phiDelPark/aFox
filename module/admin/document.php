@@ -75,7 +75,7 @@
 
 		foreach ($doc_list['data'] as $key => $value){
 			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('mid',$value['md_id']).'">'.$value['md_id'].'</a></td>';
-			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="wr_srls[]" value="'.$value['wr_srl'].'"><a href="./?srl='.$value['wr_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).'</a>'.(empty($value['wr_reply'])?'':' <small>('.$value['wr_reply'].')</small>').'</td>';
+			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="wr_srls[]" value="'.$value['wr_srl'].'"><a href="./?srl='.$value['wr_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['wr_title']),50)).'</a>'.(empty($value['wr_reply'])?'':' <small>('.$value['wr_reply'].')</small>').'<div class="d-none text-muted">'.$value['wr_category'].'</div></td>';
 			echo '<td>'.$value['mb_nick'].'</td>';
 			echo '<td>'.($value['wr_secret']?'S/':'--/').($value['wr_status']?$value['wr_status']:'--').'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['wr_regdate'])).'</td></tr>';
@@ -111,7 +111,10 @@
 <script>
 	function _showCheckItems(el_chk){
 		const tb = el_chk.closest('table'), first_chk = tb.querySelector('[type=checkbox]')
-		tb.querySelectorAll('[type=checkbox]')?.forEach(el => el.classList.remove('d-none'))
+		tb.querySelectorAll('[type=checkbox]')?.forEach(el => {
+			el.classList.remove('d-none')
+			el.parentNode.querySelector('div')?.classList.remove('d-none')
+		})
 		first_chk.parentNode?.lastChild.classList.add('d-none')
 		first_chk.parentNode?.childNodes[1].classList.remove('d-none')
 		return false
