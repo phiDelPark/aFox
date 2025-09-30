@@ -10,17 +10,18 @@ function proc($data){
 
 	DB::transaction();
 
+	$success_srls = [];
 	$mf_srls = is_array($data['mf_srls']) ? $data['mf_srls'] : [$data['mf_srls']];
 
 	try {
 
 		$callback = function($r){
 			while ($row = DB::fetch($r)){
+				$success_srls[$row['mf_target']] = $row['md_id'];
 				$_file_types = array('binary'=>0, 'image' => 1, 'video' => 2, 'audio' => 3);
 				$filetype = explode('/', strtolower($row['mf_type']));
-				$filetype = empty($_file_types[$filetype[0]]) ? 'binary' : $filetype[0];
+				$filetype = isset($_file_types[$filetype[0]]) ? $filetype[0] : 'binary';
 				$unfilename = _AF_ATTACH_DATA_.$filetype.'/'.$row['md_id'].'/'.$row['mf_target'].'/'.$row['mf_upload_name'];
-
 				if(!file_exists($unfilename) || unlinkFile($unfilename)){
 					DB::delete(_AF_FILE_TABLE_,['mf_srl'=>$row['mf_srl']]);
 				}
@@ -29,6 +30,10 @@ function proc($data){
 		};
 
 		DB::query('SELECT * FROM '._AF_FILE_TABLE_.' WHERE mf_srl IN ('.implode(',', $mf_srls).')', $callback);
+
+		foreach ($success_srls as $mf_target => $md_id){
+			unlinkAll(_AF_ATTACH_DATA_.'thumbnail'.'/'.$md_id.'/'.$mf_target.'/');
+		}
 
 	} catch (Exception $ex){
 		DB::rollback();

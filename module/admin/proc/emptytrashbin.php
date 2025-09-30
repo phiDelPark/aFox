@@ -16,13 +16,12 @@ function proc($data){
 				$wr_srl = $row['wr_srl'];
 				$md_id = $row['wr_updater'];
 				// 파일 , 댓글 , 문서 삭제
-				DB::delete(_AF_COMMENT_TABLE_,['wr_srl'=>$wr_srl]);
-				DB::delete(_AF_FILE_TABLE_,['md_id'=>$md_id,'mf_target'=>$wr_srl]);
-				// 파일 삭제
 				$types = ['binary','image','video','audio','thumbnail'];
 				foreach ($types as $val){
 					unlinkAll(_AF_ATTACH_DATA_.$val.'/'.$md_id.'/'.$wr_srl.'/');
 				}
+				DB::delete(_AF_FILE_TABLE_,['md_id'=>$md_id,'mf_target'=>$wr_srl]);
+				DB::delete(_AF_COMMENT_TABLE_,['wr_srl'=>$wr_srl]);
 			}
 			return [];
 		};

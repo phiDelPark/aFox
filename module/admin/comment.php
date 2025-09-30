@@ -39,7 +39,7 @@
 	$cat = $dd.($cat?'.md_id = \''.$cat.'\'':'.md_id <> \'_AFOXtRASH_\'');
 	$where = $search||$cat ? '('.$cat.($search&&$cat ? ' AND ' : '').$search.')' : '1';
 	$start = (($_GET['page'] - 1) * $count);
-	$cmt_list = DB::query("SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.wr_srl WHERE $where ORDER BY $cd.rp_regdate DESC LIMIT $start,$count", true);
+	$cmt_list = DB::query("SELECT SQL_CALC_FOUND_ROWS $cd.*, $dd.md_id, $dd.wr_title FROM $cd INNER JOIN $dd ON $dd.wr_srl = $cd.wr_srl WHERE $where ORDER BY $cd.rp_regdate DESC LIMIT $start,$count", true);
 	if($error = DB::error()) $error = set_error($error->getMessage(),$error->getCode());
 	$cmt_list = setDataListInfo($cmt_list, $_GET['page'], $count, DB::foundRows());
 ?>
@@ -73,9 +73,9 @@
 
 		foreach ($cmt_list['data'] as $key => $value){
 			echo '<tr><td scope="row"><a class="text-light" href="'.getUrl('cat',$value['md_id']).'">'.$value['md_id'].'</a></td>';
-			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="rp_srls[]" value="'.$value['rp_srl'].'"><a href="./?rp='.$value['rp_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['rp_content']),50)).'</a></td>';
+			echo '<td class="text-wrap"><input class="me-3 d-none" type="checkbox" name="rp_srls[]" value="'.$value['rp_srl'].'"><a href="./?rp='.$value['rp_srl'].'" target="_blank">'.escapeHTML(cutstr(strip_tags($value['rp_content']),80)).'</a><div class="text-muted">'.escapeHTML(cutstr($value['wr_title'],80)).'</div></td>';
 			echo '<td>'.$value['mb_nick'].'</td>';
-			echo '<td>'.($value['rp_secret']?'S/':'--/').($value['rp_status']?$value['rp_status']:'--').'</td>';
+			echo '<td style="text-wrap:nowrap">'.($value['rp_secret']?'S/':'--/').($value['rp_status']?$value['rp_status']:'--').'</td>';
 			echo '<td>'.date('Y/m/d', strtotime($value['rp_regdate'])).'</td></tr>';
 		}
 	}
